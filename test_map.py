@@ -1,66 +1,117 @@
-"""District reachability, traversal and broad-phase regression checks."""
-import math, random, unittest
+"""02.3 architecture and real movement checks (server + static/physics.js)."""
+import json,math,random,subprocess,unittest
 from collections import deque
+from pathlib import Path
 import server as s
 
-class DistrictTests(unittest.TestCase):
-    def player(self,x,z,y=0,yaw=0):
-        r=s.Room('MAP');p=s.new_player(r,'p','Tester',100)
-        p.update(x=x,y=y,z=z,yaw=yaw,grounded=True,vx=0,vy=0,vz=0,input={'w':True})
-        return p
-    def walk(self,p,ticks):
-        for i in range(ticks):
-            now=100+i*s.TICK;p['last_input']=now;s.move(p,s.TICK,now)
-    def test_ground_routes_connect_all_districts_and_spawns(self):
-        # A two-metre grid is deliberately stricter than the player's 0.64 m width.
-        clear={(x,z) for x in range(-50,51,2) for z in range(-50,51,2)
-               if not any(s.overlaps(x,0,z,b) for b in s.BOXES)}
-        start=(0,-20);seen={start};queue=deque([start])
+def player(pos,yaw=0,weapon=0):
+    p=s.new_player(s.Room('MAP'),'p','Test',100,weapon)
+    p.update(x=pos[0],y=pos[1],z=pos[2],yaw=yaw,vx=0,vy=0,vz=0,input={})
+    return p
+
+def run_case(case):
+    p=player(case['start'],case.get('yaw',0),case.get('weapon',0));out=[]
+    for i,inp in enumerate(case['inputs']):
+        p['input']=inp;p['last_input']=100+i*s.TICK;s.move(p,s.TICK,100+i*s.TICK)
+        out.append({k:p[k] for k in ['x','y','z','vx','vy','vz','grounded','crouch']})
+    return out
+
+def movement_cases():
+    cases=[]
+    for j in s.MAP['jumps']:
+        # Sprint three ticks then take off .2 m before the edge. Test slowest gun.
+        for weapon in range(4):
+            cases.append(dict(name=j['name']+str(weapon),kind='jump',start=j['start'],weapon=weapon,
+                              end=j['end'],inputs=[dict(w=True,sprint=True,jump=i==3) for i in range(25)]))
+    for j in s.MAP['ledges']:
+        # Begin just before the ledge, build speed then jump; clear .9 m rise.
+        cases.append(dict(name=j['name'],kind='ledge',start=j['start'],end=j['end'],
+                          inputs=[dict(w=True,sprint=True,jump=i==1) for i in range(22)]))
+    for r in s.MAP['ramps']:
+        ticks=math.ceil((r['length']+2)/5.6*30)
+        cases.append(dict(name=r['name'],kind='ramp',start=[r['x'],r['base'],r['z']+.5],
+                          height=r['base']+r['rise'],endz=r['z']-r['length'],
+                          inputs=[dict(w=True) for _ in range(ticks)]))
+    # Broad main arches: continuous jumping / slide while going through either side.
+    for a in s.MAP['arches']:
+        if a['base']>0:continue
+        for mode in ['jump','slide']:
+            start=[a['x'],0,a['z']+3] if a['axis']=='x' else [a['x']-3,0,a['z']]
+            cases.append(dict(name=f"arch {a['x']} {a['z']} {mode}",kind='clearance',start=start,
+                              yaw=0 if a['axis']=='x' else -math.pi/2,
+                              inputs=[dict(w=True,sprint=True,**{mode:i==5}) for i in range(28)]))
+    return cases
+
+class MapTests(unittest.TestCase):
+    def test_jump_gaps_ledges_ramps_and_slide_clearance_in_both_engines(self):
+        cases=movement_cases()
+        # Execute the shipped browser physics directly, not a port or mock.
+        script="""import fs from 'node:fs';import {simulate} from './static/physics.js';
+const map=JSON.parse(fs.readFileSync('static/map.json'));const cases=JSON.parse(fs.readFileSync(0,'utf8'));
+console.log(JSON.stringify(cases.map(c=>{const [x,y,z]=c.start;const p={x,y,z,yaw:c.yaw||0,vx:0,vy:0,vz:0,grounded:true,slide_ready:0,slide_until:0,jump_held:false,slide_held:false};return c.inputs.map((inp,i)=>{simulate(p,inp,1/30,100+i/30,map.boxes,map.weapons[c.weapon||0]);return {...p};});})));"""
+        result=subprocess.run(['node','--input-type=module','-e',script],input=json.dumps(cases),text=True,capture_output=True,cwd=Path(__file__).parent,check=True)
+        browser=json.loads(result.stdout)
+        for case,js in zip(cases,browser):
+            with self.subTest(case=case['name']):
+                states=run_case(case);p=states[-1]
+                for a,b in zip(states,js):
+                    for k in ['x','y','z','vx','vy','vz']:self.assertAlmostEqual(a[k],b[k],places=7)
+                if case['kind'] in ['jump','ledge']:
+                    target=case['end']
+                    self.assertTrue(any(v['grounded'] and abs(v['y']-target[1])<.02 and v['z']<=target[2]+1 for v in states),f'Failed landing: {p}')
+                    if case['kind']=='jump':self.assertGreater(max(v['y'] for v in states),case['start'][1]+1)
+                elif case['kind']=='ramp':
+                    self.assertGreaterEqual(p['y'],case['height']-.02);self.assertLess(p['z'],case['endz']+.1)
+                else:
+                    self.assertGreater(math.hypot(p['x']-case['start'][0],p['z']-case['start'][2]),6)
+                    self.assertFalse(p['crouch'])
+                    if case['name'].endswith('slide'):self.assertTrue(any(v['crouch'] for v in states))
+                    else:self.assertGreater(max(v['y'] for v in states),1)
+    def test_gaps_are_actual_gaps_and_ledges_require_jumping(self):
+        for case in movement_cases():
+            if case['kind'] not in ['jump','ledge']:continue
+            walking={**case,'inputs':[{**v,'jump':False} for v in case['inputs']]}
+            states=run_case(walking);target=case['end']
+            self.assertFalse(any(v['grounded'] and abs(v['y']-target[1])<.02 and v['z']<=target[2]+1 for v in states),case['name'])
+
+    def test_all_spawns_have_clearance_and_support(self):
+        for x,y,z in s.SPAWNS:
+            self.assertFalse(any(s.overlaps(x,y,z,b) for b in s.BOXES),(x,y,z))
+            if y:self.assertTrue(any(abs(x-b['x'])<b['w']/2 and abs(z-b['z'])<b['d']/2 and abs(y-b['y']-b['h'])<.01 for b in s.BOXES),(x,y,z))
+    def test_ground_flanks_and_lane_entrances_connect(self):
+        clear={(x,z) for x in range(-38,39) for z in range(-38,39) if not any(s.overlaps(x,0,z,b) for b in s.nearby_boxes(x,z))}
+        start=(-20,10);seen={start};queue=deque([start])
         while queue:
             x,z=queue.popleft()
-            for dx,dz in [(2,0),(-2,0),(0,2),(0,-2)]:
-                q=(x+dx,z+dz)
-                # Also check midpoint, so a thin wall cannot be skipped.
-                if q in clear and q not in seen and not any(s.overlaps(x+dx/2,0,z+dz/2,b) for b in s.BOXES):
+            for dx,dz in [(1,0),(-1,0),(0,1),(0,-1)]:
+                q=x+dx,z+dz
+                if q in clear and q not in seen and not any(s.overlaps(x+dx/2,0,z+dz/2,b) for b in s.nearby_boxes(x,z,2)):
                     seen.add(q);queue.append(q)
         for x,y,z in s.SPAWNS:
-            if y==0:self.assertLess(min(math.hypot(x-a,z-b) for a,b in seen),2.5,(x,z))
-        for point in [(0,-46),(0,46),(-46,0),(46,0),(-26,0),(26,0)]:self.assertIn(point,seen)
-        self.assertGreater(len(seen)/len(clear),.98)
-    def test_four_new_stairs_reach_roofs(self):
-        for x in [-13,13]:
-            for sign in [-1,1]:
-                p=self.player(x,20*sign,yaw=0 if sign==-1 else math.pi)
-                self.walk(p,70)
-                self.assertAlmostEqual(p['y'],4,msg=str((x,sign,p['z'])))
-                self.assertGreater(abs(p['z']),29)
-    def test_new_bridges_have_underpass_and_roof_crossing(self):
-        for z in [-34,34]:
-            p=self.player(0,z+5);self.walk(p,55)
-            self.assertLess(p['z'],z-4);self.assertEqual(p['y'],0)
-            p=self.player(-6,z,y=4,yaw=-math.pi/2);self.walk(p,75)
-            self.assertGreater(p['x'],7);self.assertAlmostEqual(p['y'],4)
-    def test_boundary_cannot_be_walked_through(self):
-        for x,z,yaw in [(50,0,-math.pi/2),(-50,0,math.pi/2),(0,50,math.pi),(0,-50,0)]:
-            p=self.player(x,z,yaw=yaw);self.walk(p,60)
-            self.assertLessEqual(max(abs(p['x']),abs(p['z'])),51.18)
-    def test_spatial_index_never_omits_nearby_colliders(self):
+            if y==0:self.assertLess(min(math.hypot(x-a,z-b) for a,b in seen),1.5,(x,z))
+        for q in [(-12,-7),(-12,16),(12,-7),(12,16),(0,33),(24,32)]:self.assertIn(q,seen)
+    def test_lane_sightlines_are_interrupted(self):
+        for x in [-26,0,27]:
+            origin=(x,1.55,38);direction=(0,0,-1)
+            self.assertTrue(any((d:=s.ray_box(origin,direction,s.bounds(b))) is not None and d<70 for b in s.BOXES),x)
+    def test_bridge_underpass_and_roof_have_clearance(self):
+        for y in [0,5.5]:
+            for x in (range(-15,16) if y==0 else range(-16,17)):self.assertFalse(any(s.overlaps(x,y,-28,b) for b in s.BOXES),(x,y))
+    def test_boundaries_contain_players(self):
+        for start,yaw in [([-38,0,20],math.pi/2),([38,0,35],-math.pi/2),([0,0,38],math.pi),([0,0,-38],0)]:
+            p=run_case(dict(start=start,yaw=yaw,inputs=[dict(w=True,sprint=True)]*60))[-1]
+            self.assertLessEqual(max(abs(p['x']),abs(p['z'])),39.18)
+    def test_spatial_index_never_omits_colliders(self):
         rng=random.Random(3);counts=[]
-        for _ in range(1000):
-            x,z=rng.uniform(-52,52),rng.uniform(-52,52);r=rng.uniform(.34,1)
+        for _ in range(500):
+            x,z=rng.uniform(-40,40),rng.uniform(-40,40);r=rng.uniform(.34,1)
             candidates=s.nearby_boxes(x,z,r);counts.append(len(candidates))
             for b in s.BOXES:
                 if abs(x-b['x'])<=b['w']/2+r and abs(z-b['z'])<=b['d']/2+r:self.assertIn(b,candidates)
-        self.assertLess(sum(counts)/len(counts),len(s.BOXES)/5)
-    def test_all_spawn_points_have_floor_and_clearance(self):
-        self.assertEqual(len(s.SPAWNS),16)
-        for x,y,z in s.SPAWNS:
-            self.assertFalse(any(s.overlaps(x,y,z,b) for b in s.BOXES))
-            if y:self.assertTrue(any(abs(x-b['x'])<b['w']/2 and abs(z-b['z'])<b['d']/2 and y==b['y']+b['h'] for b in s.BOXES))
-    def test_respawn_prefers_safe_nearby_fight_over_empty_corner(self):
-        r=s.Room('S');enemy=s.new_player(r,'a','Enemy',100);enemy.update(x=0,y=0,z=0)
-        p=s.new_player(r,'b','Respawn',100)
-        self.assertGreater(math.hypot(p['x'],p['z']),14)
-        self.assertLess(math.hypot(p['x'],p['z']),40)
+        self.assertLess(sum(counts)/len(counts),len(s.BOXES)/4)
+    def test_guide_and_json_regenerate_identically(self):
+        root=Path(__file__).parent;before=[(root/p).read_bytes() for p in ['static/map.json','MAP_GUIDE.svg']]
+        subprocess.run(['python','build_map.py'],cwd=root,check=True)
+        self.assertEqual(before,[(root/p).read_bytes() for p in ['static/map.json','MAP_GUIDE.svg']])
 
 if __name__=='__main__':unittest.main()

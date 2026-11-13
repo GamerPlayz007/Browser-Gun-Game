@@ -6,7 +6,7 @@ const map=JSON.parse(fs.readFileSync('static/map.json'));
 const commands=Array.from({length:150},(_,i)=>({seq:i+1,spawn:1,yaw:i<95?0:.8,pitch:0,input:{w:i<125,sprint:i<100,jump:i===10||i===50||i===115,d:i>=20&&i<70,slide:i===80||i===81,ads:i>=100&&i<120}}));
 const py=`import json,sys,server as s
 cmds=json.load(sys.stdin);r=s.Room('T');r.phase='playing';r.started=100
-p=s.new_player(r,'a','a',100);p.update(x=22.,y=0.,z=20.)
+p=s.new_player(r,'a','a',100);p.update(x=-20.,y=0.,z=10.)
 initial=dict(r.snapshot(100)['players'][0]);states=[]
 for i,c in enumerate(cmds):
  p['commands'].append(c);r.step(s.TICK,100+(i+1)*s.TICK);states.append(r.snapshot(100+(i+1)*s.TICK)['players'][0])

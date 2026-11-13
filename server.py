@@ -287,7 +287,7 @@ async def cache_policy(request,handler):
     if not isinstance(response,web.WebSocketResponse):response.headers['Cache-Control']='no-cache'
     return response
 async def index(request):return web.FileResponse(ROOT/'static/index.html')
-async def health(request):return web.json_response({'ok':True,'version':2,'revision':'2.2','rooms':len(rooms)})
+async def health(request):return web.json_response({'ok':True,'version':2,'revision':MAP['revision'],'rooms':len(rooms)})
 async def room_info(request):
     r=rooms.get(request.match_info['code'].upper())
     return web.json_response({'players':len(r.players),'max':MAX_PLAYERS,'phase':r.phase} if r else {'error':'Room expired or not found.'},status=200 if r else 404)
