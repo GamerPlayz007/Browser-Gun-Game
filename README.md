@@ -1,102 +1,112 @@
-# CROSSFIRE — Build 01
+# CROSSFIRE 02 — SOLSTICE
 
-A browser-based 3D deathmatch prototype for 2–4 friends. Python runs the shared game server; Three.js renders the game on each player's laptop. No game download is needed for players once you publish it.
+Browser multiplayer FPS for 2–4 friends. An upgrade to Build 01, compatible with the same Python/Render hosting settings.
 
-## What's included
+## Update your existing GitHub + Render deployment
 
-- One industrial arena with shipping containers, cover and low blocks you can jump onto.
-- WASD, mouse look, sprint, jump, rifle, ammunition, reload and synthesized audio.
-- 100 HP, 25 damage per hit, 30-round magazine, unlimited reserve ammunition.
-- Three-second respawns and 1.5-second spawn protection (firing cancels protection).
-- First to 15 kills, or the leader after 10 minutes; deaths break score ties. An exact tie currently selects the first joined tied player.
-- Automatic new round after ten seconds.
-- Room creation, six-character codes, invite links, kill feed and scoreboard.
-- Two orange practice dummies. They respawn, but do not award kills.
-- Sensitivity, sound and resolution controls in the pause menu.
+1. Extract the ZIP on your computer.
+2. Open your **GamerPlayz007 / Browser-Gun-Game** repository on GitHub.
+3. Choose **Add file → Upload files**.
+4. Drag **all contents inside the extracted folder**, including the complete `static` folder, onto the upload page. Do not upload the ZIP or the outer folder. Keep file names and folder structure.
+5. Commit the upload to `main`. Existing matching files are replaced and new files added. No old files require deletion.
+6. Render should automatically deploy that commit if On Commit is enabled. Otherwise select **Manual Deploy → Deploy latest commit**.
+7. Keep these Render settings: Python 3; build `pip install -r requirements.txt`; start `python server.py`; health `/health`; existing Free instance. Do not create a second Render service.
+8. Once Render says Live, open your existing game URL and press **Ctrl + Shift + R** to load the new version. All players should refresh; old rooms are cleared on restart.
 
-This is the agreed first deathmatch milestone. Gun Game weapon progression, bots, multiple maps and accounts are not included in this build.
+The lobby should say **SOLSTICE** with **CROSSFIRE 02** and four selectable weapon cards. If you see the old industrial-yard lobby, the new deployment has not finished or the page is cached.
 
-## Run on Replit
+## Play with friends
 
-1. Import this ZIP as a Replit project using its ZIP import option. Alternatively, create a Python project and upload the extracted files and `static` folder, keeping their structure. `server.py` must be in the project root.
-2. Open the project Shell and run:
+1. Enter your name and select a starting weapon.
+2. Create a room. The first person is its host.
+3. Press **Copy invite** in the room panel and send the link to friends.
+4. Friends enter their names and join with the prefilled room code.
+5. Choose **Deathmatch** or **Gun Game** before starting.
+6. **Enter practice** lets you move and shoot targets while waiting. Players cannot damage each other during practice.
+7. The host presses **Start match**. A three-second countdown starts the round. If your mouse is not captured, click the arena.
+8. When the round ends, the results show everyone’s kills, deaths and headshot kills. The host presses **Play again**. If the host leaves, hosting passes to another player.
 
-   ```sh
-   pip install -r requirements.txt
-   ```
+Desktop keyboard and mouse required. Open in a full browser tab, not an iframe preview.
 
-3. Click Run. The supplied `.replit` configuration runs `python server.py`. If Replit asks for a run command, enter that exact command.
-4. Open the web preview in its **own browser tab**. Embedded previews can block mouse capture.
-5. Enter a callsign, choose **Create a room**, then **Enter arena**. Use **Copy invite** to share the room link. Your friend enters a nickname and clicks the arrow beside the prefilled room code.
+## What's new
 
-There is no JavaScript build step. Three.js is bundled under `static/vendor`; Node/npm is not needed to play or host this version. The `package.json` records the bundled version and supports local preview tooling.
+- **Solstice map:** sandstone/terracotta buildings, fountain plaza, market stall, palm trees, side routes, staircases, accessible roofs and a bridge with a walkable underpass.
+- **Four weapons:** Vanguard rifle, Viper SMG, Breach shotgun and Longshot sniper. Different fire rates, magazine sizes, reload times, spread, headshot multipliers and damage falloff.
+- **Weapon presentation:** rounded models, first-person arms, iron sights/scope, detachable-magazine reload motion, muzzle flashes and immediate firing audio/recoil.
+- **Movement:** acceleration, sprinting, jump/landing physics, automatic stair stepping and short momentum-based slides with cooldown.
+- **Feedback:** headshot/damage indicators, elimination messages, impacts, kill feed and positional attenuation for remote gunfire.
+- **Players:** articulated running animation, different held weapons and short-range nametags.
+- **Match flow:** roster, host-controlled mode/start, countdown, results, rematch and host transfer.
+- **Settings:** sensitivity, volume, performance resolution/shadows, camera-motion toggle. FPS and ping are visible.
 
-### Publish a stable link
+## Modes
 
-Use one **Reserved VM / Web server** instance so all players connect to the same Python process. Configure:
+**Deathmatch:** first to 15 kills or the leader after six minutes. Fewest deaths breaks a kills tie; an exact tie is a draw. Use 1–4 to switch weapons. Each weapon retains its magazine when switched; respawning refills magazines.
 
-| Setting | Value |
-|---|---|
-| Build command | `pip install -r requirements.txt` |
-| Run command | `python server.py` |
-| Internal port | `3000` (or the supplied `PORT` environment variable) |
-| Access | Public, if friends should join without Replit accounts |
+**Gun Game:** three kills with each weapon in sequence: rifle → SMG → shotgun → sniper. The 12th kill wins. Manual switching is disabled during the round. Targets never count as kills.
 
-Replit hosting may cost money; check its displayed price before publishing. Development preview links depend on the workspace staying awake and its access settings. Public publishing has not been performed for you.
-
-Official Replit hosting reference: https://docs.replit.com/pt/references/publishing/reserved-vm-deployments
-
-Do not use static-only hosting: it cannot run the multiplayer server. Do not launch multiple independent workers or replicas: rooms are held in process memory, not a shared database. Restarting the server clears all rooms and scores; create a new room afterward.
-
-## Run on Windows instead
-
-Install Python 3.11 or newer. Open a terminal in the extracted folder:
-
-```powershell
-py -m pip install -r requirements.txt
-py server.py
-```
-
-Open `http://localhost:3000` in Chrome or Edge. This local address works only on your own laptop; it is not a public invite link. On a permitted LAN, friends can use the host laptop's LAN address and port 3000 if firewall/network rules allow it. For remote friends, use your published Replit URL.
+Three-second respawns; 1.5-second spawn protection, cancelled when firing. The server picks spawns based on distance and blocked sightlines.
 
 ## Controls
 
 | Action | Control |
 |---|---|
 | Move | W A S D |
-| Aim | Mouse |
-| Shoot | Hold left mouse button |
-| Sprint | Left Shift |
+| Look | Mouse |
+| Fire | Left mouse; hold for repeated firing |
+| Aim / scope | Hold right mouse |
+| Sprint | Shift |
+| Slide | C while moving quickly; 1.7-second cooldown |
 | Jump | Space |
 | Reload | R |
+| Switch weapon | 1–4 in Deathmatch |
 | Scoreboard | Hold Tab |
-| Release mouse / pause menu | Escape |
+| Room menu / release mouse | Escape |
 
-The match continues while you pause. Click Resume to capture the mouse again. Desktop keyboard and mouse required; touch controls are not included.
+The match continues while your room menu is open. Click Resume to recapture your mouse.
 
-## Troubleshooting
+## Local development
 
-- **WebGL unavailable:** use a WebGL2-capable browser/laptop with hardware acceleration enabled. This game cannot render without it.
-- **Mouse capture blocked:** open the game as a full browser tab rather than an embedded preview, then click Enter arena.
-- **Room expired:** create a new one. Empty rooms are cleaned up; restarts clear rooms.
-- **Connection failed:** check that the Python server is running and the network permits WebSocket connections.
-- **Low frame rate:** press Escape and uncheck High resolution.
-- **Lag:** this is a basic 30 Hz prototype with client prediction and interpolated opponents. It does not yet have production lag compensation or competitive anti-cheat.
+Python 3.11+:
 
-## Verification
+```sh
+pip install -r requirements.txt
+python server.py
+```
 
-Run `python -m unittest -v test_server.py`.
+Open http://localhost:3000. The server respects Render’s `PORT` variable. The JavaScript libraries are bundled; no npm install or build step is needed for deployment.
 
-Eight automated tests cover damage through cover, weapon cadence/reloading/protection, kills/respawns/win/reset, movement/collision/input timeouts, jumping, practice targets, HTTP assets and real multi-client WebSocket connections (isolation, room capacity, malformed inputs, client-authority rejection and disconnects).
+The optional Node scene test uses the official Three.js npm package:
 
-Python compilation and JavaScript syntax checks passed. The lobby was inspected in a browser. The available QA browser disabled WebGL, so live rendered gameplay, mouse lock and laptop frame rate remain unverified. Test with two laptops before relying on this for a group session.
+```sh
+npm install
+node test_scene.mjs
+```
 
-## Source guide
+## Verification and limits
 
-- `server.py`: authoritative simulation, room API, WebSockets and static hosting.
-- `static/game.js`: arena/model creation, browser controls, rendering, audio and network UI.
-- `static/style.css`, `static/index.html`: lobby, HUD and menus.
-- `test_server.py`: automated server tests.
-- `.replit`: Replit run/publishing configuration.
+- **15 Python tests passed:** cover, headshots/weapon roles, ammunition/reload/switching, death/respawn/win, Gun Game advancement, host-only start/countdown/rematch/draw, practice immunity, targets, spawn validity, stair traversal, bridge underpass/deck, slide/jump/input timeout, HTTP and real WebSocket clients including room isolation, capacity and host transfer.
+- **Node scene test passed:** all generated vertices finite, static map batching (50 meshes / ~6,000 triangles, excluding players/weapons), four weapon rigs and client staircase simulation.
+- Python compilation and all JavaScript syntax checks passed.
+- Lobby layout inspected. The available preview browser disables WebGL, so live rendering, animation appearance, mouse lock, audio and end-to-end gameplay on laptops remain unverified. Treat this as a playtest build. Test with two laptops before inviting a full group.
 
-Procedural art and generated sound; no Fortnite assets. Three.js is MIT licensed; its license is included in `static/vendor/THREE-LICENSE.txt`. Google Fonts is used for optional typography, with local system-font fallbacks.
+Networking uses a 30 Hz authoritative server, immediate local firing effects, simple client movement prediction and interpolated opponents. There is no historical hit rewind or production-grade competitive anti-cheat. High latency can still cause position corrections. Free hosting can add latency, restart or sleep. Do not claim or expect a guaranteed frame rate or uninterrupted service.
+
+Rooms and scores live in memory. Use one server process/instance. Server restarts clear rooms. There are no bots, accounts, permanent stats, voice chat or touch controls in this build.
+
+If WebGL is unavailable, use a WebGL2-capable Chrome/Edge browser with hardware acceleration. If movement/rendering stutters, select **Performance** in the room settings. The gun/map assets are local; optional Google Fonts has system-font fallbacks.
+
+## Source
+
+- `server.py`: authoritative movement, collision, shooting, rooms and matches.
+- `static/map.json`: shared visual/collision/weapon data.
+- `build_map.py`: map-authoring script, run only when changing layout or weapon balance.
+- `static/world.js`: batched procedural environment.
+- `static/models.js`: weapons, arms, player rigs and animations.
+- `static/physics.js`: client movement prediction.
+- `static/game.js`: network client, controls, effects and UI.
+- `static/audio.js`: original synthesized sound.
+- `static/index.html`, `static/style.css`: lobby, HUD, room and results screens.
+- `THIRD_PARTY.md`: reused libraries and licenses.
+
+Three.js’s existing Sky, RoundedBoxGeometry and BufferGeometryUtils components are reused instead of implementing those systems from scratch. The original Python/aiohttp architecture is retained. No assets were extracted from Venge or other commercial games.
