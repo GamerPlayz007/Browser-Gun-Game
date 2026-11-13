@@ -111,9 +111,12 @@ class NetworkTests(unittest.IsolatedAsyncioTestCase):
             d=await a.receive_json(timeout=2)
             if d['type']=='pong':self.assertEqual(d['t'],123);break
         code2=(await (await self.client.post('/api/rooms')).json())['room'];c,cid=await self.join(code2,'Other');self.assertEqual(len((await self.state(c))['players']),1)
-        d,did=await self.join(code,'Third');e,eid=await self.join(code,'Fourth');self.assertEqual((await self.client.get('/ws/'+code)).status,409)
+        extras=[]
+        for i in range(s.MAX_PLAYERS-2):
+            conn,_=await self.join(code,'Extra'+str(i));extras.append(conn)
+        self.assertEqual((await self.client.get('/ws/'+code)).status,409)
         await a.close();await asyncio.sleep(.05);self.assertEqual(r.host,bid)
-        for conn in [b,c,d,e]:await conn.close()
+        for conn in [b,c,*extras]:await conn.close()
     async def test_http_assets_and_room_expiry(self):
         for path in ['/','/static/map.json','/static/game.js','/static/world.js','/static/models.js','/static/vendor/addons/objects/Sky.js']:
             response=await self.client.get(path);self.assertEqual(response.status,200,path)

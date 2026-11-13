@@ -4,3 +4,14 @@
 #crosshair i:nth-child(1),#crosshair i:nth-child(2){left:calc(50% - 1px)}
 #crosshair i:nth-child(3),#crosshair i:nth-child(4){top:calc(50% - 1px)}
 #scope{background:radial-gradient(circle at center,transparent min(33vw,38vh),#10272bf5 calc(min(33vw,38vh) + 2px))}
+
+/* District navigation; fixed-size cached canvas, no DOM work on every frame. */
+#map-panel{position:absolute;left:28px;top:83px;width:158px;padding:7px;background:#15343bdb;border:1px solid #e8d4ac55;box-shadow:0 6px 24px #102c3933}
+#minimap{width:100%;height:auto;opacity:.94}
+#district-label{display:block;font-size:9px;letter-spacing:1px;margin-top:8px;color:#ffe3ad}
+#map-panel small{display:block;font-size:7px;letter-spacing:.6px;color:#a9c5bd;margin-top:5px}
+#map-panel.expanded{left:50%;top:50%;transform:translate(-50%,-50%);width:min(68vh,520px);z-index:5;background:#15343bf5;padding:14px}
+#map-panel.expanded #district-label{font-size:14px}
+#map-panel.expanded small{font-size:10px}
+#roster{max-height:230px;overflow:auto}
+@media(max-height:650px){#map-panel{width:125px;top:75px}}

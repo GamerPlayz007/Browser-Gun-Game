@@ -4,10 +4,10 @@
   "type": "module",
   "scripts": {
     "dev": "python server.py",
-    "test": "node test_scene.mjs"
+    "test": "node test_scene.mjs && node test_movement.mjs && node test_district.mjs"
   },
   "dependencies": {
     "three": "0.180.0"
   },
-  "version": "2.0.0"
+  "version": "2.2.0"
 }

@@ -6,7 +6,21 @@ from aiohttp import web, WSMsgType
 ROOT=Path(__file__).parent
 MAP=json.loads((ROOT/'static/map.json').read_text())
 BOXES=MAP['boxes']; WEAPONS=MAP['weapons']; SPAWNS=MAP['spawns']
-TICK=1/30; LIMIT=15; ROUND_SECONDS=360; MAX_PLAYERS=4
+TICK=1/30; LIMIT=15; ROUND_SECONDS=360; MAX_PLAYERS=8
+
+# Only nearby colliders participate in movement; ray tests still use all cover.
+CELL=8
+COLLISION_GRID={}
+for i,b in enumerate(BOXES):
+    for gx in range(math.floor((b['x']-b['w']/2)/CELL),math.floor((b['x']+b['w']/2)/CELL)+1):
+        for gz in range(math.floor((b['z']-b['d']/2)/CELL),math.floor((b['z']+b['d']/2)/CELL)+1):
+            COLLISION_GRID.setdefault((gx,gz),[]).append(i)
+def nearby_boxes(x,z,radius=1):
+    ids=set()
+    for gx in range(math.floor((x-radius)/CELL),math.floor((x+radius)/CELL)+1):
+        for gz in range(math.floor((z-radius)/CELL),math.floor((z+radius)/CELL)+1):
+            ids.update(COLLISION_GRID.get((gx,gz),()))
+    return [BOXES[i] for i in sorted(ids)]
 
 def ray_box(origin,direction,bounds):
     lo,hi=0.,100.
@@ -39,22 +53,23 @@ def move(p,dt,now):
         p['vx']+=((r*math.cos(yaw)-f*math.sin(yaw))*speed-p['vx'])*blend
         p['vz']+=((-r*math.sin(yaw)-f*math.cos(yaw))*speed-p['vz'])*blend
     else:p['vx']*=math.exp(-1.1*dt);p['vz']*=math.exp(-1.1*dt)
+    candidates=nearby_boxes(p['x'],p['z'],max(abs(p['vx']),abs(p['vz']))*dt+.34)
     height=1.05 if sliding else 1.8
     # Never stand into an overhead solid after a slide.
-    if not sliding and any(overlaps(p['x'],p['y'],p['z'],b) for b in BOXES):p['crouch']=True;height=1.05
+    if not sliding and any(overlaps(p['x'],p['y'],p['z'],b) for b in candidates):p['crouch']=True;height=1.05
     for axis,vel in [('x','vx'),('z','vz')]:
         v=p[axis]+p[vel]*dt;tx=v if axis=='x' else p['x'];tz=v if axis=='z' else p['z']
-        obstacles=[b for b in BOXES if overlaps(tx,p['y'],tz,b,height)]
+        obstacles=[b for b in candidates if overlaps(tx,p['y'],tz,b,height)]
         if obstacles and p['grounded']:
             top=max(b['y']+b['h'] for b in obstacles)
-            if top-p['y']<=.29 and not any(overlaps(tx,top,tz,b,height) for b in BOXES):p['y']=top;obstacles=[]
+            if top-p['y']<=.29 and not any(overlaps(tx,top,tz,b,height) for b in candidates):p['y']=top;obstacles=[]
         if not obstacles:p[axis]=v
         else:p[vel]=0
     if inp.get('jump') and not p['jump_held'] and p['grounded']:
         p['vy']=7.5;p['grounded']=False;p['slide_until']=0
     p['jump_held']=bool(inp.get('jump'));old=p['y'];p['vy']-=22*dt;ny=old+p['vy']*dt
     ground=0
-    for b in BOXES:
+    for b in candidates:
         if abs(p['x']-b['x'])<b['w']/2+.32 and abs(p['z']-b['z'])<b['d']/2+.32:
             top=b['y']+b['h']
             if p['vy']<=0 and old>=top-.02:ground=max(ground,top)
@@ -73,9 +88,11 @@ def spawn(p,players,now):
             origin=(q['x'],q['y']+1.55,q['z']);vec=(x-origin[0],y+1.55-origin[1],z-origin[2]);dist=math.sqrt(sum(v*v for v in vec))
             direction=tuple(v/max(dist,.01) for v in vec)
             if not any((h:=ray_box(origin,direction,bounds(b))) is not None and h<dist for b in BOXES):exposed+=1
-        return nearest-exposed*25
+        # Prefer protected spawns one short rotation from the fight, not the
+        # opposite corner of the district. Too-close spawns are heavily penalized.
+        return min(nearest,30)-max(0,nearest-38)*.6-exposed*25-max(0,14-nearest)*3
     points=random.sample(SPAWNS,len(SPAWNS));x,y,z=max(points,key=rank)
-    p.update(x=x,y=y,z=z,vx=0.,vy=0.,vz=0.,grounded=True,hp=100,ammo=WEAPONS[p['weapon']]['mag'],reload_at=0.,respawn_at=0.,shield=now+1.5,mags=[w['mag'] for w in WEAPONS],input={},last_shot=-999.,slide_until=0.,slide_ready=0.,jump_held=False,slide_held=False,crouch=False,motion_time=0.,move_credit=0.,commands=deque(),spawn=p.get('spawn',0)+1)
+    p.update(x=x,y=y,z=z,yaw=math.atan2(x,z),vx=0.,vy=0.,vz=0.,grounded=True,hp=100,ammo=WEAPONS[p['weapon']]['mag'],reload_at=0.,respawn_at=0.,shield=now+1.5,mags=[w['mag'] for w in WEAPONS],input={},last_shot=-999.,slide_until=0.,slide_ready=0.,jump_held=False,slide_held=False,crouch=False,motion_time=0.,move_credit=0.,commands=deque(),spawn=p.get('spawn',0)+1)
 
 def new_player(room,pid,name,now,weapon=0):
     p=dict(id=pid,name=name,kills=0,deaths=0,headshots=0,weapon=weapon,yaw=0.,pitch=0.,last_input=now,switch_at=0.,seq=0,shot_seq=0,ack_shot=0)
@@ -196,7 +213,7 @@ def aim(p,data):
 async def socket(request):
     code=request.match_info['code'].upper();room=rooms.get(code)
     if not room:return web.json_response({'error':'Room expired. Create a new room.'},status=404)
-    if len(room.players)+room.joining>=MAX_PLAYERS:return web.json_response({'error':'Room full (4 players).'},status=409)
+    if len(room.players)+room.joining>=MAX_PLAYERS:return web.json_response({'error':f'Room full ({MAX_PLAYERS} players).'},status=409)
     ws=web.WebSocketResponse(heartbeat=15,max_msg_size=2048);room.joining+=1
     try:await ws.prepare(request)
     finally:room.joining-=1
@@ -270,7 +287,7 @@ async def cache_policy(request,handler):
     if not isinstance(response,web.WebSocketResponse):response.headers['Cache-Control']='no-cache'
     return response
 async def index(request):return web.FileResponse(ROOT/'static/index.html')
-async def health(request):return web.json_response({'ok':True,'version':2,'rooms':len(rooms)})
+async def health(request):return web.json_response({'ok':True,'version':2,'revision':'2.2','rooms':len(rooms)})
 async def room_info(request):
     r=rooms.get(request.match_info['code'].upper())
     return web.json_response({'players':len(r.players),'max':MAX_PLAYERS,'phase':r.phase} if r else {'error':'Room expired or not found.'},status=200 if r else 404)
