@@ -1,5 +1,6 @@
 """CROSSFIRE 02. Server-authoritative small-room FPS. Single Python process."""
 import asyncio, contextlib, json, math, os, random, re, secrets, time
+from collections import deque
 from pathlib import Path
 from aiohttp import web, WSMsgType
 ROOT=Path(__file__).parent
@@ -74,7 +75,7 @@ def spawn(p,players,now):
             if not any((h:=ray_box(origin,direction,bounds(b))) is not None and h<dist for b in BOXES):exposed+=1
         return nearest-exposed*25
     points=random.sample(SPAWNS,len(SPAWNS));x,y,z=max(points,key=rank)
-    p.update(x=x,y=y,z=z,vx=0.,vy=0.,vz=0.,grounded=True,hp=100,ammo=WEAPONS[p['weapon']]['mag'],reload_at=0.,respawn_at=0.,shield=now+1.5,mags=[w['mag'] for w in WEAPONS],input={},last_shot=-999.,slide_until=0.,slide_ready=0.,jump_held=False,slide_held=False,crouch=False,spawn=p.get('spawn',0)+1)
+    p.update(x=x,y=y,z=z,vx=0.,vy=0.,vz=0.,grounded=True,hp=100,ammo=WEAPONS[p['weapon']]['mag'],reload_at=0.,respawn_at=0.,shield=now+1.5,mags=[w['mag'] for w in WEAPONS],input={},last_shot=-999.,slide_until=0.,slide_ready=0.,jump_held=False,slide_held=False,crouch=False,motion_time=0.,move_credit=0.,commands=deque(),spawn=p.get('spawn',0)+1)
 
 def new_player(room,pid,name,now,weapon=0):
     p=dict(id=pid,name=name,kills=0,deaths=0,headshots=0,weapon=weapon,yaw=0.,pitch=0.,last_input=now,switch_at=0.,seq=0,shot_seq=0,ack_shot=0)
@@ -164,12 +165,21 @@ class Room:
                 if now>=p['respawn_at'] and self.phase=='playing':spawn(p,self.players,now)
                 continue
             if p['reload_at'] and now>=p['reload_at']:p['ammo']=WEAPONS[p['weapon']]['mag'];p['reload_at']=0
-            if self.phase in ('lobby','playing'):move(p,dt,now)
+            if self.phase in ('lobby','playing'):
+                p['move_credit']=min(.2,p['move_credit']+dt)
+                while p['commands'] and p['move_credit']>=TICK-1e-8:
+                    cmd=p['commands'].popleft()
+                    if cmd['spawn']!=p['spawn']:continue
+                    p['input']=cmd['input'];p['yaw']=cmd['yaw'];p['pitch']=cmd['pitch']
+                    p['motion_time']+=TICK;p['last_input']=p['motion_time']
+                    move(p,TICK,p['motion_time']);p['seq']=cmd['seq'];p['move_credit']-=TICK
+            else:
+                p['commands'].clear();p['move_credit']=0.
         for t in self.targets:
             if t['hp']<=0 and now>=t['reset_at']:t['hp']=100
     def snapshot(self,now):
-        fields=('id','name','x','y','z','vx','vy','vz','grounded','yaw','pitch','hp','ammo','kills','deaths','headshots','weapon','crouch','spawn','seq','shot_seq','ack_shot')
-        return dict(type='state',phase=self.phase,mode=self.mode,host=self.host,players=[{k:p[k] for k in fields}|dict(reload=max(0,p['reload_at']-now),respawn=max(0,p['respawn_at']-now),shield=max(0,p['shield']-now),slide=max(0,p['slide_until']-now),slideCooldown=max(0,p['slide_ready']-now),switch=max(0,p['switch_at']-now)) for p in self.players.values()],targets=self.targets,events=self.events,remaining=max(0,ROUND_SECONDS-(now-self.started)) if self.phase=='playing' else ROUND_SECONDS,countdown=max(0,self.countdown_at-now),winner=self.winner)
+        fields=('id','name','x','y','z','vx','vy','vz','grounded','yaw','pitch','hp','ammo','kills','deaths','headshots','weapon','crouch','spawn','seq','shot_seq','ack_shot','jump_held','slide_held','motion_time','slide_until','slide_ready')
+        return dict(type='state',phase=self.phase,mode=self.mode,host=self.host,players=[{k:p[k] for k in fields}|dict(reload=max(0,p['reload_at']-now),respawn=max(0,p['respawn_at']-now),shield=max(0,p['shield']-now),slide=max(0,p['slide_until']-p['motion_time']),slideCooldown=max(0,p['slide_ready']-p['motion_time']),switch=max(0,p['switch_at']-now)) for p in self.players.values()],targets=self.targets,events=self.events,remaining=max(0,ROUND_SECONDS-(now-self.started)) if self.phase=='playing' else ROUND_SECONDS,countdown=max(0,self.countdown_at-now),winner=self.winner)
 
 rooms={}
 async def create_room(request):
@@ -210,8 +220,12 @@ async def socket(request):
                 action=data.get('type')
                 if action=='ping':await ws.send_json({'type':'pong','t':data.get('t')});continue
                 if action=='input':
-                    aim(p,data);p['input']={k:data.get(k) is True for k in ('w','a','s','d','jump','sprint','slide','ads')};p['last_input']=now
-                    p['seq']=max(0,min(2**31,int(data.get('seq',0))))
+                    aim(p,data)
+                    seq=max(0,min(2**31,int(data.get('seq',0))))
+                    generation=int(data.get('spawn',p['spawn']))
+                    latest=p['commands'][-1]['seq'] if p['commands'] else p['seq']
+                    if generation==p['spawn'] and seq>latest and len(p['commands'])<30:
+                        p['commands'].append(dict(seq=seq,spawn=generation,yaw=p['yaw'],pitch=p['pitch'],input={k:data.get(k) is True for k in ('w','a','s','d','jump','sprint','slide','ads')}))
                 elif action=='shoot':
                     aim(p,data);p['input']['ads']=data.get('ads') is True;p['ack_shot']=max(p['ack_shot'],max(0,min(2**31,int(data.get('shot',0)))));room.shoot(p,now,p['ack_shot'])
                 elif action=='reload':room.reload(p,now)
@@ -232,14 +246,18 @@ async def broadcast(room,packet):
             if not ws.closed:asyncio.create_task(ws.close())
     await asyncio.gather(*(send(ws) for ws in list(room.sockets.values())))
 async def loop(app):
-    last=time.monotonic()
+    last=time.monotonic();snapshot_budget=0.
     while True:
-        now=time.monotonic();dt=min(.05,now-last);last=now;pending=[]
+        now=time.monotonic();dt=min(.2,now-last);last=now;pending=[];snapshot_budget+=dt
+        publish=snapshot_budget>=.05
+        if publish:snapshot_budget%=.05
         for code,room in list(rooms.items()):
             if not room.players:
                 if now-room.last_active>180:rooms.pop(code,None)
                 continue
-            room.step(dt,now);pending.append(broadcast(room,json.dumps(room.snapshot(now),separators=(',',':'))));room.events=[]
+            room.step(dt,now)
+            if publish:
+                pending.append(broadcast(room,json.dumps(room.snapshot(now),separators=(',',':'))));room.events=[]
         if pending:await asyncio.gather(*pending)
         await asyncio.sleep(max(0,TICK-(time.monotonic()-now)))
 async def lifecycle(app):

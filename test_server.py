@@ -73,6 +73,17 @@ class GameTests(unittest.TestCase):
         a.update(input={'w':True},last_input=100)
         for i in range(30):s.move(a,s.TICK,110+i*s.TICK)
         self.assertLess(abs(a['vz']),.01)
+    def test_input_ack_only_after_simulation_and_time_budget(self):
+        r,a,b=duel();a['seq']=0
+        for seq in range(1,13):a['commands'].append(dict(seq=seq,spawn=a['spawn'],yaw=0,pitch=0,input={'w':True,'sprint':True,'jump':seq==2}))
+        self.assertEqual(a['seq'],0)
+        r.step(s.TICK,101);self.assertEqual(a['seq'],1)
+        r.step(.1,101.1);self.assertEqual(a['seq'],4)
+        self.assertAlmostEqual(a['motion_time'],4*s.TICK)
+    def test_stale_spawn_commands_are_discarded(self):
+        r,a,b=duel();pos=(a['x'],a['y'],a['z'])
+        a['commands'].append(dict(seq=100,spawn=a['spawn']-1,yaw=0,pitch=0,input={'w':True}))
+        r.step(s.TICK,101);self.assertEqual((a['x'],a['y'],a['z']),pos);self.assertEqual(a['seq'],0)
     def test_all_spawn_points_valid(self):
         for x,y,z in s.SPAWNS:self.assertFalse(any(s.overlaps(x,y,z,b) for b in s.BOXES))
 

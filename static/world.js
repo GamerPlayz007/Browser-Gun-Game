@@ -6,7 +6,7 @@ export function buildWorld(scene,map){
   scene.background=new T.Color(0xaedbdc);scene.fog=new T.Fog(0xc8dcd5,42,125);
   const sky=new Sky();sky.scale.setScalar(450);sky.material.uniforms.turbidity.value=2;sky.material.uniforms.rayleigh.value=.85;sky.material.uniforms.sunPosition.value.set(-.6,.65,.4);scene.add(sky);
   scene.add(new T.HemisphereLight(0xe1f5ff,0xb09773,2.1));
-  const sun=new T.DirectionalLight(0xffefd3,3.3);sun.position.set(-22,38,18);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);Object.assign(sun.shadow.camera,{left:-32,right:32,top:32,bottom:-32,near:1,far:100});sun.shadow.bias=-.0003;sun.shadow.normalBias=.04;scene.add(sun);
+  const sun=new T.DirectionalLight(0xffefd3,3.3);sun.position.set(-22,38,18);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);Object.assign(sun.shadow.camera,{left:-32,right:32,top:32,bottom:-32,near:1,far:100});sun.shadow.bias=-.0003;sun.shadow.normalBias=.04;scene.add(sun);
   const root=new T.Group();scene.add(root);const materials=new Map();
   function mat(c){if(!materials.has(c))materials.set(c,new T.MeshStandardMaterial({color:c,roughness:.92}));return materials.get(c);}
   function mesh(geometry,color,x,y,z){const m=new T.Mesh(geometry,mat(color));m.position.set(x,y,z);m.castShadow=m.receiveShadow=true;root.add(m);return m;}

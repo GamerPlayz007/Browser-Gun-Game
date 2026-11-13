@@ -1,3 +1,15 @@
+# Movement and performance patch 2.1
+
+Upload this complete package to the same repository and commit, then wait for Render to finish and hard-refresh every client. **Both server.py and the static folder must be updated together**: this patch changes the input protocol. The lobby badge says **02.1**.
+
+- Fixed-step 30 Hz movement on both client and server. The server acknowledges only commands it has simulated. Clients replay unacknowledged input and smooth small visual corrections.
+- Removed frame-dependent movement slowdown below 29 FPS; tested mixed sprint/jump/diagonal/slide/ADS inputs at simulated 10, 20, 30, 60 and 144 FPS.
+- Reset stale commands on respawn, bounded input time budgets, and tested 200 ms delayed acknowledgements.
+- Performance rendering is now the default (including for existing installations): no shadows, no MSAA, reduced render resolution capped around 1000 by 700 pixels. High quality is still selectable.
+- Hidden weapon scene no longer renders; scoreboard and roster rebuild only when their contents change. Server snapshots reduced to ~20 Hz while movement remains 30 Hz.
+
+Validation: 17 Python server tests, scene construction checks, JS syntax checks, and cross-language movement/replay tests passed. These are simulation checks, not measured laptop FPS. Live WebGL gameplay remains unverified in this environment. After updating, check both FPS and MS in the bottom-left HUD; FPS measures rendering, MS measures round-trip network latency.
+
 # CROSSFIRE 02 — SOLSTICE
 
 Browser multiplayer FPS for 2–4 friends. An upgrade to Build 01, compatible with the same Python/Render hosting settings.
