@@ -1,0 +1,1 @@
+{"name":"crossfire-arena","private":true,"type":"module","scripts":{"dev":"python server.py"},"dependencies":{"three":"0.180.0"}}
