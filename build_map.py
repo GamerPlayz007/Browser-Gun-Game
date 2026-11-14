@@ -16,5 +16,5 @@ def main():
         {'id':'solstice','name':'Solstice (Sandstone)','available':False,'theme':'sandstone'}]}
     (out/'index.json').write_text(json.dumps(registry,indent=2)+'\n')
     (ROOT/'MAP_GUIDE.svg').write_text(guide(arena))
-    print(f"02.4: {len(arena['boxes'])} colliders; 12 connections; {len(arena['stairs'])} access ramps")
+    print(f"02.5: {len(arena['boxes'])} colliders; 12 connections; {len(arena['stairs'])} access ramps")
 if __name__=='__main__':main()

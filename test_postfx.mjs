@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import * as THREE from 'three';
+import {createPostProcessing,EffectComposer,UnrealBloomPass} from './static/postfx.js';
+let draws=0,target=null;
+const fake={setRenderTarget(t){target=t;},clear(){},render(){draws++;}};
+const p=createPostProcessing(fake,new THREE.Scene(),new THREE.Camera(),'high');
+assert.ok(p.composer instanceof EffectComposer);
+assert.ok(p.composer.pass instanceof UnrealBloomPass);
+p.setSize(1920,1080);assert.equal(p.composer.beauty.samples,4);
+assert.equal(p.composer.beauty.width,1920);assert.equal(p.composer.bloomA.width,960);
+p.render();assert.equal(draws,5);assert.equal(target,null);
+p.setMode('ultra');assert.equal(p.composer.beauty.samples,8);
+p.render();assert.equal(draws,10);
+p.setMode('performance');p.render();assert.equal(draws,11);
+p.dispose();console.log('02.5 compositor: multisampled High/Ultra targets, bloom stages and Performance fallback passed.');

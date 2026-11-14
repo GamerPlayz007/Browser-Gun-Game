@@ -3,7 +3,7 @@ Solid architecture is carved into rooms and passages. Routes compile into both
 navigation metadata and real floor/ramp colliders. No hidden collision risers.
 """
 from html import escape
-PALETTE={'concrete':'#303b4b','dark':'#172331','road':'#273243','metal':'#53667c','pale':'#9cb7c9','glass':'#244d60','cyan':'#3df2f5','magenta':'#ff438f','amber':'#ffb845','white':'#d8faff','garden':'#427968'}
+PALETTE={'concrete':'#303b4b','dark':'#172331','road':'#273243','metal':'#53667c','pale':'#9cb7c9','glass':'#244d60','cyan':'#3df2f5','magenta':'#ff438f','amber':'#ffb845','white':'#d8faff','garden':'#427968','wood':'#655043','rust':'#705347','grate':'#637482','tile':'#51657b','asphalt':'#252f3b','facade':'#253847','leather':'#463a45'}
 def subtract(a,c):
     x0,y0,z0,x1,y1,z1=a;u0,v0,w0,u1,v1,w1=c
     u0,v0,w0=max(x0,u0),max(y0,v0),max(z0,w0);u1,v1,w1=min(x1,u1),min(y1,v1),min(z1,w1)
@@ -11,7 +11,7 @@ def subtract(a,c):
     return [p for p in [(x0,y0,z0,u0,y1,z1),(u1,y0,z0,x1,y1,z1),(u0,y0,z0,u1,v0,z1),(u0,v1,z0,u1,y1,z1),(u0,v0,z0,u1,v1,w0),(u0,v0,w1,u1,v1,z1)] if all(p[i+3]-p[i]>.001 for i in range(3))]
 
 def build(weapons):
-    boxes=[];decor=[];routes=[];stairs=[]
+    boxes=[];decor=[];routes=[];stairs=[];features=[]
     def zone(x,z):return 'transit' if z<30 else 'market' if x<31 else 'atrium' if x>53 else 'plaza'
     def box(x0,y0,z0,x1,y1,z1,style='concrete',kind='building',target=None,**kw):
         if min(x1-x0,y1-y0,z1-z0)<.001:return
@@ -42,8 +42,8 @@ def build(weapons):
         for p in parts:box(*p,style,kind)
     for b in [(0,0,0,80,23,3),(0,0,77,80,22,80),(0,0,3,4,25,77),(77,0,3,80,27,77)]:box(*b,'dark','boundary')
     masses=[(7,1,7,31,22,23),(30,1,31,52,27,47),(22,1,52,31,22,71),(49,1,47,56,20,71),(60,1,24,75,24,34),(5,1,31,9,18,62),(6,1,63,12,20,74)]
-    for b in masses:mass(b)
-    mass((57,1,35,75,14,70),'pale','atriumShell',[(58,1,36,74,13,69)])
+    for b in masses:mass(b,'facade')
+    mass((57,1,35,75,14,70),'facade','atriumShell',[(58,1,36,74,13,69)])
     floor=[(3,-.35,3,77,1,77)]
     for cut in [(32,0,50,49,4,72),*cuts]:floor=[p for a in floor for p in subtract(a,cut)]
     for p in floor:box(*p,'road','floor')
@@ -57,7 +57,7 @@ def build(weapons):
     for b in [(7,4.65,28,21,5,40),(32,4.65,51,38,5,58),(59,4.65,40,64,5,68),(64,4.65,48,73,5,53),(32,8.65,8,59,9,24),(29,8.65,24,38,9,32)]:
         parts=[b]
         for cut in deck_cuts:parts=[p for a in parts for p in subtract(a,cut)]
-        for p in parts:box(*p,'metal','deck')
+        for p in parts:box(*p,'grate','deck')
     used=set()
     for r in paths:
         for a,b in zip(r['points'],r['points'][1:]):
@@ -65,14 +65,14 @@ def build(weapons):
             if key in used:continue
             used.add(key);dx,dz=b[0]-a[0],b[2]-a[2];h=r['width']/2
             if a[1]==b[1]:
-                box(min(a[0],b[0])-h,a[1]-.32,min(a[2],b[2])-h,max(a[0],b[0])+h,a[1],max(a[2],b[2])+h,'road' if a[1]<=1 else 'metal','routeFloor')
+                box(min(a[0],b[0])-h,a[1]-.32,min(a[2],b[2])-h,max(a[0],b[0])+h,a[1],max(a[2],b[2])+h,'asphalt' if a[1]<=1 else ('wood' if r['id'] in ('U1','U3') else 'grate'),'routeFloor')
             else:
                 axis='x' if dx else 'z';low,high=(a,b) if a[1]<b[1] else (b,a)
                 direction=1 if (high[0]-low[0] if axis=='x' else high[2]-low[2])>0 else -1
                 x0,x1=min(a[0],b[0]),max(a[0],b[0]);z0,z1=min(a[2],b[2]),max(a[2],b[2])
                 if axis=='x':z0-=h;z1+=h
                 else:x0-=h;x1+=h
-                box(x0,low[1]-.32,z0,x1,high[1],z1,'metal','ramp',axis=axis,direction=direction,low=low[1],rise=high[1]-low[1],thickness=.32,route=r['id'])
+                box(x0,low[1]-.32,z0,x1,high[1],z1,'rust' if r['id'].startswith('U') else 'grate','ramp',axis=axis,direction=direction,low=low[1],rise=high[1]-low[1],thickness=.32,route=r['id'])
     # Open precise stair footprints through every intersecting floor slab.
     ramps=[b for b in boxes if b['kind']=='ramp']
     floors=[b for b in boxes if b['kind'] in ('floor','deck','routeFloor')]
@@ -115,13 +115,90 @@ def build(weapons):
         x=-12+i*7;z=-12 if i%2 else 89;h=25+(i*7)%22
         box(x,0,z,x+5,h,z+7,'dark','skyline',decor,detail=True)
         box(x+.3,h-3,z+7.02,x+4.7,h-2.7,z+7.08,'cyan' if i%3 else 'magenta','skyline',decor,detail=True)
+    # The details below are **visual only**.  Large solid counters, stalls and
+    # pillars are already represented by coarse boxes above.  No pebble, pipe,
+    # chair leg, cable or grating bolt is added to physics, preventing snags.
+    def feature(kind,x,y,z,**data):
+        features.append(dict(kind=kind,x=round(x-40,3),y=y,z=round(z-40,3),zone=zone(x,z),**data))
+    # Lane lettering, crosswalks, pothole patches and drains; all decal-height.
+    for z in (30,37,43,49,62,70):
+        for x in (35,39,43,47,51):
+            if (x+z)%3:box(x,1.006,z,x+.18,1.014,z+1.35,'pale','lane',decor,detail=True)
+    for cx,cz in ((42,64),(45,51),(18,70),(54,31)):
+        for i in range(7):
+            box(cx-3+i*.9,1.005,cz,cx-2.55+i*.9,1.012,cz+1.45,'pale','crosswalk',decor)
+    for x,z in ((12,47),(37,55),(68,43),(50,31),(22,65),(47,70)):
+        feature('manhole',x,1.015,z)
+    for x,z,dx,dz in ((18,66,1.1,.7),(42,56,1.7,.9),(69,39,1.3,1.2),(54,43,1.5,.6),(34,74,1.4,1.0)):
+        feature('puddle',x,1.015,z,w=dx,d=dz)
+    # Physically modelled curb ribbons, bevel-like tactile ridges, drain covers.
+    for x,z,w,d in ((31.5,48,1.0,24),(56,34,.8,34),(10,35,.75,26),(32,73,21,.8),(31,29,26,.7)):
+        box(x,1.015,z,x+w,1.19,z+d,'tile','curb',decor)
+        box(x+.08,1.195,z+.1,x+w-.08,1.204,z+d-.1,'amber','curbStripe',decor,detail=True)
+    # Shop bays: alternating ramen / electronic repair stalls, opened shutters,
+    # displays, luminaires and bustling piles of supplies.
+    for i,(x,z) in enumerate(((12,37),(12,44),(12,54),(18,66),(23,61),(7,48),(26,43),(26,56))):
+        feature('shop',x,1,z,variant=i%3,rotation=1.57 if i%2 else 0)
+        feature('crates',x+2.4,1,z+2.5,variant=i%3)
+        feature('lantern',x+1,4.15,z+.5,color='amber' if i%2 else 'magenta')
+        feature('vending',x-1.9,1,z+2.65,variant=i%3)
+        if i%2==0:feature('ventSteam',x+2.7,1,z+1.8)
+    for x,z in ((12,48),(22,65),(28,46),(9,60)):
+        feature('stools',x,1,z)
+    for x,z in ((6,37),(8,60),(29,63),(38,68),(53,70),(72,53),(59,37),(51,27)):
+        feature('streetlamp',x,1,z,color='cyan' if int(x)%2 else 'amber')
+    for x,z in ((8,34),(19,56),(36,60),(51,72),(73,39),(60,65),(31,21)):
+        feature('trash',x,1,z)
+    for x,z in ((5,43),(29,52),(55,43),(70,36),(43,22)):
+        feature('duct',x,3.3,z)
+    box(58.1,1.017,36.1,74,1.047,69,'tile','lobbyFloor',decor)
+    # I2 corporate glass atrium: lobby with coherent reception and seating.
+    feature('reception',70,1,63)
+    for x,z in ((65,61),(69,58),(72,50)):feature('sofa',x,1,z)
+    for x,z in ((60,67),(72,66),(60,43)):feature('planter',x,1,z)
+    feature('logo',70,5.1,68,text='AXIOM / CORE')
+    for x,z in ((61,45),(67,57),(72,46),(60,61)):
+        feature('floorLight',x,1.02,z)
+    # I3/I4 interiors are maintenance workshops / operations corridors.
+    for x,z in ((19,20),(23,27),(66,21),(69,28),(59,27)):
+        feature('workbench',x,1,z)
+    for x,z in ((23,19),(69,22),(59,31)):
+        feature('serverRack',x,1,z)
+    # Transit rail car: benches and safe overhead handrails, ticket machines.
+    for x in (38,42,47,52,56):
+        feature('trainSeat',x,9.1,17.8)
+        feature('trainSeat',x,9.1,21.0)
+        feature('handrail',x,9.1,19.5)
+    for x,z in ((34,22),(54,23),(59,16)):
+        feature('ticket',x,9,z)
+    # Elevated route dressing: steel brackets and actual individual wood slats.
+    # They visually follow route height; physics remains a continuous ramp.
+    for r in routes:
+        if not r['id'].startswith('U'):continue
+        for a,b in zip(r['points'],r['points'][1:]):
+            length=((b[0]-a[0])**2+(b[2]-a[2])**2)**.5
+            if not length:continue
+            for i in range(max(1,int(length/.85))):
+                t=(i+.5)/max(1,int(length/.85))
+                x=a[0]+(b[0]-a[0])*t;z=a[2]+(b[2]-a[2])*t
+                y=a[1]+(b[1]-a[1])*t
+                feature('plankBolt',x,y,z,axis='x' if abs(b[0]-a[0])>abs(b[2]-a[2]) else 'z',variant=i%3)
+    # Cable spans are decorative and deliberately placed above headroom.
+    for x1,z1,x2,z2,y in ((8,42,34,42,12),(13,58,34,58,11),(33,68,57,68,13),
+                           (8,33,40,33,17),(55,42,75,42,15),(25,22,58,22,19),
+                           (10,64,37,64,14),(38,29,67,29,18)):
+        feature('cable',(x1+x2)/2,y,(z1+z2)/2,dx=x2-x1,dz=z2-z1)
+    for x,z,y in ((23,32,11),(40,70,12),(72,41,9),(17,38,9),(50,25,14)):
+        feature('billboard',x,y,z,color='cyan' if int(x)%2 else 'magenta')
+    for x,z in ((11,40),(58,48),(68,38),(38,14),(34,62),(55,71)):
+        feature('pipeduct',x,7,z)
     zones=[dict(id='market',name='NIGHT MARKET',x=-24,y=1,z=6,w=25,d=39,color=PALETTE['magenta']),dict(id='plaza',name='NEON PLAZA',x=.5,y=0,z=22,w=23,d=27,color=PALETTE['cyan']),dict(id='atrium',name='TECH ATRIUM',x=25,y=1,z=12,w=23,d=35,color=PALETTE['cyan']),dict(id='transit',name='TRANSIT DECK',x=4,y=9,z=-23,w=33,d=29,color=PALETTE['amber'])]
     for r in paths:r['points']=[[x-40,y,z-40] for x,y,z in r['points']]
     spawns=[(15,1,58),(17,1,35),(40,0,68),(37,0,52),(64,1,61),(71,1,41),(34,9,12),(51,9,21)]
-    return dict(id='cyberpunk',name='Cyberpunk City',revision='02.4',theme='cyberpunk',size=80,palette=PALETTE,boxes=boxes,decor=decor,signs=signs,zones=zones,routes=routes,stairs=stairs,spawns=[[x-40,y,z-40] for x,y,z in spawns],practiceTargets=[[-24,1,4],[25,1,0]],weapons=weapons,clearance=4.2)
+    return dict(id='cyberpunk',name='Cyberpunk City',revision='02.5',theme='cyberpunk',size=80,palette=PALETTE,boxes=boxes,decor=decor,features=features,signs=signs,zones=zones,routes=routes,stairs=stairs,spawns=[[x-40,y,z-40] for x,y,z in spawns],practiceTargets=[[-24,1,4],[25,1,0]],weapons=weapons,clearance=4.2)
 
 def guide(m):
-    items=['<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="1040" viewBox="0 0 1280 1040"><rect width="1280" height="1040" fill="#101923"/>','<g font-family="Arial" fill="#e8f7ff"><text x="45" y="48" font-size="28" font-weight="bold">CROSSFIRE 02.4 / CYBERPUNK CITY</text><text x="45" y="76" font-size="15">80 × 80 m · North ↑ · Street 1 m / Plaza 0 m / Canopies 5 m / Transit 9 m</text></g><rect x="45" y="110" width="800" height="800" fill="#293444"/>']
+    items=['<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="1040" viewBox="0 0 1280 1040"><rect width="1280" height="1040" fill="#101923"/>','<g font-family="Arial" fill="#e8f7ff"><text x="45" y="48" font-size="28" font-weight="bold">CROSSFIRE 02.5 / CYBERPUNK CITY</text><text x="45" y="76" font-size="15">80 × 80 m · North ↑ · Street 1 m / Plaza 0 m / Canopies 5 m / Transit 9 m</text></g><rect x="45" y="110" width="800" height="800" fill="#293444"/>']
     def px(x):return 45+(x+40)*10
     def pz(z):return 110+(z+40)*10
     for b in m['boxes']:

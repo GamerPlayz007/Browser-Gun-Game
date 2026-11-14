@@ -1,4 +1,4 @@
-"""CROSSFIRE 02.4. Server-authoritative small-room FPS. Single Python process."""
+"""CROSSFIRE 02.5. Server-authoritative small-room FPS. Single Python process."""
 import asyncio, contextlib, json, math, os, random, re, secrets, time
 from collections import deque
 from pathlib import Path

@@ -1,4 +1,4 @@
-"""02.4: real server/client navigation, headroom, room routes and generation checks."""
+"""02.5: real server/client navigation, headroom, room routes and generation checks."""
 import json, math, random, subprocess, unittest
 from pathlib import Path
 import server as s
@@ -81,6 +81,14 @@ console.log(JSON.stringify(cases.map(c=>{const p={...c.initial};return c.command
             for b in s.BOXES:
                 if abs(x-b['x'])<=b['w']/2+r and abs(z-b['z'])<=b['d']/2+r:self.assertIn(b,near)
         self.assertLess(sum(counts)/len(counts),len(s.BOXES)/3)
+    def test_visual_features_are_decoupled_from_collision(self):
+        self.assertEqual(s.MAP['revision'],'02.5')
+        features=s.MAP['features']
+        self.assertGreater(len(features),120)
+        kinds={f['kind'] for f in features}
+        self.assertTrue({'shop','reception','trainSeat','cable','billboard','plankBolt','puddle','workbench'}<=kinds)
+        self.assertEqual(len(s.MAP['routes']),12)
+        for f in features:self.assertNotIn(f,s.BOXES)
     def test_generation_is_reproducible(self):
         paths=['static/map.json','static/maps/cyberpunk.json','static/maps/index.json','MAP_GUIDE.svg']
         before=[(ROOT/p).read_bytes() for p in paths]
