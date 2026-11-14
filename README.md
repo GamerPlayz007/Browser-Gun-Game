@@ -1,127 +1,110 @@
-# CROSSFIRE 02.3 — SOLSTICE: SKYWAYS
+# CROSSFIRE 02.4 — CYBERPUNK CITY
 
-Browser multiplayer FPS for 2–8 friends. An expansion of the 2.2 build, replacing its map with connected three-lane architecture, compatible with the same Python/Render hosting settings.
+Browser multiplayer FPS for 2–8 friends. Four architectural districts, twelve named connections, and room-scoped maps. Cyberpunk City is the active map. Lush Rainforest and Solstice (Sandstone) appear as disabled future entries in the lobby selector.
 
-## Update your existing GitHub + Render deployment
+## Upload to your existing GitHub + Render service
 
-1. Extract the ZIP on your computer.
-2. Open your **GamerPlayz007 / Browser-Gun-Game** repository on GitHub.
-3. Choose **Add file → Upload files**.
-4. Drag **all contents inside the extracted folder**, including the complete `static` folder, onto the upload page. Do not upload the ZIP or the outer folder. Keep file names and folder structure.
-5. Commit the upload to `main`. Existing matching files are replaced and new files added. No old files require deletion.
-6. Render should automatically deploy that commit if On Commit is enabled. Otherwise select **Manual Deploy → Deploy latest commit**.
-7. Keep these Render settings: Python 3; build `pip install -r requirements.txt`; start `python server.py`; health `/health`; existing Free instance. Use whichever existing service you selected after testing regional ping; this update itself needs no new service.
-8. Once Render says Live, open your existing game URL and press **Ctrl + Shift + R** to load the new version. All players should refresh; old rooms are cleared on restart.
+1. Extract `CROSSFIRE_Replit.zip`.
+2. Open `GamerPlayz007 / Browser-Gun-Game` on GitHub, then **Add file → Upload files**.
+3. Drag **the contents of the extracted folder** into GitHub, including the whole `maps` and `static` folders. Upload files/folders, not the ZIP or its outer folder. Preserve their paths.
+4. Commit to `main`. Matching paths replace the existing files; new paths are added. **No old files need deleting.** `UPLOAD_02_4.md` gives the exact changed/added list.
+5. Keep the existing Render service: **Python 3**, build `pip install -r requirements.txt`, start `python server.py`, health check `/health`. No Node build is required in production. Keep your current region and instance plan.
+6. After the deploy is Live, press **Ctrl + Shift + R** on the game page. Everyone should refresh. Restarting the server clears existing rooms.
 
-The lobby should say **SOLSTICE** with the **02.3** badge and four selectable weapon cards. If you see the old industrial-yard lobby, the new deployment has not finished or the page is cached.
+Confirm the lobby shows **CYBERPUNK** and badge **02.4**, and its Arena selector shows **Cyberpunk City**. `/health` returns `revision: "02.4"` and `mapId: "cyberpunk"`.
 
-## Play with friends
+## Play
 
-1. Enter your name and select a starting weapon.
-2. Create a room. The first person is its host.
-3. Press **Copy invite** in the room panel and send the link to friends.
-4. Friends enter their names and join with the prefilled room code.
-5. Choose **Deathmatch** or **Gun Game** before starting.
-6. **Enter practice** lets you move and shoot targets while waiting. Players cannot damage each other during practice.
-7. The host presses **Start match**. A three-second countdown starts the round. If your mouse is not captured, click the arena.
-8. When the round ends, the results show everyone’s kills, deaths and headshot kills. The host presses **Play again**. If the host leaves, hosting passes to another player.
-
-Desktop keyboard and mouse required. Open in a full browser tab, not an iframe preview.
-
-## Skyways architecture (2.3)
-
-- **80 × 80**, organised into three interconnected lanes: orange/terracotta **Ember Roofs**, white/blue **Azure Court**, slate/green **Emerald Gardens**.
-- Hollow arcade beneath three Ember roof sections; a split bell tower and a second roof access staircase. Roof shortcut gaps are 2 m and 2.5 m.
-- A white northern bridge links Ember's roof to the garden pavilion, with a clear central underpass. Its arch faces the direction of travel.
-- Raised court approaches surround a recessed-by-comparison fountain court. A broken gold ring marks the centre, with turquoise water and offset planting walls.
-- Gardens rise through connected tiers, with a pavilion, waterfall, western ramp chain and eastern roof gallery. Its optional gap is 1.5 m. Two .9 m ledges provide a jump shortcut.
-- Nine movement ramps/stairs have continuous wedge visuals over 12.5 cm collision risers. Existing acceleration, jump, slide and prediction constants are unchanged. The ramp visual/collision difference is at most 12.5 cm.
-- Main ground arches offer 8–10 m width and 5.2 m clear headroom; the bridge arch offers a 5 m clear opening above the deck. Staggered walls break the three main north/south ground sightlines.
-- **16 spawns**, 2–8 player rooms, minimap and **hold M** for the full map.
-- `python build_map.py` regenerates **both** `static/map.json` and `MAP_GUIDE.svg` from the same authored layout.
-- Shared materials and merged static geometry: **17 scene meshes / 4,506 triangles**, including sky and practice targets, excluding players/weapons. The water is opaque and batched, with no reflection or post-processing pass. Performance defaults are retained.
-
-The four weapons, ADS, reloads, sprint/jump/slide, Gun Game, practice, host controls and match results remain available.
-
-## Modes
-
-**Deathmatch:** first to 15 kills or the leader after six minutes. Fewest deaths breaks a kills tie; an exact tie is a draw. Use 1–4 to switch weapons. Each weapon retains its magazine when switched; respawning refills magazines.
-
-**Gun Game:** three kills with each weapon in sequence: rifle → SMG → shotgun → sniper. The 12th kill wins. Manual switching is disabled during the round. Targets never count as kills.
-
-Three-second respawns; 1.5-second spawn protection, cancelled when firing. The server picks spawns based on distance and blocked sightlines.
-
-## Controls
+Enter a callsign, choose a starting weapon and an available map, then create a room. Use **Copy invite** to invite friends. Joining automatically loads that room's map; the map is fixed for the lifetime of the room. The host chooses Deathmatch or Gun Game and starts the round. Practice targets are available while waiting. Player damage is disabled in the practice lobby.
 
 | Action | Control |
 |---|---|
-| Move | W A S D |
-| Look | Mouse |
-| Fire | Left mouse; hold for repeated firing |
-| Aim / scope | Hold right mouse |
-| Sprint | Shift |
-| Slide | C while moving quickly; 1.7-second cooldown |
-| Jump | Space |
-| Reload | R |
-| Switch weapon | 1–4 in Deathmatch |
-| Scoreboard | Hold Tab |
-| Expanded map | Hold M |
-| Room menu / release mouse | Escape |
+| Move / look | WASD / mouse |
+| Sprint / jump / slide | Shift / Space / C |
+| Shoot / aim | Left / right mouse |
+| Reload / weapon | R / 1–4 |
+| Scoreboard / full map | Hold Tab / hold M |
+| Room menu | Escape |
 
-The match continues while your room menu is open. Click Resume to recapture your mouse.
+Deathmatch ends at 15 kills or six minutes. Gun Game advances every three kills and ends at 12. Three-second respawns and 1.5-second spawn protection remain. The host can start a rematch; host ownership passes to another player when the host leaves.
 
-## Local development
+## City architecture
 
-Python 3.11+:
+The playable footprint is **80 × 80 metres**, bounded by city frontage with a skyline behind it. Tall solid buildings separate the districts and contain carved passages. The central tower breaks cross-district views.
+
+- **Neon Plaza:** recessed intersection, subway entrance cover, cyan edge markings and an unlit holographic sign.
+- **Night Market:** recessed counters, overhead signage, canopy terraces and a dedicated stair access.
+- **Tech Corporate Atrium:** enclosed high-ceiling lobby, pillar cover, mezzanine, opaque tinted glass-style railings and an escalator-style ramp.
+- **Elevated Transit Deck:** station canopy, train-car cover, public stairs and separate staff approaches.
+
+Streets are 6 m wide; interior and upper routes are 4 m wide. The city has six named access ramps. Street level is 1 m, the plaza is 0 m, canopies/mezzanines are 5 m and the transit platform is 9 m. Main circulation requires no jump. Ramps use the same inclined slab for rendering, player collision and bullet collision, including open space beneath them.
+
+| Pair | Street | Interior | Upper |
+|---|---|---|---|
+| Market ↔ Plaza | G1 Delivery Alley | I1 Electronics Shop | U1 Signwalk |
+| Plaza ↔ Atrium | G2 Corporate Forecourt | I2 Security Lobby | U2 Executive Link |
+| Market ↔ Transit | G3 Station Approach | I3 Maintenance Offices | U3 Rooftop Connector |
+| Atrium ↔ Transit | G4 Service Street | I4 Operations Wing | U4 Commuter Bridge |
+
+`MAP_GUIDE.svg` shows all twelve connections, buildings, elevations and spawns. It is a vector image and stays sharp when enlarged.
+
+## Display and performance
+
+- The renderer starts at **viewport × devicePixelRatio**, updates after window/DPI changes, and uses native WebGL antialiasing. The old 1000 × 700 cap is removed.
+- **Auto** monitors sustained frame times. It first removes optional skyline detail, then reduces 3D resolution in gradual 5% steps if still slow. It waits for sustained recovery before raising quality again. Initial loading, hidden tabs and large stalls are excluded from sampling.
+- Auto never drops below 75% of native pixel density or one rendered pixel per CSS pixel, whichever is greater. At DPR 1 it keeps native resolution and can only reduce optional detail. **Native** locks full display resolution, subject to the GPU's renderbuffer limit.
+- UI text remains at native display resolution. The minimap rebuilds its cached image at the current display density when expanded or resized.
+- The city uses **17 static geometry batches across four districts**, **21 scene meshes / 4,400 triangles** including practice targets, excluding player/weapon rigs. Lit geometry shares one material; neon shares one unlit material. Fixed signs share one texture atlas. No point lights, bloom, reflections or real-time shadows are used.
+- Fixed-step prediction remains at 30 Hz. Camera height extrapolates ground movement on slopes, and movement tests compare server and browser results frame by frame.
+
+**60 FPS is a target, not a measured guarantee.** The automated geometry/quality tests pass, but live WebGL visuals, eight-player rendering and FPS on Windows laptops have not been verified. The preview browser's automatic approval review reported a usage limit. After deploying, check both FPS and ping: resolution changes do not reduce network latency. High ping can still cause authoritative corrections; there is no historical hit rewind.
+
+## Local development and tests
+
+Python 3.11+ and Node (for tests):
 
 ```sh
 pip install -r requirements.txt
 python server.py
 ```
 
-Open http://localhost:3000. The server respects Render’s `PORT` variable. The JavaScript libraries are bundled; no npm install or build step is needed for deployment.
-
-The optional Node scene test uses the official Three.js npm package:
+Open `http://localhost:3000`. The production server respects Render's `PORT` variable. Runtime Three.js files are bundled locally.
 
 ```sh
 npm install
-node test_scene.mjs
-```
-
-## Verification and limits
-
-Run the checks from the project folder:
-
-```sh
-python -m unittest -v test_server.py test_map.py
-npm install
+python build_map.py
+python -m unittest -v test_map.py test_server.py
 npm test
 ```
 
-- **26 Python tests** cover gameplay, eight-client WebSocket capacity/host transfer, spawn support, ground-route connectivity, interrupted lane sightlines, perimeter containment, spatial indexing and deterministic map/guide generation. `test_map.py` directly executes the shipped JavaScript physics with Node and compares every movement step with the Python server: all three gap widths with all four weapon speeds, both .9 m ledges, all nine ramps, and main-arch jump/slide clearance. Negative checks confirm the gap/ledge shortcuts cannot simply be walked across.
-- Node tests validate finite geometry and batching, weapons, client/server movement agreement at simulated 10–144 FPS, delayed acknowledgement replay, minimap lane names and throttled redraws.
-- Python compilation and JavaScript syntax checks passed.
-- The tactical overview was visually inspected. Live WebGL gameplay and laptop performance are **not verified** in this environment, whose preview browser previously disabled WebGL. Test with friends after deployment; check FPS and ping separately. Eight-player rendering/server load has not been benchmarked on your laptops or Render instance.
+Validation covers:
 
-Networking uses a 30 Hz authoritative server, immediate local firing effects, fixed-step client prediction with acknowledged-input replay and interpolated opponents. There is no historical hit rewind or production-grade competitive anti-cheat. High latency can still cause position corrections. Free hosting can add latency, restart or sleep. Do not claim or expect a guaranteed frame rate or uninterrupted service.
+- **26 Python tests**, including gameplay, actual WebSocket room capacity/host transfer, invalid map selection, room-map contracts and map-specific spawns, movement and shooting.
+- **108 complete navigation traces**: twelve routes plus six access ramps × both directions × sprint/jump/slide, using the slowest weapon. Every movement step is compared against the shipped JavaScript physics.
+- Street/interior/bridge width samples, jump headroom, support, protected spawns, interrupted sightlines, broad-phase collision completeness and deterministic map/guide output.
+- Node scene/geometry budgets, weapon/player rigs, movement parity at simulated 10/20/30/60/144 FPS, delayed acknowledgement replay, minimap labels/DPI and Auto quality hysteresis/recovery.
 
-Rooms and scores live in memory. Use one server process/instance. Server restarts clear rooms. There are no bots, accounts, permanent stats, voice chat or touch controls in this build.
+The map guide was visually inspected. Browser gameplay and laptop benchmarks remain a deployment playtest step.
 
-If WebGL is unavailable, use a WebGL2-capable Chrome/Edge browser with hardware acceleration. If movement/rendering stutters, select **Performance** in the room settings. The gun/map assets are local; optional Google Fonts has system-font fallbacks.
+## Adding the next map
 
-## Source
+1. Create an authoring module under `maps/` and generate its JSON under `static/maps/`. Use the Cyberpunk schema: `id`, `name`, `revision`, `theme`, `size`, `palette`, `boxes`, `decor`, `zones`, `spawns`, `practiceTargets`, `signs`, `routes`, and `stairs`.
+2. Extend `build_map.py` to compile that module and set its registry entry to `available: true` with the exact `/static/maps/...json` URL. The registry generated here is the source of truth; hand-edits to generated JSON are overwritten on rebuild.
+3. Keep shared weapon balance in `static/weapons.json`. Embed the same weapon data when compiling a map. Maps do not define different gameplay weapons per room.
+4. Restart the server. `map_registry.py` loads enabled entries, the lobby lists them automatically, and each new room selects its own arena. Joining clients load the map reported by the room before opening their WebSocket.
+5. Run navigation tests for the new map before enabling it. Set the registry's `default` to change the default map.
 
-- `server.py`: authoritative movement, collision, shooting, rooms and matches.
-- `static/map.json`: shared visual/collision/weapon data.
-- `build_map.py`: map-authoring script and SVG guide generator, run only when changing layout or weapon balance.
-- `static/world.js`: batched procedural environment.
-- `static/models.js`: weapons, arms, player rigs and animations.
-- `static/physics.js`: client movement prediction.
-- `static/spatial.js`: shared-map collision broad phase for the client.
-- `static/minimap.js`: cached tactical map and district navigation.
-- `static/game.js`: network client, controls, effects and UI.
-- `static/audio.js`: original synthesized sound.
-- `static/index.html`, `static/style.css`: lobby, HUD, room and results screens.
-- `THIRD_PARTY.md`: reused libraries and licenses.
+`static/map.json` remains a generated copy of the default Cyberpunk map for existing tooling. The live client loads map-specific URLs; the server uses the registry. The environment renderer is data driven, with per-zone batches and palette colors, so additional maps can reuse it.
 
-Three.js’s existing Sky, RoundedBoxGeometry and BufferGeometryUtils components are reused instead of implementing those systems from scratch. The original Python/aiohttp architecture is retained. No assets were extracted from Venge or other commercial games.
+## Source and deployment limits
+
+- `maps/cyberpunk.py`: authored buildings, routes, ramps, props and guide generation.
+- `build_map.py`: deterministic compilation and map registry output.
+- `map_registry.py`: map loading, spatial indexes and inclined-solid ray intersection.
+- `server.py`: authoritative movement, shooting, rooms and matches.
+- `static/world.js`: shared-material per-zone geometry and signage.
+- `static/physics.js`: matching browser collision and prediction.
+- `static/display.js`: adaptive/native render sizing.
+- `static/game.js`, `static/minimap.js`: client, UI, navigation and networking.
+
+Use one Python process/instance: rooms and scores live in memory. There are no bots, accounts, permanent stats, voice chat or touch controls. Open in a full browser tab with WebGL2 and hardware acceleration. Optional Google Fonts has system-font fallbacks. Existing Three.js components and aiohttp are credited in `THIRD_PARTY.md`; no assets were extracted from commercial games.

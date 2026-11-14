@@ -5,7 +5,7 @@
 Bundled under `static/vendor/`:
 
 - `three.module.js`, `three.core.js`
-- `addons/objects/Sky.js`: analytical daylight sky shader
+- `addons/objects/Sky.js`: analytical daylight sky shader (retained for future daylight maps; unused by Cyberpunk)
 - `addons/geometries/RoundedBoxGeometry.js`: rounded weapon and character geometry
 - `addons/utils/BufferGeometryUtils.js`: batching the static map geometry
 
@@ -26,4 +26,4 @@ Barlow and Barlow Condensed by Jeremy Tribby, served optionally through Google F
 
 ## Original material
 
-The Solstice layout, collision data, procedural buildings, weapon/character models, synthesized sounds, game UI, Python rules and client controller were authored for this project. Venge, Krunker and other shooters served as design references; no game code, maps, models, logos or audio were extracted from them.
+The Cyberpunk City and Solstice layouts, collision data, procedural buildings, weapon/character models, synthesized sounds, game UI, Python rules and client controller were authored for this project. Venge, Krunker and other shooters served as design references; no game code, maps, models, logos or audio were extracted from them.

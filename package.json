@@ -1,13 +1,13 @@
 {
-  "name": "crossfire-solstice",
+  "name": "crossfire",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "python server.py",
-    "test": "node test_scene.mjs && node test_movement.mjs && node test_district.mjs"
+    "test": "node test_scene.mjs && node test_movement.mjs && node test_district.mjs && node test_display.mjs"
   },
   "dependencies": {
     "three": "0.180.0"
   },
-  "version": "2.3.0"
+  "version": "2.4.0"
 }
