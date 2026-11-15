@@ -35,7 +35,8 @@ export function avatarPose(p={},time=0,anim=makeAvatarAnim()){
  const speed=Math.min(12,Math.hypot(vx,vz)),grounded=p.grounded!==false,
        crouch=!!p.crouch,slide=grounded&&crouch&&finite(p.slide)>0&&speed>2.8;
  const run=grounded&&!crouch&&speed>=6,walk=grounded&&!crouch&&speed>.25&&!run;
- const state=!grounded?'air':slide?'slide':crouch?'crouch':run?'run':walk?'walk':'idle';
+ const vault=!!p.mantle;
+ const state=vault?'vault':!grounded?'air':slide?'slide':crouch?'crouch':run?'run':walk?'walk':'idle';
  const effort=clamp(speed/8,0,1);
  const stride=time*(7+speed*.73)+finite(anim.phase);
  const wave=Math.sin(stride),bounce=Math.abs(Math.sin(stride));
@@ -48,12 +49,12 @@ export function avatarPose(p={},time=0,anim=makeAvatarAnim()){
  return {
   state,speed,grounded,
   bodyY:(crouch?-.52:0)+(grounded?bounce*weight*.06:0)-landing*.07,
-  torsoPitch:slide?.36:state==='run'?.12:state==='air'?-.055:crouch?.12:0,
+  torsoPitch:state==='vault'?.25:slide?.36:state==='run'?.12:state==='air'?-.055:crouch?.12:0,
   torsoRoll:clamp(-strafe*.026,-.16,.16)+(hit*.08),
-  legSwing:grounded&&!slide?wave*weight:0,
-  kneeBend:slide?-.72:state==='air'?-.29:crouch?-.42:0,
+  legSwing:grounded&&!slide&&!vault?wave*weight:0,
+  kneeBend:state==='vault'?-.36:slide?-.72:state==='air'?-.29:crouch?-.42:0,
   armSwing:grounded&&!slide?wave*weight*.64:0,
-  armBrace:slide?-.6:state==='air'?-.35:crouch?-.12:0,
+  armBrace:state==='vault'?-.48:slide?-.6:state==='air'?-.35:crouch?-.12:0,
   headPitch:clamp(pitch*.38,-.45,.45),
   gunKick:shot*.22,
   hitGlow:hit,
