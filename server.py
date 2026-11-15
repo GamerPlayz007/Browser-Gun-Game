@@ -60,7 +60,7 @@ class Room:
     def __init__(self,code,map_id=None):
         self.arena=ARENAS[map_id or DEFAULT.id]
         self.code=code;self.players={};self.sockets={};self.joining=0;self.host=None;self.mode='deathmatch'
-        self.phase='lobby';self.started=0.;self.countdown_at=0.;self.winner=None;self.winner_id=None;self.win_reason=None;self.round_number=0;self.leader_id=None;self.events=[];self.last_active=time.monotonic();self.snapshot_sequence=0
+        self.phase='lobby';self.started=0.;self.ended_at=0.;self.countdown_at=0.;self.winner=None;self.winner_id=None;self.win_reason=None;self.round_number=0;self.leader_id=None;self.events=[];self.last_active=time.monotonic();self.snapshot_sequence=0
         self.targets=[dict(id='t'+str(i),x=x,y=y,z=z,hp=100,reset_at=0) for i,(x,y,z) in enumerate(self.arena.data['practiceTargets'])]
         self.pose_history=deque(maxlen=64)
     def event(self,kind,**kw):self.events.append(dict(type=kind,**kw))
@@ -90,7 +90,7 @@ class Room:
     def start(self,pid,now):
         if pid!=self.host or self.phase not in ('lobby','results'):return False
         self.phase='countdown';self.round_number+=1
-        self.countdown_at=now+COUNTDOWN_DURATION;self.started=0.
+        self.countdown_at=now+COUNTDOWN_DURATION;self.started=0.;self.ended_at=0.
         self.winner=None;self.winner_id=None;self.win_reason=None;self.leader_id=None
         self.events.clear()
         self.pose_history.clear()
@@ -109,6 +109,7 @@ class Room:
         self.winner_id=winner['id'] if winner else None
         self.winner=winner['name'] if winner else 'DRAW'
         self.win_reason=reason
+        self.ended_at=now
         self.phase='results'
         self.event('round_end',round=self.round_number,winner=self.winner,
                    winnerId=self.winner_id,reason=reason)
@@ -219,7 +220,7 @@ class Room:
     def snapshot(self,now):
         self.snapshot_sequence+=1
         fields=('id','name','x','y','z','vx','vy','vz','grounded','yaw','pitch','hp','ammo','kills','deaths','headshots','streak','best_streak','weapon','crouch','spawn','seq','shot_seq','ack_shot','jump_held','slide_held','motion_time','slide_until','slide_ready','jump_buffer_until','coyote_until','jump_consumed','jump_cut','wall_kick_used','interact_held','mantle')
-        return dict(type='state',snapshotSeq=self.snapshot_sequence,serverTime=round(now,6),tickRate=60,snapshotHz=20,mapId=self.arena.id,phase=self.phase,mode=self.mode,host=self.host,round=self.round_number,rules=rules(self.mode,len(WEAPONS)),standings=standings(self.players),leaderId=leading_player(self.players),winnerId=self.winner_id,winReason=self.win_reason,players=[{k:p[k] for k in fields}|dict(reload=max(0,p['reload_at']-now),respawn=max(0,p['respawn_at']-now),shield=max(0,p['shield']-now),slide=max(0,p['slide_until']-p['motion_time']),slideCooldown=max(0,p['slide_ready']-p['motion_time']),switch=max(0,p['switch_at']-now)) for p in self.players.values()],targets=self.targets,events=self.events,remaining=max(0,ROUND_SECONDS-(now-self.started)) if self.phase=='playing' else ROUND_SECONDS,countdown=max(0,self.countdown_at-now),winner=self.winner)
+        return dict(type='state',snapshotSeq=self.snapshot_sequence,serverTime=round(now,6),tickRate=60,snapshotHz=20,mapId=self.arena.id,phase=self.phase,mode=self.mode,host=self.host,round=self.round_number,rules=rules(self.mode,len(WEAPONS)),standings=standings(self.players),leaderId=leading_player(self.players),winnerId=self.winner_id,winReason=self.win_reason,players=[{k:p[k] for k in fields}|dict(reload=max(0,p['reload_at']-now),respawn=max(0,p['respawn_at']-now),shield=max(0,p['shield']-now),slide=max(0,p['slide_until']-p['motion_time']),slideCooldown=max(0,p['slide_ready']-p['motion_time']),switch=max(0,p['switch_at']-now)) for p in self.players.values()],targets=self.targets,events=self.events,remaining=max(0,ROUND_SECONDS-((self.ended_at if self.phase=='results' else now)-self.started)) if self.phase in ('playing','results') else ROUND_SECONDS,countdown=max(0,self.countdown_at-now),winner=self.winner)
 
 rooms={}
 async def create_room(request):
