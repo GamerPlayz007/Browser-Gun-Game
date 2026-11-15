@@ -19,6 +19,9 @@ assert.ok(avatarPose({...data,vx:4,crouch:true,slide:.4},.4,anim).kneeBend<-.5);
 assert.equal(avatarPose({...data,crouch:true},.4,anim).state,'crouch');
 trackAvatar(anim,{...data,grounded:false,vy:6},.5);
 assert.equal(avatarPose({...data,grounded:false,vy:6},.5,anim).state,'air');
+assert.equal(avatarPose({...data,grounded:false,vy:2,mantle:{elapsed:.2,duration:.42}},.51,anim).state,'vault');
+assert.ok(avatarPose({...data,grounded:false,mantle:{elapsed:.2,duration:.42}},.51,anim).torsoPitch>.15,
+ 'Remote parkour avatars should lean into their vault');
 trackAvatar(anim,data,.7);
 assert.ok(feedbackGain(anim,.7).land>0);
 near(feedbackGain(anim,1.1).land,0);
