@@ -1,15 +1,18 @@
-# CROSSFIRE V3.0 — Release Candidate 1
+# CROSSFIRE V3.0 — Release Candidate 2
 
-**Build:** `3.0.0-rc.1` (server `release`) / **phase:** `05.6`
+**Build:** `3.0.0-rc.2` (server `release`) / **phase:** `05.7`
 **Source of truth:** GitHub `main`; Render deploys the same branch if auto-deploy is configured.
 **Status:** release candidate committed; **not production-certified** until all gates below pass.
 
-## What V3 RC1 includes
+## What V3 RC2 includes
 
 The same single Cyberpunk City map, procedural city graphics and optional
 Performance / Auto / High / Ultra / Native quality presets.
 
-- Four server-authoritative modes: Deathmatch (first 15), Gun Game (3 per
+- Five server-authoritative modes including **Bot Assault** (solo/co-op
+  operators versus four non-client server-controlled enemies; first to
+  20 eliminations, with bots winning at 12 player eliminations or timeout).
+- Four original server-authoritative PVP modes: Deathmatch (first 15), Gun Game (3 per
   tier), Team Deathmatch (team first 30), Control Point (first 60 seconds
   held uncontested at the Neon Beacon, 6-minute match).
 - Improved movement and first-person feedback with client/server movement
@@ -34,7 +37,7 @@ recent run on `main`, and confirm both `javascript-tests` and
 npm ci --no-audit --no-fund
 npm test
 pip install -r requirements.txt
-python -m unittest -v test_server test_map test_release51 test_modes54 test_competitive55 test_release56
+python -m unittest -v test_server test_map test_release51 test_modes54 test_competitive55 test_release56 test_bot57
 ```
 
 CI includes Python/JS movement parity tests, competitive multiplayer,
@@ -44,8 +47,8 @@ server HTTP/room/WebSocket tests, cosmetic and release manifest checks.
 
 Once Render publishes the latest `main`, open:
 
-- `/health`: `ok: true`, `release: "3.0.0-rc.1"`, `phase: "05.6"`.
-- Homepage: **V3.0 RC** badge, four modes in the room selector.
+- `/health`: `ok: true`, `release: "3.0.0-rc.2"`, `phase: "05.7"`.
+- Homepage: **V3.0 RC2** badge, four modes in the room selector.
 - Run: `python check_live51.py https://YOUR-SERVICE.onrender.com`.
 
 The smoke script checks release metadata, first-party JS and map assets,
@@ -59,7 +62,7 @@ running it. Render must report the correct build.
 
 - Connect 2 players and then 4–8 as available. Verify joins, host handoff,
   ready-up, optional balancing, rematch flow and no ghost players.
-- Test all four modes: correct HUD, score progression and results.
+- Test all five modes, including solo Bot Assault and co-op AI: correct HUD, score progression and results.
 - Test objective contesting (both teams on point), spectators switching
   only to eligible teammates, respawns, and changes between modes.
 - Verify changing cosmetic colors updates on another player's screen and
@@ -75,7 +78,7 @@ running it. Render must report the correct build.
 
 After green CI, passing Render smoke checks and at least one successful
 real multiplayer playtest, promote RC1 to `3.0.0` and update the release badge
-from **V3.0 RC** to **V3.0**, as a separate verified release commit.
+from **V3.0 RC2** to **V3.0**, as a separate verified release commit.
 
 If any gate fails, keep the V3 release-candidate label and fix the failing
 case on `main`; avoid announcing a verified production launch prematurely.
