@@ -57,7 +57,7 @@ for(const id of ['ready-panel55','ready-summary55','ready-toggle55',
 }
 const game=fs.readFileSync('./static/game.js','utf8');
 for(const fragment of ['spectatorCandidates55(data,myId)','cycleSpectator55(',
- 'spectatorTarget55','state.teamScores','readyView55(state,myId)',
+ 'spectatorTarget55','data.teamScores','readyView55(state,myId)',
  "send({type:'balance'})","send({type:'ready',ready:!me?.ready})",
  "e.code==='ArrowLeft'||e.code==='ArrowRight'"]){
  assert.ok(game.includes(fragment),'Missing game connection: '+fragment);
