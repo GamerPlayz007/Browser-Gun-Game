@@ -1,4 +1,4 @@
-# CROSSFIRE 05.2 — COMBAT FEEL & MULTIPLAYER READINESS
+# CROSSFIRE 05.3 — MOVEMENT REVOLUTION & MULTIPLAYER READINESS
 
 **Source of truth:** `main` branch, deployed by Render when auto-deploy is enabled.
 
@@ -7,6 +7,44 @@ and its separate `cyberpunk-next` experimental selection have been removed.
 The only active map contains **more than 650 authoritative collision objects, a 120 m
 gameplay envelope, 3053 decorative objects and 13 authored district routes.**
 The surrounding 160 m urban context is visual-only.
+
+## Phase 5.3 — movement revolution (implemented on main)
+
+- **Slide-hop momentum:** `static/physics.js` and authoritative
+  `movement_live.py` now share identical constant values:
+  `slideHopSpeed=7.95`, `slideHopCarry=1.07`, and
+  `slideHopCap=10`. A buffered jump taken during a grounded slide
+  preserves modest forward velocity, capped for consistent gameplay.
+  Regular and wall jumps remain unchanged.
+- **Mantle reliability:** clearance-first mantles raise the player over
+  the edge before advancing, reducing mid-vault collisions caused by
+  intersecting the ledge during the previous linear motion.
+  The new lift/smoothstep path is identical on client and server.
+- **Held-E assistance:** while advancing forward, continuing to hold
+  E attempts to mantle an approaching valid ledge; stationary tap-to-vault
+  remains possible. Solid overhead obstructions still disallow vaults.
+- **Vault continuation:** if W is held as a mantle completes, a bounded
+  forward exit speed of `2.7 m/s` replaces the old abrupt hard stop.
+  This speed remains subject to authoritative collision checks.
+- **Visual movement feel:** `static/flow53.js` adds testable
+  SLIDE HOP / VAULTING / WALL KICK cues and opt-in subtle motion camera
+  response; FOV now smoothly interpolates rather than snapping.
+  Camera enhancements respect the existing Motion toggle.
+- **Parity and regression:** `test_flow53.mjs` tests matching Python
+  and JS trajectories for three 60 Hz sequences: slide hop, held-E
+  mantle, and blocked mantle. It also verifies post-vault speed,
+  player state parity, camera helper and HUD cue behavior.
+  The existing `test_movement.mjs` continues to test prediction
+  and authoritative replay across client frame rates.
+- The JS GitHub Actions job now installs Python and server dependencies
+  to support both cross-language tests.
+
+Play controls: **Shift + WASD** sprint; **C** slide; **Space**
+jump/slide-hop; hold **E + W** approaching a reachable ledge to mantle.
+
+**Build state:** 05.3 has been committed on `main`. Production Render,
+full GitHub Actions CI and live multiplayer frame pacing have not yet
+been independently verified. Final V3.0 release is a later milestone.
 
 ## Phase 5.2 — combat feel and visual confirmation (live main)
 
