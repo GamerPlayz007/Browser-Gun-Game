@@ -13,7 +13,9 @@ import time
 from urllib.parse import urlsplit
 from aiohttp import ClientSession, ClientTimeout, WSMsgType
 
-EXPECTED_RELEASE = "3.0.0-rc.1"\nEXPECTED_PHASE = "05.6"\nEXPECTED_BADGE = "V3.0 RC"
+EXPECTED_RELEASE = "3.0.0-rc.1"
+EXPECTED_PHASE = "05.6"
+EXPECTED_BADGE = "V3.0 RC"
 ASSETS = (
     "/", "/static/game.js", "/static/world.js", "/static/living45.js",
     "/static/atmosphere44.js", "/static/polish46.js",
@@ -46,6 +48,8 @@ async def probe(base):
                 f"Unexpected deployment: expected {EXPECTED_RELEASE}, "
                 f"received {health.get('release')!r}. Render may still deploy."
             )
+        if health.get("phase") != EXPECTED_PHASE:
+            raise RuntimeError("Wrong deployment phase: "+repr(health.get("phase")))
         print("PASS /health", json.dumps({
             "release": health.get("release"),
             "commit": health.get("buildCommit"),
