@@ -150,7 +150,20 @@ export function createCyberMaterialLibrary(T){
    envMapIntensity:1.1,side:T.FrontSide
   });
   m.userData.baseMaps=maps;m.userData.baseBump=spec.bump;
+  m.userData.surfaceStyle=known;m.userData.baseRoughness=options.roughness??spec.rough;
   materialCache.set(key,m);return m;
+ };
+ let wetness=0;
+ const applyWetness=m=>{
+  if(!m.isMeshStandardMaterial)return;
+  const style=m.userData.surfaceStyle;
+  const factor=['road','asphalt'].includes(style)?.56:
+   ['tile','concrete','pale'].includes(style)?.31:style==='metal'?.18:0;
+  m.roughness=Math.max(.18,m.userData.baseRoughness*(1-wetness*factor));
+ };
+ const setWetness=value=>{
+  wetness=Math.min(1,Math.max(0,Number.isFinite(value)?value:0));
+  for(const m of materialCache.values())applyWetness(m);
  };
  const setQuality=mode=>{
   const low=mode==='performance';
@@ -163,10 +176,11 @@ export function createCyberMaterialLibrary(T){
    m.emissiveMap=maps.emissiveMap;
    m.bumpScale=mode==='ultra'?m.userData.baseBump*1.28:m.userData.baseBump;
    m.envMapIntensity=low?.28:mode==='ultra'?1.55:1.08;
+   applyWetness(m);
    m.needsUpdate=true;
   }
  };
- return {get,setQuality,dispose(){
+ return {get,setQuality,setWetness,dispose(){
   for(const m of materialCache.values())m.dispose();
   for(const maps of textureCache.values())for(const t of Object.values(maps))t.dispose();
  },get materialCount(){return materialCache.size;},get atlasCount(){return textureCache.size;}};
