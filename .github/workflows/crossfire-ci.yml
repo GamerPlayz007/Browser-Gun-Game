@@ -1,4 +1,4 @@
-name: CROSSFIRE code and graphics regression tests
+name: CROSSFIRE release checks
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 jobs:
   javascript-tests:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
       - name: Install Node.js 22
@@ -18,5 +18,22 @@ jobs:
           cache: npm
       - name: Install locked JavaScript dependencies
         run: npm ci --no-audit --no-fund
-      - name: Test physics, netcode, world, graphics and quality presets
+      - name: Test client physics, network synchronization, world, and graphics
         run: npm test
+
+  multiplayer-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+      - name: Install server dependencies
+        run: pip install -r requirements.txt
+      - name: Check Python syntax
+        run: python -m compileall -q server.py map_registry.py movement_live.py match35.py perf36.py
+      - name: Test HTTP routes, WebSocket rooms, multiplayer snapshots and map
+        run: python -m unittest -v test_server test_map test_release51
