@@ -9,6 +9,7 @@ from movement_live import step_player, seed_movement
 from perf36 import ServerMetrics
 from modes54 import (TEAM_MODES,TEAM_IDS,TEAM_NAMES,CONTROL_POINT,
     is_team_mode,next_team,balance_teams,winner_team,controller,presence)
+from competitive55 import spawn_score,balanced_draft,ready_summary
 from match35 import (DEATHMATCH_GOAL,KILLS_PER_TIER,MATCH_DURATION,COUNTDOWN_DURATION,
                      RESPAWN_DURATION,goal,tier_for_kills,standings,leading_player,
                      timed_winner,rules)
@@ -37,27 +38,38 @@ def move(p,dt,now,arena=DEFAULT):
     """60 Hz server authority; static/physics.js implements matching prediction."""
     return step_player(p,dt,now,arena,WEAPONS)
 
-def spawn(p,players,now,arena=DEFAULT):
+def spawn(p,players,now,arena=DEFAULT,history=None):
+    """Choose a protected point using server-only line of sight and recent uses."""
+    if history is None:history={}
     enemies=[q for q in players.values() if q is not p and q['hp']>0 and
              (p.get('team') is None or q.get('team')!=p.get('team'))]
     def rank(pos):
-        x,y,z=pos;nearest=min((math.hypot(x-q['x'],z-q['z']) for q in enemies),default=40)
-        exposed=0
+        x,y,z=pos;visible=[]
         for q in enemies:
-            origin=(q['x'],q['y']+1.55,q['z']);vec=(x-origin[0],y+1.55-origin[1],z-origin[2]);dist=math.sqrt(sum(v*v for v in vec))
+            origin=(q['x'],q['y']+1.55,q['z'])
+            vec=(x-origin[0],y+1.55-origin[1],z-origin[2])
+            dist=math.sqrt(sum(v*v for v in vec))
             direction=tuple(v/max(dist,.01) for v in vec)
-            if not any((h:=ray_solid(origin,direction,b)) is not None and h<dist for b in arena.boxes):exposed+=1
-        # Prefer protected spawns one short rotation from the fight, not the
-        # opposite corner of the district. Too-close spawns are heavily penalized.
-        return min(nearest,30)-max(0,nearest-38)*.6-exposed*25-max(0,14-nearest)*3
-    points=random.sample(arena.spawns,len(arena.spawns));x,y,z=max(points,key=rank)
-    p.update(x=x,y=y,z=z,yaw=math.atan2(x,z),vx=0.,vy=0.,vz=0.,grounded=True,hp=100,ammo=WEAPONS[p['weapon']]['mag'],reload_at=0.,respawn_at=0.,shield=now+1.5,mags=[w['mag'] for w in WEAPONS],input={},last_shot=-999.,slide_until=0.,slide_ready=0.,jump_held=False,slide_held=False,crouch=False,motion_time=0.,move_credit=0.,commands=deque(),spawn=p.get('spawn',0)+1)
+            if not any((h:=ray_solid(origin,direction,b)) is not None and
+                       h<dist for b in arena.boxes):
+                visible.append(q)
+        return spawn_score(pos,p,players,history,now,visible)
+    points=random.sample(arena.spawns,len(arena.spawns))
+    x,y,z=max(points,key=rank)
+    history[(x,y,z)]=now
+    p.update(x=x,y=y,z=z,yaw=math.atan2(x,z),vx=0.,vy=0.,vz=0.,
+             grounded=True,hp=100,ammo=WEAPONS[p['weapon']]['mag'],
+             reload_at=0.,respawn_at=0.,shield=now+1.5,
+             mags=[w['mag'] for w in WEAPONS],input={},last_shot=-999.,
+             slide_until=0.,slide_ready=0.,jump_held=False,slide_held=False,
+             crouch=False,motion_time=0.,move_credit=0.,commands=deque(),
+             spawn=p.get('spawn',0)+1)
     seed_movement(p)
 
 def new_player(room,pid,name,now,weapon=0):
     team=next_team(room.players) if is_team_mode(room.mode) else None
-    p=dict(id=pid,name=name,team=team,kills=0,deaths=0,headshots=0,streak=0,best_streak=0,weapon=weapon,yaw=0.,pitch=0.,last_input=now,switch_at=0.,seq=0,shot_seq=0,ack_shot=0)
-    spawn(p,room.players,now,room.arena);room.players[pid]=p
+    p=dict(id=pid,name=name,team=team,ready=False,kills=0,deaths=0,headshots=0,streak=0,best_streak=0,weapon=weapon,yaw=0.,pitch=0.,last_input=now,switch_at=0.,seq=0,shot_seq=0,ack_shot=0)
+    spawn(p,room.players,now,room.arena,room.spawn_history);room.players[pid]=p
     if room.host is None:room.host=pid
     room.last_active=now
     return p
@@ -73,6 +85,7 @@ class Room:
         self.control_credit={team:0. for team in TEAM_IDS}
         self.control_owner=None;self.control_contested=False;self.control_presence={team:0 for team in TEAM_IDS}
         self.winner_team=None
+        self.spawn_history={}
     def event(self,kind,**kw):self.events.append(dict(type=kind,**kw))
     def record_poses(self,now):
         # Only the server's movement loop creates historical poses.
@@ -107,6 +120,18 @@ class Room:
             else:
                 for p in self.players.values():p['team']=None
         return True
+    def set_ready(self,pid,ready):
+        """Ready-up is optional and can only change the caller's own flag."""
+        if pid not in self.players or self.phase not in ('lobby','results'):return False
+        self.players[pid]['ready']=bool(ready)
+        return True
+    def balance(self,pid):
+        """Host can rebalance between rounds, never during active gameplay."""
+        if pid!=self.host or self.phase not in ('lobby','results'):return False
+        if not is_team_mode(self.next_mode):return False
+        balanced_draft(self.players)
+        self.event('teams_balanced')
+        return True
     def start(self,pid,now):
         if pid!=self.host or self.phase not in ('lobby','results'):return False
         self.mode=self.next_mode
@@ -118,16 +143,18 @@ class Room:
         self.control_credit={team:0. for team in TEAM_IDS}
         self.control_owner=None;self.control_contested=False
         self.control_presence={team:0 for team in TEAM_IDS}
-        if is_team_mode(self.mode):balance_teams(self.players)
+        if is_team_mode(self.mode):balanced_draft(self.players)
         else:
             for p in self.players.values():p['team']=None
+        for p in self.players.values():p['ready']=False
+        self.spawn_history.clear()
         self.events.clear()
         self.pose_history.clear()
         for p in self.players.values():
             p['kills']=p['deaths']=p['headshots']=0
             p['streak']=p['best_streak']=0
             if self.mode=='gungame':p['weapon']=0
-            spawn(p,self.players,now,self.arena)
+            spawn(p,self.players,now,self.arena,self.spawn_history)
             p['switch_at']=0.
         for target in self.targets:target['hp']=100;target['reset_at']=0
         self.event('countdown',round=self.round_number,mode=self.mode)
@@ -246,7 +273,7 @@ class Room:
             self.finish(now,reason='time')
         for p in self.players.values():
             if p['hp']<=0:
-                if now>=p['respawn_at'] and self.phase=='playing':spawn(p,self.players,now,self.arena)
+                if now>=p['respawn_at'] and self.phase=='playing':spawn(p,self.players,now,self.arena,self.spawn_history)
                 continue
             if p['reload_at'] and now>=p['reload_at']:p['ammo']=WEAPONS[p['weapon']]['mag'];p['reload_at']=0
             if self.phase in ('lobby','playing'):
@@ -281,9 +308,9 @@ class Room:
         self.record_poses(now)
     def snapshot(self,now):
         self.snapshot_sequence+=1
-        fields=('id','name','team','x','y','z','vx','vy','vz','grounded','yaw','pitch','hp','ammo','kills','deaths','headshots','streak','best_streak','weapon','crouch','spawn','seq','shot_seq','ack_shot','jump_held','slide_held','motion_time','slide_until','slide_ready','jump_buffer_until','coyote_until','jump_consumed','jump_cut','wall_kick_used','interact_held','mantle')
+        fields=('id','name','team','ready','x','y','z','vx','vy','vz','grounded','yaw','pitch','hp','ammo','kills','deaths','headshots','streak','best_streak','weapon','crouch','spawn','seq','shot_seq','ack_shot','jump_held','slide_held','motion_time','slide_until','slide_ready','jump_buffer_until','coyote_until','jump_consumed','jump_cut','wall_kick_used','interact_held','mantle')
         return dict(type='state',snapshotSeq=self.snapshot_sequence,serverTime=round(now,6),tickRate=60,snapshotHz=20,mapId=self.arena.id,phase=self.phase,mode=self.mode,host=self.host,round=self.round_number,nextMode=self.next_mode,rules=rules(self.mode,len(WEAPONS)),standings=standings(self.players),leaderId=leading_player(self.players),winnerId=self.winner_id,winnerTeam=self.winner_team,
-            teamScores=self.team_scores.copy(),
+            teamScores=self.team_scores.copy(),readyStatus=ready_summary(self.players),
             objective=({**CONTROL_POINT,'controller':self.control_owner,
                         'contested':self.control_contested,'presence':self.control_presence.copy()}
                        if self.mode=='control' else None),
@@ -354,6 +381,8 @@ async def socket(request):
                 elif action=='weapon':room.select(p,data.get('weapon'),now)
                 elif action=='start':room.start(pid,now)
                 elif action=='mode':room.set_mode(pid,data.get('mode'))
+                elif action=='ready':room.set_ready(pid,data.get('ready') is True)
+                elif action=='balance':room.balance(pid)
             except (ValueError,TypeError,OverflowError):continue
     finally:
         room.players.pop(pid,None);room.sockets.pop(pid,None);room.last_active=time.monotonic()
