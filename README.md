@@ -1,4 +1,4 @@
-# CROSSFIRE 03.6 — ONE LIVE CYBERPUNK CITY
+# CROSSFIRE 04.1 — ONE LIVE CYBERPUNK CITY
 
 **Source of truth:** `main` branch, deployed by Render when auto-deploy is enabled.
 
@@ -7,6 +7,13 @@ and its separate `cyberpunk-next` experimental selection have been removed.
 The only active map contains **more than 650 authoritative collision objects, a 120 m
 gameplay envelope, 3053 decorative objects and 13 authored district routes.**
 The surrounding 160 m urban context is visual-only.
+
+## Phase 4.1 — next-generation materials (live)
+- Shared, seeded 512px procedural diffuse/roughness/bump/emission atlases in `static/materials41.js`, including lit/unlit facades, rain-worn asphalt, panelled concrete, oxidized metals, tile, grate, glass, and vegetation.
+- Core map, Stage 5 architecture, and Stage 6 skyline use the same material library and reusable texture sets; no external image downloads.
+- Stage 5/6 visual-only boxes are merged by finish/tier with metre-scaled UVs instead of stretched flat-color cubes. Surrounding urban windows are deterministically mixed between lit and dark across district-colored emissive materials.
+- Performance mode removes surface bump mapping while retaining nighttime window glow; High and Ultra retain full PBR detail. The gameplay map, routes, and authoritative colliders are unchanged.
+- Material tests: `node test_materials41.mjs`; deploy from `main` with existing Render auto-deploy.
 
 ## Build
 
