@@ -92,4 +92,10 @@
 #perf-details{padding:10px 0 0;margin:0;white-space:pre-wrap;
  font:11px/1.58 'Consolas',monospace;color:#cde5e2}
 #diagnostics-toggle{margin:10px 0;width:100%;font-size:11px}
+#copy-diagnostics{display:block;width:100%;margin-top:11px;padding:9px 10px;
+ border:1px solid #66d9e988;border-radius:6px;background:#083640;
+ color:#bdf8ee;font:700 11px/1.3 'Consolas',monospace;
+ letter-spacing:.06em;pointer-events:auto;cursor:pointer}
+#copy-diagnostics:hover,#copy-diagnostics:focus-visible{
+ border-color:#83fce8;background:#145967;color:white}
 @media(max-width:650px){#perf-panel{top:76px;right:8px;width:min(280px,calc(100vw - 16px))}}
