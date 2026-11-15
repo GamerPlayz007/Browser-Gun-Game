@@ -1,4 +1,4 @@
-# CROSSFIRE 04.3 — ONE LIVE CYBERPUNK CITY
+# CROSSFIRE 04.4 — ONE LIVE CYBERPUNK CITY
 
 **Source of truth:** `main` branch, deployed by Render when auto-deploy is enabled.
 
@@ -7,6 +7,15 @@ and its separate `cyberpunk-next` experimental selection have been removed.
 The only active map contains **more than 650 authoritative collision objects, a 120 m
 gameplay envelope, 3053 decorative objects and 13 authored district routes.**
 The surrounding 160 m urban context is visual-only.
+
+## Phase 4.4 — atmosphere and cinematic post-processing (live)
+- `static/atmosphere44.js` is mounted directly into the single active Cyberpunk City scene; GPU-driven shader particles use a deterministic seed. Two clouds provide rain and drifting motes, with **1,170 particles at Ultra** (850 rain + 320 motes), lower counts in High and Auto, and none in Performance.
+- **28 noncolliding, animated, neon-tinted wet-pavement patches** positioned above real floors across all four districts on the current map. Puddles are merged into four materials/draw groups; no colliders, movement or network records change.
+- Shared PBR materials now support weather wetness: asphalt and road roughness drops under High/Ultra weather, while Performance restores dry roughness and disables expensive bump detail. No texture downloads.
+- Fog density/color respond to mode; fog is atmospheric rather than true volumetric raymarching. Puddle highlights are procedural neon approximations, not full screen-space or ray-traced reflections.
+- The preexisting **five-draw** bloom compositor in `static/postfx.js` gains cinematic grading, subtle shadow/highlight temperature, saturation, contrast, fine grain and a restrained vignette **inside its existing composite pass** (no extra full-screen draw). Performance bypasses it with one draw.
+- Auto Quality also scales down rain/motes and removes puddles when it drops optional detail. All new effects are scoped to the live renderer with proper disposal on arena unload.
+- Verification: `node test_atmosphere44.mjs`, `node test_postfx.mjs`, and `npm test`. Live Render deployment and visual/fps browser tests still need confirmation.
 
 ## Phase 4.3 — district environmental storytelling (live)
 - Adds `static/environment43.js` to the live `static/world.js` renderer. **The map builder, authoritative collision objects, spawns, network protocol and routes are untouched.**
