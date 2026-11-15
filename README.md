@@ -1,4 +1,4 @@
-# CROSSFIRE 03.3 — ONE LIVE CYBERPUNK CITY
+# CROSSFIRE 03.4 — ONE LIVE CYBERPUNK CITY
 
 **Source of truth:** `main` branch, deployed by Render when auto-deploy is enabled.
 
@@ -92,3 +92,18 @@ rendered opponent view. Python validates a **300 ms maximum rewind**, samples
 its own recent player pose history (not client-supplied hitboxes), and always
 checks the current static arena geometry. A respawn changes the generation ID
 and cannot reuse an old pose. The server alone confirms damage and eliminations.
+
+
+## Stage 3.4 — Character animation and gameplay feedback
+
+All character animation is procedural in the single live 3D game.
+Remote models now distinguish idle/walk/run/jump/crouch/slide, include
+articulated upper/lower limbs, smoother torso/head movement, and flash/glow
+reactions driven only by confirmed server shot and hit events. Spawn transitions
+use a short non-colliding ring. The local view gains a subtle landing response,
+strafe lean, and a movement state indicator. Visual effects do not change
+damage, collision, hitboxes, movement authority, or network protocol.
+
+`test_animation34.mjs` runs pose transitions, event timing, spawn reset and
+eight-avatar procedural-rig stress checks. The `test_scene.mjs` smoke test
+still checks the actual Three.js models.
