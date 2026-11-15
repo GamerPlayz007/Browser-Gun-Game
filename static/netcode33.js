@@ -15,7 +15,7 @@ export function createNetSync(){
  return {
   clockOffsetMs:null,hasPong:false,rttMs:NaN,jitterMs:0,delayMs:105,
   lastSeq:-1,lastArrivalMs:null,lastServerMs:null,
-  packetsReceived:0,packetsRejected:0,remote:new Map()
+  packetsReceived:0,packetsRejected:0,packetsMissing:0,remote:new Map()
  };
 }
 export function observePong(sync,sentMs,receivedMs,serverSeconds){
@@ -40,6 +40,7 @@ export function ingestSnapshot(sync,packet,receiveMs){
   sync.packetsRejected++;return false;
  }
  if(sequence<=sync.lastSeq){sync.packetsRejected++;return false;}
+ if(sync.lastSeq>=0&&sequence>sync.lastSeq+1)sync.packetsMissing+=sequence-sync.lastSeq-1;
  const timeMs=serverSeconds*1000;
  if(sync.lastArrivalMs!==null&&sync.lastServerMs!==null){
   const arrivalDelta=receiveMs-sync.lastArrivalMs;
@@ -121,5 +122,5 @@ export function cameraCorrection(oldVisual,newPredicted,snapDistance=2.5){
 export function syncStats(sync,nowMs){
  const age=sync.lastArrivalMs===null?Infinity:Math.max(0,nowMs-sync.lastArrivalMs);
  return {rttMs:sync.rttMs,jitterMs:sync.jitterMs,delayMs:sync.delayMs,
-  stale:age>450,ageMs:age,received:sync.packetsReceived,rejected:sync.packetsRejected};
+  stale:age>450,ageMs:age,received:sync.packetsReceived,rejected:sync.packetsRejected,missing:sync.packetsMissing};
 }

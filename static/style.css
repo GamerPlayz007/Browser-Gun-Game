@@ -77,3 +77,19 @@
 @media(max-width:650px){#round-label,#lead-status{font-size:8px}
  #match-banner{top:24%;padding:9px 12px}}
 @media(prefers-reduced-motion:reduce){#match-banner{transition:none}}
+
+
+/* CROSSFIRE 03.6 — unobtrusive optional live performance instrumentation. */
+#perf-panel{position:fixed;right:16px;top:92px;z-index:10;
+ width:min(328px,calc(100vw - 32px));pointer-events:none;
+ padding:14px;background:#061b24ed;border:1px solid #62e2e36e;
+ border-radius:8px;box-shadow:0 18px 40px #0009;
+ font:12px/1.5 'Consolas',monospace;color:#d7f6e9}
+.perf-header{display:flex;align-items:center;justify-content:space-between;
+ padding-bottom:9px;border-bottom:1px solid #69d9dd50;gap:10px}
+.perf-header strong{font-size:11px;letter-spacing:.5px;color:#8eeae1}
+.perf-header span{font-size:9px;color:#b6c8ca}
+#perf-details{padding:10px 0 0;margin:0;white-space:pre-wrap;
+ font:11px/1.58 'Consolas',monospace;color:#cde5e2}
+#diagnostics-toggle{margin:10px 0;width:100%;font-size:11px}
+@media(max-width:650px){#perf-panel{top:76px;right:8px;width:min(280px,calc(100vw - 16px))}}
