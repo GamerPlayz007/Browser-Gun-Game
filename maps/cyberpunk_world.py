@@ -55,7 +55,7 @@ def open_edge_walls_around_authored_routes(city):
     # provide a real walkable slab under the full six-metre route width.
     # This is physical geometry, not an invisible collision-only bridge.
     new_boxes.append(dict(
-        x=-9.0,y=0.74,z=35.6,w=28.0,h=0.26,d=7.8,
+        x=-12.0,y=0.74,z=35.6,w=22.0,h=0.26,d=7.8,
         kind="routeFloor",style="road",zone="plaza",
         route="G1",stage6Physical=True,structure="south-service-apron"
     ))
