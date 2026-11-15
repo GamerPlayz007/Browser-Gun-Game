@@ -1,12 +1,14 @@
-/** CROSSFIRE 03.2 live movement - deterministic authoritative 60 Hz controller.
+/** CROSSFIRE 05.3 flowing movement - deterministic authoritative 60 Hz controller.
  * Mirror of movement_live.py. Feet-space Y; server never accepts client positions.
  */
 import {nearbyBoxes} from './spatial.js';
 export const FIXED_DT=1/60;
 export const MOVE={walk:5.35,sprint:8.2,crouch:3.15,groundAccel:60,groundBrake:42,airAccel:9.5,airBrake:1.7,
  slideMin:5,slideBoost:1.13,slideMax:10,slideTime:.70,slideCD:1.05,slideDrag:2.7,slideSteer:3.6,
+ slideHopSpeed:7.95,slideHopCarry:1.07,slideHopCap:10,
  buffer:.125,coyote:.1,jumpSpeed:7.5,shortHop:.52,gravity:22,stepHeight:.29,
- height:1.8,lowHeight:1.12,wallKickRange:.52,wallKickLift:5.3,wallKickPush:5.1};
+ height:1.8,lowHeight:1.12,wallKickRange:.52,wallKickLift:5.3,wallKickPush:5.1,
+ mantleExitSpeed:2.7};
 export function topAt(b,x,z){
  if(b.kind!=='ramp')return b.y+b.h;
  const size=b.axis==='x'?b.w:b.d,v=b.axis==='x'?x:z,t=Math.max(0,Math.min(1,(v-b[b.axis])/size+.5));
@@ -72,7 +74,10 @@ export function simulate(p,input,dt,now,allBoxes,weapon){
   if(local.some(b=>overlaps(x,y,z,b,M.height))){p.mantle=null;p.vy=0;p.grounded=false;}
   else{
    p.x=x;p.y=y;p.z=z;p.vx=p.vy=p.vz=0;p.mantle={...m,elapsed:m.elapsed+dt};p.crouch=false;
-   if(t>=1){p.mantle=null;p.y=m.ty;p.grounded=true;p.jump_consumed=false;p.wall_kick_used=false;}
+   if(t>=1){p.mantle=null;p.y=m.ty;p.grounded=true;p.jump_consumed=false;p.wall_kick_used=false;
+    // A modest exit impulse removes the hard stop at the end of a vault.
+    // It is applied only while moving forward and is subject to collision next tick.
+    if(input.w){p.vx=-Math.sin(p.yaw)*M.mantleExitSpeed;p.vz=-Math.cos(p.yaw)*M.mantleExitSpeed;}}
    p.jump_held=jump;p.slide_held=slide;return;
   }
  }
@@ -101,7 +106,9 @@ export function simulate(p,input,dt,now,allBoxes,weapon){
   if(d>change){p.vx+=ex*change/d;p.vz+=ez*change/d;}else{p.vx=tx;p.vz=tz;}
  }
  boxes=nearbyBoxes(allBoxes,p.x,p.z,Math.max(Math.abs(p.vx),Math.abs(p.vz))*dt+1.25);
- if(interactEdge&&tryMantle(p,boxes,now)){p.interact_held=interact;p.jump_held=jump;p.slide_held=slide;return;}
+ // Holding E while moving forward keeps trying for a ledge as it comes into
+ // reach; tapping E while stationary retains the original precise behavior.
+ if((interactEdge||(interact&&f>0))&&tryMantle(p,boxes,now)){p.interact_held=interact;p.jump_held=jump;p.slide_held=slide;return;}
  const overlap=(x,y,z,b)=>overlaps(x,y,z,b,height);
  for(const [axis,velocity] of [['x','vx'],['z','vz']]){
   const value=p[axis]+p[velocity]*dt,x=axis==='x'?value:p.x,z=axis==='z'?value:p.z;
@@ -116,7 +123,15 @@ export function simulate(p,input,dt,now,allBoxes,weapon){
  const canStand=!p.crouch||!boxes.some(b=>overlaps(p.x,p.y,p.z,b,M.height));
  let jumped=false;
  if(now<=p.jump_buffer_until&&now<=p.coyote_until&&!p.jump_consumed&&canStand){
-  p.vy=M.jumpSpeed;p.grounded=false;p.slide_until=0;p.jump_consumed=true;p.jump_cut=false;
+  const slideHop=sliding&&startGrounded;
+  p.vy=slideHop?M.slideHopSpeed:M.jumpSpeed;
+  if(slideHop){
+   // Preserve the slide's direction without creating an unlimited speed boost.
+   const speed=Math.hypot(p.vx,p.vz);
+   if(speed>.01){const carried=Math.min(M.slideHopCap,speed*M.slideHopCarry)/speed;
+    p.vx*=carried;p.vz*=carried;}
+  }
+  p.grounded=false;p.slide_until=0;p.jump_consumed=true;p.jump_cut=false;
   p.jump_buffer_until=0;p.coyote_until=0;p.crouch=false;height=M.height;jumped=true;
  }
  if(jumpEdge&&!jumped&&!startGrounded&&!p.wall_kick_used){
