@@ -147,6 +147,7 @@
  .mode-options button{font-size:9px;padding:8px 6px}}
 
 /* CROSSFIRE 05.5 — optional ready-up, host balancing and respawn spectating. */
+#ready-panel55[hidden]{display:none!important}
 #ready-panel55{display:flex;align-items:center;justify-content:space-between;gap:8px;
  border:1px solid #7ae4d348;border-radius:5px;background:#0d35446c;
  padding:8px 10px;margin:-8px 0 13px}
