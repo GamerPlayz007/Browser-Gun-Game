@@ -99,3 +99,20 @@
 #copy-diagnostics:hover,#copy-diagnostics:focus-visible{
  border-color:#83fce8;background:#145967;color:white}
 @media(max-width:650px){#perf-panel{top:76px;right:8px;width:min(280px,calc(100vw - 16px))}}
+
+/* CROSSFIRE 05.2 — crisp adaptive reticle and restrained confirmation pulse.
+   Four crosshair arms stay centered while JS changes the reticle's diameter. */
+#crosshair{pointer-events:none;z-index:2;will-change:width,height}
+#crosshair i{background:#e7fff9;box-shadow:0 0 5px #4edfd577;border-radius:1px}
+#crosshair i:nth-child(1){width:2px;height:6px;left:calc(50% - 1px);top:0;right:auto;bottom:auto}
+#crosshair i:nth-child(2){width:2px;height:6px;left:calc(50% - 1px);bottom:0;right:auto;top:auto}
+#crosshair i:nth-child(3){width:6px;height:2px;left:0;top:calc(50% - 1px);right:auto;bottom:auto}
+#crosshair i:nth-child(4){width:6px;height:2px;right:0;top:calc(50% - 1px);left:auto;bottom:auto}
+#hitmarker{pointer-events:none;text-shadow:0 0 8px #c9f6fb88;will-change:opacity,transform}
+#hitmarker.critical{color:#ffca8d;text-shadow:0 0 12px #ff9456bb}
+#damage-number{pointer-events:none;font-variant-numeric:tabular-nums;
+ text-shadow:0 1px 6px #000d;will-change:opacity,transform}
+#damage-number.critical{color:#ffd09a}
+@media(prefers-reduced-motion:reduce){
+ #hitmarker,#damage-number{will-change:auto}
+}
