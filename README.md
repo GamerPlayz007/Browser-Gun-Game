@@ -1,4 +1,4 @@
-# CROSSFIRE 05.3 — MOVEMENT REVOLUTION & MULTIPLAYER READINESS
+# CROSSFIRE 05.4 — NEW MULTIPLAYER GAME MODES
 
 **Source of truth:** `main` branch, deployed by Render when auto-deploy is enabled.
 
@@ -7,6 +7,52 @@ and its separate `cyberpunk-next` experimental selection have been removed.
 The only active map contains **more than 650 authoritative collision objects, a 120 m
 gameplay envelope, 3053 decorative objects and 13 authored district routes.**
 The surrounding 160 m urban context is visual-only.
+
+## Phase 5.4 — new multiplayer modes (implemented on main)
+
+**Four game modes, one Cyberpunk City map:**
+- **Deathmatch:** existing individual race to 15.
+- **Gun Game:** existing weapon progression, three eliminations per tier.
+- **Team Deathmatch:** Azure vs Ember, balanced team assignment, first team to
+  30 total eliminations. Friendly fire is disabled on the **server**, and
+  teammates cannot block the authoritative hit query.
+- **Control Point:** Azure vs Ember contest the **Neon Beacon** in Neon Plaza
+  at `(2, 0, 16)` within a six-meter radius. The server awards **one point
+  per uncontested second of presence**, pausing when both teams occupy
+  the zone. First team to 60 points wins; after the 6-minute time limit,
+  the leading team wins or equal scores end in a draw.
+
+The server alone owns team assignments, score totals, Control Point occupancy,
+victory condition, and round resets. Team assignments rebalance at round start
+and upon first selecting a team mode in the lobby; joiners are assigned to
+the smaller team. There is no client-controlled team-selection or
+scoring message.
+
+**Implementation:**
+- `modes54.py`: pure deterministic team balance, objective occupancy,
+  server team scoring and winner helpers.
+- `server.py` and `match35.py`: authoritative team score and objective
+  logic, no friendly fire, per-snapshot `team`, `teamScores`, `winnerTeam`,
+  and server-owned `objective` fields. Existing FFA modes are retained.
+- `static/match35.js`, `static/game.js`: four-option host mode selector,
+  team-colored lobby/scoreboard/avatars, team score HUD, objective state,
+  notices and accurate team-winner result screens.
+- `static/control54.js`: lightweight animated Three.js beacon with
+  purely visual non-colliding rings; color and location come from server
+  snapshots. Scene resources are disposed on map unload.
+- `test_modes54.py`: team balance, friendly-fire protection, kill scoring,
+  contested/uncontested Control Point scoring, same-floor eligibility,
+  victory conditions, rematches and actual two-player WebSocket authority.
+- `test_modes54.mjs`: team presentation, objective indicator, game results,
+  and beacon lifecycle. Both suites are included in GitHub Actions CI.
+- Fixed an outdated match test that still expected a Phase 3 version badge.
+
+**Testing & release:** Source is committed directly to `main` for Render
+auto-deploy if enabled. Run `npm test` and
+`python -m unittest -v test_server test_map test_release51 test_modes54`.
+Then verify version **05.4**, complete a multiplayer browser session and
+inspect F7/F8 telemetry. The full CI and production Render deployment have
+not been independently verified in this chat.
 
 ## Phase 5.3 — movement revolution (implemented on main)
 
