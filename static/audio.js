@@ -12,4 +12,27 @@ export class AudioEngine{
  dry(){this.tone(360,.045,.065,'square');}
  reload(){this.burst(.075,.18,4600);this.tone(220,.06,.04,'square',.3);}
  step(volume=.08){this.burst(.09,volume,600);}
+ // Phase 4.5: small positional city ambience cues; bounded lifetime and
+ // shared master volume. Only called after a player gesture unlocks audio.
+ ambience(zone,volume=.12,pan=0){
+  if(!this.enabled||!this.ctx||this.volume<=0)return;
+  const c=this.ctx,t=c.currentTime;
+  const frequencies={market:[112,171],plaza:[154,236],atrium:[77,128],transit:[92,138]};
+  const notes=frequencies[zone]||frequencies.plaza;
+  const p=c.createStereoPanner();p.pan.setValueAtTime(Math.max(-.8,Math.min(.8,pan)),t);
+  p.connect(c.destination);
+  for(const [i,freq] of notes.entries()){
+   const o=c.createOscillator(),g=c.createGain(),dur=1.5+i*.3;
+   o.type=i===0?'sine':'triangle';
+   o.frequency.setValueAtTime(freq,t);
+   o.frequency.linearRampToValueAtTime(freq*(1+(i?-.035:.035)),t+dur);
+   const level=Math.max(.00001,volume*this.volume*(i===0?.18:.055));
+   g.gain.setValueAtTime(.00001,t);
+   g.gain.linearRampToValueAtTime(level,t+.16);
+   g.gain.exponentialRampToValueAtTime(.00001,t+dur);
+   o.connect(g);g.connect(p);o.start(t);o.stop(t+dur+.01);
+  }
+  // Short, distant station air rather than a permanent high-CPU noise loop.
+  if(zone==='transit')this.burst(.27,volume*.11,720,pan);
+ }
 }
