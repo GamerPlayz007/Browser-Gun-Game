@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import * as THREE from 'three';
-import {createPostProcessing,EffectComposer,UnrealBloomPass} from './static/postfx.js';
+import {createPostProcessing,EffectComposer,UnrealBloomPass,CINEMATIC_PRESETS} from './static/postfx.js';
 let draws=0,target=null;
 const fake={setRenderTarget(t){target=t;},clear(){},render(){draws++;}};
 const p=createPostProcessing(fake,new THREE.Scene(),new THREE.Camera(),'high');
@@ -8,8 +8,23 @@ assert.ok(p.composer instanceof EffectComposer);
 assert.ok(p.composer.pass instanceof UnrealBloomPass);
 p.setSize(1920,1080);assert.equal(p.composer.beauty.samples,4);
 assert.equal(p.composer.beauty.width,1920);assert.equal(p.composer.bloomA.width,960);
-p.render();assert.equal(draws,5);assert.equal(target,null);
-p.setMode('ultra');assert.equal(p.composer.beauty.samples,8);
-p.render();assert.equal(draws,10);
-p.setMode('performance');p.render();assert.equal(draws,11);
-p.dispose();console.log('02.5 compositor: multisampled High/Ultra targets, bloom stages and Performance fallback passed.');
+p.render(12.5);assert.equal(draws,5);assert.equal(target,null);
+assert.equal(p.composer.pass.compose.uniforms.frameTime.value,12.5);
+assert.ok(p.composer.pass.compose.fragmentShader.includes('uniform float vignette'));
+assert.ok(p.composer.pass.compose.fragmentShader.includes('uniform float grain'));
+assert.ok(p.composer.pass.compose.fragmentShader.includes('saturation'));
+for(const mode of ['auto','high','ultra','native']){
+ const prev=draws;p.setMode(mode);p.render(16.5);
+ assert.equal(draws-prev,5,'Enhanced grading must not add a screen pass: '+mode);
+ assert.equal(p.composer.beauty.samples,CINEMATIC_PRESETS[mode].samples);
+ assert.equal(p.composer.pass.strength,CINEMATIC_PRESETS[mode].bloom);
+ assert.equal(p.composer.pass.compose.uniforms.vignette.value,CINEMATIC_PRESETS[mode].vignette);
+ assert.equal(target,null,'Compositor should render final output to main framebuffer');
+}
+const prev=draws;p.setMode('performance');p.render(18.5);
+assert.equal(draws-prev,1,'Performance should render without post effects');
+assert.equal(p.composer.beauty.samples,0);
+assert.equal(p.composer.pass.compose.uniforms.grain.value,0);
+p.dispose();
+console.log('04.4 postfx: 5-pass grading and bloom, no extra draws, frame time,');
+console.log('preset color grading and single-draw Performance fallback passed.');
