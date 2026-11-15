@@ -16,6 +16,12 @@ jobs:
         with:
           node-version: '22'
           cache: npm
+      - name: Install Python 3.13 for JS↔Python movement parity tests
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install Python server dependencies for parity fixtures
+        run: pip install -r requirements.txt
       - name: Install locked JavaScript dependencies
         run: npm ci --no-audit --no-fund
       - name: Test client physics, network synchronization, world, and graphics
