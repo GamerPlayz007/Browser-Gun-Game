@@ -299,7 +299,9 @@ function frame(ms){try{const now=ms/1000,rawMs=ms-clock,dt=Math.min(rawMs/1000,.
  }
  world.animate(now,local);
  ambience45.update(now,local,joined&&!!me&&me.hp>0&&locked()&&!document.hidden,yaw);
- if(joined&&me&&local){const input=controls();minimap.draw(local,yaw,now);
+ if(joined&&me&&local){const input=controls();
+  minimap.draw(local,yaw,now,{objective:state?.objective,players:state?.players,
+   team:me?.team,meId:myId});
   if(me.hp>0&&['lobby','playing'].includes(state.phase)){
    movementAccumulator+=dt;
    let steps=0;while(movementAccumulator>=FIXED_DT&&steps++<6){predictStep(input);movementAccumulator-=FIXED_DT;}if(steps>=6)movementAccumulator=Math.min(movementAccumulator,FIXED_DT*2);
