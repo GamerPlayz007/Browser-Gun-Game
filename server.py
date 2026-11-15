@@ -11,6 +11,9 @@ from modes54 import (TEAM_MODES,TEAM_IDS,TEAM_NAMES,CONTROL_POINT,
     is_team_mode,next_team,balance_teams,winner_team,controller,presence)
 from competitive55 import spawn_score,balanced_draft,ready_summary
 from cosmetics56 import normalize_skin56
+from bot57 import (MODE as BOT_MODE,BOT_COUNT,BOT_GOAL,BOT_WIN_GOAL,BOT_NAMES,
+                   BOT_FIRE_SECONDS,decide as bot_decide,can_attack as bot_can_attack,
+                   miss_offset,is_bot_mode)
 from match35 import (DEATHMATCH_GOAL,KILLS_PER_TIER,MATCH_DURATION,COUNTDOWN_DURATION,
                      RESPAWN_DURATION,goal,tier_for_kills,standings,leading_player,
                      timed_winner,rules)
@@ -69,8 +72,8 @@ def spawn(p,players,now,arena=DEFAULT,history=None):
 
 def new_player(room,pid,name,now,weapon=0,skin=0):
     team=next_team(room.players) if is_team_mode(room.mode) else None
-    p=dict(id=pid,name=name,team=team,ready=False,skin=normalize_skin56(skin),kills=0,deaths=0,headshots=0,streak=0,best_streak=0,weapon=weapon,yaw=0.,pitch=0.,last_input=now,switch_at=0.,seq=0,shot_seq=0,ack_shot=0)
-    spawn(p,room.players,now,room.arena,room.spawn_history);room.players[pid]=p
+    p=dict(id=pid,name=name,team=team,bot=False,ready=False,skin=normalize_skin56(skin),kills=0,deaths=0,headshots=0,streak=0,best_streak=0,weapon=weapon,yaw=0.,pitch=0.,last_input=now,switch_at=0.,seq=0,shot_seq=0,ack_shot=0)
+    spawn(p,{**room.players,**room.bots},now,room.arena,room.spawn_history);room.players[pid]=p
     if room.host is None:room.host=pid
     room.last_active=now
     return p
@@ -87,12 +90,57 @@ class Room:
         self.control_owner=None;self.control_contested=False;self.control_presence={team:0 for team in TEAM_IDS}
         self.winner_team=None
         self.spawn_history={}
+        self.bots={};self.ai_score=0;self.bot_score=0
+    def populate_bots(self,now):
+        """Create synthetic arena opponents. Bots never own sockets or slots."""
+        self.bots.clear()
+        for i in range(BOT_COUNT):
+            pid=f'bot-{i+1}'
+            bot=dict(id=pid,name=BOT_NAMES[i],bot=True,team='bots',
+                ready=False,skin=3,kills=0,deaths=0,headshots=0,
+                streak=0,best_streak=0,weapon=0,yaw=0.,pitch=0.,
+                last_input=0.,switch_at=0.,seq=0,shot_seq=0,ack_shot=0)
+            spawn(bot,{**self.players,**self.bots},now,self.arena,self.spawn_history)
+            bot.update(think_at=now+.1*i,attack_at=now+2.2+i*.3,
+                       target_id=None,can_see=False,check_at=now+1.,
+                       last_check=(bot['x'],bot['z']),detour_until=0.)
+            self.bots[pid]=bot
+    def step_bots(self,now):
+        """Authoritative bot movement/attacks, no client-supplied coordinates."""
+        if self.mode!=BOT_MODE or self.phase!='playing':return
+        everyone={**self.players,**self.bots}
+        for bot in self.bots.values():
+            if self.phase!='playing':break
+            if bot['hp']<=0:
+                if now>=bot['respawn_at']:
+                    spawn(bot,everyone,now,self.arena,self.spawn_history)
+                    bot.update(think_at=now,attack_at=now+1.2,
+                               last_check=(bot['x'],bot['z']),check_at=now+1.)
+                continue
+            if now>=bot.get('think_at',0):
+                bot_decide(bot,self.players,self.arena,now)
+            bot['motion_time']+=TICK
+            bot['last_input']=bot['motion_time']
+            move(bot,TICK,bot['motion_time'],self.arena)
+            if bot['ammo']<=0:bot['ammo']=WEAPONS[bot['weapon']]['mag']
+            target=bot_can_attack(bot,self.players,self.arena,now)
+            if target is None:continue
+            dx=target['x']-bot['x'];dz=target['z']-bot['z']
+            horizontal=max(.1,math.hypot(dx,dz))
+            miss_yaw,miss_pitch=miss_offset()
+            old_yaw,old_pitch=bot['yaw'],bot['pitch']
+            bot['yaw']=math.atan2(-dx,-dz)+miss_yaw
+            bot['pitch']=math.atan2(target['y']+1.12-bot['y']-1.55,horizontal)+miss_pitch
+            bot['shot_seq']+=1
+            self.shoot(bot,now,bot['shot_seq'])
+            bot['yaw'],bot['pitch']=old_yaw,old_pitch
+            bot['attack_at']=now+BOT_FIRE_SECONDS+.08*(int(bot['id'][-1])%3)
     def event(self,kind,**kw):self.events.append(dict(type=kind,**kw))
     def record_poses(self,now):
         # Only the server's movement loop creates historical poses.
         self.pose_history.append((now,{
             pid:(p['x'],p['y'],p['z'],p['crouch'],p['spawn'])
-            for pid,p in self.players.items()
+            for pid,p in {**self.players,**self.bots}.items()
         }))
     def historical_pose(self,player,when):
         if not self.pose_history:return None
@@ -113,7 +161,7 @@ class Room:
         return previous[1] if previous is not None and when-previous[0]<=TICK*2 else None
     def set_mode(self,pid,mode):
         if (pid!=self.host or self.phase not in ('lobby','results')
-                or mode not in ('deathmatch','gungame','teamdeathmatch','control')):return False
+                or mode not in ('deathmatch','gungame','teamdeathmatch','control',BOT_MODE)):return False
         # Changing the chosen mode invalidates earlier ready acknowledgements.
         if mode!=self.next_mode:
             for player in self.players.values():player['ready']=False
@@ -145,6 +193,7 @@ class Room:
     def start(self,pid,now):
         if pid!=self.host or self.phase not in ('lobby','results'):return False
         self.mode=self.next_mode
+        self.bots.clear();self.ai_score=0;self.bot_score=0
         self.phase='countdown';self.round_number+=1
         self.countdown_at=now+COUNTDOWN_DURATION;self.started=0.;self.ended_at=0.
         self.winner=None;self.winner_id=None;self.winner_team=None
@@ -166,12 +215,16 @@ class Room:
             if self.mode=='gungame':p['weapon']=0
             spawn(p,self.players,now,self.arena,self.spawn_history)
             p['switch_at']=0.
+        if self.mode==BOT_MODE:self.populate_bots(now)
         for target in self.targets:target['hp']=100;target['reset_at']=0
         self.event('countdown',round=self.round_number,mode=self.mode)
         return True
     def finish(self,now,winner=None,reason='time',team=None):
         if self.phase=='results':return False
-        if is_team_mode(self.mode):
+        if self.mode==BOT_MODE:
+            self.winner_team=None;self.winner_id=None
+            self.winner='PLAYERS' if self.ai_score>=BOT_GOAL else 'BOTS'
+        elif is_team_mode(self.mode):
             team=team if team in TEAM_IDS else winner_team(self.team_scores)
             self.winner_team=team
             self.winner_id=None
@@ -213,10 +266,13 @@ class Room:
             for b in self.arena.boxes:
                 h=ray_solid(origin,direction,b)
                 if h is not None and h<distance:distance=h
-            candidates=list(self.targets)
+            candidates=list(self.targets) if self.mode!=BOT_MODE else []
             if self.phase=='playing':
-                candidates.extend(q for q in self.players.values()
-                    if not is_team_mode(self.mode) or q.get('team')!=p.get('team'))
+                if self.mode==BOT_MODE:
+                    candidates.extend(self.players.values() if p.get('bot') else self.bots.values())
+                else:
+                    candidates.extend(q for q in self.players.values()
+                        if not is_team_mode(self.mode) or q.get('team')!=p.get('team'))
             for q in candidates:
                 if q is p or q['hp']<=0:continue
                 historic=(self.historical_pose(q,allowed_view) if allowed_view is not None
@@ -246,13 +302,24 @@ class Room:
                                victimId=victim['id'],head=head,weapon=p['weapon'],streak=p['streak'])
                     if p['streak'] in (3,5,8):
                         self.event('streak',id=p['id'],name=p['name'],count=p['streak'])
-                    if not is_team_mode(self.mode):
+                    if not is_team_mode(self.mode) and self.mode!=BOT_MODE:
                         leader=leading_player(self.players)
                         if leader is not None and leader!=self.leader_id:
                             self.leader_id=leader
                             self.event('leader',id=leader,name=self.players[leader]['name'],
                                        score=self.players[leader]['kills'])
-                    if self.mode=='gungame':
+                    if self.mode==BOT_MODE:
+                        if victim.get('bot'):
+                            self.ai_score+=1
+                            self.event('bot_score',players=self.ai_score,bots=self.bot_score)
+                            if self.ai_score>=BOT_GOAL:
+                                self.finish(now,reason='score')
+                        elif p.get('bot'):
+                            self.bot_score+=1
+                            self.event('bot_score',players=self.ai_score,bots=self.bot_score)
+                            if self.bot_score>=BOT_WIN_GOAL:
+                                self.finish(now,reason='score')
+                    elif self.mode=='gungame':
                         if p['kills']>=goal(self.mode,len(WEAPONS)):
                             self.finish(now,p,reason='score')
                         else:
@@ -284,7 +351,7 @@ class Room:
             self.finish(now,reason='time')
         for p in self.players.values():
             if p['hp']<=0:
-                if now>=p['respawn_at'] and self.phase=='playing':spawn(p,self.players,now,self.arena,self.spawn_history)
+                if now>=p['respawn_at'] and self.phase=='playing':spawn(p,{**self.players,**self.bots},now,self.arena,self.spawn_history)
                 continue
             if p['reload_at'] and now>=p['reload_at']:p['ammo']=WEAPONS[p['weapon']]['mag'];p['reload_at']=0
             if self.phase in ('lobby','playing'):
@@ -297,6 +364,7 @@ class Room:
                     move(p,TICK,p['motion_time'],self.arena);p['seq']=cmd['seq'];p['move_credit']-=TICK
             else:
                 p['commands'].clear();p['move_credit']=0.
+        self.step_bots(now)
         # Server-only scoring: one point per uncontested second inside the
         # Neon Plaza beacon. Opposing players inside the ring pause scoring.
         if self.phase=='playing' and self.mode=='control':
@@ -319,13 +387,14 @@ class Room:
         self.record_poses(now)
     def snapshot(self,now):
         self.snapshot_sequence+=1
-        fields=('id','name','team','ready','skin','x','y','z','vx','vy','vz','grounded','yaw','pitch','hp','ammo','kills','deaths','headshots','streak','best_streak','weapon','crouch','spawn','seq','shot_seq','ack_shot','jump_held','slide_held','motion_time','slide_until','slide_ready','jump_buffer_until','coyote_until','jump_consumed','jump_cut','wall_kick_used','interact_held','mantle')
-        return dict(type='state',snapshotSeq=self.snapshot_sequence,serverTime=round(now,6),tickRate=60,snapshotHz=20,mapId=self.arena.id,phase=self.phase,mode=self.mode,host=self.host,round=self.round_number,nextMode=self.next_mode,rules=rules(self.mode,len(WEAPONS)),standings=standings(self.players,self.mode),leaderId=(None if is_team_mode(self.mode) else leading_player(self.players)),winnerId=self.winner_id,winnerTeam=self.winner_team,
+        fields=('id','name','team','bot','ready','skin','x','y','z','vx','vy','vz','grounded','yaw','pitch','hp','ammo','kills','deaths','headshots','streak','best_streak','weapon','crouch','spawn','seq','shot_seq','ack_shot','jump_held','slide_held','motion_time','slide_until','slide_ready','jump_buffer_until','coyote_until','jump_consumed','jump_cut','wall_kick_used','interact_held','mantle')
+        return dict(type='state',snapshotSeq=self.snapshot_sequence,serverTime=round(now,6),tickRate=60,snapshotHz=20,mapId=self.arena.id,phase=self.phase,mode=self.mode,host=self.host,round=self.round_number,nextMode=self.next_mode,rules=rules(self.mode,len(WEAPONS)),standings=standings(self.players,self.mode),leaderId=(None if is_team_mode(self.mode) or self.mode==BOT_MODE else leading_player(self.players)),winnerId=self.winner_id,winnerTeam=self.winner_team,
             teamScores=self.team_scores.copy(),readyStatus=ready_summary(self.players),
+            aiScore=self.ai_score,botScore=self.bot_score,botsAlive=sum(b['hp']>0 for b in self.bots.values()),
             objective=({**CONTROL_POINT,'controller':self.control_owner,
                         'contested':self.control_contested,'presence':self.control_presence.copy()}
                        if self.mode=='control' else None),
-            winReason=self.win_reason,players=[{k:p[k] for k in fields}|dict(reload=max(0,p['reload_at']-now),respawn=max(0,p['respawn_at']-now),shield=max(0,p['shield']-now),slide=max(0,p['slide_until']-p['motion_time']),slideCooldown=max(0,p['slide_ready']-p['motion_time']),switch=max(0,p['switch_at']-now)) for p in self.players.values()],targets=self.targets,events=self.events,remaining=max(0,ROUND_SECONDS-((self.ended_at if self.phase=='results' else now)-self.started)) if self.phase in ('playing','results') else ROUND_SECONDS,countdown=max(0,self.countdown_at-now),winner=self.winner)
+            winReason=self.win_reason,players=[{k:p[k] for k in fields}|dict(reload=max(0,p['reload_at']-now),respawn=max(0,p['respawn_at']-now),shield=max(0,p['shield']-now),slide=max(0,p['slide_until']-p['motion_time']),slideCooldown=max(0,p['slide_ready']-p['motion_time']),switch=max(0,p['switch_at']-now)) for p in list(self.players.values())+list(self.bots.values())],targets=self.targets,events=self.events,remaining=max(0,ROUND_SECONDS-((self.ended_at if self.phase=='results' else now)-self.started)) if self.phase in ('playing','results') else ROUND_SECONDS,countdown=max(0,self.countdown_at-now),winner=self.winner)
 
 rooms={}
 async def create_room(request):
