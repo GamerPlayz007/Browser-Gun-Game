@@ -39,7 +39,7 @@ assert.equal(safeWrite56('name','Alpha'),false,
  'Restricted browser storage must be handled without crashing');
 
 const html=fs.readFileSync('./static/index.html','utf8');
-assert.ok(html.includes('<sup>V3.0 RC</sup>'),'V3 candidate build badge');
+assert.ok(html.includes('<sup>V3.0 RC2</sup>'),'V3 candidate build badge');
 for(const id of ['skin56-home','skin56-room','rejoin56']){
  assert.ok(html.includes('id="'+id+'"'),'Missing release UI element '+id);
 }
