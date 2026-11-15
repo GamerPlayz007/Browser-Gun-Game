@@ -1,0 +1,22 @@
+name: CROSSFIRE code and graphics regression tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  javascript-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install locked JavaScript dependencies
+        run: npm ci --no-audit --no-fund
+      - name: Test physics, netcode, world, graphics and quality presets
+        run: npm test
