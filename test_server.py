@@ -231,6 +231,28 @@ class NetworkTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual((await self.state(ws))['mapId'],'cyberpunk');await ws.close()
         html=await (await self.client.get('/')).text();self.assertIn('<sup>03.5</sup>',html);self.assertIn('id="map-select"',html)
         arena=await (await self.client.get('/static/maps/cyberpunk.json')).json();self.assertEqual(arena['id'],'cyberpunk');self.assertEqual(len(arena['routes']),13)
+    async def test_host_only_queues_next_mode_without_rewriting_finished_match(self):
+        code=(await (await self.client.post('/api/rooms')).json())['room']
+        host,hid=await self.join(code,'Host')
+        guest,gid=await self.join(code,'Guest')
+        room=s.rooms[code];room.phase='results';room.winner='Host'
+        room.winner_id=hid;room.win_reason='time'
+        await guest.send_json({'type':'mode','mode':'gungame'})
+        await asyncio.sleep(.06)
+        self.assertEqual(room.next_mode,'deathmatch')
+        await host.send_json({'type':'mode','mode':'gungame'})
+        await asyncio.sleep(.06)
+        self.assertEqual(room.mode,'deathmatch')
+        self.assertEqual(room.next_mode,'gungame')
+        snap=room.snapshot(time.monotonic())
+        self.assertEqual((snap['mode'],snap['nextMode']),('deathmatch','gungame'))
+        await host.send_json({'type':'start'})
+        await asyncio.sleep(.06)
+        self.assertEqual(room.phase,'countdown')
+        self.assertEqual(room.mode,'gungame')
+        self.assertEqual(room.snapshot(time.monotonic())['rules']['goal'],12)
+        await guest.close();await host.close()
+
     async def test_duplicate_shot_ids_do_not_consume_extra_ammunition(self):
         code=(await (await self.client.post('/api/rooms')).json())['room']
         ws,pid=await self.join(code,'Shooter')
