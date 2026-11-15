@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import * as T from 'three';
 import {matchPresentation,finishPresentation,matchNotice} from './static/match35.js';
 import {createControlBeacon54,CONTROL54_COLORS} from './static/control54.js';
+import {createMinimap} from './static/minimap.js';
 
 const blue={id:'a',name:'Alpha',team:'azure',kills:3,deaths:2,rank:1};
 const orange={id:'b',name:'Bravo',team:'ember',kills:4,deaths:2,rank:2};
@@ -74,4 +75,32 @@ assert.equal(marker.root.visible,false);
 marker.dispose();
 assert.equal(scene.children.length,0,'Objective marker must release map lifecycle');
 
-console.log('05.4 team presentation, Control Point state, team victory, and beacon lifecycle passed.');
+// A friend may see teammate map dots but cannot see opposing positions.
+const drawn=[];
+const fakeContext=(isFront)=>({
+ setTransform(){},fillRect(){},fillText(text){if(isFront)drawn.push({type:'text',text});},
+ clearRect(){},drawImage(){},beginPath(){},moveTo(){},lineTo(){},closePath(){},
+ arc(x,y,r){if(isFront)drawn.push({type:'arc',x,y,r});},
+ fill(){},stroke(){},save(){},restore(){},translate(){},rotate(){}
+});
+globalThis.document={createElement:()=>({width:0,height:0,getContext:()=>fakeContext(false)})};
+const canvas={width:0,height:0,clientWidth:240,getContext:()=>fakeContext(true)};
+const label={textContent:''};
+const sampleMap={size:120,palette:{},boxes:[],zones:[
+ {id:'plaza',name:'NEON PLAZA',x:0,z:20,w:25,d:30,color:'#4de9fc'}
+]};
+const mini=createMinimap(canvas,label,sampleMap);
+mini.draw({x:0,y:0,z:22},0,1,{objective,team:'azure',meId:'a',players:[
+ {id:'a',team:'azure',hp:100,x:0,z:22},
+ {id:'b',team:'azure',hp:100,x:3,z:18},
+ {id:'c',team:'ember',hp:100,x:5,z:15},
+ {id:'d',team:'azure',hp:0,x:8,z:10}
+]});
+assert.equal(drawn.filter(d=>d.type==='arc').length,2,
+ 'Only active teammate + objective beacon render as circular map markers');
+assert.ok(drawn.some(d=>d.type==='text'&&d.text==='C'),
+ 'Objective must have a map label');
+assert.ok(label.textContent.includes('NEON PLAZA'));
+
+console.log('05.4 team presentation, Control Point state, team victory,');
+console.log('beacon lifecycle and private teammate/objective minimap passed.');
