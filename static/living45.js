@@ -3,8 +3,8 @@ import {STORY_SIGNS,DISTRICT_STORIES} from './environment43.js';
 // CROSSFIRE 04.5. Purely decorative animated city actors and spatial ambience.
 // The network state, map.boxes, match rules and collision queries are untouched.
 export const LIVING45_PRESETS={
- performance:{ads:2,fans:2,drones:0,reactive:false},
- auto:{ads:6,fans:3,drones:2,reactive:true},
+ performance:{ads:4,fans:2,drones:0,reactive:false},
+ auto:{ads:8,fans:3,drones:2,reactive:true},
  high:{ads:8,fans:4,drones:3,reactive:true},
  ultra:{ads:12,fans:4,drones:4,reactive:true},
  native:{ads:8,fans:4,drones:3,reactive:true}
@@ -131,7 +131,9 @@ export function createLivingWorld45(T,map){
  let active='high',detail=true,lastTime=0;
  function visibility(){
   const p=LIVING45_PRESETS[active];
-  ads.forEach((a,i)=>{a.mesh.visible=i<p.ads&&(detail||a.slot===0);});
+  const ordered=[...ads].sort((a,b)=>a.slot-b.slot);
+  const available=new Set(ordered.slice(0,p.ads).map(a=>a.mesh));
+  ads.forEach(a=>{a.mesh.visible=available.has(a.mesh)&&(detail||a.slot===0);});
   fans.forEach((a,i)=>{a.frame.visible=i<p.fans&&(detail||i<2);});
   drones.forEach((d,i)=>{d.group.visible=i<p.drones&&detail;});
  }
