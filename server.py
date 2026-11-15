@@ -1,4 +1,4 @@
-"""CROSSFIRE 03.6. Server-authoritative multiplayer arena with release diagnostics."""
+"""CROSSFIRE 05.1. Server-authoritative multiplayer arena with release diagnostics."""
 import asyncio, contextlib, json, math, os, random, re, secrets, time
 from collections import deque
 from pathlib import Path
@@ -11,6 +11,7 @@ from match35 import (DEATHMATCH_GOAL,KILLS_PER_TIER,MATCH_DURATION,COUNTDOWN_DUR
                      RESPAWN_DURATION,goal,tier_for_kills,standings,leading_player,
                      timed_winner,rules)
 MAP=DEFAULT.data;BOXES=DEFAULT.boxes;SPAWNS=DEFAULT.spawns
+RELEASE='05.1'; API_VERSION=5
 TICK=1/60; LIMIT=DEATHMATCH_GOAL; ROUND_SECONDS=MATCH_DURATION; MAX_PLAYERS=8; MAX_REWIND=.30
 
 def nearby_boxes(x,z,radius=1,arena=DEFAULT):return arena.nearby(x,z,radius)
@@ -340,8 +341,10 @@ async def cache_policy(request,handler):
 async def index(request):return web.FileResponse(ROOT/'static/index.html')
 async def health(request):
     summary=request.app['perf36'].summary(sum(len(r.players) for r in rooms.values()),len(rooms))
-    return web.json_response({'ok':True,'version':5,'revision':MAP['revision'],
-        'phase':'03.6','network':'03.3','match':'03.5','mapId':DEFAULT.id,
+    return web.json_response({'ok':True,'version':API_VERSION,'release':RELEASE,
+        'buildCommit':os.environ.get('RENDER_GIT_COMMIT','')[:12] or None,
+        'revision':MAP['revision'], 'phase':RELEASE,
+        'network':'03.3','match':'03.5','mapId':DEFAULT.id,
         'rooms':len(rooms),'metrics':summary})
 async def room_info(request):
     r=rooms.get(request.match_info['code'].upper())
