@@ -1,5 +1,48 @@
-# CROSSFIRE V3.0 RC1 — PHASE 5.6 RELEASE CANDIDATE
+# CROSSFIRE V3.0 RC2 — BOT ASSAULT (SOLO + CO-OP)
 
+**Single source of truth:** `main`, Render auto-deploys to
+**https://playcrossfire.onrender.com**.
+
+**New fifth mode: BOT ASSAULT** — 1–8 human operators versus four
+server-controlled arcade opponents in Cyberpunk City. Create a private room
+alone, choose Bot Assault in the room menu and start the round.
+
+- Four named AI characters spawn into the existing map, navigate with
+  the same server-authoritative collision system and return after elimination.
+  Their coarse decision cycle considers distance, obstacles and a short
+  recovery step if blocked. Their combat events are created by the server,
+  not controlled by a browser.
+- **Cooperative objective:** Humans score 20 bot eliminations to win.
+  Bots win after 12 player eliminations or when the six-minute round expires.
+  Player teammates cannot harm one another in this mode.
+- **No additional players or hosting costs per bot:** AI actors do not
+  create WebSocket connections, consume room slots, assume host permissions,
+  appear on human leaderboards, or count toward readiness.
+- HUD shows live operator/bot progress, an AI-themed score banner,
+  red/pink bot markers, victory/defeat results and match audio.
+  Spectating still follows only human teammates, never AI opponents.
+- Switching back to Deathmatch, Gun Game, Team Deathmatch or Control
+  removes all AI actors on the next round. Rematches reset the counters
+  and repopulate the four bot slots.
+- `bot57.py` contains server-only arcade AI and visibility checks;
+  `test_bot57.py` covers score limits, friend safety, host authority,
+  match transitions and the solo WebSocket path; `test_bot57.mjs`
+  covers bot-excluding HUD/roster, match results and solo/co-op selection.
+- `check_live51.py` now performs an additional real-deployment solo
+  Bot Assault join, starts a round and checks the four AI snapshot actors.
+
+**Release metadata:** `3.0.0-rc.2` / phase `05.7` / **V3.0 RC2**.
+The build is a release candidate until the CI and live Render smoke
+checks and a real browser playtest pass.
+
+```bash
+npm ci && npm test
+pip install -r requirements.txt
+python -m unittest -v test_server test_map test_release51 test_modes54 test_competitive55 test_release56 test_bot57
+python check_live51.py https://playcrossfire.onrender.com
+```
+
+## Previous Phase 5.6 release-candidate groundwork
 **Source of truth:** `main` branch, deployed by Render when auto-deploy is enabled.
 
 CROSSFIRE now uses **one** playable Cyberpunk City. The former 80 m map
@@ -10,8 +53,8 @@ The surrounding 160 m urban context is visual-only.
 
 ## Phase 5.6 — V3.0 release candidate (implemented on main)
 
-**Current build:** `3.0.0-rc.1`, server phase `05.6`,
-homepage badge **V3.0 RC**. This is a release candidate, not yet an
+**Current build:** `3.0.0-rc.2`, server phase `05.7`,
+homepage badge **V3.0 RC2**. This is a release candidate, not yet an
 independently validated public launch. The game still uses the same single
 Cyberpunk City and incremental `main` branch.
 
@@ -47,7 +90,7 @@ python check_live51.py https://YOUR-RENDER-SERVICE.onrender.com
 
 **Promotion to public 3.0.0:** only after CI, live Render smoke, and a
 real multiplayer friends session pass; until then the release remains
-`3.0.0-rc.1`.
+`3.0.0-rc.2`.
 
 ## Phase 5.5 — competitive multiplayer systems (implemented on main)
 
