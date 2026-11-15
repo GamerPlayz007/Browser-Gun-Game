@@ -48,6 +48,7 @@ console.log(JSON.stringify(cases.map(c=>{const p={...c.initial};return c.command
             self.assertGreaterEqual(route['width'],6 if route['id'][0]=='G' else 3)
             for a,b in zip(route['points'],route['points'][1:]):
                 dx,dz=b[0]-a[0],b[2]-a[2];length=math.hypot(dx,dz)
+                if length<1e-9:continue  # Vertical-only route segment has no horizontal sample tangent.
                 for i in range(math.ceil(length*2)+1):
                     t=min(1,i/max(1,math.ceil(length*2)))
                     # Ground roads: audit full width. Upper routes/interiors:
