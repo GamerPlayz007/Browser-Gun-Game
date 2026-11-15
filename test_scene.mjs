@@ -20,6 +20,8 @@ assert.ok(map.decor.length>1500,'Dense noncolliding architectural detail from th
 assert.ok(standard>8&&textureSets>8,'PBR materials with four map channels');
 assert.ok(casts>0&&world.sun.castShadow,'Directional light casts shadows on Ultra');
 assert.ok(world.lighting&&world.lighting.districtLights.length===4,'Live world uses phase 4.2 district lighting');
+assert.ok(world.environment43?.stats.parts>=700,'Live world includes phase 4.3 environmental storytelling');
+assert.equal(world.environment43.stats.signs,24,'City adds 24 distinctive business signs');
 assert.equal(world.lighting.signLights.length,map.signs.length,'All existing signs have lighting anchors');
 assert.equal(world.sun.shadow.mapSize.width,2048);
 assert.equal(world.targets.size,2);
