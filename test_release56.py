@@ -49,7 +49,7 @@ class Release56Contracts(unittest.TestCase):
         for id in ('skin56-home','skin56-room','rejoin56'):
             self.assertIn('id="'+id+'"',html)
         self.assertIn("from './preferences56.js'",game)
-        self.assertIn("setPlayerSkin56(g,skinColor56(p.skin))",game)
+        self.assertIn("setPlayerSkin56(g,visualSkin)",game)
         self.assertIn("disconnect('Connection closed.",game)
         self.assertIn("safeRead56('cf-name','')",game)
         self.assertNotIn('localStorage.',game)
