@@ -13,7 +13,7 @@ import {createUrbanAmbience45} from './living45.js';
 import {matchPresentation,finishPresentation,matchNotice} from './match35.js';
 import {createNetSync,observePong,ingestSnapshot,sampleRemote,cameraCorrection,syncStats} from './netcode33.js';
 import {fireMode, makeTrigger, pressTrigger, releaseTrigger, takeTriggerPulse,
- predictedAmmo, reloadFraction, ammoState, damageBearing, confirmedHit} from './combat32.js';
+ predictedAmmo, reloadFraction, ammoState, damageBearing} from './combat32.js';
 const $=id=>document.getElementById(id),clamp=T.MathUtils.clamp;
 const audio=new AudioEngine();
 const settings={sens:Number(localStorage.getItem('cf-sens')||1),motion:localStorage.getItem('cf-motion')!=='false',quality:localStorage.getItem('cf-quality-25')||'high'};
@@ -137,7 +137,7 @@ function addTracer(origin,end){
  if(!Array.isArray(origin)||!Array.isArray(end)||origin.length!==3||end.length!==3||
    ![...origin,...end].every(Number.isFinite))return;
  // Conservative cap prevents shotgun volleys from producing runaway meshes.
- while(effects.length>=FEEDBACK52.maxTracers){
+ while(effects.length>FEEDBACK52.maxTracers-2){
   const e=effects.shift();e.obj.removeFromParent();
   if(e.own){e.obj.geometry.dispose();e.obj.material.dispose();}
  }
