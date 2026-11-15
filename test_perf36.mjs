@@ -59,7 +59,10 @@ assert.ok(ui.includes('<sup>V3.0 RC</sup>'));
 const game=fs.readFileSync('./static/game.js','utf8');
 assert.ok(game.includes('frameMeter.record(rawMs'));
 assert.ok(game.includes("e.code==='F7'"));
-assert.ok(game.includes("if(!joined)return;if(e.code==='F7'"),
+const keyboard=game.slice(game.indexOf("document.addEventListener('keydown'"),
+ game.indexOf("document.addEventListener('keyup'"));
+assert.ok(keyboard.indexOf("if(e.code==='F7'")>=0 &&
+ keyboard.indexOf("if(e.code==='F7'")<keyboard.indexOf("if(['INPUT'"),
  'F7 must be handled before the focused-input guard');
 assert.ok(game.includes('formatDiagnostics'));
 assert.ok(game.includes("e.code==='F8'"),'F8 copies diagnostics');
