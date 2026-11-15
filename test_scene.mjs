@@ -23,14 +23,19 @@ assert.ok(world.lighting&&world.lighting.districtLights.length===4,'Live world u
 assert.ok(world.environment43?.stats.parts>=700,'Live world includes phase 4.3 environmental storytelling');
 assert.equal(world.environment43.stats.signs,24,'City adds 24 distinctive business signs');
 assert.ok(world.atmosphere44&&world.atmosphere44.puddles.length>=25,'Phase 4.4 weather lives in the active scene');
+assert.ok(world.living45&&world.living45.ads.length===12,'Phase 4.5 live adverts present');
+assert.equal(world.living45.fans.length,4,'Phase 4.5 ventilation motor anchors present');
+assert.equal(world.living45.drones.length,4,'Phase 4.5 rooftop service actors present');
 assert.equal(world.lighting.signLights.length,map.signs.length,'All existing signs have lighting anchors');
 assert.equal(world.sun.shadow.mapSize.width,2048);
 assert.equal(world.targets.size,2);
 assert.equal(new Set(scene.children[0].children.filter(o=>o.isMesh&&o.userData.zone).map(o=>o.userData.zone)).size,4);
 assert.ok(scene.children[0].children.some(o=>o.isPointLight),'Selective neon point lights');
 world.setQuality('performance');assert.equal(world.sun.castShadow,false);
+assert.equal(world.living45.ads.filter(a=>a.mesh.visible).length,4,'Performance displays one sign per district');
 assert.equal(world.atmosphere44.rain.visible,false,'Performance disables optional GPU rain');
 world.setQuality('ultra');assert.equal(world.sun.castShadow,true);
+assert.equal(world.living45.ads.filter(a=>a.mesh.visible).length,12,'Ultra displays full animated advertisements');
 assert.equal(world.atmosphere44.rain.geometry.drawRange.count,850,'Ultra restores 850 precipitation sprites');
 console.log(`03.2 world: ${world.staticBatches} batches, ${world.featureCount} authored features, ${meshes} meshes, ${Math.round(triangles)} triangles.`);
 for(let id=0;id<4;id++){const gun=makeWeapon(id);assert.equal(gun.userData.id,id);for(const reload of [0,.25,.5,.9])animateWeapon(gun,{time:1,ads:1,reload,kick:.02,moving:true,slide:0,motion:true,switched:0});}
