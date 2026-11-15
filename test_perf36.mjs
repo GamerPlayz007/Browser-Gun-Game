@@ -52,7 +52,7 @@ for(const label of ['1% LOW FPS','FRAME P95','RTT','JITTER','BUFFER','SEQ GAPS',
  assert.ok(view.includes(label),`Missing diagnostics: ${label}`);
 assert.ok(!view.includes('NaN'));
 const ui=fs.readFileSync('./static/index.html','utf8');
-for(const id of ['perf-panel','perf-details','diagnostics-toggle']){
+for(const id of ['perf-panel','perf-details','diagnostics-toggle','copy-diagnostics']){
  assert.ok(ui.includes(`id="${id}"`),`Missing diagnostics DOM: ${id}`);
 }
 assert.ok(ui.includes('<sup>05.1</sup>'));
@@ -62,5 +62,7 @@ assert.ok(game.includes("e.code==='F7'"));
 assert.ok(game.includes("if(!joined)return;if(e.code==='F7'"),
  'F7 must be handled before the focused-input guard');
 assert.ok(game.includes('formatDiagnostics'));
+assert.ok(game.includes("e.code==='F8'"),'F8 copies diagnostics');
+assert.ok(game.includes('createDebugReport51'),'Playtest diagnostic export wired');
 console.log('Stage 3.6: frame pacing, slow-frame detection, sequence gaps, bounded sampling,');
 console.log('and HUD diagnostics contracts passed.');
