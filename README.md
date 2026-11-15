@@ -1,4 +1,4 @@
-# CROSSFIRE 05.5 — COMPETITIVE MULTIPLAYER SYSTEMS
+# CROSSFIRE V3.0 RC1 — PHASE 5.6 RELEASE CANDIDATE
 
 **Source of truth:** `main` branch, deployed by Render when auto-deploy is enabled.
 
@@ -7,6 +7,47 @@ and its separate `cyberpunk-next` experimental selection have been removed.
 The only active map contains **more than 650 authoritative collision objects, a 120 m
 gameplay envelope, 3053 decorative objects and 13 authored district routes.**
 The surrounding 160 m urban context is visual-only.
+
+## Phase 5.6 — V3.0 release candidate (implemented on main)
+
+**Current build:** `3.0.0-rc.1`, server phase `05.6`,
+homepage badge **V3.0 RC**. This is a release candidate, not yet an
+independently validated public launch. The game still uses the same single
+Cyberpunk City and incremental `main` branch.
+
+- The lobby offers four visual-only avatar accent choices: **Ember**,
+  **Glacier**, **Golden**, **Nova**. The server validates IDs 0–3 and syncs
+  each player's selected palette to other clients; colors never affect
+  match rules. Live changes swap shared material references instead of
+  rebuilding a player model or duplicating materials.
+- Browser preferences (callsign, sensitivity, motion, quality, audio volume,
+  avatar accent) are now safely read/written even if localStorage is blocked.
+  Quality values are validated; avatars persist only their cosmetic choice.
+- Unexpected WebSocket disconnects return players to the join screen with
+  **Rejoin Previous Room**. Room codes are kept only in the live tab, not
+  persisted in localStorage. Rejoining creates a new player identity—no
+  misleading promises of restoring the previous player's scores.
+- `test_release56.py` validates strict server cosmetic authorization,
+  manifests, HTTP health/asset checks and two WebSocket clients.
+  `test_release56.mjs` validates blocked-storage resilience, cosmetic
+  presets, persistence, rejoin wiring and UI contracts.
+- `check_live51.py` now checks the V3 build badge, phase, assets, two
+  WebSocket clients, host-controlled mode selection, team assignment,
+  readiness, cosmetic updates and server ping.
+- The **V3 release gates** and friend playtest checklist are in
+  `V3_RELEASE_CHECKLIST.md`. GitHub Actions must show BOTH test jobs
+  passing on `main` and Render must serve the expected V3 build.
+
+```bash
+npm ci && npm test
+pip install -r requirements.txt
+python -m unittest -v test_server test_map test_release51 test_modes54 test_competitive55 test_release56
+python check_live51.py https://YOUR-RENDER-SERVICE.onrender.com
+```
+
+**Promotion to public 3.0.0:** only after CI, live Render smoke, and a
+real multiplayer friends session pass; until then the release remains
+`3.0.0-rc.1`.
 
 ## Phase 5.5 — competitive multiplayer systems (implemented on main)
 
