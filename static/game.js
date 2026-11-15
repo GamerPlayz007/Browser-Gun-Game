@@ -2,6 +2,7 @@ import * as T from 'three';
 import {buildWorld} from './world.js';
 import {makeWeapon,animateWeapon,makePlayer,animatePlayer,markPlayerEvent,disposePlayer} from './models.js';
 import {simulate,FIXED_DT} from './physics.js';
+import {movementCue53,cameraFeel53} from './flow53.js';
 import {createMinimap} from './minimap.js';
 import {createDisplay} from './display.js';
 import {FrameMeter,formatDiagnostics} from './perf36.js';
@@ -47,7 +48,7 @@ async function loadArena(id){
 }
 const weapons=map.weapons,weaponModels=weapons.map(w=>makeWeapon(w.id));for(const g of weaponModels){g.visible=false;viewScene.add(g);}
 let selected=0,ws=null,myId=null,roomCode='',state=null,me=null,local=null,joined=false,keys={},aiming=false,yaw=0,pitch=0,seq=0,shotId=0,pendingShots=[];let pendingMoves=[],movementAccumulator=0,viewError=new T.Vector3(),rosterSignature='',scoreSignature='';
-let groundVelocity=0,landingPulse=0,lastLocalGrounded=true,movementHint='';
+let groundVelocity=0,landingPulse=0,lastLocalGrounded=true,movementHint='',slideHopUntil53=0;
 let ads=0,kick=0,eye=1.55,visualRecoil=0,lastShot=-10,flashUntil=0,hitUntil=0,damageUntil=0,elimUntil=0,noticeTimer,toastTimer,lastPhase='',lastSpawn=-1,switchVisual=0,rtt=50;
 let clock=performance.now(),fpsFrames=0,fpsLast=performance.now(),fps=60,lastStep=0,shotRecovery=0,frameError=false,matchBannerUntil=0,crosshairSize52=24,flashPower52=1;
 const feedback52=makeCombatFeedback52();
@@ -70,7 +71,11 @@ function predictStep(input){
  const command={type:'input',seq:++seq,spawn:me.spawn,yaw,pitch,...input};
  local.yaw=yaw;local.motion_time+=FIXED_DT;
  const beforeY=local.y;
+ const wasSliding=local.slide_until>local.motion_time&&local.grounded;
+ const beforeHeld=local.jump_held;
  simulate(local,input,FIXED_DT,local.motion_time,map.boxes,weapons[me.weapon]);
+ if(wasSliding&&input.jump&&!beforeHeld&&local.vy>0&&!local.grounded)
+  slideHopUntil53=performance.now()/1000+.48;
  if(!lastLocalGrounded&&local.grounded&&local.vy===0)landingPulse=Math.max(landingPulse,.16);
  lastLocalGrounded=!!local.grounded;
  groundVelocity=local.grounded?clamp((local.y-beforeY)/FIXED_DT,-6,6):0;
@@ -96,7 +101,7 @@ function fireWeapon(now){if(!me||!locked()||me.hp<=0||!['lobby','playing'].inclu
  $('ammo').textContent=ammo();
 }
 async function enter(create){$('create').disabled=$('join').disabled=true;$('status').textContent='Connecting to arena…';try{let code=$('code').value.trim().toUpperCase();const response=await fetch(create?'/api/rooms':'/api/rooms/'+code,create?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mapId:$('map-select').value})}:{});const data=await response.json();if(!response.ok)throw Error(data.error||'Connection failed.');if(create)code=data.room;else if(data.players>=data.max)throw Error('This room is full.');await loadArena(data.mapId);const name=$('name').value.trim()||'Player';localStorage.setItem('cf-name',name);const conn=new WebSocket(`${location.protocol==='https:'?'wss':'ws'}://${location.host}/ws/${code}?name=${encodeURIComponent(name)}&weapon=${selected}`);ws=conn;const timeout=setTimeout(()=>{if(conn.readyState!==1)conn.close();},12000);conn.onopen=()=>clearTimeout(timeout);conn.onmessage=e=>{if(ws===conn)handle(JSON.parse(e.data));};conn.onclose=()=>{clearTimeout(timeout);if(ws===conn)disconnect('Connection closed. Join again or create a new room.');};conn.onerror=()=>{$('status').textContent='Could not connect. Check the server is awake.';};}catch(e){$('status').textContent=e.message;$('create').disabled=$('join').disabled=false;}}
-function disconnect(message){netSync=createNetSync();frameMeter.reset();feedback52.reset();clearVisualEffects52();$('perf-panel').hidden=true;joined=false;state=me=local=null;myId=null;lastPhase='';lastSpawn=-1;pendingShots=[];pendingMoves=[];movementAccumulator=0;landingPulse=0;lastLocalGrounded=true;movementHint='';viewError.set(0,0,0);rosterSignature=scoreSignature='';matchBannerUntil=0;resetInput();document.exitPointerLock?.();for(const g of opponents.values())disposePlayer(g);opponents.clear();for(const id of ['hud','room-panel','death','results','scoreboard'])$(id).hidden=true;$('home').hidden=false;$('shade').style.opacity=1;$('status').textContent=message;$('create').disabled=$('join').disabled=false;}
+function disconnect(message){netSync=createNetSync();frameMeter.reset();feedback52.reset();slideHopUntil53=0;clearVisualEffects52();$('perf-panel').hidden=true;joined=false;state=me=local=null;myId=null;lastPhase='';lastSpawn=-1;pendingShots=[];pendingMoves=[];movementAccumulator=0;landingPulse=0;lastLocalGrounded=true;movementHint='';viewError.set(0,0,0);rosterSignature=scoreSignature='';matchBannerUntil=0;resetInput();document.exitPointerLock?.();for(const g of opponents.values())disposePlayer(g);opponents.clear();for(const id of ['hud','room-panel','death','results','scoreboard'])$(id).hidden=true;$('home').hidden=false;$('shade').style.opacity=1;$('status').textContent=message;$('create').disabled=$('join').disabled=false;}
 function scoreboard(players,body){
  body.replaceChildren();
  const scores=state?.standings?.length?state.standings:
@@ -184,7 +189,7 @@ function handle(data){if(data.type==='welcome'){netSync=createNetSync();seq=0;sh
  const previous=me;state=data;me=data.players.find(p=>p.id===myId);if(!me)return;const now=performance.now()/1000;
  pendingShots=pendingShots.filter(s=>s.id>me.ack_shot);
  if(!local||me.spawn!==lastSpawn){
-  local={...me};lastSpawn=me.spawn;pendingMoves=[];movementAccumulator=0;landingPulse=0;lastLocalGrounded=!!me.grounded;movementHint='';viewError.set(0,0,0);pendingShots=[];lastShot=-10;shotRecovery=0;feedback52.reset();releaseTrigger(combatTrigger);
+  local={...me};lastSpawn=me.spawn;pendingMoves=[];movementAccumulator=0;landingPulse=0;lastLocalGrounded=!!me.grounded;movementHint='';viewError.set(0,0,0);pendingShots=[];lastShot=-10;shotRecovery=0;feedback52.reset();slideHopUntil53=0;releaseTrigger(combatTrigger);
   yaw=me.yaw;pitch=0;
  }else{
   const old=new T.Vector3(local.x+viewError.x,local.y+viewError.y,local.z+viewError.z);
@@ -264,11 +269,19 @@ function frame(ms){try{const now=ms/1000,rawMs=ms-clock,dt=Math.min(rawMs/1000,.
   ads+=(Number(aiming&&locked()&&me.reload<=0)-ads)*Math.min(1,dt*16);const sliding=local.crouch?1:0;eye+=((sliding?.9:1.55)-eye)*Math.min(1,dt*15);
   const localSpeed=Math.hypot(local.vx,local.vz),moving=localSpeed>.5;
    const bob=settings.motion&&moving&&local.grounded?Math.sin(now*12)*.018*(1-ads):0;
-   const cue=local.mantle?'VAULTING':local.slide_until>local.motion_time?'SLIDING':!local.grounded?'AIRBORNE':
-    local.crouch?'CROUCHING':input.sprint&&localSpeed>5?'SPRINTING':moving?'MOVING':'READY';
-   if(cue!==movementHint){movementHint=cue;$('movement-state').textContent=cue;}
+   const cue=movementCue53(local,input,now,slideHopUntil53);
+   if(cue!==movementHint){movementHint=cue;$('movement-state').textContent=cue;
+    $('movement-state').classList.toggle('flow-action',cue==='SLIDE HOP'||cue==='VAULTING'||cue==='WALL KICK');}
    landingPulse=Math.max(0,landingPulse-dt*.95);
-  camera.position.set(local.x+viewError.x+local.vx*movementAccumulator,local.y+viewError.y+(local.grounded?groundVelocity:local.vy)*movementAccumulator+eye+bob-(settings.motion?landingPulse*.24:0),local.z+viewError.z+local.vz*movementAccumulator);camera.rotation.set(pitch+visualRecoil,yaw,settings.motion?((local.crouch?-.025:0)-clamp((local.vx*Math.cos(yaw)-local.vz*Math.sin(yaw))/8,-1,1)*.011):0,'YXZ');camera.fov=T.MathUtils.lerp(input.sprint?88:82,me.weapon===3?26:57,ads);camera.updateProjectionMatrix();
+  const flow53=cameraFeel53(local,yaw,{motion:settings.motion,aim:ads});
+  camera.position.set(local.x+viewError.x+local.vx*movementAccumulator,
+   local.y+viewError.y+(local.grounded?groundVelocity:local.vy)*movementAccumulator+eye+bob
+   -(settings.motion?landingPulse*.24:0)+flow53.vaultDip,
+   local.z+viewError.z+local.vz*movementAccumulator);
+  camera.rotation.set(pitch+visualRecoil,yaw,flow53.roll,'YXZ');
+  const targetFov53=T.MathUtils.lerp(input.sprint?88:82,me.weapon===3?26:57,ads)+flow53.fovBoost;
+  camera.fov=T.MathUtils.lerp(camera.fov,targetFov53,Math.min(1,dt*13));
+  camera.updateProjectionMatrix();
   for(const [id,g] of opponents){const shown=sampleRemote(netSync,id,ms);const p=shown?{...g.userData.target,...shown}:g.userData.target;if(!p)continue;
     // 20 Hz snapshots render on a delayed server-time timeline. No double lerp.
     g.position.set(p.x,p.y,p.z);animatePlayer(g,p,now);g.userData.tag.visible=camera.position.distanceTo(g.position)<18;}
