@@ -50,7 +50,7 @@ console.log(JSON.stringify(cases.map(c=>{const p={...c.initial};return c.command
                 dx,dz=b[0]-a[0],b[2]-a[2];length=math.hypot(dx,dz)
                 for i in range(math.ceil(length*2)+1):
                     t=min(1,i/max(1,math.ceil(length*2)))
-                    sides=[0] if min(t,1-t)*length<route['width']/2 else [0,-1,1]
+                    sides=[0] if min(t,1-t)*length<route['width']/2 or (route['id'] in ('G3','G4') and max(a[1],b[1])>=5) else [0,-1,1]
                     for side in sides:
                         offset=side*(route['width']/2-.4)
                         x=a[0]+t*dx-dz/length*offset;z=a[2]+t*dz+dx/length*offset;y=a[1]+t*(b[1]-a[1])
