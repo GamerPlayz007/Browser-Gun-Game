@@ -1,4 +1,4 @@
-# CROSSFIRE 03.2 — ONE LIVE CYBERPUNK CITY
+# CROSSFIRE 03.3 — ONE LIVE CYBERPUNK CITY
 
 **Source of truth:** `main` branch, deployed by Render when auto-deploy is enabled.
 
@@ -17,6 +17,7 @@ python build_map.py
 python -m unittest test_map test_server test_stage31
 npm test
 node test_stage31.mjs
+node test_netcode33.mjs
 python server.py
 ```
 
@@ -61,3 +62,25 @@ playtests; CI tests alone are not a claim of production polish.
 **Workflow:** Every later stage contributes directly to this one game,
 and reaches `main` after the regression gate. No independent playable
 versions or extra map selectors.
+
+
+## Multiplayer synchronization — Stage 3.3
+
+- The Python server remains authoritative for movement, room state and hits.
+- State packets carry an increasing `snapshotSeq` plus a monotonic
+  `serverTime` timestamp. Ping/pong measures clock offset and RTT.
+- The browser samples opponent positions on a short, jitter-adaptive buffer
+  (95–185 ms); it interpolates heading around angle wrap and bounds
+  extrapolation to 80 ms during a missing snapshot.
+- Remote buffers reset on respawn, teleports, disconnections and room changes.
+- Local prediction continues at 60 Hz. Authoritative snapshots replay only
+  unacknowledged inputs, with bounded camera correction and snapping for
+  large errors. No client-reported position is accepted by the server.
+- The in-game HUD shows RTT, observed snapshot-arrival jitter and stale-link
+  warnings.
+- `test_netcode33.mjs` exercises packet delay, out-of-order arrivals,
+  teleport/respawn reset, extrapolation caps, clock alignment and corrections.
+
+This work does **not** add historical hitbox rewinding or claim to eliminate
+high network latency. Actual browser multiplayer playtests and Render
+deployment still require verification.

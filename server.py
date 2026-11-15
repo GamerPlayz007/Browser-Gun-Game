@@ -1,4 +1,4 @@
-"""CROSSFIRE 02.5. Server-authoritative small-room FPS. Single Python process."""
+"""CROSSFIRE 03.3. Server-authoritative multiplayer arena with sequenced snapshots."""
 import asyncio, contextlib, json, math, os, random, re, secrets, time
 from collections import deque
 from pathlib import Path
@@ -57,7 +57,7 @@ class Room:
     def __init__(self,code,map_id=None):
         self.arena=ARENAS[map_id or DEFAULT.id]
         self.code=code;self.players={};self.sockets={};self.joining=0;self.host=None;self.mode='deathmatch'
-        self.phase='lobby';self.started=0.;self.countdown_at=0.;self.winner=None;self.events=[];self.last_active=time.monotonic()
+        self.phase='lobby';self.started=0.;self.countdown_at=0.;self.winner=None;self.events=[];self.last_active=time.monotonic();self.snapshot_sequence=0
         self.targets=[dict(id='t'+str(i),x=x,y=y,z=z,hp=100,reset_at=0) for i,(x,y,z) in enumerate(self.arena.data['practiceTargets'])]
     def event(self,kind,**kw):self.events.append(dict(type=kind,**kw))
     def start(self,pid,now):
@@ -148,8 +148,9 @@ class Room:
         for t in self.targets:
             if t['hp']<=0 and now>=t['reset_at']:t['hp']=100
     def snapshot(self,now):
+        self.snapshot_sequence+=1
         fields=('id','name','x','y','z','vx','vy','vz','grounded','yaw','pitch','hp','ammo','kills','deaths','headshots','weapon','crouch','spawn','seq','shot_seq','ack_shot','jump_held','slide_held','motion_time','slide_until','slide_ready','jump_buffer_until','coyote_until','jump_consumed','jump_cut','wall_kick_used','interact_held','mantle')
-        return dict(type='state',mapId=self.arena.id,phase=self.phase,mode=self.mode,host=self.host,players=[{k:p[k] for k in fields}|dict(reload=max(0,p['reload_at']-now),respawn=max(0,p['respawn_at']-now),shield=max(0,p['shield']-now),slide=max(0,p['slide_until']-p['motion_time']),slideCooldown=max(0,p['slide_ready']-p['motion_time']),switch=max(0,p['switch_at']-now)) for p in self.players.values()],targets=self.targets,events=self.events,remaining=max(0,ROUND_SECONDS-(now-self.started)) if self.phase=='playing' else ROUND_SECONDS,countdown=max(0,self.countdown_at-now),winner=self.winner)
+        return dict(type='state',snapshotSeq=self.snapshot_sequence,serverTime=round(now,6),tickRate=60,snapshotHz=20,mapId=self.arena.id,phase=self.phase,mode=self.mode,host=self.host,players=[{k:p[k] for k in fields}|dict(reload=max(0,p['reload_at']-now),respawn=max(0,p['respawn_at']-now),shield=max(0,p['shield']-now),slide=max(0,p['slide_until']-p['motion_time']),slideCooldown=max(0,p['slide_ready']-p['motion_time']),switch=max(0,p['switch_at']-now)) for p in self.players.values()],targets=self.targets,events=self.events,remaining=max(0,ROUND_SECONDS-(now-self.started)) if self.phase=='playing' else ROUND_SECONDS,countdown=max(0,self.countdown_at-now),winner=self.winner)
 
 rooms={}
 async def create_room(request):
@@ -194,7 +195,7 @@ async def socket(request):
                 data=json.loads(msg.data)
                 if not isinstance(data,dict):continue
                 action=data.get('type')
-                if action=='ping':await ws.send_json({'type':'pong','t':data.get('t')});continue
+                if action=='ping':await ws.send_json({'type':'pong','t':data.get('t'),'serverTime':time.monotonic()});continue
                 if action=='input':
                     aim(p,data)
                     seq=max(0,min(2**31,int(data.get('seq',0))))
@@ -254,7 +255,7 @@ async def cache_policy(request,handler):
     if not isinstance(response,web.WebSocketResponse):response.headers['Cache-Control']='no-cache'
     return response
 async def index(request):return web.FileResponse(ROOT/'static/index.html')
-async def health(request):return web.json_response({'ok':True,'version':2,'revision':MAP['revision'],'mapId':DEFAULT.id,'rooms':len(rooms)})
+async def health(request):return web.json_response({'ok':True,'version':3,'revision':MAP['revision'],'network':'03.3','mapId':DEFAULT.id,'rooms':len(rooms)})
 async def room_info(request):
     r=rooms.get(request.match_info['code'].upper())
     return web.json_response({'players':len(r.players),'max':MAX_PLAYERS,'phase':r.phase,'mapId':r.arena.id,'mapName':r.arena.data['name']} if r else {'error':'Room expired or not found.'},status=200 if r else 404)
