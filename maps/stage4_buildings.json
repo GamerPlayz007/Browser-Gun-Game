@@ -1,0 +1,1383 @@
+{
+  "project": "CROSSFIRE / Cyberpunk City",
+  "phase": 1,
+  "stage": 2,
+  "status": "architectural design proposal; no implementation / collision tests",
+  "ground_truth": {
+    "source": "GitHub main/maps/cyberpunk.py checked 2026-11-14",
+    "stage1": "CROSSFIRE_Stage1_Urban_Plan.json",
+    "authored_coordinate_convention": "x=east, z=south, origin northwest 0..80, exported game x/z subtract 40",
+    "fixed_existing_core_m": [
+      80,
+      80
+    ]
+  },
+  "priorities": [
+    "preserve four landmarks and all 12 routes",
+    "real building program first",
+    "differentiate public, service, upper-floor access",
+    "preserve first-person game movement variety with loops and legible transitions",
+    "do not activate non-built floors"
+  ],
+  "buildings": [
+    {
+      "id": "M01",
+      "name": "Market Frontage Shops",
+      "use": "shops with housing above",
+      "sector": "Market",
+      "footprint": [
+        5,
+        31,
+        9,
+        62
+      ],
+      "existing": "M-W",
+      "status": "retain/rebuild",
+      "storeys": 4,
+      "visual_roof_y": 17,
+      "active_levels": [
+        1,
+        5
+      ],
+      "mass_notes": "Original 4 m-deep strip becomes a narrow but legible row of street-facing units; upper flats are mostly non-playable.",
+      "doors": [
+        [
+          "M01-D1",
+          9,
+          43,
+          1,
+          "front storefront / market walk"
+        ],
+        [
+          "M01-D2",
+          9,
+          56,
+          1,
+          "rear shop door"
+        ],
+        [
+          "M01-U1",
+          9,
+          38,
+          5,
+          "upper gallery to U1"
+        ]
+      ],
+      "rooms": [
+        "two shallow shop bays",
+        "shared stair/entrance",
+        "upper housing frontage"
+      ],
+      "route_ids": [
+        "PD-02",
+        "U1",
+        "S1"
+      ],
+      "gameplay": "Two shop thresholds and connected balcony with visual roof above; do not model upper flats as empty stacked arenas."
+    },
+    {
+      "id": "M02",
+      "name": "Corner Food and Deliveries",
+      "use": "food shops and ground storage",
+      "sector": "Market",
+      "footprint": [
+        6,
+        63,
+        12,
+        74
+      ],
+      "existing": "M-SW",
+      "status": "retain/rebuild",
+      "storeys": 3,
+      "visual_roof_y": 13,
+      "active_levels": [
+        1
+      ],
+      "mass_notes": "Preserve narrow corner mass, with shop along pedestrian spine and a separate lane-side service shutter.",
+      "doors": [
+        [
+          "M02-D1",
+          12,
+          69,
+          1,
+          "corner shop front"
+        ],
+        [
+          "M02-D2",
+          9,
+          74,
+          1,
+          "service shutter onto ST-02"
+        ]
+      ],
+      "rooms": [
+        "shop floor",
+        "kitchen/storage",
+        "service recess"
+      ],
+      "route_ids": [
+        "G1",
+        "ST-02"
+      ],
+      "gameplay": "A believable interior elbow joining a public shopfront and a loading entrance."
+    },
+    {
+      "id": "M03",
+      "name": "Electronic Repair Arcade",
+      "use": "retail and repair",
+      "sector": "Market",
+      "footprint": [
+        22,
+        52,
+        31,
+        71
+      ],
+      "existing": "M-E",
+      "status": "retain/carve",
+      "storeys": 4,
+      "visual_roof_y": 17,
+      "active_levels": [
+        1,
+        5
+      ],
+      "mass_notes": "Route I1 becomes a real ground-floor sequence with west entry, repair showroom, workshop and east exit toward Plaza.",
+      "doors": [
+        [
+          "M03-D1",
+          22,
+          55,
+          1,
+          "west market entrance"
+        ],
+        [
+          "M03-D2",
+          31,
+          55,
+          1,
+          "east arcade exit"
+        ],
+        [
+          "M03-D3",
+          26,
+          71,
+          1,
+          "south goods entrance"
+        ],
+        [
+          "M03-U1",
+          29,
+          55,
+          5,
+          "upper Signwalk landing"
+        ]
+      ],
+      "rooms": [
+        "electronics retail",
+        "repair bench room",
+        "rear warehouse",
+        "stair and terrace"
+      ],
+      "route_ids": [
+        "I1",
+        "U1",
+        "S2"
+      ],
+      "gameplay": "Small interior turns break up exterior flow; upstairs crosses into U1 without teleport links."
+    },
+    {
+      "id": "M04",
+      "name": "Market Workshop / Terrace",
+      "use": "small workshop and publicly visible terrace",
+      "sector": "Market",
+      "footprint": [
+        21,
+        34,
+        30,
+        46
+      ],
+      "existing": null,
+      "status": "new infill / geometry must be checked",
+      "storeys": 1,
+      "visual_roof_y": 5,
+      "active_levels": [
+        1,
+        5
+      ],
+      "mass_notes": "A low infill roof, deliberately aligned with U1 at y=5; NOT a tall mass that blocks existing Signwalk.",
+      "doors": [
+        [
+          "M04-D1",
+          21,
+          39,
+          1,
+          "market side door"
+        ],
+        [
+          "M04-D2",
+          30,
+          42,
+          1,
+          "east workshop door"
+        ],
+        [
+          "M04-U1",
+          26,
+          38,
+          5,
+          "roof terrace"
+        ]
+      ],
+      "rooms": [
+        "ground workshop",
+        "street-side equipment nook",
+        "occupied roof"
+      ],
+      "route_ids": [
+        "U1"
+      ],
+      "gameplay": "The low roof is a believable intermediate terrace connecting the market-level gallery."
+    },
+    {
+      "id": "C01",
+      "name": "Central Exchange Building",
+      "use": "mixed-use offices, public ground arcade",
+      "sector": "Central",
+      "footprint": [
+        30,
+        31,
+        52,
+        47
+      ],
+      "existing": "C-1",
+      "status": "retain / major ground-floor carve",
+      "storeys": 6,
+      "visual_roof_y": 27,
+      "active_levels": [
+        1,
+        5
+      ],
+      "mass_notes": "GROUND void is x=39.75..44.25, z=31..47; west and east wings remain. Structural bridge at y>=5.25 crosses void; currently hypothetical.",
+      "doors": [
+        [
+          "C01-N",
+          42,
+          31,
+          1,
+          "PD-01 north public arch"
+        ],
+        [
+          "C01-S",
+          42,
+          47,
+          1,
+          "PD-01 south public arch"
+        ],
+        [
+          "C01-W",
+          30,
+          39,
+          1,
+          "west business unit"
+        ],
+        [
+          "C01-E",
+          52,
+          39,
+          1,
+          "east service unit"
+        ],
+        [
+          "C01-U",
+          42,
+          40,
+          5,
+          "bridge above arcade"
+        ]
+      ],
+      "rooms": [
+        "public arcade",
+        "west retail wing",
+        "east admin wing",
+        "shared vertical core",
+        "upper transfer bridge"
+      ],
+      "route_ids": [
+        "PD-01",
+        "ST-01",
+        "U1"
+      ],
+      "gameplay": "The city needs a direct station-to-plaza passage; side wings create optional interior detours, not a single empty tunnel."
+    },
+    {
+      "id": "P01",
+      "name": "Neon Plaza",
+      "use": "public recessed square",
+      "sector": "Plaza",
+      "footprint": [
+        32,
+        50,
+        49,
+        72
+      ],
+      "existing": "plaza floor cut",
+      "status": "preserve/regrade access",
+      "storeys": 0,
+      "visual_roof_y": null,
+      "active_levels": [
+        0,
+        1
+      ],
+      "mass_notes": "Keep current recessed 0 m level while fixing 1 m street-to-plaza step with actual transition geometry.",
+      "doors": [
+        [
+          "P01-N",
+          42,
+          50,
+          0,
+          "arcade connection"
+        ],
+        [
+          "P01-W",
+          32,
+          62,
+          0,
+          "market connection"
+        ],
+        [
+          "P01-E",
+          49,
+          60,
+          0,
+          "corporate passage"
+        ],
+        [
+          "P01-S",
+          42,
+          72,
+          0,
+          "south ramp/stairs"
+        ]
+      ],
+      "rooms": [
+        "recessed open square",
+        "northern walkway",
+        "public feature / drainage",
+        "ramped access"
+      ],
+      "route_ids": [
+        "PD-01",
+        "G1",
+        "G2",
+        "I1",
+        "I2",
+        "PD-03"
+      ],
+      "gameplay": "Readable centre with multiple exits; landscaping is navigable and does not arbitrarily close whole sides."
+    },
+    {
+      "id": "P02",
+      "name": "Plaza East Gallery",
+      "use": "public retail/gallery to corporate interface",
+      "sector": "Plaza",
+      "footprint": [
+        49,
+        47,
+        56,
+        71
+      ],
+      "existing": "P-E",
+      "status": "retain/carve",
+      "storeys": 4,
+      "visual_roof_y": 18,
+      "active_levels": [
+        1,
+        5
+      ],
+      "mass_notes": "Tall narrow plot; the I2 passage must be defined with shopfront glazing, an actual lobby and access doors.",
+      "doors": [
+        [
+          "P02-W",
+          49,
+          60,
+          1,
+          "plaza side entrance"
+        ],
+        [
+          "P02-E",
+          56,
+          64,
+          1,
+          "corporate side exit"
+        ],
+        [
+          "P02-S",
+          52,
+          71,
+          1,
+          "southern service door"
+        ],
+        [
+          "P02-U",
+          53,
+          62,
+          5,
+          "upper corridor to U2"
+        ]
+      ],
+      "rooms": [
+        "front gallery",
+        "side vestibule",
+        "back-of-house service",
+        "upper circulation"
+      ],
+      "route_ids": [
+        "I2",
+        "U2",
+        "PD-03"
+      ],
+      "gameplay": "One legible interior detour rather than unmotivated open-sided walls."
+    },
+    {
+      "id": "A01",
+      "name": "Axiom Tech Headquarters",
+      "use": "corporate atrium + offices",
+      "sector": "Axiom",
+      "footprint": [
+        57,
+        35,
+        75,
+        70
+      ],
+      "existing": "A01/atriumShell",
+      "status": "retain / major circulation and portal rebuild",
+      "storeys": 5,
+      "visual_roof_y": 21,
+      "active_levels": [
+        1,
+        5
+      ],
+      "mass_notes": "Public lobby west and south; north service portal x=57..75, z=35.2..39.8 at ground keeps ST-01 continuous; must preserve structure above.",
+      "doors": [
+        [
+          "A01-W",
+          57,
+          64,
+          1,
+          "plaza-to-lobby entry"
+        ],
+        [
+          "A01-S",
+          64,
+          70,
+          1,
+          "south public access"
+        ],
+        [
+          "A01-NW",
+          57,
+          37,
+          1,
+          "north portal west"
+        ],
+        [
+          "A01-NE",
+          75,
+          37,
+          1,
+          "north portal east"
+        ],
+        [
+          "A01-U1",
+          63,
+          65,
+          5,
+          "U2 entry to atrium ring"
+        ],
+        [
+          "A01-U2",
+          60,
+          47,
+          5,
+          "U4 transfer entry"
+        ]
+      ],
+      "rooms": [
+        "lobby and reception south",
+        "voided central atrium",
+        "western upper mezzanine",
+        "service strip north",
+        "office entrances (mostly closed)"
+      ],
+      "route_ids": [
+        "G2",
+        "G4",
+        "I2",
+        "I4",
+        "U2",
+        "U4",
+        "S3",
+        "ST-01"
+      ],
+      "gameplay": "Double-height void with a true balcony circuit; a public route and service route have distinct identities."
+    },
+    {
+      "id": "T01",
+      "name": "Elevated Station and Canopy",
+      "use": "rail platform and passenger concourse",
+      "sector": "Transit",
+      "footprint": [
+        31,
+        8,
+        59,
+        24
+      ],
+      "existing": "station deck/roof",
+      "status": "retain/restructure",
+      "storeys": 2,
+      "visual_roof_y": 14,
+      "active_levels": [
+        9
+      ],
+      "mass_notes": "Rail corridor z14..22 must remain continuous; passenger areas exist on either side of tracks. Deck at y9, canopy at ~14.",
+      "doors": [
+        [
+          "T01-S",
+          44,
+          24,
+          9,
+          "south platform exit"
+        ],
+        [
+          "T01-W",
+          31,
+          22,
+          9,
+          "west platform service exit"
+        ],
+        [
+          "T01-E",
+          53,
+          24,
+          9,
+          "east passenger stair landing"
+        ]
+      ],
+      "rooms": [
+        "platform strips",
+        "boarding and waiting",
+        "ticket kiosks",
+        "service maintenance access"
+      ],
+      "route_ids": [
+        "G3",
+        "G4",
+        "I3",
+        "I4",
+        "U3",
+        "U4",
+        "S4",
+        "S5",
+        "S6"
+      ],
+      "gameplay": "Platform circulation and roof/rail supports replace floating elevated slabs; reserve railway continuously."
+    },
+    {
+      "id": "T02",
+      "name": "North Signalling House",
+      "use": "station administration and utilities",
+      "sector": "Transit",
+      "footprint": [
+        7,
+        7,
+        31,
+        13
+      ],
+      "existing": "T-W northern portion",
+      "status": "split/rebuild to clear RAIL-01",
+      "storeys": 3,
+      "visual_roof_y": 14,
+      "active_levels": [
+        1
+      ],
+      "mass_notes": "Original T-W mass is separated around rail reservation z14..22; this north wing cannot bridge across the elevated rail.",
+      "doors": [
+        [
+          "T02-S",
+          17,
+          13,
+          1,
+          "south utility entrance"
+        ],
+        [
+          "T02-W",
+          7,
+          11,
+          1,
+          "west access"
+        ]
+      ],
+      "rooms": [
+        "signal office",
+        "electrical room",
+        "stair to closed upper floors"
+      ],
+      "route_ids": [
+        "I3"
+      ],
+      "gameplay": "A narrow service interior gives spatial narrative to the older station precinct."
+    },
+    {
+      "id": "T03",
+      "name": "South Transit Workshop",
+      "use": "repair shops and access to service stairs",
+      "sector": "Transit",
+      "footprint": [
+        7,
+        23,
+        31,
+        28
+      ],
+      "existing": "T-W rebuilt southern portion",
+      "status": "split/rebuild to clear RAIL-01",
+      "storeys": 2,
+      "visual_roof_y": 9,
+      "active_levels": [
+        1,
+        5
+      ],
+      "mass_notes": "South of rail reservation, north of ST-01. Exterior access and upper service gallery create credible U3 handoff.",
+      "doors": [
+        [
+          "T03-S",
+          18,
+          28,
+          1,
+          "street-side workshop door"
+        ],
+        [
+          "T03-N",
+          25,
+          23,
+          1,
+          "rail-side maintenance door"
+        ],
+        [
+          "T03-U",
+          26,
+          26,
+          5,
+          "U3 service landing"
+        ]
+      ],
+      "rooms": [
+        "repair workshop",
+        "tool store",
+        "staff stair",
+        "openable service gallery"
+      ],
+      "route_ids": [
+        "G3",
+        "I3",
+        "U3",
+        "S5"
+      ],
+      "gameplay": "Market-to-station link threads through service circulation with clearly readable elevation changes."
+    },
+    {
+      "id": "T04",
+      "name": "Eastern Transit Operations",
+      "use": "operations and station utilities",
+      "sector": "Transit",
+      "footprint": [
+        60,
+        24,
+        75,
+        34
+      ],
+      "existing": "T-E",
+      "status": "retain/carve service corridor",
+      "storeys": 3,
+      "visual_roof_y": 15,
+      "active_levels": [
+        1,
+        5
+      ],
+      "mass_notes": "Keep T-E footprint, but fit I4 inside a legitimate utility passage with access toward Axiom.",
+      "doors": [
+        [
+          "T04-W",
+          60,
+          29,
+          1,
+          "ST-01 access"
+        ],
+        [
+          "T04-S",
+          67,
+          34,
+          1,
+          "Axiom service door"
+        ],
+        [
+          "T04-U",
+          60,
+          28,
+          5,
+          "U4 service landing"
+        ]
+      ],
+      "rooms": [
+        "operations corridor",
+        "control room",
+        "staff stair",
+        "mechanical room"
+      ],
+      "route_ids": [
+        "G4",
+        "I4",
+        "U4",
+        "S6"
+      ],
+      "gameplay": "Alternative indoor-outdoor route around the corporate side with a clear station purpose."
+    },
+    {
+      "id": "T05",
+      "name": "West Public Station Stair",
+      "use": "public stair and future lift",
+      "sector": "Transit",
+      "footprint": [
+        35,
+        23,
+        41,
+        29
+      ],
+      "existing": "new",
+      "status": "add / exact geometry pending",
+      "storeys": 3,
+      "visual_roof_y": 11,
+      "active_levels": [
+        1,
+        3,
+        5,
+        7,
+        9
+      ],
+      "mass_notes": "Compact switchback stairs, four rises of ~2 m each with intermediate landings; public lift reserved, not implemented.",
+      "doors": [
+        [
+          "T05-G",
+          38,
+          29,
+          1,
+          "street entrance"
+        ],
+        [
+          "T05-P",
+          38,
+          23,
+          9,
+          "platform landing"
+        ]
+      ],
+      "rooms": [
+        "lower vestibule",
+        "switchback stairs",
+        "intermediate landings",
+        "upper exit"
+      ],
+      "route_ids": [
+        "G3",
+        "S4"
+      ],
+      "gameplay": "Recognizable vertical circulation replacing one implausibly steep long ramp."
+    },
+    {
+      "id": "T06",
+      "name": "East Public Station Stair",
+      "use": "public stair and future lift",
+      "sector": "Transit",
+      "footprint": [
+        50,
+        23,
+        56,
+        29
+      ],
+      "existing": "new",
+      "status": "add / exact geometry pending",
+      "storeys": 3,
+      "visual_roof_y": 11,
+      "active_levels": [
+        1,
+        3,
+        5,
+        7,
+        9
+      ],
+      "mass_notes": "Second public stair for legible wayfinding and redundant connection to elevated platform.",
+      "doors": [
+        [
+          "T06-G",
+          53,
+          29,
+          1,
+          "street entrance"
+        ],
+        [
+          "T06-P",
+          53,
+          23,
+          9,
+          "platform landing"
+        ]
+      ],
+      "rooms": [
+        "ticket entry",
+        "switchback stair",
+        "intermediate landings",
+        "platform exit"
+      ],
+      "route_ids": [
+        "G4",
+        "S4"
+      ],
+      "gameplay": "Two distinct ways onto Transit Deck; not dependent on one inaccessible sloped surface."
+    }
+  ],
+  "game_specific_traversal_concepts": [
+    {
+      "id": "X01",
+      "name": "Market shop throughway",
+      "category": "interior bypass",
+      "building": [
+        "M03"
+      ],
+      "z_levels": [
+        1
+      ],
+      "nodes": [
+        "M_G",
+        "P_G"
+      ],
+      "physical": "I1 inside M03 retail and repair bay",
+      "status": "reframe old I1"
+    },
+    {
+      "id": "X02",
+      "name": "Market rooftop sequence",
+      "category": "elevated public/service",
+      "building": [
+        "M01",
+        "M04",
+        "M03"
+      ],
+      "z_levels": [
+        5
+      ],
+      "nodes": [
+        "M_5",
+        "P_5"
+      ],
+      "physical": "U1 becomes supported galleries and M04 roof, with genuine stair landings",
+      "status": "reframe old U1"
+    },
+    {
+      "id": "X03",
+      "name": "Central Exchange arcade",
+      "category": "public ground",
+      "building": [
+        "C01"
+      ],
+      "z_levels": [
+        1
+      ],
+      "nodes": [
+        "T_G",
+        "P_G"
+      ],
+      "physical": "PD-01 4.5 m corridor through C01 ground floor; upper transfer slab above y5",
+      "status": "new critical connection"
+    },
+    {
+      "id": "X04",
+      "name": "Axiom mezzanine circuit",
+      "category": "interior elevated loop",
+      "building": [
+        "A01",
+        "P02"
+      ],
+      "z_levels": [
+        5
+      ],
+      "nodes": [
+        "P_5",
+        "A_5"
+      ],
+      "physical": "U2 + continuous atrium ring, with at least 2 defined stair exits",
+      "status": "reframe old U2"
+    },
+    {
+      "id": "X05",
+      "name": "West under-station staff route",
+      "category": "maintenance connection",
+      "building": [
+        "T03",
+        "T05",
+        "T01"
+      ],
+      "z_levels": [
+        1,
+        5,
+        9
+      ],
+      "nodes": [
+        "M_G",
+        "T_9"
+      ],
+      "physical": "I3 / U3 meet proper staff stair and station landings; no 4m in 16m magical ramp",
+      "status": "reframe old I3 U3 S5"
+    },
+    {
+      "id": "X06",
+      "name": "East operations connection",
+      "category": "maintenance connection",
+      "building": [
+        "T04",
+        "T06",
+        "T01"
+      ],
+      "z_levels": [
+        1,
+        5,
+        9
+      ],
+      "nodes": [
+        "A_G",
+        "T_9"
+      ],
+      "physical": "I4 / U4 connect Axiom service mezzanine to station stairs and platform",
+      "status": "reframe old I4 U4 S6"
+    },
+    {
+      "id": "X07",
+      "name": "North service portal",
+      "category": "building pass-through",
+      "building": [
+        "A01"
+      ],
+      "z_levels": [
+        1
+      ],
+      "nodes": [
+        "A_G",
+        "T_G"
+      ],
+      "physical": "Carve A01 north ground band (z35.2..39.8), align ST-01 through to east",
+      "status": "new critical connection"
+    },
+    {
+      "id": "X08",
+      "name": "South commercial frontage",
+      "category": "pedestrian corridor",
+      "building": [
+        "M02",
+        "P01",
+        "A01"
+      ],
+      "z_levels": [
+        0,
+        1
+      ],
+      "nodes": [
+        "M_G",
+        "P_G",
+        "A_G"
+      ],
+      "physical": "ST-02 connects shops and plaza with explicit +1m transitions",
+      "status": "reframe old G1 G2"
+    }
+  ],
+  "floor_levels": {
+    "plaza": 0,
+    "street": 1,
+    "first_active_gallery": 5,
+    "station_platform": 9,
+    "station_roof_visual": 14,
+    "inactive_highrise_visual": "13-27m"
+  },
+  "sections": [
+    {
+      "id": "SEC-M",
+      "title": "Market promenade section",
+      "description": "street +1 to workshop terrace +5 to apartment facades above, with internal shop stairs"
+    },
+    {
+      "id": "SEC-C",
+      "title": "Central exchange section",
+      "description": "ground 4.5m public arcade through C01 and overhead structural bridge at +5"
+    },
+    {
+      "id": "SEC-T",
+      "title": "Station section",
+      "description": "street+1, +3/+5/+7 stair landings, platform+9, canopy+14"
+    },
+    {
+      "id": "SEC-A",
+      "title": "Axiom section",
+      "description": "public lobby+1, mezzanine+5 around atrium void, upper offices mostly closed"
+    }
+  ],
+  "stairs": [
+    {
+      "id": "S1",
+      "from_y": 1,
+      "to_y": 5,
+      "building": "M01/M04",
+      "mechanism": "shop/service stair with landings",
+      "must_replace_existing_long_ramp": true
+    },
+    {
+      "id": "S2",
+      "from_y": 0,
+      "to_y": 5,
+      "building": "M03/P01",
+      "mechanism": "multi-flight plaza upper access",
+      "must_replace_existing_long_ramp": true
+    },
+    {
+      "id": "S3",
+      "from_y": 1,
+      "to_y": 5,
+      "building": "A01",
+      "mechanism": "atrium internal stair with landings",
+      "must_replace_existing_long_ramp": true
+    },
+    {
+      "id": "S4",
+      "from_y": 1,
+      "to_y": 9,
+      "building": "T05",
+      "mechanism": "4 return flights with landings at +3/+5/+7; lift shaft reserved",
+      "must_replace_existing_long_ramp": true
+    },
+    {
+      "id": "S5",
+      "from_y": 1,
+      "to_y": 9,
+      "building": "T03",
+      "mechanism": "staff stairs with intermediate landings",
+      "must_replace_existing_long_ramp": true
+    },
+    {
+      "id": "S6",
+      "from_y": 1,
+      "to_y": 9,
+      "building": "T04/T06",
+      "mechanism": "service stairs with intermediate landings",
+      "must_replace_existing_long_ramp": true
+    }
+  ],
+  "circulation_graph": {
+    "nodes": {
+      "M_G": [
+        16,
+        1,
+        53
+      ],
+      "P_G": [
+        41,
+        0,
+        62
+      ],
+      "A_G": [
+        64,
+        1,
+        64
+      ],
+      "T_G": [
+        44,
+        1,
+        29
+      ],
+      "M_5": [
+        26,
+        5,
+        38
+      ],
+      "P_5": [
+        35,
+        5,
+        55
+      ],
+      "A_5": [
+        63,
+        5,
+        55
+      ],
+      "T_9": [
+        44,
+        9,
+        18
+      ]
+    },
+    "edges": [
+      {
+        "id": "G1",
+        "from_node": "M_G",
+        "to_node": "P_G",
+        "kind": "original ground"
+      },
+      {
+        "id": "I1",
+        "from_node": "M_G",
+        "to_node": "P_G",
+        "kind": "original interior"
+      },
+      {
+        "id": "G2",
+        "from_node": "P_G",
+        "to_node": "A_G",
+        "kind": "original ground"
+      },
+      {
+        "id": "I2",
+        "from_node": "P_G",
+        "to_node": "A_G",
+        "kind": "original interior"
+      },
+      {
+        "id": "G3",
+        "from_node": "M_G",
+        "to_node": "T_G",
+        "kind": "original ground"
+      },
+      {
+        "id": "I3",
+        "from_node": "M_G",
+        "to_node": "T_G",
+        "kind": "original interior"
+      },
+      {
+        "id": "G4",
+        "from_node": "A_G",
+        "to_node": "T_G",
+        "kind": "original ground"
+      },
+      {
+        "id": "I4",
+        "from_node": "A_G",
+        "to_node": "T_G",
+        "kind": "original interior"
+      },
+      {
+        "id": "PD-01",
+        "from_node": "T_G",
+        "to_node": "P_G",
+        "kind": "new arcade"
+      },
+      {
+        "id": "U1",
+        "from_node": "M_5",
+        "to_node": "P_5",
+        "kind": "elevated galleries"
+      },
+      {
+        "id": "U2",
+        "from_node": "P_5",
+        "to_node": "A_5",
+        "kind": "atrium connector"
+      },
+      {
+        "id": "U3",
+        "from_node": "M_5",
+        "to_node": "T_9",
+        "kind": "service stairs+upper link"
+      },
+      {
+        "id": "U4",
+        "from_node": "A_5",
+        "to_node": "T_9",
+        "kind": "operations stairs+upper link"
+      },
+      {
+        "id": "S1",
+        "from_node": "M_G",
+        "to_node": "M_5",
+        "kind": "market stair"
+      },
+      {
+        "id": "S2",
+        "from_node": "P_G",
+        "to_node": "P_5",
+        "kind": "plaza stair"
+      },
+      {
+        "id": "S3",
+        "from_node": "A_G",
+        "to_node": "A_5",
+        "kind": "atrium stair"
+      },
+      {
+        "id": "S4",
+        "from_node": "T_G",
+        "to_node": "T_9",
+        "kind": "public stairs"
+      },
+      {
+        "id": "S5",
+        "from_node": "M_G",
+        "to_node": "T_9",
+        "kind": "west staff stair"
+      },
+      {
+        "id": "S6",
+        "from_node": "A_G",
+        "to_node": "T_9",
+        "kind": "east operations stair"
+      }
+    ],
+    "this_is_topological_only": true
+  },
+  "design_conflicts": [
+    {
+      "id": "CF-01",
+      "severity": "critical",
+      "location": [
+        39.75,
+        31,
+        44.25,
+        47
+      ],
+      "problem": "C01 original solid C-1 mass blocks new public arcade",
+      "resolution": "explicit ground void, properly supported upper spans, entrances aligned at both ends",
+      "verify": "3d solid subtractions and headroom"
+    },
+    {
+      "id": "CF-02",
+      "severity": "critical",
+      "location": [
+        7,
+        14,
+        31,
+        22
+      ],
+      "problem": "T-W mass crosses rail continuation",
+      "resolution": "split north T02 and south T03 while reserving continuous elevated railway",
+      "verify": "platform structure and railway clearance"
+    },
+    {
+      "id": "CF-03",
+      "severity": "critical",
+      "location": [
+        57,
+        35.2,
+        75,
+        39.8
+      ],
+      "problem": "ST-01 east leg intersects A01 shell",
+      "resolution": "ground-level service portal and load-bearing span above it",
+      "verify": "actual headroom and architecture"
+    },
+    {
+      "id": "CF-04",
+      "severity": "critical",
+      "location": [
+        35,
+        23,
+        56,
+        29
+      ],
+      "problem": "Public and staff 8m rises currently behave as steep straight ramps",
+      "resolution": "T05/T06 return stairs with landings at y3/5/7, access lift concept",
+      "verify": "player physics stair-step and route graph"
+    },
+    {
+      "id": "CF-05",
+      "severity": "medium",
+      "location": [
+        32,
+        50,
+        49,
+        72
+      ],
+      "problem": "Plaza -1m relative to street",
+      "resolution": "surface transitions and public ramps/stairs at identified edges",
+      "verify": "continuous floor colliders"
+    },
+    {
+      "id": "CF-06",
+      "severity": "medium",
+      "location": [
+        0,
+        77,
+        80,
+        80
+      ],
+      "problem": "Current southern boundary masks city continuation",
+      "resolution": "keep boundary during stage2; create gateway only after playable expansion",
+      "verify": "future boundary revisions"
+    },
+    {
+      "id": "CF-07",
+      "severity": "medium",
+      "location": [
+        21,
+        34,
+        30,
+        46
+      ],
+      "problem": "New low workshop overlaps old U1 path in plan",
+      "resolution": "set roof precisely at y5 and make U1 walk on roof instead of passing through solid mass",
+      "verify": "vertical footprint and bridge physics"
+    },
+    {
+      "id": "CF-08",
+      "severity": "medium",
+      "location": [
+        57,
+        35,
+        75,
+        70
+      ],
+      "problem": "Existing Axiom interior mostly void without meaningful floor circulation",
+      "resolution": "split ground lobby, service threshold, mezzanine ring, and closed offices",
+      "verify": "collision and character nav"
+    }
+  ],
+  "core_constraints": {
+    "public_walk_clear_width_target_m": 2.8,
+    "interior_shortcut_target_width_m": [
+      2.2,
+      4.5
+    ],
+    "sensible_headroom_min_m": 2.6,
+    "stair_landings_m": [
+      1,
+      3,
+      5,
+      7,
+      9
+    ],
+    "reserved_rail_centerline_z": 18,
+    "reserved_rail_half_width_m": 4,
+    "no_full_rooftop_access_by_default": true,
+    "nonplayable_upper_floors_are_shells": true
+  },
+  "not_implemented": [
+    "actual geometry",
+    "collision tests",
+    "navmesh",
+    "procedural building generation",
+    "spawn placement",
+    "render improvements"
+  ],
+  "next_stage": "Phase 1 Stage 3: topology/collision/navigability plan and strict geometry validation before greybox.",
+  "planning_checks": {
+    "passed": true,
+    "issues": [],
+    "connected_nodes": 8,
+    "nodes": 8,
+    "edges": 19,
+    "loop_rank_topological": 12,
+    "note": "These are schematic logical checks; never describe them as physics-tested routes."
+  }
+}
