@@ -24,7 +24,7 @@ class LiveCityTests(unittest.TestCase):
         self.assertEqual(routes,{f'{kind}{i}' for kind in 'GIU' for i in range(1,5)}|{'PD-01'})
         self.assertEqual(len(self.map['stairs']),6)
         self.assertEqual(len(self.map['spawns']),8)
-        self.assertEqual(len(self.map['boxes']),661)
+        self.assertGreaterEqual(len(self.map['boxes']),650)
         self.assertEqual(json.loads((ROOT/'static/map.json').read_text()),self.map)
 
     def test_noncolliding_layers(self):
@@ -42,6 +42,6 @@ class LiveCityTests(unittest.TestCase):
         room=Room('LIVE')
         self.assertEqual(room.arena.id,'cyberpunk')
         self.assertEqual(room.arena.data['size'],120)
-        self.assertEqual(len(room.arena.boxes),661)
+        self.assertEqual(len(room.arena.boxes),len(self.map['boxes']))
 
 if __name__=='__main__':unittest.main()

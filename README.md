@@ -4,7 +4,7 @@
 
 CROSSFIRE now uses **one** playable Cyberpunk City. The former 80 m map
 and its separate `cyberpunk-next` experimental selection have been removed.
-The only active map contains **661 authoritative collision objects, a 120 m
+The only active map contains **more than 650 authoritative collision objects, a 120 m
 gameplay envelope, 3053 decorative objects and 13 authored district routes.**
 The surrounding 160 m urban context is visual-only.
 
