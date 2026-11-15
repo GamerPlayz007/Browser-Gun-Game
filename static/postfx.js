@@ -86,14 +86,20 @@ export class EffectComposer{
   const target=()=>new T.WebGLRenderTarget(16,16,{
    type:T.HalfFloatType,format:T.RGBAFormat,depthBuffer:true,stencilBuffer:false});
   this.beauty=target();this.bloomA=target();this.bloomB=target();
-  this.width=0;this.height=0;this.mode='high';this.setMode('high');
+  this.width=0;this.height=0;this.mode='high';this.detailEnabled=true;
+  // Browsers and drivers can support fewer MSAA samples than Ultra requests.
+  // Detect the hardware cap instead of allocating an incomplete framebuffer.
+  let max=8;
+  try{const gl=renderer.getContext?.();const supported=gl?.getParameter?.(gl.MAX_SAMPLES);
+   if(Number.isFinite(supported))max=Math.max(0,supported);}catch{}
+  this.maxSamples=max;this.setMode('high');
  }
  setMode(mode){
   this.mode=CINEMATIC_PRESETS[mode]?mode:'high';
   const cfg=CINEMATIC_PRESETS[this.mode],p=this.pass;
   // Render target MSAA used only on High/Ultra; no additional render passes.
   const changedSamples=this.beauty.samples!==cfg.samples;
-  this.beauty.samples=cfg.samples;
+  this.beauty.samples=Math.min(cfg.samples,this.maxSamples);
   p.strength=cfg.bloom;p.threshold=cfg.threshold;p.radius=cfg.radius;
   p.compose.uniforms.contrast.value=cfg.contrast;
   p.compose.uniforms.saturation.value=cfg.saturation;
@@ -103,6 +109,7 @@ export class EffectComposer{
    this.beauty.dispose();this.beauty.setSize(this.width,this.height);
   }
  }
+ setDetail(enabled){this.detailEnabled=Boolean(enabled);}
  setSize(w,h){
   w=Math.max(1,Math.floor(w));h=Math.max(1,Math.floor(h));
   if(this.width===w&&this.height===h)return;
@@ -112,7 +119,9 @@ export class EffectComposer{
  }
  render(time=0){
   const r=this.renderer,p=this.pass;
-  if(this.mode==='performance'){
+  // Auto drops the entire compositor when its frame meter disables optional
+  // detail; this recovers five shader draws while retaining the base scene.
+  if(this.mode==='performance'||(this.mode==='auto'&&!this.detailEnabled)){
    r.setRenderTarget(null);r.render(this.scene,this.camera);return;
   }
   r.setRenderTarget(this.beauty);r.clear(true,true,true);r.render(this.scene,this.camera);
@@ -139,6 +148,6 @@ export class EffectComposer{
 }
 export function createPostProcessing(renderer,scene,camera,mode='high'){
  const composer=new EffectComposer(renderer,scene,camera);composer.setMode(mode);
- return {composer,setMode(value){composer.setMode(value);},setSize(w,h){composer.setSize(w,h);},
+ return {composer,setMode(value){composer.setMode(value);},setDetail(value){composer.setDetail(value);},setSize(w,h){composer.setSize(w,h);},
   render(time=0){composer.render(time);},dispose(){composer.dispose();}};
 }
