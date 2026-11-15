@@ -122,7 +122,18 @@ export function planEnvironment43(map){
     const dx=isX?0:signSide*(w/2+.06),dz=isX?signSide*(w/2+.06):0;
     add(s.x+dx,s.y,s.z+dz,isX?.12:.06,h+.12,isX?.06:.12,'metal',tier,zone,'sign-bracket');
    }
-   // Angular safety plate directly beneath every sign, also visual-only.
+   // Cantilevered rain awnings project over the sidewalk, safely above eye
+   // level; no gameplay collision is added anywhere beneath the awning.
+   const outward=.32;
+   add(s.x+(isX?Math.sin(s.rotation)*outward:0),s.y-.77,
+    s.z+(!isX?Math.cos(s.rotation)*outward:0),
+    isX?.64:w*1.03,.08,isX?w*1.03:.64,'metal',tier,zone,'shop-rain-awning');
+   for(const offset of [-.79,0,.79]){
+    const sx=isX?0:offset,sz=isX?offset:0;
+    add(s.x+sx+(isX?Math.sin(s.rotation)*.63:0),s.y-.72,
+     s.z+sz+(!isX?Math.cos(s.rotation)*.63:0),
+     isX?.045:.045,.04,isX?.045:.045,accent,Math.max(1,tier),zone,'awning-led');
+   }
    box(-.65,w*.73,.045,.08,'grate','service-awning');
    signs.push({...s,tier,localIndex:i,width:w,height:h});
   });
