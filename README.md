@@ -1,4 +1,4 @@
-# CROSSFIRE 04.4 — ONE LIVE CYBERPUNK CITY
+# CROSSFIRE 04.5 — ONE LIVE CYBERPUNK CITY
 
 **Source of truth:** `main` branch, deployed by Render when auto-deploy is enabled.
 
@@ -7,6 +7,14 @@ and its separate `cyberpunk-next` experimental selection have been removed.
 The only active map contains **more than 650 authoritative collision objects, a 120 m
 gameplay envelope, 3053 decorative objects and 13 authored district routes.**
 The surrounding 160 m urban context is visual-only.
+
+## Phase 4.5 — a living city (implemented on main)
+- `static/living45.js` adds **12 original animated advertising panels** (three per district), **four turning ventilation fans** and **four slow-moving rooftop service drones** anchored to authored Cyberpunk City landmarks. All are render-only `collidable:false`, never modifying the map, routes, server or multiplayer state.
+- Ads use **four shared procedural canvas textures / shader materials** (one per district) for gentle horizontal interference, scrolling highlights, scanline detail and non-strobing luminance. They react modestly to nearby players with smooth proximity-controlled glow.
+- Mechanisms have deterministic motion computed from the frame clock; no extra physics bodies or network traffic.
+- The existing Web Audio engine synthesizes gentle **positional ambience** for Night Market, Neon Plaza, Tech Atrium and Transit Deck. Sound only plays after user-gesture audio unlock, when the player is active, respects the volume slider and pauses if muted/hidden. Cues are throttled to one per 5.2 seconds (Performance 7.4 seconds); no downloaded tracks.
+- Performance leaves one advert per district and two ventilation fans, with drones disabled; High/Auto have intermediate tiers; Ultra presents all decorative actors. The existing Auto detail toggle also hides expensive secondary objects.
+- Existing Render auto-deploy from `main` is unchanged. Tests: `node test_living45.mjs` or `npm test`. Browser visual quality, Render deployment and measured fps still require real playtesting.
 
 ## Phase 4.4 — atmosphere and cinematic post-processing (live)
 - `static/atmosphere44.js` is mounted directly into the single active Cyberpunk City scene; GPU-driven shader particles use a deterministic seed. Two clouds provide rain and drifting motes, with **1,170 particles at Ultra** (850 rain + 320 motes), lower counts in High and Auto, and none in Performance.
