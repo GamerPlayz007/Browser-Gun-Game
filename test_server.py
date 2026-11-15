@@ -209,6 +209,10 @@ class NetworkTests(unittest.IsolatedAsyncioTestCase):
         self.assertGreaterEqual(b['serverTime'],a['serverTime'])
         self.assertGreater(b['serverTime'],0)
         self.assertEqual((b['tickRate'],b['snapshotHz']),(60,20))
+        self.assertEqual(b['rules']['goal'],15)
+        self.assertIn('standings',b)
+        self.assertEqual(len(b['standings']),1)
+        self.assertEqual(b['round'],0)
         self.assertEqual(b['players'][0]['id'],pid)
         await ws.close()
 
@@ -225,7 +229,7 @@ class NetworkTests(unittest.IsolatedAsyncioTestCase):
         ws=await self.client.ws_connect('/ws/'+data['room']);welcome=await ws.receive_json();self.assertEqual(welcome['mapId'],'cyberpunk')
         await ws.send_json({'type':'map','mapId':'solstice'})
         self.assertEqual((await self.state(ws))['mapId'],'cyberpunk');await ws.close()
-        html=await (await self.client.get('/')).text();self.assertIn('<sup>03.4</sup>',html);self.assertIn('id="map-select"',html)
+        html=await (await self.client.get('/')).text();self.assertIn('<sup>03.5</sup>',html);self.assertIn('id="map-select"',html)
         arena=await (await self.client.get('/static/maps/cyberpunk.json')).json();self.assertEqual(arena['id'],'cyberpunk');self.assertEqual(len(arena['routes']),13)
     async def test_duplicate_shot_ids_do_not_consume_extra_ammunition(self):
         code=(await (await self.client.post('/api/rooms')).json())['room']
@@ -257,5 +261,5 @@ class NetworkTests(unittest.IsolatedAsyncioTestCase):
         for path in ['/','/static/map.json','/static/game.js','/static/world.js','/static/models.js','/static/vendor/addons/objects/Sky.js']:
             response=await self.client.get(path);self.assertEqual(response.status,200,path)
         self.assertEqual((await self.client.get('/api/rooms/XXXXXX')).status,404)
-        self.assertEqual((await (await self.client.get('/health')).json())['version'],3)
+        self.assertEqual((await (await self.client.get('/health')).json())['version'],4)
 if __name__=='__main__':unittest.main()

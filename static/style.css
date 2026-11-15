@@ -57,3 +57,23 @@
 @keyframes feed-arrival{from{opacity:0;transform:translateX(12px)}
  to{opacity:1;transform:translateX(0)}}
 @media(prefers-reduced-motion:reduce){.feed-row{animation:none}}
+
+
+/* CROSSFIRE 03.5 — match authority and competitive UI. */
+#round-label,#lead-status{display:block;font-weight:700;letter-spacing:1.6px;font-size:9px;color:#8ddbdc}
+#round-label{margin-bottom:3px;color:#d7dfd7}
+#lead-status{margin-top:5px;color:#79e6dc}
+#match-banner{position:absolute;top:19%;left:50%;transform:translate(-50%,-10px);
+ z-index:4;width:min(520px,85vw);pointer-events:none;
+ padding:12px 18px;text-align:center;border-top:1px solid #89e4e7;
+ border-bottom:1px solid #89e4e755;background:#123b45d9;color:#fbf0da;
+ font:800 clamp(15px,2vw,23px) 'Barlow Condensed',Impact,sans-serif;
+ letter-spacing:1.3px;box-shadow:0 16px 35px #061f2a55;
+ opacity:0;transition:opacity .17s ease-out}
+#match-award{margin:5px 0 13px;font-weight:700;font-size:10px;
+ letter-spacing:1.5px;color:#89e3d4}
+#scoreboard th:last-child,#scoreboard td:last-child{text-align:right;color:#8de4d4}
+#final-scores th:last-child,#final-scores td:last-child{text-align:right}
+@media(max-width:650px){#round-label,#lead-status{font-size:8px}
+ #match-banner{top:24%;padding:9px 12px}}
+@media(prefers-reduced-motion:reduce){#match-banner{transition:none}}
