@@ -52,7 +52,7 @@ const ui=fs.readFileSync('./static/index.html','utf8');
 for(const id of ['perf-panel','perf-details','diagnostics-toggle']){
  assert.ok(ui.includes(`id="${id}"`),`Missing diagnostics DOM: ${id}`);
 }
-assert.ok(ui.includes('<sup>04.1</sup>'));
+assert.ok(ui.includes('<sup>04.2</sup>'));
 const game=fs.readFileSync('./static/game.js','utf8');
 assert.ok(game.includes('frameMeter.record(rawMs'));
 assert.ok(game.includes("e.code==='F7'"));
