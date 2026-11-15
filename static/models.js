@@ -1,5 +1,6 @@
 import * as T from 'three';
 import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
+import {makeAvatarAnim,trackAvatar,markAvatar,avatarPose} from './animation34.js';
 const materials=new Map();const material=c=>{if(!materials.has(c))materials.set(c,new T.MeshStandardMaterial({color:c,roughness:.48,metalness:.25}));return materials.get(c);};
 function box(parent,w,h,d,c,x,y,z,r=.018){const m=new T.Mesh(new RoundedBoxGeometry(w,h,d,1,Math.min(r,w/3,h/3,d/3)),material(c));m.position.set(x,y,z);parent.add(m);return m;}
 function cylinder(parent,r1,r2,h,c,x,y,z){const m=new T.Mesh(new T.CylinderGeometry(r1,r2,h,12),material(c));m.position.set(x,y,z);parent.add(m);return m;}
@@ -31,13 +32,91 @@ export function animateWeapon(root,{time,ads,reload,kick,moving,slide,motion,swi
 }
 export function makePlayer(name,color=0xd38165){
  const root=new T.Group(),body=new T.Group();root.add(body);
- box(body,.56,.64,.34,0x3b5559,0,1.13,0,.07);box(body,.6,.25,.38,color,0,1.36,0,.05);box(body,.43,.22,.31,0x263b40,0,.76,0);
- const head=new T.Group();head.position.y=1.67;body.add(head);const helmet=new T.Mesh(new T.SphereGeometry(.23,12,8),material(color));helmet.scale.y=.9;head.add(helmet);box(head,.36,.12,.12,0x173841,0,.015,-.18,.035);box(head,.27,.055,.025,0x7bd6d1,0,.03,-.25,.01);
- const limbs=[];for(const side of [-1,1]){const leg=new T.Group();leg.position.set(side*.16,.79,0);body.add(leg);box(leg,.21,.38,.23,0x68807a,0,-.18,0,.05);box(leg,.18,.3,.2,0x3b5559,0,-.49,.015,.04);box(leg,.22,.13,.32,0x263b40,0,-.7,-.055);limbs.push(leg);const arm=new T.Group();arm.position.set(side*.37,1.39,0);body.add(arm);box(arm,.18,.38,.21,color,0,-.16,-.05,.06);box(arm,.16,.34,.18,0x526e70,0,-.32,-.22,.04).rotation.x=-.65;}
- const gun=makeWeapon(0,false);gun.scale.setScalar(.8);gun.position.set(.26,1.1,-.34);body.add(gun);
- // A subtle overhead marker, with labels visible only at short range.
- const canvas=document.createElement('canvas');canvas.width=256;canvas.height=48;const ctx=canvas.getContext('2d');ctx.fillStyle='#17353bba';ctx.fillRect(0,0,256,48);ctx.fillStyle='#fff4dc';ctx.textAlign='center';ctx.font='bold 22px sans-serif';ctx.fillText(name,128,31);const tex=new T.CanvasTexture(canvas);tex.colorSpace=T.SRGBColorSpace;const tag=new T.Sprite(new T.SpriteMaterial({map:tex,depthTest:true}));tag.position.y=2.12;tag.scale.set(1.5,.28,1);root.add(tag);
- root.traverse(o=>{if(o.isMesh)o.castShadow=true;});root.userData={body,head,limbs,gun,tag};return root;
+ box(body,.56,.64,.34,0x3b5559,0,1.13,0,.07);
+ box(body,.60,.25,.38,color,0,1.36,0,.05);
+ box(body,.43,.22,.31,0x263b40,0,.76,0);
+ box(body,.47,.055,.36,0x67c6b9,0,1.06,-.015,.012);
+ const head=new T.Group();head.position.y=1.67;body.add(head);
+ const helmet=new T.Mesh(new T.SphereGeometry(.23,12,8),material(color));
+ helmet.scale.y=.9;head.add(helmet);
+ box(head,.36,.12,.12,0x173841,0,.015,-.18,.035);
+ box(head,.27,.055,.025,0x7bd6d1,0,.03,-.25,.01);
+ const legs=[],knees=[],arms=[],elbows=[];
+ for(const side of [-1,1]){
+  const leg=new T.Group();leg.position.set(side*.16,.79,0);body.add(leg);
+  box(leg,.21,.38,.23,0x68807a,0,-.18,0,.05);
+  const knee=new T.Group();knee.position.y=-.37;leg.add(knee);
+  box(knee,.18,.3,.2,0x3b5559,0,-.12,.015,.04);
+  box(knee,.22,.13,.32,0x263b40,0,-.36,-.055);
+  legs.push(leg);knees.push(knee);
+  const arm=new T.Group();arm.position.set(side*.37,1.39,0);body.add(arm);
+  box(arm,.18,.38,.21,color,0,-.16,-.05,.06);
+  const elbow=new T.Group();elbow.position.set(0,-.32,-.16);arm.add(elbow);
+  box(elbow,.16,.34,.18,0x526e70,0,-.14,-.06,.04).rotation.x=-.3;
+  arms.push(arm);elbows.push(elbow);
+ }
+ const gun=makeWeapon(0,false);gun.scale.setScalar(.8);
+ gun.position.set(.26,1.1,-.34);body.add(gun);
+ const impact=new T.Mesh(new T.BoxGeometry(.61,.09,.40),
+  new T.MeshBasicMaterial({color:0xffba78,transparent:true,opacity:0,depthWrite:false}));
+ impact.position.set(0,1.35,0);impact.userData.uniqueMaterial=true;body.add(impact);
+ // Spawn marker is a brief graphical signal, not an active hitbox.
+ const spawnRing=new T.Mesh(new T.TorusGeometry(.43,.025,4,32),
+  new T.MeshBasicMaterial({color:0x67ede5,transparent:true,opacity:0,depthWrite:false}));
+ spawnRing.rotation.x=-Math.PI/2;spawnRing.position.y=.05;
+ spawnRing.userData.uniqueMaterial=true;root.add(spawnRing);
+ const canvas=document.createElement('canvas');canvas.width=256;canvas.height=48;
+ const ctx=canvas.getContext('2d');ctx.fillStyle='#17353bba';
+ ctx.fillRect(0,0,256,48);ctx.fillStyle='#fff4dc';
+ ctx.textAlign='center';ctx.font='bold 22px sans-serif';
+ ctx.fillText(name,128,31);
+ const tex=new T.CanvasTexture(canvas);tex.colorSpace=T.SRGBColorSpace;
+ const tag=new T.Sprite(new T.SpriteMaterial({map:tex,depthTest:true}));
+ tag.position.y=2.12;tag.scale.set(1.5,.28,1);root.add(tag);
+ root.traverse(o=>{if(o.isMesh&&o!==spawnRing&&o!==impact)o.castShadow=true;});
+ root.userData={body,head,limbs:legs,legs,knees,arms,elbows,gun,
+  tag,spawnRing,impact,animation:makeAvatarAnim()};
+ return root;
 }
-export function animatePlayer(root,p,time){const d=root.userData;const speed=Math.hypot(p.vx,p.vz);d.body.position.y=p.crouch?-.65:0;d.body.rotation.x=p.crouch?-.12:0;d.limbs.forEach((l,i)=>l.rotation.x=Math.sin(time*11+i*Math.PI)*Math.min(.65,speed*.09));d.head.rotation.x=p.pitch*.4;root.rotation.y=p.yaw;}
-export function disposePlayer(root){root.traverse(o=>{o.geometry?.dispose();if(o.isSprite){o.material.map.dispose();o.material.dispose();}});root.removeFromParent();}
+export function markPlayerEvent(root,type,time){
+ if(root?.userData?.animation)markAvatar(root.userData.animation,type,time);
+}
+export function animatePlayer(root,p,time){
+ const d=root.userData;
+ trackAvatar(d.animation,p,time);
+ const pose=avatarPose(p,time,d.animation);
+ d.body.position.set(0,pose.bodyY,0);
+ d.body.rotation.set(pose.torsoPitch,0,pose.torsoRoll);
+ d.head.rotation.x=pose.headPitch-pose.torsoPitch*.35;
+ d.legs.forEach((leg,i)=>{
+  const side=i===0?1:-1;
+  leg.rotation.x=pose.legSwing*side+(pose.state==='slide'?-.30:0);
+  leg.rotation.z=pose.state==='slide'?(i===0?-.09:.09):0;
+  d.knees[i].rotation.x=pose.kneeBend+Math.max(0,pose.legSwing*side)*.22;
+ });
+ d.arms.forEach((arm,i)=>{
+  const side=i===0?1:-1;
+  arm.rotation.x=-.16-pose.armBrace+pose.armSwing*side*.55;
+  arm.rotation.z=(i===0?-.04:.04);
+  d.elbows[i].rotation.x=-.26+(pose.state==='run'?.15:0);
+ });
+ d.gun.rotation.x=-pose.gunKick*.7;
+ d.gun.position.set(.26,1.1-pose.gunKick*.04,-.34+pose.gunKick*.07);
+ d.gun.userData.flash.visible=pose.gunKick>.06;
+ d.impact.material.opacity=pose.hitGlow*.65;
+ d.spawnRing.visible=pose.spawnPulse>0;
+ d.spawnRing.material.opacity=pose.spawnPulse*.46;
+ d.spawnRing.scale.setScalar(1+(1-pose.spawnPulse)*.7);
+ d.tag.position.y=pose.tagY;
+ root.rotation.y=Number.isFinite(p.yaw)?p.yaw:0;
+ root.scale.setScalar(pose.visibilityScale);
+ return pose;
+}
+export function disposePlayer(root){
+ root.traverse(o=>{
+  o.geometry?.dispose();
+  if(o.isSprite){o.material.map?.dispose();o.material.dispose();}
+  else if(o.userData.uniqueMaterial)o.material.dispose();
+ });
+ root.removeFromParent();
+}
