@@ -229,7 +229,7 @@ class NetworkTests(unittest.IsolatedAsyncioTestCase):
         ws=await self.client.ws_connect('/ws/'+data['room']);welcome=await ws.receive_json();self.assertEqual(welcome['mapId'],'cyberpunk')
         await ws.send_json({'type':'map','mapId':'solstice'})
         self.assertEqual((await self.state(ws))['mapId'],'cyberpunk');await ws.close()
-        html=await (await self.client.get('/')).text();self.assertIn('<sup>03.5</sup>',html);self.assertIn('id="map-select"',html)
+        html=await (await self.client.get('/')).text();self.assertIn('<sup>03.6</sup>',html);self.assertIn('id="map-select"',html)
         arena=await (await self.client.get('/static/maps/cyberpunk.json')).json();self.assertEqual(arena['id'],'cyberpunk');self.assertEqual(len(arena['routes']),13)
     async def test_host_only_queues_next_mode_without_rewriting_finished_match(self):
         code=(await (await self.client.post('/api/rooms')).json())['room']
@@ -283,5 +283,5 @@ class NetworkTests(unittest.IsolatedAsyncioTestCase):
         for path in ['/','/static/map.json','/static/game.js','/static/world.js','/static/models.js','/static/vendor/addons/objects/Sky.js']:
             response=await self.client.get(path);self.assertEqual(response.status,200,path)
         self.assertEqual((await self.client.get('/api/rooms/XXXXXX')).status,404)
-        self.assertEqual((await (await self.client.get('/health')).json())['version'],4)
+        self.assertEqual((await (await self.client.get('/health')).json())['version'],5)
 if __name__=='__main__':unittest.main()

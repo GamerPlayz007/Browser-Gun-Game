@@ -1,4 +1,4 @@
-# CROSSFIRE 03.5 — ONE LIVE CYBERPUNK CITY
+# CROSSFIRE 03.6 — ONE LIVE CYBERPUNK CITY
 
 **Source of truth:** `main` branch, deployed by Render when auto-deploy is enabled.
 
@@ -130,3 +130,23 @@ Tests: `python -m unittest test_map test_server test_stage31 test_match35`,
 
 Real Render deployment, 2–8-player race tests and Windows/WebGL playtests
 are separate manual release checks; passing CI does not establish them.
+
+
+## Stage 3.6 — Release verification and live diagnostics
+
+- Server /health now includes privacy-safe aggregate server loop-work percentiles,
+  snapshot sizes, and connected client counts.
+- Press **F7** in a room, or use **PERFORMANCE DIAGNOSTICS** in Settings,
+  to see real browser requestAnimationFrame interval FPS, 1% low FPS, p50/p95/p99
+  frame times, draw calls, triangles, RTT, network jitter, and snapshot gaps.
+- These are actual browser intervals, **not** GPU-timer readings. The metrics
+  are collected on the player's device at their selected quality preset.
+- Local WebSocket integration and load tests simulate 2, 4 and 8 clients,
+  room transitions, host transfer and independently inspect snapshot delivery.
+- Synthetic benchmark artifacts from GitHub Actions describe the runner's
+  loopback test conditions and are **not** proof of external Internet ping or
+  Windows/RTX performance.
+
+To test actual latency/FPS, open the deployed version 03.6 in Chrome/Edge,
+create a room, invite another device, play a round, and toggle F7. Real Render
+availability and cross-country connections still require checking separately.

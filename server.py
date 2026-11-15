@@ -1,4 +1,4 @@
-"""CROSSFIRE 03.5. Server-authoritative multiplayer matches and scoring."""
+"""CROSSFIRE 03.6. Server-authoritative multiplayer arena with release diagnostics."""
 import asyncio, contextlib, json, math, os, random, re, secrets, time
 from collections import deque
 from pathlib import Path
@@ -6,6 +6,7 @@ from aiohttp import web, WSMsgType
 ROOT=Path(__file__).parent
 from map_registry import ARENAS, DEFAULT, REGISTRY, WEAPONS, Arena, top_at, bottom_at, ray_solid
 from movement_live import step_player, seed_movement
+from perf36 import ServerMetrics
 from match35 import (DEATHMATCH_GOAL,KILLS_PER_TIER,MATCH_DURATION,COUNTDOWN_DURATION,
                      RESPAWN_DURATION,goal,tier_for_kills,standings,leading_player,
                      timed_winner,rules)
@@ -310,6 +311,7 @@ async def broadcast(room,packet):
 async def loop(app):
     last=time.monotonic();snapshot_budget=0.
     while True:
+        work_start=time.perf_counter()
         now=time.monotonic();dt=min(.2,now-last);last=now;pending=[];snapshot_budget+=dt
         publish=snapshot_budget>=.05
         if publish:snapshot_budget%=.05
@@ -319,8 +321,12 @@ async def loop(app):
                 continue
             room.step(dt,now)
             if publish:
-                pending.append(broadcast(room,json.dumps(room.snapshot(now),separators=(',',':'))));room.events=[]
+                payload=json.dumps(room.snapshot(now),separators=(',',':'))
+                app['perf36'].observe_snapshot(len(payload.encode('utf-8')),len(room.sockets))
+                pending.append(broadcast(room,payload))
+                room.events=[]
         if pending:await asyncio.gather(*pending)
+        app['perf36'].observe_loop((time.perf_counter()-work_start)*1000.)
         await asyncio.sleep(max(0,TICK-(time.monotonic()-now)))
 async def lifecycle(app):
     task=asyncio.create_task(loop(app));yield;task.cancel()
@@ -332,13 +338,17 @@ async def cache_policy(request,handler):
     if not isinstance(response,web.WebSocketResponse):response.headers['Cache-Control']='no-cache'
     return response
 async def index(request):return web.FileResponse(ROOT/'static/index.html')
-async def health(request):return web.json_response({'ok':True,'version':4,'revision':MAP['revision'],'network':'03.3','match':'03.5','mapId':DEFAULT.id,'rooms':len(rooms)})
+async def health(request):
+    summary=request.app['perf36'].summary(sum(len(r.players) for r in rooms.values()),len(rooms))
+    return web.json_response({'ok':True,'version':5,'revision':MAP['revision'],
+        'phase':'03.6','network':'03.3','match':'03.5','mapId':DEFAULT.id,
+        'rooms':len(rooms),'metrics':summary})
 async def room_info(request):
     r=rooms.get(request.match_info['code'].upper())
     return web.json_response({'players':len(r.players),'max':MAX_PLAYERS,'phase':r.phase,'mapId':r.arena.id,'mapName':r.arena.data['name']} if r else {'error':'Room expired or not found.'},status=200 if r else 404)
 async def list_maps(request):return web.json_response(REGISTRY)
 def make_app():
-    app=web.Application(client_max_size=4096,middlewares=[cache_policy]);app.router.add_get('/',index);app.router.add_get('/health',health)
+    app=web.Application(client_max_size=4096,middlewares=[cache_policy]);app['perf36']=ServerMetrics();app.router.add_get('/',index);app.router.add_get('/health',health)
     app.router.add_get('/api/maps',list_maps);app.router.add_post('/api/rooms',create_room);app.router.add_get('/api/rooms/{code}',room_info);app.router.add_get('/ws/{code}',socket);app.router.add_static('/static/',ROOT/'static');app.cleanup_ctx.append(lifecycle);return app
 if __name__=='__main__':
     import argparse
