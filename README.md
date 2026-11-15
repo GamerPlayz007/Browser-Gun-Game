@@ -1,4 +1,4 @@
-# CROSSFIRE 04.2 — ONE LIVE CYBERPUNK CITY
+# CROSSFIRE 04.3 — ONE LIVE CYBERPUNK CITY
 
 **Source of truth:** `main` branch, deployed by Render when auto-deploy is enabled.
 
@@ -7,6 +7,15 @@ and its separate `cyberpunk-next` experimental selection have been removed.
 The only active map contains **more than 650 authoritative collision objects, a 120 m
 gameplay envelope, 3053 decorative objects and 13 authored district routes.**
 The surrounding 160 m urban context is visual-only.
+
+## Phase 4.3 — district environmental storytelling (live)
+- Adds `static/environment43.js` to the live `static/world.js` renderer. **The map builder, authoritative collision objects, spawns, network protocol and routes are untouched.**
+- Original and legible cyberpunk brands: 24 bespoke glowing sign panels split across Night Market, Neon Plaza, Tech Atrium and Transit Deck. Each district receives its own colors, terminology, and local atmosphere.
+- Procedural, deterministic building details drawn from existing facade geometry: weathered overhang rails, rain awnings, ducts, AC/service panels, louvers, illuminated status indicators, piping, and hanging power lines.
+- Discreet road edge lines and lane markings attached just above the existing road slabs; no walk-through kiosks placed in corridors.
+- A total of **720 additional lightweight facade/sign/street components, 34 cable runs and 24 text signs** in the checked-in live map; batched into **34 draw groups** (21 instanced box styles + 12 sign sheets + 1 cable mesh), with four shared canvas sign atlases.
+- Performance: base landmarks only; High/Auto: primary architecture and business signs; Ultra: full decorative population. All new content remains visual-only with `collidable:false`.
+- Run `node test_environment43.mjs` and `npm test` locally. Render deployment and in-browser screenshot comparison require live verification.
 
 ## Phase 4.2 — cinematic district lighting (live)
 - Lighting is rendered directly in the active game by `static/lighting42.js`; no separate demo or map.
