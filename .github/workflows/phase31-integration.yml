@@ -10,6 +10,8 @@ on:
       - 'static/stage*_visual_layer.js'
       - 'test_stage31.py'
       - '.github/workflows/phase31-integration.yml'
+permissions:
+  contents: write
 jobs:
   validate:
     runs-on: ubuntu-latest
@@ -36,3 +38,13 @@ jobs:
         run: |
           CROSSFIRE_STAGE31=1 python -m unittest test_stage31
           node test_stage31.mjs
+      - name: Commit deployable experimental map assets on branch
+        if: github.event_name == 'push' && github.ref == 'refs/heads/feature/phase-3-1-integration'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add static/maps/cyberpunk-next.json static/maps/index.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'build(stage31): ship generated opt-in arena for Render'
+            git push origin HEAD:feature/phase-3-1-integration
+          fi
