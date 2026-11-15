@@ -1,4 +1,4 @@
-"""CROSSFIRE 03.3. Server-authoritative multiplayer arena with sequenced snapshots."""
+"""CROSSFIRE 03.5. Server-authoritative multiplayer matches and scoring."""
 import asyncio, contextlib, json, math, os, random, re, secrets, time
 from collections import deque
 from pathlib import Path
@@ -6,8 +6,11 @@ from aiohttp import web, WSMsgType
 ROOT=Path(__file__).parent
 from map_registry import ARENAS, DEFAULT, REGISTRY, WEAPONS, Arena, top_at, bottom_at, ray_solid
 from movement_live import step_player, seed_movement
+from match35 import (DEATHMATCH_GOAL,KILLS_PER_TIER,MATCH_DURATION,COUNTDOWN_DURATION,
+                     RESPAWN_DURATION,goal,tier_for_kills,standings,leading_player,
+                     timed_winner,rules)
 MAP=DEFAULT.data;BOXES=DEFAULT.boxes;SPAWNS=DEFAULT.spawns
-TICK=1/60; LIMIT=15; ROUND_SECONDS=360; MAX_PLAYERS=8; MAX_REWIND=.30
+TICK=1/60; LIMIT=DEATHMATCH_GOAL; ROUND_SECONDS=MATCH_DURATION; MAX_PLAYERS=8; MAX_REWIND=.30
 
 def nearby_boxes(x,z,radius=1,arena=DEFAULT):return arena.nearby(x,z,radius)
 
@@ -47,7 +50,7 @@ def spawn(p,players,now,arena=DEFAULT):
     seed_movement(p)
 
 def new_player(room,pid,name,now,weapon=0):
-    p=dict(id=pid,name=name,kills=0,deaths=0,headshots=0,weapon=weapon,yaw=0.,pitch=0.,last_input=now,switch_at=0.,seq=0,shot_seq=0,ack_shot=0)
+    p=dict(id=pid,name=name,kills=0,deaths=0,headshots=0,streak=0,best_streak=0,weapon=weapon,yaw=0.,pitch=0.,last_input=now,switch_at=0.,seq=0,shot_seq=0,ack_shot=0)
     spawn(p,room.players,now,room.arena);room.players[pid]=p
     if room.host is None:room.host=pid
     room.last_active=now
@@ -56,8 +59,8 @@ def new_player(room,pid,name,now,weapon=0):
 class Room:
     def __init__(self,code,map_id=None):
         self.arena=ARENAS[map_id or DEFAULT.id]
-        self.code=code;self.players={};self.sockets={};self.joining=0;self.host=None;self.mode='deathmatch'
-        self.phase='lobby';self.started=0.;self.countdown_at=0.;self.winner=None;self.events=[];self.last_active=time.monotonic();self.snapshot_sequence=0
+        self.code=code;self.players={};self.sockets={};self.joining=0;self.host=None;self.mode='deathmatch';self.next_mode='deathmatch'
+        self.phase='lobby';self.started=0.;self.ended_at=0.;self.countdown_at=0.;self.winner=None;self.winner_id=None;self.win_reason=None;self.round_number=0;self.leader_id=None;self.events=[];self.last_active=time.monotonic();self.snapshot_sequence=0
         self.targets=[dict(id='t'+str(i),x=x,y=y,z=z,hp=100,reset_at=0) for i,(x,y,z) in enumerate(self.arena.data['practiceTargets'])]
         self.pose_history=deque(maxlen=64)
     def event(self,kind,**kw):self.events.append(dict(type=kind,**kw))
@@ -84,23 +87,42 @@ class Room:
                 )
             previous=(at,candidate)
         return previous[1] if previous is not None and when-previous[0]<=TICK*2 else None
+    def set_mode(self,pid,mode):
+        if (pid!=self.host or self.phase not in ('lobby','results')
+                or mode not in ('deathmatch','gungame')):return False
+        self.next_mode=mode
+        if self.phase=='lobby':self.mode=mode
+        return True
     def start(self,pid,now):
         if pid!=self.host or self.phase not in ('lobby','results'):return False
-        self.phase='countdown';self.countdown_at=now+3;self.winner=None
+        self.mode=self.next_mode
+        self.phase='countdown';self.round_number+=1
+        self.countdown_at=now+COUNTDOWN_DURATION;self.started=0.;self.ended_at=0.
+        self.winner=None;self.winner_id=None;self.win_reason=None;self.leader_id=None
+        self.events.clear()
+        self.pose_history.clear()
         for p in self.players.values():
             p['kills']=p['deaths']=p['headshots']=0
+            p['streak']=p['best_streak']=0
             if self.mode=='gungame':p['weapon']=0
             spawn(p,self.players,now,self.arena)
+            p['switch_at']=0.
+        for target in self.targets:target['hp']=100;target['reset_at']=0
+        self.event('countdown',round=self.round_number,mode=self.mode)
         return True
-    def finish(self,now,winner=None):
-        if self.phase=='results':return
-        if winner:self.winner=winner['name']
-        else:
-            ranking=sorted(self.players.values(),key=lambda p:(-p['kills'],p['deaths']))
-            self.winner=ranking[0]['name'] if ranking and (len(ranking)==1 or (ranking[0]['kills'],ranking[0]['deaths'])!=(ranking[1]['kills'],ranking[1]['deaths'])) else 'DRAW'
-        self.phase='results';self.event('notice',text='Round complete')
+    def finish(self,now,winner=None,reason='time'):
+        if self.phase=='results':return False
+        winner=winner if winner is not None else timed_winner(self.players)
+        self.winner_id=winner['id'] if winner else None
+        self.winner=winner['name'] if winner else 'DRAW'
+        self.win_reason=reason
+        self.ended_at=now
+        self.phase='results'
+        self.event('round_end',round=self.round_number,winner=self.winner,
+                   winnerId=self.winner_id,reason=reason)
+        return True
     def select(self,p,weapon,now):
-        if not isinstance(weapon,int) or isinstance(weapon,bool) or not 0<=weapon<4:return
+        if not isinstance(weapon,int) or isinstance(weapon,bool) or not 0<=weapon<len(WEAPONS):return
         if self.mode=='gungame' and self.phase!='lobby':return
         if now<p['switch_at'] or p['weapon']==weapon:return
         p['mags'][p['weapon']]=p['ammo'];p['weapon']=weapon;p['ammo']=p['mags'][weapon];p['reload_at']=0;p['switch_at']=now+.5
@@ -148,21 +170,42 @@ class Room:
             self.event('hit',id=p['id'],victim=victim['id'],damage=damage,head=head,killed=victim['hp']==0,origin=origin)
             if victim['hp']==0:
                 if 'deaths' in victim:
-                    victim['deaths']+=1;victim['respawn_at']=now+3;p['kills']+=1;p['headshots']+=int(head)
-                    self.event('kill',killer=p['name'],killerId=p['id'],victim=victim['name'],victimId=victim['id'],head=head,weapon=p['weapon'])
+                    victim['deaths']+=1;victim['streak']=0
+                    victim['respawn_at']=now+RESPAWN_DURATION
+                    p['kills']+=1;p['headshots']+=int(head)
+                    p['streak']+=1;p['best_streak']=max(p['best_streak'],p['streak'])
+                    self.event('kill',killer=p['name'],killerId=p['id'],victim=victim['name'],
+                               victimId=victim['id'],head=head,weapon=p['weapon'],streak=p['streak'])
+                    if p['streak'] in (3,5,8):
+                        self.event('streak',id=p['id'],name=p['name'],count=p['streak'])
+                    leader=leading_player(self.players)
+                    if leader is not None and leader!=self.leader_id:
+                        self.leader_id=leader
+                        self.event('leader',id=leader,name=self.players[leader]['name'],
+                                   score=self.players[leader]['kills'])
                     if self.mode=='gungame':
-                        if p['kills']>=12:self.finish(now,p)
+                        if p['kills']>=goal(self.mode,len(WEAPONS)):
+                            self.finish(now,p,reason='score')
                         else:
-                            new=min(3,p['kills']//3)
-                            if new!=p['weapon']:p['weapon']=new;p['ammo']=WEAPONS[new]['mag'];p['reload_at']=0;p['switch_at']=now+.45
-                    elif p['kills']>=LIMIT:self.finish(now,p)
+                            new=tier_for_kills(p['kills'],len(WEAPONS))
+                            if new!=p['weapon']:
+                                p['weapon']=new;p['ammo']=WEAPONS[new]['mag']
+                                p['reload_at']=0;p['switch_at']=now+.45
+                                self.event('tier_up',id=p['id'],name=p['name'],
+                                           tier=new+1,weapon=new)
+                    elif p['kills']>=goal(self.mode,len(WEAPONS)):
+                        self.finish(now,p,reason='score')
+                    if self.phase=='results':break
                 else:victim['reset_at']=now+3
         return True
     def step(self,dt,now):
         if self.phase=='countdown' and now>=self.countdown_at:
             self.phase='playing';self.started=now
             for p in self.players.values():p['shield']=now+1.5
-        if self.phase=='playing' and now-self.started>=ROUND_SECONDS:self.finish(now)
+            self.event('round_start',round=self.round_number,mode=self.mode,
+                       goal=goal(self.mode,len(WEAPONS)))
+        if self.phase=='playing' and now-self.started>=ROUND_SECONDS:
+            self.finish(now,reason='time')
         for p in self.players.values():
             if p['hp']<=0:
                 if now>=p['respawn_at'] and self.phase=='playing':spawn(p,self.players,now,self.arena)
@@ -183,8 +226,8 @@ class Room:
         self.record_poses(now)
     def snapshot(self,now):
         self.snapshot_sequence+=1
-        fields=('id','name','x','y','z','vx','vy','vz','grounded','yaw','pitch','hp','ammo','kills','deaths','headshots','weapon','crouch','spawn','seq','shot_seq','ack_shot','jump_held','slide_held','motion_time','slide_until','slide_ready','jump_buffer_until','coyote_until','jump_consumed','jump_cut','wall_kick_used','interact_held','mantle')
-        return dict(type='state',snapshotSeq=self.snapshot_sequence,serverTime=round(now,6),tickRate=60,snapshotHz=20,mapId=self.arena.id,phase=self.phase,mode=self.mode,host=self.host,players=[{k:p[k] for k in fields}|dict(reload=max(0,p['reload_at']-now),respawn=max(0,p['respawn_at']-now),shield=max(0,p['shield']-now),slide=max(0,p['slide_until']-p['motion_time']),slideCooldown=max(0,p['slide_ready']-p['motion_time']),switch=max(0,p['switch_at']-now)) for p in self.players.values()],targets=self.targets,events=self.events,remaining=max(0,ROUND_SECONDS-(now-self.started)) if self.phase=='playing' else ROUND_SECONDS,countdown=max(0,self.countdown_at-now),winner=self.winner)
+        fields=('id','name','x','y','z','vx','vy','vz','grounded','yaw','pitch','hp','ammo','kills','deaths','headshots','streak','best_streak','weapon','crouch','spawn','seq','shot_seq','ack_shot','jump_held','slide_held','motion_time','slide_until','slide_ready','jump_buffer_until','coyote_until','jump_consumed','jump_cut','wall_kick_used','interact_held','mantle')
+        return dict(type='state',snapshotSeq=self.snapshot_sequence,serverTime=round(now,6),tickRate=60,snapshotHz=20,mapId=self.arena.id,phase=self.phase,mode=self.mode,host=self.host,round=self.round_number,nextMode=self.next_mode,rules=rules(self.mode,len(WEAPONS)),standings=standings(self.players),leaderId=leading_player(self.players),winnerId=self.winner_id,winReason=self.win_reason,players=[{k:p[k] for k in fields}|dict(reload=max(0,p['reload_at']-now),respawn=max(0,p['respawn_at']-now),shield=max(0,p['shield']-now),slide=max(0,p['slide_until']-p['motion_time']),slideCooldown=max(0,p['slide_ready']-p['motion_time']),switch=max(0,p['switch_at']-now)) for p in self.players.values()],targets=self.targets,events=self.events,remaining=max(0,ROUND_SECONDS-((self.ended_at if self.phase=='results' else now)-self.started)) if self.phase in ('playing','results') else ROUND_SECONDS,countdown=max(0,self.countdown_at-now),winner=self.winner)
 
 rooms={}
 async def create_room(request):
@@ -250,7 +293,7 @@ async def socket(request):
                 elif action=='reload':room.reload(p,now)
                 elif action=='weapon':room.select(p,data.get('weapon'),now)
                 elif action=='start':room.start(pid,now)
-                elif action=='mode' and pid==room.host and room.phase=='lobby' and data.get('mode') in ('deathmatch','gungame'):room.mode=data['mode']
+                elif action=='mode':room.set_mode(pid,data.get('mode'))
             except (ValueError,TypeError,OverflowError):continue
     finally:
         room.players.pop(pid,None);room.sockets.pop(pid,None);room.last_active=time.monotonic()
@@ -289,7 +332,7 @@ async def cache_policy(request,handler):
     if not isinstance(response,web.WebSocketResponse):response.headers['Cache-Control']='no-cache'
     return response
 async def index(request):return web.FileResponse(ROOT/'static/index.html')
-async def health(request):return web.json_response({'ok':True,'version':3,'revision':MAP['revision'],'network':'03.3','mapId':DEFAULT.id,'rooms':len(rooms)})
+async def health(request):return web.json_response({'ok':True,'version':4,'revision':MAP['revision'],'network':'03.3','match':'03.5','mapId':DEFAULT.id,'rooms':len(rooms)})
 async def room_info(request):
     r=rooms.get(request.match_info['code'].upper())
     return web.json_response({'players':len(r.players),'max':MAX_PLAYERS,'phase':r.phase,'mapId':r.arena.id,'mapName':r.arena.data['name']} if r else {'error':'Room expired or not found.'},status=200 if r else 404)

@@ -1,4 +1,4 @@
-# CROSSFIRE 03.4 — ONE LIVE CYBERPUNK CITY
+# CROSSFIRE 03.5 — ONE LIVE CYBERPUNK CITY
 
 **Source of truth:** `main` branch, deployed by Render when auto-deploy is enabled.
 
@@ -107,3 +107,26 @@ damage, collision, hitboxes, movement authority, or network protocol.
 `test_animation34.mjs` runs pose transitions, event timing, spawn reset and
 eight-avatar procedural-rig stress checks. The `test_scene.mjs` smoke test
 still checks the actual Three.js models.
+
+
+## Stage 3.5 — Competitive Match Systems
+
+The **same live Python server** now owns ranked Deathmatch and Gun Game rules.
+Both modes use a six-minute timer, a three-second countdown, deterministic
+standings (kills, deaths, headshots), streaks, best-streak records, live leader
+announcements and winner/reason metadata.
+
+Deathmatch is first to 15 eliminations. Gun Game is three eliminations
+per tier across the four existing weapons (12 total). The next weapon
+is assigned by the server at each tier and cannot be selected manually
+during a round. Match results are frozen after victory or timeout.
+Rematches clear old scores, streaks, target damage and previous pose histories.
+
+The HUD shows round/rank/leader information and server-derived progress.
+Server events power tier, streak, lead and match-end presentation.
+Neither client scores nor UI events can change server-owned results.
+Tests: `python -m unittest test_map test_server test_stage31 test_match35`,
+`npm test`, `node test_stage31.mjs`.
+
+Real Render deployment, 2–8-player race tests and Windows/WebGL playtests
+are separate manual release checks; passing CI does not establish them.
