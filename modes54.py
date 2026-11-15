@@ -12,7 +12,7 @@ TEAM_KILL_GOAL=30
 CONTROL_GOAL=60
 CONTROL_RADIUS=6.
 # Existing, accessible Neon Plaza ground near the central routes.
-CONTROL_POINT={'id':'neon-beacon','name':'NEON BEACON','x':2.,'y':0.,'z':22.,'radius':CONTROL_RADIUS}
+CONTROL_POINT={'id':'neon-beacon','name':'NEON BEACON','x':2.,'y':0.,'z':16.,'radius':CONTROL_RADIUS}
 
 def is_team_mode(mode):
     return mode in TEAM_MODES
