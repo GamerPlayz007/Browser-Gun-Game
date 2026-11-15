@@ -3,7 +3,7 @@
  */
 import {nearbyBoxes} from './spatial.js';
 export const FIXED_DT=1/60;
-export const MOVE={walk:5.35,sprint:8.2,crouch:3.15,groundAccel:34,groundBrake:42,airAccel:9.5,airBrake:1.7,
+export const MOVE={walk:5.35,sprint:8.2,crouch:3.15,groundAccel:60,groundBrake:42,airAccel:9.5,airBrake:1.7,
  slideMin:5,slideBoost:1.13,slideMax:10,slideTime:.70,slideCD:1.05,slideDrag:2.7,slideSteer:3.6,
  buffer:.125,coyote:.1,jumpSpeed:7.5,shortHop:.52,gravity:22,stepHeight:.29,
  height:1.8,lowHeight:1.12,wallKickRange:.52,wallKickLift:5.3,wallKickPush:5.1};
