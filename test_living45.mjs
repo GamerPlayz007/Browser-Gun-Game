@@ -1,0 +1,73 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import * as T from 'three';
+import {planLiving45,createLivingWorld45,createUrbanAmbience45,LIVING45_PRESETS} from './static/living45.js';
+import {AudioEngine} from './static/audio.js';
+const ctx=new Proxy({}, {get:(_,key)=>()=>{}});
+globalThis.document={createElement:()=>({width:0,height:0,getContext:()=>ctx})};
+const map=JSON.parse(fs.readFileSync('static/map.json','utf8'));
+const topology=JSON.stringify({boxes:map.boxes,routes:map.routes,spawns:map.spawns});
+const plan=planLiving45(map);
+assert.equal(plan.ads.length,12);
+assert.equal(plan.fans.length,4);
+assert.equal(plan.drones.length,4);
+for(const zone of map.zones.map(z=>z.id)){
+ assert.equal(plan.ads.filter(a=>a.zone===zone).length,3,'Each district receives 3 unique ads');
+ assert.equal(plan.fans.filter(a=>a.zone===zone).length,1);
+ assert.equal(plan.drones.filter(a=>a.zone===zone).length,1);
+}
+const layer=createLivingWorld45(T,map);
+assert.ok(layer.root.isGroup);
+assert.equal(layer.root.userData.collidable,false);
+assert.ok(layer.root.children.every(x=>x.userData.collidable===false));
+assert.equal(layer.ads.length,12);
+assert.equal(layer.fans.length,4);
+assert.equal(layer.drones.length,4);
+assert.equal(layer.root.children.length,20,'Keep root draw group budget bounded');
+for(const mode of ['performance','auto','high','ultra','native']){
+ layer.setQuality(mode);
+ const cfg=LIVING45_PRESETS[mode];
+ assert.equal(layer.ads.filter(a=>a.mesh.visible).length,cfg.ads);
+ assert.equal(layer.fans.filter(a=>a.frame.visible).length,cfg.fans);
+ assert.equal(layer.drones.filter(a=>a.group.visible).length,cfg.drones);
+ assert.ok(layer.ads.every(a=>a.mesh.userData.collidable===false));
+}
+layer.setQuality('ultra');
+const anchor=layer.ads.find(a=>a.zone==='market');
+layer.animate(12.5,{x:anchor.x,z:anchor.z,y:1});
+assert.ok(anchor.mesh.material.uniforms.uBoost.value>0,'Nearby ads react gently to players');
+assert.equal(anchor.mesh.material.uniforms.uTime.value,12.5);
+const fanRotation=layer.fans[0].rotor.rotation.z;
+layer.animate(14.0,{x:anchor.x,z:anchor.z,y:1});
+assert.notEqual(layer.fans[0].rotor.rotation.z,fanRotation,'Fans must animate over time');
+layer.setDetail(false);
+assert.equal(layer.ads.filter(a=>a.mesh.visible).length,4,'Each district keeps one billboard when reducing detail');
+assert.equal(layer.drones.filter(a=>a.group.visible).length,0);
+layer.setDetail(true);
+assert.equal(layer.drones.filter(a=>a.group.visible).length,4);
+const engine=new AudioEngine(),captured=[];
+engine.ctx={};engine.ambience=(...args)=>captured.push(args);
+const ambient=createUrbanAmbience45(engine,map);
+ambient.setQuality('high');
+const first=ambient.update(1,{x:-24,z:6},true);
+assert.equal(first.zone,'market');
+assert.equal(ambient.update(2,{x:-24,z:6},true),null,'No per-frame audio spam');
+const next=ambient.update(7,{x:4,z:-23},true);
+assert.equal(next.zone,'transit');
+assert.equal(captured.length,2);
+for(const [,volume,pan] of captured){
+ assert.ok(volume>=0&&volume<.16,'Atmosphere must remain quiet');
+ assert.ok(pan>=-.45&&pan<=.45,'Spatial pan must remain comfortable');
+}
+engine.volume=0;
+assert.equal(ambient.update(13,{x:0,z:20},true),null,'User mute silences ambience');
+engine.volume=.5;engine.ctx=null;
+assert.equal(ambient.update(13,{x:0,z:20},true),null,'Browser audio consent must be respected');
+engine.ctx={};
+assert.equal(ambient.update(13,{x:0,z:20},false),null,'Inactive game cannot play ambience');
+assert.equal(JSON.stringify({boxes:map.boxes,routes:map.routes,spawns:map.spawns}),topology);
+const scene=new T.Scene();scene.add(layer.root);
+layer.dispose();
+assert.equal(scene.children.length,0,'Living world should be disposed on arena unload');
+console.log('Phase 4.5: 12 animated ads, 4 fans, 4 rooftop drones,');
+console.log('tiered visuals, safe proximity response, muted/spatial ambience and stable gameplay passed.');
