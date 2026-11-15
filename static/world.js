@@ -3,94 +3,14 @@ import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 import {topAt} from './physics.js';
 import {createStage5VisualLayer} from './stage5_visual_layer.js';
 import {createStage6VisualLayer} from './stage6_visual_layer.js';
+import {SURFACE_STYLES,NEON_STYLES,createCyberMaterialLibrary} from './materials41.js';
 
 // 02.5: deterministic CanvasTexture PBR atlases + district/LOD mesh batching.
 // Only map.boxes are authoritative colliders. All map.features and map.decor
 // are purely visual. The rendering pipeline never changes simulation geometry.
-const TAU=Math.PI*2;
 const PAINT={cyan:'#38eff7',magenta:'#ff4b9e',amber:'#ffb454',white:'#c8f8ff'};
-const MATERIALS={
- facade:{color:'#364657',metalness:.23,roughness:.77,emissive:'#bbdfff',glow:.90},
- concrete:{color:'#667281',metalness:.10,roughness:.86},
- dark:{color:'#344556',metalness:.24,roughness:.75},
- road:{color:'#45515d',metalness:.08,roughness:.88},
- asphalt:{color:'#414a53',metalness:.12,roughness:.82},
- metal:{color:'#a9afb8',metalness:.73,roughness:.43},
- grate:{color:'#a5a9aa',metalness:.82,roughness:.51},
- rust:{color:'#8f7873',metalness:.69,roughness:.67},
- wood:{color:'#ab9080',metalness:.02,roughness:.83},
- pale:{color:'#9db1c5',metalness:.19,roughness:.53},
- glass:{color:'#6cb3d5',metalness:.6,roughness:.22,emissive:'#72c6fd',glow:.13},
- tile:{color:'#b7bccb',metalness:.58,roughness:.23},
- garden:{color:'#7cae8d',metalness:0,roughness:.92},
- leather:{color:'#77626e',metalness:.08,roughness:.64},
- cyan:{color:PAINT.cyan,glow:2.7},magenta:{color:PAINT.magenta,glow:2.7},
- amber:{color:PAINT.amber,glow:2.7},white:{color:PAINT.white,glow:2.1}
-};
-const NEON=new Set(['cyan','magenta','amber','white']);
-function random(seed){return()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};}
-function makeCanvas(size){const c=document.createElement('canvas');c.width=c.height=size;return c;}
-function atlas(style,size=1024){
- const maps=Array.from({length:4},()=>makeCanvas(size));
- const ctx=maps.map(c=>c.getContext('2d'));
- const r=random(style.split('').reduce((v,ch)=>v*33+ch.charCodeAt(0),12687)>>>0);
- const base={facade:[38,52,72],concrete:[77,86,99],dark:[31,43,59],road:[40,46,55],asphalt:[35,42,51],
-   metal:[104,117,131],grate:[85,101,113],rust:[102,76,71],wood:[94,67,54],pale:[128,149,165],glass:[40,81,109],
-   tile:[84,103,120],garden:[50,95,75],leather:[68,48,57]}[style]||[80,93,103];
- const step=style==='facade'?64:(style==='wood'?64:128),line=(x,y,x2,y2,width,alpha=.5)=>{
-  for(let i=0;i<3;i++){const c=ctx[i];c.strokeStyle=i===0?`rgba(8,12,21,${alpha})`:i===1?'#afafaf':'#777777';c.lineWidth=width;c.beginPath();c.moveTo(x,y);c.lineTo(x2,y2);c.stroke();}
- };
- const block=(x,y,w,h,rgb,rough=180,bump=128,light=0)=>{
-  const colors=[`rgb(${rgb.map(v=>Math.max(0,Math.min(255,v|0))).join(',')})`,`rgb(${rough},${rough},${rough})`,`rgb(${bump},${bump},${bump})`,
-  `rgb(${light},${light},${light})`];
-  ctx.forEach((c,i)=>{c.fillStyle=colors[i];c.fillRect(x,y,w,h);});
- };
- block(0,0,size,size,base);
- const grid=style==='facade'||style==='concrete'||style==='dark'||style==='tile'||style==='glass'||style==='wood'||style==='grate'||style==='rust';
- if(grid){
-  for(let y=0;y<size;y+=step)for(let x=0;x<size;x+=step){
-   const variation=(r()-.5)*25, b=base.map(c=>c+variation);
-   block(x+2,y+2,step-4,step-4,b,style==='glass'?62:style==='wood'?210:style==='tile'?80:166,125+variation);
-   if(style==='facade'||style==='glass'||style==='dark'){
-    // The atlas contains genuinely independent lit/unlit windows and recessed mullions.
-    const lit=r()>(style==='facade'?.53:.83),color=r()>.67?[255,149,92]:r()>.55?[250,71,154]:[50,199,243];
-    block(x+9,y+12,step-18,step-21,lit?color:[11,24,37],lit?76:206,lit?218:70,lit?220:0);
-    block(x+step/2-2,y+10,4,step-18,[20,25,38],175,100,0);
-   }else if(style==='wood'){
-    for(let i=0;i<7;i++){const yy=y+r()*step;line(x+3,yy,x+step-4,yy+(r()-.5)*10,.5+r()*2,.24);}
-    for(const bx of [x+8,x+step-10])for(const by of [y+9,y+step-10])block(bx,by,4,4,[33,35,38],60,222);
-   }else if(style==='grate'||style==='rust'){
-    block(x+6,y+6,step-12,step-12,style==='rust'?[84,74,77]:[53,64,73],105,116);
-    for(let i=15;i<step-10;i+=12){block(x+i,y+9,5,step-18,[13,20,28],59,30);}
-    for(const bx of [x+8,x+step-12])for(const by of [y+8,y+step-12])block(bx,by,5,5,[170,162,152],60,235);
-   }else if(style==='tile'){
-    block(x+4,y+4,step-8,step-8,base.map(v=>v+variation+18),74,171);
-   }else{
-    line(x+1,y+1,x+step-1,y+1,2,.34);
-   }
-  }
- }
- // Fine chips, gravel, weathering and cracks. Reuse the same seeded random
- // sequence each load, so the entire map is generated reproducibly offline.
- for(let i=0;i<size*1.55;i++){
-  const x=r()*size,y=r()*size,s=1+r()*3,dark=r()>.49;
-  const c=ctx[0];c.fillStyle=dark?'rgba(2,7,15,.17)':'rgba(205,209,218,.08)';c.fillRect(x,y,s,s);
-  ctx[1].fillStyle=dark?'#9a9a9a':'#cdcdcd';ctx[1].fillRect(x,y,s,s);
-  ctx[2].fillStyle=dark?'#696969':'#bababa';ctx[2].fillRect(x,y,s,s);
- }
- if(['road','asphalt','concrete','facade','rust'].includes(style)){
-  for(let i=0;i<45;i++){
-   const x=r()*size,y=r()*size;
-   line(x,y,x+(r()-.5)*95,y+35+r()*100,.3+r()*.8,.10+r()*.18);
-  }
- }
- const names=['map','roughnessMap','bumpMap','emissiveMap'];
- return Object.fromEntries(maps.map((c,i)=>{
-  const t=new T.CanvasTexture(c);t.wrapS=t.wrapT=T.RepeatWrapping;t.anisotropy=8;
-  if(i===0||i===3)t.colorSpace=T.SRGBColorSpace;
-  return [names[i],t];
- }));
-}
+const MATERIALS=Object.fromEntries([...SURFACE_STYLES,...NEON_STYLES].map(name=>[name,true]));
+const NEON=new Set(NEON_STYLES);
 // Plane environmental lighting is reflected by PBR surfaces; unlike screen
 // space reflections it stays stable as the camera moves around wet patches.
 function environment(renderer){
@@ -123,20 +43,16 @@ function rampGeometry(b){
  g.setAttribute('uv',new T.Float32BufferAttribute(uv,2));g.computeVertexNormals();return g;
 }
 export function buildWorld(scene,map,{renderer,quality='high'}={}){
- const root=new T.Group();scene.add(root);const batches=new Map(),details=[],mats=new Map(),textures=[];
+ const root=new T.Group();scene.add(root);const batches=new Map(),details=[],mats=new Map();
+ const materialSystem=createCyberMaterialLibrary(T);
  scene.background=new T.Color('#091525');scene.fog=new T.FogExp2('#0a1628',.0085);
  const hemi=new T.HemisphereLight('#9bb7df','#2f2736',1.25);root.add(hemi);
  const sun=new T.DirectionalLight('#f9d6bd',2.8);sun.position.set(-30,67,14);sun.castShadow=true;
  sun.shadow.mapSize.set(2048,2048);Object.assign(sun.shadow.camera,{left:-80,right:80,top:80,bottom:-80,near:2,far:200});sun.shadow.bias=-.00018;sun.shadow.normalBias=.035;root.add(sun,sun.target);sun.target.position.set(0,0,0);
  let env=null;try{env=environment(renderer);if(env)scene.environment=env.texture;}catch(error){console.warn('Environment map unavailable:',error);}
- for(const [style,info] of Object.entries(MATERIALS)){
-  if(NEON.has(style)){mats.set(style,new T.MeshBasicMaterial({color:info.color,toneMapped:false,side:T.DoubleSide}));continue;}
-  const tex=atlas(style,1024);textures.push(...Object.values(tex));
-  const mat=new T.MeshStandardMaterial({color:info.color,map:tex.map,roughnessMap:tex.roughnessMap,bumpMap:tex.bumpMap,
-    emissiveMap:tex.emissiveMap,emissive:info.emissive||'#ffffff',emissiveIntensity:info.glow||0,
-    metalness:info.metalness,roughness:info.roughness,bumpScale:.045,envMapIntensity:1.2});
-  mats.set(style,mat);
- }
+ // One 512px four-channel atlas per surface, shared by the core city and
+ // every visual-only building and window across Stage 5 and Stage 6.
+ for(const style of Object.keys(MATERIALS))mats.set(style,materialSystem.get(style));
  // Deep colored light pockets contrast with the very dark underpasses.
  const lights=[[-27,5,14,'#ff468b',17,3],[-20,5,1,'#f0a65f',14,3],[-3,5,25,'#43f5ff',18,4],
   [22,5,23,'#33cfff',20,4],[29,6,5,'#f6b774',15,3],[2,12,-22,'#ffaf50',17,3],[-28,5,24,'#fa4c93',17,3]];
@@ -266,8 +182,8 @@ export function buildWorld(scene,map,{renderer,quality='high'}={}){
   const group=new T.Group(),body=new T.Mesh(new T.CylinderGeometry(.36,.4,1.05,10),targetMat),head=new T.Mesh(new T.IcosahedronGeometry(.25,1),headMat);
   body.position.y=.95;head.position.y=1.62;body.castShadow=true;group.add(body,head);group.position.set(...pos);root.add(group);targets.set('t'+i,group);
  }
- const stage5Group=createStage5VisualLayer(T,map,'ultra');
-  const stage6Group=createStage6VisualLayer(T,map,'ultra');
+ const stage5Group=createStage5VisualLayer(T,map,'ultra',materialSystem);
+  const stage6Group=createStage6VisualLayer(T,map,'ultra',materialSystem);
   root.add(stage5Group,stage6Group);
   let detailEnabled=true,activeVisualMode=quality;
   function showStageDetail(){
@@ -280,12 +196,7 @@ export function buildWorld(scene,map,{renderer,quality='high'}={}){
   for(const d of details)d.visible=!low;
   for(const l of root.children)if(l.isPointLight)l.visible=!low||l.position.y>10;
   sun.castShadow=!low;sun.shadow.mapSize.set(2048,2048);
-  for(const [name,m] of mats){if(NEON.has(name))continue;
-   const tex=m.userData.maps||(m.userData.maps={map:m.map,bumpMap:m.bumpMap,roughnessMap:m.roughnessMap,emissiveMap:m.emissiveMap});
-   m.map=tex.map;m.roughnessMap=tex.roughnessMap;
-   m.bumpMap=low?null:tex.bumpMap;m.emissiveMap=low?null:tex.emissiveMap;
-   m.envMapIntensity=low?.05:ultra?1.7:1.05;m.bumpScale=ultra?.085:.047;m.needsUpdate=true;
-  }
+  materialSystem.setQuality(mode);
   scene.fog.density=low?.0062:.0085;
  }
  setQuality(quality);
@@ -295,6 +206,6 @@ export function buildWorld(scene,map,{renderer,quality='high'}={}){
    for(let i=0;i<s.seeds.length;i++){const k=(time*.38+s.seeds[i])%1;p.setXYZ(i,s.x+Math.sin(time+i)*.3*k,s.y+.2+3*k,s.z+Math.cos(time*.7+i)*.25*k);}p.needsUpdate=true;
   }},
   dispose(){root.traverse(o=>{o.geometry?.dispose();if(o.isPoints||o.userData.stage5VisualOnly||o.userData.stage6VisualOnly)o.material?.dispose();});
-   for(const m of mats.values())m.dispose();for(const t of textures)t.dispose();for(const m of [targetMat,headMat,signMaterial])m?.dispose();signTexture?.dispose();env?.dispose();scene.environment=null;root.removeFromParent();}
+   materialSystem.dispose();for(const m of [targetMat,headMat,signMaterial])m?.dispose();signTexture?.dispose();env?.dispose();scene.environment=null;root.removeFromParent();}
  };
 }
