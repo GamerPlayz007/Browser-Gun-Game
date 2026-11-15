@@ -90,7 +90,12 @@ class MultiplayerLoadTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(len(game.rooms),2)
             for index,(code,ids) in enumerate(rooms):
                 mine=next(ws for which,ws in sockets if which==index)
+                # A freshly connected socket can have an older queued state
+                # from before the fourth client joined. Require convergence.
                 state=await recv_type(mine,'state')
+                for _ in range(30):
+                    if {p['id'] for p in state['players']}==set(ids):break
+                    state=await recv_type(mine,'state')
                 self.assertEqual({p['id'] for p in state['players']},set(ids))
                 self.assertEqual(state['mapId'],'cyberpunk')
                 other_ids=set(rooms[1-index][1])
