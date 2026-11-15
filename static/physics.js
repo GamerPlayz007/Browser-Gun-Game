@@ -69,7 +69,12 @@ export function simulate(p,input,dt,now,allBoxes,weapon){
  p.jump_cut ??=false;p.wall_kick_used ??=false;p.mantle ??=null;
  if(p.mantle){
   const m=p.mantle,t=clamp((m.elapsed+dt)/m.duration,0,1);
-  const x=m.sx+(m.tx-m.sx)*t,z=m.sz+(m.tz-m.sz)*t,y=m.sy+(m.ty-m.sy)*t+.24*Math.sin(Math.PI*t);
+  // Clear the lip before approaching horizontally. The old straight-line
+  // mantle could intersect the wall and abort a legitimate ledge grab.
+  const lift=clamp(t*2.8,0,1),approach=clamp((t-.18)/.82,0,1);
+  const advance=approach*approach*(3-2*approach);
+  const x=m.sx+(m.tx-m.sx)*advance,z=m.sz+(m.tz-m.sz)*advance;
+  const y=m.sy+(m.ty-m.sy)*lift+.10*Math.sin(Math.PI*t);
   const local=nearbyBoxes(allBoxes,x,z,2);
   if(local.some(b=>overlaps(x,y,z,b,M.height))){p.mantle=null;p.vy=0;p.grounded=false;}
   else{
