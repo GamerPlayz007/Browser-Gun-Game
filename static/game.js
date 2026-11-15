@@ -112,14 +112,32 @@ function scoreboard(players,body){
  const scores=state?.standings?.length?state.standings:
   [...players].sort((a,b)=>b.kills-a.kills||a.deaths-b.deaths).map((p,i)=>({...p,rank:i+1,streak:p.streak||0}));
  for(const p of scores){
-  const tr=document.createElement('tr');if(p.id===myId)tr.className='me';
-  for(const value of [`#${p.rank}  ${p.name}${p.id===myId?' / YOU':''}`,p.kills,p.deaths,p.headshots,p.streak||0]){
+  const tr=document.createElement('tr');
+  tr.className=(p.id===myId?'me ':'')+(p.team?'team-'+p.team:'');
+  for(const value of [`#${p.rank}  ${p.name}${p.team?' · '+p.team.toUpperCase():''}${p.id===myId?' / YOU':''}`,p.kills,p.deaths,p.headshots,p.streak||0]){
    const td=document.createElement('td');td.textContent=value;tr.append(td);
   }
   body.append(tr);
  }
 }
-function renderRoster(){const el=$('roster');el.replaceChildren();for(const p of state.players){const r=document.createElement('div');r.className='roster-row';const avatar=document.createElement('span');avatar.className='avatar';avatar.textContent=p.name.slice(0,1).toUpperCase();const name=document.createElement('span');name.textContent=p.name;const badge=document.createElement('small');badge.textContent=p.id===state.host?'HOST':p.id===myId?'YOU':'CONNECTED';r.append(avatar,name,badge);el.append(r);}for(let i=state.players.length;i<8;i++){const r=document.createElement('div');r.className='roster-empty';r.textContent='Open slot — invite a friend';el.append(r);}}
+function renderRoster(){
+ const el=$('roster');el.replaceChildren();
+ for(const p of state.players){
+  const row=document.createElement('div');
+  row.className='roster-row'+(p.team?' team-'+p.team:'');
+  const avatar=document.createElement('span');avatar.className='avatar';
+  avatar.textContent=p.name.slice(0,1).toUpperCase();
+  const name=document.createElement('span');name.textContent=p.name;
+  const badge=document.createElement('small');
+  badge.textContent=[p.team?.toUpperCase(),p.id===state.host?'HOST':p.id===myId?'YOU':'CONNECTED']
+   .filter(Boolean).join(' · ');
+  row.append(avatar,name,badge);el.append(row);
+ }
+ for(let i=state.players.length;i<8;i++){
+  const row=document.createElement('div');row.className='roster-empty';
+  row.textContent='Open slot — invite a friend';el.append(row);
+ }
+}
 function uiRoom(){
  const host=state.host===myId,between=['lobby','results'].includes(state.phase);
  $('start').hidden=!between;$('start').disabled=!host;
@@ -217,19 +235,31 @@ function handle(data){if(data.type==='welcome'){netSync=createNetSync();seq=0;sh
  $('respawn-time').textContent=Math.ceil(me.respawn);
  $('timer').textContent=data.phase==='lobby'?'PRACTICE':
   `${Math.floor(match.remaining/60)}:${String(Math.floor(match.remaining%60)).padStart(2,'0')}`;
- $('mode-label').textContent=data.mode==='gungame'?'GUN GAME':'DEATHMATCH';
+ $('mode-label').textContent=({deathmatch:'DEATHMATCH',gungame:'GUN GAME',
+  teamdeathmatch:'TEAM DEATHMATCH',control:'CONTROL POINT'})[data.mode]||'DEATHMATCH';
  $('objective').textContent=match.objective;
  $('round-label').textContent=`ROUND ${Math.max(1,match.round)} · ${match.rankText}`;
  $('lead-status').textContent=match.leaderText;
+ $('team-bar').hidden=!match.teamMode;
+ $('team-bar').classList.toggle('contested',!!data.objective?.contested);
+ $('team-azure').textContent='AZURE '+match.azure;
+ $('team-ember').textContent='EMBER '+match.ember;
+ $('team-control').textContent=data.mode==='control'?match.pointStatus:'TEAM SCORE';
  $('progress').style.width=match.progress+'%';
  $('countdown').hidden=data.phase!=='countdown';
  $('countdown').textContent=Math.ceil(data.countdown);
  $('slide-label').textContent=me.slideCooldown>0?`SLIDE / ${me.slideCooldown.toFixed(1)}s`:'C / SLIDE READY';
- const present=new Set();for(const p of data.players){if(p.id===myId)continue;present.add(p.id);let g=opponents.get(p.id);if(!g){g=makePlayer(p.name);scene.add(g);g.position.set(p.x,p.y,p.z);opponents.set(p.id,g);}if(g.userData.target?.spawn!==p.spawn){g.position.set(p.x,p.y,p.z);g.userData.animation.spawn=undefined;}g.userData.target=p;g.visible=p.hp>0;if(g.userData.gun.userData.id!==p.weapon){const old=g.userData.gun;old.removeFromParent();old.traverse(o=>o.geometry?.dispose());const gun=makeWeapon(p.weapon,false);gun.scale.setScalar(.8);gun.position.set(.26,1.1,-.34);g.userData.body.add(gun);g.userData.gun=gun;}}
+ const present=new Set();for(const p of data.players){if(p.id===myId)continue;present.add(p.id);let g=opponents.get(p.id);if(!g){g=makePlayer(p.name);scene.add(g);g.position.set(p.x,p.y,p.z);opponents.set(p.id,g);}
+  if(g.userData.team54!==p.team){
+   g.userData.team54=p.team;
+   g.userData.tag.material.color.set(p.team==='azure'?'#7de4ff':p.team==='ember'?'#ffb69b':'#ffffff');
+   g.userData.spawnRing.material.color.set(p.team==='azure'?'#7de4ff':p.team==='ember'?'#ffb69b':'#67ede5');
+  }
+  if(g.userData.target?.spawn!==p.spawn){g.position.set(p.x,p.y,p.z);g.userData.animation.spawn=undefined;}g.userData.target=p;g.visible=p.hp>0;if(g.userData.gun.userData.id!==p.weapon){const old=g.userData.gun;old.removeFromParent();old.traverse(o=>o.geometry?.dispose());const gun=makeWeapon(p.weapon,false);gun.scale.setScalar(.8);gun.position.set(.26,1.1,-.34);g.userData.body.add(gun);g.userData.gun=gun;}}
  for(const [id,g] of opponents)if(!present.has(id)){disposePlayer(g);opponents.delete(id);}for(const t of data.targets)world.targets.get(t.id).visible=t.hp>0;
- const rosterKey=JSON.stringify([data.host,data.players.map(p=>[p.id,p.name])]);
+ const rosterKey=JSON.stringify([data.host,data.mode,data.players.map(p=>[p.id,p.name,p.team])]);
  if(rosterKey!==rosterSignature){renderRoster();rosterSignature=rosterKey;}
- const scoreKey=JSON.stringify([data.mode,data.round,data.standings]);
+ const scoreKey=JSON.stringify([data.mode,data.round,data.standings,data.teamScores]);
  if(scoreKey!==scoreSignature){scoreboard(data.players,$('scores'));scoreSignature=scoreKey;}
  uiRoom();
  if(data.phase!==lastPhase){
