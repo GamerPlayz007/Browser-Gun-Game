@@ -43,4 +43,17 @@ const player=makePlayer('Test');animatePlayer(player,{vx:5,vz:0,crouch:false,pit
 const p={x:-24,y:1,z:13,vx:0,vy:0,vz:0,yaw:0,grounded:true,slide_until:0,slide_ready:0,jump_held:false,slide_held:false};
 for(let i=0;i<105;i++)simulate(p,{w:true},1/60,100+i/60,map.boxes,map.weapons[0]);
 assert.ok(Number.isFinite(p.x)&&Number.isFinite(p.y)&&Number.isFinite(p.z));assert.ok(p.z<11);
-world.dispose();console.log('PBR world, presets, route access, rigs and movement passed.');
+// Shared PBR materials must be disposed exactly once, even if used by
+// hundreds of Stage 5/6 visual meshes and all base city batches.
+const disposals=new Map();
+scene.traverse(o=>{
+ if(!o.isMesh||!o.material?.isMeshStandardMaterial)return;
+ const mat=o.material;if(disposals.has(mat))return;
+ const previous=mat.dispose.bind(mat);let count=0;
+ mat.dispose=()=>{count++;previous();};
+ disposals.set(mat,()=>count);
+});
+world.dispose();
+for(const [mat,count] of disposals)
+ assert.equal(count(),1,'World/shared PBR material disposed more or less than once');
+console.log('04.6 world: balanced resource ownership, presets, route access, rigs and movement passed.');
