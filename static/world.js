@@ -11,6 +11,7 @@ import {SURFACE_STYLES,NEON_STYLES,createCyberMaterialLibrary} from './materials
 const PAINT={cyan:'#38eff7',magenta:'#ff4b9e',amber:'#ffb454',white:'#c8f8ff'};
 const MATERIALS=Object.fromEntries([...SURFACE_STYLES,...NEON_STYLES].map(name=>[name,true]));
 const NEON=new Set(NEON_STYLES);
+function makeCanvas(size){const c=document.createElement('canvas');c.width=c.height=size;return c;}
 // Plane environmental lighting is reflected by PBR surfaces; unlike screen
 // space reflections it stays stable as the camera moves around wet patches.
 function environment(renderer){
