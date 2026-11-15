@@ -435,7 +435,7 @@ document.addEventListener('keyup',e=>{keys[e.code]=false;if(e.code==='Tab')$('sc
 function createDebugReport51(){
  const net=syncStats(netSync,performance.now());
  const data=captureRenderHealth46(renderer,scene,world,display);
- return ['CROSSFIRE 05.5 / PLAYTEST REPORT',
+ return ['CROSSFIRE V3.0 RC1 / PLAYTEST REPORT',
    'Map: '+(map?.name||map?.id||'unknown'),
    'Connection: '+(joined?'joined':'not joined'),
    'Quality setting: '+settings.quality,
