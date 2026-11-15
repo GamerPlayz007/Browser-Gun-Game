@@ -58,7 +58,13 @@ async def main():
                 await asyncio.sleep(.15)
             assert 'FPS AVG' in telemetry and 'JITTER' in telemetry
             assert 'DRAW CALLS' in telemetry
-            await page.locator('#start').click()
+            # Opening the room menu is the supported way to resume match
+            # setup after the game viewport takes focus/pointer lock.
+            await page.locator('#menu-button').click(timeout=12000,force=True)
+            await page.locator('#room-panel').wait_for(state='visible',timeout=12000)
+            assert game.rooms[code].phase=='lobby'
+            await page.locator('#start').wait_for(state='visible',timeout=12000)
+            await page.locator('#start').click(timeout=12000)
             await asyncio.sleep(.1)
             assert game.rooms[code].phase=='countdown'
             game.rooms[code].countdown_at=time.monotonic()-.01
