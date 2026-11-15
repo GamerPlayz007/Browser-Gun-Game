@@ -6,6 +6,7 @@ This is an integration smoke, not an RTX/Windows FPS benchmark.
 """
 import asyncio
 import time
+from aiohttp import WSMsgType
 from aiohttp.test_utils import TestClient,TestServer
 from playwright.async_api import async_playwright
 import server as game
@@ -17,6 +18,9 @@ async def main():
     client=TestClient(TestServer(game.make_app()))
     await client.start_server()
     peer=None
+    peer_reader_task=None
+    peer_states=[]
+    peer_pongs=asyncio.Queue()
     failures=[]
     try:
         async with async_playwright() as p:
@@ -45,6 +49,18 @@ async def main():
             assert code in game.rooms
             peer=await client.ws_connect('/ws/'+code+'?name=SocketPeer')
             peer_welcome=await recv_type(peer,'welcome')
+            # A real connected peer continuously reads states and responds to
+            # WebSocket heartbeats. Leaving the queue unread causes a false
+            # disconnect during slow software-WebGL rendering.
+            async def read_peer():
+                async for message in peer:
+                    if message.type!=WSMsgType.TEXT:continue
+                    payload=message.json()
+                    if payload.get('type')=='pong':
+                        peer_pongs.put_nowait(payload)
+                    elif payload.get('type')=='state':
+                        peer_states.append(payload['snapshotSeq'])
+            peer_reader_task=asyncio.create_task(read_peer())
             for _ in range(50):
                 roster=await page.locator('#roster .roster-row').count()
                 if roster>=2:break
@@ -74,8 +90,9 @@ async def main():
             assert game.rooms[code].phase=='playing'
             assert await page.locator('#mode-label').inner_text()=='DEATHMATCH'
             await peer.send_json({'type':'ping','t':123456})
-            pong=await recv_type(peer,'pong')
+            pong=await asyncio.wait_for(peer_pongs.get(),timeout=6)
             assert pong['t']==123456
+            assert len(peer_states)>=3,'Peer stopped reading authoritative snapshots'
             assert not failures,'Browser JavaScript exceptions: '+repr(failures)
             # Chromium's software WebGL driver may never produce a screenshot of
             # the continuously animating scene. Gameplay assertions above are
@@ -94,6 +111,9 @@ async def main():
             await context.close()
             await browser.close()
     finally:
+        if peer_reader_task is not None:
+            peer_reader_task.cancel()
+            await asyncio.gather(peer_reader_task,return_exceptions=True)
         if peer is not None:await peer.close()
         await client.close()
         game.rooms.clear()
