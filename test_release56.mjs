@@ -50,9 +50,8 @@ for(const snippet of [
  "safeWrite56('cf-volume',audio.volume)","safeWrite56('cf-skin56',preferredSkin56)",
  "send({type:'skin',skin:preferredSkin56})",
  'setPlayerSkin56(g,skinColor56(p.skin))',
- "disconnect('Connection closed.","$('rejoin56').onclick",
- "ws="
-].slice(0,-1)){
+ "disconnect('Connection closed.","$('rejoin56').onclick"
+]){
  assert.ok(game.includes(snippet),'Missing V3 UI connection: '+snippet);
 }
 assert.ok(!game.includes('localStorage.'),'No unsafe direct storage calls');
