@@ -14,6 +14,9 @@ class LiveCityTests(unittest.TestCase):
     def test_single_playable_arena(self):
         self.assertEqual(set(ARENAS),{'cyberpunk'})
         self.assertEqual(registry.REGISTRY['default'],'cyberpunk')
+        self.assertEqual(len(registry.REGISTRY['maps']),1)
+        self.assertEqual(registry.REGISTRY['maps'][0]['id'],'cyberpunk')
+        self.assertFalse((ROOT/'static/experimental').exists(), 'Remove obsolete duplicate movement prototypes')
         self.assertEqual(DEFAULT.data,self.map)
         self.assertEqual(self.map['size'],120)
         self.assertEqual(self.map['revision'],'03.2')

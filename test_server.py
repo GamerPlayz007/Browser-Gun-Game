@@ -160,7 +160,7 @@ class NetworkTests(unittest.IsolatedAsyncioTestCase):
         for conn in [b,c,*extras]:await conn.close()
     async def test_map_selector_validation_and_join_contract(self):
         registry=await (await self.client.get('/api/maps')).json()
-        self.assertEqual(registry['default'],'cyberpunk');self.assertEqual(len(registry['maps']),3)
+        self.assertEqual(registry['default'],'cyberpunk');self.assertEqual(len(registry['maps']),1)
         self.assertEqual([m['id'] for m in registry['maps'] if m['available']],['cyberpunk'])
         for value in ['rainforest','solstice','missing','../server.py',None,[]]:
             response=await self.client.post('/api/rooms',json={'mapId':value});self.assertEqual(response.status,400)

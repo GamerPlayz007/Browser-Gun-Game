@@ -19,8 +19,6 @@ def main():
     registry={'default':'cyberpunk','maps':[
         {'id':'cyberpunk','name':'Cyberpunk City','available':True,
          'url':'/static/maps/cyberpunk.json','theme':'cyberpunk'},
-        {'id':'rainforest','name':'Lush Rainforest','available':False,'theme':'rainforest'},
-        {'id':'solstice','name':'Solstice (Sandstone)','available':False,'theme':'sandstone'},
     ]}
     (out/'index.json').write_text(json.dumps(registry,indent=2)+'\n',encoding='utf-8')
     # Stale 80 m map guide and old optional candidate are deliberately removed.

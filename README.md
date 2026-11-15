@@ -35,8 +35,9 @@ must be checked there. No separate map-generation environment variable.
 - `static/maps/cyberpunk.json`: served to clients and the Python server.
 - `static/map.json`: identical data for existing tests and helpers.
 
-The 02.5 Cyberpunk City selection, former experimental candidate file, and
-obsolete 80 m SVG guide have been deleted from the current tree. Old git
+The 02.5 Cyberpunk City selection, former experimental candidate file, obsolete
+movement prototypes and 80 m SVG guide have been deleted from the current tree.
+Only the live Cyberpunk City appears in the map registry. Old git
 history remains available for rollback.
 
 ## Gameplay and quality

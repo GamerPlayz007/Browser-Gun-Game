@@ -7,18 +7,6 @@
       "available": true,
       "url": "/static/maps/cyberpunk.json",
       "theme": "cyberpunk"
-    },
-    {
-      "id": "rainforest",
-      "name": "Lush Rainforest",
-      "available": false,
-      "theme": "rainforest"
-    },
-    {
-      "id": "solstice",
-      "name": "Solstice (Sandstone)",
-      "available": false,
-      "theme": "sandstone"
     }
   ]
 }
