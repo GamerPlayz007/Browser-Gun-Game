@@ -1,4 +1,4 @@
-"""CROSSFIRE 05.4: probe the ACTUAL deployed website and two-player transport.
+"""CROSSFIRE 05.5: probe the ACTUAL deployed website and two-player transport.
 
 Usage: python check_live51.py https://your-service.onrender.com
 Requires: pip install -r requirements.txt
@@ -13,11 +13,12 @@ import time
 from urllib.parse import urlsplit
 from aiohttp import ClientSession, ClientTimeout, WSMsgType
 
-EXPECTED_RELEASE = "05.4"
+EXPECTED_RELEASE = "05.5"
 ASSETS = (
     "/", "/static/game.js", "/static/world.js", "/static/living45.js",
     "/static/atmosphere44.js", "/static/polish46.js",
     "/static/control54.js", "/static/minimap.js", "/static/match35.js",
+    "/static/competitive55.js",
     "/static/maps/cyberpunk.json",
 )
 
