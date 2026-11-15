@@ -6,6 +6,7 @@ export class AudioEngine{
  shot(id,volume=1,pan=0){this.burst([.13,.085,.24,.27][id],[.38,.26,.65,.6][id]*volume,[2600,3800,1800,2200][id],pan);this.tone([90,130,60,70][id],.12,.18*volume,'triangle');}
  hit(head=false){this.tone(head?1700:1050,.075,.12);if(head)this.tone(2200,.05,.08,'sine',.045);}
  kill(){this.tone(700,.1,.1);this.tone(1050,.14,.1,'sine',.08);}
+ dry(){this.tone(360,.045,.065,'square');}
  reload(){this.burst(.075,.18,4600);this.tone(220,.06,.04,'square',.3);}
  step(volume=.08){this.burst(.09,volume,600);}
 }

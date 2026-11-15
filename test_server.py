@@ -11,6 +11,15 @@ def duel(mode='deathmatch',weapon=0):
     return r,a,b
 
 class GameTests(unittest.TestCase):
+    def test_server_hit_events_include_origin_for_directional_ui(self):
+        r,a,b=duel()
+        self.assertTrue(r.shoot(a,101,shot_id=1))
+        hits=[event for event in r.events if event['type']=='hit']
+        self.assertTrue(hits)
+        self.assertEqual(tuple(hits[0]['origin']),(-24.,2.55,13.))
+        self.assertEqual(hits[0]['id'],'a')
+        self.assertEqual(hits[0]['victim'],'b')
+
     def test_cover_blocks_bullets(self):
         r,a,b=duel();a.update(x=-24,y=1,z=24,yaw=-math.pi/2,pitch=0);b.update(x=0,y=1,z=24)
         r.shoot(a,101);self.assertEqual(b['hp'],100)
@@ -157,6 +166,32 @@ class NetworkTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual((await self.state(ws))['mapId'],'cyberpunk');await ws.close()
         html=await (await self.client.get('/')).text();self.assertIn('<sup>02.5</sup>',html);self.assertIn('id="map-select"',html)
         arena=await (await self.client.get('/static/maps/cyberpunk.json')).json();self.assertEqual(arena['id'],'cyberpunk');self.assertEqual(len(arena['routes']),12)
+    async def test_duplicate_shot_ids_do_not_consume_extra_ammunition(self):
+        code=(await (await self.client.post('/api/rooms')).json())['room']
+        ws,pid=await self.join(code,'Shooter')
+        room=s.rooms[code];room.phase='playing';room.started=time.monotonic()
+        p=room.players[pid]
+        p.update(ammo=30,reload_at=0.,switch_at=0.,last_shot=-999.,shield=0.)
+        packet={'type':'shoot','shot':7,'yaw':0,'pitch':0}
+        await ws.send_json(packet)
+        await asyncio.sleep(.08)
+        self.assertEqual(p['ammo'],29)
+        self.assertEqual(p['ack_shot'],7)
+        # A replay after the weapon cooldown must still be ignored.
+        await asyncio.sleep(.18)
+        await ws.send_json(packet)
+        await asyncio.sleep(.08)
+        self.assertEqual(p['ammo'],29)
+        self.assertEqual(p['ack_shot'],7)
+        await ws.send_json({'type':'shoot','shot':0,'yaw':0,'pitch':0})
+        await asyncio.sleep(.05)
+        self.assertEqual(p['ammo'],29)
+        await ws.send_json({'type':'shoot','shot':8,'yaw':0,'pitch':0})
+        await asyncio.sleep(.08)
+        self.assertEqual(p['ammo'],28)
+        self.assertEqual(p['shot_seq'],8)
+        await ws.close()
+
     async def test_http_assets_and_room_expiry(self):
         for path in ['/','/static/map.json','/static/game.js','/static/world.js','/static/models.js','/static/vendor/addons/objects/Sky.js']:
             response=await self.client.get(path);self.assertEqual(response.status,200,path)
