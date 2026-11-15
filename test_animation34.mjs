@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import * as T from 'three';
 import {makeAvatarAnim,markAvatar,trackAvatar,avatarPose,feedbackGain} from './static/animation34.js';
-import {makePlayer,animatePlayer,markPlayerEvent,disposePlayer} from './static/models.js';
+import {makeWeapon,animateWeapon,makePlayer,animatePlayer,markPlayerEvent,disposePlayer} from './static/models.js';
 
 const near=(a,b,e=1e-6)=>assert.ok(Math.abs(a-b)<=e,`${a} != ${b}`);
 const data={spawn:1,grounded:true,vx:0,vy:0,vz:0,crouch:false,
@@ -33,6 +33,14 @@ near(avatarPose(data,2,anim).gunKick,0);
 
 const ctx=new Proxy({}, {get:()=>()=>{}});
 globalThis.document={createElement:()=>({width:0,height:0,getContext:()=>ctx})};
+const firstPerson=makeWeapon(0);
+animateWeapon(firstPerson,{time:1,ads:0,reload:0,kick:.10,moving:false,slide:0,motion:false,switched:0});
+assert.ok(firstPerson.userData.model.position.y>0,'Phase 5.2 receiver visual kick exists');
+assert.ok(firstPerson.userData.model.rotation.x<0,'Phase 5.2 model rotates on visual recoil');
+assert.ok(firstPerson.userData.left.rotation.x<0,'Support hand follows visual recoil');
+animateWeapon(firstPerson,{time:2,ads:0,reload:0,kick:0,moving:false,slide:0,motion:false,switched:0});
+near(firstPerson.userData.model.position.y,0);
+near(firstPerson.userData.model.rotation.x,0);
 const root=makePlayer('Test Pilot');
 assert.equal(root.userData.legs.length,2);
 assert.equal(root.userData.knees.length,2);
