@@ -113,6 +113,9 @@ class Room:
     def set_mode(self,pid,mode):
         if (pid!=self.host or self.phase not in ('lobby','results')
                 or mode not in ('deathmatch','gungame','teamdeathmatch','control')):return False
+        # Changing the chosen mode invalidates earlier ready acknowledgements.
+        if mode!=self.next_mode:
+            for player in self.players.values():player['ready']=False
         self.next_mode=mode
         if self.phase=='lobby':
             self.mode=mode
@@ -130,6 +133,7 @@ class Room:
         if pid!=self.host or self.phase not in ('lobby','results'):return False
         if not is_team_mode(self.next_mode):return False
         balanced_draft(self.players)
+        for player in self.players.values():player['ready']=False
         self.event('teams_balanced')
         return True
     def start(self,pid,now):
