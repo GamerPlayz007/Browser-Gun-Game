@@ -1,4 +1,4 @@
-"""CROSSFIRE V3.0 RC1: probe the ACTUAL deployed website and two-player transport.
+"""CROSSFIRE V3.0 RC2: probe the ACTUAL deployed website and two-player transport.
 
 Usage: python check_live51.py https://your-service.onrender.com
 Requires: pip install -r requirements.txt
@@ -13,9 +13,9 @@ import time
 from urllib.parse import urlsplit
 from aiohttp import ClientSession, ClientTimeout, WSMsgType
 
-EXPECTED_RELEASE = "3.0.0-rc.1"
-EXPECTED_PHASE = "05.6"
-EXPECTED_BADGE = "V3.0 RC"
+EXPECTED_RELEASE = "3.0.0-rc.2"
+EXPECTED_PHASE = "05.7"
+EXPECTED_BADGE = "V3.0 RC2"
 ASSETS = (
     "/", "/static/game.js", "/static/world.js", "/static/living45.js",
     "/static/atmosphere44.js", "/static/polish46.js",
@@ -133,6 +133,42 @@ async def probe(base):
                                     a.get("team") != b.get("team"))
                 print("PASS server-owned game mode, team balance, ready and cosmetics")
                 print("PASS two-player WebSocket handshake and server ping")
+        # Final solo-PVE gate. Bots are server-owned and should never occupy
+        # a player slot or require a second browser connection.
+        async with session.post(base + "/api/rooms", json={"mapId": "cyberpunk"}) as r:
+            if r.status != 200:
+                raise RuntimeError("Bot Assault room creation failed")
+            bot_room = (await r.json())["room"]
+        async with session.ws_connect(ws_uri.rsplit("/",1)[0]+"/"+bot_room+"?name=Solo", heartbeat=15) as solo:
+            hello=await solo.receive_json(timeout=12)
+            if hello.get("type")!="welcome":
+                raise RuntimeError("Solo Bot Assault did not join")
+            await solo.send_json({"type":"mode","mode":"botmatch"})
+            async with asyncio.timeout(14):
+                while True:
+                    msg=await solo.receive()
+                    if msg.type!=WSMsgType.TEXT:
+                        raise RuntimeError("Solo room disconnected")
+                    state=json.loads(msg.data)
+                    if state.get("type")=="state" and state.get("mode")=="botmatch":
+                        break
+            await solo.send_json({"type":"start"})
+            async with asyncio.timeout(14):
+                while True:
+                    msg=await solo.receive()
+                    if msg.type!=WSMsgType.TEXT:
+                        raise RuntimeError("Solo match disconnected")
+                    state=json.loads(msg.data)
+                    if state.get("type")!="state" or state.get("phase")!="countdown":
+                        continue
+                    bots=[p for p in state.get("players",[]) if p.get("bot")]
+                    humans=[p for p in state.get("players",[]) if not p.get("bot")]
+                    if len(bots)!=4 or len(humans)!=1:
+                        raise RuntimeError("AI players or human room count is incorrect")
+                    if state.get("rules",{}).get("goal")!=20:
+                        raise RuntimeError("Bot Assault target goal missing")
+                    break
+        print("PASS solo Bot Assault and four synthetic AI opponents")
         print("PASS CROSSFIRE", EXPECTED_RELEASE, "basic deployment smoke check")
 
 if __name__ == "__main__":
