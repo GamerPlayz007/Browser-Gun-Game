@@ -5,7 +5,7 @@ import {createStage5VisualLayer} from './stage5_visual_layer.js';
 import {createStage6VisualLayer} from './stage6_visual_layer.js';
 import {SURFACE_STYLES,NEON_STYLES,createCyberMaterialLibrary} from './materials41.js';
 
-// 02.5: deterministic CanvasTexture PBR atlases + district/LOD mesh batching.
+// 04.1: shared procedural PBR atlas library with batched noncolliding city context.
 // Only map.boxes are authoritative colliders. All map.features and map.decor
 // are purely visual. The rendering pipeline never changes simulation geometry.
 const PAINT={cyan:'#38eff7',magenta:'#ff4b9e',amber:'#ffb454',white:'#c8f8ff'};
