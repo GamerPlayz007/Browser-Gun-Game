@@ -101,12 +101,21 @@ async def probe(base):
                             break
                 # Exercise V3's host-only mode selection, ready flags, and
                 # server-owned cosmetics without starting an actual match.
-                await bob.send_json({"type":"mode","mode":"control"})
                 await alice.send_json({"type":"mode","mode":"control"})
+                # Wait for the host's mode change before marking ready:
+                # changing modes legitimately clears old ready flags.
+                async with asyncio.timeout(12):
+                    while True:
+                        message = await bob.receive()
+                        if message.type != WSMsgType.TEXT:
+                            raise RuntimeError("Room connection closed during mode change")
+                        current = json.loads(message.data)
+                        if current.get("type") == "state" and current.get("mode") == "control":
+                            break
                 await bob.send_json({"type":"ready","ready":True})
                 await bob.send_json({"type":"skin","skin":1})
                 verified = False
-                async with asyncio.timeout(14):
+                async with asyncio.timeout(12):
                     while not verified:
                         message = await bob.receive()
                         if message.type != WSMsgType.TEXT:
