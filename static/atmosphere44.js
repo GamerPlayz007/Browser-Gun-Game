@@ -82,7 +82,7 @@ function seedCloud(T,zones,count,seed){
 export function planPuddles44(map){
  const puddles=[],zones=new Set(Object.keys(PALETTE));
  for(const floor of map.boxes||[]){
-  if(floor.kind!=='floor'||floor.style!=='road'||!zones.has(floor.zone))continue;
+  if(floor.kind!=='floor'||!['road','tile'].includes(floor.style)||!zones.has(floor.zone))continue;
   if(floor.w<5||floor.d<16)continue;
   const count=Math.min(8,Math.max(2,Math.floor(floor.d/9)));
   for(let i=0;i<count;i++){
