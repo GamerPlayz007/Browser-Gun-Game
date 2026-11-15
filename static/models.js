@@ -38,7 +38,7 @@ export function animateWeapon(root,{time,ads,reload,kick,moving,slide,motion,swi
 export function makePlayer(name,color=0xd38165){
  const root=new T.Group(),body=new T.Group();root.add(body);
  box(body,.56,.64,.34,0x3b5559,0,1.13,0,.07);
- box(body,.60,.25,.38,color,0,1.36,0,.05);
+ const chestSkin56=box(body,.60,.25,.38,color,0,1.36,0,.05);
  box(body,.43,.22,.31,0x263b40,0,.76,0);
  box(body,.47,.055,.36,0x67c6b9,0,1.06,-.015,.012);
  const head=new T.Group();head.position.y=1.67;body.add(head);
@@ -46,7 +46,7 @@ export function makePlayer(name,color=0xd38165){
  helmet.scale.y=.9;head.add(helmet);
  box(head,.36,.12,.12,0x173841,0,.015,-.18,.035);
  box(head,.27,.055,.025,0x7bd6d1,0,.03,-.25,.01);
- const legs=[],knees=[],arms=[],elbows=[];
+ const legs=[],knees=[],arms=[],elbows=[],skinMeshes56=[chestSkin56,helmet];
  for(const side of [-1,1]){
   const leg=new T.Group();leg.position.set(side*.16,.79,0);body.add(leg);
   box(leg,.21,.38,.23,0x68807a,0,-.18,0,.05);
@@ -55,7 +55,7 @@ export function makePlayer(name,color=0xd38165){
   box(knee,.22,.13,.32,0x263b40,0,-.36,-.055);
   legs.push(leg);knees.push(knee);
   const arm=new T.Group();arm.position.set(side*.37,1.39,0);body.add(arm);
-  box(arm,.18,.38,.21,color,0,-.16,-.05,.06);
+  skinMeshes56.push(box(arm,.18,.38,.21,color,0,-.16,-.05,.06));
   const elbow=new T.Group();elbow.position.set(0,-.32,-.16);arm.add(elbow);
   box(elbow,.16,.34,.18,0x526e70,0,-.14,-.06,.04).rotation.x=-.3;
   arms.push(arm);elbows.push(elbow);
@@ -80,8 +80,16 @@ export function makePlayer(name,color=0xd38165){
  tag.position.y=2.12;tag.scale.set(1.5,.28,1);root.add(tag);
  root.traverse(o=>{if(o.isMesh&&o!==spawnRing&&o!==impact)o.castShadow=true;});
  root.userData={body,head,limbs:legs,legs,knees,arms,elbows,gun,
-  tag,spawnRing,impact,animation:makeAvatarAnim()};
+  tag,spawnRing,impact,skinMeshes56,skinColor56:color,animation:makeAvatarAnim()};
  return root;
+}
+// Material references are shared; recoloring swaps references instead of mutating
+// the palette for every other player. Works for in-round cosmetic changes.
+export function setPlayerSkin56(root,color){
+ if(!root?.userData?.skinMeshes56||root.userData.skinColor56===color)return false;
+ for(const piece of root.userData.skinMeshes56)piece.material=material(color);
+ root.userData.skinColor56=color;
+ return true;
 }
 export function markPlayerEvent(root,type,time){
  if(root?.userData?.animation)markAvatar(root.userData.animation,type,time);
