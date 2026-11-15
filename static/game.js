@@ -145,7 +145,9 @@ function uiRoom(){
  $('resume').textContent=state.phase==='lobby'?'ENTER PRACTICE':state.phase==='results'?'VIEW RESULTS':'RESUME MATCH';
  $('room-title').textContent=state.phase==='lobby'?'Your squad.':state.phase==='results'?'Run it back.':'Stay in the fight.';
  $('room-hint').textContent=state.phase==='lobby'?
-  'Practice while your friends join. The host starts the match.':
+  (state.mode==='control'?'Capture the Neon Beacon together. The host starts the match.':
+   state.mode==='teamdeathmatch'?'Teams are assigned automatically. First team to 30 wins.':
+   'Practice while your friends join. The host starts the match.'):
   state.phase==='results'?
   'The host can choose the next mode before starting the rematch.':
   'The match continues while this menu is open.';
@@ -184,7 +186,10 @@ function processEvent(e){
   matchBannerUntil=now+2.25;
   if(e.type==='tier_up'&&e.id===myId)audio.tier();
   else if(e.type==='streak'&&e.id===myId)audio.streak();
-  else if(e.type==='round_end')audio.finish(e.winnerId===myId);
+  else if(e.type==='round_end')audio.finish(e.winnerId===myId||
+   (Boolean(e.winnerTeam)&&e.winnerTeam===me?.team));
+  else if(e.type==='control_status'&&e.team===me?.team&&!e.contested)
+   audio.tone(780,.12,.065,'triangle');
  }
  if(e.type==='shot'){if(e.id!==myId)markPlayerEvent(opponents.get(e.id),'shot',now);for(const index of tracerCount52(settings.quality,e.ends?.length))addTracer(e.origin,e.ends[index]);if(e.id!==myId&&local){const dx=e.origin[0]-local.x,dz=e.origin[2]-local.z,dist=Math.hypot(dx,dz);audio.shot(e.weapon,Math.max(0,1-dist/45)*.35,clamp((dx*Math.cos(yaw)-dz*Math.sin(yaw))/Math.max(1,dist),-1,1));}}
  if(e.type==='hit'){
