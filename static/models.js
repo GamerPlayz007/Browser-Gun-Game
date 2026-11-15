@@ -27,7 +27,12 @@ export function animateWeapon(root,{time,ads,reload,kick,moving,slide,motion,swi
  const d=root.userData,id=d.id;root.position.set(T.MathUtils.lerp(.28,0,ads),T.MathUtils.lerp(-.29,id===3?-.17:-.145,ads),T.MathUtils.lerp(-.50,-.39,ads)+kick*.65);
  const bob=moving&&motion?Math.sin(time*12)*.008*(1-ads*.8):0;root.position.y+=bob-switched*.22;
  root.rotation.set(kick*.4,0,(moving&&motion?Math.cos(time*6)*.012:0)-slide*.22);
+ // 05.2: a short mechanical receiver snap and hand follow-through.
+ // Purely first-person visual motion; server recoil and hit logic unchanged.
+ d.model.position.set(0,Math.min(.018,kick*.16),Math.min(.015,kick*.1));
+ d.model.rotation.x=-kick*.21;
  d.magazine.position.set(0,-.1, -.035);d.left.position.set(0,0,0);
+ d.left.rotation.x=-kick*.18;
  if(reload>0){const p=1-reload;const wave=Math.sin(p*Math.PI);root.rotation.z-=wave*.4;root.rotation.x+=wave*.18;root.position.y-=wave*.04;const drop=p<.48?Math.sin(p/.48*Math.PI/2):Math.cos((p-.48)/.52*Math.PI/2);d.magazine.position.y-=drop*.32;d.magazine.position.x-=drop*.12;d.left.position.y-=drop*.15;}
 }
 export function makePlayer(name,color=0xd38165){
