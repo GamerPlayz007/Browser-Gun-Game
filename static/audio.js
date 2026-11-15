@@ -5,6 +5,14 @@ export class AudioEngine{
  burst(duration,volume,cutoff,pan=0){if(!this.enabled||!this.ctx||!this.noise)return;const c=this.ctx,t=c.currentTime,s=c.createBufferSource(),f=c.createBiquadFilter(),g=c.createGain(),p=c.createStereoPanner();s.buffer=this.noise;f.type='lowpass';f.frequency.value=cutoff;g.gain.setValueAtTime(volume*this.volume,t);g.gain.exponentialRampToValueAtTime(.001,t+duration);p.pan.value=pan;s.connect(f);f.connect(g);g.connect(p);p.connect(c.destination);s.start(t,Math.random()*.5);s.stop(t+duration);}
  shot(id,volume=1,pan=0){this.burst([.13,.085,.24,.27][id],[.38,.26,.65,.6][id]*volume,[2600,3800,1800,2200][id],pan);this.tone([90,130,60,70][id],.12,.18*volume,'triangle');}
  hit(head=false){this.tone(head?1700:1050,.075,.12);if(head)this.tone(2200,.05,.08,'sine',.045);}
+ // 05.2 confirmation is invoked ONLY by an authoritative server hit event.
+ // Keep it short and quieter than gunfire so overlapping rounds remain clear.
+ confirm52(head=false,killed=false){
+  if(!this.enabled||!this.ctx||this.volume<=0)return;
+  this.tone(head?1540:1040,.062,head?.083:.055,'sine');
+  if(head)this.tone(2010,.045,.04,'triangle',.024);
+  if(killed)this.tone(680,.095,.05,'sine',.038);
+ }
  kill(){this.tone(700,.1,.1);this.tone(1050,.14,.1,'sine',.08);}
  tier(){this.tone(620,.1,.09,'triangle');this.tone(840,.13,.08,'sine',.08);this.tone(1040,.16,.07,'sine',.17);}
  streak(){this.tone(740,.085,.07,'sine');this.tone(980,.1,.075,'sine',.085);}
