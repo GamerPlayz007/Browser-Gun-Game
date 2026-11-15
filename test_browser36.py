@@ -82,8 +82,12 @@ async def main():
             await page.locator('#start').wait_for(state='visible',timeout=12000)
             await page.locator('#start').click(timeout=12000)
             await asyncio.sleep(.1)
-            assert game.rooms[code].phase=='countdown'
-            game.rooms[code].countdown_at=time.monotonic()-.01
+            # A very slow software-rendered browser can let the entire
+            # countdown elapse before the click promise resolves.
+            phase=game.rooms[code].phase
+            assert phase in ('countdown','playing'),f'Match did not start: {phase}'
+            if phase=='countdown':
+                game.rooms[code].countdown_at=time.monotonic()-.01
             for _ in range(40):
                 if game.rooms[code].phase=='playing':break
                 await asyncio.sleep(.05)
