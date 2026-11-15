@@ -262,7 +262,15 @@ function handle(data){if(data.type==='welcome'){netSync=createNetSync();seq=0;sh
   $('ammo-panel').classList.toggle('reloading',me.reload>0);
   $('reload-progress').style.width=(100*reloadFraction(me.reload,weapons[me.weapon].reload))+'%';
  const match=matchPresentation(data,me);
+ const spectateChoices55=spectatorCandidates55(data,myId);
+ if(!spectateChoices55.some(p=>p.id===spectatorTarget55))
+  spectatorTarget55=spectateChoices55[0]?.id||null;
+ const spectating55=me.hp<=0&&data.phase==='playing'&&!!spectatorTarget55;
  $('death').hidden=me.hp>0||data.phase!=='playing';
+ $('spectate-panel55').hidden=!spectating55;
+ $('spectate-label55').textContent=spectating55?
+  'FOLLOWING '+(spectateChoices55.find(p=>p.id===spectatorTarget55)?.name||'PLAYER'):
+  (data.mode==='teamdeathmatch'||data.mode==='control'?'NO TEAMMATE AVAILABLE':'NO PLAYER AVAILABLE');
  $('respawn-time').textContent=Math.ceil(me.respawn);
  $('timer').textContent=data.phase==='lobby'?'PRACTICE':
   `${Math.floor(match.remaining/60)}:${String(Math.floor(match.remaining%60)).padStart(2,'0')}`;
@@ -354,6 +362,20 @@ function frame(ms){try{const now=ms/1000,rawMs=ms-clock,dt=Math.min(rawMs/1000,.
   for(const [id,g] of opponents){const shown=sampleRemote(netSync,id,ms);const p=shown?{...g.userData.target,...shown}:g.userData.target;if(!p)continue;
     // 20 Hz snapshots render on a delayed server-time timeline. No double lerp.
     g.position.set(p.x,p.y,p.z);animatePlayer(g,p,now);g.userData.tag.visible=camera.position.distanceTo(g.position)<18;}
+  // Dead players may watch eligible active players during the respawn timer.
+  // Team modes restrict the target list to their own team.
+  if(me.hp<=0&&state.phase==='playing'&&spectatorTarget55){
+   const subject=opponents.get(spectatorTarget55);
+   const p=subject?.userData.target;
+   if(subject&&p&&p.hp>0){
+    const eye55=p.crouch?.88:1.55;
+    camera.position.set(subject.position.x,subject.position.y+eye55,subject.position.z);
+    camera.rotation.set(Number.isFinite(p.pitch)?p.pitch:0,
+      Number.isFinite(p.yaw)?p.yaw:0,0,'YXZ');
+    camera.fov=T.MathUtils.lerp(camera.fov,82,Math.min(1,dt*14));
+    camera.updateProjectionMatrix();
+   }
+  }
   for(let i=0;i<4;i++)weaponModels[i].visible=i===me.weapon&&locked()&&me.hp>0&&state.phase!=='results'&&!(me.weapon===3&&ads>.95);
   const gun=weaponModels[me.weapon];animateWeapon(gun,{time:now,ads,reload:me.reload>0?me.reload/weapons[me.weapon].reload:0,kick,moving:locked()&&moving,slide:sliding,motion:settings.motion,switched:switchVisual});gun.userData.flash.visible=now<flashUntil;gun.userData.flash.rotation.z=now*21;
   gun.userData.flash.scale.set(flashPower52,flashPower52,flashPower52*2);
@@ -362,7 +384,7 @@ function frame(ms){try{const now=ms/1000,rawMs=ms-clock,dt=Math.min(rawMs/1000,.
   const spread52=crosshairSpread52({speed:localSpeed,grounded:local.grounded,
     crouch:local.crouch,aim:ads,recoil:kick,sprint:input.sprint,weapon:me.weapon});
   crosshairSize52+=(spread52-crosshairSize52)*Math.min(1,dt*15);
-  $('crosshair').style.opacity=ads>.75?'0':'1';
+  $('crosshair').style.opacity=me.hp<=0||ads>.75?'0':'1';
   $('crosshair').style.width=$('crosshair').style.height=crosshairSize52.toFixed(1)+'px';
   if(moving&&local.grounded&&locked()&&now-lastStep>(input.sprint?.28:.4)){audio.step(input.sprint?.07:.045);lastStep=now;}
  }else{camera.position.set(7+Math.sin(now*.045)*2,9,30+Math.cos(now*.045)*2);camera.lookAt(-5,3,14);camera.fov=65;camera.updateProjectionMatrix();for(const g of weaponModels)g.visible=false;}
@@ -380,7 +402,23 @@ $('resume').onclick=capture;renderer.domElement.addEventListener('click',()=>{if
 document.addEventListener('pointerlockchange',()=>{if(!joined)return;resetInput();$('room-panel').hidden=locked()||state?.phase==='results';});
 document.addEventListener('mousemove',e=>{if(!locked())return;const sens=.002*settings.sens*T.MathUtils.lerp(1,me?.weapon===3?.32:.65,ads);yaw-=e.movementX*sens;pitch=clamp(pitch-e.movementY*sens,-1.5,1.5);});
 document.addEventListener('mousedown',e=>{if(!locked())return;if(e.button===0){pressTrigger(combatTrigger);if(me&&ammo()<=0&&me.reload<=0&&me.switch<=0)audio.dry();tryTriggerFire(performance.now()/1000);}if(e.button===2){aiming=true;sendInput();}});document.addEventListener('mouseup',e=>{if(e.button===0)releaseTrigger(combatTrigger);if(e.button===2){aiming=false;sendInput();}});document.addEventListener('contextmenu',e=>{if(joined)e.preventDefault();});
-document.addEventListener('keydown',e=>{if(!joined)return;if(e.code==='F7'){e.preventDefault();if(!e.repeat)$('perf-panel').hidden=!$('perf-panel').hidden;return;}if(e.code==='F8'){e.preventDefault();if(!e.repeat)copyDebugReport51();return;}if(['INPUT','SELECT','TEXTAREA'].includes(document.activeElement.tagName))return;if(['Tab','Space','KeyW','KeyA','KeyS','KeyD'].includes(e.code))e.preventDefault();keys[e.code]=true;if(e.code==='Tab')$('scoreboard').hidden=false;if(e.code==='KeyM')$('map-panel').classList.add('expanded');if(e.repeat)return;if(e.code==='KeyR'&&locked()){send({type:'reload'});if(me.ammo<weapons[me.weapon].mag&&!me.reload)audio.reload();}if(/^Digit[1-4]$/.test(e.code))selectWeapon(Number(e.code.slice(-1))-1);});
+function cycleCurrentSpectator55(direction){
+ if(!state||!myId)return;
+ spectatorTarget55=cycleSpectator55(spectatorTarget55,
+   spectatorCandidates55(state,myId),direction);
+ if(spectatorTarget55){
+  const p=state.players.find(player=>player.id===spectatorTarget55);
+  $('spectate-label55').textContent='FOLLOWING '+(p?.name||'PLAYER');
+ }
+}
+document.addEventListener('keydown',e=>{if(!joined)return;
+ if(me?.hp<=0&&state?.phase==='playing'&&
+    (e.code==='ArrowLeft'||e.code==='ArrowRight')){
+  e.preventDefault();if(!e.repeat)
+   cycleCurrentSpectator55(e.code==='ArrowRight'?1:-1);
+  return;
+ }
+ if(e.code==='F7'){e.preventDefault();if(!e.repeat)$('perf-panel').hidden=!$('perf-panel').hidden;return;}if(e.code==='F8'){e.preventDefault();if(!e.repeat)copyDebugReport51();return;}if(['INPUT','SELECT','TEXTAREA'].includes(document.activeElement.tagName))return;if(['Tab','Space','KeyW','KeyA','KeyS','KeyD'].includes(e.code))e.preventDefault();keys[e.code]=true;if(e.code==='Tab')$('scoreboard').hidden=false;if(e.code==='KeyM')$('map-panel').classList.add('expanded');if(e.repeat)return;if(e.code==='KeyR'&&locked()){send({type:'reload'});if(me.ammo<weapons[me.weapon].mag&&!me.reload)audio.reload();}if(/^Digit[1-4]$/.test(e.code))selectWeapon(Number(e.code.slice(-1))-1);});
 document.addEventListener('keyup',e=>{keys[e.code]=false;if(e.code==='Tab')$('scoreboard').hidden=true;if(e.code==='KeyM')$('map-panel').classList.remove('expanded');});window.addEventListener('blur',()=>{resetInput();$('scoreboard').hidden=true;});
 function createDebugReport51(){
  const net=syncStats(netSync,performance.now());
@@ -403,6 +441,10 @@ async function copyDebugReport51(){
  }
 }
 $('copy-diagnostics').onclick=copyDebugReport51;
+$('spectate-prev55').onclick=()=>cycleCurrentSpectator55(-1);
+$('spectate-next55').onclick=()=>cycleCurrentSpectator55(1);
+$('ready-toggle55').onclick=()=>send({type:'ready',ready:!me?.ready});
+$('balance-teams55').onclick=()=>send({type:'balance'});
 $('diagnostics-toggle').onclick=()=>{$('perf-panel').hidden=!$('perf-panel').hidden;};
 $('create').onclick=()=>{audio.unlock();enter(true);};$('join').onclick=()=>{audio.unlock();enter(false);};$('code').onkeydown=e=>{if(e.key==='Enter')enter(false);};$('name').value=localStorage.getItem('cf-name')||'';$('code').value=new URLSearchParams(location.search).get('room')||'';
 $('start').onclick=()=>{send({type:'start'});capture();};$('rematch').onclick=()=>{send({type:'start'});audio.unlock();};$('result-room').onclick=()=>{$('results').hidden=true;$('room-panel').hidden=false;};$('menu-button').onclick=()=>{document.exitPointerLock?.();$('room-panel').hidden=false;};
