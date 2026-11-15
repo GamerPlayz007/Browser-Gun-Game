@@ -1,4 +1,4 @@
-"""CROSSFIRE 05.2. Server-authoritative multiplayer arena with release diagnostics."""
+"""CROSSFIRE 05.3. Server-authoritative multiplayer arena with release diagnostics."""
 import asyncio, contextlib, json, math, os, random, re, secrets, time
 from collections import deque
 from pathlib import Path
@@ -11,7 +11,7 @@ from match35 import (DEATHMATCH_GOAL,KILLS_PER_TIER,MATCH_DURATION,COUNTDOWN_DUR
                      RESPAWN_DURATION,goal,tier_for_kills,standings,leading_player,
                      timed_winner,rules)
 MAP=DEFAULT.data;BOXES=DEFAULT.boxes;SPAWNS=DEFAULT.spawns
-RELEASE='05.2'; API_VERSION=5
+RELEASE='05.3'; API_VERSION=5
 TICK=1/60; LIMIT=DEATHMATCH_GOAL; ROUND_SECONDS=MATCH_DURATION; MAX_PLAYERS=8; MAX_REWIND=.30
 
 def nearby_boxes(x,z,radius=1,arena=DEFAULT):return arena.nearby(x,z,radius)
