@@ -1,57 +1,60 @@
-/**
- * CROSSFIRE Stage 6 — OPTIONAL instanced context renderer.
- *
- * This visual-only helper draws the extended 160m urban context without
- * registering collisions. It never changes the Stage 6 120m physical map.
- * If your existing world.js draws all map.decor, do NOT draw twice.
- * This module is not automatically plugged into the game.
- */
-export function createStage6VisualLayer(THREE, map, quality='high') {
-  const level={performance:0,high:1,ultra:2}[quality];
-  if(level===undefined) throw new Error(`Invalid quality setting: ${quality}`);
-  const entries=(map?.decor||[]).filter(b=>b.stage6VisualOnly && (b.stage6Tier||0)<=level);
-  const groups=new Map();
-  for (const b of entries) {
-    const key=`${b.kind}:${b.style}:${b.urbanFamily||'none'}:tier${b.stage6Tier||0}`;
-    if(!groups.has(key)) groups.set(key,[]);
-    groups.get(key).push(b);
-  }
-  const sceneGroup=new THREE.Group();sceneGroup.name='stage6-visual-city-context';
-  sceneGroup.userData.collidable=false;
-  const geo=new THREE.BoxGeometry(1,1,1);
-  const matrix=new THREE.Matrix4();
-  const position=new THREE.Vector3();
-  const quaternion=new THREE.Quaternion();
-  const scale=new THREE.Vector3();
-  const families={market:'#9c6584',industrial:'#778796',corporate:'#4b8da9',
-                  transit:'#a99772',civic:'#74a6a1'};
-  for(const [key,items] of groups){
-    const sample=items[0];
-    const color=families[sample.urbanFamily] || map?.palette?.[sample.style] || '#8293a4';
-    const isGlass=sample.style==='glass';
-    const material=new THREE.MeshStandardMaterial({
-      color,roughness: isGlass ? 0.28 : 0.78, metalness: isGlass ? 0.18 : 0.08,
-      transparent:false
-    });
-    const mesh=new THREE.InstancedMesh(geo,material,items.length);
-    mesh.name=`stage6-context-${key}`;
-    mesh.userData.collidable=false;mesh.userData.stage6VisualOnly=true;
-    mesh.userData.stage6Tier=sample.stage6Tier||0;
-    for(let i=0;i<items.length;i++){
-      const b=items[i];position.set(b.x,b.y+b.h/2,b.z);
-      scale.set(b.w,b.h,b.d);matrix.compose(position,quaternion,scale);
-      mesh.setMatrixAt(i,matrix);
-    }
-    mesh.instanceMatrix.needsUpdate=true;
-    mesh.frustumCulled=false;sceneGroup.add(mesh);
-  }
-  sceneGroup.userData.disposeStage6=()=>{
-    sceneGroup.traverse(node=>{if(node.isMesh)node.material?.dispose()});
-    geo.dispose();
-  };
-  return sceneGroup;
-}
+import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
+import {createSurfaceBoxGeometry} from './materials41.js';
 
+// Phase 4.1: the surrounding skyline now participates in the material system.
+// The 160 m context remains purely visual; it creates no collision meshes.
+export function createStage6VisualLayer(THREE,map,quality='high',library=null){
+ const level={performance:0,high:1,ultra:2}[quality];
+ if(level===undefined)throw Error('Invalid Stage 6 quality: '+quality);
+ const entries=(map?.decor||[]).filter(b=>b.stage6VisualOnly&&(b.stage6Tier||0)<=level);
+ const groups=new Map();
+ const pseudoRandom=b=>{
+  const n=Math.floor((b.x+503)*71+(b.y+277)*131+(b.z+311)*197);
+  return ((Math.imul(n,2654435761)>>>0)%11);
+ };
+ for(const b of entries){
+  const window=b.kind==='urbanWindow';
+  const lit=window&&pseudoRandom(b)>2;
+  const key=[b.kind,b.style,b.urbanFamily||'none',b.stage6Tier||0,lit?'lit':'dark'].join('::');
+  if(!groups.has(key))groups.set(key,[]);
+  groups.get(key).push(b);
+ }
+ const sceneGroup=new THREE.Group();sceneGroup.name='stage6-visual-city-context';
+ sceneGroup.userData.collidable=false;
+ const colorByFamily={market:'#f16fa7',industrial:'#f4a66c',corporate:'#72cbee',
+  transit:'#ffd18b',civic:'#70e9d3'};
+ const fallbackMaterials=[];
+ for(const [key,items] of groups){
+  const sample=items[0],isWindow=sample.kind==='urbanWindow',lit=key.endsWith('::lit');
+  const family=sample.urbanFamily||'none',familyColor=colorByFamily[family]||'#a5c8e2';
+  const style=isWindow?(lit?'window':'glass'):
+   sample.style==='facade'?'facade':sample.style==='glass'?'glass':
+   sample.style==='metal'?'metal':sample.style==='rust'?'rust':
+   sample.style==='road'?'road':sample.style==='dark'?'dark':'concrete';
+  const tint=isWindow?'#edf5ff':new THREE.Color(map?.palette?.[sample.style]||'#a8b6c4')
+   .lerp(new THREE.Color('#e5e9ed'),.55).getStyle();
+  const material=library?library.get(style,{tint,emissive:familyColor,
+   glow:isWindow?(lit?1.55:.015):0}):
+   new THREE.MeshStandardMaterial({color:isWindow?familyColor:tint,
+    roughness:isWindow?.27:.79,metalness:isWindow?.08:.22,
+    emissive:isWindow&&lit?familyColor:'#000000',
+    emissiveIntensity:isWindow&&lit?.9:0});
+  if(!library)fallbackMaterials.push(material);
+  const geos=items.map(b=>createSurfaceBoxGeometry(THREE,b,isWindow?1.7:2.7));
+  const merged=mergeGeometries(geos,false);for(const g of geos)g.dispose();
+  if(!merged)throw Error('Stage 6 merge failed: '+key);
+  const mesh=new THREE.Mesh(merged,material);
+  mesh.name='stage6-context-'+key;mesh.receiveShadow=false;
+  mesh.userData.collidable=false;mesh.userData.stage6VisualOnly=true;
+  mesh.userData.stage6Tier=sample.stage6Tier||0;
+  sceneGroup.add(mesh);
+ }
+ sceneGroup.userData.disposeStage6=()=>{
+  sceneGroup.traverse(mesh=>{mesh.geometry?.dispose();});
+  for(const mat of fallbackMaterials)mat.dispose();
+ };
+ return sceneGroup;
+}
 export function excludeStage6FromLegacyDecor(map){
-  return (map?.decor||[]).filter(box=>!box.stage6VisualOnly);
+ return (map?.decor||[]).filter(box=>!box.stage6VisualOnly);
 }
