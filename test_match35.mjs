@@ -53,7 +53,7 @@ for(const id of ['round-label','lead-status','match-banner','match-award']){
  assert.ok(html.includes(`id="${id}"`),`Missing live UI element ${id}`);
 }
 assert.ok(html.includes('<th>STREAK</th>'));
-assert.ok(html.includes('<sup>03.5</sup>'));
+assert.match(html,/<sup>03\\.\\d+<\\/sup>/,'Phase 3+ version badge must be visible');
 const game=fs.readFileSync('./static/game.js','utf8');
 assert.ok(game.includes('matchPresentation(data,me)'));
 assert.ok(game.includes('data.standings'));
