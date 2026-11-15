@@ -15,8 +15,8 @@ def traverse(route,reverse=False,mode='sprint',weapon=0):
             dx,dz=target[0]-p['x'],target[2]-p['z'];dist=math.hypot(dx,dz)
             if dist<.22 and abs(p['y']-target[1])<.32:break
             yaw=math.atan2(-dx,-dz)
-            inp=dict(w=True,sprint=True,jump=mode=='jump' and tick%50==12 and dist>2,
-                     slide=mode=='slide' and _==6 and dist>4 and (p['vx']*dx+p['vz']*dz)/max(.01,math.hypot(p['vx'],p['vz'])*dist)>.95)
+            inp=dict(w=True,sprint=True,jump=mode=='jump' and tick%50==12 and dist>2 and abs(p['y']-target[1])<.25,
+                     slide=mode=='slide' and _==6 and dist>4 and abs(p['y']-target[1])<.25 and (p['vx']*dx+p['vz']*dz)/max(.01,math.hypot(p['vx'],p['vz'])*dist)>.95)
             p.update(yaw=yaw,input=inp,last_input=100+tick*s.TICK)
             s.move(p,s.TICK,100+tick*s.TICK)
             commands.append(dict(yaw=yaw,**inp));states.append({k:p[k] for k in ['x','y','z','vx','vy','vz','grounded','crouch']});tick+=1
