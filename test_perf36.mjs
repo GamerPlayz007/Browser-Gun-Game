@@ -42,17 +42,20 @@ const net=syncStats(sync,10170);
 assert.equal(net.missing,2);
 assert.equal(net.rejected,1);
 const view=formatDiagnostics(frames,{...net,rttMs:280,delayMs:135},{
- quality:'PERFORMANCE 100% DPR',drawCalls:123,triangles:180000
+ quality:'PERFORMANCE 100% DPR',drawCalls:123,triangles:180000,
+ textures:45,geometries:68,shaderPrograms:14,visibleMeshes:155,
+ visibleInstances:640,shadowCasters:22,pixelWidth:1280,pixelHeight:720,
+ atmosphereRain:0,atmosphereMotes:0,activeAds:4,activeDrones:0
 });
 for(const label of ['1% LOW FPS','FRAME P95','RTT','JITTER','BUFFER','SEQ GAPS',
- 'DRAW CALLS','TRIANGLES','PERFORMANCE 100% DPR'])
+ 'DRAW CALLS','TRIANGLES','GPU TEXTURES','GPU GEOMETRY','SHADERS','INSTANCES','RAIN / MOTES','PERFORMANCE 100% DPR'])
  assert.ok(view.includes(label),`Missing diagnostics: ${label}`);
 assert.ok(!view.includes('NaN'));
 const ui=fs.readFileSync('./static/index.html','utf8');
 for(const id of ['perf-panel','perf-details','diagnostics-toggle']){
  assert.ok(ui.includes(`id="${id}"`),`Missing diagnostics DOM: ${id}`);
 }
-assert.ok(ui.includes('<sup>04.5</sup>'));
+assert.ok(ui.includes('<sup>04.6</sup>'));
 const game=fs.readFileSync('./static/game.js','utf8');
 assert.ok(game.includes('frameMeter.record(rawMs'));
 assert.ok(game.includes("e.code==='F7'"));
