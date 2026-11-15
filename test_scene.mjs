@@ -19,6 +19,8 @@ assert.ok(world.staticBatches<240,`Static batch budget ${world.staticBatches}`);
 assert.ok(map.decor.length>1500,'Dense noncolliding architectural detail from the current map');
 assert.ok(standard>8&&textureSets>8,'PBR materials with four map channels');
 assert.ok(casts>0&&world.sun.castShadow,'Directional light casts shadows on Ultra');
+assert.ok(world.lighting&&world.lighting.districtLights.length===4,'Live world uses phase 4.2 district lighting');
+assert.equal(world.lighting.signLights.length,map.signs.length,'All existing signs have lighting anchors');
 assert.equal(world.sun.shadow.mapSize.width,2048);
 assert.equal(world.targets.size,2);
 assert.equal(new Set(scene.children[0].children.filter(o=>o.isMesh&&o.userData.zone).map(o=>o.userData.zone)).size,4);
