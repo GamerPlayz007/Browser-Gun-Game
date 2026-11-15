@@ -68,7 +68,7 @@ def open_edge_walls_around_authored_routes(city):
     # route sampling. Fill them with visible, solid road support at level 1.
     for x,z,width,depth,route in (
         (-10.3,20.1,2.0,2.0,"I1"),
-        (12.75,20.65,1.8,2.2,"I2"),
+        (13.2,20.65,1.6,2.2,"I2"),
     ):
         new_boxes.append(dict(
             x=x,y=0.74,z=z,w=width,h=0.26,d=depth,
