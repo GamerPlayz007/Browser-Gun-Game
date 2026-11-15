@@ -7,6 +7,8 @@ ROOT=Path(__file__).parent
 from map_registry import ARENAS, DEFAULT, REGISTRY, WEAPONS, Arena, top_at, bottom_at, ray_solid
 from movement_live import step_player, seed_movement
 from perf36 import ServerMetrics
+from modes54 import (TEAM_MODES,TEAM_IDS,TEAM_NAMES,CONTROL_POINT,
+    is_team_mode,next_team,balance_teams,winner_team,controller,presence)
 from match35 import (DEATHMATCH_GOAL,KILLS_PER_TIER,MATCH_DURATION,COUNTDOWN_DURATION,
                      RESPAWN_DURATION,goal,tier_for_kills,standings,leading_player,
                      timed_winner,rules)
@@ -36,7 +38,8 @@ def move(p,dt,now,arena=DEFAULT):
     return step_player(p,dt,now,arena,WEAPONS)
 
 def spawn(p,players,now,arena=DEFAULT):
-    enemies=[q for q in players.values() if q is not p and q['hp']>0]
+    enemies=[q for q in players.values() if q is not p and q['hp']>0 and
+             (p.get('team') is None or q.get('team')!=p.get('team'))]
     def rank(pos):
         x,y,z=pos;nearest=min((math.hypot(x-q['x'],z-q['z']) for q in enemies),default=40)
         exposed=0
@@ -52,7 +55,8 @@ def spawn(p,players,now,arena=DEFAULT):
     seed_movement(p)
 
 def new_player(room,pid,name,now,weapon=0):
-    p=dict(id=pid,name=name,kills=0,deaths=0,headshots=0,streak=0,best_streak=0,weapon=weapon,yaw=0.,pitch=0.,last_input=now,switch_at=0.,seq=0,shot_seq=0,ack_shot=0)
+    team=next_team(room.players) if is_team_mode(room.mode) else None
+    p=dict(id=pid,name=name,team=team,kills=0,deaths=0,headshots=0,streak=0,best_streak=0,weapon=weapon,yaw=0.,pitch=0.,last_input=now,switch_at=0.,seq=0,shot_seq=0,ack_shot=0)
     spawn(p,room.players,now,room.arena);room.players[pid]=p
     if room.host is None:room.host=pid
     room.last_active=now
@@ -65,6 +69,10 @@ class Room:
         self.phase='lobby';self.started=0.;self.ended_at=0.;self.countdown_at=0.;self.winner=None;self.winner_id=None;self.win_reason=None;self.round_number=0;self.leader_id=None;self.events=[];self.last_active=time.monotonic();self.snapshot_sequence=0
         self.targets=[dict(id='t'+str(i),x=x,y=y,z=z,hp=100,reset_at=0) for i,(x,y,z) in enumerate(self.arena.data['practiceTargets'])]
         self.pose_history=deque(maxlen=64)
+        self.team_scores={team:0 for team in TEAM_IDS}
+        self.control_credit={team:0. for team in TEAM_IDS}
+        self.control_owner=None;self.control_contested=False;self.control_presence={team:0 for team in TEAM_IDS}
+        self.winner_team=None
     def event(self,kind,**kw):self.events.append(dict(type=kind,**kw))
     def record_poses(self,now):
         # Only the server's movement loop creates historical poses.
@@ -91,16 +99,28 @@ class Room:
         return previous[1] if previous is not None and when-previous[0]<=TICK*2 else None
     def set_mode(self,pid,mode):
         if (pid!=self.host or self.phase not in ('lobby','results')
-                or mode not in ('deathmatch','gungame')):return False
+                or mode not in ('deathmatch','gungame','teamdeathmatch','control')):return False
         self.next_mode=mode
-        if self.phase=='lobby':self.mode=mode
+        if self.phase=='lobby':
+            self.mode=mode
+            if is_team_mode(mode):balance_teams(self.players)
+            else:
+                for p in self.players.values():p['team']=None
         return True
     def start(self,pid,now):
         if pid!=self.host or self.phase not in ('lobby','results'):return False
         self.mode=self.next_mode
         self.phase='countdown';self.round_number+=1
         self.countdown_at=now+COUNTDOWN_DURATION;self.started=0.;self.ended_at=0.
-        self.winner=None;self.winner_id=None;self.win_reason=None;self.leader_id=None
+        self.winner=None;self.winner_id=None;self.winner_team=None
+        self.win_reason=None;self.leader_id=None
+        self.team_scores={team:0 for team in TEAM_IDS}
+        self.control_credit={team:0. for team in TEAM_IDS}
+        self.control_owner=None;self.control_contested=False
+        self.control_presence={team:0 for team in TEAM_IDS}
+        if is_team_mode(self.mode):balance_teams(self.players)
+        else:
+            for p in self.players.values():p['team']=None
         self.events.clear()
         self.pose_history.clear()
         for p in self.players.values():
@@ -112,16 +132,23 @@ class Room:
         for target in self.targets:target['hp']=100;target['reset_at']=0
         self.event('countdown',round=self.round_number,mode=self.mode)
         return True
-    def finish(self,now,winner=None,reason='time'):
+    def finish(self,now,winner=None,reason='time',team=None):
         if self.phase=='results':return False
-        winner=winner if winner is not None else timed_winner(self.players)
-        self.winner_id=winner['id'] if winner else None
-        self.winner=winner['name'] if winner else 'DRAW'
+        if is_team_mode(self.mode):
+            team=team if team in TEAM_IDS else winner_team(self.team_scores)
+            self.winner_team=team
+            self.winner_id=None
+            self.winner=TEAM_NAMES[team]+' TEAM' if team else 'DRAW'
+        else:
+            winner=winner if winner is not None else timed_winner(self.players)
+            self.winner_team=None
+            self.winner_id=winner['id'] if winner else None
+            self.winner=winner['name'] if winner else 'DRAW'
         self.win_reason=reason
         self.ended_at=now
         self.phase='results'
         self.event('round_end',round=self.round_number,winner=self.winner,
-                   winnerId=self.winner_id,reason=reason)
+                   winnerId=self.winner_id,winnerTeam=self.winner_team,reason=reason)
         return True
     def select(self,p,weapon,now):
         if not isinstance(weapon,int) or isinstance(weapon,bool) or not 0<=weapon<len(WEAPONS):return
