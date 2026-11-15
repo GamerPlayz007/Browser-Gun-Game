@@ -45,10 +45,11 @@ Stage 3.2 upgrades the combat HUD, server-confirmed hit feedback, firing
 controls and replay resistance. Quality modes remain Performance, Auto,
 High, Ultra and Native.
 
-Movement/traversal code must be enabled **in both server.py and
-static/game.js/physics.js**, with matching input rates and parity tests.
-A 60 Hz standalone prototype by itself is not the authoritative multiplayer
-movement controller.
+**Movement:** Python `movement_live.py` and JavaScript `static/physics.js`
+are one mirrored fixed-60Hz controller, including responsive acceleration,
+slides/crouch, jump buffering, coyote jumps, short hops, wall-kicks, and
+server-validated mantle/vault transitions via **E**. Both replay the same
+network input and are regression-tested for numerical parity.
 
 ## Release gate
 

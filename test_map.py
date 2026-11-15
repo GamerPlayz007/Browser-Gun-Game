@@ -10,7 +10,7 @@ def traverse(route,reverse=False,mode='sprint',weapon=0):
     p.update(x=points[0][0],y=points[0][1],z=points[0][2],vx=0,vy=0,vz=0,grounded=True)
     initial=p.copy();commands=[];states=[];tick=0
     for target in points[1:]:
-        budget=math.ceil(math.dist((p['x'],p['y'],p['z']),target)/4*30)+180
+        budget=math.ceil(math.dist((p['x'],p['y'],p['z']),target)/4*60)+360
         for _ in range(budget):
             dx,dz=target[0]-p['x'],target[2]-p['z'];dist=math.hypot(dx,dz)
             if dist<.22 and abs(p['y']-target[1])<.32:break
@@ -21,7 +21,7 @@ def traverse(route,reverse=False,mode='sprint',weapon=0):
             s.move(p,s.TICK,100+tick*s.TICK)
             commands.append(dict(yaw=yaw,**inp));states.append({k:p[k] for k in ['x','y','z','vx','vy','vz','grounded','crouch']});tick+=1
         else:raise AssertionError(f"{route['id']} reverse={reverse} {mode} stuck at {(p['x'],p['y'],p['z'])}; target {target}")
-    return dict(name=f"{route['id']}:{reverse}:{mode}",initial={k:initial[k] for k in ['x','y','z','yaw','vx','vy','vz','grounded','slide_until','slide_ready','jump_held','slide_held']},weapon=weapon,commands=commands),states
+    return dict(name=f"{route['id']}:{reverse}:{mode}",initial={k:initial[k] for k in ['x','y','z','yaw','vx','vy','vz','grounded','slide_until','slide_ready','jump_held','slide_held','jump_buffer_until','coyote_until','jump_consumed','jump_cut','wall_kick_used','interact_held','mantle']},weapon=weapon,commands=commands),states
 
 class MapTests(unittest.TestCase):
     def test_all_registered_routes_and_six_accesses_in_both_engines(self):
@@ -32,7 +32,7 @@ class MapTests(unittest.TestCase):
                     case,states=traverse(route,reverse,mode,weapon=3);cases.append(case);expected.append(states)
         script="""import fs from 'node:fs';import {simulate} from './static/physics.js';
 const map=JSON.parse(fs.readFileSync('static/map.json')),cases=JSON.parse(fs.readFileSync(0,'utf8'));
-console.log(JSON.stringify(cases.map(c=>{const p={...c.initial};return c.commands.map((cmd,i)=>{p.yaw=cmd.yaw;simulate(p,cmd,1/30,100+i/30,map.boxes,map.weapons[c.weapon]);return [p.x,p.y,p.z,p.vx,p.vy,p.vz,p.grounded,p.crouch];});})));"""
+console.log(JSON.stringify(cases.map(c=>{const p={...c.initial};return c.commands.map((cmd,i)=>{p.yaw=cmd.yaw;simulate(p,cmd,1/60,100+i/60,map.boxes,map.weapons[c.weapon]);return [p.x,p.y,p.z,p.vx,p.vy,p.vz,p.grounded,p.crouch];});})));"""
         js=json.loads(subprocess.run(['node','--input-type=module','-e',script],input=json.dumps(cases),cwd=ROOT,text=True,capture_output=True,check=True).stdout)
         for case,py,client in zip(cases,expected,js):
             with self.subTest(case=case['name']):

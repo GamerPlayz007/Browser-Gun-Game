@@ -94,8 +94,8 @@ class GameTests(unittest.TestCase):
         for seq in range(1,13):a['commands'].append(dict(seq=seq,spawn=a['spawn'],yaw=0,pitch=0,input={'w':True,'sprint':True,'jump':seq==2}))
         self.assertEqual(a['seq'],0)
         r.step(s.TICK,101);self.assertEqual(a['seq'],1)
-        r.step(.1,101.1);self.assertEqual(a['seq'],4)
-        self.assertAlmostEqual(a['motion_time'],4*s.TICK)
+        r.step(.1,101.1);self.assertEqual(a['seq'],7)
+        self.assertAlmostEqual(a['motion_time'],7*s.TICK)
     def test_stale_spawn_commands_are_discarded(self):
         r,a,b=duel();pos=(a['x'],a['y'],a['z'])
         a['commands'].append(dict(seq=100,spawn=a['spawn']-1,yaw=0,pitch=0,input={'w':True}))
