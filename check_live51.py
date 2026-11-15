@@ -1,4 +1,4 @@
-"""CROSSFIRE 05.5: probe the ACTUAL deployed website and two-player transport.
+"""CROSSFIRE V3.0 RC1: probe the ACTUAL deployed website and two-player transport.
 
 Usage: python check_live51.py https://your-service.onrender.com
 Requires: pip install -r requirements.txt
@@ -13,12 +13,12 @@ import time
 from urllib.parse import urlsplit
 from aiohttp import ClientSession, ClientTimeout, WSMsgType
 
-EXPECTED_RELEASE = "05.5"
+EXPECTED_RELEASE = "3.0.0-rc.1"\nEXPECTED_PHASE = "05.6"\nEXPECTED_BADGE = "V3.0 RC"
 ASSETS = (
     "/", "/static/game.js", "/static/world.js", "/static/living45.js",
     "/static/atmosphere44.js", "/static/polish46.js",
     "/static/control54.js", "/static/minimap.js", "/static/match35.js",
-    "/static/competitive55.js",
+    "/static/competitive55.js", "/static/preferences56.js",
     "/static/maps/cyberpunk.json",
 )
 
@@ -57,7 +57,7 @@ async def probe(base):
                     raise RuntimeError(f"{path}: HTTP {response.status}")
                 if path == "/":
                     text = await response.text()
-                    if f"<sup>{EXPECTED_RELEASE}</sup>" not in text:
+                    if f"<sup>{EXPECTED_BADGE}</sup>" not in text:
                         raise RuntimeError("Homepage version does not match the server")
                 else:
                     await response.read()
