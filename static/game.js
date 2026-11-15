@@ -12,6 +12,7 @@ import {AudioEngine} from './audio.js';
 import {FEEDBACK52,makeCombatFeedback52,crosshairSpread52,tracerCount52,recoilFeel52} from './feedback52.js';
 import {createUrbanAmbience45} from './living45.js';
 import {matchPresentation,finishPresentation,matchNotice} from './match35.js';
+import {createControlBeacon54} from './control54.js';
 import {createNetSync,observePong,ingestSnapshot,sampleRemote,cameraCorrection,syncStats} from './netcode33.js';
 import {fireMode, makeTrigger, pressTrigger, releaseTrigger, takeTriggerPulse,
  predictedAmmo, reloadFraction, ammoState, damageBearing} from './combat32.js';
@@ -19,7 +20,7 @@ const $=id=>document.getElementById(id),clamp=T.MathUtils.clamp;
 const audio=new AudioEngine();
 const settings={sens:Number(localStorage.getItem('cf-sens')||1),motion:localStorage.getItem('cf-motion')!=='false',quality:localStorage.getItem('cf-quality-25')||'high'};
 $('sensitivity').value=settings.sens;$('motion').checked=settings.motion;$('quality').value=settings.quality;
-let map,registry,renderer,world,scene,camera,viewScene,viewCamera,display,minimap,postfx,ambience45;
+let map,registry,renderer,world,scene,camera,viewScene,viewCamera,display,minimap,postfx,ambience45,controlBeacon54;
 try{
  const catalog=await fetch('/api/maps');if(!catalog.ok)throw Error('Map list could not load.');registry=await catalog.json();
  const entry=registry.maps.find(m=>m.id===registry.default&&m.available);
@@ -29,7 +30,9 @@ try{
  renderer=new T.WebGLRenderer({antialias:true,powerPreference:'high-performance'});renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.13;renderer.autoClear=false;
  renderer.info.autoReset=false; // Count draw calls across every compositor and weapon pass.
  $('viewport').appendChild(renderer.domElement);
- world=buildWorld(scene,map,{renderer,quality:settings.quality});postfx=createPostProcessing(renderer,scene,camera,settings.quality);viewScene=new T.Scene();viewCamera=new T.PerspectiveCamera(65,innerWidth/innerHeight,.03,10);viewScene.add(new T.HemisphereLight(0xf0f8f5,0x697f7a,2.8));const light=new T.DirectionalLight(0xffe5bb,3);light.position.set(-2,4,3);viewScene.add(light);
+ world=buildWorld(scene,map,{renderer,quality:settings.quality});
+ controlBeacon54=createControlBeacon54(T,scene);
+ postfx=createPostProcessing(renderer,scene,camera,settings.quality);viewScene=new T.Scene();viewCamera=new T.PerspectiveCamera(65,innerWidth/innerHeight,.03,10);viewScene.add(new T.HemisphereLight(0xf0f8f5,0x697f7a,2.8));const light=new T.DirectionalLight(0xffe5bb,3);light.position.set(-2,4,3);viewScene.add(light);
 }catch(e){$('status').textContent=e.message.includes('WebGL')?'3D graphics unavailable. Enable hardware acceleration and use Chrome or Edge.':e.message;throw e;}
 display=createDisplay(renderer,[camera,viewCamera],enabled=>{world.setDetail(enabled);postfx.setDetail(enabled);},settings.quality);
 minimap=createMinimap($('minimap'),$('district-label'),map);
@@ -41,7 +44,9 @@ async function loadArena(id){
  const response=await fetch(entry.url);if(!response.ok)throw Error('Could not load the room map.');
  const next=await response.json();if(next.id!==id)throw Error('Map data mismatch. Refresh and try again.');
  const nextScene=new T.Scene(),nextWorld=buildWorld(nextScene,next,{renderer,quality:settings.quality});
- clearVisualEffects52();world.dispose();postfx.dispose();scene=nextScene;world=nextWorld;postfx=createPostProcessing(renderer,scene,camera,settings.quality);map=next;
+ clearVisualEffects52();controlBeacon54.dispose();world.dispose();postfx.dispose();
+ scene=nextScene;world=nextWorld;controlBeacon54=createControlBeacon54(T,scene);
+ postfx=createPostProcessing(renderer,scene,camera,settings.quality);map=next;
  ambience45.setMap(map);
  minimap=createMinimap($('minimap'),$('district-label'),map);$('map-select').value=id;
  display.quality.reset();display.resize(true);
@@ -247,6 +252,7 @@ function handle(data){if(data.type==='welcome'){netSync=createNetSync();seq=0;sh
  for(const e of data.events)processEvent(e);
 }
 function frame(ms){try{const now=ms/1000,rawMs=ms-clock,dt=Math.min(rawMs/1000,.2);clock=ms;display.frame(rawMs);frameMeter.record(rawMs,!document.hidden);fpsFrames++;
+ controlBeacon54.update(state?.objective,now,joined&&state?.mode==='control');
  if(ms-fpsLast>600){
   fps=Math.round(fpsFrames*1000/(ms-fpsLast));fpsLast=ms;fpsFrames=0;
   const net=syncStats(netSync,ms);
