@@ -40,6 +40,6 @@ jobs:
       - name: Install server dependencies
         run: pip install -r requirements.txt
       - name: Check Python syntax
-        run: python -m compileall -q server.py map_registry.py movement_live.py match35.py perf36.py
+        run: python -m compileall -q server.py map_registry.py movement_live.py match35.py modes54.py perf36.py
       - name: Test HTTP routes, WebSocket rooms, multiplayer snapshots and map
-        run: python -m unittest -v test_server test_map test_release51
+        run: python -m unittest -v test_server test_map test_release51 test_modes54
