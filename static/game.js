@@ -13,6 +13,7 @@ import {FEEDBACK52,makeCombatFeedback52,crosshairSpread52,tracerCount52,recoilFe
 import {createUrbanAmbience45} from './living45.js';
 import {matchPresentation,finishPresentation,matchNotice} from './match35.js';
 import {createControlBeacon54} from './control54.js';
+import {readyView55,spectatorCandidates55,cycleSpectator55,teamStandings55} from './competitive55.js';
 import {createNetSync,observePong,ingestSnapshot,sampleRemote,cameraCorrection,syncStats} from './netcode33.js';
 import {fireMode, makeTrigger, pressTrigger, releaseTrigger, takeTriggerPulse,
  predictedAmmo, reloadFraction, ammoState, damageBearing} from './combat32.js';
@@ -54,6 +55,7 @@ async function loadArena(id){
 const weapons=map.weapons,weaponModels=weapons.map(w=>makeWeapon(w.id));for(const g of weaponModels){g.visible=false;viewScene.add(g);}
 let selected=0,ws=null,myId=null,roomCode='',state=null,me=null,local=null,joined=false,keys={},aiming=false,yaw=0,pitch=0,seq=0,shotId=0,pendingShots=[];let pendingMoves=[],movementAccumulator=0,viewError=new T.Vector3(),rosterSignature='',scoreSignature='';
 let groundVelocity=0,landingPulse=0,lastLocalGrounded=true,movementHint='',slideHopUntil53=0;
+let spectatorTarget55=null;
 let ads=0,kick=0,eye=1.55,visualRecoil=0,lastShot=-10,flashUntil=0,hitUntil=0,damageUntil=0,elimUntil=0,noticeTimer,toastTimer,lastPhase='',lastSpawn=-1,switchVisual=0,rtt=50;
 let clock=performance.now(),fpsFrames=0,fpsLast=performance.now(),fps=60,lastStep=0,shotRecovery=0,frameError=false,matchBannerUntil=0,crosshairSize52=24,flashPower52=1;
 const feedback52=makeCombatFeedback52();
@@ -106,30 +108,47 @@ function fireWeapon(now){if(!me||!locked()||me.hp<=0||!['lobby','playing'].inclu
  $('ammo').textContent=ammo();
 }
 async function enter(create){$('create').disabled=$('join').disabled=true;$('status').textContent='Connecting to arena…';try{let code=$('code').value.trim().toUpperCase();const response=await fetch(create?'/api/rooms':'/api/rooms/'+code,create?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mapId:$('map-select').value})}:{});const data=await response.json();if(!response.ok)throw Error(data.error||'Connection failed.');if(create)code=data.room;else if(data.players>=data.max)throw Error('This room is full.');await loadArena(data.mapId);const name=$('name').value.trim()||'Player';localStorage.setItem('cf-name',name);const conn=new WebSocket(`${location.protocol==='https:'?'wss':'ws'}://${location.host}/ws/${code}?name=${encodeURIComponent(name)}&weapon=${selected}`);ws=conn;const timeout=setTimeout(()=>{if(conn.readyState!==1)conn.close();},12000);conn.onopen=()=>clearTimeout(timeout);conn.onmessage=e=>{if(ws===conn)handle(JSON.parse(e.data));};conn.onclose=()=>{clearTimeout(timeout);if(ws===conn)disconnect('Connection closed. Join again or create a new room.');};conn.onerror=()=>{$('status').textContent='Could not connect. Check the server is awake.';};}catch(e){$('status').textContent=e.message;$('create').disabled=$('join').disabled=false;}}
-function disconnect(message){netSync=createNetSync();frameMeter.reset();feedback52.reset();slideHopUntil53=0;clearVisualEffects52();$('perf-panel').hidden=true;joined=false;state=me=local=null;myId=null;lastPhase='';lastSpawn=-1;pendingShots=[];pendingMoves=[];movementAccumulator=0;landingPulse=0;lastLocalGrounded=true;movementHint='';viewError.set(0,0,0);rosterSignature=scoreSignature='';matchBannerUntil=0;resetInput();document.exitPointerLock?.();for(const g of opponents.values())disposePlayer(g);opponents.clear();for(const id of ['hud','room-panel','death','results','scoreboard'])$(id).hidden=true;$('home').hidden=false;$('shade').style.opacity=1;$('status').textContent=message;$('create').disabled=$('join').disabled=false;}
+function disconnect(message){netSync=createNetSync();frameMeter.reset();feedback52.reset();slideHopUntil53=0;spectatorTarget55=null;clearVisualEffects52();$('perf-panel').hidden=true;joined=false;state=me=local=null;myId=null;lastPhase='';lastSpawn=-1;pendingShots=[];pendingMoves=[];movementAccumulator=0;landingPulse=0;lastLocalGrounded=true;movementHint='';viewError.set(0,0,0);rosterSignature=scoreSignature='';matchBannerUntil=0;resetInput();document.exitPointerLock?.();for(const g of opponents.values())disposePlayer(g);opponents.clear();for(const id of ['hud','room-panel','death','results','scoreboard'])$(id).hidden=true;$('home').hidden=false;$('shade').style.opacity=1;$('status').textContent=message;$('create').disabled=$('join').disabled=false;}
 function scoreboard(players,body){
  body.replaceChildren();
  const scores=state?.standings?.length?state.standings:
-  [...players].sort((a,b)=>b.kills-a.kills||a.deaths-b.deaths).map((p,i)=>({...p,rank:i+1,streak:p.streak||0}));
- for(const p of scores){
-  const tr=document.createElement('tr');
-  tr.className=(p.id===myId?'me ':'')+(p.team?'team-'+p.team:'');
-  for(const value of [`#${p.rank}  ${p.name}${p.team?' · '+p.team.toUpperCase():''}${p.id===myId?' / YOU':''}`,p.kills,p.deaths,p.headshots,p.streak||0]){
-   const td=document.createElement('td');td.textContent=value;tr.append(td);
+  [...players].sort((a,b)=>b.kills-a.kills||a.deaths-b.deaths)
+   .map((p,i)=>({...p,rank:i+1,streak:p.streak||0}));
+ const isTeam=state.mode==='teamdeathmatch'||state.mode==='control';
+ const groups=isTeam?teamStandings55({...state,standings:scores}):
+   [{team:null,players:scores}];
+ for(const group of groups){
+  if(isTeam){
+   const heading=document.createElement('tr');
+   heading.className='team-group55 team-'+group.team;
+   const cell=document.createElement('td');cell.colSpan=5;
+   cell.textContent=group.team.toUpperCase()+' TEAM · '+group.score+' PTS';
+   heading.append(cell);body.append(heading);
   }
-  body.append(tr);
+  for(const p of group.players){
+   const tr=document.createElement('tr');
+   tr.className=(p.id===myId?'me ':'')+(p.team?'team-'+p.team:'');
+   for(const value of [
+    '#'+p.rank+'  '+p.name+(p.id===myId?' / YOU':''),
+    p.kills,p.deaths,p.headshots,p.streak||0
+   ]){
+    const td=document.createElement('td');
+    td.textContent=value;tr.append(td);
+   }
+   body.append(tr);
+  }
  }
 }
 function renderRoster(){
  const el=$('roster');el.replaceChildren();
  for(const p of state.players){
   const row=document.createElement('div');
-  row.className='roster-row'+(p.team?' team-'+p.team:'');
+  row.className='roster-row'+(p.team?' team-'+p.team:'')+(p.ready?' is-ready55':'');
   const avatar=document.createElement('span');avatar.className='avatar';
   avatar.textContent=p.name.slice(0,1).toUpperCase();
   const name=document.createElement('span');name.textContent=p.name;
   const badge=document.createElement('small');
-  badge.textContent=[p.team?.toUpperCase(),p.id===state.host?'HOST':p.id===myId?'YOU':'CONNECTED']
+  badge.textContent=[p.team?.toUpperCase(),p.id===state.host?'HOST':p.id===myId?'YOU':'CONNECTED',p.ready?'READY':null]
    .filter(Boolean).join(' · ');
   row.append(avatar,name,badge);el.append(row);
  }
@@ -140,6 +159,13 @@ function renderRoster(){
 }
 function uiRoom(){
  const host=state.host===myId,between=['lobby','results'].includes(state.phase);
+ const ready55=readyView55(state,myId);
+ $('ready-panel55').hidden=!between;
+ $('ready-summary55').textContent=ready55.ready+' / '+ready55.total+' READY · OPTIONAL';
+ $('ready-toggle55').disabled=!ready55.canReady;
+ $('ready-toggle55').textContent=ready55.mine?'CANCEL READY':'MARK READY';
+ $('ready-toggle55').classList.toggle('is-ready',ready55.mine);
+ $('balance-teams55').hidden=!ready55.canBalance;
  $('start').hidden=!between;$('start').disabled=!host;
  $('start').textContent=host?(state.phase==='results'?'START REMATCH →':'START MATCH →'):'WAITING FOR HOST';
  $('resume').textContent=state.phase==='lobby'?'ENTER PRACTICE':state.phase==='results'?'VIEW RESULTS':'RESUME MATCH';
@@ -217,7 +243,7 @@ function handle(data){if(data.type==='welcome'){netSync=createNetSync();seq=0;sh
  const previous=me;state=data;me=data.players.find(p=>p.id===myId);if(!me)return;const now=performance.now()/1000;
  pendingShots=pendingShots.filter(s=>s.id>me.ack_shot);
  if(!local||me.spawn!==lastSpawn){
-  local={...me};lastSpawn=me.spawn;pendingMoves=[];movementAccumulator=0;landingPulse=0;lastLocalGrounded=!!me.grounded;movementHint='';viewError.set(0,0,0);pendingShots=[];lastShot=-10;shotRecovery=0;feedback52.reset();slideHopUntil53=0;releaseTrigger(combatTrigger);
+  local={...me};lastSpawn=me.spawn;pendingMoves=[];movementAccumulator=0;landingPulse=0;lastLocalGrounded=!!me.grounded;movementHint='';viewError.set(0,0,0);pendingShots=[];lastShot=-10;shotRecovery=0;feedback52.reset();slideHopUntil53=0;spectatorTarget55=null;releaseTrigger(combatTrigger);
   yaw=me.yaw;pitch=0;
  }else{
   const old=new T.Vector3(local.x+viewError.x,local.y+viewError.y,local.z+viewError.z);
@@ -262,7 +288,7 @@ function handle(data){if(data.type==='welcome'){netSync=createNetSync();seq=0;sh
   }
   if(g.userData.target?.spawn!==p.spawn){g.position.set(p.x,p.y,p.z);g.userData.animation.spawn=undefined;}g.userData.target=p;g.visible=p.hp>0;if(g.userData.gun.userData.id!==p.weapon){const old=g.userData.gun;old.removeFromParent();old.traverse(o=>o.geometry?.dispose());const gun=makeWeapon(p.weapon,false);gun.scale.setScalar(.8);gun.position.set(.26,1.1,-.34);g.userData.body.add(gun);g.userData.gun=gun;}}
  for(const [id,g] of opponents)if(!present.has(id)){disposePlayer(g);opponents.delete(id);}for(const t of data.targets)world.targets.get(t.id).visible=t.hp>0;
- const rosterKey=JSON.stringify([data.host,data.mode,data.players.map(p=>[p.id,p.name,p.team])]);
+ const rosterKey=JSON.stringify([data.host,data.mode,data.nextMode,data.players.map(p=>[p.id,p.name,p.team,p.ready])]);
  if(rosterKey!==rosterSignature){renderRoster();rosterSignature=rosterKey;}
  const scoreKey=JSON.stringify([data.mode,data.round,data.standings,data.teamScores]);
  if(scoreKey!==scoreSignature){scoreboard(data.players,$('scores'));scoreSignature=scoreKey;}
