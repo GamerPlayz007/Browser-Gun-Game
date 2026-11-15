@@ -236,11 +236,12 @@ class Room:
                                victimId=victim['id'],head=head,weapon=p['weapon'],streak=p['streak'])
                     if p['streak'] in (3,5,8):
                         self.event('streak',id=p['id'],name=p['name'],count=p['streak'])
-                    leader=leading_player(self.players)
-                    if leader is not None and leader!=self.leader_id:
-                        self.leader_id=leader
-                        self.event('leader',id=leader,name=self.players[leader]['name'],
-                                   score=self.players[leader]['kills'])
+                    if not is_team_mode(self.mode):
+                        leader=leading_player(self.players)
+                        if leader is not None and leader!=self.leader_id:
+                            self.leader_id=leader
+                            self.event('leader',id=leader,name=self.players[leader]['name'],
+                                       score=self.players[leader]['kills'])
                     if self.mode=='gungame':
                         if p['kills']>=goal(self.mode,len(WEAPONS)):
                             self.finish(now,p,reason='score')
@@ -309,7 +310,7 @@ class Room:
     def snapshot(self,now):
         self.snapshot_sequence+=1
         fields=('id','name','team','ready','x','y','z','vx','vy','vz','grounded','yaw','pitch','hp','ammo','kills','deaths','headshots','streak','best_streak','weapon','crouch','spawn','seq','shot_seq','ack_shot','jump_held','slide_held','motion_time','slide_until','slide_ready','jump_buffer_until','coyote_until','jump_consumed','jump_cut','wall_kick_used','interact_held','mantle')
-        return dict(type='state',snapshotSeq=self.snapshot_sequence,serverTime=round(now,6),tickRate=60,snapshotHz=20,mapId=self.arena.id,phase=self.phase,mode=self.mode,host=self.host,round=self.round_number,nextMode=self.next_mode,rules=rules(self.mode,len(WEAPONS)),standings=standings(self.players),leaderId=leading_player(self.players),winnerId=self.winner_id,winnerTeam=self.winner_team,
+        return dict(type='state',snapshotSeq=self.snapshot_sequence,serverTime=round(now,6),tickRate=60,snapshotHz=20,mapId=self.arena.id,phase=self.phase,mode=self.mode,host=self.host,round=self.round_number,nextMode=self.next_mode,rules=rules(self.mode,len(WEAPONS)),standings=standings(self.players,self.mode),leaderId=(None if is_team_mode(self.mode) else leading_player(self.players)),winnerId=self.winner_id,winnerTeam=self.winner_team,
             teamScores=self.team_scores.copy(),readyStatus=ready_summary(self.players),
             objective=({**CONTROL_POINT,'controller':self.control_owner,
                         'contested':self.control_contested,'presence':self.control_presence.copy()}
