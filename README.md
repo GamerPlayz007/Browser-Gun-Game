@@ -1,4 +1,4 @@
-# CROSSFIRE 05.1 — MULTIPLAYER RELEASE READINESS
+# CROSSFIRE 05.2 — COMBAT FEEL & MULTIPLAYER READINESS
 
 **Source of truth:** `main` branch, deployed by Render when auto-deploy is enabled.
 
@@ -8,6 +8,28 @@ The only active map contains **more than 650 authoritative collision objects, a 
 gameplay envelope, 3053 decorative objects and 13 authored district routes.**
 The surrounding 160 m urban context is visual-only.
 
+## Phase 5.2 — combat feel and visual confirmation (live main)
+
+- `static/feedback52.js` introduces a self-contained, testable presentation layer:
+  server-only hit acknowledgement, short-lived stacking damage readouts for
+  multiple server-confirmed hits, recoil-reactive crosshair spacing, and
+  bounded quality-specific tracer selection. It does not alter hits, shot
+  timing, damage, ammo, weapon ranges or authoritative movement.
+- Reticle arms now remain centered as they respond to movement, jumping,
+  sliding/crouching, aiming and visual recoil. Larger hits momentarily
+  pulse the hit marker, while headshots receive distinct treatment.
+- New short synthesized hit cues respect mute/volume and only play after
+  server hit events. First-person receiver movement and support-hand
+  follow-through add tactile presentation without affecting physics.
+- Tracers are quality-tier sampled and capped at 36 temporary objects;
+  old particle objects are cleaned up during arena changes and disconnect.
+- `test_feedback52.mjs` verifies that local/remote shots never fabricate
+  confirmed hits, tests hit stacking, reticle states, tracer budget caps,
+  visual recoil and mute-safe audio.
+- This is an incremental **05.2 development build**. It is not the
+  official V3 release until the complete phase 5 and real-device
+  multiplayer validation pass.
+
 ## Phase 5.1 — multiplayer release-readiness audit (live main)
 
 The active game still uses the **single Cyberpunk City**. Phase 5.1 does
@@ -15,12 +37,12 @@ not rewrite the map, movement rules, spawns, simulation or netcode.
 
 **Corrected release contracts**
 - The browser lobby, JS package, and Python server now identify the same
-  release: **05.1**. The legacy `/health` numeric `version: 5` remains
+  release: **05.2**. The legacy `/health` numeric `version: 5` remains
   the API schema version; new `release` and `phase` fields identify the
   actual game release. `buildCommit` exposes the optional first 12
   characters of Render's `RENDER_GIT_COMMIT`, if present. The current map's
   geometric `revision: 03.2` stays separate.
-- Python tests that still expected the old 03.6 lobby badge now check 05.1.
+- Python tests that still expected the old 03.6 lobby badge now check 05.2.
 - The bundled `.github/workflows/crossfire-ci.yml` now runs **both** the
   complete JS regression suite and Python's multiplayer HTTP/WebSocket/map
   tests in separate jobs: `npm test` and
