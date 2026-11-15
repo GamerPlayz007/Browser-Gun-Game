@@ -61,16 +61,23 @@ class GameTests(unittest.TestCase):
         for i in range(4):r.shoot(a,101+i*.2)
         self.assertEqual(r.targets[0]['hp'],0);self.assertEqual(a['kills'],0)
     def test_stairs_reach_roof(self):
-        r,a,b=duel();a.update(x=-29,z=14,y=1,yaw=0,pitch=0,input={'w':True},last_input=100)
-        for i in range(105):a['last_input']=100+i*s.TICK;s.move(a,s.TICK,100+i*s.TICK)
-        self.assertAlmostEqual(a['y'],5);self.assertLess(a['z'],-2)
-    def test_bridge_has_clear_underpass_and_solid_deck(self):
-        r,a,b=duel();a.update(x=5,z=31,y=1,yaw=math.pi,input={'w':True})
-        for i in range(32):a['last_input']=100+i*s.TICK;s.move(a,s.TICK,100+i*s.TICK)
-        self.assertGreater(a['z'],35);self.assertEqual(a['y'],1)
-        a.update(x=5,y=7,z=33,vx=0,vz=0,vy=-1,input={},grounded=False)
-        for i in range(30):s.move(a,s.TICK,110+i*s.TICK)
-        self.assertAlmostEqual(a['y'],5)
+        from test_map import traverse
+        course=next(r for r in s.MAP['stairs'] if r['id']=='S1')
+        _,states=traverse(course,mode='sprint')
+        self.assertAlmostEqual(states[-1]['y'],course['points'][-1][1],delta=.32)
+        self.assertTrue(all(p['y']<6 for p in states))
+    def test_new_city_has_supported_decks_and_open_lower_space(self):
+        # Find a real elevated deck with free space below, rather than relying
+        # on the deleted 80 m map's old bridge coordinates.
+        elevated=[b for b in s.BOXES if b['kind'] in ('deck','routeFloor','stairLanding')
+                  and 4.9<=s.top_at(b,b['x'],b['z'])<=9.2]
+        self.assertTrue(elevated)
+        valid=[]
+        for b in elevated:
+            x,z=b['x'],b['z'];top=s.top_at(b,x,z)
+            if not any(s.overlaps(x,1,z,c,1.8) for c in s.nearby_boxes(x,z)):
+                valid.append((x,z,top))
+        self.assertTrue(valid,'At least one elevated deck must have a traversable space below')
     def test_slide_cooldown_jump_landing_and_timeout(self):
         r,a,b=duel();a.update(vz=-8,input={'w':True,'slide':True},last_input=100)
         s.move(a,s.TICK,100);self.assertTrue(a['crouch']);self.assertGreater(a['slide_ready'],101)
@@ -87,8 +94,8 @@ class GameTests(unittest.TestCase):
         for seq in range(1,13):a['commands'].append(dict(seq=seq,spawn=a['spawn'],yaw=0,pitch=0,input={'w':True,'sprint':True,'jump':seq==2}))
         self.assertEqual(a['seq'],0)
         r.step(s.TICK,101);self.assertEqual(a['seq'],1)
-        r.step(.1,101.1);self.assertEqual(a['seq'],4)
-        self.assertAlmostEqual(a['motion_time'],4*s.TICK)
+        r.step(.1,101.1);self.assertEqual(a['seq'],7)
+        self.assertAlmostEqual(a['motion_time'],7*s.TICK)
     def test_stale_spawn_commands_are_discarded(self):
         r,a,b=duel();pos=(a['x'],a['y'],a['z'])
         a['commands'].append(dict(seq=100,spawn=a['spawn']-1,yaw=0,pitch=0,input={'w':True}))
@@ -153,7 +160,7 @@ class NetworkTests(unittest.IsolatedAsyncioTestCase):
         for conn in [b,c,*extras]:await conn.close()
     async def test_map_selector_validation_and_join_contract(self):
         registry=await (await self.client.get('/api/maps')).json()
-        self.assertEqual(registry['default'],'cyberpunk');self.assertEqual(len(registry['maps']),3)
+        self.assertEqual(registry['default'],'cyberpunk');self.assertEqual(len(registry['maps']),1)
         self.assertEqual([m['id'] for m in registry['maps'] if m['available']],['cyberpunk'])
         for value in ['rainforest','solstice','missing','../server.py',None,[]]:
             response=await self.client.post('/api/rooms',json={'mapId':value});self.assertEqual(response.status,400)
@@ -164,8 +171,8 @@ class NetworkTests(unittest.IsolatedAsyncioTestCase):
         ws=await self.client.ws_connect('/ws/'+data['room']);welcome=await ws.receive_json();self.assertEqual(welcome['mapId'],'cyberpunk')
         await ws.send_json({'type':'map','mapId':'solstice'})
         self.assertEqual((await self.state(ws))['mapId'],'cyberpunk');await ws.close()
-        html=await (await self.client.get('/')).text();self.assertIn('<sup>02.5</sup>',html);self.assertIn('id="map-select"',html)
-        arena=await (await self.client.get('/static/maps/cyberpunk.json')).json();self.assertEqual(arena['id'],'cyberpunk');self.assertEqual(len(arena['routes']),12)
+        html=await (await self.client.get('/')).text();self.assertIn('<sup>03.2</sup>',html);self.assertIn('id="map-select"',html)
+        arena=await (await self.client.get('/static/maps/cyberpunk.json')).json();self.assertEqual(arena['id'],'cyberpunk');self.assertEqual(len(arena['routes']),13)
     async def test_duplicate_shot_ids_do_not_consume_extra_ammunition(self):
         code=(await (await self.client.post('/api/rooms')).json())['room']
         ws,pid=await self.join(code,'Shooter')

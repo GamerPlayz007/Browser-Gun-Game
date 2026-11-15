@@ -1,7 +1,7 @@
 import * as T from 'three';
 import {buildWorld} from './world.js';
 import {makeWeapon,animateWeapon,makePlayer,animatePlayer,disposePlayer} from './models.js';
-import {simulate} from './physics.js';
+import {simulate,FIXED_DT} from './physics.js';
 import {createMinimap} from './minimap.js';
 import {createDisplay} from './display.js';
 import {createPostProcessing} from './postfx.js';
@@ -51,12 +51,12 @@ function updateSelection(id){document.querySelectorAll('.weapon-card').forEach(b
 function toast(text){$('toast').textContent=text;$('toast').style.opacity=1;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').style.opacity=0,3000);}
 function notice(text){$('notice').textContent=text;clearTimeout(noticeTimer);noticeTimer=setTimeout(()=>$('notice').textContent='',3000);}
 function locked(){return document.pointerLockElement===renderer.domElement;}
-function controls(){const enabled=joined&&locked()&&me?.hp>0&&['lobby','playing'].includes(state?.phase);return {w:enabled&&!!keys.KeyW,a:enabled&&!!keys.KeyA,s:enabled&&!!keys.KeyS,d:enabled&&!!keys.KeyD,jump:enabled&&!!keys.Space,sprint:enabled&&(!!keys.ShiftLeft||!!keys.ShiftRight),slide:enabled&&!!keys.KeyC,ads:enabled&&aiming};}
+function controls(){const enabled=joined&&locked()&&me?.hp>0&&['lobby','playing'].includes(state?.phase);return {w:enabled&&!!keys.KeyW,a:enabled&&!!keys.KeyA,s:enabled&&!!keys.KeyS,d:enabled&&!!keys.KeyD,jump:enabled&&!!keys.Space,sprint:enabled&&(!!keys.ShiftLeft||!!keys.ShiftRight),slide:enabled&&!!keys.KeyC,interact:enabled&&!!keys.KeyE,ads:enabled&&aiming};}
 function sendInput(){} // Input is sampled and sent by the fixed-step predictor below.
 function predictStep(input){
  const command={type:'input',seq:++seq,spawn:me.spawn,yaw,pitch,...input};
- local.yaw=yaw;local.motion_time+=1/30;
- const beforeY=local.y;simulate(local,input,1/30,local.motion_time,map.boxes,weapons[me.weapon]);groundVelocity=local.grounded?clamp((local.y-beforeY)*30,-6,6):0;
+ local.yaw=yaw;local.motion_time+=FIXED_DT;
+ const beforeY=local.y;simulate(local,input,FIXED_DT,local.motion_time,map.boxes,weapons[me.weapon]);groundVelocity=local.grounded?clamp((local.y-beforeY)/FIXED_DT,-6,6):0;
  pendingMoves.push(command);send(command);
  if(pendingMoves.length>90){pendingMoves=[];local={...me};viewError.set(0,0,0);}
 }
@@ -106,7 +106,7 @@ function handle(data){if(data.type==='welcome'){if(data.mapId!==map.id){ws?.clos
   const old=new T.Vector3(local.x+viewError.x,local.y+viewError.y,local.z+viewError.z);
   pendingMoves=pendingMoves.filter(cmd=>cmd.seq>me.seq&&cmd.spawn===me.spawn);
   local={...me};
-  for(const cmd of pendingMoves){local.yaw=cmd.yaw;local.motion_time+=1/30;simulate(local,cmd,1/30,local.motion_time,map.boxes,weapons[me.weapon]);}
+  for(const cmd of pendingMoves){local.yaw=cmd.yaw;local.motion_time+=FIXED_DT;simulate(local,cmd,FIXED_DT,local.motion_time,map.boxes,weapons[me.weapon]);}
   viewError.set(old.x-local.x,old.y-local.y,old.z-local.z);
   if(viewError.length()>2)viewError.set(0,0,0);
  }
@@ -139,7 +139,7 @@ function frame(ms){try{const now=ms/1000,rawMs=ms-clock,dt=Math.min(rawMs/1000,.
  if(joined&&me&&local){const input=controls();minimap.draw(local,yaw,now);
   if(me.hp>0&&['lobby','playing'].includes(state.phase)){
    movementAccumulator+=dt;
-   while(movementAccumulator>=1/30){predictStep(input);movementAccumulator-=1/30;}
+   let steps=0;while(movementAccumulator>=FIXED_DT&&steps++<6){predictStep(input);movementAccumulator-=FIXED_DT;}if(steps>=6)movementAccumulator=Math.min(movementAccumulator,FIXED_DT*2);
   }else movementAccumulator=0;
   viewError.multiplyScalar(Math.exp(-dt*14));
   tryTriggerFire(now);

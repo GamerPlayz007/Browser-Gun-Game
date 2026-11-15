@@ -5,8 +5,9 @@ from pathlib import Path
 from aiohttp import web, WSMsgType
 ROOT=Path(__file__).parent
 from map_registry import ARENAS, DEFAULT, REGISTRY, WEAPONS, Arena, top_at, bottom_at, ray_solid
+from movement_live import step_player, seed_movement
 MAP=DEFAULT.data;BOXES=DEFAULT.boxes;SPAWNS=DEFAULT.spawns
-TICK=1/30; LIMIT=15; ROUND_SECONDS=360; MAX_PLAYERS=8
+TICK=1/60; LIMIT=15; ROUND_SECONDS=360; MAX_PLAYERS=8
 
 def nearby_boxes(x,z,radius=1,arena=DEFAULT):return arena.nearby(x,z,radius)
 
@@ -26,46 +27,8 @@ def overlaps(x,y,z,b,height=1.8):
     return abs(x-b['x'])<b['w']/2+.32 and abs(z-b['z'])<b['d']/2+.32 and y<top_at(b,x,z)-.015 and y+height>bottom_at(b,x,z)+.015
 
 def move(p,dt,now,arena=DEFAULT):
-    inp=p['input'] if now-p['last_input']<.4 else {}
-    f=float(bool(inp.get('w')))-float(bool(inp.get('s')));r=float(bool(inp.get('d')))-float(bool(inp.get('a')))
-    length=max(1,math.hypot(f,r));yaw=p['yaw'];f/=length;r/=length
-    if inp.get('slide') and not p['slide_held'] and p['grounded'] and now>=p['slide_ready'] and math.hypot(p['vx'],p['vz'])>4:
-        p['slide_until']=now+.65;p['slide_ready']=now+1.7
-        length=max(.1,math.hypot(p['vx'],p['vz']));p['vx']=p['vx']/length*11;p['vz']=p['vz']/length*11
-    p['slide_held']=bool(inp.get('slide'));sliding=now<p['slide_until']
-    p['crouch']=sliding
-    if not sliding:
-        speed=(8.0 if inp.get('sprint') and not inp.get('ads') else 5.6)*WEAPONS[p['weapon']]['speed']
-        if inp.get('ads'):speed*=.62
-        blend=min(1,dt*(18 if p['grounded'] else 5))
-        p['vx']+=((r*math.cos(yaw)-f*math.sin(yaw))*speed-p['vx'])*blend
-        p['vz']+=((-r*math.sin(yaw)-f*math.cos(yaw))*speed-p['vz'])*blend
-    else:p['vx']*=math.exp(-1.1*dt);p['vz']*=math.exp(-1.1*dt)
-    candidates=nearby_boxes(p['x'],p['z'],max(abs(p['vx']),abs(p['vz']))*dt+.34,arena)
-    height=1.05 if sliding else 1.8
-    # Never stand into an overhead solid after a slide.
-    if not sliding and any(overlaps(p['x'],p['y'],p['z'],b) for b in candidates):p['crouch']=True;height=1.05
-    for axis,vel in [('x','vx'),('z','vz')]:
-        v=p[axis]+p[vel]*dt;tx=v if axis=='x' else p['x'];tz=v if axis=='z' else p['z']
-        obstacles=[b for b in candidates if overlaps(tx,p['y'],tz,b,height)]
-        if obstacles and p['grounded']:
-            top=max(top_at(b,tx,tz) for b in obstacles)
-            if top-p['y']<=.29 and not any(overlaps(tx,top,tz,b,height) for b in candidates):p['y']=top;obstacles=[]
-        if not obstacles:p[axis]=v
-        else:p[vel]=0
-    if inp.get('jump') and not p['jump_held'] and p['grounded']:
-        p['vy']=7.5;p['grounded']=False;p['slide_until']=0
-    p['jump_held']=bool(inp.get('jump'));old=p['y'];p['vy']-=22*dt;ny=old+p['vy']*dt
-    ground=0
-    for b in candidates:
-        if abs(p['x']-b['x'])<b['w']/2+.32 and abs(p['z']-b['z'])<b['d']/2+.32:
-            top=top_at(b,p['x'],p['z']);bottom=bottom_at(b,p['x'],p['z'])
-            if p['vy']<=0 and old>=top-.02:ground=max(ground,top)
-            if p['vy']>0 and old+height<=bottom+.02 and ny+height>=bottom:
-                ny=bottom-height;p['vy']=0
-    if ny<=ground or (p['grounded'] and p['vy']<=0 and old-ground<=.29):ny=ground;p['vy']=0;p['grounded']=True
-    else:p['grounded']=False
-    p['y']=ny
+    """60 Hz server authority; static/physics.js implements matching prediction."""
+    return step_player(p,dt,now,arena,WEAPONS)
 
 def spawn(p,players,now,arena=DEFAULT):
     enemies=[q for q in players.values() if q is not p and q['hp']>0]
@@ -81,6 +44,7 @@ def spawn(p,players,now,arena=DEFAULT):
         return min(nearest,30)-max(0,nearest-38)*.6-exposed*25-max(0,14-nearest)*3
     points=random.sample(arena.spawns,len(arena.spawns));x,y,z=max(points,key=rank)
     p.update(x=x,y=y,z=z,yaw=math.atan2(x,z),vx=0.,vy=0.,vz=0.,grounded=True,hp=100,ammo=WEAPONS[p['weapon']]['mag'],reload_at=0.,respawn_at=0.,shield=now+1.5,mags=[w['mag'] for w in WEAPONS],input={},last_shot=-999.,slide_until=0.,slide_ready=0.,jump_held=False,slide_held=False,crouch=False,motion_time=0.,move_credit=0.,commands=deque(),spawn=p.get('spawn',0)+1)
+    seed_movement(p)
 
 def new_player(room,pid,name,now,weapon=0):
     p=dict(id=pid,name=name,kills=0,deaths=0,headshots=0,weapon=weapon,yaw=0.,pitch=0.,last_input=now,switch_at=0.,seq=0,shot_seq=0,ack_shot=0)
@@ -184,7 +148,7 @@ class Room:
         for t in self.targets:
             if t['hp']<=0 and now>=t['reset_at']:t['hp']=100
     def snapshot(self,now):
-        fields=('id','name','x','y','z','vx','vy','vz','grounded','yaw','pitch','hp','ammo','kills','deaths','headshots','weapon','crouch','spawn','seq','shot_seq','ack_shot','jump_held','slide_held','motion_time','slide_until','slide_ready')
+        fields=('id','name','x','y','z','vx','vy','vz','grounded','yaw','pitch','hp','ammo','kills','deaths','headshots','weapon','crouch','spawn','seq','shot_seq','ack_shot','jump_held','slide_held','motion_time','slide_until','slide_ready','jump_buffer_until','coyote_until','jump_consumed','jump_cut','wall_kick_used','interact_held','mantle')
         return dict(type='state',mapId=self.arena.id,phase=self.phase,mode=self.mode,host=self.host,players=[{k:p[k] for k in fields}|dict(reload=max(0,p['reload_at']-now),respawn=max(0,p['respawn_at']-now),shield=max(0,p['shield']-now),slide=max(0,p['slide_until']-p['motion_time']),slideCooldown=max(0,p['slide_ready']-p['motion_time']),switch=max(0,p['switch_at']-now)) for p in self.players.values()],targets=self.targets,events=self.events,remaining=max(0,ROUND_SECONDS-(now-self.started)) if self.phase=='playing' else ROUND_SECONDS,countdown=max(0,self.countdown_at-now),winner=self.winner)
 
 rooms={}
@@ -237,7 +201,7 @@ async def socket(request):
                     generation=int(data.get('spawn',p['spawn']))
                     latest=p['commands'][-1]['seq'] if p['commands'] else p['seq']
                     if generation==p['spawn'] and seq>latest and len(p['commands'])<30:
-                        p['commands'].append(dict(seq=seq,spawn=generation,yaw=p['yaw'],pitch=p['pitch'],input={k:data.get(k) is True for k in ('w','a','s','d','jump','sprint','slide','ads')}))
+                        p['commands'].append(dict(seq=seq,spawn=generation,yaw=p['yaw'],pitch=p['pitch'],input={k:data.get(k) is True for k in ('w','a','s','d','jump','sprint','slide','ads','interact')}))
                 elif action=='shoot':
                     # A duplicate/replayed client shot sequence must never spend ammo
                     # or create another server-confirmed hit event.
