@@ -185,3 +185,16 @@
  #spectate-panel55{bottom:9%;width:min(330px,90vw)}
  .spectate-actions55 span{font-size:8px}
 }
+
+/* CROSSFIRE V3 RC1 — unobtrusive cosmetic preferences and recovery UI. */
+#skin56-home{border-color:#7db8bc88;background:#123d45;color:#f8ead3;
+ font-weight:600;cursor:pointer}
+#skin56-room{min-width:125px;width:47%;max-width:200px;cursor:pointer;
+ border:1px solid #7adbd788;background:#113e46;color:#e8f7ef;padding:6px}
+#rejoin56[hidden]{display:none!important}
+#rejoin56{margin:11px 0 2px;width:100%;padding:11px 12px;
+ border:1px solid #99e4b4a0;background:#163e43;color:#c5f8d8;
+ font:700 10px/1.25 'Barlow',sans-serif;letter-spacing:.08em;
+ cursor:pointer}
+#rejoin56:hover,#rejoin56:focus-visible{border-color:#c2ffe0;background:#1c5c54}
+.brand sup{border-color:#60d4c9a8;color:#a9ffe0;letter-spacing:.08em}
