@@ -18,20 +18,28 @@ def goal(mode,weapon_count):
 def tier_for_kills(kills,weapon_count):
     return min(max(0,int(kills)) // KILLS_PER_TIER, max(0,weapon_count-1))
 
-def standings(players):
-    """Deterministic standings; rank ties share a rank, IDs disambiguate names."""
-    ordered = sorted(players.values(),
-        key=lambda p:(-p['kills'],p['deaths'],-p['headshots'],p['name'].casefold(),p['id']))
-    out=[]
-    prior=None
+def standings(players,mode=None):
+    """Stable rankings: team modes group Azure/Ember and rank within each team."""
+    grouped=is_team_mode(mode)
+    def key(p):
+        performance=(-p['kills'],p['deaths'],-p['headshots'],
+                     p['name'].casefold(),p['id'])
+        return ((0 if p.get('team')=='azure' else 1),*performance) if grouped else performance
+    ordered=sorted(players.values(),key=key)
+    out=[];prior=None;within=0
     for index,p in enumerate(ordered):
-        key=(-p['kills'],p['deaths'])
-        rank=out[-1]['rank'] if key==prior else index+1
-        out.append(dict(id=p['id'],name=p['name'],rank=rank,
+        team=p.get('team') if grouped else None
+        if grouped and (not out or out[-1].get('team')!=team):
+            within=0;prior=None
+        within+=1
+        rank_key=(team,-p['kills'],p['deaths'])
+        rank=out[-1]['rank'] if rank_key==prior else (within if grouped else index+1)
+        out.append(dict(id=p['id'],name=p['name'],team=team,
+            ready=p.get('ready',False),rank=rank,
             kills=p['kills'],deaths=p['deaths'],headshots=p['headshots'],
             streak=p.get('streak',0),bestStreak=p.get('best_streak',0),
             weapon=p['weapon']))
-        prior=key
+        prior=rank_key
     return out
 
 def leading_player(players):
