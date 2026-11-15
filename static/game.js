@@ -361,12 +361,12 @@ function frame(ms){try{const now=ms/1000,rawMs=ms-clock,dt=Math.min(rawMs/1000,.
   camera.updateProjectionMatrix();
   for(const [id,g] of opponents){const shown=sampleRemote(netSync,id,ms);const p=shown?{...g.userData.target,...shown}:g.userData.target;if(!p)continue;
     // 20 Hz snapshots render on a delayed server-time timeline. No double lerp.
-    g.position.set(p.x,p.y,p.z);animatePlayer(g,p,now);g.userData.tag.visible=camera.position.distanceTo(g.position)<18;}
+    g.position.set(p.x,p.y,p.z);g.userData.render55=p;animatePlayer(g,p,now);g.userData.tag.visible=camera.position.distanceTo(g.position)<18;}
   // Dead players may watch eligible active players during the respawn timer.
   // Team modes restrict the target list to their own team.
   if(me.hp<=0&&state.phase==='playing'&&spectatorTarget55){
    const subject=opponents.get(spectatorTarget55);
-   const p=subject?.userData.target;
+   const p=subject?.userData.render55||subject?.userData.target;
    if(subject&&p&&p.hp>0){
     const eye55=p.crouch?.88:1.55;
     camera.position.set(subject.position.x,subject.position.y+eye55,subject.position.z);
