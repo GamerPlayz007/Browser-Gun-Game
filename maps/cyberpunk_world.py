@@ -27,7 +27,7 @@ def open_edge_walls_around_authored_routes(city):
     """
     new_boxes=[]
     for wall in city["boxes"]:
-        if wall.get("kind") not in ("edgeWall","building"):
+        if wall.get("kind") not in ("edgeWall","building","atriumShell"):
             new_boxes.append(wall)
             continue
         pieces=[(
@@ -38,7 +38,7 @@ def open_edge_walls_around_authored_routes(city):
             # Legacy-grade street corridors require the promised broad width
             # across the new facades; narrow rooftop and interior routes were
             # already cut by the Stage 4 geometry compiler.
-            if wall.get("kind")=="building" and not route["id"].startswith("G"):
+            if wall.get("kind") in ("building","atriumShell") and not route["id"].startswith("G"):
                 continue
             half=route["width"]/2+0.3
             for a,b in zip(route["points"],route["points"][1:]):
