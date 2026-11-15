@@ -21,9 +21,29 @@ export function createMinimap(canvas,label,map){
   return true;
  }
  resize();
- return {draw(p,yaw,time){
+ return {draw(p,yaw,time,markers={}){
   const changed=resize();if(!changed&&time-last<.1)return;last=time;
   ctx.clearRect(0,0,SIZE,SIZE);ctx.drawImage(base,0,0,SIZE,SIZE);
+  // Draw only teammates, never enemy positions or other hidden game state.
+  const team=markers.team;
+  if(team==='azure'||team==='ember'){
+   ctx.fillStyle=team==='azure'?'#57ddff':'#ff996c';
+   for(const mate of markers.players||[]){
+    if(mate.id===markers.meId||mate.team!==team||mate.hp<=0||
+       !Number.isFinite(mate.x)||!Number.isFinite(mate.z))continue;
+    ctx.beginPath();ctx.arc(px(mate.x),px(mate.z),3.5,0,Math.PI*2);ctx.fill();
+   }
+  }
+  const point=markers.objective;
+  if(point&&Number.isFinite(point.x)&&Number.isFinite(point.z)){
+   const color=point.contested?'#ffe5a1':point.controller==='azure'?'#57ddff':
+    point.controller==='ember'?'#ff996c':'#fff0bd';
+   ctx.strokeStyle=color;ctx.lineWidth=2.2;ctx.fillStyle='#091a26';
+   ctx.beginPath();ctx.arc(px(point.x),px(point.z),Math.max(6,(point.radius||6)*SCALE),0,Math.PI*2);
+   ctx.fill();ctx.stroke();
+   ctx.fillStyle=color;ctx.font='bold 12px sans-serif';ctx.textAlign='center';
+   ctx.fillText('C',px(point.x),px(point.z)+4);
+  }
   ctx.save();ctx.translate(px(p.x),px(p.z));ctx.rotate(-yaw);
   ctx.fillStyle='#ff558f';ctx.strokeStyle='#112333';ctx.lineWidth=2;
   ctx.beginPath();ctx.moveTo(0,-8);ctx.lineTo(5,5);ctx.lineTo(0,2);ctx.lineTo(-5,5);ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();
