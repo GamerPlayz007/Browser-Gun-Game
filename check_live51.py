@@ -17,6 +17,7 @@ EXPECTED_RELEASE = "05.4"
 ASSETS = (
     "/", "/static/game.js", "/static/world.js", "/static/living45.js",
     "/static/atmosphere44.js", "/static/polish46.js",
+    "/static/control54.js", "/static/minimap.js", "/static/match35.js",
     "/static/maps/cyberpunk.json",
 )
 
