@@ -1,6 +1,6 @@
 import * as T from 'three';
 import {buildWorld} from './world.js';
-import {makeWeapon,animateWeapon,makePlayer,animatePlayer,markPlayerEvent,disposePlayer} from './models.js';
+import {makeWeapon,animateWeapon,makePlayer,setPlayerSkin56,animatePlayer,markPlayerEvent,disposePlayer} from './models.js';
 import {simulate,FIXED_DT} from './physics.js';
 import {movementCue53,cameraFeel53} from './flow53.js';
 import {createMinimap} from './minimap.js';
@@ -14,13 +14,21 @@ import {createUrbanAmbience45} from './living45.js';
 import {matchPresentation,finishPresentation,matchNotice} from './match35.js';
 import {createControlBeacon54} from './control54.js';
 import {readyView55,spectatorCandidates55,cycleSpectator55,teamStandings55} from './competitive55.js';
+import {safeRead56,safeWrite56,safeName56,safeQuality56,skinId56,skinColor56} from './preferences56.js';
 import {createNetSync,observePong,ingestSnapshot,sampleRemote,cameraCorrection,syncStats} from './netcode33.js';
 import {fireMode, makeTrigger, pressTrigger, releaseTrigger, takeTriggerPulse,
  predictedAmmo, reloadFraction, ammoState, damageBearing} from './combat32.js';
 const $=id=>document.getElementById(id),clamp=T.MathUtils.clamp;
 const audio=new AudioEngine();
-const settings={sens:Number(localStorage.getItem('cf-sens')||1),motion:localStorage.getItem('cf-motion')!=='false',quality:localStorage.getItem('cf-quality-25')||'high'};
-$('sensitivity').value=settings.sens;$('motion').checked=settings.motion;$('quality').value=settings.quality;
+const settings={sens:clamp(Number(safeRead56('cf-sens','1'))||1,.4,2.5),
+ motion:safeRead56('cf-motion','true')!=='false',
+ quality:safeQuality56(safeRead56('cf-quality-25','high'))};
+let preferredSkin56=skinId56(safeRead56('cf-skin56','0'));
+const storedVolume56=clamp(Number(safeRead56('cf-volume','0.5'))||0,.0,1);
+$('sensitivity').value=settings.sens;
+$('motion').checked=settings.motion;$('quality').value=settings.quality;
+$('skin56-home').value=$('skin56-room').value=String(preferredSkin56);
+$('volume').value=storedVolume56;audio.volume=storedVolume56;
 let map,registry,renderer,world,scene,camera,viewScene,viewCamera,display,minimap,postfx,ambience45,controlBeacon54;
 try{
  const catalog=await fetch('/api/maps');if(!catalog.ok)throw Error('Map list could not load.');registry=await catalog.json();
@@ -107,8 +115,11 @@ function fireWeapon(now){if(!me||!locked()||me.hp<=0||!['lobby','playing'].inclu
  visualRecoil=Math.min(.06,visualRecoil+w.kick*.3*feel52.shakeScale);
  $('ammo').textContent=ammo();
 }
-async function enter(create){$('create').disabled=$('join').disabled=true;$('status').textContent='Connecting to arena…';try{let code=$('code').value.trim().toUpperCase();const response=await fetch(create?'/api/rooms':'/api/rooms/'+code,create?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mapId:$('map-select').value})}:{});const data=await response.json();if(!response.ok)throw Error(data.error||'Connection failed.');if(create)code=data.room;else if(data.players>=data.max)throw Error('This room is full.');await loadArena(data.mapId);const name=$('name').value.trim()||'Player';localStorage.setItem('cf-name',name);const conn=new WebSocket(`${location.protocol==='https:'?'wss':'ws'}://${location.host}/ws/${code}?name=${encodeURIComponent(name)}&weapon=${selected}`);ws=conn;const timeout=setTimeout(()=>{if(conn.readyState!==1)conn.close();},12000);conn.onopen=()=>clearTimeout(timeout);conn.onmessage=e=>{if(ws===conn)handle(JSON.parse(e.data));};conn.onclose=()=>{clearTimeout(timeout);if(ws===conn)disconnect('Connection closed. Join again or create a new room.');};conn.onerror=()=>{$('status').textContent='Could not connect. Check the server is awake.';};}catch(e){$('status').textContent=e.message;$('create').disabled=$('join').disabled=false;}}
-function disconnect(message){netSync=createNetSync();frameMeter.reset();feedback52.reset();slideHopUntil53=0;spectatorTarget55=null;clearVisualEffects52();$('perf-panel').hidden=true;joined=false;state=me=local=null;myId=null;lastPhase='';lastSpawn=-1;pendingShots=[];pendingMoves=[];movementAccumulator=0;landingPulse=0;lastLocalGrounded=true;movementHint='';viewError.set(0,0,0);rosterSignature=scoreSignature='';matchBannerUntil=0;resetInput();document.exitPointerLock?.();for(const g of opponents.values())disposePlayer(g);opponents.clear();for(const id of ['hud','room-panel','death','results','scoreboard'])$(id).hidden=true;$('home').hidden=false;$('shade').style.opacity=1;$('status').textContent=message;$('create').disabled=$('join').disabled=false;}
+async function enter(create){$('create').disabled=$('join').disabled=true;$('rejoin56').hidden=true;$('status').textContent='Connecting to arena…';try{let code=$('code').value.trim().toUpperCase();const response=await fetch(create?'/api/rooms':'/api/rooms/'+code,create?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mapId:$('map-select').value})}:{});const data=await response.json();if(!response.ok)throw Error(data.error||'Connection failed.');if(create)code=data.room;else if(data.players>=data.max)throw Error('This room is full.');await loadArena(data.mapId);const name=safeName56($('name').value);safeWrite56('cf-name',name);const conn=new WebSocket(`${location.protocol==='https:'?'wss':'ws'}://${location.host}/ws/${code}?name=${encodeURIComponent(name)}&weapon=${selected}&skin=${preferredSkin56}`);ws=conn;const timeout=setTimeout(()=>{if(conn.readyState!==1)conn.close();},12000);conn.onopen=()=>clearTimeout(timeout);conn.onmessage=e=>{if(ws===conn)handle(JSON.parse(e.data));};conn.onclose=()=>{clearTimeout(timeout);if(ws===conn)disconnect('Connection closed. Rejoining creates a new player identity.',code);};conn.onerror=()=>{$('status').textContent='Could not connect. Check the server is awake.';};}catch(e){$('status').textContent=e.message;$('create').disabled=$('join').disabled=false;}}
+function disconnect(message,rejoinCode56=null){
+ const code56=typeof rejoinCode56==='string'&&/^[A-F0-9]{6}$/.test(rejoinCode56)?rejoinCode56:null;
+ $('rejoin56').hidden=!code56;if(code56)$('code').value=code56;
+ netSync=createNetSync();frameMeter.reset();feedback52.reset();slideHopUntil53=0;spectatorTarget55=null;clearVisualEffects52();$('perf-panel').hidden=true;joined=false;state=me=local=null;myId=null;lastPhase='';lastSpawn=-1;pendingShots=[];pendingMoves=[];movementAccumulator=0;landingPulse=0;lastLocalGrounded=true;movementHint='';viewError.set(0,0,0);rosterSignature=scoreSignature='';matchBannerUntil=0;resetInput();document.exitPointerLock?.();for(const g of opponents.values())disposePlayer(g);opponents.clear();for(const id of ['hud','room-panel','death','results','scoreboard'])$(id).hidden=true;$('home').hidden=false;$('shade').style.opacity=1;$('status').textContent=message;$('create').disabled=$('join').disabled=false;}
 function scoreboard(players,body){
  body.replaceChildren();
  const scores=state?.standings?.length?state.standings:
@@ -288,7 +299,8 @@ function handle(data){if(data.type==='welcome'){netSync=createNetSync();seq=0;sh
  $('countdown').hidden=data.phase!=='countdown';
  $('countdown').textContent=Math.ceil(data.countdown);
  $('slide-label').textContent=me.slideCooldown>0?`SLIDE / ${me.slideCooldown.toFixed(1)}s`:'C / SLIDE READY';
- const present=new Set();for(const p of data.players){if(p.id===myId)continue;present.add(p.id);let g=opponents.get(p.id);if(!g){g=makePlayer(p.name);scene.add(g);g.position.set(p.x,p.y,p.z);opponents.set(p.id,g);}
+ const present=new Set();for(const p of data.players){if(p.id===myId)continue;present.add(p.id);let g=opponents.get(p.id);if(!g){g=makePlayer(p.name,skinColor56(p.skin));scene.add(g);g.position.set(p.x,p.y,p.z);opponents.set(p.id,g);}
+  setPlayerSkin56(g,skinColor56(p.skin));
   if(g.userData.team54!==p.team){
    g.userData.team54=p.team;
    g.userData.tag.material.color.set(p.team==='azure'?'#7de4ff':p.team==='ember'?'#ffb69b':'#ffffff');
