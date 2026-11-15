@@ -9,7 +9,7 @@ import {createEnvironment43} from './environment43.js';
 import {createAtmosphere44} from './atmosphere44.js';
 import {createLivingWorld45} from './living45.js';
 
-// 04.5: one live map plus living advertising, architecture and animation.
+// 04.6: one live map, managed lifecycle and tiered cinematic polish.
 // Only map.boxes are authoritative colliders. All map.features and map.decor
 // are purely visual. The rendering pipeline never changes simulation geometry.
 const PAINT={cyan:'#38eff7',magenta:'#ff4b9e',amber:'#ffb454',white:'#c8f8ff'};
@@ -219,7 +219,10 @@ export function buildWorld(scene,map,{renderer,quality='high'}={}){
   animate(time,player=null){lighting.animate(time);atmosphere44.animate(time);living45.animate(time,player);for(const s of steam){const p=s.cloud.geometry.attributes.position;
    for(let i=0;i<s.seeds.length;i++){const k=(time*.38+s.seeds[i])%1;p.setXYZ(i,s.x+Math.sin(time+i)*.3*k,s.y+.2+3*k,s.z+Math.cos(time*.7+i)*.25*k);}p.needsUpdate=true;
   }},
-  dispose(){living45.dispose();atmosphere44.dispose();environment43.dispose();lighting.dispose();root.traverse(o=>{o.geometry?.dispose();if(o.isPoints||o.userData.stage5VisualOnly||o.userData.stage6VisualOnly)o.material?.dispose();});
+  dispose(){living45.dispose();atmosphere44.dispose();environment43.dispose();lighting.dispose();
+   // Core geometry is owned by this world. Stage 5/6 use shared materials
+   // owned by materialSystem; never dispose those materials twice.
+   root.traverse(o=>{o.geometry?.dispose();if(o.isPoints)o.material?.dispose();});
    materialSystem.dispose();for(const m of [targetMat,headMat,signMaterial])m?.dispose();signTexture?.dispose();env?.dispose();scene.environment=null;root.removeFromParent();}
  };
 }
