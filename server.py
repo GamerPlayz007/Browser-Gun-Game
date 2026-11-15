@@ -10,6 +10,7 @@ from perf36 import ServerMetrics
 from modes54 import (TEAM_MODES,TEAM_IDS,TEAM_NAMES,CONTROL_POINT,
     is_team_mode,next_team,balance_teams,winner_team,controller,presence)
 from competitive55 import spawn_score,balanced_draft,ready_summary
+from cosmetics56 import normalize_skin56
 from match35 import (DEATHMATCH_GOAL,KILLS_PER_TIER,MATCH_DURATION,COUNTDOWN_DURATION,
                      RESPAWN_DURATION,goal,tier_for_kills,standings,leading_player,
                      timed_winner,rules)
@@ -66,9 +67,9 @@ def spawn(p,players,now,arena=DEFAULT,history=None):
              spawn=p.get('spawn',0)+1)
     seed_movement(p)
 
-def new_player(room,pid,name,now,weapon=0):
+def new_player(room,pid,name,now,weapon=0,skin=0):
     team=next_team(room.players) if is_team_mode(room.mode) else None
-    p=dict(id=pid,name=name,team=team,ready=False,kills=0,deaths=0,headshots=0,streak=0,best_streak=0,weapon=weapon,yaw=0.,pitch=0.,last_input=now,switch_at=0.,seq=0,shot_seq=0,ack_shot=0)
+    p=dict(id=pid,name=name,team=team,ready=False,skin=normalize_skin56(skin),kills=0,deaths=0,headshots=0,streak=0,best_streak=0,weapon=weapon,yaw=0.,pitch=0.,last_input=now,switch_at=0.,seq=0,shot_seq=0,ack_shot=0)
     spawn(p,room.players,now,room.arena,room.spawn_history);room.players[pid]=p
     if room.host is None:room.host=pid
     room.last_active=now
@@ -135,6 +136,11 @@ class Room:
         balanced_draft(self.players)
         for player in self.players.values():player['ready']=False
         self.event('teams_balanced')
+        return True
+    def set_skin56(self,pid,skin):
+        if pid not in self.players or type(skin) is not int or not 0<=skin<4:
+            return False
+        self.players[pid]['skin']=normalize_skin56(skin)
         return True
     def start(self,pid,now):
         if pid!=self.host or self.phase not in ('lobby','results'):return False
@@ -313,7 +319,7 @@ class Room:
         self.record_poses(now)
     def snapshot(self,now):
         self.snapshot_sequence+=1
-        fields=('id','name','team','ready','x','y','z','vx','vy','vz','grounded','yaw','pitch','hp','ammo','kills','deaths','headshots','streak','best_streak','weapon','crouch','spawn','seq','shot_seq','ack_shot','jump_held','slide_held','motion_time','slide_until','slide_ready','jump_buffer_until','coyote_until','jump_consumed','jump_cut','wall_kick_used','interact_held','mantle')
+        fields=('id','name','team','ready','skin','x','y','z','vx','vy','vz','grounded','yaw','pitch','hp','ammo','kills','deaths','headshots','streak','best_streak','weapon','crouch','spawn','seq','shot_seq','ack_shot','jump_held','slide_held','motion_time','slide_until','slide_ready','jump_buffer_until','coyote_until','jump_consumed','jump_cut','wall_kick_used','interact_held','mantle')
         return dict(type='state',snapshotSeq=self.snapshot_sequence,serverTime=round(now,6),tickRate=60,snapshotHz=20,mapId=self.arena.id,phase=self.phase,mode=self.mode,host=self.host,round=self.round_number,nextMode=self.next_mode,rules=rules(self.mode,len(WEAPONS)),standings=standings(self.players,self.mode),leaderId=(None if is_team_mode(self.mode) else leading_player(self.players)),winnerId=self.winner_id,winnerTeam=self.winner_team,
             teamScores=self.team_scores.copy(),readyStatus=ready_summary(self.players),
             objective=({**CONTROL_POINT,'controller':self.control_owner,
@@ -350,7 +356,9 @@ async def socket(request):
     try:weapon=max(0,min(3,int(request.query.get('weapon','0'))))
     except ValueError:weapon=0
     if room.mode=='gungame' and room.phase!='lobby':weapon=0
-    p=new_player(room,pid,name,time.monotonic(),weapon);room.sockets[pid]=ws
+    try:skin=int(request.query.get('skin','0'))
+    except (ValueError,TypeError,OverflowError):skin=0
+    p=new_player(room,pid,name,time.monotonic(),weapon,skin);room.sockets[pid]=ws
     await ws.send_json(dict(type='welcome',id=pid,room=code,mapId=room.arena.id));room.event('notice',text=f'{name} joined')
     bucket=0;bucket_time=time.monotonic()
     try:
@@ -388,6 +396,7 @@ async def socket(request):
                 elif action=='mode':room.set_mode(pid,data.get('mode'))
                 elif action=='ready':room.set_ready(pid,data.get('ready') is True)
                 elif action=='balance':room.balance(pid)
+                elif action=='skin':room.set_skin56(pid,data.get('skin'))
             except (ValueError,TypeError,OverflowError):continue
     finally:
         room.players.pop(pid,None);room.sockets.pop(pid,None);room.last_active=time.monotonic()
