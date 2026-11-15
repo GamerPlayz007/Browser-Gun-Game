@@ -1,4 +1,4 @@
-# CROSSFIRE 04.6 — ONE LIVE CYBERPUNK CITY
+# CROSSFIRE 05.1 — MULTIPLAYER RELEASE READINESS
 
 **Source of truth:** `main` branch, deployed by Render when auto-deploy is enabled.
 
@@ -7,6 +7,48 @@ and its separate `cyberpunk-next` experimental selection have been removed.
 The only active map contains **more than 650 authoritative collision objects, a 120 m
 gameplay envelope, 3053 decorative objects and 13 authored district routes.**
 The surrounding 160 m urban context is visual-only.
+
+## Phase 5.1 — multiplayer release-readiness audit (live main)
+
+The active game still uses the **single Cyberpunk City**. Phase 5.1 does
+not rewrite the map, movement rules, spawns, simulation or netcode.
+
+**Corrected release contracts**
+- The browser lobby, JS package, and Python server now identify the same
+  release: **05.1**. The legacy `/health` numeric `version: 5` remains
+  the API schema version; new `release` and `phase` fields identify the
+  actual game release. `buildCommit` exposes the optional first 12
+  characters of Render's `RENDER_GIT_COMMIT`, if present. The current map's
+  geometric `revision: 03.2` stays separate.
+- Python tests that still expected the old 03.6 lobby badge now check 05.1.
+- The bundled `.github/workflows/crossfire-ci.yml` now runs **both** the
+  complete JS regression suite and Python's multiplayer HTTP/WebSocket/map
+  tests in separate jobs: `npm test` and
+  `python -m unittest -v test_server test_map test_release51`.
+- `test_release51.py` validates the browser/server build version, source
+  module imports, same-file live/editor map data, release HTTP metadata,
+  live static assets, and two-client WebSocket join/ping/host succession.
+- `check_live51.py` is an optional independent probe of a deployed
+  Render instance: checks the active build, assets, maps, creates a temporary
+  room, joins two WebSocket clients, checks ping/pong and closes cleanly.
+  It may take longer for a free Render instance to wake up.
+- The in-game F7 diagnostics panel adds **COPY DEBUG REPORT (F8)**, exporting
+  FPS/frame pacing, network timing and renderer metrics **without player
+  names or room codes**, so actual multiplayer playtests can drive fixes.
+
+**Commands:**
+```bash
+npm ci
+npm test
+pip install -r requirements.txt
+python -m unittest -v test_server test_map test_release51
+python check_live51.py https://YOUR-RENDER-SERVICE.onrender.com
+```
+
+**Release gate:** commit to main does not prove Render deployed, CI ran,
+WebGL compiled on a Windows browser, or 2–8 real players can play reliably.
+Confirm GitHub Actions checks and then run the live smoke script and actual
+desktop playtests before announcing **V3.0**.
 
 ## Phase 4.6 — Ultra polish, performance, telemetry and deployment checks
 - All changes stay on the **single playable Cyberpunk City** in GitHub `main`. No additional map or parallel experiment. Authoritative collision boxes, spawns, route topology and netcode stay unchanged.
