@@ -11,7 +11,7 @@ from aiohttp.test_utils import TestClient, TestServer
 import server
 
 ROOT = Path(__file__).parent
-RELEASE = "05.4"
+RELEASE = "05.5"
 
 class ReleaseAssets(unittest.TestCase):
     def test_client_module_imports_exist(self):
@@ -40,10 +40,10 @@ class ReleaseAssets(unittest.TestCase):
         pkg = json.loads((ROOT / "package.json").read_text())
         lock = json.loads((ROOT / "package-lock.json").read_text())
         html = (ROOT / "static/index.html").read_text()
-        self.assertEqual(pkg["version"], "5.4.0")
+        self.assertEqual(pkg["version"], "5.5.0")
         self.assertEqual(lock["version"], pkg["version"])
         self.assertEqual(lock["packages"][""]["version"], pkg["version"])
-        self.assertIn("<sup>05.4</sup>", html)
+        self.assertIn("<sup>05.5</sup>", html)
         self.assertIn("CROSSFIRE", html)
         self.assertEqual(server.RELEASE, RELEASE)
 
@@ -78,6 +78,7 @@ class ReleaseMultiplayer(unittest.IsolatedAsyncioTestCase):
             "/static/lighting42.js", "/static/environment43.js",
             "/static/atmosphere44.js", "/static/living45.js",
             "/static/control54.js", "/static/minimap.js", "/static/match35.js",
+            "/static/competitive55.js",
             "/static/polish46.js", "/static/maps/cyberpunk.json",
         ):
             asset = await self.client.get(uri)
