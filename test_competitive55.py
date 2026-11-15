@@ -62,7 +62,11 @@ class CompetitiveFairnessTests(unittest.TestCase):
         for id in ['a','b','c','d']:s.new_player(r,id,id,100)
         self.assertFalse(r.balance('a'),'FFA cannot use team balance')
         self.assertTrue(r.set_mode('a','teamdeathmatch'))
+        self.assertTrue(r.set_ready('b',True))
         self.assertFalse(r.balance('b'))
+        self.assertTrue(r.balance('a'))
+        self.assertFalse(r.players['b']['ready'],
+                         'Balancing teams resets obsolete readiness')
         r.players['a']['kills']=20
         r.players['b']['kills']=14
         r.players['c']['kills']=9
@@ -73,6 +77,16 @@ class CompetitiveFairnessTests(unittest.TestCase):
         self.assertTrue(r.start('a',102))
         self.assertFalse(r.balance('a'))
         self.assertTrue(all(p['kills']==0 for p in r.players.values()))
+
+    def test_changing_game_mode_resets_readiness(self):
+        r=s.Room('MODE55')
+        a=s.new_player(r,'a','Alpha',100)
+        b=s.new_player(r,'b','Bravo',100)
+        self.assertTrue(r.set_ready('a',True))
+        self.assertTrue(r.set_ready('b',True))
+        self.assertEqual(ready_summary(r.players)['ready'],2)
+        self.assertTrue(r.set_mode('a','control'))
+        self.assertEqual(ready_summary(r.players)['ready'],0)
 
     def test_team_standings_rank_within_sides_ffa_ties_unchanged(self):
         ps={id:dict(id=id,name=id,kills=k,deaths=d,headshots=0,weapon=0,
