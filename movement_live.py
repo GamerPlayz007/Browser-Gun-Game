@@ -1,4 +1,4 @@
-"""CROSSFIRE 03.2 Python authoritative 60 Hz arena movement.
+"""CROSSFIRE 05.3 Python authoritative 60 Hz arena movement.
 
 Algorithm intentionally mirrors static/physics.js for client prediction replay.
 Never accept client-supplied positions or mantle destinations.
@@ -10,9 +10,10 @@ FIXED_DT=1/60
 M=dict(walk=5.35,sprint=8.2,crouch=3.15,groundAccel=60,groundBrake=42,
        airAccel=9.5,airBrake=1.7,slideMin=5,slideBoost=1.13,slideMax=10,
        slideTime=.70,slideCD=1.05,slideDrag=2.7,slideSteer=3.6,
+       slideHopSpeed=7.95,slideHopCarry=1.07,slideHopCap=10,
        buffer=.125,coyote=.1,jumpSpeed=7.5,shortHop=.52,gravity=22,
        stepHeight=.29,height=1.8,lowHeight=1.12,wallKickRange=.52,
-       wallKickLift=5.3,wallKickPush=5.1)
+       wallKickLift=5.3,wallKickPush=5.1,mantleExitSpeed=2.7)
 SUPPORTS={'building','atriumShell','railing','deck','stairLanding','routeFloor'}
 
 def seed_movement(p):
@@ -78,6 +79,10 @@ def step_player(p,dt,now,arena,weapons):
             if t>=1:
                 p['mantle']=None;p['y']=m['ty'];p['grounded']=True
                 p['jump_consumed']=False;p['wall_kick_used']=False
+                # Exit a vault with limited forward motion when W is held.
+                if inp.get('w'):
+                    p['vx']=-math.sin(p['yaw'])*M['mantleExitSpeed']
+                    p['vz']=-math.cos(p['yaw'])*M['mantleExitSpeed']
             p['jump_held']=jump;p['slide_held']=slide
             return
     f=float(bool(inp.get('w')))-float(bool(inp.get('s')))
@@ -110,7 +115,8 @@ def step_player(p,dt,now,arena,weapons):
         if d>change:p['vx']+=ex*change/d;p['vz']+=ez*change/d
         else:p['vx']=tx;p['vz']=tz
     boxes=arena.nearby(p['x'],p['z'],max(abs(p['vx']),abs(p['vz']))*dt+1.25)
-    if interact_edge and try_mantle(p,boxes,now):
+    # Held E + forward input tries to mantle whenever a ledge comes in range.
+    if (interact_edge or (interact and f>0)) and try_mantle(p,boxes,now):
         p['interact_held']=interact;p['jump_held']=jump;p['slide_held']=slide
         return
     def standing_overlap(x,y,z,b):return overlap(x,y,z,b,height)
@@ -128,7 +134,14 @@ def step_player(p,dt,now,arena,weapons):
     can_stand=not p['crouch'] or not any(overlap(p['x'],p['y'],p['z'],b,M['height']) for b in boxes)
     jumped=False
     if now<=p['jump_buffer_until'] and now<=p['coyote_until'] and not p['jump_consumed'] and can_stand:
-        p['vy']=M['jumpSpeed'];p['grounded']=False;p['slide_until']=0
+        slide_hop=sliding and start_grounded
+        p['vy']=M['slideHopSpeed'] if slide_hop else M['jumpSpeed']
+        if slide_hop:
+            speed=math.hypot(p['vx'],p['vz'])
+            if speed>.01:
+                carried=min(M['slideHopCap'],speed*M['slideHopCarry'])/speed
+                p['vx']*=carried;p['vz']*=carried
+        p['grounded']=False;p['slide_until']=0
         p['jump_consumed']=True;p['jump_cut']=False
         p['jump_buffer_until']=0;p['coyote_until']=0;p['crouch']=False;height=M['height'];jumped=True
     if jump_edge and not jumped and not start_grounded and not p['wall_kick_used']:
