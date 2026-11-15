@@ -111,7 +111,7 @@ export function createAtmosphere44(T,map,scene){
   mesh.userData={collidable:false,atmosphere44:true};
   group.add(mesh);clouds.push({mesh,geometry,material,count,uniforms,name});return mesh;
  }
- const rain=cloud('rain',850,44081,7.5,2.15,.34);
+ const rain=cloud('rain',850,44081,7.5,2.15,2.35);
  const motes=cloud('floating-motes',320,44082,.32,1.6,1.05);
  const puddles=planPuddles44(map),puddleMeshes=[],puddleGeometries=[],puddleMaterials=[];
  for(const zone of Object.keys(PALETTE)){
@@ -135,21 +135,23 @@ export function createAtmosphere44(T,map,scene){
   mesh.renderOrder=2;mesh.userData={collidable:false,atmosphere44:true};
   group.add(mesh);puddleMeshes.push(mesh);puddleGeometries.push(geometry);puddleMaterials.push(material);
  }
- let active='high';
+ let active='high',detailEnabled=true;
  function setQuality(mode='high'){
   active=ATMOSPHERE_PRESETS[mode]?mode:'high';
   const cfg=ATMOSPHERE_PRESETS[active];
-  rain.geometry.setDrawRange(0,cfg.rain);
-  motes.geometry.setDrawRange(0,cfg.motes);
+  const fraction=active==='auto'&&!detailEnabled?.43:1;
+  rain.geometry.setDrawRange(0,Math.floor(cfg.rain*fraction));
+  motes.geometry.setDrawRange(0,Math.floor(cfg.motes*fraction));
   rain.visible=cfg.rain>0;motes.visible=cfg.motes>0;
   clouds[0].uniforms.uOpacity.value=cfg.opacity*.68;
   clouds[1].uniforms.uOpacity.value=cfg.opacity*.58;
   for(const mesh of puddleMeshes){
-   mesh.visible=cfg.puddles;
+   mesh.visible=cfg.puddles&&(active!=='auto'||detailEnabled);
    mesh.material.uniforms.uOpacity.value=cfg.opacity*.68;
   }
   if(scene.fog){scene.fog.density=cfg.fog;scene.fog.color.set(active==='ultra'?'#111d33':'#101c30');}
  }
+ function setDetail(enabled){detailEnabled=Boolean(enabled);setQuality(active);}
  function animate(time){
   if(!Number.isFinite(time))return;
   for(const {uniforms} of clouds)uniforms.uTime.value=time;
@@ -162,6 +164,6 @@ export function createAtmosphere44(T,map,scene){
   group.removeFromParent();
  }
  setQuality('high');
- return {group,rain,motes,puddleMeshes,puddles,setQuality,animate,dispose,
+ return {group,rain,motes,puddleMeshes,puddles,setQuality,setDetail,animate,dispose,
   get quality(){return active;},get wetness(){return ATMOSPHERE_PRESETS[active].wetness;}};
 }
