@@ -67,7 +67,11 @@ setInterval(()=>send({type:'ping',t:performance.now()}),2000);
 function ammo(){return me?predictedAmmo(me.ammo,pendingShots,me.weapon):0;}
 function tryTriggerFire(now){if(me&&takeTriggerPulse(combatTrigger,weapons[me.weapon]))fireWeapon(now);}
 function fireWeapon(now){if(!me||!locked()||me.hp<=0||!['lobby','playing'].includes(state.phase)||me.reload>0||me.switch>0)return;const w=weapons[me.weapon];if(now-lastShot<w.interval||ammo()<=0)return;
- lastShot=now;shotId++;pendingShots.push({id:shotId,weapon:w.id});send({type:'shoot',shot:shotId,yaw,pitch,ads:aiming});
+ lastShot=now;shotId++;pendingShots.push({id:shotId,weapon:w.id});
+  // The server validates and clamps this view timestamp to its own pose history.
+  const viewServerTime=netSync.clockOffsetMs===null?undefined:
+    (performance.now()-netSync.clockOffsetMs-netSync.delayMs)/1000;
+  send({type:'shoot',shot:shotId,yaw,pitch,ads:aiming,viewServerTime});
  // Local recoil/audio/flash are immediate. Only server events show hits and kills.
  audio.shot(w.id);kick=Math.min(.2,kick+w.kick*2);flashUntil=now+.055;pitch=clamp(pitch+w.kick*(aiming?.55:1),-1.5,1.5);shotRecovery+=w.kick*(aiming?.55:1);visualRecoil=Math.min(.06,visualRecoil+w.kick*.3);
  $('ammo').textContent=ammo();
