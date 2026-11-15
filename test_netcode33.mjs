@@ -61,5 +61,34 @@ assert.equal(snap.snapped,true);near(snap.x,0);
 assert.equal(cameraCorrection({x:NaN,y:0,z:0},{x:0,y:0,z:0}).snapped,true);
 near(shortAngle(-3.13,3.13,.5),-Math.PI,.02);
 
+// Eight remote players, 150 consecutive snapshots with bounded jitter and loss.
+const crowd=createNetSync();
+assert.equal(observePong(crowd,1000,1250,1.125),true);
+for(let frame=0;frame<150;frame++){
+ const people=Array.from({length:8},(_,i)=>({
+  ...createPlayer(i*10+frame*.1),id:'p'+i,z:i*2,spawn:1
+ }));
+ const arrival=10000+frame*50+(frame%5===0?18:frame%3===0?-12:0);
+ assert.equal(ingestSnapshot(crowd,{
+  snapshotSeq:frame+1,serverTime:10+frame*.05,players:people
+ },arrival),true);
+}
+assert.equal(crowd.remote.size,8,'maintain separate bounded history for 8 players');
+for(let i=0;i<8;i++){
+ const buffer=crowd.remote.get('p'+i);
+ assert.ok(buffer.length>=2&&buffer.length<=32);
+ const position=sampleRemote(crowd,'p'+i,17500);
+ assert.ok(position&&Number.isFinite(position.x)&&Number.isFinite(position.z));
+}
+assert.ok(crowd.delayMs>=95&&crowd.delayMs<=185);
+const lastPeople=Array.from({length:7},(_,i)=>({
+ ...createPlayer(i*10+15),id:'p'+i,z:i*2,spawn:1
+}));
+assert.equal(ingestSnapshot(crowd,{
+ snapshotSeq:151,serverTime:17.5,players:lastPeople
+},17570),true);
+assert.equal(crowd.remote.size,7,'departures purge stale player histories');
+assert.equal(crowd.remote.has('p7'),false);
+
 console.log('Stage 3.3: server clock, 20 Hz timeline, adaptive jitter, 80ms extrapolation,');
 console.log('spawn/teleport reset, out-of-order rejection and camera correction passed.');
