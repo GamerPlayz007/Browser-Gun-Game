@@ -1,4 +1,4 @@
-/** CROSSFIRE 03.6 — browser frame pacing and network diagnostics.
+/** CROSSFIRE 04.6 — browser frame pacing, network and GPU resource diagnostics.
  * Measures requestAnimationFrame intervals, not GPU execution time.
  */
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
@@ -58,6 +58,15 @@ export function formatDiagnostics(frame,net,render){
   `PRESET        ${render.quality||'--'}`,
   `TRIANGLES     ${number(render.triangles)}`,
   `DRAW CALLS    ${number(render.drawCalls)}`,
+  `GPU TEXTURES  ${number(render.textures)}`,
+  `GPU GEOMETRY  ${number(render.geometries)}`,
+  `SHADERS       ${number(render.shaderPrograms)}`,
+  `VISIBLE MESH  ${number(render.visibleMeshes)}`,
+  `INSTANCES     ${number(render.visibleInstances)}`,
+  `SHADOW CAST   ${number(render.shadowCasters)}`,
+  `FRAMEBUFFER   ${Number.isFinite(render.pixelWidth)?Math.round(render.pixelWidth):'--'} × ${Number.isFinite(render.pixelHeight)?Math.round(render.pixelHeight):'--'}`,
+  `RAIN / MOTES  ${number(render.atmosphereRain)} / ${number(render.atmosphereMotes)}`,
+  `ADS / DRONES  ${number(render.activeAds)} / ${number(render.activeDrones)}`,
   '',
   'Frame intervals are not GPU frame times.',
   'Sequence gaps are estimates, not measured Internet loss.'
