@@ -5,8 +5,9 @@ import {createStage5VisualLayer} from './stage5_visual_layer.js';
 import {createStage6VisualLayer} from './stage6_visual_layer.js';
 import {SURFACE_STYLES,NEON_STYLES,createCyberMaterialLibrary} from './materials41.js';
 import {createCinematicLighting} from './lighting42.js';
+import {createEnvironment43} from './environment43.js';
 
-// 04.1: shared procedural PBR atlas library with batched noncolliding city context.
+// 04.3: one live map with shared PBR atlases, cinematic district lighting and story-rich surroundings.
 // Only map.boxes are authoritative colliders. All map.features and map.decor
 // are purely visual. The rendering pipeline never changes simulation geometry.
 const PAINT={cyan:'#38eff7',magenta:'#ff4b9e',amber:'#ffb454',white:'#c8f8ff'};
@@ -184,25 +185,30 @@ export function buildWorld(scene,map,{renderer,quality='high'}={}){
  const stage5Group=createStage5VisualLayer(T,map,'ultra',materialSystem);
   const stage6Group=createStage6VisualLayer(T,map,'ultra',materialSystem);
   root.add(stage5Group,stage6Group);
+  const environment43=createEnvironment43(T,map,materialSystem);
+  root.add(environment43.group);
   let detailEnabled=true,activeVisualMode=quality;
   function showStageDetail(){
    const level=activeVisualMode==='performance'?0:activeVisualMode==='ultra'?2:1;
    for(const mesh of stage5Group.children)mesh.visible=detailEnabled&&(mesh.userData.stage5Tier||0)<=level;
    for(const mesh of stage6Group.children)mesh.visible=detailEnabled&&(mesh.userData.stage6Tier||0)<=level;
+   environment43.setDetail(detailEnabled);
   }
   function setQuality(mode){activeVisualMode=mode;showStageDetail();
   const low=mode==='performance';
   for(const d of details)d.visible=!low;
   lighting.setQuality(mode);
   materialSystem.setQuality(mode);
+  environment43.setQuality(mode);
  }
  setQuality(quality);
- return {sun,lighting,targets,staticBatches:batches.size+(map.signs?.length?1:0),featureCount:map.features?.length||0,
+ return {sun,lighting,environment43,targets,staticBatches:batches.size+(map.signs?.length?1:0),featureCount:map.features?.length||0,
+  environmentCount:environment43.stats.parts,environmentSigns:environment43.stats.signs,
   setDetail(enabled){detailEnabled=enabled;for(const mesh of details)mesh.visible=enabled;showStageDetail();},setQuality,
   animate(time){lighting.animate(time);for(const s of steam){const p=s.cloud.geometry.attributes.position;
    for(let i=0;i<s.seeds.length;i++){const k=(time*.38+s.seeds[i])%1;p.setXYZ(i,s.x+Math.sin(time+i)*.3*k,s.y+.2+3*k,s.z+Math.cos(time*.7+i)*.25*k);}p.needsUpdate=true;
   }},
-  dispose(){lighting.dispose();root.traverse(o=>{o.geometry?.dispose();if(o.isPoints||o.userData.stage5VisualOnly||o.userData.stage6VisualOnly)o.material?.dispose();});
+  dispose(){environment43.dispose();lighting.dispose();root.traverse(o=>{o.geometry?.dispose();if(o.isPoints||o.userData.stage5VisualOnly||o.userData.stage6VisualOnly)o.material?.dispose();});
    materialSystem.dispose();for(const m of [targetMat,headMat,signMaterial])m?.dispose();signTexture?.dispose();env?.dispose();scene.environment=null;root.removeFromParent();}
  };
 }
