@@ -77,6 +77,7 @@ class ReleaseMultiplayer(unittest.IsolatedAsyncioTestCase):
             "/", "/static/game.js", "/static/world.js",
             "/static/lighting42.js", "/static/environment43.js",
             "/static/atmosphere44.js", "/static/living45.js",
+            "/static/control54.js", "/static/minimap.js", "/static/match35.js",
             "/static/polish46.js", "/static/maps/cyberpunk.json",
         ):
             asset = await self.client.get(uri)
