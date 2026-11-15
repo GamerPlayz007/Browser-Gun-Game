@@ -25,3 +25,20 @@
 .hero .eyebrow{color:#61f0f3}.hero h1{font-size:clamp(42px,5.7vw,84px)}
 #shade{background:linear-gradient(90deg,rgba(8,18,32,.86),rgba(8,18,32,.22) 62%,rgba(8,18,32,.55))}
 @media(max-height:760px){#home{overflow-y:auto}.join-panel{top:100px}.hero{padding-top:40px}#loadout{margin-top:24px}}
+
+
+/* Stage 3.2: legible, state-driven combat information. */
+#fire-mode-label{display:block;margin-top:3px;font-size:9px;letter-spacing:1.4px;color:#78d8e1}
+#ammo-panel.low-ammo #ammo{color:#ffbf7a}
+#ammo-panel.empty-ammo #ammo{color:#ff7970}
+#reload-track{display:block;overflow:hidden;height:3px;margin-top:5px;width:100%;border-radius:3px;background:#6c81925e;opacity:0;transition:opacity .12s}
+#ammo-panel.reloading #reload-track{opacity:1}
+#reload-progress{display:block;height:100%;width:0;background:linear-gradient(90deg,#61e7e3,#f7d29a);transition:width .08s linear}
+#hitmarker.critical,#damage-number.critical{color:#ffbb78;text-shadow:0 0 12px #ff8048bd}
+#damage-direction{--bearing:0deg;position:fixed;left:50%;top:50%;width:180px;height:180px;
+ pointer-events:none;z-index:4;opacity:0;transform:translate(-50%,-50%) rotate(var(--bearing));
+ transition:opacity .14s ease-out}
+#damage-direction:before{content:"";position:absolute;top:0;left:calc(50% - 12px);
+ width:24px;height:14px;background:#ff8d73;clip-path:polygon(50% 0,100% 100%,0 100%);
+ filter:drop-shadow(0 0 5px #ff513a9c)}
+@media(max-width:650px){#damage-direction{width:140px;height:140px}}

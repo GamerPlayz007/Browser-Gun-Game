@@ -1,0 +1,43 @@
+name: CROSSFIRE Phase 3.2 Combat Regression
+on:
+  push:
+    branches: [feature/phase-3-2-combat-feedback]
+  pull_request:
+    paths:
+      - 'static/game.js'
+      - 'static/combat32.js'
+      - 'static/audio.js'
+      - 'static/index.html'
+      - 'static/style.css'
+      - 'server.py'
+      - 'package.json'
+      - 'test_combat32.mjs'
+      - 'test_server.py'
+      - '.github/workflows/phase32-combat.yml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: pip install -r requirements.txt
+      - run: npm ci
+      - name: Compile baseline map for reproducible original tests
+        run: python build_map.py
+      - name: Full server and map regressions
+        run: python -m unittest test_map test_server
+      - name: Full browser-side unit tests, including combat
+        run: npm test
+      - name: Rebuild experimental city and regression-test integration
+        run: |
+          CROSSFIRE_STAGE31=1 python build_map.py
+          CROSSFIRE_STAGE31=1 python -m unittest test_stage31
+          node test_stage31.mjs

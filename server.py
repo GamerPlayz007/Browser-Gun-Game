@@ -148,7 +148,7 @@ class Room:
         self.event('shot',id=p['id'],weapon=p['weapon'],shot=shot_id,origin=origin,ends=ends)
         for victim,damage,head in hits.values():
             victim['hp']=max(0,victim['hp']-damage)
-            self.event('hit',id=p['id'],victim=victim['id'],damage=damage,head=head,killed=victim['hp']==0)
+            self.event('hit',id=p['id'],victim=victim['id'],damage=damage,head=head,killed=victim['hp']==0,origin=origin)
             if victim['hp']==0:
                 if 'deaths' in victim:
                     victim['deaths']+=1;victim['respawn_at']=now+3;p['kills']+=1;p['headshots']+=int(head)
@@ -239,7 +239,15 @@ async def socket(request):
                     if generation==p['spawn'] and seq>latest and len(p['commands'])<30:
                         p['commands'].append(dict(seq=seq,spawn=generation,yaw=p['yaw'],pitch=p['pitch'],input={k:data.get(k) is True for k in ('w','a','s','d','jump','sprint','slide','ads')}))
                 elif action=='shoot':
-                    aim(p,data);p['input']['ads']=data.get('ads') is True;p['ack_shot']=max(p['ack_shot'],max(0,min(2**31,int(data.get('shot',0)))));room.shoot(p,now,p['ack_shot'])
+                    # A duplicate/replayed client shot sequence must never spend ammo
+                    # or create another server-confirmed hit event.
+                    shot=int(data.get('shot',0))
+                    if shot<=p['ack_shot'] or shot>2**31:continue
+                    aim(p,data)
+                    p['input']['ads']=data.get('ads') is True
+                    # Acknowledge received input even when gameplay cooldown rejects it.
+                    p['ack_shot']=shot
+                    room.shoot(p,now,shot)
                 elif action=='reload':room.reload(p,now)
                 elif action=='weapon':room.select(p,data.get('weapon'),now)
                 elif action=='start':room.start(pid,now)
