@@ -34,7 +34,7 @@ class MatchRulesTests(unittest.TestCase):
 
     def test_round_start_blocks_non_host_and_resets_state(self):
         r,a,b=duel('gungame')
-        r.phase='results';r.winner='Alpha';r.winner_id='a'
+        r.phase='results';r.winner='Alpha';r.winner_id='a';r.next_mode='gungame'
         a.update(kills=10,deaths=5,headshots=3,streak=4,best_streak=8,
                  weapon=3,ammo=1,shield=0)
         b.update(kills=2,streak=2,best_streak=2)
@@ -65,6 +65,29 @@ class MatchRulesTests(unittest.TestCase):
         self.assertEqual(snapshot['round'],1)
         self.assertEqual(snapshot['rules']['goal'],12)
         self.assertEqual(len(snapshot['standings']),2)
+
+    def test_next_match_mode_can_change_only_between_rounds(self):
+        r,a,b=duel()
+        r.phase='lobby'
+        self.assertFalse(r.set_mode('b','gungame'))
+        self.assertTrue(r.set_mode('a','gungame'))
+        self.assertEqual((r.mode,r.next_mode),('gungame','gungame'))
+        self.assertTrue(r.start('a',101))
+        self.assertFalse(r.set_mode('a','deathmatch'))
+        self.assertEqual(r.mode,'gungame')
+        r.step(s.TICK,104.1)
+        self.assertEqual(r.phase,'playing')
+        self.assertFalse(r.set_mode('a','deathmatch'))
+        self.assertTrue(r.finish(500,a,reason='score'))
+        self.assertTrue(r.set_mode('a','deathmatch'))
+        self.assertEqual(r.mode,'gungame','Completed match mode must stay unchanged')
+        self.assertEqual(r.next_mode,'deathmatch')
+        state=r.snapshot(501)
+        self.assertEqual((state['mode'],state['nextMode']),('gungame','deathmatch'))
+        self.assertEqual(state['winReason'],'score')
+        self.assertTrue(r.start('a',502))
+        self.assertEqual(r.mode,'deathmatch')
+        self.assertEqual(r.snapshot(502)['rules']['goal'],15)
 
     def test_deathmatch_goal_freezes_winner_and_reports_result(self):
         r,a,b=duel()
