@@ -1,4 +1,4 @@
-# CROSSFIRE 04.5 — ONE LIVE CYBERPUNK CITY
+# CROSSFIRE 04.6 — ONE LIVE CYBERPUNK CITY
 
 **Source of truth:** `main` branch, deployed by Render when auto-deploy is enabled.
 
@@ -7,6 +7,16 @@ and its separate `cyberpunk-next` experimental selection have been removed.
 The only active map contains **more than 650 authoritative collision objects, a 120 m
 gameplay envelope, 3053 decorative objects and 13 authored district routes.**
 The surrounding 160 m urban context is visual-only.
+
+## Phase 4.6 — Ultra polish, performance, telemetry and deployment checks
+- All changes stay on the **single playable Cyberpunk City** in GitHub `main`. No additional map or parallel experiment. Authoritative collision boxes, spawns, route topology and netcode stay unchanged.
+- **Auto quality** now limits the initial HiDPI ratio to 1.15× (rather than rendering 2–3 native screen pixels per CSS pixel) and can adapt resolution down to 65% of that ceiling on sustained slow frames. High, Ultra and Native remain full native-resolution choices, and Performance stays 1× DPR.
+- Auto can **bypass bloom and cinematic grading** while optional detail has been disabled by the frame-pacing meter, with a single renderer scene draw, and restore the visual compositor after recovery. Ultra now clamps MSAA sample requests to the GPU's reported `MAX_SAMPLES`, avoiding unsupported framebuffer allocations.
+- Fixed disposal ownership for shared Stage 5/6 PBR materials: each shared texture/material is disposed once by its owning library instead of being disposed during every mesh traversal and again by the library. Separate living/weather/ambient layers still dispose their own resources.
+- F7 diagnostics now gather **whole-frame** draw calls (including post-processing and first-person weapon), shader program count, renderer texture/geometry allocations, active meshes, instanced props, shadow casters, frame-buffer size, rain/motes and active advert/drone counts. Counts are resource counters; frame pacing is still CPU browser frame intervals, not measured GPU kernel times.
+- `static/polish46.js` contains read-only render telemetry and budget warnings, tested by `node test_polish46.mjs`; display, world material ownership and compositor regressions are extended in the existing test scripts.
+- GitHub Actions CI workflow `.github/workflows/crossfire-ci.yml` runs `npm ci` and `npm test` on pushes to main and pull requests where Actions is enabled.
+- Production Render deployment, full GPU browser screenshots and real-device 144 FPS have not been independently validated; use F7 to compare actual renderer resources after deployment.
 
 ## Phase 4.5 — a living city (implemented on main)
 - `static/living45.js` adds **12 original animated advertising panels** (three per district), **four turning ventilation fans** and **four slow-moving rooftop service drones** anchored to authored Cyberpunk City landmarks. All are render-only `collidable:false`, never modifying the map, routes, server or multiplayer state.
