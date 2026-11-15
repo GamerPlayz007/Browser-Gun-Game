@@ -1,4 +1,4 @@
-# CROSSFIRE 05.4 — NEW MULTIPLAYER GAME MODES
+# CROSSFIRE 05.5 — COMPETITIVE MULTIPLAYER SYSTEMS
 
 **Source of truth:** `main` branch, deployed by Render when auto-deploy is enabled.
 
@@ -7,6 +7,64 @@ and its separate `cyberpunk-next` experimental selection have been removed.
 The only active map contains **more than 650 authoritative collision objects, a 120 m
 gameplay envelope, 3053 decorative objects and 13 authored district routes.**
 The surrounding 160 m urban context is visual-only.
+
+## Phase 5.5 — competitive multiplayer systems (implemented on main)
+
+**Fairer starts and team management**
+- Server-only spawn scoring now penalizes recently used spawn points for
+  nine seconds, and strongly penalizes spawning on top of another living
+  player. Existing map line-of-sight safety and enemy-distance ranking remain.
+  Each room tracks its own recent spawn uses; histories reset each round.
+  Team-spawn preference is intentionally subtle and never overrides exposure.
+- Players who join active team games are assigned to the smaller team.
+  The host can choose **BALANCE TEAMS** during the lobby or results phase,
+  using a snake draft based on *previous-round* kills, deaths, and headshots.
+  Team sizes stay within one player; mid-round reshuffling is disallowed.
+- **Ready-up is optional**. Each player can mark themselves ready from the
+  lobby/results menu, and the room displays the ready count and badges.
+  Client messages can only change the *sender's own* status. Switching
+  modes, rebalancing teams, and starting a round reset old readiness.
+  A host can start regardless of readiness to keep private games quick.
+
+**Spectating and scoreboards**
+- During the three-second respawn delay, eliminated players can spectate
+  living players using the Left/Right arrows (or buttons after releasing
+  pointer lock). Team modes allow **teammates only**; in FFA, all other
+  living players are eligible. Spectator target selection and UI are
+  read-only and do not affect gameplay authority.
+- The spectator camera tracks the selected target's server-snapshot pose.
+  It resets when the local player respawns or leaves the room.
+- Team scoreboards are grouped into Azure/Ember sections with **rank within
+  each team**, shared ranks for equivalent kill/death records and the
+  authoritative current team score. FFA tie handling remains unchanged;
+  solo-leader notices are suppressed in team modes.
+
+**Implementation/testing**
+- `competitive55.py`: pure team balancing, spawn-safety scoring and
+  ready-count helpers.
+- `static/competitive55.js`: side-effect-free presentation helpers for
+  spectator eligibility/cycling, ready controls and team score grouping.
+- `server.py`, `match35.py`, `static/game.js`, `static/index.html`,
+  `static/style.css`: integrated server protocol, lobby, scoreboard,
+  spectator camera and transitions, all on one playable map.
+- `test_competitive55.py`: spawn reuse/crowding, snake-draft balancing,
+  server-host restrictions, ready resets, grouped standings and live
+  two-WebSocket authorization checks.
+- `test_competitive55.mjs`: isolated spectator eligibility/cycling,
+  team/FFA visibility, ready controls and actual HTML/JS wiring.
+  Both are included in GitHub Actions on pushes to `main`.
+
+Run locally:
+```bash
+npm ci && npm test
+pip install -r requirements.txt
+python -m unittest -v test_server test_map test_release51 test_modes54 test_competitive55
+python check_live51.py https://YOUR-RENDER-SERVICE.onrender.com
+```
+
+**Release status:** 05.5 code is committed. GitHub Actions execution, live
+Render publication, and real 2–8-player playtests are **not independently
+verified** here. Phase 5.6 will complete the V3.0 polish and release gates.
 
 ## Phase 5.4 — new multiplayer modes (implemented on main)
 
