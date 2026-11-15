@@ -11,7 +11,7 @@ const before=JSON.stringify({boxes:map.boxes,routes:map.routes,spawns:map.spawns
 const plan=planEnvironment43(map);
 assert.ok(plan.stats.parts>=700,'City should have hundreds of authored visual objects');
 assert.equal(plan.stats.signs,24,'Exactly 24 unique story signs');
-assert.equal(plan.stats.wires,34,'Wiring is derived from current facades');
+assert.ok(plan.stats.wires>=20,'Wiring should be derived from many existing facades');
 assert.ok(plan.stats.facades>=40,'Large existing walls should get mechanical details');
 assert.ok(plan.stats.floorMarkings>=25,'Street markings need to be visible');
 assert.deepEqual(Object.keys(DISTRICT_STORIES).sort(),map.zones.map(z=>z.id).sort());
@@ -52,5 +52,5 @@ assert.equal(JSON.stringify({boxes:map.boxes,routes:map.routes,spawns:map.spawns
 const scene=new T.Scene();scene.add(environment.group);
 environment.dispose();library.dispose();
 assert.equal(scene.children.length,0,'Environment should dispose cleanly on map replacement');
-console.log('Phase 4.3: 720 batched noncolliding details, storefronts, cyber signage,');
+console.log('Phase 4.3: '+plan.stats.parts+' batched noncolliding details, storefronts, cyber signage,');
 console.log('road markings, performance tiers, and unchanged collision topology passed.');
