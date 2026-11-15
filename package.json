@@ -4,10 +4,10 @@
   "type": "module",
   "scripts": {
     "dev": "python server.py",
-    "test": "node --check static/game.js && node --check static/netcode33.js && node test_scene.mjs && node test_movement.mjs && node test_district.mjs && node test_display.mjs && node test_postfx.mjs && node test_combat32.mjs && node test_netcode33.mjs && node test_animation34.mjs && node test_match35.mjs && node test_perf36.mjs && node test_materials41.mjs && node test_lighting42.mjs && node test_environment43.mjs && node test_atmosphere44.mjs && node test_living45.mjs && node test_polish46.mjs && node test_feedback52.mjs && node test_flow53.mjs && node test_modes54.mjs && node test_competitive55.mjs"
+    "test": "node --check static/game.js && node --check static/netcode33.js && node test_scene.mjs && node test_movement.mjs && node test_district.mjs && node test_display.mjs && node test_postfx.mjs && node test_combat32.mjs && node test_netcode33.mjs && node test_animation34.mjs && node test_match35.mjs && node test_perf36.mjs && node test_materials41.mjs && node test_lighting42.mjs && node test_environment43.mjs && node test_atmosphere44.mjs && node test_living45.mjs && node test_polish46.mjs && node test_feedback52.mjs && node test_flow53.mjs && node test_modes54.mjs && node test_competitive55.mjs && node test_release56.mjs"
   },
   "dependencies": {
     "three": "0.180.0"
   },
-  "version": "5.5.0"
+  "version": "3.0.0-rc.1"
 }
