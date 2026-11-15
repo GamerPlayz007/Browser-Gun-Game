@@ -112,5 +112,45 @@ class TeamModeTests(unittest.TestCase):
         self.assertEqual(r.win_reason,'objective')
         self.assertEqual(r.snapshot(107)['teamScores']['azure'],CONTROL_GOAL)
 
+class TeamModeSocketTests(unittest.IsolatedAsyncioTestCase):
+    async def asyncSetUp(self):
+        from aiohttp.test_utils import TestClient,TestServer
+        s.rooms.clear()
+        self.client=TestClient(TestServer(s.make_app()))
+        await self.client.start_server()
+
+    async def asyncTearDown(self):
+        await self.client.close()
+        s.rooms.clear()
+
+    async def test_two_websocket_clients_receive_team_authority_and_objective(self):
+        import asyncio
+        response=await self.client.post('/api/rooms',json={'mapId':'cyberpunk'})
+        code=(await response.json())['room']
+        host=await self.client.ws_connect('/ws/'+code+'?name=Host')
+        welcome=await host.receive_json(timeout=2)
+        guest=await self.client.ws_connect('/ws/'+code+'?name=Guest')
+        other=await guest.receive_json(timeout=2)
+        await host.send_json({'type':'mode','mode':'control'})
+        await asyncio.sleep(.12)
+        room=s.rooms[code]
+        self.assertEqual(room.mode,'control')
+        self.assertEqual(room.players[welcome['id']]['team'],'azure')
+        self.assertEqual(room.players[other['id']]['team'],'ember')
+        await guest.send_json({'type':'mode','mode':'deathmatch'})
+        await guest.send_json({'type':'team','team':'azure'})
+        await asyncio.sleep(.09)
+        self.assertEqual(room.mode,'control')
+        self.assertEqual(room.players[other['id']]['team'],'ember')
+        state=room.snapshot(100)
+        self.assertEqual(state['objective']['id'],'neon-beacon')
+        self.assertEqual(state['teamScores'],{'azure':0,'ember':0})
+        self.assertEqual(state['rules']['goal'],CONTROL_GOAL)
+        await host.send_json({'type':'start'})
+        await asyncio.sleep(.08)
+        self.assertEqual(room.phase,'countdown')
+        await guest.close()
+        await host.close()
+
 if __name__=='__main__':
     unittest.main()
