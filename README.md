@@ -84,3 +84,11 @@ versions or extra map selectors.
 This work does **not** add historical hitbox rewinding or claim to eliminate
 high network latency. Actual browser multiplayer playtests and Render
 deployment still require verification.
+
+### Bounded historical hit validation
+
+For browser shots, the client may include the estimated server time of its
+rendered opponent view. Python validates a **300 ms maximum rewind**, samples
+its own recent player pose history (not client-supplied hitboxes), and always
+checks the current static arena geometry. A respawn changes the generation ID
+and cannot reuse an old pose. The server alone confirms damage and eliminations.

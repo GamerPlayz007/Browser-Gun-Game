@@ -7,7 +7,7 @@ ROOT=Path(__file__).parent
 from map_registry import ARENAS, DEFAULT, REGISTRY, WEAPONS, Arena, top_at, bottom_at, ray_solid
 from movement_live import step_player, seed_movement
 MAP=DEFAULT.data;BOXES=DEFAULT.boxes;SPAWNS=DEFAULT.spawns
-TICK=1/60; LIMIT=15; ROUND_SECONDS=360; MAX_PLAYERS=8
+TICK=1/60; LIMIT=15; ROUND_SECONDS=360; MAX_PLAYERS=8; MAX_REWIND=.30
 
 def nearby_boxes(x,z,radius=1,arena=DEFAULT):return arena.nearby(x,z,radius)
 
@@ -59,7 +59,31 @@ class Room:
         self.code=code;self.players={};self.sockets={};self.joining=0;self.host=None;self.mode='deathmatch'
         self.phase='lobby';self.started=0.;self.countdown_at=0.;self.winner=None;self.events=[];self.last_active=time.monotonic();self.snapshot_sequence=0
         self.targets=[dict(id='t'+str(i),x=x,y=y,z=z,hp=100,reset_at=0) for i,(x,y,z) in enumerate(self.arena.data['practiceTargets'])]
+        self.pose_history=deque(maxlen=64)
     def event(self,kind,**kw):self.events.append(dict(type=kind,**kw))
+    def record_poses(self,now):
+        # Only the server's movement loop creates historical poses.
+        self.pose_history.append((now,{
+            pid:(p['x'],p['y'],p['z'],p['crouch'],p['spawn'])
+            for pid,p in self.players.items()
+        }))
+    def historical_pose(self,player,when):
+        if not self.pose_history:return None
+        previous=None
+        for at,poses in self.pose_history:
+            candidate=poses.get(player['id'])
+            if candidate is None or candidate[4]!=player['spawn']:
+                previous=None;continue
+            if at>=when:
+                if previous is None:return candidate if at-when<=TICK*2 else None
+                start,earlier=previous
+                fraction=max(0.,min(1.,(when-start)/max(1e-6,at-start)))
+                return (
+                    *(earlier[k]+(candidate[k]-earlier[k])*fraction for k in range(3)),
+                    candidate[3] if fraction>=.5 else earlier[3],player['spawn']
+                )
+            previous=(at,candidate)
+        return previous[1] if previous is not None and when-previous[0]<=TICK*2 else None
     def start(self,pid,now):
         if pid!=self.host or self.phase not in ('lobby','results'):return False
         self.phase='countdown';self.countdown_at=now+3;self.winner=None
@@ -83,11 +107,16 @@ class Room:
     def reload(self,p,now):
         if p['hp']>0 and self.phase in ('lobby','playing') and p['ammo']<WEAPONS[p['weapon']]['mag'] and not p['reload_at']:
             p['reload_at']=now+WEAPONS[p['weapon']]['reload']
-    def shoot(self,p,now,shot_id=0):
+    def shoot(self,p,now,shot_id=0,view_time=None):
         w=WEAPONS[p['weapon']]
         if p['hp']<=0 or p['reload_at'] or now<p['switch_at'] or now-p['last_shot']<w['interval']*.95 or p['ammo']<=0 or self.phase not in ('lobby','playing'):return False
         p['last_shot']=now;p['ammo']-=1;p['shield']=0;p['shot_seq']=shot_id
         origin=(p['x'],p['y']+(.9 if p['crouch'] else 1.55),p['z']);ends=[];hits={}
+        # Clients cannot select arbitrary historical frames: accept at most
+        # 300ms of server-recorded player history; cover is always current.
+        allowed_view=(float(view_time) if isinstance(view_time,(int,float)) and
+                      not isinstance(view_time,bool) and math.isfinite(view_time) and
+                      0<=now-view_time<=MAX_REWIND else None)
         ads=p['input'].get('ads',False);spread=w['spread']*(.15 if ads and w['id']==3 else .4 if ads and w['id']!=2 else 1)
         for _ in range(w['pellets']):
             yaw=p['yaw']+random.uniform(-spread,spread);pitch=p['pitch']+random.uniform(-spread,spread);cp=math.cos(pitch)
@@ -100,8 +129,12 @@ class Room:
             if self.phase=='playing':candidates+=list(self.players.values())
             for q in candidates:
                 if q is p or q['hp']<=0:continue
-                height=1.05 if q.get('crouch') else 1.8
-                h=ray_box(origin,direction,(q['x']-.32,q['y'],q['z']-.32,q['x']+.32,q['y']+height,q['z']+.32))
+                historic=(self.historical_pose(q,allowed_view) if allowed_view is not None
+                          and 'spawn' in q else None)
+                qx,qy,qz,crouch=(historic[:4] if historic else
+                                (q['x'],q['y'],q['z'],q.get('crouch',False)))
+                height=1.05 if crouch else 1.8
+                h=ray_box(origin,direction,(qx-.32,qy,qz-.32,qx+.32,qy+height,qz+.32))
                 if h is not None and h<distance:
                     distance=h;victim=q;head=origin[1]+direction[1]*h>q['y']+height-.35
             ends.append([round(origin[i]+direction[i]*distance,3) for i in range(3)])
@@ -147,6 +180,7 @@ class Room:
                 p['commands'].clear();p['move_credit']=0.
         for t in self.targets:
             if t['hp']<=0 and now>=t['reset_at']:t['hp']=100
+        self.record_poses(now)
     def snapshot(self,now):
         self.snapshot_sequence+=1
         fields=('id','name','x','y','z','vx','vy','vz','grounded','yaw','pitch','hp','ammo','kills','deaths','headshots','weapon','crouch','spawn','seq','shot_seq','ack_shot','jump_held','slide_held','motion_time','slide_until','slide_ready','jump_buffer_until','coyote_until','jump_consumed','jump_cut','wall_kick_used','interact_held','mantle')
@@ -212,7 +246,7 @@ async def socket(request):
                     p['input']['ads']=data.get('ads') is True
                     # Acknowledge received input even when gameplay cooldown rejects it.
                     p['ack_shot']=shot
-                    room.shoot(p,now,shot)
+                    room.shoot(p,now,shot,data.get('viewServerTime'))
                 elif action=='reload':room.reload(p,now)
                 elif action=='weapon':room.select(p,data.get('weapon'),now)
                 elif action=='start':room.start(pid,now)

@@ -30,6 +30,36 @@ class GameTests(unittest.TestCase):
         self.assertEqual(hits[0]['id'],'a')
         self.assertEqual(hits[0]['victim'],'b')
 
+    def test_bounded_server_pose_rewind_uses_historical_target_only(self):
+        r,a,b=duel()
+        r.record_poses(101.0)
+        b['x']=-20.0
+        r.record_poses(101.1)
+        self.assertTrue(r.shoot(a,101.11,shot_id=1,view_time=101.0))
+        self.assertLess(b['hp'],100,'Rewind should find a formerly visible target')
+
+        old,a2,b2=duel()
+        old.record_poses(101.0);b2['x']=-20.0;old.record_poses(101.1)
+        self.assertTrue(old.shoot(a2,101.11,shot_id=1,view_time=100.0))
+        self.assertEqual(b2['hp'],100,'Old timestamps beyond 300ms cannot rewind')
+
+        respawn,a3,b3=duel()
+        respawn.record_poses(101.0)
+        b3['x']=-20.0;b3['spawn']+=1
+        respawn.record_poses(101.1)
+        self.assertTrue(respawn.shoot(a3,101.11,shot_id=1,view_time=101.0))
+        self.assertEqual(b3['hp'],100,'A respawn must never use the previous life hitbox')
+
+    def test_static_cover_still_blocks_rewound_player(self):
+        r,a,b=duel()
+        a.update(x=-24.,y=1.,z=24.,yaw=-math.pi/2,pitch=0)
+        b.update(x=0.,y=1.,z=24.)
+        r.record_poses(101.0)
+        b['x']=3.
+        r.record_poses(101.1)
+        r.shoot(a,101.11,shot_id=1,view_time=101.0)
+        self.assertEqual(b['hp'],100,'Rewind must not bypass current static cover')
+
     def test_cover_blocks_bullets(self):
         r,a,b=duel();a.update(x=-24,y=1,z=24,yaw=-math.pi/2,pitch=0);b.update(x=0,y=1,z=24)
         r.shoot(a,101);self.assertEqual(b['hp'],100)

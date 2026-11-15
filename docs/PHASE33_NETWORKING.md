@@ -47,3 +47,16 @@ A GitHub Actions green run validates deterministic logic but **not** actual
 - RTT variation and simulated packet delay (Network tab)
 - Snap-to-position behavior for teleports and late joins
 - Performance and High/Ultra GPU presets on Windows laptops
+
+## Limited server-side historical pose validation
+
+The client includes `viewServerTime` on a shot, derived from its server-clock
+midpoint estimate and current rendering delay. The server clamps requests to
+at most 300 ms in the past, and compares only against recent **server-recorded**
+player pose history. It does not rewind static walls, trust client positions,
+or cross respawn generations. Too-old, missing, or invalid timestamps fall
+back to current authoritative positions. Its history is capped at 64 samples.
+
+This improves common high-RTT visual/server disagreement but is not a
+comprehensive anti-cheat system or proof of perfect hit registration. Real
+multiplayer testing and RTT profiling remain required.
