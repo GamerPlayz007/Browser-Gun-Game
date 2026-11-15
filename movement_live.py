@@ -68,8 +68,12 @@ def step_player(p,dt,now,arena,weapons):
     p.setdefault('wall_kick_used',False);p.setdefault('mantle',None)
     if p['mantle']:
         m=p['mantle'];t=clamp((m['elapsed']+dt)/m['duration'],0,1)
-        x=m['sx']+(m['tx']-m['sx'])*t;z=m['sz']+(m['tz']-m['sz'])*t
-        y=m['sy']+(m['ty']-m['sy'])*t+.24*math.sin(math.pi*t)
+        # Mirror the clearance-first client path; rise over the lip before moving in.
+        lift=clamp(t*2.8,0,1);approach=clamp((t-.18)/.82,0,1)
+        advance=approach*approach*(3-2*approach)
+        x=m['sx']+(m['tx']-m['sx'])*advance
+        z=m['sz']+(m['tz']-m['sz'])*advance
+        y=m['sy']+(m['ty']-m['sy'])*lift+.10*math.sin(math.pi*t)
         local=arena.nearby(x,z,2)
         if any(overlap(x,y,z,b,M['height']) for b in local):
             p['mantle']=None;p['vy']=0;p['grounded']=False
