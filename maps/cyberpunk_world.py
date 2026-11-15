@@ -64,6 +64,17 @@ def open_edge_walls_around_authored_routes(city):
         kind="routeFloor",style="road",zone="plaza",
         route="G1",stage6Physical=True,structure="south-service-apron"
     ))
+    # Two brief interior-road apron gaps were exposed by full 120 m native
+    # route sampling. Fill them with visible, solid road support at level 1.
+    for x,z,width,depth,route in (
+        (-10.3,20.1,2.0,2.0,"I1"),
+        (12.75,20.65,1.8,2.2,"I2"),
+    ):
+        new_boxes.append(dict(
+            x=x,y=0.74,z=z,w=width,h=0.26,d=depth,
+            kind="routeFloor",style="road",zone="plaza",
+            route=route,stage6Physical=True,structure="interior-road-apron"
+        ))
     city["boxes"]=new_boxes
     city["stage6"]["final_collider_count"]=len(new_boxes)
     return city
