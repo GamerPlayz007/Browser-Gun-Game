@@ -122,6 +122,13 @@ function disconnect(message,rejoinCode56=null){
  netSync=createNetSync();frameMeter.reset();feedback52.reset();slideHopUntil53=0;spectatorTarget55=null;clearVisualEffects52();$('perf-panel').hidden=true;joined=false;state=me=local=null;myId=null;lastPhase='';lastSpawn=-1;pendingShots=[];pendingMoves=[];movementAccumulator=0;landingPulse=0;lastLocalGrounded=true;movementHint='';viewError.set(0,0,0);rosterSignature=scoreSignature='';matchBannerUntil=0;resetInput();document.exitPointerLock?.();for(const g of opponents.values())disposePlayer(g);opponents.clear();for(const id of ['hud','room-panel','death','results','scoreboard'])$(id).hidden=true;$('home').hidden=false;$('shade').style.opacity=1;$('status').textContent=message;$('create').disabled=$('join').disabled=false;}
 function scoreboard(players,body){
  body.replaceChildren();
+ if(state?.mode==='botmatch'){
+  const tr=document.createElement('tr');tr.className='bot-assault-heading';
+  const td=document.createElement('td');td.colSpan=5;
+  td.textContent='OPERATORS '+(state.aiScore||0)+' / '+(state.rules?.goal||20)+
+   ' · BOTS '+(state.botScore||0)+' / '+(state.rules?.botGoal||12);
+  tr.append(td);body.append(tr);
+ }
  const scores=state?.standings?.length?state.standings:
   [...players].sort((a,b)=>b.kills-a.kills||a.deaths-b.deaths)
    .map((p,i)=>({...p,rank:i+1,streak:p.streak||0}));
@@ -152,7 +159,14 @@ function scoreboard(players,body){
 }
 function renderRoster(){
  const el=$('roster');el.replaceChildren();
- for(const p of state.players){
+ const realPlayers=state.players.filter(p=>!p.bot);
+ if(state.mode==='botmatch'){
+  const note=document.createElement('div');note.className='bot-roster-note';
+  note.textContent='BOT ASSAULT · '+(state.players.filter(p=>p.bot).length||4)+
+   ' SERVER-CONTROLLED OPPONENTS · NO EXTRA PLAYER SLOTS';
+  el.append(note);
+ }
+ for(const p of realPlayers){
   const row=document.createElement('div');
   row.className='roster-row'+(p.team?' team-'+p.team:'')+(p.ready?' is-ready55':'');
   const avatar=document.createElement('span');avatar.className='avatar';
@@ -163,7 +177,7 @@ function renderRoster(){
    .filter(Boolean).join(' · ');
   row.append(avatar,name,badge);el.append(row);
  }
- for(let i=state.players.length;i<8;i++){
+ for(let i=realPlayers.length;i<8;i++){
   const row=document.createElement('div');row.className='roster-empty';
   row.textContent='Open slot — invite a friend';el.append(row);
  }
@@ -182,7 +196,8 @@ function uiRoom(){
  $('resume').textContent=state.phase==='lobby'?'ENTER PRACTICE':state.phase==='results'?'VIEW RESULTS':'RESUME MATCH';
  $('room-title').textContent=state.phase==='lobby'?'Your squad.':state.phase==='results'?'Run it back.':'Stay in the fight.';
  $('room-hint').textContent=state.phase==='lobby'?
-  (state.mode==='control'?'Capture the Neon Beacon together. The host starts the match.':
+  (state.mode==='botmatch'?'Solo or co-op: defeat 20 AI opponents before they score 12 eliminations. Host starts the match.':
+   state.mode==='control'?'Capture the Neon Beacon together. The host starts the match.':
    state.mode==='teamdeathmatch'?'Teams are assigned automatically. First team to 30 wins.':
    'Practice while your friends join. The host starts the match.'):
   state.phase==='results'?
@@ -224,7 +239,8 @@ function processEvent(e){
   if(e.type==='tier_up'&&e.id===myId)audio.tier();
   else if(e.type==='streak'&&e.id===myId)audio.streak();
   else if(e.type==='round_end')audio.finish(e.winnerId===myId||
-   (Boolean(e.winnerTeam)&&e.winnerTeam===me?.team));
+   (Boolean(e.winnerTeam)&&e.winnerTeam===me?.team)||
+   (state?.mode==='botmatch'&&e.winner==='PLAYERS'));
   else if(e.type==='control_status'&&e.team===me?.team&&!e.contested)
    audio.tone(780,.12,.065,'triangle');
  }
@@ -286,29 +302,32 @@ function handle(data){if(data.type==='welcome'){netSync=createNetSync();seq=0;sh
  $('timer').textContent=data.phase==='lobby'?'PRACTICE':
   `${Math.floor(match.remaining/60)}:${String(Math.floor(match.remaining%60)).padStart(2,'0')}`;
  $('mode-label').textContent=({deathmatch:'DEATHMATCH',gungame:'GUN GAME',
-  teamdeathmatch:'TEAM DEATHMATCH',control:'CONTROL POINT'})[data.mode]||'DEATHMATCH';
+  teamdeathmatch:'TEAM DEATHMATCH',control:'CONTROL POINT',botmatch:'BOT ASSAULT'})[data.mode]||'DEATHMATCH';
  $('objective').textContent=match.objective;
  $('round-label').textContent=`ROUND ${Math.max(1,match.round)} · ${match.rankText}`;
  $('lead-status').textContent=match.leaderText;
- $('team-bar').hidden=!match.teamMode;
+ $('team-bar').hidden=!(match.teamMode||match.botMode);
+ $('team-bar').classList.toggle('bot-assault-ui',match.botMode);
  $('team-bar').classList.toggle('contested',!!data.objective?.contested);
- $('team-azure').textContent='AZURE '+match.azure;
- $('team-ember').textContent='EMBER '+match.ember;
- $('team-control').textContent=data.mode==='control'?match.pointStatus:'TEAM SCORE';
+ $('team-azure').textContent=match.botMode?'OPERATORS '+match.aiScore+' / '+match.goal:'AZURE '+match.azure;
+ $('team-ember').textContent=match.botMode?'BOTS '+match.botScore+' / '+match.botGoal:'EMBER '+match.ember;
+ $('team-control').textContent=match.botMode?'BOT ASSAULT':data.mode==='control'?match.pointStatus:'TEAM SCORE';
  $('progress').style.width=match.progress+'%';
  $('countdown').hidden=data.phase!=='countdown';
  $('countdown').textContent=Math.ceil(data.countdown);
  $('slide-label').textContent=me.slideCooldown>0?`SLIDE / ${me.slideCooldown.toFixed(1)}s`:'C / SLIDE READY';
- const present=new Set();for(const p of data.players){if(p.id===myId)continue;present.add(p.id);let g=opponents.get(p.id);if(!g){g=makePlayer(p.name,skinColor56(p.skin));scene.add(g);g.position.set(p.x,p.y,p.z);opponents.set(p.id,g);}
-  setPlayerSkin56(g,skinColor56(p.skin));
+ const present=new Set();for(const p of data.players){if(p.id===myId)continue;present.add(p.id);let g=opponents.get(p.id);
+  const visualSkin=p.bot?0xef6a86:skinColor56(p.skin);
+  if(!g){g=makePlayer(p.name,visualSkin);scene.add(g);g.position.set(p.x,p.y,p.z);opponents.set(p.id,g);}
+  setPlayerSkin56(g,visualSkin);
   if(g.userData.team54!==p.team){
    g.userData.team54=p.team;
-   g.userData.tag.material.color.set(p.team==='azure'?'#7de4ff':p.team==='ember'?'#ffb69b':'#ffffff');
-   g.userData.spawnRing.material.color.set(p.team==='azure'?'#7de4ff':p.team==='ember'?'#ffb69b':'#67ede5');
+   g.userData.tag.material.color.set(p.bot?'#ff8ba7':p.team==='azure'?'#7de4ff':p.team==='ember'?'#ffb69b':'#ffffff');
+   g.userData.spawnRing.material.color.set(p.bot?'#ff6586':p.team==='azure'?'#7de4ff':p.team==='ember'?'#ffb69b':'#67ede5');
   }
   if(g.userData.target?.spawn!==p.spawn){g.position.set(p.x,p.y,p.z);g.userData.animation.spawn=undefined;}g.userData.target=p;g.visible=p.hp>0;if(g.userData.gun.userData.id!==p.weapon){const old=g.userData.gun;old.removeFromParent();old.traverse(o=>o.geometry?.dispose());const gun=makeWeapon(p.weapon,false);gun.scale.setScalar(.8);gun.position.set(.26,1.1,-.34);g.userData.body.add(gun);g.userData.gun=gun;}}
  for(const [id,g] of opponents)if(!present.has(id)){disposePlayer(g);opponents.delete(id);}for(const t of data.targets)world.targets.get(t.id).visible=t.hp>0;
- const rosterKey=JSON.stringify([data.host,data.mode,data.nextMode,data.players.map(p=>[p.id,p.name,p.team,p.ready])]);
+ const rosterKey=JSON.stringify([data.host,data.mode,data.nextMode,data.players.map(p=>[p.id,p.name,p.team,p.ready,p.bot])]);
  if(rosterKey!==rosterSignature){renderRoster();rosterSignature=rosterKey;}
  const scoreKey=JSON.stringify([data.mode,data.round,data.standings,data.teamScores]);
  if(scoreKey!==scoreSignature){scoreboard(data.players,$('scores'));scoreSignature=scoreKey;}
