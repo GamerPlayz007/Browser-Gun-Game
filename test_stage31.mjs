@@ -5,8 +5,8 @@ import {buildWorld} from './static/world.js';
 
 const canvasContext=new Proxy({}, {get:()=>()=>{}});
 globalThis.document={createElement:()=>({width:0,height:0,getContext:()=>canvasContext})};
-const map=JSON.parse(fs.readFileSync('static/maps/cyberpunk-next.json','utf8'));
-assert.equal(map.id,'cyberpunk-next');
+const map=JSON.parse(fs.readFileSync('static/maps/cyberpunk.json','utf8'));
+assert.equal(map.id,'cyberpunk');
 assert.equal(map.size,120);
 assert.equal(map.routes.length,13);
 assert.ok(map.boxes.length>500);
@@ -35,4 +35,4 @@ scene.traverse(o=>{
   for(const v of o.geometry.attributes.position.array)assert.ok(Number.isFinite(v));
 });
 world.dispose();
-console.log('Stage 3.1: experimental map, instanced details, and quality toggles passed.');
+console.log('Single live city, instanced details, and quality toggles passed.');

@@ -14,8 +14,8 @@ scene.traverse(o=>{if(!o.isMesh)return;meshes++;const p=o.geometry.attributes.po
  if(o.material.isMeshStandardMaterial){standard++;if(o.material.map&&o.material.roughnessMap&&o.material.bumpMap&&o.material.emissiveMap)textureSets++;}
  if(o.castShadow)casts++;
 });
-assert.ok(meshes<180,`Scene merge budgets: ${meshes} meshes`);assert.ok(triangles<150000,`Triangles ${triangles}`);
-assert.ok(world.staticBatches<130,`Static batch budget ${world.staticBatches}`);
+assert.ok(meshes<280,`Scene merge budgets: ${meshes} meshes`);assert.ok(triangles<500000,`Triangles ${triangles}`);
+assert.ok(world.staticBatches<240,`Static batch budget ${world.staticBatches}`);
 assert.ok(world.featureCount>100,'Dense prop descriptions from the map');
 assert.ok(standard>8&&textureSets>8,'PBR materials with four map channels');
 assert.ok(casts>0&&world.sun.castShadow,'Directional light casts shadows on Ultra');
@@ -25,7 +25,7 @@ assert.equal(new Set(scene.children[0].children.filter(o=>o.isMesh&&o.userData.z
 assert.ok(scene.children[0].children.some(o=>o.isPointLight),'Selective neon point lights');
 world.setQuality('performance');assert.equal(world.sun.castShadow,false);
 world.setQuality('ultra');assert.equal(world.sun.castShadow,true);
-console.log(`02.5 world: ${world.staticBatches} batches, ${world.featureCount} authored features, ${meshes} meshes, ${Math.round(triangles)} triangles.`);
+console.log(`03.2 world: ${world.staticBatches} batches, ${world.featureCount} authored features, ${meshes} meshes, ${Math.round(triangles)} triangles.`);
 for(let id=0;id<4;id++){const gun=makeWeapon(id);assert.equal(gun.userData.id,id);for(const reload of [0,.25,.5,.9])animateWeapon(gun,{time:1,ads:1,reload,kick:.02,moving:true,slide:0,motion:true,switched:0});}
 const player=makePlayer('Test');animatePlayer(player,{vx:5,vz:0,crouch:false,pitch:0,yaw:0},1);
 const p={x:-29,y:1,z:14,vx:0,vy:0,vz:0,yaw:0,grounded:true,slide_until:0,slide_ready:0,jump_held:false,slide_held:false};

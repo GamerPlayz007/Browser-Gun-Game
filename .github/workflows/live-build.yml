@@ -1,0 +1,42 @@
+name: CROSSFIRE Main Build Gate
+on:
+  push:
+    branches: [main, feature/single-live-city]
+  pull_request:
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: pip install -r requirements.txt
+      - run: npm ci
+      - name: Compile the ONE live map
+        run: python build_map.py
+      - name: Python map and multiplayer regressions
+        run: python -m unittest test_map test_server test_stage31
+      - name: JavaScript rendering, gameplay and combat regressions
+        run: npm test && node test_stage31.mjs
+      - name: Publish deterministic compiled map to the same branch
+        if: github.event_name == 'push'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A static/map.json static/maps
+          if ! git diff --cached --quiet; then
+            git commit -m 'build: synchronize single generated Cyberpunk map'
+            git push origin HEAD:"${GITHUB_REF_NAME}"
+          fi

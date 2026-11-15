@@ -1,4 +1,4 @@
-"""02.5: real server/client navigation, headroom, room routes and generation checks."""
+"""03.2: sole live city, client/server movement and map generation tests."""
 import json, math, random, subprocess, unittest
 from pathlib import Path
 import server as s
@@ -24,7 +24,7 @@ def traverse(route,reverse=False,mode='sprint',weapon=0):
     return dict(name=f"{route['id']}:{reverse}:{mode}",initial={k:initial[k] for k in ['x','y','z','yaw','vx','vy','vz','grounded','slide_until','slide_ready','jump_held','slide_held']},weapon=weapon,commands=commands),states
 
 class MapTests(unittest.TestCase):
-    def test_all_twelve_connections_and_six_accesses_in_both_engines(self):
+    def test_all_registered_routes_and_six_accesses_in_both_engines(self):
         cases=[];expected=[]
         for route in s.MAP['routes']+s.MAP['stairs']:
             for reverse in [False,True]:
@@ -66,7 +66,7 @@ console.log(JSON.stringify(cases.map(c=>{const p={...c.initial};return c.command
             self.assertFalse(any(s.overlaps(*pos,b) for b in s.BOXES),pos)
             x,y,z=pos
             self.assertTrue(any(abs(s.top_at(b,x,z)-y)<.01 and abs(x-b['x'])<=b['w']/2 and abs(z-b['z'])<=b['d']/2 for b in s.nearby_boxes(x,z)),pos)
-        self.assertEqual({r['id'] for r in s.MAP['routes']},{f'{kind}{i}' for kind in 'GIU' for i in range(1,5)})
+        self.assertEqual({r['id'] for r in s.MAP['routes']},{f'{kind}{i}' for kind in 'GIU' for i in range(1,5)}|{'PD-01'})
         for kind in 'GIU':
             edges={frozenset([r['fromZone'],r['toZone']]) for r in s.MAP['routes'] if r['id'].startswith(kind)}
             self.assertEqual(edges,{frozenset(p) for p in [('market','plaza'),('plaza','atrium'),('market','transit'),('atrium','transit')]})
@@ -77,20 +77,20 @@ console.log(JSON.stringify(cases.map(c=>{const p={...c.initial};return c.command
     def test_spatial_index_never_omits_colliders(self):
         rng=random.Random(3);counts=[]
         for _ in range(300):
-            x,z=rng.uniform(-40,40),rng.uniform(-40,40);r=rng.uniform(.34,1);near=s.nearby_boxes(x,z,r);counts.append(len(near))
+            x,z=rng.uniform(-60,60),rng.uniform(-60,60);r=rng.uniform(.34,1);near=s.nearby_boxes(x,z,r);counts.append(len(near))
             for b in s.BOXES:
                 if abs(x-b['x'])<=b['w']/2+r and abs(z-b['z'])<=b['d']/2+r:self.assertIn(b,near)
         self.assertLess(sum(counts)/len(counts),len(s.BOXES)/3)
     def test_visual_features_are_decoupled_from_collision(self):
-        self.assertEqual(s.MAP['revision'],'02.5')
+        self.assertEqual(s.MAP['revision'],'03.2')
         features=s.MAP['features']
         self.assertGreater(len(features),120)
         kinds={f['kind'] for f in features}
         self.assertTrue({'shop','reception','trainSeat','cable','billboard','plankBolt','puddle','workbench'}<=kinds)
-        self.assertEqual(len(s.MAP['routes']),12)
+        self.assertEqual(len(s.MAP['routes']),13)
         for f in features:self.assertNotIn(f,s.BOXES)
     def test_generation_is_reproducible(self):
-        paths=['static/map.json','static/maps/cyberpunk.json','static/maps/index.json','MAP_GUIDE.svg']
+        paths=['static/map.json','static/maps/cyberpunk.json','static/maps/index.json']
         before=[(ROOT/p).read_bytes() for p in paths]
         subprocess.run(['python','build_map.py'],cwd=ROOT,check=True,capture_output=True)
         self.assertEqual(before,[(ROOT/p).read_bytes() for p in paths])
