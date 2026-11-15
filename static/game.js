@@ -7,6 +7,7 @@ import {createDisplay} from './display.js';
 import {FrameMeter,formatDiagnostics} from './perf36.js';
 import {createPostProcessing} from './postfx.js';
 import {AudioEngine} from './audio.js';
+import {createUrbanAmbience45} from './living45.js';
 import {matchPresentation,finishPresentation,matchNotice} from './match35.js';
 import {createNetSync,observePong,ingestSnapshot,sampleRemote,cameraCorrection,syncStats} from './netcode33.js';
 import {fireMode, makeTrigger, pressTrigger, releaseTrigger, takeTriggerPulse,
@@ -15,11 +16,12 @@ const $=id=>document.getElementById(id),clamp=T.MathUtils.clamp;
 const audio=new AudioEngine();
 const settings={sens:Number(localStorage.getItem('cf-sens')||1),motion:localStorage.getItem('cf-motion')!=='false',quality:localStorage.getItem('cf-quality-25')||'high'};
 $('sensitivity').value=settings.sens;$('motion').checked=settings.motion;$('quality').value=settings.quality;
-let map,registry,renderer,world,scene,camera,viewScene,viewCamera,display,minimap,postfx;
+let map,registry,renderer,world,scene,camera,viewScene,viewCamera,display,minimap,postfx,ambience45;
 try{
  const catalog=await fetch('/api/maps');if(!catalog.ok)throw Error('Map list could not load.');registry=await catalog.json();
  const entry=registry.maps.find(m=>m.id===registry.default&&m.available);
  const response=await fetch(entry.url);if(!response.ok)throw Error('Arena data could not load.');map=await response.json();
+ ambience45=createUrbanAmbience45(audio,map);ambience45.setQuality(settings.quality);
  scene=new T.Scene();camera=new T.PerspectiveCamera(82,innerWidth/innerHeight,.06,600);camera.rotation.order='YXZ';
  renderer=new T.WebGLRenderer({antialias:true,powerPreference:'high-performance'});renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.13;renderer.autoClear=false;$('viewport').appendChild(renderer.domElement);
  world=buildWorld(scene,map,{renderer,quality:settings.quality});postfx=createPostProcessing(renderer,scene,camera,settings.quality);viewScene=new T.Scene();viewCamera=new T.PerspectiveCamera(65,innerWidth/innerHeight,.03,10);viewScene.add(new T.HemisphereLight(0xf0f8f5,0x697f7a,2.8));const light=new T.DirectionalLight(0xffe5bb,3);light.position.set(-2,4,3);viewScene.add(light);
@@ -35,6 +37,7 @@ async function loadArena(id){
  const next=await response.json();if(next.id!==id)throw Error('Map data mismatch. Refresh and try again.');
  const nextScene=new T.Scene(),nextWorld=buildWorld(nextScene,next,{renderer,quality:settings.quality});
  world.dispose();postfx.dispose();scene=nextScene;world=nextWorld;postfx=createPostProcessing(renderer,scene,camera,settings.quality);map=next;
+ ambience45.setMap(map);
  minimap=createMinimap($('minimap'),$('district-label'),map);$('map-select').value=id;
  display.quality.reset();display.resize(true);
 }
@@ -221,7 +224,8 @@ function frame(ms){try{const now=ms/1000,rawMs=ms-clock,dt=Math.min(rawMs/1000,.
    });
   }
  }
- world.animate(now);
+ world.animate(now,local);
+ ambience45.update(now,local,joined&&!!me&&me.hp>0&&locked()&&!document.hidden,yaw);
  if(joined&&me&&local){const input=controls();minimap.draw(local,yaw,now);
   if(me.hp>0&&['lobby','playing'].includes(state.phase)){
    movementAccumulator+=dt;
@@ -265,7 +269,7 @@ $('create').onclick=()=>{audio.unlock();enter(true);};$('join').onclick=()=>{aud
 $('start').onclick=()=>{send({type:'start'});capture();};$('rematch').onclick=()=>{send({type:'start'});audio.unlock();};$('result-room').onclick=()=>{$('results').hidden=true;$('room-panel').hidden=false;};$('menu-button').onclick=()=>{document.exitPointerLock?.();$('room-panel').hidden=false;};
 $('copy-invite').onclick=async()=>{try{await navigator.clipboard.writeText(`${location.origin}/?room=${roomCode}`);toast('Invite copied. Send it to your friends.');}catch{toast('Room code '+roomCode+' — copy the address bar link.');}};
 $('leave').onclick=()=>{const conn=ws;ws=null;conn?.close();history.replaceState(null,'','/');disconnect('You left the room.');};document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>send({type:'mode',mode:b.dataset.mode}));
-$('sensitivity').oninput=e=>{settings.sens=Number(e.target.value);localStorage.setItem('cf-sens',settings.sens);};$('motion').onchange=e=>{settings.motion=e.target.checked;localStorage.setItem('cf-motion',settings.motion);};$('volume').oninput=e=>audio.volume=Number(e.target.value);$('quality').onchange=e=>{settings.quality=e.target.value;localStorage.setItem('cf-quality-25',settings.quality);display.setMode(settings.quality);world.setQuality(settings.quality);postfx.setMode(settings.quality);};
+$('sensitivity').oninput=e=>{settings.sens=Number(e.target.value);localStorage.setItem('cf-sens',settings.sens);};$('motion').onchange=e=>{settings.motion=e.target.checked;localStorage.setItem('cf-motion',settings.motion);};$('volume').oninput=e=>audio.volume=Number(e.target.value);$('quality').onchange=e=>{settings.quality=e.target.value;localStorage.setItem('cf-quality-25',settings.quality);display.setMode(settings.quality);world.setQuality(settings.quality);postfx.setMode(settings.quality);ambience45.setQuality(settings.quality);};
 window.addEventListener('resize',()=>display.resize());
 document.addEventListener('visibilitychange',()=>{clock=performance.now();frameMeter.reset();movementAccumulator=0;display.quality.warmup=120;resetInput();});
 $('create').disabled=$('join').disabled=false;$('create').textContent='CREATE A ROOM →';$('status').textContent='Create a room and send your friends the invite.';
