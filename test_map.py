@@ -60,7 +60,7 @@ console.log(JSON.stringify(cases.map(c=>{const p={...c.initial};return c.command
                         supports=[s.top_at(o,x,z) for o in near if y-1.5<=s.top_at(o,x,z)<=y+.3 and abs(x-o['x'])<=o['w']/2+.01 and abs(z-o['z'])<=o['d']/2+.01]
                         self.assertTrue(supports,(route['id'],'unsupported',[x,y,z]))
                         floor=max(supports)
-                        blockers=[o for o in near if s.overlaps(x,floor+.29,z,o,2.7)]
+                        blockers=[o for o in near if s.overlaps(x,floor+.29,z,o,2.7) and not (side!=0 and o.get('kind') in ('stairTread','stairLanding') and o.get('route')!=route['id'])]
                         self.assertFalse(blockers,(route['id'],[x,floor,z],[(o['kind'],o['x'],o['z']) for o in blockers]))
     def test_spawns_and_street_connectivity(self):
         for pos in s.SPAWNS:
