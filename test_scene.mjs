@@ -29,6 +29,6 @@ console.log(`03.2 world: ${world.staticBatches} batches, ${world.featureCount} a
 for(let id=0;id<4;id++){const gun=makeWeapon(id);assert.equal(gun.userData.id,id);for(const reload of [0,.25,.5,.9])animateWeapon(gun,{time:1,ads:1,reload,kick:.02,moving:true,slide:0,motion:true,switched:0});}
 const player=makePlayer('Test');animatePlayer(player,{vx:5,vz:0,crouch:false,pitch:0,yaw:0},1);
 const p={x:-24,y:1,z:13,vx:0,vy:0,vz:0,yaw:0,grounded:true,slide_until:0,slide_ready:0,jump_held:false,slide_held:false};
-for(let i=0;i<105;i++)simulate(p,{w:true},1/30,100+i/30,map.boxes,map.weapons[0]);
+for(let i=0;i<105;i++)simulate(p,{w:true},1/60,100+i/60,map.boxes,map.weapons[0]);
 assert.ok(Number.isFinite(p.x)&&Number.isFinite(p.y)&&Number.isFinite(p.z));assert.ok(p.z<11);
 world.dispose();console.log('PBR world, presets, route access, rigs and movement passed.');
