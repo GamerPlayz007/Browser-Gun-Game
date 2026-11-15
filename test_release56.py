@@ -9,9 +9,9 @@ import server
 from cosmetics56 import PALETTE56,normalize_skin56
 
 ROOT=Path(__file__).parent
-VERSION='3.0.0-rc.1'
-PHASE='05.6'
-BADGE='V3.0 RC'
+VERSION='3.0.0-rc.2'
+PHASE='05.7'
+BADGE='V3.0 RC2'
 
 class Release56Contracts(unittest.TestCase):
     def test_skin_ids_are_strictly_validated(self):
