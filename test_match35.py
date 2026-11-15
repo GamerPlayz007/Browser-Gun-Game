@@ -12,7 +12,11 @@ class MatchRulesTests(unittest.TestCase):
                          [0,0,1,1,2,2,3,3,3])
         self.assertEqual(rules('gungame',4),{
             'goal':12,'duration':360,'countdown':3,'respawn':3,
+            'teamBased':False,'controlPoint':False,'bots':0,'botGoal':0,
             'killsPerTier':3,'tiers':4})
+        self.assertEqual(rules('botmatch',4)['goal'],20)
+        self.assertEqual(rules('botmatch',4)['bots'],4)
+        self.assertEqual(rules('botmatch',4)['botGoal'],12)
 
     def test_leaderboard_sorting_shared_ranks_and_unique_ids(self):
         r,a,b=duel()
