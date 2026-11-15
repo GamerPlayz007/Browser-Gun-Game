@@ -121,3 +121,27 @@
 #movement-state.flow-action{color:#ffe5ae;border-color:#ffe1a580;
  background:linear-gradient(95deg,#4f3c235e,#183d485e);text-shadow:0 0 8px #f7c97966}
 #movement-state.flow-action:before{background:#ffdb8f;box-shadow:0 0 7px #ffdb8f}
+
+/* Phase 5.4 — two-team modes, readable beacon status and compact 2×2 mode picker. */
+.mode-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.mode-options button{min-width:0;min-height:54px}
+.mode-options button[data-mode="teamdeathmatch"].active{border-color:#65d9ff;background:#153e5688}
+.mode-options button[data-mode="control"].active{border-color:#ffc88b;background:#5e423088}
+#team-bar[hidden]{display:none!important}
+#team-bar{display:flex;align-items:center;justify-content:center;gap:12px;
+ margin-top:9px;padding:6px 9px;border:1px solid #8ae9f244;border-radius:5px;
+ background:#081a27dd;white-space:nowrap;box-shadow:0 8px 20px #04152177;
+ font:700 11px/1.2 'Barlow Condensed',sans-serif;text-shadow:0 1px 4px #000b}
+#team-bar strong{font-size:15px;letter-spacing:.08em}
+#team-azure{color:#65ddff}#team-ember{color:#ffaf7f}
+#team-control{font:700 9px/1.2 'Barlow Condensed',sans-serif;color:#e7e9db;letter-spacing:.04em}
+#team-bar.contested{border-color:#ffe39a;background:#493719dd}
+.roster-row.team-azure{border-left:3px solid #57ddff}
+.roster-row.team-ember{border-left:3px solid #ff996c}
+.roster-row.team-azure .avatar,.roster-row.team-azure small{color:#6fe1ff}
+.roster-row.team-ember .avatar,.roster-row.team-ember small{color:#ffbb94}
+#scoreboard tr.team-azure td:first-child{color:#8ee6ff}
+#scoreboard tr.team-ember td:first-child{color:#ffc19b}
+@media(max-width:650px){#team-bar{gap:5px;padding:5px}
+ #team-bar strong{font-size:12px}#team-control{font-size:8px}
+ .mode-options button{font-size:9px;padding:8px 6px}}
