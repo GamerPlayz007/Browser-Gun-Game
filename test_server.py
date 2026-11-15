@@ -11,6 +11,16 @@ def duel(mode='deathmatch',weapon=0):
     return r,a,b
 
 class GameTests(unittest.TestCase):
+    def test_snapshot_contains_monotonic_sequence_and_server_clock(self):
+        room,_,_=duel()
+        first=room.snapshot(110.0)
+        second=room.snapshot(110.05)
+        self.assertEqual(first['type'],'state')
+        self.assertEqual(first['snapshotSeq']+1,second['snapshotSeq'])
+        self.assertEqual((first['serverTime'],second['serverTime']),(110.0,110.05))
+        self.assertEqual((second['tickRate'],second['snapshotHz']),(60,20))
+        self.assertEqual(len(second['players']),2)
+
     def test_server_hit_events_include_origin_for_directional_ui(self):
         r,a,b=duel()
         self.assertTrue(r.shoot(a,101,shot_id=1))
@@ -150,7 +160,10 @@ class NetworkTests(unittest.IsolatedAsyncioTestCase):
         await a.send_json({'type':'ping','t':123})
         while True:
             d=await a.receive_json(timeout=2)
-            if d['type']=='pong':self.assertEqual(d['t'],123);break
+            if d['type']=='pong':
+                self.assertEqual(d['t'],123)
+                self.assertLess(abs(d['serverTime']-time.monotonic()),3)
+                break
         code2=(await (await self.client.post('/api/rooms')).json())['room'];c,cid=await self.join(code2,'Other');self.assertEqual(len((await self.state(c))['players']),1)
         extras=[]
         for i in range(s.MAX_PLAYERS-2):
@@ -158,6 +171,17 @@ class NetworkTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual((await self.client.get('/ws/'+code)).status,409)
         await a.close();await asyncio.sleep(.05);self.assertEqual(r.host,bid)
         for conn in [b,c,*extras]:await conn.close()
+    async def test_sequenced_network_snapshots_include_server_time(self):
+        code=(await (await self.client.post('/api/rooms')).json())['room']
+        ws,pid=await self.join(code,'Clocked')
+        a=await self.state(ws);b=await self.state(ws)
+        self.assertGreater(b['snapshotSeq'],a['snapshotSeq'])
+        self.assertGreaterEqual(b['serverTime'],a['serverTime'])
+        self.assertGreater(b['serverTime'],0)
+        self.assertEqual((b['tickRate'],b['snapshotHz']),(60,20))
+        self.assertEqual(b['players'][0]['id'],pid)
+        await ws.close()
+
     async def test_map_selector_validation_and_join_contract(self):
         registry=await (await self.client.get('/api/maps')).json()
         self.assertEqual(registry['default'],'cyberpunk');self.assertEqual(len(registry['maps']),1)
@@ -171,7 +195,7 @@ class NetworkTests(unittest.IsolatedAsyncioTestCase):
         ws=await self.client.ws_connect('/ws/'+data['room']);welcome=await ws.receive_json();self.assertEqual(welcome['mapId'],'cyberpunk')
         await ws.send_json({'type':'map','mapId':'solstice'})
         self.assertEqual((await self.state(ws))['mapId'],'cyberpunk');await ws.close()
-        html=await (await self.client.get('/')).text();self.assertIn('<sup>03.2</sup>',html);self.assertIn('id="map-select"',html)
+        html=await (await self.client.get('/')).text();self.assertIn('<sup>03.3</sup>',html);self.assertIn('id="map-select"',html)
         arena=await (await self.client.get('/static/maps/cyberpunk.json')).json();self.assertEqual(arena['id'],'cyberpunk');self.assertEqual(len(arena['routes']),13)
     async def test_duplicate_shot_ids_do_not_consume_extra_ammunition(self):
         code=(await (await self.client.post('/api/rooms')).json())['room']
@@ -203,5 +227,5 @@ class NetworkTests(unittest.IsolatedAsyncioTestCase):
         for path in ['/','/static/map.json','/static/game.js','/static/world.js','/static/models.js','/static/vendor/addons/objects/Sky.js']:
             response=await self.client.get(path);self.assertEqual(response.status,200,path)
         self.assertEqual((await self.client.get('/api/rooms/XXXXXX')).status,404)
-        self.assertEqual((await (await self.client.get('/health')).json())['version'],2)
+        self.assertEqual((await (await self.client.get('/health')).json())['version'],3)
 if __name__=='__main__':unittest.main()

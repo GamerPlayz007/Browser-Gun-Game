@@ -4,10 +4,10 @@
   "type": "module",
   "scripts": {
     "dev": "python server.py",
-    "test": "node test_scene.mjs && node test_movement.mjs && node test_district.mjs && node test_display.mjs && node test_postfx.mjs && node test_combat32.mjs"
+    "test": "node test_scene.mjs && node test_movement.mjs && node test_district.mjs && node test_display.mjs && node test_postfx.mjs && node test_combat32.mjs && node test_netcode33.mjs"
   },
   "dependencies": {
     "three": "0.180.0"
   },
-  "version": "3.2.0"
+  "version": "3.3.0"
 }
