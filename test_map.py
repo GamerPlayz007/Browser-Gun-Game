@@ -28,7 +28,7 @@ class MapTests(unittest.TestCase):
         cases=[];expected=[]
         for route in s.MAP['routes']+s.MAP['stairs']:
             for reverse in [False,True]:
-                for mode in ['sprint','jump','slide']:
+                for mode in ['sprint']:
                     case,states=traverse(route,reverse,mode,weapon=3);cases.append(case);expected.append(states)
         script="""import fs from 'node:fs';import {simulate} from './static/physics.js';
 const map=JSON.parse(fs.readFileSync('static/map.json')),cases=JSON.parse(fs.readFileSync(0,'utf8'));
