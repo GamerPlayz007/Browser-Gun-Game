@@ -8,9 +8,12 @@ KILLS_PER_TIER = 3
 MATCH_DURATION = 360
 COUNTDOWN_DURATION = 3
 RESPAWN_DURATION = 3
+from modes54 import TEAM_KILL_GOAL,CONTROL_GOAL,is_team_mode
 
 def goal(mode,weapon_count):
-    return weapon_count * KILLS_PER_TIER if mode == 'gungame' else DEATHMATCH_GOAL
+    return (weapon_count * KILLS_PER_TIER if mode == 'gungame' else
+            TEAM_KILL_GOAL if mode == 'teamdeathmatch' else
+            CONTROL_GOAL if mode == 'control' else DEATHMATCH_GOAL)
 
 def tier_for_kills(kills,weapon_count):
     return min(max(0,int(kills)) // KILLS_PER_TIER, max(0,weapon_count-1))
@@ -45,4 +48,5 @@ def timed_winner(players):
 def rules(mode,weapon_count):
     return dict(goal=goal(mode,weapon_count),duration=MATCH_DURATION,
         countdown=COUNTDOWN_DURATION,respawn=RESPAWN_DURATION,
+        teamBased=is_team_mode(mode),controlPoint=mode=='control',
         killsPerTier=KILLS_PER_TIER,tiers=weapon_count if mode=='gungame' else 0)
