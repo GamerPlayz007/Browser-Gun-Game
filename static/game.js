@@ -5,6 +5,7 @@ import {simulate,FIXED_DT} from './physics.js';
 import {createMinimap} from './minimap.js';
 import {createDisplay} from './display.js';
 import {FrameMeter,formatDiagnostics} from './perf36.js';
+import {captureRenderHealth46} from './polish46.js';
 import {createPostProcessing} from './postfx.js';
 import {AudioEngine} from './audio.js';
 import {createUrbanAmbience45} from './living45.js';
@@ -23,10 +24,12 @@ try{
  const response=await fetch(entry.url);if(!response.ok)throw Error('Arena data could not load.');map=await response.json();
  ambience45=createUrbanAmbience45(audio,map);ambience45.setQuality(settings.quality);
  scene=new T.Scene();camera=new T.PerspectiveCamera(82,innerWidth/innerHeight,.06,600);camera.rotation.order='YXZ';
- renderer=new T.WebGLRenderer({antialias:true,powerPreference:'high-performance'});renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.13;renderer.autoClear=false;$('viewport').appendChild(renderer.domElement);
+ renderer=new T.WebGLRenderer({antialias:true,powerPreference:'high-performance'});renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.13;renderer.autoClear=false;
+ renderer.info.autoReset=false; // Count draw calls across every compositor and weapon pass.
+ $('viewport').appendChild(renderer.domElement);
  world=buildWorld(scene,map,{renderer,quality:settings.quality});postfx=createPostProcessing(renderer,scene,camera,settings.quality);viewScene=new T.Scene();viewCamera=new T.PerspectiveCamera(65,innerWidth/innerHeight,.03,10);viewScene.add(new T.HemisphereLight(0xf0f8f5,0x697f7a,2.8));const light=new T.DirectionalLight(0xffe5bb,3);light.position.set(-2,4,3);viewScene.add(light);
 }catch(e){$('status').textContent=e.message.includes('WebGL')?'3D graphics unavailable. Enable hardware acceleration and use Chrome or Edge.':e.message;throw e;}
-display=createDisplay(renderer,[camera,viewCamera],enabled=>world.setDetail(enabled),settings.quality);
+display=createDisplay(renderer,[camera,viewCamera],enabled=>{world.setDetail(enabled);postfx.setDetail(enabled);},settings.quality);
 minimap=createMinimap($('minimap'),$('district-label'),map);
 for(const entry of registry.maps){const option=document.createElement('option');option.value=entry.id;option.textContent=entry.name+(entry.available?'':' — coming later');option.disabled=!entry.available;$('map-select').append(option);}
 $('map-select').value=map.id;
@@ -218,10 +221,8 @@ function frame(ms){try{const now=ms/1000,rawMs=ms-clock,dt=Math.min(rawMs/1000,.
   const net=syncStats(netSync,ms);
   $('metrics').textContent=`${fps} FPS · ${Number.isFinite(net.rttMs)?Math.round(net.rttMs):'--'} MS · ±${Math.round(net.jitterMs)} JITTER · ${net.stale&&joined?'SYNCING · ':''}${display.label()}`;
   if(!$('perf-panel').hidden){
-   const info=renderer.info.render;
-   $('perf-details').textContent=formatDiagnostics(frameMeter.summary(),net,{
-     quality:display.label(),drawCalls:info.calls,triangles:info.triangles
-   });
+   $('perf-details').textContent=formatDiagnostics(frameMeter.summary(),net,
+    captureRenderHealth46(renderer,scene,world,display));
   }
  }
  world.animate(now,local);
@@ -254,7 +255,7 @@ function frame(ms){try{const now=ms/1000,rawMs=ms-clock,dt=Math.min(rawMs/1000,.
  for(let i=effects.length-1;i>=0;i--)if(now>effects[i].until){const e=effects.splice(i,1)[0];e.obj.removeFromParent();if(e.own){e.obj.geometry.dispose();e.obj.material.dispose();}}
  $('damage').style.opacity=now<damageUntil?.65:0;$('damage-direction').style.opacity=now<damageUntil?1:0;$('hitmarker').style.opacity=$('damage-number').style.opacity=now<hitUntil?1:0;$('elimination').style.opacity=now<elimUntil?1:0;
  $('match-banner').style.opacity=now<matchBannerUntil?1:0;
-  renderer.clear();postfx.setSize(display.buffer.width,display.buffer.height);postfx.render(now);if(joined&&me&&locked()&&me.hp>0&&state.phase!=='results'){renderer.clearDepth();renderer.render(viewScene,viewCamera);}
+  renderer.info.reset();renderer.clear();postfx.setSize(display.buffer.width,display.buffer.height);postfx.render(now);if(joined&&me&&locked()&&me.hp>0&&state.phase!=='results'){renderer.clearDepth();renderer.render(viewScene,viewCamera);}
  }catch(e){if(!frameError){frameError=true;toast('Rendering error: '+e.message);console.error(e);}}}
 renderer.setAnimationLoop(frame);
 async function capture(){audio.unlock();if(state?.phase==='results'){$('results').hidden=false;$('room-panel').hidden=true;return;}try{await renderer.domElement.requestPointerLock();}catch{toast('Open this game in its own browser tab to capture the mouse.');}}
