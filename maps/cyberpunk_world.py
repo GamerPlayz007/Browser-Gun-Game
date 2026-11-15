@@ -75,20 +75,6 @@ def open_edge_walls_around_authored_routes(city):
             kind="routeFloor",style="road",zone="plaza",
             route=route,stage6Physical=True,structure="interior-road-apron"
         ))
-    # At the 7 m turn of the transit switchback, the lower stair was
-    # trapped beneath the overhanging 9 m platform. Keep the upper deck
-    # at its original elevation, but tuck its front lip behind the stair turn.
-    # The long upper bridge remains physically supported by the same deck.
-    for b in new_boxes:
-        if (b.get("kind")=="deck" and b.get("structure")=="station-landing"
-                and b.get("route")=="S5" and b["y"]>8):
-            b["z"]=round(b["z"]-.35,5)
-    new_boxes=[
-        b for b in new_boxes
-        if not (b.get("kind")=="routeFloor" and b.get("structure")=="U3"
-                and 8.5<b["y"]<9 and abs(b["x"]+14.675)<.01
-                and abs(b["z"]+17.505)<.01)
-    ]
     city["boxes"]=new_boxes
     city["stage6"]["final_collider_count"]=len(new_boxes)
     return city
