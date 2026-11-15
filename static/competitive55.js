@@ -5,7 +5,7 @@
 export const TEAM_COLORS55=Object.freeze({azure:'#65ddff',ember:'#ffaf7f'});
 
 export function readyView55(state={},myId=null){
- const players=Array.isArray(state.players)?state.players:[];
+ const players=(Array.isArray(state.players)?state.players:[]).filter(p=>!p.bot);
  const ready=players.filter(p=>p.ready===true).length;
  const me=players.find(p=>p.id===myId);
  const between=state.phase==='lobby'||state.phase==='results';
@@ -17,7 +17,7 @@ export function readyView55(state={},myId=null){
 
 export function spectatorCandidates55(state={},myId=null){
  if(state.phase!=='playing')return [];
- const players=Array.isArray(state.players)?state.players:[];
+ const players=(Array.isArray(state.players)?state.players:[]).filter(p=>!p.bot);
  const me=players.find(p=>p.id===myId);
  if(!me||me.hp>0)return [];
  const teamMode=state.mode==='teamdeathmatch'||state.mode==='control';
