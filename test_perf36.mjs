@@ -56,6 +56,8 @@ assert.ok(ui.includes('<sup>03.6</sup>'));
 const game=fs.readFileSync('./static/game.js','utf8');
 assert.ok(game.includes('frameMeter.record(rawMs'));
 assert.ok(game.includes("e.code==='F7'"));
+assert.ok(game.includes("if(!joined)return;if(e.code==='F7'"),
+ 'F7 must be handled before the focused-input guard');
 assert.ok(game.includes('formatDiagnostics'));
 console.log('Stage 3.6: frame pacing, slow-frame detection, sequence gaps, bounded sampling,');
 console.log('and HUD diagnostics contracts passed.');
