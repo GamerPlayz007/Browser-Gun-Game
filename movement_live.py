@@ -7,7 +7,7 @@ import math
 from map_registry import top_at, bottom_at
 
 FIXED_DT=1/60
-M=dict(walk=5.35,sprint=8.2,crouch=3.15,groundAccel=34,groundBrake=42,
+M=dict(walk=5.35,sprint=8.2,crouch=3.15,groundAccel=60,groundBrake=42,
        airAccel=9.5,airBrake=1.7,slideMin=5,slideBoost=1.13,slideMax=10,
        slideTime=.70,slideCD=1.05,slideDrag=2.7,slideSteer=3.6,
        buffer=.125,coyote=.1,jumpSpeed=7.5,shortHop=.52,gravity=22,
