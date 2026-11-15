@@ -4,6 +4,7 @@ import {topAt} from './physics.js';
 import {createStage5VisualLayer} from './stage5_visual_layer.js';
 import {createStage6VisualLayer} from './stage6_visual_layer.js';
 import {SURFACE_STYLES,NEON_STYLES,createCyberMaterialLibrary} from './materials41.js';
+import {createCinematicLighting} from './lighting42.js';
 
 // 04.1: shared procedural PBR atlas library with batched noncolliding city context.
 // Only map.boxes are authoritative colliders. All map.features and map.decor
@@ -47,17 +48,14 @@ export function buildWorld(scene,map,{renderer,quality='high'}={}){
  const root=new T.Group();scene.add(root);const batches=new Map(),details=[],mats=new Map();
  const materialSystem=createCyberMaterialLibrary(T);
  scene.background=new T.Color('#091525');scene.fog=new T.FogExp2('#0a1628',.0085);
- const hemi=new T.HemisphereLight('#9bb7df','#2f2736',1.25);root.add(hemi);
- const sun=new T.DirectionalLight('#f9d6bd',2.8);sun.position.set(-30,67,14);sun.castShadow=true;
- sun.shadow.mapSize.set(2048,2048);Object.assign(sun.shadow.camera,{left:-80,right:80,top:80,bottom:-80,near:2,far:200});sun.shadow.bias=-.00018;sun.shadow.normalBias=.035;root.add(sun,sun.target);sun.target.position.set(0,0,0);
+ // The lighting controller owns moon, rim, sign bounce, architectural washes,
+ // grounded neon pools, shadows and quality presets, never physics objects.
+ const lighting=createCinematicLighting(T,scene,root,map);
+ const sun=lighting.moon;
  let env=null;try{env=environment(renderer);if(env)scene.environment=env.texture;}catch(error){console.warn('Environment map unavailable:',error);}
  // One 512px four-channel atlas per surface, shared by the core city and
  // every visual-only building and window across Stage 5 and Stage 6.
  for(const style of Object.keys(MATERIALS))mats.set(style,materialSystem.get(style));
- // Deep colored light pockets contrast with the very dark underpasses.
- const lights=[[-27,5,14,'#ff468b',17,3],[-20,5,1,'#f0a65f',14,3],[-3,5,25,'#43f5ff',18,4],
-  [22,5,23,'#33cfff',20,4],[29,6,5,'#f6b774',15,3],[2,12,-22,'#ffaf50',17,3],[-28,5,24,'#fa4c93',17,3]];
- for(const [x,y,z,color,dist,intensity] of lights){const l=new T.PointLight(color,intensity,dist,2);l.position.set(x,y,z);l.userData.fxLight=true;root.add(l);}
  const steam=[];
  function queue(g,style='concrete',zone='plaza',optional=false,casts=false){
   if(g.index){const next=g.toNonIndexed();g.dispose();g=next;}
@@ -193,20 +191,18 @@ export function buildWorld(scene,map,{renderer,quality='high'}={}){
    for(const mesh of stage6Group.children)mesh.visible=detailEnabled&&(mesh.userData.stage6Tier||0)<=level;
   }
   function setQuality(mode){activeVisualMode=mode;showStageDetail();
-  const low=mode==='performance',ultra=mode==='ultra';
+  const low=mode==='performance';
   for(const d of details)d.visible=!low;
-  for(const l of root.children)if(l.isPointLight)l.visible=!low||l.position.y>10;
-  sun.castShadow=!low;sun.shadow.mapSize.set(2048,2048);
+  lighting.setQuality(mode);
   materialSystem.setQuality(mode);
-  scene.fog.density=low?.0062:.0085;
  }
  setQuality(quality);
- return {sun,targets,staticBatches:batches.size+(map.signs?.length?1:0),featureCount:map.features?.length||0,
+ return {sun,lighting,targets,staticBatches:batches.size+(map.signs?.length?1:0),featureCount:map.features?.length||0,
   setDetail(enabled){detailEnabled=enabled;for(const mesh of details)mesh.visible=enabled;showStageDetail();},setQuality,
-  animate(time){for(const s of steam){const p=s.cloud.geometry.attributes.position;
+  animate(time){lighting.animate(time);for(const s of steam){const p=s.cloud.geometry.attributes.position;
    for(let i=0;i<s.seeds.length;i++){const k=(time*.38+s.seeds[i])%1;p.setXYZ(i,s.x+Math.sin(time+i)*.3*k,s.y+.2+3*k,s.z+Math.cos(time*.7+i)*.25*k);}p.needsUpdate=true;
   }},
-  dispose(){root.traverse(o=>{o.geometry?.dispose();if(o.isPoints||o.userData.stage5VisualOnly||o.userData.stage6VisualOnly)o.material?.dispose();});
+  dispose(){lighting.dispose();root.traverse(o=>{o.geometry?.dispose();if(o.isPoints||o.userData.stage5VisualOnly||o.userData.stage6VisualOnly)o.material?.dispose();});
    materialSystem.dispose();for(const m of [targetMat,headMat,signMaterial])m?.dispose();signTexture?.dispose();env?.dispose();scene.environment=null;root.removeFromParent();}
  };
 }
