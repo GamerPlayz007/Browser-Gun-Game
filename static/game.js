@@ -96,7 +96,23 @@ function scoreboard(players,body){
  }
 }
 function renderRoster(){const el=$('roster');el.replaceChildren();for(const p of state.players){const r=document.createElement('div');r.className='roster-row';const avatar=document.createElement('span');avatar.className='avatar';avatar.textContent=p.name.slice(0,1).toUpperCase();const name=document.createElement('span');name.textContent=p.name;const badge=document.createElement('small');badge.textContent=p.id===state.host?'HOST':p.id===myId?'YOU':'CONNECTED';r.append(avatar,name,badge);el.append(r);}for(let i=state.players.length;i<8;i++){const r=document.createElement('div');r.className='roster-empty';r.textContent='Open slot — invite a friend';el.append(r);}}
-function uiRoom(){const host=state.host===myId,canStart=['lobby','results'].includes(state.phase);$('start').hidden=!canStart;$('start').disabled=!host;$('start').textContent=host?(state.phase==='results'?'START REMATCH →':'START MATCH →'):'WAITING FOR HOST';$('resume').textContent=state.phase==='lobby'?'ENTER PRACTICE':state.phase==='results'?'VIEW RESULTS':'RESUME MATCH';$('room-title').textContent=state.phase==='lobby'?'Your squad.':'Stay in the fight.';$('room-hint').textContent=state.phase==='lobby'?'Practice while your friends join. The host starts the match.':'The match continues while this menu is open.';document.querySelectorAll('[data-mode]').forEach(b=>{b.classList.toggle('active',b.dataset.mode===state.mode);b.disabled=!host||state.phase!=='lobby';});document.querySelectorAll('#room-weapons button').forEach(b=>b.disabled=state.mode==='gungame'&&state.phase!=='lobby');}
+function uiRoom(){
+ const host=state.host===myId,between=['lobby','results'].includes(state.phase);
+ $('start').hidden=!between;$('start').disabled=!host;
+ $('start').textContent=host?(state.phase==='results'?'START REMATCH →':'START MATCH →'):'WAITING FOR HOST';
+ $('resume').textContent=state.phase==='lobby'?'ENTER PRACTICE':state.phase==='results'?'VIEW RESULTS':'RESUME MATCH';
+ $('room-title').textContent=state.phase==='lobby'?'Your squad.':state.phase==='results'?'Run it back.':'Stay in the fight.';
+ $('room-hint').textContent=state.phase==='lobby'?
+  'Practice while your friends join. The host starts the match.':
+  state.phase==='results'?
+  'The host can choose the next mode before starting the rematch.':
+  'The match continues while this menu is open.';
+ document.querySelectorAll('[data-mode]').forEach(b=>{
+  b.classList.toggle('active',b.dataset.mode===(state.nextMode||state.mode));
+  b.disabled=!host||!between;
+ });
+ document.querySelectorAll('#room-weapons button').forEach(b=>b.disabled=state.mode==='gungame'&&state.phase!=='lobby');
+}
 function addTracer(origin,end){const geometry=new T.BufferGeometry().setFromPoints([new T.Vector3(...origin),new T.Vector3(...end)]),line=new T.Line(geometry,new T.LineBasicMaterial({color:0xffe0a0,transparent:true,opacity:.5}));scene.add(line);effects.push({obj:line,until:performance.now()/1000+.055,own:true});const dot=new T.Mesh(hitGeometry,hitMaterial);dot.position.set(...end);scene.add(dot);effects.push({obj:dot,until:performance.now()/1000+.18});}
 function processEvent(e){
  const now=performance.now()/1000;
