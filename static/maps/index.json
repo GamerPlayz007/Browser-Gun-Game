@@ -9,6 +9,13 @@
       "theme": "cyberpunk"
     },
     {
+      "id": "cyberpunk-next",
+      "name": "Cyberpunk City / Rebuilt (Experimental)",
+      "available": true,
+      "url": "/static/maps/cyberpunk-next.json",
+      "theme": "cyberpunk"
+    },
+    {
       "id": "rainforest",
       "name": "Lush Rainforest",
       "available": false,

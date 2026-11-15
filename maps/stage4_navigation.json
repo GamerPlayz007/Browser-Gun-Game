@@ -1,0 +1,2070 @@
+{
+  "project": "CROSSFIRE / Cyberpunk City",
+  "phase": 1,
+  "stage": 3,
+  "title": "Navigation and Structural Validation Specification",
+  "status": "DETAILED PLANNING ONLY \u2014 NOT GEOMETRY OR PHYSICS VERIFIED",
+  "source_basis": {
+    "reference": "maps/cyberpunk.py (published main 14 Nov 2026)",
+    "stage1": "CROSSFIRE_Stage1_Urban_Plan.json",
+    "stage2": "CROSSFIRE_Stage2_Building_Plan.json"
+  },
+  "coordinate_system": {
+    "authored": "x east, z south, map bounds [0,80]",
+    "world": "gameX=authoredX-40, gameZ=authoredZ-40",
+    "y": "meters above plaza datum"
+  },
+  "navigation_philosophy": {
+    "legible": "Public routes visibly identify district destinations and remain usable without unlocking hidden connections.",
+    "discoverable": "Interior and elevated routes offer alternative choices; each has a building-specific entrance, floor, and credible destination.",
+    "not_aimed_at": "Not designed to imitate real-world tactical movement; all routes are fictional gameplay circulation."
+  },
+  "landmark_nodes": [
+    "M_C",
+    "P_C",
+    "A_LOBBY",
+    "T_C"
+  ],
+  "nodes": {
+    "M_N": {
+      "x": 16,
+      "y": 1,
+      "z": 33,
+      "world_x": -24,
+      "world_z": -7,
+      "zone": "Market",
+      "label": "Market north",
+      "kind": "wayfinding"
+    },
+    "M_C": {
+      "x": 16,
+      "y": 1,
+      "z": 53,
+      "world_x": -24,
+      "world_z": 13,
+      "zone": "Market",
+      "label": "Market spine",
+      "kind": "landmark"
+    },
+    "M_S": {
+      "x": 16,
+      "y": 1,
+      "z": 70,
+      "world_x": -24,
+      "world_z": 30,
+      "zone": "Market",
+      "label": "Market south",
+      "kind": "wayfinding"
+    },
+    "M_SHOP_W": {
+      "x": 22,
+      "y": 1,
+      "z": 55,
+      "world_x": -18,
+      "world_z": 15,
+      "zone": "Market",
+      "label": "Shop entrance",
+      "kind": "door"
+    },
+    "M_SHOP_E": {
+      "x": 31,
+      "y": 1,
+      "z": 55,
+      "world_x": -9,
+      "world_z": 15,
+      "zone": "Market",
+      "label": "Shop exit",
+      "kind": "door"
+    },
+    "M_S_ST": {
+      "x": 20,
+      "y": 1,
+      "z": 74,
+      "world_x": -20,
+      "world_z": 34,
+      "zone": "Market",
+      "label": "South street",
+      "kind": "junction"
+    },
+    "P_W": {
+      "x": 32,
+      "y": 0,
+      "z": 62,
+      "world_x": -8,
+      "world_z": 22,
+      "zone": "Plaza",
+      "label": "West steps",
+      "kind": "threshold"
+    },
+    "P_C": {
+      "x": 42,
+      "y": 0,
+      "z": 62,
+      "world_x": 2,
+      "world_z": 22,
+      "zone": "Plaza",
+      "label": "NEON PLAZA",
+      "kind": "landmark"
+    },
+    "P_N": {
+      "x": 42,
+      "y": 0,
+      "z": 50,
+      "world_x": 2,
+      "world_z": 10,
+      "zone": "Plaza",
+      "label": "North entrance",
+      "kind": "threshold"
+    },
+    "P_E": {
+      "x": 49,
+      "y": 0,
+      "z": 60,
+      "world_x": 9,
+      "world_z": 20,
+      "zone": "Plaza",
+      "label": "East steps",
+      "kind": "threshold"
+    },
+    "P_S": {
+      "x": 42,
+      "y": 0,
+      "z": 72,
+      "world_x": 2,
+      "world_z": 32,
+      "zone": "Plaza",
+      "label": "South steps",
+      "kind": "threshold"
+    },
+    "C_N": {
+      "x": 42,
+      "y": 1,
+      "z": 31,
+      "world_x": 2,
+      "world_z": -9,
+      "zone": "Central",
+      "label": "Exchange north",
+      "kind": "door"
+    },
+    "C_M": {
+      "x": 42,
+      "y": 1,
+      "z": 40,
+      "world_x": 2,
+      "world_z": 0,
+      "zone": "Central",
+      "label": "Exchange arcade",
+      "kind": "wayfinding"
+    },
+    "C_S": {
+      "x": 42,
+      "y": 1,
+      "z": 47,
+      "world_x": 2,
+      "world_z": 7,
+      "zone": "Central",
+      "label": "Exchange south",
+      "kind": "door"
+    },
+    "T_W": {
+      "x": 18,
+      "y": 1,
+      "z": 29,
+      "world_x": -22,
+      "world_z": -11,
+      "zone": "Transit",
+      "label": "Station west",
+      "kind": "wayfinding"
+    },
+    "T_C": {
+      "x": 44,
+      "y": 1,
+      "z": 29,
+      "world_x": 4,
+      "world_z": -11,
+      "zone": "Transit",
+      "label": "Station frontage",
+      "kind": "landmark"
+    },
+    "T_E": {
+      "x": 53,
+      "y": 1,
+      "z": 29,
+      "world_x": 13,
+      "world_z": -11,
+      "zone": "Transit",
+      "label": "Station east",
+      "kind": "junction"
+    },
+    "A_ENTRY": {
+      "x": 57,
+      "y": 1,
+      "z": 64,
+      "world_x": 17,
+      "world_z": 24,
+      "zone": "Axiom",
+      "label": "Axiom public door",
+      "kind": "door"
+    },
+    "A_LOBBY": {
+      "x": 65,
+      "y": 1,
+      "z": 60,
+      "world_x": 25,
+      "world_z": 20,
+      "zone": "Axiom",
+      "label": "AXIOM TECH",
+      "kind": "landmark"
+    },
+    "A_SOUTH": {
+      "x": 64,
+      "y": 1,
+      "z": 70,
+      "world_x": 24,
+      "world_z": 30,
+      "zone": "Axiom",
+      "label": "Axiom south",
+      "kind": "door"
+    },
+    "A_SERVICE": {
+      "x": 65,
+      "y": 1,
+      "z": 37,
+      "world_x": 25,
+      "world_z": -3,
+      "zone": "Axiom",
+      "label": "Axiom service",
+      "kind": "wayfinding"
+    },
+    "A_NW": {
+      "x": 57,
+      "y": 1,
+      "z": 37,
+      "world_x": 17,
+      "world_z": -3,
+      "zone": "Axiom",
+      "label": "Portal west",
+      "kind": "door"
+    },
+    "A_NE": {
+      "x": 75,
+      "y": 1,
+      "z": 37,
+      "world_x": 35,
+      "world_z": -3,
+      "zone": "Axiom",
+      "label": "Portal east",
+      "kind": "door"
+    },
+    "T_OPS": {
+      "x": 67,
+      "y": 1,
+      "z": 29,
+      "world_x": 27,
+      "world_z": -11,
+      "zone": "Transit",
+      "label": "Operations",
+      "kind": "door"
+    },
+    "P02_W": {
+      "x": 49,
+      "y": 1,
+      "z": 60,
+      "world_x": 9,
+      "world_z": 20,
+      "zone": "Plaza",
+      "label": "Gallery raised",
+      "kind": "door"
+    },
+    "P02_E": {
+      "x": 56,
+      "y": 1,
+      "z": 64,
+      "world_x": 16,
+      "world_z": 24,
+      "zone": "Plaza",
+      "label": "Gallery east",
+      "kind": "door"
+    },
+    "S1_G": {
+      "x": 26,
+      "y": 1,
+      "z": 39,
+      "world_x": -14,
+      "world_z": -1,
+      "zone": "Market",
+      "label": "Market stair",
+      "kind": "stair"
+    },
+    "S2_G": {
+      "x": 26,
+      "y": 1,
+      "z": 62,
+      "world_x": -14,
+      "world_z": 22,
+      "zone": "Market",
+      "label": "Arcade stair",
+      "kind": "stair"
+    },
+    "S3_G": {
+      "x": 63,
+      "y": 1,
+      "z": 65,
+      "world_x": 23,
+      "world_z": 25,
+      "zone": "Axiom",
+      "label": "Atrium stair",
+      "kind": "stair"
+    },
+    "S4_W_G": {
+      "x": 38,
+      "y": 1,
+      "z": 29,
+      "world_x": -2,
+      "world_z": -11,
+      "zone": "Transit",
+      "label": "Station west stair",
+      "kind": "stair"
+    },
+    "S4_E_G": {
+      "x": 53,
+      "y": 1,
+      "z": 29,
+      "world_x": 13,
+      "world_z": -11,
+      "zone": "Transit",
+      "label": "Station east stair",
+      "kind": "stair"
+    },
+    "S5_G": {
+      "x": 26,
+      "y": 1,
+      "z": 27,
+      "world_x": -14,
+      "world_z": -13,
+      "zone": "Transit",
+      "label": "Workshop stair",
+      "kind": "stair"
+    },
+    "S6_G": {
+      "x": 67,
+      "y": 1,
+      "z": 31,
+      "world_x": 27,
+      "world_z": -9,
+      "zone": "Transit",
+      "label": "Operations stair",
+      "kind": "stair"
+    },
+    "M5_W": {
+      "x": 11,
+      "y": 5,
+      "z": 38,
+      "world_x": -29,
+      "world_z": -2,
+      "zone": "Market",
+      "label": "Market gallery",
+      "kind": "wayfinding"
+    },
+    "M5_M": {
+      "x": 26,
+      "y": 5,
+      "z": 38,
+      "world_x": -14,
+      "world_z": -2,
+      "zone": "Market",
+      "label": "Workshop roof",
+      "kind": "landmark"
+    },
+    "M5_E": {
+      "x": 29,
+      "y": 5,
+      "z": 55,
+      "world_x": -11,
+      "world_z": 15,
+      "zone": "Market",
+      "label": "Electronics gallery",
+      "kind": "wayfinding"
+    },
+    "P5": {
+      "x": 35,
+      "y": 5,
+      "z": 55,
+      "world_x": -5,
+      "world_z": 15,
+      "zone": "Plaza",
+      "label": "Upper plaza",
+      "kind": "wayfinding"
+    },
+    "P02_5": {
+      "x": 53,
+      "y": 5,
+      "z": 62,
+      "world_x": 13,
+      "world_z": 22,
+      "zone": "Plaza",
+      "label": "East gallery",
+      "kind": "wayfinding"
+    },
+    "A5_S": {
+      "x": 63,
+      "y": 5,
+      "z": 65,
+      "world_x": 23,
+      "world_z": 25,
+      "zone": "Axiom",
+      "label": "Atrium balcony",
+      "kind": "landmark"
+    },
+    "A5_C": {
+      "x": 65,
+      "y": 5,
+      "z": 55,
+      "world_x": 25,
+      "world_z": 15,
+      "zone": "Axiom",
+      "label": "Atrium mezzanine",
+      "kind": "junction"
+    },
+    "A5_N": {
+      "x": 60,
+      "y": 5,
+      "z": 47,
+      "world_x": 20,
+      "world_z": 7,
+      "zone": "Axiom",
+      "label": "Upper service",
+      "kind": "wayfinding"
+    },
+    "T5_W": {
+      "x": 26,
+      "y": 5,
+      "z": 26,
+      "world_x": -14,
+      "world_z": -14,
+      "zone": "Transit",
+      "label": "West service deck",
+      "kind": "wayfinding"
+    },
+    "T5_E": {
+      "x": 60,
+      "y": 5,
+      "z": 28,
+      "world_x": 20,
+      "world_z": -12,
+      "zone": "Transit",
+      "label": "East service deck",
+      "kind": "wayfinding"
+    },
+    "T9_W": {
+      "x": 38,
+      "y": 9,
+      "z": 23,
+      "world_x": -2,
+      "world_z": -17,
+      "zone": "Transit",
+      "label": "West platform",
+      "kind": "wayfinding"
+    },
+    "T9_C": {
+      "x": 44,
+      "y": 9,
+      "z": 18,
+      "world_x": 4,
+      "world_z": -22,
+      "zone": "Transit",
+      "label": "Transit platform",
+      "kind": "landmark"
+    },
+    "T9_E": {
+      "x": 53,
+      "y": 9,
+      "z": 23,
+      "world_x": 13,
+      "world_z": -17,
+      "zone": "Transit",
+      "label": "East platform",
+      "kind": "wayfinding"
+    }
+  },
+  "edges": [
+    {
+      "id": "PUB-01",
+      "from_node": "M_N",
+      "to_node": "M_C",
+      "kind": "public",
+      "legacy_id": "PD-02",
+      "required_rebuild": null,
+      "description": "Market pedestrian spine",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "PUB-02",
+      "from_node": "M_C",
+      "to_node": "M_S",
+      "kind": "public",
+      "legacy_id": "PD-02",
+      "required_rebuild": null,
+      "description": "Market pedestrian spine",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "PUB-03",
+      "from_node": "M_S",
+      "to_node": "M_S_ST",
+      "kind": "public",
+      "legacy_id": "ST-02",
+      "required_rebuild": null,
+      "description": "Southern market junction",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "PUB-04",
+      "from_node": "M_S_ST",
+      "to_node": "P_S",
+      "kind": "public",
+      "legacy_id": "ST-02",
+      "required_rebuild": "CF-05",
+      "description": "South frontage with explicit plaza grade transition",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "PUB-05",
+      "from_node": "P_S",
+      "to_node": "P_C",
+      "kind": "public",
+      "legacy_id": null,
+      "required_rebuild": null,
+      "description": "Main plaza walk",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "PUB-06",
+      "from_node": "P_C",
+      "to_node": "P_N",
+      "kind": "public",
+      "legacy_id": null,
+      "required_rebuild": null,
+      "description": "Central square promenade",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "PUB-07",
+      "from_node": "P_C",
+      "to_node": "P_E",
+      "kind": "public",
+      "legacy_id": null,
+      "required_rebuild": null,
+      "description": "East plaza promenade",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "PUB-08",
+      "from_node": "P_C",
+      "to_node": "P_W",
+      "kind": "public",
+      "legacy_id": null,
+      "required_rebuild": null,
+      "description": "West plaza promenade",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "PUB-09",
+      "from_node": "T_W",
+      "to_node": "T_C",
+      "kind": "public",
+      "legacy_id": "ST-01",
+      "required_rebuild": null,
+      "description": "Station frontage west",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "PUB-10",
+      "from_node": "T_C",
+      "to_node": "T_E",
+      "kind": "public",
+      "legacy_id": "ST-01",
+      "required_rebuild": null,
+      "description": "Station frontage east",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "PUB-11",
+      "from_node": "M_N",
+      "to_node": "T_W",
+      "kind": "public",
+      "legacy_id": "G3",
+      "required_rebuild": null,
+      "description": "Ground approach to station frontage",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "PUB-12",
+      "from_node": "T_C",
+      "to_node": "C_N",
+      "kind": "public",
+      "legacy_id": "PD-01",
+      "required_rebuild": null,
+      "description": "Arcade north entrance",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "PUB-13",
+      "from_node": "C_N",
+      "to_node": "C_M",
+      "kind": "public",
+      "legacy_id": "PD-01",
+      "required_rebuild": "CF-01",
+      "description": "Ground arcade carved in Central Exchange",
+      "target_clear_width_m": 4.5,
+      "designed_not_built": true
+    },
+    {
+      "id": "PUB-14",
+      "from_node": "C_M",
+      "to_node": "C_S",
+      "kind": "public",
+      "legacy_id": "PD-01",
+      "required_rebuild": "CF-01",
+      "description": "Ground arcade south arch",
+      "target_clear_width_m": 4.5,
+      "designed_not_built": true
+    },
+    {
+      "id": "PUB-15",
+      "from_node": "C_S",
+      "to_node": "P_N",
+      "kind": "public",
+      "legacy_id": "PD-01",
+      "required_rebuild": "CF-05",
+      "description": "Street +1 to plaza +0 via genuine stepped transition",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "PUB-16",
+      "from_node": "P_S",
+      "to_node": "A_SOUTH",
+      "kind": "public",
+      "legacy_id": "G2",
+      "required_rebuild": "CF-05",
+      "description": "South corporate frontage and grade transition",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "PUB-17",
+      "from_node": "A_SOUTH",
+      "to_node": "A_LOBBY",
+      "kind": "public",
+      "legacy_id": null,
+      "required_rebuild": null,
+      "description": "Main atrium approach",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "PUB-18",
+      "from_node": "P_E",
+      "to_node": "A_ENTRY",
+      "kind": "public",
+      "legacy_id": "G2",
+      "required_rebuild": "CF-05",
+      "description": "Public outdoor corridor to corporate entry",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "PUB-19",
+      "from_node": "A_ENTRY",
+      "to_node": "A_LOBBY",
+      "kind": "public",
+      "legacy_id": null,
+      "required_rebuild": null,
+      "description": "Lobby public circulation",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "PUB-20",
+      "from_node": "T_E",
+      "to_node": "A_NW",
+      "kind": "public",
+      "legacy_id": "ST-01",
+      "required_rebuild": "CF-03",
+      "description": "Street bends into service portal",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "PUB-21",
+      "from_node": "A_NW",
+      "to_node": "A_SERVICE",
+      "kind": "public",
+      "legacy_id": "G4",
+      "required_rebuild": "CF-03",
+      "description": "Axiom ground portal interior",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "PUB-22",
+      "from_node": "A_SERVICE",
+      "to_node": "A_NE",
+      "kind": "public",
+      "legacy_id": "ST-01",
+      "required_rebuild": "CF-03",
+      "description": "East exit of ground portal",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "PUB-23",
+      "from_node": "A_SERVICE",
+      "to_node": "T_OPS",
+      "kind": "public",
+      "legacy_id": "G4",
+      "required_rebuild": "CF-08",
+      "description": "Operations service passage; not exterior street",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "PUB-24",
+      "from_node": "T_E",
+      "to_node": "T_OPS",
+      "kind": "public",
+      "legacy_id": "G4",
+      "required_rebuild": "CF-08",
+      "description": "Operations ground access",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "PUB-25",
+      "from_node": "A_LOBBY",
+      "to_node": "A_SERVICE",
+      "kind": "public",
+      "legacy_id": "I4",
+      "required_rebuild": "CF-08",
+      "description": "Internal corporate service corridor",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "EXP-01",
+      "from_node": "M_C",
+      "to_node": "P_W",
+      "kind": "discovery",
+      "legacy_id": "G1",
+      "required_rebuild": "CF-05",
+      "description": "Rear market alley to plaza edge",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "EXP-02",
+      "from_node": "M_C",
+      "to_node": "M_SHOP_W",
+      "kind": "discovery",
+      "legacy_id": "I1",
+      "required_rebuild": null,
+      "description": "Shop west entrance",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "EXP-03",
+      "from_node": "M_SHOP_W",
+      "to_node": "M_SHOP_E",
+      "kind": "discovery",
+      "legacy_id": "I1",
+      "required_rebuild": "CF-09",
+      "description": "M03 through shop with rooms and doorways",
+      "target_clear_width_m": 3.2,
+      "designed_not_built": true
+    },
+    {
+      "id": "EXP-04",
+      "from_node": "M_SHOP_E",
+      "to_node": "P_W",
+      "kind": "discovery",
+      "legacy_id": "I1",
+      "required_rebuild": "CF-05",
+      "description": "Shop east terrace transitions down into plaza",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "EXP-05",
+      "from_node": "P_E",
+      "to_node": "P02_W",
+      "kind": "discovery",
+      "legacy_id": "I2",
+      "required_rebuild": "CF-10",
+      "description": "Plaza +0 / gallery +1 at identical XZ must use offset steps",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "EXP-06",
+      "from_node": "P02_W",
+      "to_node": "P02_E",
+      "kind": "discovery",
+      "legacy_id": "I2",
+      "required_rebuild": "CF-11",
+      "description": "Internal east gallery corridor",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "EXP-07",
+      "from_node": "P02_E",
+      "to_node": "A_ENTRY",
+      "kind": "discovery",
+      "legacy_id": "I2",
+      "required_rebuild": "CF-11",
+      "description": "East gallery exits at public Axiom entrance",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "EXP-08",
+      "from_node": "M_N",
+      "to_node": "S5_G",
+      "kind": "discovery",
+      "legacy_id": "I3",
+      "required_rebuild": "CF-04",
+      "description": "Market to transit maintenance workshop",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "EXP-09",
+      "from_node": "T_OPS",
+      "to_node": "S6_G",
+      "kind": "discovery",
+      "legacy_id": "I4",
+      "required_rebuild": "CF-04",
+      "description": "Transit operations internal shortcut",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "UP-01",
+      "from_node": "M5_W",
+      "to_node": "M5_M",
+      "kind": "elevated",
+      "legacy_id": "U1",
+      "required_rebuild": "CF-07",
+      "description": "Supported market signwalk",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "UP-02",
+      "from_node": "M5_M",
+      "to_node": "M5_E",
+      "kind": "elevated",
+      "legacy_id": "U1",
+      "required_rebuild": "CF-07",
+      "description": "M04 terrace to repair gallery",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "UP-03",
+      "from_node": "M5_E",
+      "to_node": "P5",
+      "kind": "elevated",
+      "legacy_id": "U1",
+      "required_rebuild": "CF-07",
+      "description": "Upper plaza approach; guardrail and supports",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "UP-04",
+      "from_node": "P5",
+      "to_node": "P02_5",
+      "kind": "elevated",
+      "legacy_id": "U2",
+      "required_rebuild": "CF-11",
+      "description": "Gallery connector, support to named parcels",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "UP-05",
+      "from_node": "P02_5",
+      "to_node": "A5_S",
+      "kind": "elevated",
+      "legacy_id": "U2",
+      "required_rebuild": "CF-08",
+      "description": "Upper Axiom entry",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "UP-06",
+      "from_node": "A5_S",
+      "to_node": "A5_C",
+      "kind": "elevated",
+      "legacy_id": "U2",
+      "required_rebuild": "CF-08",
+      "description": "Atrium mezzanine loop",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "UP-07",
+      "from_node": "A5_C",
+      "to_node": "A5_N",
+      "kind": "elevated",
+      "legacy_id": "U4",
+      "required_rebuild": "CF-08",
+      "description": "Upper service link",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "UP-08",
+      "from_node": "M5_M",
+      "to_node": "T5_W",
+      "kind": "elevated",
+      "legacy_id": "U3",
+      "required_rebuild": "CF-04",
+      "description": "West service gallery towards transit",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "UP-09",
+      "from_node": "A5_N",
+      "to_node": "T5_E",
+      "kind": "elevated",
+      "legacy_id": "U4",
+      "required_rebuild": "CF-04",
+      "description": "East operations gallery towards transit",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "UP-10",
+      "from_node": "T9_W",
+      "to_node": "T9_C",
+      "kind": "elevated",
+      "legacy_id": null,
+      "required_rebuild": null,
+      "description": "Platform west side",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "UP-11",
+      "from_node": "T9_C",
+      "to_node": "T9_E",
+      "kind": "elevated",
+      "legacy_id": null,
+      "required_rebuild": null,
+      "description": "Platform east side",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "VERT-01",
+      "from_node": "M_C",
+      "to_node": "S1_G",
+      "kind": "discovery",
+      "legacy_id": null,
+      "required_rebuild": null,
+      "description": "Market public approach to rear stair",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "VERT-02",
+      "from_node": "S1_G",
+      "to_node": "M5_M",
+      "kind": "vertical",
+      "legacy_id": "S1",
+      "required_rebuild": "CF-12",
+      "description": "Stair flights 1->5, short landings",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "VERT-03",
+      "from_node": "P_C",
+      "to_node": "S2_G",
+      "kind": "discovery",
+      "legacy_id": "S2",
+      "required_rebuild": "CF-05",
+      "description": "Public plaza to repair stair entry requires +0->+1 transition",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "VERT-04",
+      "from_node": "S2_G",
+      "to_node": "M5_E",
+      "kind": "vertical",
+      "legacy_id": "S2",
+      "required_rebuild": "CF-12",
+      "description": "Repair building stair to +5 gallery",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "VERT-05",
+      "from_node": "A_LOBBY",
+      "to_node": "S3_G",
+      "kind": "public",
+      "legacy_id": null,
+      "required_rebuild": null,
+      "description": "Atrium central stair ground approach",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "VERT-06",
+      "from_node": "S3_G",
+      "to_node": "A5_S",
+      "kind": "vertical",
+      "legacy_id": "S3",
+      "required_rebuild": "CF-12",
+      "description": "Atrium stair with mezzanine landing",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "VERT-07",
+      "from_node": "T_C",
+      "to_node": "S4_W_G",
+      "kind": "public",
+      "legacy_id": "S4",
+      "required_rebuild": null,
+      "description": "Station public stair entrance west",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "VERT-08",
+      "from_node": "S4_W_G",
+      "to_node": "T9_W",
+      "kind": "vertical",
+      "legacy_id": "S4",
+      "required_rebuild": "CF-04",
+      "description": "West public return stair +1,+3,+5,+7,+9",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "VERT-09",
+      "from_node": "T_E",
+      "to_node": "S4_E_G",
+      "kind": "public",
+      "legacy_id": null,
+      "required_rebuild": null,
+      "description": "Station east stair ground entrance",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "VERT-10",
+      "from_node": "S4_E_G",
+      "to_node": "T9_E",
+      "kind": "vertical",
+      "legacy_id": "S4",
+      "required_rebuild": "CF-04",
+      "description": "East station stair +1,+3,+5,+7,+9",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "VERT-11",
+      "from_node": "S5_G",
+      "to_node": "T5_W",
+      "kind": "vertical",
+      "legacy_id": "S5",
+      "required_rebuild": "CF-04",
+      "description": "Workshop stair from +1 to +5",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "VERT-12",
+      "from_node": "T5_W",
+      "to_node": "T9_W",
+      "kind": "vertical",
+      "legacy_id": "U3",
+      "required_rebuild": "CF-04",
+      "description": "Additional stairs from west service deck +5 to +9",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "VERT-13",
+      "from_node": "S6_G",
+      "to_node": "T5_E",
+      "kind": "vertical",
+      "legacy_id": "S6",
+      "required_rebuild": "CF-04",
+      "description": "Operations stair from +1 to +5",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    },
+    {
+      "id": "VERT-14",
+      "from_node": "T5_E",
+      "to_node": "T9_E",
+      "kind": "vertical",
+      "legacy_id": "U4",
+      "required_rebuild": "CF-04",
+      "description": "Additional stairs from east operations deck +5 to +9",
+      "target_clear_width_m": 2.8,
+      "designed_not_built": true
+    }
+  ],
+  "portal_registry": [
+    {
+      "id": "M01-D1",
+      "building": "M01",
+      "position": [
+        9,
+        1,
+        43
+      ],
+      "purpose": "front storefront / market walk",
+      "port_type": "boundary_portal",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "M01-D2",
+      "building": "M01",
+      "position": [
+        9,
+        1,
+        56
+      ],
+      "purpose": "rear shop door",
+      "port_type": "boundary_portal",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "M01-U1",
+      "building": "M01",
+      "position": [
+        9,
+        5,
+        38
+      ],
+      "purpose": "upper gallery to U1",
+      "port_type": "boundary_portal",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "M02-D1",
+      "building": "M02",
+      "position": [
+        12,
+        1,
+        69
+      ],
+      "purpose": "corner shop front",
+      "port_type": "boundary_portal",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "M02-D2",
+      "building": "M02",
+      "position": [
+        9,
+        1,
+        74
+      ],
+      "purpose": "service shutter onto ST-02",
+      "port_type": "boundary_portal",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "M03-D1",
+      "building": "M03",
+      "position": [
+        22,
+        1,
+        55
+      ],
+      "purpose": "west market entrance",
+      "port_type": "boundary_portal",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "M03-D2",
+      "building": "M03",
+      "position": [
+        31,
+        1,
+        55
+      ],
+      "purpose": "east arcade exit",
+      "port_type": "boundary_portal",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "M03-D3",
+      "building": "M03",
+      "position": [
+        26,
+        1,
+        71
+      ],
+      "purpose": "south goods entrance",
+      "port_type": "boundary_portal",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "M03-U1",
+      "building": "M03",
+      "position": [
+        29,
+        5,
+        55
+      ],
+      "purpose": "upper Signwalk landing",
+      "port_type": "interior_landing",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "M04-D1",
+      "building": "M04",
+      "position": [
+        21,
+        1,
+        39
+      ],
+      "purpose": "market side door",
+      "port_type": "boundary_portal",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "M04-D2",
+      "building": "M04",
+      "position": [
+        30,
+        1,
+        42
+      ],
+      "purpose": "east workshop door",
+      "port_type": "boundary_portal",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "M04-U1",
+      "building": "M04",
+      "position": [
+        26,
+        5,
+        38
+      ],
+      "purpose": "roof terrace",
+      "port_type": "interior_landing",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "C01-N",
+      "building": "C01",
+      "position": [
+        42,
+        1,
+        31
+      ],
+      "purpose": "PD-01 north public arch",
+      "port_type": "boundary_portal",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "C01-S",
+      "building": "C01",
+      "position": [
+        42,
+        1,
+        47
+      ],
+      "purpose": "PD-01 south public arch",
+      "port_type": "boundary_portal",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "C01-W",
+      "building": "C01",
+      "position": [
+        30,
+        1,
+        39
+      ],
+      "purpose": "west business unit",
+      "port_type": "boundary_portal",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "C01-E",
+      "building": "C01",
+      "position": [
+        52,
+        1,
+        39
+      ],
+      "purpose": "east service unit",
+      "port_type": "boundary_portal",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "C01-U",
+      "building": "C01",
+      "position": [
+        42,
+        5,
+        40
+      ],
+      "purpose": "bridge above arcade",
+      "port_type": "interior_landing",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "P01-N",
+      "building": "P01",
+      "position": [
+        42,
+        0,
+        50
+      ],
+      "purpose": "arcade connection",
+      "port_type": "boundary_portal",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "P01-W",
+      "building": "P01",
+      "position": [
+        32,
+        0,
+        62
+      ],
+      "purpose": "market connection",
+      "port_type": "boundary_portal",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "P01-E",
+      "building": "P01",
+      "position": [
+        49,
+        0,
+        60
+      ],
+      "purpose": "corporate passage",
+      "port_type": "boundary_portal",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "P01-S",
+      "building": "P01",
+      "position": [
+        42,
+        0,
+        72
+      ],
+      "purpose": "south ramp/stairs",
+      "port_type": "boundary_portal",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "P02-W",
+      "building": "P02",
+      "position": [
+        49,
+        1,
+        60
+      ],
+      "purpose": "plaza side entrance",
+      "port_type": "boundary_portal",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "P02-E",
+      "building": "P02",
+      "position": [
+        56,
+        1,
+        64
+      ],
+      "purpose": "corporate side exit",
+      "port_type": "boundary_portal",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "P02-S",
+      "building": "P02",
+      "position": [
+        52,
+        1,
+        71
+      ],
+      "purpose": "southern service door",
+      "port_type": "boundary_portal",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "P02-U",
+      "building": "P02",
+      "position": [
+        53,
+        5,
+        62
+      ],
+      "purpose": "upper corridor to U2",
+      "port_type": "interior_landing",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "A01-W",
+      "building": "A01",
+      "position": [
+        57,
+        1,
+        64
+      ],
+      "purpose": "plaza-to-lobby entry",
+      "port_type": "boundary_portal",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "A01-S",
+      "building": "A01",
+      "position": [
+        64,
+        1,
+        70
+      ],
+      "purpose": "south public access",
+      "port_type": "boundary_portal",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "A01-NW",
+      "building": "A01",
+      "position": [
+        57,
+        1,
+        37
+      ],
+      "purpose": "north portal west",
+      "port_type": "boundary_portal",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "A01-NE",
+      "building": "A01",
+      "position": [
+        75,
+        1,
+        37
+      ],
+      "purpose": "north portal east",
+      "port_type": "boundary_portal",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "A01-U1",
+      "building": "A01",
+      "position": [
+        63,
+        5,
+        65
+      ],
+      "purpose": "U2 entry to atrium ring",
+      "port_type": "interior_landing",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "A01-U2",
+      "building": "A01",
+      "position": [
+        60,
+        5,
+        47
+      ],
+      "purpose": "U4 transfer entry",
+      "port_type": "interior_landing",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "T01-S",
+      "building": "T01",
+      "position": [
+        44,
+        9,
+        24
+      ],
+      "purpose": "south platform exit",
+      "port_type": "boundary_portal",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "T01-W",
+      "building": "T01",
+      "position": [
+        31,
+        9,
+        22
+      ],
+      "purpose": "west platform service exit",
+      "port_type": "boundary_portal",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "T01-E",
+      "building": "T01",
+      "position": [
+        53,
+        9,
+        24
+      ],
+      "purpose": "east passenger stair landing",
+      "port_type": "boundary_portal",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "T02-S",
+      "building": "T02",
+      "position": [
+        17,
+        1,
+        13
+      ],
+      "purpose": "south utility entrance",
+      "port_type": "boundary_portal",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "T02-W",
+      "building": "T02",
+      "position": [
+        7,
+        1,
+        11
+      ],
+      "purpose": "west access",
+      "port_type": "boundary_portal",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "T03-S",
+      "building": "T03",
+      "position": [
+        18,
+        1,
+        28
+      ],
+      "purpose": "street-side workshop door",
+      "port_type": "boundary_portal",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "T03-N",
+      "building": "T03",
+      "position": [
+        25,
+        1,
+        23
+      ],
+      "purpose": "rail-side maintenance door",
+      "port_type": "boundary_portal",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "T03-U",
+      "building": "T03",
+      "position": [
+        26,
+        5,
+        26
+      ],
+      "purpose": "U3 service landing",
+      "port_type": "interior_landing",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "T04-W",
+      "building": "T04",
+      "position": [
+        60,
+        1,
+        29
+      ],
+      "purpose": "ST-01 access",
+      "port_type": "boundary_portal",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "T04-S",
+      "building": "T04",
+      "position": [
+        67,
+        1,
+        34
+      ],
+      "purpose": "Axiom service door",
+      "port_type": "boundary_portal",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "T04-U",
+      "building": "T04",
+      "position": [
+        60,
+        5,
+        28
+      ],
+      "purpose": "U4 service landing",
+      "port_type": "boundary_portal",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "T05-G",
+      "building": "T05",
+      "position": [
+        38,
+        1,
+        29
+      ],
+      "purpose": "street entrance",
+      "port_type": "boundary_portal",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "T05-P",
+      "building": "T05",
+      "position": [
+        38,
+        9,
+        23
+      ],
+      "purpose": "platform landing",
+      "port_type": "boundary_portal",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "T06-G",
+      "building": "T06",
+      "position": [
+        53,
+        1,
+        29
+      ],
+      "purpose": "street entrance",
+      "port_type": "boundary_portal",
+      "verifiable_against_active_level": true
+    },
+    {
+      "id": "T06-P",
+      "building": "T06",
+      "position": [
+        53,
+        9,
+        23
+      ],
+      "purpose": "platform landing",
+      "port_type": "boundary_portal",
+      "verifiable_against_active_level": true
+    }
+  ],
+  "vertical_circulation": [
+    {
+      "id": "S1",
+      "building": "M01/M04",
+      "bottom_y": 1,
+      "top_y": 5,
+      "proposed_type": "shop/service stair with landings",
+      "requires_full_mesh": true,
+      "geometry_test_status": "UNVERIFIED",
+      "design_targets": {
+        "walking_step_rise_max_m": 0.18,
+        "clearance_headroom_min_m": 2.6,
+        "landing_interval_vertical_m": 4.0
+      },
+      "note": "Step-rise target is a design constraint; movement physics step-up support (.29m) is not a substitute for building a stair mesh."
+    },
+    {
+      "id": "S2",
+      "building": "M03/P01",
+      "bottom_y": 0,
+      "top_y": 5,
+      "proposed_type": "multi-flight plaza upper access",
+      "requires_full_mesh": true,
+      "geometry_test_status": "UNVERIFIED",
+      "design_targets": {
+        "walking_step_rise_max_m": 0.18,
+        "clearance_headroom_min_m": 2.6,
+        "landing_interval_vertical_m": 2.0
+      },
+      "note": "Step-rise target is a design constraint; movement physics step-up support (.29m) is not a substitute for building a stair mesh."
+    },
+    {
+      "id": "S3",
+      "building": "A01",
+      "bottom_y": 1,
+      "top_y": 5,
+      "proposed_type": "atrium internal stair with landings",
+      "requires_full_mesh": true,
+      "geometry_test_status": "UNVERIFIED",
+      "design_targets": {
+        "walking_step_rise_max_m": 0.18,
+        "clearance_headroom_min_m": 2.6,
+        "landing_interval_vertical_m": 4.0
+      },
+      "note": "Step-rise target is a design constraint; movement physics step-up support (.29m) is not a substitute for building a stair mesh."
+    },
+    {
+      "id": "S4",
+      "building": "T05",
+      "bottom_y": 1,
+      "top_y": 9,
+      "proposed_type": "4 return flights with landings at +3/+5/+7; lift shaft reserved",
+      "requires_full_mesh": true,
+      "geometry_test_status": "UNVERIFIED",
+      "design_targets": {
+        "walking_step_rise_max_m": 0.18,
+        "clearance_headroom_min_m": 2.6,
+        "landing_interval_vertical_m": 2.0
+      },
+      "note": "Step-rise target is a design constraint; movement physics step-up support (.29m) is not a substitute for building a stair mesh."
+    },
+    {
+      "id": "S5",
+      "building": "T03",
+      "bottom_y": 1,
+      "top_y": 9,
+      "proposed_type": "staff stairs with intermediate landings",
+      "requires_full_mesh": true,
+      "geometry_test_status": "UNVERIFIED",
+      "design_targets": {
+        "walking_step_rise_max_m": 0.18,
+        "clearance_headroom_min_m": 2.6,
+        "landing_interval_vertical_m": 2.0
+      },
+      "note": "Step-rise target is a design constraint; movement physics step-up support (.29m) is not a substitute for building a stair mesh."
+    },
+    {
+      "id": "S6",
+      "building": "T04/T06",
+      "bottom_y": 1,
+      "top_y": 9,
+      "proposed_type": "service stairs with intermediate landings",
+      "requires_full_mesh": true,
+      "geometry_test_status": "UNVERIFIED",
+      "design_targets": {
+        "walking_step_rise_max_m": 0.18,
+        "clearance_headroom_min_m": 2.6,
+        "landing_interval_vertical_m": 2.0
+      },
+      "note": "Step-rise target is a design constraint; movement physics step-up support (.29m) is not a substitute for building a stair mesh."
+    }
+  ],
+  "structural_issues": [
+    {
+      "id": "CF-01",
+      "severity": "critical",
+      "location": [
+        39.75,
+        31,
+        44.25,
+        47
+      ],
+      "problem": "C01 original solid C-1 mass blocks new public arcade",
+      "resolution": "explicit ground void, properly supported upper spans, entrances aligned at both ends",
+      "verify": "3d solid subtractions and headroom"
+    },
+    {
+      "id": "CF-02",
+      "severity": "critical",
+      "location": [
+        7,
+        14,
+        31,
+        22
+      ],
+      "problem": "T-W mass crosses rail continuation",
+      "resolution": "split north T02 and south T03 while reserving continuous elevated railway",
+      "verify": "platform structure and railway clearance"
+    },
+    {
+      "id": "CF-03",
+      "severity": "critical",
+      "location": [
+        57,
+        35.2,
+        75,
+        39.8
+      ],
+      "problem": "ST-01 east leg intersects A01 shell",
+      "resolution": "ground-level service portal and load-bearing span above it",
+      "verify": "actual headroom and architecture"
+    },
+    {
+      "id": "CF-04",
+      "severity": "critical",
+      "location": [
+        35,
+        23,
+        56,
+        29
+      ],
+      "problem": "Public and staff 8m rises currently behave as steep straight ramps",
+      "resolution": "T05/T06 return stairs with landings at y3/5/7, access lift concept",
+      "verify": "player physics stair-step and route graph"
+    },
+    {
+      "id": "CF-05",
+      "severity": "medium",
+      "location": [
+        32,
+        50,
+        49,
+        72
+      ],
+      "problem": "Plaza -1m relative to street",
+      "resolution": "surface transitions and public ramps/stairs at identified edges",
+      "verify": "continuous floor colliders"
+    },
+    {
+      "id": "CF-06",
+      "severity": "medium",
+      "location": [
+        0,
+        77,
+        80,
+        80
+      ],
+      "problem": "Current southern boundary masks city continuation",
+      "resolution": "keep boundary during stage2; create gateway only after playable expansion",
+      "verify": "future boundary revisions"
+    },
+    {
+      "id": "CF-07",
+      "severity": "medium",
+      "location": [
+        21,
+        34,
+        30,
+        46
+      ],
+      "problem": "New low workshop overlaps old U1 path in plan",
+      "resolution": "set roof precisely at y5 and make U1 walk on roof instead of passing through solid mass",
+      "verify": "vertical footprint and bridge physics"
+    },
+    {
+      "id": "CF-08",
+      "severity": "medium",
+      "location": [
+        57,
+        35,
+        75,
+        70
+      ],
+      "problem": "Existing Axiom interior mostly void without meaningful floor circulation",
+      "resolution": "split ground lobby, service threshold, mezzanine ring, and closed offices",
+      "verify": "collision and character nav"
+    },
+    {
+      "id": "CF-09",
+      "severity": "critical",
+      "location": [
+        22,
+        52,
+        31,
+        71
+      ],
+      "problem": "Shop-through is only meaningful if continuous walkable interior exists between two door openings; legacy carves do not certify room geometry",
+      "resolution": "Carve M03 using actual room and doorway footprint with clear headroom; connect to street and plaza transitions",
+      "verify": "AABB solid intersection + walking simulation + door threshold sweep"
+    },
+    {
+      "id": "CF-10",
+      "severity": "critical",
+      "location": [
+        49,
+        60,
+        49,
+        60
+      ],
+      "problem": "P01-E (+0) and P02-W (+1) share exactly the same x/z coordinate but different floor elevations",
+      "resolution": "Move the raised gallery threshold inside the parcel and add a small multi-step entry or a separate gentler public route",
+      "verify": "portal landing separation, continuous floor colliders, grade transition"
+    },
+    {
+      "id": "CF-11",
+      "severity": "critical",
+      "location": [
+        49,
+        47,
+        56,
+        71
+      ],
+      "problem": "P02 gallery +5 U2 link has no individually modelled landings, bridge supports, or unbroken floor",
+      "resolution": "Reserve exact cross-building bridge opening, supported slab and upper threshold, aligned at y=5",
+      "verify": "no collision overlap; bridge support, human-readable entrance"
+    },
+    {
+      "id": "CF-12",
+      "severity": "critical",
+      "location": [
+        21,
+        34,
+        30,
+        46
+      ],
+      "problem": "S1 S2 S3 stair IDs only represent vertical connectivity; detailed flights, headroom, landing room and render/collision synchronization are absent",
+      "resolution": "Draw actual switchback/straight segments by named building before implementation, including top and bottom door clearances",
+      "verify": "stairs are physically traversed in both game engines at walk, sprint and jump"
+    },
+    {
+      "id": "CF-13",
+      "severity": "high",
+      "location": [
+        35,
+        23,
+        56,
+        29
+      ],
+      "problem": "Two proposed 6x6m station stair footprints appear plausible but are not space-proven for actual landings, support and clearance",
+      "resolution": "Fit exact multi-flight stair section inside each footprint or enlarge before greybox",
+      "verify": "section fit, 3-D volume overlap tests, stair traversal"
+    },
+    {
+      "id": "CF-14",
+      "severity": "medium",
+      "location": [
+        31,
+        8,
+        59,
+        24
+      ],
+      "problem": "Stage 2 upper graph can incorrectly imply an ordinary walkway spans the +5m to +9m difference",
+      "resolution": "Replace elevation changes on U3/U4 with explicit stair connections; horizontal bridges only at matched levels",
+      "verify": "all graph elevation changes typed vertical, never a flat edge with unequal y"
+    }
+  ],
+  "acceptance_tests": [
+    {
+      "id": "G01",
+      "name": "All published route IDs preserved",
+      "kind": "graph",
+      "can_test_now": true
+    },
+    {
+      "id": "G02",
+      "name": "Four landmarks connected by public-only graph",
+      "kind": "graph",
+      "can_test_now": true
+    },
+    {
+      "id": "G03",
+      "name": "Public-only alternative landmark paths after single corridor edge removal",
+      "kind": "graph",
+      "can_test_now": true
+    },
+    {
+      "id": "G04",
+      "name": "All planned graph nodes in original 80m core",
+      "kind": "graph",
+      "can_test_now": true
+    },
+    {
+      "id": "G05",
+      "name": "Non-vertical links remain on one elevation",
+      "kind": "graph",
+      "can_test_now": true
+    },
+    {
+      "id": "G06",
+      "name": "Every building doorway lies on a valid building boundary and active elevation",
+      "kind": "data",
+      "can_test_now": true
+    },
+    {
+      "id": "P01",
+      "name": "All planned structural voids carved out of colliders",
+      "kind": "geometry",
+      "can_test_now": false
+    },
+    {
+      "id": "P02",
+      "name": "Floor/landing/walkway support across whole route width",
+      "kind": "geometry",
+      "can_test_now": false
+    },
+    {
+      "id": "P03",
+      "name": "Sufficient headroom and no portal obstruction",
+      "kind": "geometry",
+      "can_test_now": false
+    },
+    {
+      "id": "P04",
+      "name": "Walk and jump traversal both directions in client and server",
+      "kind": "physics",
+      "can_test_now": false
+    },
+    {
+      "id": "P05",
+      "name": "No unintended fall-through, stuck pockets or missing step colliders",
+      "kind": "physics",
+      "can_test_now": false
+    },
+    {
+      "id": "P06",
+      "name": "Performance stays within agreed target on target laptops",
+      "kind": "performance",
+      "can_test_now": false
+    }
+  ],
+  "preservation": {
+    "original_routes": [
+      "G1",
+      "G2",
+      "G3",
+      "G4",
+      "I1",
+      "I2",
+      "I3",
+      "I4",
+      "U1",
+      "U2",
+      "U3",
+      "U4"
+    ],
+    "vertical_ids": [
+      "S1",
+      "S2",
+      "S3",
+      "S4",
+      "S5",
+      "S6"
+    ]
+  },
+  "change_policy": "No live source changes, no direct replacement of published paths; design requires 3D greybox and engine testing."
+}

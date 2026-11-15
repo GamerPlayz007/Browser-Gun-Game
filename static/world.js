@@ -1,6 +1,8 @@
 import * as T from 'three';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 import {topAt} from './physics.js';
+import {createStage5VisualLayer} from './stage5_visual_layer.js';
+import {createStage6VisualLayer} from './stage6_visual_layer.js';
 
 // 02.5: deterministic CanvasTexture PBR atlases + district/LOD mesh batching.
 // Only map.boxes are authoritative colliders. All map.features and map.decor
@@ -149,7 +151,9 @@ export function buildWorld(scene,map,{renderer,quality='high'}={}){
  function cube(x,y,z,w,h,d,style='metal',zone='plaza',optional=true,casts=false){queue(boxGeometry({x,y,z,w,h,d,kind:'detail'}),style,zone,optional,casts);}
  function cylinder(x,y,z,r1,r2,h,style,zone,optional=true){const g=new T.CylinderGeometry(r1,r2,h,12);g.translate(x,y+h/2,z);queue(g,style,zone,optional,false);}
  function lightPanel(x,y,z,w,h,color,zone,rot=0){const g=new T.PlaneGeometry(w,h);g.rotateY(rot);g.translate(x,y,z);queue(g,color,zone,false,false);}
- for(const b of [...map.boxes,...(map.decor||[])]){
+ // Stage 5/6 visual-only elements are rendered in instanced batches below.
+  const legacyDecor=(map.decor||[]).filter(b=>!b.stage5VisualOnly&&!b.stage6VisualOnly);
+  for(const b of [...map.boxes,...legacyDecor]){
   const style=b.style in MATERIALS?b.style:'concrete';
   const g=b.kind==='ramp'?rampGeometry(b):boxGeometry(b);
   queue(g,style,b.zone||'plaza',!!b.detail,['building','atriumShell','boundary','pillar','stationRoof','skyline','train'].includes(b.kind));
@@ -262,7 +266,16 @@ export function buildWorld(scene,map,{renderer,quality='high'}={}){
   const group=new T.Group(),body=new T.Mesh(new T.CylinderGeometry(.36,.4,1.05,10),targetMat),head=new T.Mesh(new T.IcosahedronGeometry(.25,1),headMat);
   body.position.y=.95;head.position.y=1.62;body.castShadow=true;group.add(body,head);group.position.set(...pos);root.add(group);targets.set('t'+i,group);
  }
- function setQuality(mode){
+ const stage5Group=createStage5VisualLayer(T,map,'ultra');
+  const stage6Group=createStage6VisualLayer(T,map,'ultra');
+  root.add(stage5Group,stage6Group);
+  let detailEnabled=true,activeVisualMode=quality;
+  function showStageDetail(){
+   const level=activeVisualMode==='performance'?0:activeVisualMode==='ultra'?2:1;
+   for(const mesh of stage5Group.children)mesh.visible=detailEnabled&&(mesh.userData.stage5Tier||0)<=level;
+   for(const mesh of stage6Group.children)mesh.visible=detailEnabled&&(mesh.userData.stage6Tier||0)<=level;
+  }
+  function setQuality(mode){activeVisualMode=mode;showStageDetail();
   const low=mode==='performance',ultra=mode==='ultra';
   for(const d of details)d.visible=!low;
   for(const l of root.children)if(l.isPointLight)l.visible=!low||l.position.y>10;
@@ -277,11 +290,11 @@ export function buildWorld(scene,map,{renderer,quality='high'}={}){
  }
  setQuality(quality);
  return {sun,targets,staticBatches:batches.size+(map.signs?.length?1:0),featureCount:map.features?.length||0,
-  setDetail(enabled){for(const mesh of details)mesh.visible=enabled;},setQuality,
+  setDetail(enabled){detailEnabled=enabled;for(const mesh of details)mesh.visible=enabled;showStageDetail();},setQuality,
   animate(time){for(const s of steam){const p=s.cloud.geometry.attributes.position;
    for(let i=0;i<s.seeds.length;i++){const k=(time*.38+s.seeds[i])%1;p.setXYZ(i,s.x+Math.sin(time+i)*.3*k,s.y+.2+3*k,s.z+Math.cos(time*.7+i)*.25*k);}p.needsUpdate=true;
   }},
-  dispose(){root.traverse(o=>{o.geometry?.dispose();if(o.isPoints)o.material.dispose();});
+  dispose(){root.traverse(o=>{o.geometry?.dispose();if(o.isPoints||o.userData.stage5VisualOnly||o.userData.stage6VisualOnly)o.material?.dispose();});
    for(const m of mats.values())m.dispose();for(const t of textures)t.dispose();for(const m of [targetMat,headMat,signMaterial])m?.dispose();signTexture?.dispose();env?.dispose();scene.environment=null;root.removeFromParent();}
  };
 }
