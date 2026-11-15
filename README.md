@@ -1,4 +1,4 @@
-# CROSSFIRE 04.1 — ONE LIVE CYBERPUNK CITY
+# CROSSFIRE 04.2 — ONE LIVE CYBERPUNK CITY
 
 **Source of truth:** `main` branch, deployed by Render when auto-deploy is enabled.
 
@@ -7,6 +7,15 @@ and its separate `cyberpunk-next` experimental selection have been removed.
 The only active map contains **more than 650 authoritative collision objects, a 120 m
 gameplay envelope, 3053 decorative objects and 13 authored district routes.**
 The surrounding 160 m urban context is visual-only.
+
+## Phase 4.2 — cinematic district lighting (live)
+- Lighting is rendered directly in the active game by `static/lighting42.js`; no separate demo or map.
+- Cool moon key light and restrained magenta rim light add depth without turning every surface pink.
+- Four distinct district light palettes: market magenta, plaza cyan, atrium teal, transit amber; authored signs have local bounce lighting and slim emissive light fixtures.
+- Four soft, shader-based ground light pools are visual-only and are disabled on Performance. The strongest fixture and shadow tiers are reserved for Ultra.
+- High/Auto enable a moderate amount of sign lighting and moon shadows; Performance retains two district sources, reduces shadow cost to zero, and removes architectural spotlights.
+- A deterministic, low-amplitude neon pulse updates during the existing render frame. No strobing, collision changes, network changes, or external assets.
+- Test: `node test_lighting42.mjs`; production Render deployment still needs verification.
 
 ## Phase 4.1 — next-generation materials (live)
 - Shared, seeded 512px procedural diffuse/roughness/bump/emission atlases in `static/materials41.js`, including lit/unlit facades, rain-worn asphalt, panelled concrete, oxidized metals, tile, grate, glass, and vegetation.
