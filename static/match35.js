@@ -10,6 +10,9 @@ export function matchPresentation(state={},me={}){
  const perTier=Math.max(1,cleanInt(rules.killsPerTier,3));
  const kills=cleanInt(me?.kills),round=cleanInt(state.round);
  const teamMode=mode==='teamdeathmatch'||mode==='control';
+ const botMode=mode==='botmatch';
+ const aiScore=cleanInt(state.aiScore),botScore=cleanInt(state.botScore);
+ const botGoal=Math.max(1,cleanInt(rules.botGoal,12));
  const team=me?.team==='azure'||me?.team==='ember'?me.team:null;
  const scores=state.teamScores||{};
  const azure=cleanInt(scores.azure),ember=cleanInt(scores.ember);
@@ -24,26 +27,37 @@ export function matchPresentation(state={},me={}){
  const isGunGame=mode==='gungame';
  const tier=Math.min(tiers,Math.floor(kills/perTier)+1);
  const tierProgress=Math.min(perTier,kills%perTier);
- const progress=clamp(100*(teamMode?teamPoints:kills)/goal,0,100);
+ const progress=clamp(100*(botMode?aiScore:teamMode?teamPoints:kills)/goal,0,100);
  const objective=state.phase==='lobby'?'WAITING FOR HOST':
+   botMode?`BOT ASSAULT · ${aiScore} / ${goal} ELIMINATIONS`:
    mode==='teamdeathmatch'?`TEAM DEATHMATCH · FIRST TO ${goal}`:
    mode==='control'?`CONTROL POINT · FIRST TO ${goal}`:
    isGunGame?`TIER ${tier} / ${tiers} · ${Math.min(kills,goal)} / ${goal}`:
    `FIRST TO ${goal}`;
- const leaderText=teamMode?`AZURE ${azure}  ·  EMBER ${ember}${mode==='control'?'  ·  '+pointStatus:''}`:!leader?'WAITING FOR PLAYERS':
+ const leaderText=botMode?`OPERATORS ${aiScore} / ${goal}  ·  BOTS ${botScore} / ${botGoal}`:
+  teamMode?`AZURE ${azure}  ·  EMBER ${ember}${mode==='control'?'  ·  '+pointStatus:''}`:!leader?'WAITING FOR PLAYERS':
    !leaderId?'TIED FOR THE LEAD':
    leaderId===me.id?`YOU LEAD · ${leader.kills} PTS`:
    `${leader.name} LEADS · ${leader.kills} PTS`;
- const rankText=(team?team.toUpperCase()+' TEAM · ':'')+
+ const rankText=botMode?`CO-OP · ${ranks.length} OPERATORS`:
+  (team?team.toUpperCase()+' TEAM · ':'')+
   (mine?`#${mine.rank} / ${ranks.length}`:`0 / ${ranks.length}`);
  return {goal,round,progress,objective,rankText,leaderText,
-  teamMode,team,azure,ember,pointStatus,
+  teamMode,team,azure,ember,pointStatus,botMode,aiScore,botScore,botGoal,
   isGunGame,tier,tierProgress,perTier,tiers,
   rank:mine?.rank||null,
   remaining:Math.max(0,Number(state.remaining)||0)};
 }
 export function finishPresentation(state={}){
  const winner=state.winner||'DRAW',id=state.winnerId||null;
+ if(state.mode==='botmatch'){
+  const playerWin=winner==='PLAYERS';
+  return {headline:playerWin?'OPERATORS WIN!':'BOTS WIN THIS ROUND',
+   detail:playerWin?'ASSAULT CLEARED':state.winReason==='time'?'TIME EXPIRED':'BOTS OVERRAN THE SQUAD',
+   podium:'OPERATORS '+cleanInt(state.aiScore)+' / '+Math.max(1,cleanInt(state.rules?.goal,20))+
+    ' · BOTS '+cleanInt(state.botScore)+' / '+Math.max(1,cleanInt(state.rules?.botGoal,12))};
+ }
+
  const winningTeam=state.winnerTeam||null,teamMode=state.mode==='teamdeathmatch'||state.mode==='control';
  const reason=state.winReason||'time',isDraw=!id&&!winningTeam;
  const standing=Array.isArray(state.standings)?
@@ -71,9 +85,11 @@ export function matchNotice(event,myId,weapons=[]){
   case 'leader':
    return event.id===myId?'YOU TAKE THE LEAD':`${event.name} TAKES THE LEAD`;
   case 'round_start':return `ROUND ${event.round} · GO`;
+  case 'bot_score':return `OPERATORS ${cleanInt(event.players)} · BOTS ${cleanInt(event.bots)}`;
   case 'control_status':return event.contested?'BEACON CONTESTED':
    event.team?`${event.team.toUpperCase()} CONTROLS THE BEACON`:'BEACON UNCLAIMED';
-  case 'round_end':return event.winnerId===null&&!event.winnerTeam?
+  case 'round_end':if(event.mode==='botmatch')return event.winner==='PLAYERS'?'BOT ASSAULT CLEARED':'BOTS WIN THE ROUND';
+   return event.winnerId===null&&!event.winnerTeam?
      'ROUND COMPLETE · DRAW':`${event.winner} TAKES THE ROUND`;
   default:return null;
  }
