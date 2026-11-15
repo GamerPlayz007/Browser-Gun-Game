@@ -198,3 +198,21 @@
  cursor:pointer}
 #rejoin56:hover,#rejoin56:focus-visible{border-color:#c2ffe0;background:#1c5c54}
 .brand sup{border-color:#60d4c9a8;color:#a9ffe0;letter-spacing:.08em}
+
+/* CROSSFIRE Bot Assault: five-mode selector and unmistakable PVE accent. */
+.mode-options{flex-wrap:wrap}
+.mode-options button{flex:1 1 calc(50% - 7px);min-width:130px}
+.mode-options button[data-mode="botmatch"]{flex:1 1 100%;
+ background:linear-gradient(100deg,#3a1e34a6,#532739a6);
+ border-color:#e77f9d91;color:#ffe9f0}
+.mode-options button[data-mode="botmatch"].active{
+ background:linear-gradient(100deg,#78314e,#513056);
+ border-color:#ff9cb8;box-shadow:inset 3px 0 #ff83a9}
+.mode-options button[data-mode="botmatch"] small{color:#ffccdb}
+#team-bar.bot-assault-ui{background:linear-gradient(90deg,#234961e6,#532e42de)}
+#team-bar.bot-assault-ui strong:last-child{color:#ff90a7}
+#team-bar.bot-assault-ui strong:first-child{color:#8aece7}
+.bot-roster-note{font-size:10px;letter-spacing:.06em;color:#ffbbd3;padding:7px 9px;
+ border:1px solid #bd658266;background:#4a2b417d}
+#scoreboard .bot-assault-heading td{color:#ffdcf0;font-size:11px;
+ background:#452638c4;border-left:3px solid #ff8daa;text-align:left;padding:10px}
