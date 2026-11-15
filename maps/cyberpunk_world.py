@@ -51,6 +51,14 @@ def open_edge_walls_around_authored_routes(city):
                         z=round((z0+z1)/2,5),w=round(x1-x0,5),
                         h=round(y1-y0,5),d=round(z1-z0,5))
             new_boxes.append(part)
+    # The G1 south-service corridor straddles the removed legacy perimeter:
+    # provide a real walkable slab under the full six-metre route width.
+    # This is physical geometry, not an invisible collision-only bridge.
+    new_boxes.append(dict(
+        x=-9.0,y=0.74,z=35.6,w=28.0,h=0.26,d=7.8,
+        kind="routeFloor",style="road",zone="plaza",
+        route="G1",stage6Physical=True,structure="south-service-apron"
+    ))
     city["boxes"]=new_boxes
     city["stage6"]["final_collider_count"]=len(new_boxes)
     return city
