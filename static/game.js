@@ -263,8 +263,29 @@ $('resume').onclick=capture;renderer.domElement.addEventListener('click',()=>{if
 document.addEventListener('pointerlockchange',()=>{if(!joined)return;resetInput();$('room-panel').hidden=locked()||state?.phase==='results';});
 document.addEventListener('mousemove',e=>{if(!locked())return;const sens=.002*settings.sens*T.MathUtils.lerp(1,me?.weapon===3?.32:.65,ads);yaw-=e.movementX*sens;pitch=clamp(pitch-e.movementY*sens,-1.5,1.5);});
 document.addEventListener('mousedown',e=>{if(!locked())return;if(e.button===0){pressTrigger(combatTrigger);if(me&&ammo()<=0&&me.reload<=0&&me.switch<=0)audio.dry();tryTriggerFire(performance.now()/1000);}if(e.button===2){aiming=true;sendInput();}});document.addEventListener('mouseup',e=>{if(e.button===0)releaseTrigger(combatTrigger);if(e.button===2){aiming=false;sendInput();}});document.addEventListener('contextmenu',e=>{if(joined)e.preventDefault();});
-document.addEventListener('keydown',e=>{if(!joined)return;if(e.code==='F7'){e.preventDefault();if(!e.repeat)$('perf-panel').hidden=!$('perf-panel').hidden;return;}if(['INPUT','SELECT','TEXTAREA'].includes(document.activeElement.tagName))return;if(['Tab','Space','KeyW','KeyA','KeyS','KeyD'].includes(e.code))e.preventDefault();keys[e.code]=true;if(e.code==='Tab')$('scoreboard').hidden=false;if(e.code==='KeyM')$('map-panel').classList.add('expanded');if(e.repeat)return;if(e.code==='KeyR'&&locked()){send({type:'reload'});if(me.ammo<weapons[me.weapon].mag&&!me.reload)audio.reload();}if(/^Digit[1-4]$/.test(e.code))selectWeapon(Number(e.code.slice(-1))-1);});
+document.addEventListener('keydown',e=>{if(!joined)return;if(e.code==='F7'){e.preventDefault();if(!e.repeat)$('perf-panel').hidden=!$('perf-panel').hidden;return;}if(e.code==='F8'){e.preventDefault();if(!e.repeat)copyDebugReport51();return;}if(['INPUT','SELECT','TEXTAREA'].includes(document.activeElement.tagName))return;if(['Tab','Space','KeyW','KeyA','KeyS','KeyD'].includes(e.code))e.preventDefault();keys[e.code]=true;if(e.code==='Tab')$('scoreboard').hidden=false;if(e.code==='KeyM')$('map-panel').classList.add('expanded');if(e.repeat)return;if(e.code==='KeyR'&&locked()){send({type:'reload'});if(me.ammo<weapons[me.weapon].mag&&!me.reload)audio.reload();}if(/^Digit[1-4]$/.test(e.code))selectWeapon(Number(e.code.slice(-1))-1);});
 document.addEventListener('keyup',e=>{keys[e.code]=false;if(e.code==='Tab')$('scoreboard').hidden=true;if(e.code==='KeyM')$('map-panel').classList.remove('expanded');});window.addEventListener('blur',()=>{resetInput();$('scoreboard').hidden=true;});
+function createDebugReport51(){
+ const net=syncStats(netSync,performance.now());
+ const data=captureRenderHealth46(renderer,scene,world,display);
+ return ['CROSSFIRE 05.1 / PLAYTEST REPORT',
+   'Map: '+(map?.name||map?.id||'unknown'),
+   'Connection: '+(joined?'joined':'not joined'),
+   'Quality setting: '+settings.quality,
+   'Capture: '+new Date().toISOString(),
+   '',
+   formatDiagnostics(frameMeter.summary(),net,data)].join('\n');
+}
+async function copyDebugReport51(){
+ const report=createDebugReport51();
+ try{
+  await navigator.clipboard.writeText(report);
+  toast('Playtest report copied. Paste it into the bug report chat.');
+ }catch{
+  toast('Could not copy automatically. Use F7 to read the diagnostics.');
+ }
+}
+$('copy-diagnostics').onclick=copyDebugReport51;
 $('diagnostics-toggle').onclick=()=>{$('perf-panel').hidden=!$('perf-panel').hidden;};
 $('create').onclick=()=>{audio.unlock();enter(true);};$('join').onclick=()=>{audio.unlock();enter(false);};$('code').onkeydown=e=>{if(e.key==='Enter')enter(false);};$('name').value=localStorage.getItem('cf-name')||'';$('code').value=new URLSearchParams(location.search).get('room')||'';
 $('start').onclick=()=>{send({type:'start'});capture();};$('rematch').onclick=()=>{send({type:'start'});audio.unlock();};$('result-room').onclick=()=>{$('results').hidden=true;$('room-panel').hidden=false;};$('menu-button').onclick=()=>{document.exitPointerLock?.();$('room-panel').hidden=false;};
