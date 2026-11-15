@@ -11,7 +11,7 @@ from aiohttp.test_utils import TestClient, TestServer
 import server
 
 ROOT = Path(__file__).parent
-RELEASE = "05.1"
+RELEASE = "05.2"
 
 class ReleaseAssets(unittest.TestCase):
     def test_client_module_imports_exist(self):
@@ -40,10 +40,10 @@ class ReleaseAssets(unittest.TestCase):
         pkg = json.loads((ROOT / "package.json").read_text())
         lock = json.loads((ROOT / "package-lock.json").read_text())
         html = (ROOT / "static/index.html").read_text()
-        self.assertEqual(pkg["version"], "5.1.0")
+        self.assertEqual(pkg["version"], "5.2.0")
         self.assertEqual(lock["version"], pkg["version"])
         self.assertEqual(lock["packages"][""]["version"], pkg["version"])
-        self.assertIn("<sup>05.1</sup>", html)
+        self.assertIn("<sup>05.2</sup>", html)
         self.assertIn("CROSSFIRE", html)
         self.assertEqual(server.RELEASE, RELEASE)
 
