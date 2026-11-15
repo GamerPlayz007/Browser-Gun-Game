@@ -1,6 +1,5 @@
-// 02.5 GPU quality profiles. Geometry resolution (CSS display DPR) is
-// independent of UI layout. High/Ultra use full/native pixels; Performance is
-// an explicit opt-in for weaker hardware. Auto starts at High quality.
+// 04.6 GPU quality profiles. Auto begins at a bounded DPR and adapts to
+// actual frame pacing. High/Ultra/Native remain native-resolution choices.
 export const QUALITY_MODES=['auto','performance','high','ultra','native'];
 export function displaySize(width,height,dpr,scale=1,limit=16384){
  const ratio=Math.min(Math.max(1,dpr)*scale,limit/Math.max(width,height));
@@ -16,7 +15,9 @@ export class AutoQuality{
   this.total+=ms;this.count++;if(this.count<120)return false;
   const avg=this.total/this.count;this.total=this.count=0;
   this.slow=avg>18.5?this.slow+1:0;this.fast=avg<14?this.fast+1:0;
-  const floor=Math.max(.70,1/Math.max(1,dpr));
+  // Auto's DPR is already capped at 1.15. We can safely reduce to 65% of
+  // that internal resolution when a slower laptop needs headroom.
+  const floor=.65;
   if(this.slow>=2){this.slow=this.fast=0;
    if(this.detail){this.detail=false;return true;}
    if(this.scale>floor){this.scale=Math.max(floor,Math.round((this.scale-.08)*100)/100);return true;}
@@ -36,7 +37,8 @@ export function createDisplay(renderer,cameras,onDetail,mode='high'){
   if(!force&&w===width&&h===height&&p===dpr)return;
   const changed=p!==dpr||w!==width||h!==height;width=w;height=h;dpr=p;
   if(changed&&quality.mode==='auto')quality.reset();
-  const scalar=quality.mode==='performance'?1/Math.max(1,p):quality.scale;
+  const scalar=quality.mode==='performance'?1/Math.max(1,p):
+   quality.mode==='auto'?Math.min(p,1.15)*quality.scale/Math.max(1,p):quality.scale;
   buffer=displaySize(w,h,p,scalar,limit);
   renderer.setPixelRatio(buffer.ratio);renderer.setSize(w,h);
   for(const camera of cameras){camera.aspect=w/h;camera.updateProjectionMatrix();}
