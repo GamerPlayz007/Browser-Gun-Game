@@ -78,9 +78,9 @@ async def probe(base):
             code = room["room"]
         scheme = "wss" if base.startswith("https:") else "ws"
         ws_uri = scheme + base.split("://", 1)[1] + "/ws/" + code
-        async with session.ws_connect(ws_uri + "?name=ProbeA", heartbeat=15) as alice:
+        async with session.ws_connect(ws_uri + "?name=ProbeA&skin=2", heartbeat=15) as alice:
             welcome_a = await alice.receive_json(timeout=12)
-            async with session.ws_connect(ws_uri + "?name=ProbeB", heartbeat=15) as bob:
+            async with session.ws_connect(ws_uri + "?name=ProbeB&skin=3", heartbeat=15) as bob:
                 welcome_b = await bob.receive_json(timeout=12)
                 if welcome_a.get("type") != "welcome" or welcome_b.get("type") != "welcome":
                     raise RuntimeError("Missing WebSocket join handshake")
@@ -99,6 +99,30 @@ async def probe(base):
                             if data.get("t") != 517:
                                 raise RuntimeError("Pong timestamp not echoed")
                             break
+                # Exercise V3's host-only mode selection, ready flags, and
+                # server-owned cosmetics without starting an actual match.
+                await bob.send_json({"type":"mode","mode":"control"})
+                await alice.send_json({"type":"mode","mode":"control"})
+                await bob.send_json({"type":"ready","ready":True})
+                await bob.send_json({"type":"skin","skin":1})
+                verified = False
+                async with asyncio.timeout(14):
+                    while not verified:
+                        message = await bob.receive()
+                        if message.type != WSMsgType.TEXT:
+                            raise RuntimeError("Room connection closed during V3 probe")
+                        current = json.loads(message.data)
+                        if current.get("type") != "state":
+                            continue
+                        owners={p["id"]:p for p in current.get("players",[])}
+                        a=owners.get(welcome_a["id"])
+                        b=owners.get(welcome_b["id"])
+                        verified = (current.get("mode") == "control" and
+                                    current.get("readyStatus",{}).get("ready") == 1 and
+                                    a is not None and b is not None and
+                                    a.get("skin") == 2 and b.get("skin") == 1 and
+                                    a.get("team") != b.get("team"))
+                print("PASS server-owned game mode, team balance, ready and cosmetics")
                 print("PASS two-player WebSocket handshake and server ping")
         print("PASS CROSSFIRE", EXPECTED_RELEASE, "basic deployment smoke check")
 
