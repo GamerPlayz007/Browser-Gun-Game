@@ -31,7 +31,8 @@ def endpoint(base):
 async def probe(base):
     base = endpoint(base)
     print("Checking", base)
-    async with ClientSession(timeout=ClientTimeout(total=30)) as session:
+    # Cold Render instances can require extra startup time before /health responds.
+    async with ClientSession(timeout=ClientTimeout(total=120, connect=90)) as session:
         async with session.get(base + "/health") as response:
             if response.status != 200:
                 raise RuntimeError(f"/health returned HTTP {response.status}")
