@@ -237,7 +237,7 @@ class Room:
         self.win_reason=reason
         self.ended_at=now
         self.phase='results'
-        self.event('round_end',round=self.round_number,winner=self.winner,
+        self.event('round_end',round=self.round_number,winner=self.winner,mode=self.mode,
                    winnerId=self.winner_id,winnerTeam=self.winner_team,reason=reason)
         return True
     def select(self,p,weapon,now):
@@ -266,7 +266,7 @@ class Room:
             for b in self.arena.boxes:
                 h=ray_solid(origin,direction,b)
                 if h is not None and h<distance:distance=h
-            candidates=list(self.targets) if self.mode!=BOT_MODE else []
+            candidates=list(self.targets) if self.mode!=BOT_MODE or self.phase=='lobby' else []
             if self.phase=='playing':
                 if self.mode==BOT_MODE:
                     candidates.extend(self.players.values() if p.get('bot') else self.bots.values())
