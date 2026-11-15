@@ -40,6 +40,9 @@ scoring message.
 - `static/control54.js`: lightweight animated Three.js beacon with
   purely visual non-colliding rings; color and location come from server
   snapshots. Scene resources are disposed on map unload.
+- The minimap marks the Control Point and shows **living teammates only**
+  in team modes; it does not reveal opposing players. Test coverage confirms
+  objective visibility and exclusion of opponents/dead players.
 - `test_modes54.py`: team balance, friendly-fire protection, kill scoring,
   contested/uncontested Control Point scoring, same-floor eligibility,
   victory conditions, rematches and actual two-player WebSocket authority.
