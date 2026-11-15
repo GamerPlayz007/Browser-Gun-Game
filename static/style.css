@@ -116,3 +116,8 @@
 @media(prefers-reduced-motion:reduce){
  #hitmarker,#damage-number{will-change:auto}
 }
+
+/* 05.3 — contextual parkour flow cue, restrained and accessible. */
+#movement-state.flow-action{color:#ffe5ae;border-color:#ffe1a580;
+ background:linear-gradient(95deg,#4f3c235e,#183d485e);text-shadow:0 0 8px #f7c97966}
+#movement-state.flow-action:before{background:#ffdb8f;box-shadow:0 0 7px #ffdb8f}
