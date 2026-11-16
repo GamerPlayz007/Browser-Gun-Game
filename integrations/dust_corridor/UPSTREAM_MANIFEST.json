@@ -1,0 +1,62 @@
+{
+  "schema": 1,
+  "upstream_repository": "https://github.com/Leonxlnx/claude-of-duty",
+  "upstream_commit": "7f8a15ae54dd65e7ce22c80c074f9b1da7daee2f",
+  "license": "MIT",
+  "purpose": "Verbatim Dust Corridor world source import for CROSSFire Stage 6.1. Not loaded by the live game.",
+  "dependency": "Three.js r180; already bundled in CROSSFire",
+  "files": [
+    {
+      "path": "src/world/World.js",
+      "upstream_git_blob_sha": "dfe306b62e318d0637df7be15667834c5859c002"
+    },
+    {
+      "path": "src/world/MapGenerator.js",
+      "upstream_git_blob_sha": "e28bb0c6081b38f1de3fc3da286bfdd641a4c706"
+    },
+    {
+      "path": "src/world/Buildings.js",
+      "upstream_git_blob_sha": "2dc75b51ee88b1e43aaacee9d68474586e003dfd"
+    },
+    {
+      "path": "src/world/Props.js",
+      "upstream_git_blob_sha": "d59572bc7c4c817d430c37f388bd518d4c6807af"
+    },
+    {
+      "path": "src/world/GeometryBuilder.js",
+      "upstream_git_blob_sha": "9f40cda9d7c631c23a03eb98c0d8b0ed4eb4b2d8"
+    },
+    {
+      "path": "src/world/Noise.js",
+      "upstream_git_blob_sha": "e4d6e905f34292e8d676f6ecb4fdbd28a36d9ce3"
+    },
+    {
+      "path": "src/world/MaterialLibrary.js",
+      "upstream_git_blob_sha": "1b7532aa4d2a28ebf901536e88bfcddf3f460071"
+    },
+    {
+      "path": "src/world/ClothSystem.js",
+      "upstream_git_blob_sha": "3ed56fd60121e3519c0979735b34fa4d048ef461"
+    },
+    {
+      "path": "src/physics/BVH.js",
+      "upstream_git_blob_sha": "3ea2fb51b9add51645b145402daff2d3d14f13c0"
+    },
+    {
+      "path": "src/core/SeededRandom.js",
+      "upstream_git_blob_sha": "72221df34d6f499fd16475e267892c4208397d60"
+    },
+    {
+      "path": "src/render/FullscreenPass.js",
+      "upstream_git_blob_sha": "8f9f865167916448544fe33fcb95cfd2a176d252"
+    },
+    {
+      "path": "src/render/shaders/noise.glsl.js",
+      "upstream_git_blob_sha": "a4766bf1a4bc3fda522c5b842ebc19a0ba99ff4f"
+    },
+    {
+      "path": "LICENSE",
+      "upstream_git_blob_sha": "48a2f6640b81ff8eca9ce7f6a96337692713ef5b"
+    }
+  ]
+}
