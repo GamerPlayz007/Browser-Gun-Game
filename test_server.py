@@ -118,10 +118,19 @@ class GameTests(unittest.TestCase):
             if not any(s.overlaps(x,1,z,c,1.8) for c in s.nearby_boxes(x,z)):
                 valid.append((x,z,top))
         self.assertTrue(valid,'At least one elevated deck must have a traversable space below')
-    def test_slide_cooldown_jump_landing_and_timeout(self):
+    def test_repeated_slide_without_cooldown_jump_landing_and_timeout(self):
         r,a,b=duel();a.update(vz=-8,input={'w':True,'slide':True},last_input=100)
-        s.move(a,s.TICK,100);self.assertTrue(a['crouch']);self.assertGreater(a['slide_ready'],101)
-        ready=a['slide_ready'];a['input']={'w':True,'slide':False};s.move(a,s.TICK,100.1);a['input']['slide']=True;s.move(a,s.TICK,100.2);self.assertEqual(a['slide_ready'],ready)
+        s.move(a,s.TICK,100);self.assertTrue(a['crouch'])
+        self.assertAlmostEqual(a['slide_ready'],100)
+        first=a['slide_until']
+        a['input']={'w':True,'slide':False};s.move(a,s.TICK,100.1)
+        a['input']['slide']=True;s.move(a,s.TICK,100.2)
+        self.assertEqual(a['slide_until'],first,'Re-press during active slide does not stack')
+        a.update(vz=-8,slide_until=0,grounded=True,slide_held=False,
+                 input={'w':True,'slide':True},last_input=100.9)
+        s.move(a,s.TICK,100.9)
+        self.assertGreater(a['slide_until'],100.9)
+        self.assertAlmostEqual(a['slide_ready'],100.9)
         a.update(x=-24,y=1,z=18,input={'jump':True},jump_held=False,slide_until=0,grounded=True,last_input=102);s.move(a,s.TICK,102);self.assertGreater(a['y'],0)
         a['input']={}
         for i in range(60):s.move(a,s.TICK,102+i*s.TICK)

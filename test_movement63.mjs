@@ -13,7 +13,8 @@ assert.equal(mapper.input({},false).crouch,false);
 assert.equal(mapper.toggleCrouch(),false);
 mapper.reset();
 assert.equal(mapper.crouched,false);
-assert.deepEqual(leanOffset63(0,1),{x:.52,z:0});
+assert.equal(leanOffset63(0,1).x,.52);
+assert.equal(Math.abs(leanOffset63(0,1).z),0);
 const floor={x:0,y:-1,z:0,w:80,h:1,d:80,kind:'floor'};
 const wall={x:.6,y:0,z:0,w:.35,h:3,d:20,kind:'building'};
 const initial={x:0,y:0,z:4,vx:0,vy:0,vz:-8,yaw:0,

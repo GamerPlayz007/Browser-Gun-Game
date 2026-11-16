@@ -295,8 +295,8 @@ class Room:
                 # The exposed head remains hittable when the torso is behind
                 # solid cover. Rewound shots use the corresponding old lean.
                 qlean=historic[5] if historic else q.get('lean',0.)
-                qyaw=historic[6] if historic else q['yaw']
                 if abs(qlean)>.01:
+                    qyaw=historic[6] if historic else q.get('yaw',0.)
                     hx=qx+math.cos(qyaw)*.52*qlean
                     hz=qz-math.sin(qyaw)*.52*qlean
                     upper=qy+height+.04
