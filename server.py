@@ -86,6 +86,8 @@ def new_player(room,pid,name,now,weapon=0,skin=0):
 class Room:
     def __init__(self,code,map_id=None):
         self.arena=ARENAS[map_id or DEFAULT.id]
+        center=self.arena.data.get('center',{'x':0,'z':0})
+        self.control_point={**CONTROL_POINT,'x':center['x'],'z':center['z'],'y':0.} if self.arena.id=='neon_zenith' else CONTROL_POINT
         self.code=code;self.players={};self.sockets={};self.joining=0;self.host=None;self.mode='deathmatch';self.next_mode='deathmatch'
         self.phase='lobby';self.started=0.;self.ended_at=0.;self.countdown_at=0.;self.winner=None;self.winner_id=None;self.win_reason=None;self.round_number=0;self.leader_id=None;self.events=[];self.last_active=time.monotonic();self.snapshot_sequence=0
         self.targets=[dict(id='t'+str(i),x=x,y=y,z=z,hp=100,reset_at=0) for i,(x,y,z) in enumerate(self.arena.data['practiceTargets'])]
@@ -422,7 +424,7 @@ class Room:
         # Server-only scoring: one point per uncontested second inside the
         # Neon Plaza beacon. Opposing players inside the ring pause scoring.
         if self.phase=='playing' and self.mode=='control':
-            active,contested,counts=controller(self.players)
+            active,contested,counts=controller(self.players,self.control_point)
             changed=(active!=self.control_owner or contested!=self.control_contested)
             self.control_owner=active;self.control_contested=contested
             self.control_presence=counts
@@ -445,7 +447,7 @@ class Room:
         return dict(type='state',snapshotSeq=self.snapshot_sequence,serverTime=round(now,6),tickRate=60,snapshotHz=20,maxHp=MAX_HEALTH,mapId=self.arena.id,phase=self.phase,mode=self.mode,host=self.host,round=self.round_number,nextMode=self.next_mode,rules=rules(self.mode,len(WEAPONS)),standings=standings(self.players,self.mode),leaderId=(None if is_team_mode(self.mode) or self.mode==BOT_MODE else leading_player(self.players)),winnerId=self.winner_id,winnerTeam=self.winner_team,
             teamScores=self.team_scores.copy(),readyStatus=ready_summary(self.players),
             aiScore=self.ai_score,botScore=self.bot_score,botsAlive=sum(b['hp']>0 for b in self.bots.values()),
-            objective=({**CONTROL_POINT,'controller':self.control_owner,
+            objective=({**self.control_point,'controller':self.control_owner,
                         'contested':self.control_contested,'presence':self.control_presence.copy()}
                        if self.mode=='control' else None),
             winReason=self.win_reason,players=[{k:p[k] for k in fields}|dict(reload=max(0,p['reload_at']-now),respawn=max(0,p['respawn_at']-now),shield=max(0,p['shield']-now),slide=max(0,p['slide_until']-p['motion_time']),slideCooldown=max(0,p['slide_ready']-p['motion_time']),switch=0.,regenDelay=max(0.,p['regen_after']-now) if 0<p['hp']<MAX_HEALTH else 0.) for p in list(self.players.values())+list(self.bots.values())],targets=self.targets,events=self.events,remaining=max(0,ROUND_SECONDS-((self.ended_at if self.phase=='results' else now)-self.started)) if self.phase in ('playing','results') else ROUND_SECONDS,countdown=max(0,self.countdown_at-now),winner=self.winner)
