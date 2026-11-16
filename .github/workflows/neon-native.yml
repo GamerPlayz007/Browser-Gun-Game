@@ -16,7 +16,7 @@ permissions:
 
 concurrency:
   group: neon-zenith-native-import
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   import-original-scene:
@@ -49,5 +49,9 @@ jobs:
             echo "No changes in pinned upstream scene"
           else
             git commit -m "Vendor pinned original Neon Zenith native scene (full fidelity)"
+            # Build jobs run while normal development continues on main.
+            # Rebase this assets-only commit instead of failing a stale push.
+            git fetch origin main
+            git rebase -X theirs origin/main
             git push origin HEAD:main
           fi
