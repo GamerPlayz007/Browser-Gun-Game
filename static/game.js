@@ -5,6 +5,7 @@ import {simulate,FIXED_DT} from './physics.js';
 import {createJumpLatch62} from './input62.js';
 import {leanOffset63} from './lean63.js';
 import {createMovementControls63} from './controls63.js';
+import {MAX_HEALTH64,healthPercent64,healthStatus64,wheelWeapon64} from './combat64.js';
 import {movementCue53,cameraFeel53} from './flow53.js';
 import {createMinimap} from './minimap.js';
 import {createDisplay} from './display.js';
@@ -70,7 +71,7 @@ async function loadArena(id){
  display.quality.reset();display.resize(true);
 }
 const weapons=map.weapons,weaponModels=weapons.map(w=>makeWeapon(w.id));for(const g of weaponModels){g.visible=false;viewScene.add(g);}
-let selected=0,ws=null,myId=null,roomCode='',state=null,me=null,local=null,joined=false,keys={},aiming=false,yaw=0,pitch=0,seq=0,shotId=0,pendingShots=[];let pendingMoves=[],movementAccumulator=0,viewError=new T.Vector3(),rosterSignature='',scoreSignature='';
+let selected=0,desiredWeapon64=null,weaponMags64=weapons.map(w=>w.mag),ws=null,myId=null,roomCode='',state=null,me=null,local=null,joined=false,keys={},aiming=false,yaw=0,pitch=0,seq=0,shotId=0,pendingShots=[];let pendingMoves=[],movementAccumulator=0,viewError=new T.Vector3(),rosterSignature='',scoreSignature='';
 let groundVelocity=0,landingPulse=0,lastLocalGrounded=true,movementHint='',slideHopUntil53=0,visualLean63=0;
 let spectatorTarget55=null;
 let ads=0,kick=0,eye=1.55,visualRecoil=0,lastShot=-10,flashUntil=0,hitUntil=0,damageUntil=0,elimUntil=0,noticeTimer,toastTimer,lastPhase='',lastSpawn=-1,switchVisual=0,rtt=50;
@@ -86,7 +87,18 @@ const silhouette=id=>`<svg viewBox="0 0 220 60" aria-hidden="true"><path d="M20 
 function makeCards(container){for(const w of weapons){const b=document.createElement('button');b.className='weapon-card'+(w.id===selected?' active':'');b.dataset.weapon=w.id;b.innerHTML=`<span class="number">0${w.id+1}</span>${silhouette(w.id)}<strong>${w.name}</strong><small>${w.type}</small>`;b.onclick=()=>selectWeapon(w.id);container.append(b);}}
 makeCards($('home-weapons'));makeCards($('room-weapons'));for(const w of weapons){const s=document.createElement('span');s.className='slot';s.textContent=`${w.id+1} ${w.short}`;$('weapon-slots').append(s);}
 function send(data){if(ws?.readyState===WebSocket.OPEN)ws.send(JSON.stringify(data));}
-function selectWeapon(id){if(joined){if(state?.mode==='gungame'&&state.phase!=='lobby'){toast('Gun Game: earn kills to advance.');return;}send({type:'weapon',weapon:id});}else{selected=id;updateSelection(id);}}
+function selectWeapon(id){
+ if(!Number.isInteger(id)||id<0||id>=weapons.length)return;
+ if(joined){
+  if(state?.mode==='gungame'&&state.phase!=='lobby'){
+   toast('Gun Game: earn kills to advance.');return;
+  }
+  if(me?.hp<=0||!['lobby','playing'].includes(state?.phase))return;
+  if(id===selected)return;
+  // Optimistic slot selection makes rapid wheel notches cycle properly.
+  selected=id;desiredWeapon64=id;updateSelection(id);switchVisual=.7;send({type:'weapon',weapon:id});
+ }else{selected=id;updateSelection(id);}
+}
 function updateSelection(id){document.querySelectorAll('.weapon-card').forEach(b=>b.classList.toggle('active',Number(b.dataset.weapon)===id));[...$('weapon-slots').children].forEach((s,i)=>s.classList.toggle('active',i===id));}
 function toast(text){$('toast').textContent=text;$('toast').style.opacity=1;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').style.opacity=0,3000);}
 function notice(text){$('notice').textContent=text;clearTimeout(noticeTimer);noticeTimer=setTimeout(()=>$('notice').textContent='',3000);}
@@ -117,9 +129,13 @@ function predictStep(input){
 }
 function resetInput(){$('map-panel').classList.remove('expanded');keys={};jumpLatch62.clear();movementControls63.reset();visualLean63=0;aiming=false;releaseTrigger(combatTrigger);sendInput();}
 setInterval(()=>send({type:'ping',t:performance.now()}),2000);
-function ammo(){return me?predictedAmmo(me.ammo,pendingShots,me.weapon):0;}
-function tryTriggerFire(now){if(me&&takeTriggerPulse(combatTrigger,weapons[me.weapon]))fireWeapon(now);}
-function fireWeapon(now){if(!me||!locked()||me.hp<=0||!['lobby','playing'].includes(state.phase)||me.reload>0||me.switch>0)return;const w=weapons[me.weapon];if(now-lastShot<w.interval||ammo()<=0)return;
+function ammo(){
+ if(!me)return 0;
+ return predictedAmmo(selected===me.weapon?me.ammo:weaponMags64[selected],
+   pendingShots,selected);
+}
+function tryTriggerFire(now){if(me&&takeTriggerPulse(combatTrigger,weapons[selected]))fireWeapon(now);}
+function fireWeapon(now){if(!me||!locked()||me.hp<=0||!['lobby','playing'].includes(state.phase)||(me.reload>0&&selected===me.weapon))return;const w=weapons[selected];if(now-lastShot<w.interval||ammo()<=0)return;
  lastShot=now;shotId++;pendingShots.push({id:shotId,weapon:w.id});
   // The server validates and clamps this view timestamp to its own pose history.
   const viewServerTime=netSync.clockOffsetMs===null?undefined:
@@ -281,14 +297,14 @@ function processEvent(e){
     audio.burst(.12,.16,500);
    }
   }
- if(e.type==='kill'){const div=document.createElement('div');div.className='feed-row';div.append(document.createTextNode(e.killer));const mid=document.createElement('span');mid.textContent=weapons[e.weapon].short+(e.head?' ◇':' →');div.append(mid,document.createTextNode(e.victim));$('feed').prepend(div);while($('feed').children.length>5)$('feed').lastChild.remove();setTimeout(()=>div.remove(),5000);if(e.killerId===myId){$('elimination').textContent=(e.head?'HEADSHOT / ':'ELIMINATED / ')+e.victim;elimUntil=now+1.8;audio.kill();}if(e.victimId===myId)$('killed-by').textContent=`${e.killer} · ${weapons[e.weapon].name}`;}
+ if(e.type==='kill'){const div=document.createElement('div');div.className='feed-row';div.append(document.createTextNode(e.killer));const mid=document.createElement('span');mid.textContent=weapons[e.weapon].short+(e.head?' ◇':' →');div.append(mid,document.createTextNode(e.victim));$('feed').prepend(div);while($('feed').children.length>5)$('feed').lastChild.remove();setTimeout(()=>div.remove(),5000);if(e.killerId===myId){$('elimination').textContent=(e.head?'HEADSHOT / ':'ELIMINATED / ')+e.victim+(e.siphon>0?' · +'+e.siphon+' SIPHON':'');elimUntil=now+1.8;audio.kill();}if(e.victimId===myId)$('killed-by').textContent=`${e.killer} · ${weapons[e.weapon].name}`;}
 }
 function handle(data){if(data.type==='welcome'){netSync=createNetSync();seq=0;shotId=0;feedback52.reset();if(data.mapId!==map.id){ws?.close();disconnect('Map mismatch. Reload the page.');return;}$('room-map').textContent=map.name;$('score-map').textContent=map.name;myId=data.id;roomCode=data.room;joined=true;history.replaceState(null,'',`?room=${roomCode}`);$('room-code').textContent=roomCode;$('home').hidden=true;$('hud').hidden=false;$('room-panel').hidden=false;$('shade').style.opacity=0;return;}if(data.type==='pong'){if(observePong(netSync,data.t,performance.now(),data.serverTime))rtt=netSync.rttMs;return;}if(data.type!=='state'||data.mapId!==map.id)return;
  if(!ingestSnapshot(netSync,data,performance.now()))return;
  const previous=me;state=data;me=data.players.find(p=>p.id===myId);if(!me)return;const now=performance.now()/1000;
  pendingShots=pendingShots.filter(s=>s.id>me.ack_shot);
  if(!local||me.spawn!==lastSpawn){
-  local={...me};lastSpawn=me.spawn;pendingMoves=[];movementAccumulator=0;landingPulse=0;visualLean63=0;movementControls63.reset();lastLocalGrounded=!!me.grounded;movementHint='';viewError.set(0,0,0);pendingShots=[];lastShot=-10;shotRecovery=0;feedback52.reset();slideHopUntil53=0;spectatorTarget55=null;releaseTrigger(combatTrigger);
+  local={...me};lastSpawn=me.spawn;desiredWeapon64=null;selected=me.weapon;weaponMags64=weapons.map(w=>w.mag);updateSelection(selected);pendingMoves=[];movementAccumulator=0;landingPulse=0;visualLean63=0;movementControls63.reset();lastLocalGrounded=!!me.grounded;movementHint='';viewError.set(0,0,0);pendingShots=[];lastShot=-10;shotRecovery=0;feedback52.reset();slideHopUntil53=0;spectatorTarget55=null;releaseTrigger(combatTrigger);
   yaw=me.yaw;pitch=0;
  }else{
   const old=new T.Vector3(local.x+viewError.x,local.y+viewError.y,local.z+viewError.z);
@@ -299,13 +315,24 @@ function handle(data){if(data.type==='welcome'){netSync=createNetSync();seq=0;sh
    viewError.set(correction.x,correction.y,correction.z);
   // Large corrections are snapped above; small corrections decay visually.
  }
- if(!previous||previous.weapon!==me.weapon){selected=me.weapon;updateSelection(selected);switchVisual=1;pendingShots=[];lastShot=-10;}
- $('health').textContent=me.hp;$('healthbar').style.width=me.hp+'%';$('protection').textContent=me.shield>0?' / PROTECTED':'';$('ammo').textContent=ammo();$('mag').textContent=' / '+weapons[me.weapon].mag;$('weapon-name').textContent=weapons[me.weapon].name;$('reload-label').textContent=me.reload>0?`RELOADING ${me.reload.toFixed(1)}s`:ammo()===0?'EMPTY — R TO RELOAD':'R / RELOAD';
-  $('fire-mode-label').textContent=fireMode(weapons[me.weapon])==='auto'?'AUTO':'SINGLE CLICK';
-  $('ammo-panel').classList.toggle('low-ammo',ammoState(ammo(),weapons[me.weapon].mag)==='low');
-  $('ammo-panel').classList.toggle('empty-ammo',ammoState(ammo(),weapons[me.weapon].mag)==='empty');
+ weaponMags64[me.weapon]=me.ammo;
+ if(!previous||previous.weapon!==me.weapon){
+  if(desiredWeapon64===null||desiredWeapon64===me.weapon){
+   selected=me.weapon;desiredWeapon64=null;updateSelection(selected);
+  }
+  switchVisual=1;
+ }
+ $('health').textContent=Math.ceil(me.hp);
+ $('healthbar').style.width=healthPercent64(me.hp,data.maxHp||MAX_HEALTH64)+'%';
+ $('protection').textContent=healthStatus64(me,data.maxHp||MAX_HEALTH64);
+ $('ammo').textContent=ammo();$('mag').textContent=' / '+weapons[selected].mag;
+ $('weapon-name').textContent=weapons[selected].name;
+ $('reload-label').textContent=me.reload>0&&selected===me.weapon?`RELOADING ${me.reload.toFixed(1)}s`:ammo()===0?'EMPTY — R TO RELOAD':'R / RELOAD';
+  $('fire-mode-label').textContent=fireMode(weapons[selected])==='auto'?'AUTO':'SINGLE CLICK';
+  $('ammo-panel').classList.toggle('low-ammo',ammoState(ammo(),weapons[selected].mag)==='low');
+  $('ammo-panel').classList.toggle('empty-ammo',ammoState(ammo(),weapons[selected].mag)==='empty');
   $('ammo-panel').classList.toggle('reloading',me.reload>0);
-  $('reload-progress').style.width=(100*reloadFraction(me.reload,weapons[me.weapon].reload))+'%';
+  $('reload-progress').style.width=(100*reloadFraction(selected===me.weapon?me.reload:0,weapons[selected].reload))+'%';
  const match=matchPresentation(data,me);
  const spectateChoices55=spectatorCandidates55(data,myId);
  if(!spectateChoices55.some(p=>p.id===spectatorTarget55))
@@ -407,7 +434,7 @@ function frame(ms){try{const now=ms/1000,rawMs=ms-clock,dt=Math.min(rawMs/1000,.
    -(settings.motion?landingPulse*.24:0)+flow53.vaultDip,
    local.z+viewError.z+local.vz*movementAccumulator+peek63.z);
   camera.rotation.set(pitch+visualRecoil,yaw,flow53.roll-visualLean63*.15,'YXZ');
-  const targetFov53=T.MathUtils.lerp(input.sprint?88:82,me.weapon===3?26:57,ads)+flow53.fovBoost;
+  const targetFov53=T.MathUtils.lerp(input.sprint?88:82,selected===3?26:57,ads)+flow53.fovBoost;
   camera.fov=T.MathUtils.lerp(camera.fov,targetFov53,Math.min(1,dt*13));
   camera.updateProjectionMatrix();
   for(const [id,g] of opponents){const shown=sampleRemote(netSync,id,ms);const p=shown?{...g.userData.target,...shown}:g.userData.target;if(!p)continue;
@@ -428,13 +455,13 @@ function frame(ms){try{const now=ms/1000,rawMs=ms-clock,dt=Math.min(rawMs/1000,.
     camera.updateProjectionMatrix();
    }
   }
-  for(let i=0;i<4;i++)weaponModels[i].visible=i===me.weapon&&locked()&&me.hp>0&&state.phase!=='results'&&!(me.weapon===3&&ads>.95);
-  const gun=weaponModels[me.weapon];animateWeapon(gun,{time:now,ads,reload:me.reload>0?me.reload/weapons[me.weapon].reload:0,kick,moving:locked()&&moving,slide:sliding,motion:settings.motion,switched:switchVisual});gun.userData.flash.visible=now<flashUntil;gun.userData.flash.rotation.z=now*21;
+  for(let i=0;i<4;i++)weaponModels[i].visible=i===selected&&locked()&&me.hp>0&&state.phase!=='results'&&!(selected===3&&ads>.95);
+  const gun=weaponModels[selected];animateWeapon(gun,{time:now,ads,reload:selected===me.weapon&&me.reload>0?me.reload/weapons[selected].reload:0,kick,moving:locked()&&moving,slide:sliding,motion:settings.motion,switched:switchVisual});gun.userData.flash.visible=now<flashUntil;gun.userData.flash.rotation.z=now*21;
   gun.userData.flash.scale.set(flashPower52,flashPower52,flashPower52*2);
   kick=Math.max(0,kick-dt*.7);visualRecoil*=Math.exp(-dt*18);switchVisual=Math.max(0,switchVisual-dt*5);
-  $('scope').hidden=!(me.weapon===3&&ads>.95&&locked()&&me.hp>0);
+  $('scope').hidden=!(selected===3&&ads>.95&&locked()&&me.hp>0);
   const spread52=crosshairSpread52({speed:localSpeed,grounded:local.grounded,
-    crouch:local.crouch,aim:ads,recoil:kick,sprint:input.sprint,weapon:me.weapon});
+    crouch:local.crouch,aim:ads,recoil:kick,sprint:input.sprint,weapon:selected});
   crosshairSize52+=(spread52-crosshairSize52)*Math.min(1,dt*15);
   $('crosshair').style.opacity=me.hp<=0||ads>.75?'0':'1';
   $('crosshair').style.width=$('crosshair').style.height=crosshairSize52.toFixed(1)+'px';
@@ -453,7 +480,13 @@ async function capture(){audio.unlock();if(state?.phase==='results'){$('results'
 $('resume').onclick=capture;renderer.domElement.addEventListener('click',()=>{if(joined&&!locked()&&$('room-panel').hidden&&state.phase!=='results')capture();});
 document.addEventListener('pointerlockchange',()=>{if(!joined)return;resetInput();$('room-panel').hidden=locked()||state?.phase==='results';});
 document.addEventListener('mousemove',e=>{if(!locked())return;const sens=.002*settings.sens*T.MathUtils.lerp(1,me?.weapon===3?.32:.65,ads);yaw-=e.movementX*sens;pitch=clamp(pitch-e.movementY*sens,-1.5,1.5);});
-document.addEventListener('mousedown',e=>{if(!locked())return;if(e.button===0){pressTrigger(combatTrigger);if(me&&ammo()<=0&&me.reload<=0&&me.switch<=0)audio.dry();tryTriggerFire(performance.now()/1000);}if(e.button===2){aiming=true;sendInput();}});document.addEventListener('mouseup',e=>{if(e.button===0)releaseTrigger(combatTrigger);if(e.button===2){aiming=false;sendInput();}});document.addEventListener('contextmenu',e=>{if(joined)e.preventDefault();});
+document.addEventListener('mousedown',e=>{if(!locked())return;if(e.button===0){pressTrigger(combatTrigger);if(me&&ammo()<=0&&me.reload<=0)audio.dry();tryTriggerFire(performance.now()/1000);}if(e.button===2){aiming=true;sendInput();}});document.addEventListener('mouseup',e=>{if(e.button===0)releaseTrigger(combatTrigger);if(e.button===2){aiming=false;sendInput();}});document.addEventListener('contextmenu',e=>{if(joined)e.preventDefault();});
+// One notch selects the next slot; wheel events do not scroll the page in-game.
+renderer.domElement.addEventListener('wheel',e=>{
+ if(!joined||!locked()||me?.hp<=0||!['lobby','playing'].includes(state?.phase))return;
+ e.preventDefault();
+ if(e.deltaY!==0)selectWeapon(wheelWeapon64(selected,e.deltaY,weapons.length));
+},{passive:false});
 function cycleCurrentSpectator55(direction){
  if(!state||!myId)return;
  spectatorTarget55=cycleSpectator55(spectatorTarget55,
@@ -475,7 +508,7 @@ document.addEventListener('keydown',e=>{if(!joined)return;
   movementControls63.toggleCrouch();
  }
  if(e.code==='Space'&&!e.repeat&&locked()&&me?.hp>0)jumpLatch62.press();
- keys[e.code]=true;if(e.code==='Tab')$('scoreboard').hidden=false;if(e.code==='KeyM')$('map-panel').classList.add('expanded');if(e.repeat)return;if(e.code==='KeyR'&&locked()){send({type:'reload'});if(me.ammo<weapons[me.weapon].mag&&!me.reload)audio.reload();}if(/^Digit[1-4]$/.test(e.code))selectWeapon(Number(e.code.slice(-1))-1);});
+ keys[e.code]=true;if(e.code==='Tab')$('scoreboard').hidden=false;if(e.code==='KeyM')$('map-panel').classList.add('expanded');if(e.repeat)return;if(e.code==='KeyR'&&locked()){send({type:'reload'});if(ammo()<weapons[selected].mag&&(!me.reload||selected!==me.weapon))audio.reload();}if(/^Digit[1-4]$/.test(e.code))selectWeapon(Number(e.code.slice(-1))-1);});
 document.addEventListener('keyup',e=>{keys[e.code]=false;if(e.code==='Tab')$('scoreboard').hidden=true;if(e.code==='KeyM')$('map-panel').classList.remove('expanded');});window.addEventListener('blur',()=>{resetInput();$('scoreboard').hidden=true;});
 function createDebugReport51(){
  const net=syncStats(netSync,performance.now());

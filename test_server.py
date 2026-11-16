@@ -36,19 +36,19 @@ class GameTests(unittest.TestCase):
         b['x']=-20.0
         r.record_poses(101.1)
         self.assertTrue(r.shoot(a,101.11,shot_id=1,view_time=101.0))
-        self.assertLess(b['hp'],100,'Rewind should find a formerly visible target')
+        self.assertLess(b['hp'],200,'Rewind should find a formerly visible target')
 
         old,a2,b2=duel()
         old.record_poses(101.0);b2['x']=-20.0;old.record_poses(101.1)
         self.assertTrue(old.shoot(a2,101.11,shot_id=1,view_time=100.0))
-        self.assertEqual(b2['hp'],100,'Old timestamps beyond 300ms cannot rewind')
+        self.assertEqual(b2['hp'],200,'Old timestamps beyond 300ms cannot rewind')
 
         respawn,a3,b3=duel()
         respawn.record_poses(101.0)
         b3['x']=-20.0;b3['spawn']+=1
         respawn.record_poses(101.1)
         self.assertTrue(respawn.shoot(a3,101.11,shot_id=1,view_time=101.0))
-        self.assertEqual(b3['hp'],100,'A respawn must never use the previous life hitbox')
+        self.assertEqual(b3['hp'],200,'A respawn must never use the previous life hitbox')
 
     def test_static_cover_still_blocks_rewound_player(self):
         r,a,b=duel()
@@ -58,31 +58,32 @@ class GameTests(unittest.TestCase):
         b['x']=3.
         r.record_poses(101.1)
         r.shoot(a,101.11,shot_id=1,view_time=101.0)
-        self.assertEqual(b['hp'],100,'Rewind must not bypass current static cover')
+        self.assertEqual(b['hp'],200,'Rewind must not bypass current static cover')
 
     def test_cover_blocks_bullets(self):
         r,a,b=duel();a.update(x=-24,y=1,z=24,yaw=-math.pi/2,pitch=0);b.update(x=0,y=1,z=24)
-        r.shoot(a,101);self.assertEqual(b['hp'],100)
+        r.shoot(a,101);self.assertEqual(b['hp'],200)
     def test_damage_kill_respawn_win(self):
         r,a,b=duel()
-        for i in range(4):self.assertTrue(r.shoot(a,101+i*.2))
+        for i in range(10):self.assertTrue(r.shoot(a,101+i*.2))
         self.assertEqual(b['hp'],0);self.assertEqual(a['kills'],1);self.assertEqual(b['deaths'],1)
-        r.step(s.TICK,105);self.assertEqual(b['hp'],100);self.assertGreater(b['shield'],105)
-        a['kills']=14;b.update(x=-24,z=5,y=1,shield=0,hp=25);r.shoot(a,106)
+        r.step(s.TICK,106);self.assertEqual(b['hp'],200);self.assertGreater(b['shield'],106)
+        a['kills']=14;b.update(x=-24,z=5,y=1,shield=0,hp=25);r.shoot(a,107)
         self.assertEqual(r.phase,'results');self.assertEqual(r.winner,'Alpha')
     def test_headshot_and_weapon_roles(self):
         r,a,b=duel(weapon=3);a.update(pitch=0,input={'ads':True});r.shoot(a,101)
-        self.assertEqual(b['hp'],0);self.assertEqual(a['headshots'],1)
-        r,a,b=duel(weapon=1);r.shoot(a,101);self.assertGreater(b['hp'],70);self.assertLess(b['hp'],100)
-        r,a,b=duel(weapon=2);b['z']=11;a['pitch']=-math.atan(.5/2);r.shoot(a,101);self.assertEqual(b['hp'],0)
+        self.assertLess(b['hp'],200)
+        r.shoot(a,102.2);self.assertEqual(b['hp'],0);self.assertEqual(a['headshots'],1)
+        r,a,b=duel(weapon=1);r.shoot(a,101);self.assertGreater(b['hp'],170);self.assertLess(b['hp'],200)
+        r,a,b=duel(weapon=2);b['z']=11;a['pitch']=-math.atan(.5/2);r.shoot(a,101);self.assertLess(b['hp'],200)
     def test_cadence_empty_reload_protection(self):
         r,a,b=duel();b['shield']=110
-        r.shoot(a,101);self.assertFalse(r.shoot(a,101.01));self.assertEqual(a['ammo'],29);self.assertEqual(b['hp'],100)
+        r.shoot(a,101);self.assertFalse(r.shoot(a,101.01));self.assertEqual(a['ammo'],29);self.assertEqual(b['hp'],200)
         r.reload(a,102);self.assertFalse(r.shoot(a,102.5));r.step(s.TICK,104);self.assertEqual(a['ammo'],30)
         a['ammo']=0;self.assertFalse(r.shoot(a,105))
     def test_switch_keeps_ammunition_and_cancels_reload(self):
         r,a,b=duel();a['ammo']=2;r.reload(a,101);r.select(a,1,101)
-        self.assertEqual(a['weapon'],1);self.assertEqual(a['reload_at'],0);self.assertFalse(r.shoot(a,101.1))
+        self.assertEqual(a['weapon'],1);self.assertEqual(a['reload_at'],0);self.assertTrue(r.shoot(a,101.1))
         r.select(a,0,102);self.assertEqual(a['ammo'],2)
     def test_lobby_host_countdown_rematch_and_tie(self):
         r,a,b=duel();r.phase='lobby';self.assertFalse(r.start('b',101));self.assertTrue(r.start('a',101));self.assertEqual(r.phase,'countdown');self.assertFalse(r.shoot(a,102));r.step(s.TICK,104.1);self.assertEqual(r.phase,'playing')
@@ -90,7 +91,7 @@ class GameTests(unittest.TestCase):
     def test_lobby_players_invulnerable(self):
         r,a,b=duel();r.phase='lobby'
         for i in range(10):r.shoot(a,101+i*.2)
-        self.assertEqual(b['hp'],100)
+        self.assertEqual(b['hp'],200)
     def test_gungame_progression_and_switch_block(self):
         r,a,b=duel('gungame');a['kills']=2;b['hp']=1;r.shoot(a,101)
         self.assertEqual(a['weapon'],1);r.select(a,3,102);self.assertEqual(a['weapon'],1)

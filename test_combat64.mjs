@@ -1,0 +1,21 @@
+import assert from 'node:assert/strict';
+import {MAX_HEALTH64,healthPercent64,healthStatus64,wheelWeapon64}
+ from './static/combat64.js';
+assert.equal(MAX_HEALTH64,200);
+assert.equal(healthPercent64(100),50);
+assert.equal(healthPercent64(200),100);
+assert.equal(healthPercent64(250),100);
+assert.equal(healthPercent64(-20),0);
+assert.equal(healthPercent64(NaN),0);
+assert.equal(wheelWeapon64(0,100,4),1);
+assert.equal(wheelWeapon64(0,-100,4),3);
+assert.equal(wheelWeapon64(3,100,4),0);
+assert.equal(wheelWeapon64(2,0,4),2);
+assert.equal(wheelWeapon64(2,1,0),2);
+let x=0;for(let i=0;i<12;i++)x=wheelWeapon64(x,1,4);
+assert.equal(x,0,'Rapid wheel notches must cycle all weapon slots');
+assert.equal(healthStatus64({hp:80,shield:0,regenDelay:2.7}),'/ REGEN 2.7s');
+assert.equal(healthStatus64({hp:80,shield:0,regenDelay:0}),'/ REGENERATING');
+assert.equal(healthStatus64({hp:200,shield:0,regenDelay:0}),'');
+assert.equal(healthStatus64({hp:160,shield:1,regenDelay:2}),'/ PROTECTED');
+console.log('Daybreak 6.4: 200 HP HUD, regen labels and wraparound mouse-wheel switching passed.');

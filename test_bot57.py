@@ -32,7 +32,7 @@ class BotAssaultModeTests(unittest.TestCase):
         self.assertEqual(len(room.bots),BOT_COUNT)
         self.assertEqual(set(room.bots),{f'bot-{i}' for i in range(1,5)})
         self.assertEqual(tuple(b['name'] for b in room.bots.values()),BOT_NAMES)
-        self.assertTrue(all(b['bot'] and b['hp']==100 and b['team']=='bots'
+        self.assertTrue(all(b['bot'] and b['hp']==200 and b['team']=='bots'
                             for b in room.bots.values()))
         snap=room.snapshot(101)
         self.assertEqual(len(snap['players']),6)

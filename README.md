@@ -1,3 +1,20 @@
+## Phase 6.4 — DAYBREAK / combat overhaul
+
+- Human and AI players spawn/respawn with **200 HP**; practice dummies retain
+  their authored 100 HP. HUD health bar is scaled to the server's maxHp value.
+- Server-owned **+50 HP elimination siphon**, capped at 200; display actual
+  amount restored in the elimination banner.
+- **Regeneration** begins after 5 seconds without taking damage, restoring
+  10 HP/s via server monotonic time. New damage resets delay and fractional
+  regeneration progress. Runs independently of input packets.
+- **Mouse wheel** cycles weapons (backwards/forwards) and keys 1–4 remain.
+  Optimistic HUD selection supports several scroll notches in one snapshot.
+- Removed the artificial switch-to-fire lockout. The server still enforces
+  normal firing intervals and magazine ammunition across weapon changes.
+- All game modes, bots, respawn protection and authoritative hit confirmation
+  retain existing safeguards. No client-controlled HP or elimination awards.
+- New test_combat64.py and test_combat64.mjs are in both CI workflows.
+
 ## Phase 6.3 — DAYBREAK / movement overhaul
 
 - Left or Right **CTRL** toggles crouch on/off, with a clear safety reset

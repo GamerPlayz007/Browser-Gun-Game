@@ -42,8 +42,8 @@ class TeamModeTests(unittest.TestCase):
         friend.update(x=-24.,y=1.,z=9.,shield=0)
         b.update(x=-24.,y=1.,z=5.,shield=0)
         self.assertTrue(r.shoot(a,101,shot_id=1))
-        self.assertEqual(friend['hp'],100)
-        self.assertLess(b['hp'],100)
+        self.assertEqual(friend['hp'],200)
+        self.assertLess(b['hp'],200)
         self.assertFalse(any(e['type']=='hit' and e['victim']=='c' for e in r.events))
 
     def test_team_deathmatch_winner_and_rematch_reset(self):
@@ -52,7 +52,7 @@ class TeamModeTests(unittest.TestCase):
         a.update(x=-24.,y=1.,z=13.,yaw=0.,pitch=-math.atan(.5/8),
                  shield=0,last_input=100,input={})
         b.update(x=-24.,y=1.,z=5.,shield=0)
-        for i in range(4):
+        for i in range(10):
             self.assertTrue(r.shoot(a,101+i*.2,shot_id=i+1))
         self.assertEqual(r.team_scores,{'azure':1,'ember':0})
         self.assertEqual(r.phase,'playing')

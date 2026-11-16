@@ -6,6 +6,7 @@ from aiohttp import web, WSMsgType
 ROOT=Path(__file__).parent
 from map_registry import ARENAS, DEFAULT, REGISTRY, WEAPONS, Arena, top_at, bottom_at, ray_solid
 from movement_live import step_player, seed_movement, allowed_lean
+from combat64 import MAX_HEALTH, KILL_SIPHON, REGEN_DELAY, reset_health, take_damage, siphon, regenerate
 from perf36 import ServerMetrics
 from modes54 import (TEAM_MODES,TEAM_IDS,TEAM_NAMES,CONTROL_POINT,
     is_team_mode,next_team,balance_teams,winner_team,controller,presence)
@@ -62,12 +63,13 @@ def spawn(p,players,now,arena=DEFAULT,history=None):
     x,y,z=max(points,key=rank)
     history[(x,y,z)]=now
     p.update(x=x,y=y,z=z,yaw=math.atan2(x,z),vx=0.,vy=0.,vz=0.,
-             grounded=True,hp=100,ammo=WEAPONS[p['weapon']]['mag'],
+             grounded=True,hp=MAX_HEALTH,ammo=WEAPONS[p['weapon']]['mag'],
              reload_at=0.,respawn_at=0.,shield=now+1.5,
              mags=[w['mag'] for w in WEAPONS],input={},last_shot=-999.,
              slide_until=0.,slide_ready=0.,jump_held=False,slide_held=False,
              crouch=False,motion_time=0.,move_credit=0.,commands=deque(),
              spawn=p.get('spawn',0)+1)
+    reset_health(p,now)
     seed_movement(p)
 
 def new_player(room,pid,name,now,weapon=0,skin=0):
@@ -122,6 +124,7 @@ class Room:
             bot['motion_time']+=TICK
             bot['last_input']=bot['motion_time']
             move(bot,TICK,bot['motion_time'],self.arena)
+            regenerate(bot,now)
             if bot['ammo']<=0:bot['ammo']=WEAPONS[bot['weapon']]['mag']
             target=bot_can_attack(bot,self.players,self.arena,now)
             if target is None:continue
@@ -245,14 +248,16 @@ class Room:
     def select(self,p,weapon,now):
         if not isinstance(weapon,int) or isinstance(weapon,bool) or not 0<=weapon<len(WEAPONS):return
         if self.mode=='gungame' and self.phase!='lobby':return
-        if now<p['switch_at'] or p['weapon']==weapon:return
-        p['mags'][p['weapon']]=p['ammo'];p['weapon']=weapon;p['ammo']=p['mags'][weapon];p['reload_at']=0;p['switch_at']=now+.5
+        if p['weapon']==weapon:return
+        # Switching is immediate, but the global last_shot cadence is retained.
+        p['mags'][p['weapon']]=p['ammo'];p['weapon']=weapon
+        p['ammo']=p['mags'][weapon];p['reload_at']=0;p['switch_at']=now
     def reload(self,p,now):
         if p['hp']>0 and self.phase in ('lobby','playing') and p['ammo']<WEAPONS[p['weapon']]['mag'] and not p['reload_at']:
             p['reload_at']=now+WEAPONS[p['weapon']]['reload']
     def shoot(self,p,now,shot_id=0,view_time=None):
         w=WEAPONS[p['weapon']]
-        if p['hp']<=0 or p['reload_at'] or now<p['switch_at'] or now-p['last_shot']<w['interval']*.95 or p['ammo']<=0 or self.phase not in ('lobby','playing'):return False
+        if p['hp']<=0 or p['reload_at'] or now-p['last_shot']<w['interval']*.95 or p['ammo']<=0 or self.phase not in ('lobby','playing'):return False
         p['last_shot']=now;p['ammo']-=1;p['shield']=0;p['shot_seq']=shot_id
         # Recompute peek on every shot with the current aim; clients cannot
         # provide an arbitrary gun origin or peek through an opaque wall.
@@ -311,7 +316,11 @@ class Room:
                 old=hits.get(victim['id'],(victim,0,False));hits[victim['id']]=(victim,old[1]+damage,old[2] or head)
         self.event('shot',id=p['id'],weapon=p['weapon'],shot=shot_id,origin=origin,ends=ends)
         for victim,damage,head in hits.values():
-            victim['hp']=max(0,victim['hp']-damage)
+            if 'deaths' in victim:
+                take_damage(victim,damage,now)
+            else:
+                # Practice targets keep their original 100 HP and do not regen.
+                victim['hp']=max(0,victim['hp']-damage)
             self.event('hit',id=p['id'],victim=victim['id'],damage=damage,head=head,killed=victim['hp']==0,origin=origin)
             if victim['hp']==0:
                 if 'deaths' in victim:
@@ -319,8 +328,10 @@ class Room:
                     victim['respawn_at']=now+RESPAWN_DURATION
                     p['kills']+=1;p['headshots']+=int(head)
                     p['streak']+=1;p['best_streak']=max(p['best_streak'],p['streak'])
+                    restored=siphon(p)
                     self.event('kill',killer=p['name'],killerId=p['id'],victim=victim['name'],
-                               victimId=victim['id'],head=head,weapon=p['weapon'],streak=p['streak'])
+                               victimId=victim['id'],head=head,weapon=p['weapon'],
+                               streak=p['streak'],siphon=restored)
                     if p['streak'] in (3,5,8):
                         self.event('streak',id=p['id'],name=p['name'],count=p['streak'])
                     if not is_team_mode(self.mode) and self.mode!=BOT_MODE:
@@ -347,7 +358,7 @@ class Room:
                             new=tier_for_kills(p['kills'],len(WEAPONS))
                             if new!=p['weapon']:
                                 p['weapon']=new;p['ammo']=WEAPONS[new]['mag']
-                                p['reload_at']=0;p['switch_at']=now+.45
+                                p['reload_at']=0;p['switch_at']=now
                                 self.event('tier_up',id=p['id'],name=p['name'],
                                            tier=new+1,weapon=new)
                     elif self.mode=='teamdeathmatch':
@@ -374,6 +385,8 @@ class Room:
             if p['hp']<=0:
                 if now>=p['respawn_at'] and self.phase=='playing':spawn(p,{**self.players,**self.bots},now,self.arena,self.spawn_history)
                 continue
+            if self.phase in ('lobby','playing'):
+                regenerate(p,now)
             if p['reload_at'] and now>=p['reload_at']:p['ammo']=WEAPONS[p['weapon']]['mag'];p['reload_at']=0
             if self.phase in ('lobby','playing'):
                 p['move_credit']=min(.2,p['move_credit']+dt)
@@ -409,13 +422,13 @@ class Room:
     def snapshot(self,now):
         self.snapshot_sequence+=1
         fields=('id','name','team','bot','ready','skin','x','y','z','vx','vy','vz','grounded','yaw','pitch','hp','ammo','kills','deaths','headshots','streak','best_streak','weapon','crouch','lean','spawn','seq','shot_seq','ack_shot','jump_held','slide_held','motion_time','slide_until','slide_ready','jump_buffer_until','coyote_until','jump_consumed','jump_cut','wall_kick_used','interact_held','mantle')
-        return dict(type='state',snapshotSeq=self.snapshot_sequence,serverTime=round(now,6),tickRate=60,snapshotHz=20,mapId=self.arena.id,phase=self.phase,mode=self.mode,host=self.host,round=self.round_number,nextMode=self.next_mode,rules=rules(self.mode,len(WEAPONS)),standings=standings(self.players,self.mode),leaderId=(None if is_team_mode(self.mode) or self.mode==BOT_MODE else leading_player(self.players)),winnerId=self.winner_id,winnerTeam=self.winner_team,
+        return dict(type='state',snapshotSeq=self.snapshot_sequence,serverTime=round(now,6),tickRate=60,snapshotHz=20,maxHp=MAX_HEALTH,mapId=self.arena.id,phase=self.phase,mode=self.mode,host=self.host,round=self.round_number,nextMode=self.next_mode,rules=rules(self.mode,len(WEAPONS)),standings=standings(self.players,self.mode),leaderId=(None if is_team_mode(self.mode) or self.mode==BOT_MODE else leading_player(self.players)),winnerId=self.winner_id,winnerTeam=self.winner_team,
             teamScores=self.team_scores.copy(),readyStatus=ready_summary(self.players),
             aiScore=self.ai_score,botScore=self.bot_score,botsAlive=sum(b['hp']>0 for b in self.bots.values()),
             objective=({**CONTROL_POINT,'controller':self.control_owner,
                         'contested':self.control_contested,'presence':self.control_presence.copy()}
                        if self.mode=='control' else None),
-            winReason=self.win_reason,players=[{k:p[k] for k in fields}|dict(reload=max(0,p['reload_at']-now),respawn=max(0,p['respawn_at']-now),shield=max(0,p['shield']-now),slide=max(0,p['slide_until']-p['motion_time']),slideCooldown=max(0,p['slide_ready']-p['motion_time']),switch=max(0,p['switch_at']-now)) for p in list(self.players.values())+list(self.bots.values())],targets=self.targets,events=self.events,remaining=max(0,ROUND_SECONDS-((self.ended_at if self.phase=='results' else now)-self.started)) if self.phase in ('playing','results') else ROUND_SECONDS,countdown=max(0,self.countdown_at-now),winner=self.winner)
+            winReason=self.win_reason,players=[{k:p[k] for k in fields}|dict(reload=max(0,p['reload_at']-now),respawn=max(0,p['respawn_at']-now),shield=max(0,p['shield']-now),slide=max(0,p['slide_until']-p['motion_time']),slideCooldown=max(0,p['slide_ready']-p['motion_time']),switch=0.,regenDelay=max(0.,p['regen_after']-now) if 0<p['hp']<MAX_HEALTH else 0.) for p in list(self.players.values())+list(self.bots.values())],targets=self.targets,events=self.events,remaining=max(0,ROUND_SECONDS-((self.ended_at if self.phase=='results' else now)-self.started)) if self.phase in ('playing','results') else ROUND_SECONDS,countdown=max(0,self.countdown_at-now),winner=self.winner)
 
 rooms={}
 async def create_room(request):
