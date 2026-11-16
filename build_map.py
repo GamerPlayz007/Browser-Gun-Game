@@ -1,4 +1,4 @@
-"""Single-source CROSSFIRE map compiler. Always generates one playable city.
+"""Single-source CROSSFIRE compiler for Daybreak and optional native maps.
 
 python build_map.py
 No CROSSFIRE_STAGE31 flag, legacy map, or optional candidate.
@@ -20,6 +20,13 @@ def main():
         {'id':'cyberpunk','name':'Daybreak City','available':True,
          'url':'/static/maps/cyberpunk.json','theme':'modern-daylight'},
     ]}
+    # Register Neon Zenith only after its authoritative map export exists.
+    # Original 3D graphics are served separately by its native renderer.
+    if (out/'neon_zenith.json').is_file():
+        registry['maps'].append({
+            'id':'neon_zenith','name':'Neon Zenith · Original',
+            'available':True,'url':'/static/maps/neon_zenith.json',
+            'theme':'cyberpunk-native','engine':'neon-zenith-native'})
     (out/'index.json').write_text(json.dumps(registry,indent=2)+'\n',encoding='utf-8')
     # Stale 80 m map guide and old optional candidate are deliberately removed.
     for legacy in (out/'cyberpunk-next.json',ROOT/'MAP_GUIDE.svg'):
