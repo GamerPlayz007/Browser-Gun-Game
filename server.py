@@ -583,9 +583,28 @@ async def list_rooms65(request):
          'active':code in rooms}
         for code in ROOM_CODES65]})
 async def list_maps(request):return web.json_response(REGISTRY)
+
+# Native Neon Zenith is bundled from its pinned upstream source by GitHub Actions.
+# This route NEVER substitutes a simplified CROSSFIRE world for upstream visuals.
+NEON_ROOT=ROOT/'static/neon'
+async def neon_preview_status(request):
+    return web.json_response({'ready':(NEON_ROOT/'index.html').is_file(),
+        'type':'original-scene-walkthrough','multiplayer':False})
+async def neon_entry(request):
+    if not (NEON_ROOT/'index.html').is_file():
+        raise web.HTTPServiceUnavailable(text='Original Neon Zenith build not installed.')
+    return web.FileResponse(NEON_ROOT/'index.html')
+async def neon_asset(request):
+    name=request.match_info.get('asset','')
+    base=NEON_ROOT.resolve()
+    path=(base/name).resolve()
+    if not path.is_relative_to(base) or not path.is_file():
+        raise web.HTTPNotFound()
+    return web.FileResponse(path)
+
 def make_app():
     app=web.Application(client_max_size=4096,middlewares=[cache_policy]);app['perf36']=ServerMetrics();app.router.add_get('/',index);app.router.add_get('/health',health)
-    app.router.add_get('/api/maps',list_maps);app.router.add_post('/api/rooms',create_room);app.router.add_get('/api/rooms',list_rooms65);app.router.add_get('/api/rooms/{code}',room_info);app.router.add_get('/ws/{code}',socket);app.router.add_static('/static/',ROOT/'static');app.cleanup_ctx.append(lifecycle);return app
+    app.router.add_get('/api/maps',list_maps);app.router.add_get('/api/neon-preview',neon_preview_status);app.router.add_get('/neon',neon_entry);app.router.add_get('/neon/',neon_entry);app.router.add_post('/api/rooms',create_room);app.router.add_get('/api/rooms',list_rooms65);app.router.add_get('/api/rooms/{code}',room_info);app.router.add_get('/ws/{code}',socket);app.router.add_static('/static/',ROOT/'static');app.router.add_get('/neon/{asset:.*}',neon_asset);app.router.add_get('/{asset:.*}',neon_asset);app.cleanup_ctx.append(lifecycle);return app
 if __name__=='__main__':
     import argparse
     parser=argparse.ArgumentParser();parser.add_argument('--host',default='0.0.0.0');parser.add_argument('--port',type=int,default=int(os.environ.get('PORT','3000')));parser.add_argument('--strictPort',action='store_true');args=parser.parse_args();web.run_app(make_app(),host=args.host,port=args.port)
