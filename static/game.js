@@ -187,7 +187,7 @@ if(data.mapId==='neon_zenith'){
     room:code,name:callsign,weapon:String(selected),skin:String(preferredSkin56),
     cfquality:document.getElementById('cf-neon-quality')?.value||'balanced'
   });
-  location.assign('/neon/?crossfire-mp&'+params.toString());
+  location.assign('/?map=neon_zenith&crossfire-mp&'+params.toString());
   return;
 }
 await loadArena(data.mapId);const name=safeName56($('name').value);safeWrite56('cf-name',name);const conn=new WebSocket(`${location.protocol==='https:'?'wss':'ws'}://${location.host}/ws/${code}?name=${encodeURIComponent(name)}&weapon=${selected}&skin=${preferredSkin56}`);ws=conn;const timeout=setTimeout(()=>{if(conn.readyState!==1)conn.close();},12000);conn.onopen=()=>clearTimeout(timeout);conn.onmessage=e=>{if(ws===conn)handle(JSON.parse(e.data));};conn.onclose=()=>{clearTimeout(timeout);if(ws===conn)disconnect('Connection closed. Rejoining creates a new player identity.',code);};conn.onerror=()=>{$('status').textContent='Could not connect. Check the server is awake.';};}catch(e){$('status').textContent=e.message;$('create').disabled=$('join').disabled=false;refreshRooms65();}}
