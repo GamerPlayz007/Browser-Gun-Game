@@ -189,11 +189,11 @@ class MapIsolationTests(unittest.TestCase):
             self.assertGreater(p['z'],101)
             r.phase='playing';q=s.new_player(r,'q','Target',100)
             p.update(x=100,y=0,z=105,yaw=0,pitch=0,shield=0);q.update(x=100,y=0,z=95,shield=0)
-            r.shoot(p,101);self.assertEqual(q['hp'],100)
+            r.shoot(p,101);self.assertEqual(q['hp'],200)
             normal=s.Room('DEFAULT');self.assertEqual(normal.arena.id,'cyberpunk')
             a=s.new_player(normal,'a','A',100);b=s.new_player(normal,'b','B',100)
             normal.phase='playing';a.update(x=100,y=0,z=105,yaw=0,pitch=0,shield=0);b.update(x=100,y=0,z=95,shield=0)
-            normal.shoot(a,101);self.assertLess(b['hp'],100)
+            normal.shoot(a,101);self.assertLess(b['hp'],200)
         finally:s.ARENAS.pop('fixture')
     def test_ramp_ray_respects_open_space_under_incline(self):
         ramp=dict(x=0,y=.68,z=0,w=4,h=8.32,d=16,kind='ramp',axis='z',direction=-1,low=1,rise=8,thickness=.32)
@@ -218,7 +218,7 @@ class NetworkTests(unittest.IsolatedAsyncioTestCase):
         p=r.players[aid];q=r.players[bid];p.update(x=-24,y=1,z=13,yaw=0,pitch=0,shield=0);q.update(x=-24,y=1,z=5,shield=0)
         await a.send_json({'type':'input','yaw':0,'pitch':0,'w':True,'x':9999,'kills':100,'seq':1});await asyncio.sleep(.12)
         self.assertLess(p['z'],13);self.assertLess(p['x'],25);self.assertEqual(p['kills'],0)
-        await a.send_json({'type':'shoot','yaw':0,'pitch':0,'shot':1});await asyncio.sleep(.06);self.assertLess(q['hp'],100)
+        await a.send_json({'type':'shoot','yaw':0,'pitch':0,'shot':1});await asyncio.sleep(.06);self.assertLess(q['hp'],200)
         await a.send_str('bad json');await a.send_json({'type':'input','yaw':'NaN'});await a.send_json([])
         await a.send_json({'type':'ping','t':123})
         while True:
