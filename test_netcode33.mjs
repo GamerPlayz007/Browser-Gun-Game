@@ -20,6 +20,7 @@ assert.equal(ingestSnapshot(net,packet(1,20,createPlayer(0,3.12)),60060),true);
 assert.equal(ingestSnapshot(net,packet(2,20.05,createPlayer(1,-3.12)),60110),true);
 const halfway=sampleRemote(net,'rival',60120); // 20.025s virtual server time
 near(halfway.x,.5);
+assert.equal(halfway.lean,0,'Older snapshots without lean remain neutral');
 assert.ok(Math.abs(Math.abs(halfway.yaw)-Math.PI)<.03,'yaw crosses +/-pi without a full revolution');
 assert.ok(halfway.grounded);
 const future=sampleRemote(net,'rival',60500);

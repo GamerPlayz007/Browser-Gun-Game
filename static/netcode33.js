@@ -67,7 +67,8 @@ export function ingestSnapshot(sync,packet,receiveMs){
    x:p.x,y:p.y,z:p.z,vx:finite(p.vx)?p.vx:0,
    vy:finite(p.vy)?p.vy:0,vz:finite(p.vz)?p.vz:0,
    yaw:p.yaw,pitch:finite(p.pitch)?p.pitch:0,
-   crouch:!!p.crouch,grounded:!!p.grounded,slide:finite(p.slide)?p.slide:0,weapon:p.weapon
+   crouch:!!p.crouch,grounded:!!p.grounded,slide:finite(p.slide)?p.slide:0,
+   lean:finite(p.lean)?clamp(p.lean,-1,1):0,weapon:p.weapon
   };
   let history=sync.remote.get(p.id);
   const prev=history?.[history.length-1];
@@ -101,6 +102,7 @@ export function sampleRemote(sync,id,nowMs){
   return {...next,x:lerp(prev.x,next.x,fraction),y:lerp(prev.y,next.y,fraction),
    z:lerp(prev.z,next.z,fraction),yaw:shortAngle(prev.yaw,next.yaw,fraction),
    pitch:lerp(prev.pitch,next.pitch,fraction),
+   lean:lerp(prev.lean,next.lean,fraction),
    // Keep animation flags consistent with the sampled interval, not the future.
    crouch:fraction>=.5?next.crouch:prev.crouch,
    grounded:fraction>=.5?next.grounded:prev.grounded,

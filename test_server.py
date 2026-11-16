@@ -129,6 +129,29 @@ class GameTests(unittest.TestCase):
         a.update(input={'w':True},last_input=100)
         for i in range(30):s.move(a,s.TICK,110+i*s.TICK)
         self.assertLess(abs(a['vz']),.01)
+    def test_server_validates_peek_origin_against_cover(self):
+        from map_registry import Arena
+        floor=dict(x=0,y=-1,z=0,w=60,h=1,d=60,kind='floor')
+        wall=dict(x=.6,y=0,z=0,w=.35,h=3,d=20,kind='building')
+        r,a,b=duel()
+        r.arena=Arena(dict(id='fixture',boxes=[floor],spawns=[[0,0,4]]))
+        r.targets=[]
+        a.update(x=0,y=0,z=4,yaw=0,pitch=0,crouch=False,lean=0,
+                 input={'leanRight':True},last_shot=0,shield=0)
+        self.assertTrue(r.shoot(a,101,shot_id=1))
+        event=next(x for x in r.events if x['type']=='shot')
+        self.assertAlmostEqual(event['origin'][0],.52)
+        r.events=[]
+        r.arena=Arena(dict(id='fixture',boxes=[floor,wall],spawns=[[0,0,4]]))
+        self.assertTrue(r.shoot(a,102,shot_id=2))
+        event=next(x for x in r.events if x['type']=='shot')
+        self.assertLess(event['origin'][0],.52)
+        self.assertGreaterEqual(event['origin'][0],0)
+        a['input']={'leanLeft':True}
+        self.assertTrue(r.shoot(a,103,shot_id=3))
+        event=r.events[-1]
+        self.assertLess(event['origin'][0],0)
+
     def test_input_ack_only_after_simulation_and_time_budget(self):
         r,a,b=duel();a['seq']=0
         for seq in range(1,13):a['commands'].append(dict(seq=seq,spawn=a['spawn'],yaw=0,pitch=0,input={'w':True,'sprint':True,'jump':seq==2}))

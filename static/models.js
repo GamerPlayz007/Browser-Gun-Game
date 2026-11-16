@@ -98,8 +98,10 @@ export function animatePlayer(root,p,time){
  const d=root.userData;
  trackAvatar(d.animation,p,time);
  const pose=avatarPose(p,time,d.animation);
- d.body.position.set(0,pose.bodyY,0);
- d.body.rotation.set(pose.torsoPitch,0,pose.torsoRoll);
+ const lean=Number.isFinite(p.lean)?Math.max(-1,Math.min(1,p.lean)):0;
+ d.body.position.set(lean*.10,pose.bodyY,0);
+ d.body.rotation.set(pose.torsoPitch,0,pose.torsoRoll-lean*.11);
+ d.head.position.x=lean*.30;
  d.head.rotation.x=pose.headPitch-pose.torsoPitch*.35;
  d.legs.forEach((leg,i)=>{
   const side=i===0?1:-1;
@@ -121,6 +123,7 @@ export function animatePlayer(root,p,time){
  d.spawnRing.material.opacity=pose.spawnPulse*.46;
  d.spawnRing.scale.setScalar(1+(1-pose.spawnPulse)*.7);
  d.tag.position.y=pose.tagY;
+ d.tag.position.x=lean*.32;
  root.rotation.y=Number.isFinite(p.yaw)?p.yaw:0;
  root.scale.setScalar(pose.visibilityScale);
  return pose;

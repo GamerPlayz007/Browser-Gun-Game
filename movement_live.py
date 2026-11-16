@@ -9,7 +9,7 @@ from map_registry import top_at, bottom_at
 FIXED_DT=1/60
 M=dict(walk=5.35,sprint=8.2,crouch=3.15,groundAccel=60,groundBrake=42,
        airAccel=9.5,airBrake=1.7,slideMin=5,slideBoost=1.13,slideMax=10,
-       slideTime=.70,slideCD=1.05,slideDrag=2.7,slideSteer=3.6,
+       slideTime=.70,slideCD=0,slideDrag=2.7,slideSteer=3.6,
        slideHopSpeed=7.95,slideHopCarry=1.07,slideHopCap=10,
        buffer=.18,coyote=.14,jumpSpeed=7.5,shortHop=.52,gravity=22,
        stepHeight=.29,stairStepHeight=.36,height=1.8,lowHeight=1.12,wallKickRange=.52,
@@ -18,7 +18,7 @@ SUPPORTS={'building','atriumShell','railing','deck','stairLanding','routeFloor'}
 
 def seed_movement(p):
     p.update(jump_buffer_until=0.,coyote_until=0.,jump_consumed=False,
-             jump_cut=False,wall_kick_used=False,interact_held=False,mantle=None)
+             jump_cut=False,wall_kick_used=False,interact_held=False,mantle=None,lean=0.)
     return p
 
 def overlap(x,y,z,b,height):
@@ -27,6 +27,23 @@ def overlap(x,y,z,b,height):
 def blocks_head(p,b):
     # A step edge close to the player's feet must never count as a ceiling.
     return bottom_at(b,p['x'],p['z'])>=p['y']+M['lowHeight']-.03 and overlap(p['x'],p['y'],p['z'],b,M['height'])
+
+def allowed_lean(p,inp,arena):
+    """Limit first-person peek against world solids on the authoritative server."""
+    direction=int(bool(inp.get('leanRight')))-int(bool(inp.get('leanLeft')))
+    if not direction:return 0.
+    eye=p['y']+(.9 if p['crouch'] else 1.55)
+    nearby=arena.nearby(p['x'],p['z'],1.5)
+    dx=math.cos(p['yaw'])*.52*direction
+    dz=-math.sin(p['yaw'])*.52*direction
+    accepted=0.
+    for i in range(1,9):
+        t=i/8;x=p['x']+dx*t;z=p['z']+dz*t
+        if any(abs(x-b['x'])<b['w']/2+.09 and abs(z-b['z'])<b['d']/2+.09
+               and eye+.12>b['y'] and eye-.12<b['y']+b['h'] for b in nearby):
+            break
+        accepted=t
+    return direction*accepted
 
 def clamp(x,a,b):return max(a,min(b,x))
 
@@ -71,6 +88,7 @@ def step_player(p,dt,now,arena,weapons):
     p.setdefault('jump_consumed',False);p.setdefault('jump_cut',False)
     p.setdefault('wall_kick_used',False);p.setdefault('mantle',None)
     if p['mantle']:
+        p['lean']=0.
         m=p['mantle'];t=clamp((m['elapsed']+dt)/m['duration'],0,1)
         # Mirror the clearance-first client path; rise over the lip before moving in.
         lift=clamp(t*2.8,0,1);approach=clamp((t-.18)/.82,0,1)
@@ -99,11 +117,11 @@ def step_player(p,dt,now,arena,weapons):
     ix=r*math.cos(p['yaw'])-f*math.sin(p['yaw']);iz=-r*math.sin(p['yaw'])-f*math.cos(p['yaw'])
     moving=(f*f+r*r)>0
     speed_before=math.hypot(p['vx'],p['vz'])
-    if slide_edge and p['grounded'] and now>=p['slide_ready'] and speed_before>=M['slideMin']:
-        p['slide_until']=now+M['slideTime'];p['slide_ready']=now+M['slideCD']
+    if slide_edge and p['grounded'] and now>=p['slide_until'] and speed_before>=M['slideMin']:
+        p['slide_until']=now+M['slideTime'];p['slide_ready']=now
         boost=min(M['slideMax'],speed_before*M['slideBoost'])/max(.1,speed_before)
         p['vx']*=boost;p['vz']*=boost
-    sliding=now<p['slide_until'];p['crouch']=sliding or slide
+    sliding=now<p['slide_until'];p['crouch']=sliding or bool(inp.get('crouch'))
     height=M['lowHeight'] if p['crouch'] else M['height']
     boxes=arena.nearby(p['x'],p['z'],max(abs(p['vx']),abs(p['vz']))*dt+1.25)
     if not p['crouch'] and any(blocks_head(p,b) for b in boxes):
@@ -125,7 +143,7 @@ def step_player(p,dt,now,arena,weapons):
     boxes=arena.nearby(p['x'],p['z'],max(abs(p['vx']),abs(p['vz']))*dt+1.25)
     # Held E + forward input tries to mantle whenever a ledge comes in range.
     if (interact_edge or (interact and f>0)) and try_mantle(p,boxes,now):
-        p['interact_held']=interact;p['jump_held']=jump;p['slide_held']=slide
+        p['interact_held']=interact;p['jump_held']=jump;p['slide_held']=slide;p['lean']=0.
         return
     def standing_overlap(x,y,z,b):return overlap(x,y,z,b,height)
     for axis,velocity in (('x','vx'),('z','vz')):
@@ -139,7 +157,8 @@ def step_player(p,dt,now,arena,weapons):
                 p['y']=top;obstacles=[]
         if not obstacles:p[axis]=value
         else:p[velocity]=0
-    if jump_edge:p['jump_buffer_until']=now+M['buffer']
+    if jump_edge or (jump and start_grounded and not p['jump_consumed']):
+        p['jump_buffer_until']=now+M['buffer']
     if start_grounded:p['coyote_until']=now+M['coyote']
     can_stand=not p['crouch'] or not any(blocks_head(p,b) for b in boxes)
     jumped=False
@@ -175,3 +194,4 @@ def step_player(p,dt,now,arena,weapons):
     p['y']=ny
     if p['grounded'] and not start_grounded:
         p['jump_consumed']=False;p['jump_cut']=False;p['wall_kick_used']=False
+    p['lean']=allowed_lean(p,inp,arena)

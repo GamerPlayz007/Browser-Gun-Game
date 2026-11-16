@@ -5,7 +5,7 @@ from pathlib import Path
 from aiohttp import web, WSMsgType
 ROOT=Path(__file__).parent
 from map_registry import ARENAS, DEFAULT, REGISTRY, WEAPONS, Arena, top_at, bottom_at, ray_solid
-from movement_live import step_player, seed_movement
+from movement_live import step_player, seed_movement, allowed_lean
 from perf36 import ServerMetrics
 from modes54 import (TEAM_MODES,TEAM_IDS,TEAM_NAMES,CONTROL_POINT,
     is_team_mode,next_team,balance_teams,winner_team,controller,presence)
@@ -139,7 +139,7 @@ class Room:
     def record_poses(self,now):
         # Only the server's movement loop creates historical poses.
         self.pose_history.append((now,{
-            pid:(p['x'],p['y'],p['z'],p['crouch'],p['spawn'])
+            pid:(p['x'],p['y'],p['z'],p['crouch'],p['spawn'],p.get('lean',0.),p['yaw'])
             for pid,p in {**self.players,**self.bots}.items()
         }))
     def historical_pose(self,player,when):
@@ -155,7 +155,9 @@ class Room:
                 fraction=max(0.,min(1.,(when-start)/max(1e-6,at-start)))
                 return (
                     *(earlier[k]+(candidate[k]-earlier[k])*fraction for k in range(3)),
-                    candidate[3] if fraction>=.5 else earlier[3],player['spawn']
+                    candidate[3] if fraction>=.5 else earlier[3],player['spawn'],
+                    candidate[5] if fraction>=.5 else earlier[5],
+                    candidate[6] if fraction>=.5 else earlier[6]
                 )
             previous=(at,candidate)
         return previous[1] if previous is not None and when-previous[0]<=TICK*2 else None
@@ -252,7 +254,14 @@ class Room:
         w=WEAPONS[p['weapon']]
         if p['hp']<=0 or p['reload_at'] or now<p['switch_at'] or now-p['last_shot']<w['interval']*.95 or p['ammo']<=0 or self.phase not in ('lobby','playing'):return False
         p['last_shot']=now;p['ammo']-=1;p['shield']=0;p['shot_seq']=shot_id
-        origin=(p['x'],p['y']+(.9 if p['crouch'] else 1.55),p['z']);ends=[];hits={}
+        # Recompute peek on every shot with the current aim; clients cannot
+        # provide an arbitrary gun origin or peek through an opaque wall.
+        p['lean']=allowed_lean(p,p.get('input',{}),self.arena)
+        shift=.52*p['lean']
+        origin=(p['x']+math.cos(p['yaw'])*shift,
+                p['y']+(.9 if p['crouch'] else 1.55),
+                p['z']-math.sin(p['yaw'])*shift)
+        ends=[];hits={}
         # Clients cannot select arbitrary historical frames: accept at most
         # 300ms of server-recorded player history; cover is always current.
         allowed_view=(float(view_time) if isinstance(view_time,(int,float)) and
@@ -282,7 +291,19 @@ class Room:
                 height=1.05 if crouch else 1.8
                 h=ray_box(origin,direction,(qx-.32,qy,qz-.32,qx+.32,qy+height,qz+.32))
                 if h is not None and h<distance:
-                    distance=h;victim=q;head=origin[1]+direction[1]*h>q['y']+height-.35
+                    distance=h;victim=q;head=origin[1]+direction[1]*h>qy+height-.35
+                # The exposed head remains hittable when the torso is behind
+                # solid cover. Rewound shots use the corresponding old lean.
+                qlean=historic[5] if historic else q.get('lean',0.)
+                qyaw=historic[6] if historic else q['yaw']
+                if abs(qlean)>.01:
+                    hx=qx+math.cos(qyaw)*.52*qlean
+                    hz=qz-math.sin(qyaw)*.52*qlean
+                    upper=qy+height+.04
+                    peek=ray_box(origin,direction,(hx-.22,upper-.44,hz-.22,
+                                                   hx+.22,upper,hz+.22))
+                    if peek is not None and peek<distance:
+                        distance=peek;victim=q;head=True
             ends.append([round(origin[i]+direction[i]*distance,3) for i in range(3)])
             if victim and now>=victim.get('shield',0):
                 falloff=max(.4,1-max(0,distance-w['falloff'])/(w['range']-w['falloff'])*.6)
@@ -387,7 +408,7 @@ class Room:
         self.record_poses(now)
     def snapshot(self,now):
         self.snapshot_sequence+=1
-        fields=('id','name','team','bot','ready','skin','x','y','z','vx','vy','vz','grounded','yaw','pitch','hp','ammo','kills','deaths','headshots','streak','best_streak','weapon','crouch','spawn','seq','shot_seq','ack_shot','jump_held','slide_held','motion_time','slide_until','slide_ready','jump_buffer_until','coyote_until','jump_consumed','jump_cut','wall_kick_used','interact_held','mantle')
+        fields=('id','name','team','bot','ready','skin','x','y','z','vx','vy','vz','grounded','yaw','pitch','hp','ammo','kills','deaths','headshots','streak','best_streak','weapon','crouch','lean','spawn','seq','shot_seq','ack_shot','jump_held','slide_held','motion_time','slide_until','slide_ready','jump_buffer_until','coyote_until','jump_consumed','jump_cut','wall_kick_used','interact_held','mantle')
         return dict(type='state',snapshotSeq=self.snapshot_sequence,serverTime=round(now,6),tickRate=60,snapshotHz=20,mapId=self.arena.id,phase=self.phase,mode=self.mode,host=self.host,round=self.round_number,nextMode=self.next_mode,rules=rules(self.mode,len(WEAPONS)),standings=standings(self.players,self.mode),leaderId=(None if is_team_mode(self.mode) or self.mode==BOT_MODE else leading_player(self.players)),winnerId=self.winner_id,winnerTeam=self.winner_team,
             teamScores=self.team_scores.copy(),readyStatus=ready_summary(self.players),
             aiScore=self.ai_score,botScore=self.bot_score,botsAlive=sum(b['hp']>0 for b in self.bots.values()),
@@ -448,7 +469,7 @@ async def socket(request):
                     generation=int(data.get('spawn',p['spawn']))
                     latest=p['commands'][-1]['seq'] if p['commands'] else p['seq']
                     if generation==p['spawn'] and seq>latest and len(p['commands'])<30:
-                        p['commands'].append(dict(seq=seq,spawn=generation,yaw=p['yaw'],pitch=p['pitch'],input={k:data.get(k) is True for k in ('w','a','s','d','jump','sprint','slide','ads','interact')}))
+                        p['commands'].append(dict(seq=seq,spawn=generation,yaw=p['yaw'],pitch=p['pitch'],input={k:data.get(k) is True for k in ('w','a','s','d','jump','sprint','slide','crouch','leanLeft','leanRight','ads','interact')}))
                 elif action=='shoot':
                     # A duplicate/replayed client shot sequence must never spend ammo
                     # or create another server-confirmed hit event.

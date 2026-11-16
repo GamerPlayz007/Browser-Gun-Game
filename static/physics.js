@@ -2,9 +2,10 @@
  * Mirror of movement_live.py. Feet-space Y; server never accepts client positions.
  */
 import {nearbyBoxes} from './spatial.js';
+import {allowedLean63} from './lean63.js';
 export const FIXED_DT=1/60;
 export const MOVE={walk:5.35,sprint:8.2,crouch:3.15,groundAccel:60,groundBrake:42,airAccel:9.5,airBrake:1.7,
- slideMin:5,slideBoost:1.13,slideMax:10,slideTime:.70,slideCD:1.05,slideDrag:2.7,slideSteer:3.6,
+ slideMin:5,slideBoost:1.13,slideMax:10,slideTime:.70,slideCD:0,slideDrag:2.7,slideSteer:3.6,
  slideHopSpeed:7.95,slideHopCarry:1.07,slideHopCap:10,
  buffer:.18,coyote:.14,jumpSpeed:7.5,shortHop:.52,gravity:22,stepHeight:.29,stairStepHeight:.36,
  height:1.8,lowHeight:1.12,wallKickRange:.52,wallKickLift:5.3,wallKickPush:5.1,
@@ -16,7 +17,7 @@ export function topAt(b,x,z){
 }
 export function bottomAt(b,x,z){return b.kind==='ramp'?topAt(b,x,z)-b.thickness:b.y;}
 export function seedMovement(p){
- Object.assign(p,{jump_buffer_until:0,coyote_until:0,jump_consumed:false,jump_cut:false,wall_kick_used:false,interact_held:false,mantle:null});
+ Object.assign(p,{jump_buffer_until:0,coyote_until:0,jump_consumed:false,jump_cut:false,wall_kick_used:false,interact_held:false,mantle:null,lean:0});
  return p;
 }
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
@@ -73,6 +74,7 @@ export function simulate(p,input,dt,now,allBoxes,weapon){
  p.jump_buffer_until ??=0;p.coyote_until ??=0;p.jump_consumed ??=false;
  p.jump_cut ??=false;p.wall_kick_used ??=false;p.mantle ??=null;
  if(p.mantle){
+  p.lean=0;
   const m=p.mantle,t=clamp((m.elapsed+dt)/m.duration,0,1);
   // Clear the lip before approaching horizontally. The old straight-line
   // mantle could intersect the wall and abort a legitimate ledge grab.
@@ -95,12 +97,12 @@ export function simulate(p,input,dt,now,allBoxes,weapon){
  f/=length;r/=length;const ix=r*Math.cos(p.yaw)-f*Math.sin(p.yaw),iz=-r*Math.sin(p.yaw)-f*Math.cos(p.yaw);
  const moving=(f*f+r*r)>0;
  const speedBefore=Math.hypot(p.vx,p.vz);
- if(slideEdge&&p.grounded&&now>=p.slide_ready&&speedBefore>=M.slideMin){
-  p.slide_until=now+M.slideTime;p.slide_ready=now+M.slideCD;
+ if(slideEdge&&p.grounded&&now>=p.slide_until&&speedBefore>=M.slideMin){
+  p.slide_until=now+M.slideTime;p.slide_ready=now;
   const boost=Math.min(M.slideMax,speedBefore*M.slideBoost)/Math.max(.1,speedBefore);p.vx*=boost;p.vz*=boost;
  }
  const sliding=now<p.slide_until;
- p.crouch=sliding||slide;
+ p.crouch=sliding||!!input.crouch;
  let height=p.crouch?M.lowHeight:M.height;
  let boxes=nearbyBoxes(allBoxes,p.x,p.z,Math.max(Math.abs(p.vx),Math.abs(p.vz))*dt+1.25);
  if(!p.crouch&&boxes.some(b=>blocksHead(p,b))){p.crouch=true;height=M.lowHeight;}
@@ -118,7 +120,7 @@ export function simulate(p,input,dt,now,allBoxes,weapon){
  boxes=nearbyBoxes(allBoxes,p.x,p.z,Math.max(Math.abs(p.vx),Math.abs(p.vz))*dt+1.25);
  // Holding E while moving forward keeps trying for a ledge as it comes into
  // reach; tapping E while stationary retains the original precise behavior.
- if((interactEdge||(interact&&f>0))&&tryMantle(p,boxes,now)){p.interact_held=interact;p.jump_held=jump;p.slide_held=slide;return;}
+ if((interactEdge||(interact&&f>0))&&tryMantle(p,boxes,now)){p.interact_held=interact;p.jump_held=jump;p.slide_held=slide;p.lean=0;return;}
  const overlap=(x,y,z,b)=>overlaps(x,y,z,b,height);
  for(const [axis,velocity] of [['x','vx'],['z','vz']]){
   const value=p[axis]+p[velocity]*dt,x=axis==='x'?value:p.x,z=axis==='z'?value:p.z;
@@ -129,7 +131,9 @@ export function simulate(p,input,dt,now,allBoxes,weapon){
   }
   if(!obstacles.length)p[axis]=value;else p[velocity]=0;
  }
- if(jumpEdge)p.jump_buffer_until=now+M.buffer;
+ // Held Space queues a fresh takeoff only on contact with the ground.
+ if(jumpEdge||(jump&&startGrounded&&!p.jump_consumed))
+  p.jump_buffer_until=now+M.buffer;
  if(startGrounded)p.coyote_until=now+M.coyote;
  const canStand=!p.crouch||!boxes.some(b=>blocksHead(p,b));
  let jumped=false;
@@ -161,4 +165,5 @@ export function simulate(p,input,dt,now,allBoxes,weapon){
  else p.grounded=false;
  p.y=ny;
  if(p.grounded&&!startGrounded){p.jump_consumed=false;p.jump_cut=false;p.wall_kick_used=false;}
+ p.lean=allowedLean63(p,input,allBoxes);
 }

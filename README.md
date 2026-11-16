@@ -1,3 +1,19 @@
+## Phase 6.3 — DAYBREAK / movement overhaul
+
+- Left or Right **CTRL** toggles crouch on/off, with a clear safety reset
+  when the game loses pointer lock or the player respawns.
+- **C** starts a momentum-capped slide on a fresh press while moving; slides
+  have no artificial cooldown, but must end before starting again.
+- Holding **SPACE** repeats jumping after each real landing. Existing short-hop
+  and coyote timing remain, with no midair double-jump.
+- **Q / E** hold left/right lean. Shifted camera position and 0.15 rad roll
+  are smoothed, with matching authoritative client/server wall checks.
+- The previous E vault binding is now **F**; mantle game mechanics stay intact.
+- Server snapshots include lean; remote character torsos/heads visibly lean.
+  Server shots use validated leaning origins, and an exposed leaning head can
+  be hit using current or historical server poses.
+- Input and multiplayer physics parity regressions are part of the test suite.
+
 ## Phase 6.2 — DAYBREAK / stair and jump recovery
 
 - Expand all four-flight switchback turn/exit platforms from 0.8m strips to
