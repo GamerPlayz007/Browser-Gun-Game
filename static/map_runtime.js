@@ -36,6 +36,7 @@ async function bootNeonMap(){
   const style=document.createElement('style');
   style.textContent=`
   body.cf-native-map {background:#04040a!important}
+  body.cf-native-map > :not(#cf-native-root):not(#cfmp-shell):not(#cf-neon-shell):not(#crossfire-native-status):not(script){display:none!important}
   body.cf-native-map #cf-native-root{position:fixed;inset:0;z-index:2}
   body.cf-native-map #cf-native-root #gl{position:fixed;inset:0;display:block;width:100vw;height:100vh}
   body.cf-native-map #cf-native-root #ui{position:fixed;inset:0;pointer-events:none}
