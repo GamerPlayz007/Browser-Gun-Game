@@ -49,6 +49,11 @@ export function avatarPose(p={},time=0,anim=makeAvatarAnim()){
  return {
   state,speed,grounded,
   bodyY:(crouch?-.52:0)+(grounded?bounce*weight*.06:0)-landing*.07,
+  // Controlled idle breathing and foot balance; no changes to hitboxes.
+  idleBreath:state==='idle'?Math.sin(time*1.8)*.008:0,
+  hipYaw:state==='run'?wave*.042:state==='walk'?wave*.022:0,
+  legSide:state==='slide'?.05:state==='air'?.035:0,
+  armWeight:state==='run'?effort:state==='walk'?effort*.5:0,
   torsoPitch:state==='vault'?.25:slide?.36:state==='run'?.12:state==='air'?-.055:crouch?.12:0,
   torsoRoll:clamp(-strafe*.026,-.16,.16)+(hit*.08),
   legSwing:grounded&&!slide&&!vault?wave*weight:0,

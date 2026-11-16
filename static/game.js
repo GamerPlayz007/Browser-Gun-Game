@@ -1,6 +1,6 @@
 import * as T from 'three';
 import {buildWorld} from './world.js';
-import {makeWeapon,animateWeapon,makePlayer,setPlayerSkin56,animatePlayer,markPlayerEvent,disposePlayer} from './models.js';
+import {makeWeapon,animateWeapon,makePlayer,setPlayerSkin56,animatePlayer,markPlayerEvent,disposePlayer,setModelQuality67} from './models.js';
 import {simulate,FIXED_DT} from './physics.js';
 import {createJumpLatch62} from './input62.js';
 import {leanOffset63} from './lean63.js';
@@ -49,11 +49,12 @@ try{
  controlBeacon54=createControlBeacon54(T,scene);
  postfx=createPostProcessing(renderer,scene,camera,settings.quality);viewScene=new T.Scene();viewCamera=new T.PerspectiveCamera(65,innerWidth/innerHeight,.03,10);viewScene.add(new T.HemisphereLight(0xf0f8f5,0x697f7a,2.8));const light=new T.DirectionalLight(0xffe5bb,3);light.position.set(-2,4,3);viewScene.add(light);
 }catch(e){$('status').textContent=e.message.includes('WebGL')?'3D graphics unavailable. Enable hardware acceleration and use Chrome or Edge.':e.message;throw e;}
+let updateRigQuality67=()=>{};
 display=createDisplay(renderer,[camera,viewCamera],enabled=>{
  const tier=qualityTier61(enabled);
  world.setQuality(tier);world.setDetail(enabled);
  renderer.shadowMap.enabled=tier!=='performance';
- postfx.setDetail(enabled);ambience45.setQuality(tier);
+ postfx.setDetail(enabled);ambience45.setQuality(tier);updateRigQuality67(tier);
 },settings.quality);
 minimap=createMinimap($('minimap'),$('district-label'),map);
 for(const entry of registry.maps){const option=document.createElement('option');option.value=entry.id;option.textContent=entry.name+(entry.available?'':' — coming later');option.disabled=!entry.available;$('map-select').append(option);}
@@ -84,6 +85,11 @@ const movementControls63=createMovementControls63();
 let netSync=createNetSync();
 const frameMeter=new FrameMeter();
 const opponents=new Map(),effects=[],hitGeometry=new T.IcosahedronGeometry(.035,0),hitMaterial=new T.MeshBasicMaterial({color:0xffc98a});
+updateRigQuality67=tier=>{
+ for(const rig of weaponModels)setModelQuality67(rig,tier);
+ for(const rig of opponents.values())setModelQuality67(rig,tier);
+};
+updateRigQuality67(qualityTier61());
 const silhouette=id=>`<svg viewBox="0 0 220 60" aria-hidden="true"><path d="M20 19h${[100,80,130,135][id]}v24H70l-8 16H47l4-17H20z"/><path d="M5 16h22v30H5zM100 26h${[92,65,98,105][id]}v6h-${[92,65,98,105][id]}z"/>${id===3?'<rect x="89" y="5" width="45" height="13" rx="5"/><rect x="100" y="16" width="7" height="7"/>':'<rect x="65" y="12" width="48" height="7"/>'}${id===1?'<rect x="75" y="38" width="10" height="20"/>':''}</svg>`;
 function makeCards(container){for(const w of weapons){const b=document.createElement('button');b.className='weapon-card'+(w.id===selected?' active':'');b.dataset.weapon=w.id;b.innerHTML=`<span class="number">0${w.id+1}</span>${silhouette(w.id)}<strong>${w.name}</strong><small>${w.type}</small>`;b.onclick=()=>selectWeapon(w.id);container.append(b);}}
 makeCards($('home-weapons'));makeCards($('room-weapons'));for(const w of weapons){const s=document.createElement('span');s.className='slot';s.textContent=`${w.id+1} ${w.short}`;$('weapon-slots').append(s);}
@@ -385,14 +391,14 @@ function handle(data){if(data.type==='manual_respawn_result65'){toast(data.messa
  $('slide-label').textContent=me.slide>0?'C / SLIDING':'C / SLIDE · CTRL / CROUCH';
  const present=new Set();for(const p of data.players){if(p.id===myId)continue;present.add(p.id);let g=opponents.get(p.id);
   const visualSkin=p.bot?0xef6a86:skinColor56(p.skin);
-  if(!g){g=makePlayer(p.name,visualSkin);scene.add(g);g.position.set(p.x,p.y,p.z);opponents.set(p.id,g);}
+  if(!g){g=makePlayer(p.name,visualSkin);setModelQuality67(g,qualityTier61());scene.add(g);g.position.set(p.x,p.y,p.z);opponents.set(p.id,g);}
   setPlayerSkin56(g,visualSkin);
   if(g.userData.team54!==p.team){
    g.userData.team54=p.team;
    g.userData.tag.material.color.set(p.bot?'#ff8ba7':p.team==='azure'?'#7de4ff':p.team==='ember'?'#ffb69b':'#ffffff');
    g.userData.spawnRing.material.color.set(p.bot?'#ff6586':p.team==='azure'?'#7de4ff':p.team==='ember'?'#ffb69b':'#67ede5');
   }
-  if(g.userData.target?.spawn!==p.spawn){g.position.set(p.x,p.y,p.z);g.userData.animation.spawn=undefined;}g.userData.target=p;g.visible=p.hp>0;if(g.userData.gun.userData.id!==p.weapon){const old=g.userData.gun;old.removeFromParent();old.traverse(o=>o.geometry?.dispose());const gun=makeWeapon(p.weapon,false);gun.scale.setScalar(.8);gun.position.set(.26,1.1,-.34);g.userData.body.add(gun);g.userData.gun=gun;}}
+  if(g.userData.target?.spawn!==p.spawn){g.position.set(p.x,p.y,p.z);g.userData.animation.spawn=undefined;}g.userData.target=p;g.visible=p.hp>0;if(g.userData.gun.userData.id!==p.weapon){const old=g.userData.gun;old.removeFromParent();old.traverse(o=>o.geometry?.dispose());const gun=makeWeapon(p.weapon,false);setModelQuality67(gun,qualityTier61());gun.scale.setScalar(.8);gun.position.set(.26,1.1,-.34);g.userData.body.add(gun);g.userData.gun=gun;}}
  for(const [id,g] of opponents)if(!present.has(id)){disposePlayer(g);opponents.delete(id);}for(const t of data.targets)world.targets.get(t.id).visible=t.hp>0;
  const rosterKey=JSON.stringify([data.host,data.mode,data.nextMode,data.players.map(p=>[p.id,p.name,p.team,p.ready,p.bot])]);
  if(rosterKey!==rosterSignature){renderRoster();rosterSignature=rosterKey;}

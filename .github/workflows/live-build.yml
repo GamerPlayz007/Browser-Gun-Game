@@ -27,7 +27,7 @@ jobs:
       - name: Compile the ONE live map
         run: python build_map.py
       - name: Python map and multiplayer regressions
-        run: python -m unittest test_map test_server test_combat64 test_interface65 test_stage31 test_match35 test_stage36
+        run: python -m unittest test_map test_daybreak67 test_server test_combat64 test_interface65 test_stage31 test_match35 test_stage36
       - name: JavaScript rendering, gameplay and combat regressions
         run: npm test && node test_stage31.mjs
       - name: Measure real loopback WebSocket load at 2, 4 and 8 players

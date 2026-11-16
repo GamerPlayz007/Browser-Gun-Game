@@ -1,3 +1,29 @@
+## Phase 6.7 — DAYBREAK / outer-city and character fidelity
+
+- 25-ish independently validated, server-colliding urban fixtures are placed
+  only in previously unoccupied outer-city pockets: benches, kiosks, planters,
+  parked vehicles and concrete barriers. Their footprints are checked against
+  all G/I/U/stair routes, five additional outer street circuits, existing
+  obstacles, spawn positions and each other; old collision boxes and routes
+  are preserved verbatim.
+- Each collision proxy is replaced by a **matching detailed visual**; not
+  an invisible blocker. Rendering uses a dozen-ish InstancedMesh batches
+  instead of a separate draw call per street-detail box. Shops, public signs,
+  canopies and rooftop ventilation details add texture without extra physics.
+- Quality tiers: **Performance = street furniture only**, Auto/High = legible
+  storefronts and basic finishes, Ultra/Native = extra facade/roof details.
+  Automatic detail reduction can hide all optional detail.
+- Player rig now includes batched armor straps, helmet trim, protective pads,
+  and utility details. First-person weapons have batched decorative trim and
+  more nuanced motion. Models switch details dynamically for iGPU vs RTX.
+- Procedural player idle breath, sprint hip sway and limb balance remain
+  entirely visual; hitboxes and server movement are untouched.
+- `test_daybreak67.py` tests server route clearance and authoritative covers;
+  `test_daybreak67.mjs` tests instancing/draw-call budgets, quality tiers and
+  animation over 120 frames. Existing browser/multiplayer regression suite
+  remains mandatory. 
+- Stage 6.8 is reserved for school iGPU final optimization and launch checks.
+
 ## Phase 6.6 — DAYBREAK CITY / daytime visual redesign
 
 - Retains the original single playable 120m world, full G/I/U/S travel routes,

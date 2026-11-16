@@ -9,6 +9,7 @@ import {createEnvironment43} from './environment43.js';
 import {createAtmosphere44} from './atmosphere44.js';
 import {createLivingWorld45} from './living45.js';
 import {DAYBREAK_SKY66,createDaybreakSky66} from './daybreak66.js';
+import {createUrbanDetails67} from './urban67.js';
 
 // 04.6: one live map, managed lifecycle and tiered cinematic polish.
 // Only map.boxes are authoritative colliders. All map.features and map.decor
@@ -74,6 +75,7 @@ export function buildWorld(scene,map,{renderer,quality='high'}={}){
  // Stage 5/6 visual-only elements are rendered in instanced batches below.
   const legacyDecor=(map.decor||[]).filter(b=>!b.stage5VisualOnly&&!b.stage6VisualOnly);
   for(const b of [...map.boxes,...legacyDecor]){
+  if(b.daybreak67Physical)continue; // Instanced furniture replaces collision proxies.
   const style=b.style in MATERIALS?b.style:'concrete';
   const g=b.kind==='ramp'?rampGeometry(b):boxGeometry(b);
   queue(g,style,b.zone||'plaza',!!b.detail,['building','atriumShell','boundary','pillar','stationRoof','skyline','train'].includes(b.kind));
@@ -190,6 +192,8 @@ export function buildWorld(scene,map,{renderer,quality='high'}={}){
  const stage5Group=createStage5VisualLayer(T,map,'ultra',materialSystem);
   const stage6Group=createStage6VisualLayer(T,map,'ultra',materialSystem);
   root.add(stage5Group,stage6Group);
+  const urban67=createUrbanDetails67(T,map,materialSystem);
+  root.add(urban67.root);
   const environment43=createEnvironment43(T,map,materialSystem);
   root.add(environment43.group);
   const atmosphere44=createAtmosphere44(T,map,scene);
@@ -204,6 +208,7 @@ export function buildWorld(scene,map,{renderer,quality='high'}={}){
    environment43.setDetail(detailEnabled);
    atmosphere44.setDetail(detailEnabled);
    living45.setDetail(detailEnabled);
+   urban67.setDetail(detailEnabled);
   }
   function setQuality(mode){activeVisualMode=mode;showStageDetail();
   const low=mode==='performance';
@@ -213,16 +218,17 @@ export function buildWorld(scene,map,{renderer,quality='high'}={}){
   environment43.setQuality(mode);
   atmosphere44.setQuality(mode);
   living45.setQuality(mode);
+  urban67.setQuality(mode);
   materialSystem.setWetness(atmosphere44.wetness);
  }
  setQuality(quality);
- return {sun,sky66,lighting,environment43,atmosphere44,living45,targets,staticBatches:batches.size+(map.signs?.length?1:0),featureCount:map.features?.length||0,
+ return {sun,sky66,lighting,environment43,atmosphere44,living45,urban67,targets,staticBatches:batches.size+(map.signs?.length?1:0),featureCount:map.features?.length||0,
   environmentCount:environment43.stats.parts,environmentSigns:environment43.stats.signs,
   setDetail(enabled){detailEnabled=enabled;for(const mesh of details)mesh.visible=enabled;showStageDetail();},setQuality,
   animate(time,player=null){lighting.animate(time);atmosphere44.animate(time);living45.animate(time,player);for(const s of steam){const p=s.cloud.geometry.attributes.position;
    for(let i=0;i<s.seeds.length;i++){const k=(time*.38+s.seeds[i])%1;p.setXYZ(i,s.x+Math.sin(time+i)*.3*k,s.y+.2+3*k,s.z+Math.cos(time*.7+i)*.25*k);}p.needsUpdate=true;
   }},
-  dispose(){living45.dispose();atmosphere44.dispose();environment43.dispose();lighting.dispose();
+  dispose(){urban67.dispose();living45.dispose();atmosphere44.dispose();environment43.dispose();lighting.dispose();
    // Core geometry is owned by this world. Stage 5/6 use shared materials
    // owned by materialSystem; never dispose those materials twice.
    root.traverse(o=>{o.geometry?.dispose();if(o.isPoints)o.material?.dispose();});

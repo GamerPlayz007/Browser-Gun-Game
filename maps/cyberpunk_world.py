@@ -8,6 +8,7 @@ from maps.stage4_greybox import overlay as greybox
 from maps.stage5_detail import overlay as detail
 from maps.stage6_expansion import overlay as expansion
 from maps.stage4_greybox import subtract
+from maps.daybreak67_density import overlay as daylight_density67
 
 ARCADE = dict(
     id="PD-01", name="Station–Plaza Arcade",
@@ -92,6 +93,7 @@ def build(weapons, quality="ultra"):
     assert all(route["id"] != ARCADE["id"] for route in result["routes"])
     result["routes"].append(dict(ARCADE))
     result = open_edge_walls_around_authored_routes(result)
+    result = daylight_density67(result)
     result["stage6"]["no_deployment"] = False
     result["liveBuild"] = dict(
         singleArena=True, source="phase1-stage4-6/phase2-stage5",
