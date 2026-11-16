@@ -7,6 +7,7 @@ on:
       - integrations/crossfire_neon_multiplayer.js
       - scripts/export_neon_zenith_arena.mjs
       - scripts/import_neon_zenith.sh
+      - scripts/patch_neon_fast_boot.py
       - .github/workflows/neon-native.yml
       - build_map.py
   workflow_dispatch:
@@ -37,6 +38,8 @@ jobs:
           python -m json.tool static/maps/neon_zenith.json >/dev/null
           python -m json.tool static/maps/index.json >/dev/null
           test -s static/neon/index.html
+          python3 -m py_compile scripts/patch_neon_fast_boot.py
+          grep -q cfmp-quality static/neon/assets/index-*.js
           test -s static/neon/NEON_ZENITH_CREDITS.md
           test -s static/neon/NEON_ZENITH_LICENSE.txt
           du -sh static/neon
