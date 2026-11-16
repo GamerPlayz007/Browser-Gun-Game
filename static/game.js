@@ -6,6 +6,7 @@ import {createJumpLatch62} from './input62.js';
 import {leanOffset63} from './lean63.js';
 import {createMovementControls63} from './controls63.js';
 import {MAX_HEALTH64,healthPercent64,healthStatus64,wheelWeapon64} from './combat64.js';
+import {ROOM_CODES65,validRoom65,kd65,roomLabel65} from './interface65.js';
 import {movementCue53,cameraFeel53} from './flow53.js';
 import {createMinimap} from './minimap.js';
 import {createDisplay} from './display.js';
@@ -149,11 +150,29 @@ function fireWeapon(now){if(!me||!locked()||me.hp<=0||!['lobby','playing'].inclu
  visualRecoil=Math.min(.06,visualRecoil+w.kick*.3*feel52.shakeScale);
  $('ammo').textContent=ammo();
 }
-async function enter(create){$('create').disabled=$('join').disabled=true;$('rejoin56').hidden=true;$('status').textContent='Connecting to arena…';try{let code=$('code').value.trim().toUpperCase();const response=await fetch(create?'/api/rooms':'/api/rooms/'+code,create?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mapId:$('map-select').value})}:{});const data=await response.json();if(!response.ok)throw Error(data.error||'Connection failed.');if(create)code=data.room;else if(data.players>=data.max)throw Error('This room is full.');await loadArena(data.mapId);const name=safeName56($('name').value);safeWrite56('cf-name',name);const conn=new WebSocket(`${location.protocol==='https:'?'wss':'ws'}://${location.host}/ws/${code}?name=${encodeURIComponent(name)}&weapon=${selected}&skin=${preferredSkin56}`);ws=conn;const timeout=setTimeout(()=>{if(conn.readyState!==1)conn.close();},12000);conn.onopen=()=>clearTimeout(timeout);conn.onmessage=e=>{if(ws===conn)handle(JSON.parse(e.data));};conn.onclose=()=>{clearTimeout(timeout);if(ws===conn)disconnect('Connection closed. Rejoining creates a new player identity.',code);};conn.onerror=()=>{$('status').textContent='Could not connect. Check the server is awake.';};}catch(e){$('status').textContent=e.message;$('create').disabled=$('join').disabled=false;}}
+async function refreshRooms65(prefer){
+ try{
+  const response=await fetch('/api/rooms');
+  if(!response.ok)throw Error('Room list unavailable');
+  const data=await response.json();
+  const el=$('code');
+  const preferred=String(prefer||el.value||new URLSearchParams(location.search).get('room')||'MAX').toUpperCase();
+  el.replaceChildren();
+  for(const r of data.rooms||[]){
+   if(!validRoom65(r.code))continue;
+   const option=document.createElement('option');option.value=r.code;
+   option.textContent=roomLabel65(r);
+   option.disabled=r.active&&r.players>=r.max;el.append(option);
+  }
+  el.value=preferred;
+  if(!el.value)el.selectedIndex=0;
+ }catch{ /* The room can still be entered with a known premade code. */ }
+}
+async function enter(create){$('create').disabled=$('join').disabled=true;$('rejoin56').hidden=true;$('status').textContent='Connecting to arena…';try{let code=$('code').value.trim().toUpperCase();const response=await fetch(create?'/api/rooms':'/api/rooms/'+code,create?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mapId:$('map-select').value})}:{});const data=await response.json();if(!response.ok)throw Error(data.error||'Connection failed.');if(create){code=data.room;$('code').value=code;}else if(data.players>=data.max)throw Error('This room is full.');await loadArena(data.mapId);const name=safeName56($('name').value);safeWrite56('cf-name',name);const conn=new WebSocket(`${location.protocol==='https:'?'wss':'ws'}://${location.host}/ws/${code}?name=${encodeURIComponent(name)}&weapon=${selected}&skin=${preferredSkin56}`);ws=conn;const timeout=setTimeout(()=>{if(conn.readyState!==1)conn.close();},12000);conn.onopen=()=>clearTimeout(timeout);conn.onmessage=e=>{if(ws===conn)handle(JSON.parse(e.data));};conn.onclose=()=>{clearTimeout(timeout);if(ws===conn)disconnect('Connection closed. Rejoining creates a new player identity.',code);};conn.onerror=()=>{$('status').textContent='Could not connect. Check the server is awake.';};}catch(e){$('status').textContent=e.message;$('create').disabled=$('join').disabled=false;refreshRooms65();}}
 function disconnect(message,rejoinCode56=null){
- const code56=typeof rejoinCode56==='string'&&/^[A-F0-9]{6}$/.test(rejoinCode56)?rejoinCode56:null;
+ const code56=validRoom65(rejoinCode56)?rejoinCode56.toUpperCase():null;
  $('rejoin56').hidden=!code56;if(code56)$('code').value=code56;
- netSync=createNetSync();frameMeter.reset();feedback52.reset();slideHopUntil53=0;spectatorTarget55=null;clearVisualEffects52();$('perf-panel').hidden=true;joined=false;state=me=local=null;myId=null;lastPhase='';lastSpawn=-1;pendingShots=[];pendingMoves=[];movementAccumulator=0;landingPulse=0;lastLocalGrounded=true;movementHint='';viewError.set(0,0,0);rosterSignature=scoreSignature='';matchBannerUntil=0;resetInput();document.exitPointerLock?.();for(const g of opponents.values())disposePlayer(g);opponents.clear();for(const id of ['hud','room-panel','death','results','scoreboard'])$(id).hidden=true;$('home').hidden=false;$('shade').style.opacity=1;$('status').textContent=message;$('create').disabled=$('join').disabled=false;}
+ netSync=createNetSync();frameMeter.reset();feedback52.reset();slideHopUntil53=0;spectatorTarget55=null;clearVisualEffects52();$('perf-panel').hidden=true;joined=false;state=me=local=null;myId=null;lastPhase='';lastSpawn=-1;pendingShots=[];pendingMoves=[];movementAccumulator=0;landingPulse=0;lastLocalGrounded=true;movementHint='';viewError.set(0,0,0);rosterSignature=scoreSignature='';matchBannerUntil=0;resetInput();document.exitPointerLock?.();for(const g of opponents.values())disposePlayer(g);opponents.clear();for(const id of ['hud','room-panel','death','results','scoreboard'])$(id).hidden=true;$('home').hidden=false;$('shade').style.opacity=1;$('status').textContent=message;$('create').disabled=$('join').disabled=false;refreshRooms65(code56);}
 function scoreboard(players,body){
  body.replaceChildren();
  if(state?.mode==='botmatch'){
@@ -182,7 +201,7 @@ function scoreboard(players,body){
    tr.className=(p.id===myId?'me ':'')+(p.team?'team-'+p.team:'');
    for(const value of [
     '#'+p.rank+'  '+p.name+(p.id===myId?' / YOU':''),
-    p.kills,p.deaths,p.headshots,p.streak||0
+    p.kills,p.deaths,kd65(p.kills,p.deaths),p.streak||0
    ]){
     const td=document.createElement('td');
     td.textContent=value;tr.append(td);
@@ -299,7 +318,7 @@ function processEvent(e){
   }
  if(e.type==='kill'){const div=document.createElement('div');div.className='feed-row';div.append(document.createTextNode(e.killer));const mid=document.createElement('span');mid.textContent=weapons[e.weapon].short+(e.head?' ◇':' →');div.append(mid,document.createTextNode(e.victim));$('feed').prepend(div);while($('feed').children.length>5)$('feed').lastChild.remove();setTimeout(()=>div.remove(),5000);if(e.killerId===myId){$('elimination').textContent=(e.head?'HEADSHOT / ':'ELIMINATED / ')+e.victim+(e.siphon>0?' · +'+e.siphon+' SIPHON':'');elimUntil=now+1.8;audio.kill();}if(e.victimId===myId)$('killed-by').textContent=`${e.killer} · ${weapons[e.weapon].name}`;}
 }
-function handle(data){if(data.type==='welcome'){netSync=createNetSync();seq=0;shotId=0;feedback52.reset();if(data.mapId!==map.id){ws?.close();disconnect('Map mismatch. Reload the page.');return;}$('room-map').textContent=map.name;$('score-map').textContent=map.name;myId=data.id;roomCode=data.room;joined=true;history.replaceState(null,'',`?room=${roomCode}`);$('room-code').textContent=roomCode;$('home').hidden=true;$('hud').hidden=false;$('room-panel').hidden=false;$('shade').style.opacity=0;return;}if(data.type==='pong'){if(observePong(netSync,data.t,performance.now(),data.serverTime))rtt=netSync.rttMs;return;}if(data.type!=='state'||data.mapId!==map.id)return;
+function handle(data){if(data.type==='manual_respawn_result65'){toast(data.message||'Respawn unavailable.');return;}if(data.type==='welcome'){netSync=createNetSync();seq=0;shotId=0;feedback52.reset();if(data.mapId!==map.id){ws?.close();disconnect('Map mismatch. Reload the page.');return;}$('room-map').textContent=map.name;$('score-map').textContent=map.name;myId=data.id;roomCode=data.room;joined=true;history.replaceState(null,'',`?room=${roomCode}`);$('room-code').textContent=roomCode;$('home').hidden=true;$('hud').hidden=false;$('room-panel').hidden=false;$('shade').style.opacity=0;return;}if(data.type==='pong'){if(observePong(netSync,data.t,performance.now(),data.serverTime))rtt=netSync.rttMs;return;}if(data.type!=='state'||data.mapId!==map.id)return;
  if(!ingestSnapshot(netSync,data,performance.now()))return;
  const previous=me;state=data;me=data.players.find(p=>p.id===myId);if(!me)return;const now=performance.now()/1000;
  pendingShots=pendingShots.filter(s=>s.id>me.ack_shot);
@@ -322,6 +341,9 @@ function handle(data){if(data.type==='welcome'){netSync=createNetSync();seq=0;sh
   }
   switchVisual=1;
  }
+ $('kills65').textContent=String(me.kills||0);
+ $('deaths65').textContent=String(me.deaths||0);
+ $('kd65').textContent=kd65(me.kills,me.deaths);
  $('health').textContent=Math.ceil(me.hp);
  $('healthbar').style.width=healthPercent64(me.hp,data.maxHp||MAX_HEALTH64)+'%';
  $('protection').textContent=healthStatus64(me,data.maxHp||MAX_HEALTH64);
@@ -411,7 +433,7 @@ function frame(ms){try{const now=ms/1000,rawMs=ms-clock,dt=Math.min(rawMs/1000,.
  ambience45.update(now,local,joined&&!!me&&me.hp>0&&locked()&&!document.hidden,yaw);
  if(joined&&me&&local){const input=controls();
   minimap.draw(local,yaw,now,{objective:state?.objective,players:state?.players,
-   team:me?.team,meId:myId});
+   team:me?.team,mode:state?.mode,meId:myId});
   if(me.hp>0&&['lobby','playing'].includes(state.phase)){
    movementAccumulator+=dt;
    let steps=0;while(movementAccumulator>=FIXED_DT&&steps++<6){predictStep(controls());movementAccumulator-=FIXED_DT;}if(steps>=6)movementAccumulator=Math.min(movementAccumulator,FIXED_DT*2);
@@ -439,7 +461,11 @@ function frame(ms){try{const now=ms/1000,rawMs=ms-clock,dt=Math.min(rawMs/1000,.
   camera.updateProjectionMatrix();
   for(const [id,g] of opponents){const shown=sampleRemote(netSync,id,ms);const p=shown?{...g.userData.target,...shown}:g.userData.target;if(!p)continue;
     // 20 Hz snapshots render on a delayed server-time timeline. No double lerp.
-    g.position.set(p.x,p.y,p.z);g.userData.render55=p;animatePlayer(g,p,now);g.userData.tag.visible=camera.position.distanceTo(g.position)<18;}
+    g.position.set(p.x,p.y,p.z);g.userData.render55=p;animatePlayer(g,p,now);const distance=camera.position.distanceTo(g.position);
+    g.userData.tag.visible=p.hp>0&&distance<55;
+    // Sprites already use depth-testing, so walls occlude their labels.
+    const size=Math.min(2.1,Math.max(1.45,distance*.035));
+    g.userData.tag.scale.set(size,size*.187,1);}
   // Dead players may watch eligible active players during the respawn timer.
   // Team modes restrict the target list to their own team.
   if(me.hp<=0&&state.phase==='playing'&&spectatorTarget55){
@@ -503,7 +529,8 @@ document.addEventListener('keydown',e=>{if(!joined)return;
    cycleCurrentSpectator55(e.code==='ArrowRight'?1:-1);
   return;
  }
- if(e.code==='F7'){e.preventDefault();if(!e.repeat)$('perf-panel').hidden=!$('perf-panel').hidden;return;}if(e.code==='F8'){e.preventDefault();if(!e.repeat)copyDebugReport51();return;}if(['INPUT','SELECT','TEXTAREA'].includes(document.activeElement.tagName))return;if(['Tab','Space','KeyW','KeyA','KeyS','KeyD','KeyQ','KeyE','KeyF','KeyC','ControlLeft','ControlRight'].includes(e.code))e.preventDefault();
+ if(e.code==='F7'){e.preventDefault();if(!e.repeat)$('perf-panel').hidden=!$('perf-panel').hidden;return;}if(e.code==='F8'){e.preventDefault();if(!e.repeat)copyDebugReport51();return;}if(e.code==='Tab'&&locked()){e.preventDefault();$('scoreboard').hidden=false;return;}
+ if(['INPUT','SELECT','TEXTAREA'].includes(document.activeElement?.tagName))return;if(['Tab','Space','KeyW','KeyA','KeyS','KeyD','KeyQ','KeyE','KeyF','KeyC','ControlLeft','ControlRight'].includes(e.code))e.preventDefault();
  if(!e.repeat&&locked()&&me?.hp>0&&(e.code==='ControlLeft'||e.code==='ControlRight')){
   movementControls63.toggleCrouch();
  }
@@ -536,8 +563,18 @@ $('spectate-next55').onclick=()=>cycleCurrentSpectator55(1);
 $('ready-toggle55').onclick=()=>send({type:'ready',ready:!me?.ready});
 $('balance-teams55').onclick=()=>send({type:'balance'});
 $('diagnostics-toggle').onclick=()=>{$('perf-panel').hidden=!$('perf-panel').hidden;};
+$('manual-respawn65').onclick=()=>{
+ if(!joined||!me||me.hp<=0||!['lobby','playing'].includes(state?.phase)){
+  toast('Respawn is unavailable right now.');return;
+ }
+ if(!confirm('Respawn at a safe location? In a match this counts as one death.'))return;
+ send({type:'respawn'});
+};
 $('create').onclick=()=>{audio.unlock();enter(true);};$('join').onclick=()=>{audio.unlock();enter(false);};
-$('rejoin56').onclick=()=>{audio.unlock();enter(false);};$('code').onkeydown=e=>{if(e.key==='Enter')enter(false);};$('name').value=safeRead56('cf-name','');$('code').value=new URLSearchParams(location.search).get('room')||'';
+$('rejoin56').onclick=()=>{audio.unlock();enter(false);};
+ $('code').onchange=()=>{$('status').textContent='Select a room and join your friends.';};
+ $('name').value=safeRead56('cf-name','');
+ refreshRooms65(new URLSearchParams(location.search).get('room'));
 $('start').onclick=()=>{send({type:'start'});capture();};$('rematch').onclick=()=>{send({type:'start'});audio.unlock();};$('result-room').onclick=()=>{$('results').hidden=true;$('room-panel').hidden=false;};$('menu-button').onclick=()=>{document.exitPointerLock?.();$('room-panel').hidden=false;};
 $('copy-invite').onclick=async()=>{try{await navigator.clipboard.writeText(`${location.origin}/?room=${roomCode}`);toast('Invite copied. Send it to your friends.');}catch{toast('Room code '+roomCode+' — copy the address bar link.');}};
 $('leave').onclick=()=>{const conn=ws;ws=null;conn?.close();history.replaceState(null,'','/');disconnect('You left the room.');};document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>send({type:'mode',mode:b.dataset.mode}));

@@ -75,7 +75,7 @@ assert.equal(marker.root.visible,false);
 marker.dispose();
 assert.equal(scene.children.length,0,'Objective marker must release map lifecycle');
 
-// A friend may see teammate map dots but cannot see opposing positions.
+// Teammates and enemies appear in distinct colors on the same live radar.
 const drawn=[];
 const fakeContext=(isFront)=>({
  setTransform(){},fillRect(){},fillText(text){if(isFront)drawn.push({type:'text',text});},
@@ -96,11 +96,11 @@ mini.draw({x:0,y:0,z:22},0,1,{objective,team:'azure',meId:'a',players:[
  {id:'c',team:'ember',hp:100,x:5,z:15},
  {id:'d',team:'azure',hp:0,x:8,z:10}
 ]});
-assert.equal(drawn.filter(d=>d.type==='arc').length,2,
- 'Only active teammate + objective beacon render as circular map markers');
+assert.equal(drawn.filter(d=>d.type==='arc').length,3,
+ 'Active ally, enemy and objective beacon render; dead players are excluded');
 assert.ok(drawn.some(d=>d.type==='text'&&d.text==='C'),
  'Objective must have a map label');
 assert.ok(label.textContent.includes('NEON PLAZA'));
 
 console.log('05.4 team presentation, Control Point state, team victory,');
-console.log('beacon lifecycle and private teammate/objective minimap passed.');
+console.log('beacon lifecycle and live ally/enemy minimap passed.');

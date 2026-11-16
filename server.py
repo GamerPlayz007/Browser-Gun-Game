@@ -21,6 +21,9 @@ from match35 import (DEATHMATCH_GOAL,KILLS_PER_TIER,MATCH_DURATION,COUNTDOWN_DUR
 MAP=DEFAULT.data;BOXES=DEFAULT.boxes;SPAWNS=DEFAULT.spawns
 RELEASE='3.0.0-rc.2'; PHASE='05.7'; API_VERSION=5
 TICK=1/60; LIMIT=DEATHMATCH_GOAL; ROUND_SECONDS=MATCH_DURATION; MAX_PLAYERS=8; MAX_REWIND=.30
+# Fixed memorable lobby names, never player-entered or randomly generated codes.
+ROOM_CODES65=('MAX','ACE','FOX','RED','SKY','NEO','ZEN','PRO','WOLF','NOVA','ECHO','LIME')
+MANUAL_RESPAWN_COOLDOWN65=20.
 
 def nearby_boxes(x,z,radius=1,arena=DEFAULT):return arena.nearby(x,z,radius)
 
@@ -74,7 +77,7 @@ def spawn(p,players,now,arena=DEFAULT,history=None):
 
 def new_player(room,pid,name,now,weapon=0,skin=0):
     team=next_team(room.players) if is_team_mode(room.mode) else None
-    p=dict(id=pid,name=name,team=team,bot=False,ready=False,skin=normalize_skin56(skin),kills=0,deaths=0,headshots=0,streak=0,best_streak=0,weapon=weapon,yaw=0.,pitch=0.,last_input=now,switch_at=0.,seq=0,shot_seq=0,ack_shot=0)
+    p=dict(id=pid,name=name,team=team,bot=False,ready=False,skin=normalize_skin56(skin),kills=0,deaths=0,headshots=0,streak=0,best_streak=0,weapon=weapon,yaw=0.,pitch=0.,last_input=now,switch_at=0.,seq=0,shot_seq=0,ack_shot=0,last_manual_respawn=-1e9)
     spawn(p,{**room.players,**room.bots},now,room.arena,room.spawn_history);room.players[pid]=p
     if room.host is None:room.host=pid
     room.last_active=now
@@ -252,6 +255,23 @@ class Room:
         # Switching is immediate, but the global last_shot cadence is retained.
         p['mags'][p['weapon']]=p['ammo'];p['weapon']=weapon
         p['ammo']=p['mags'][weapon];p['reload_at']=0;p['switch_at']=now
+    def manual_respawn65(self,pid,now):
+        """User-requested recovery. Same authoritative spawn and protection.
+        A death is recorded in active matches to avoid escaping a loss.
+        """
+        p=self.players.get(pid)
+        if p is None or p['hp']<=0 or self.phase not in ('lobby','playing'):
+            return False,'Respawn unavailable right now.'
+        delay=MANUAL_RESPAWN_COOLDOWN65-(now-p.get('last_manual_respawn',-1e9))
+        if delay>0:return False,f'Respawn available in {math.ceil(delay)}s.'
+        p['last_manual_respawn']=now
+        if self.phase=='playing':
+            p['deaths']+=1
+            p['streak']=0
+        spawn(p,{**self.players,**self.bots},now,self.arena,self.spawn_history)
+        self.event('manual_respawn65',id=pid)
+        return True,'Respawned safely.'
+
     def reload(self,p,now):
         if p['hp']>0 and self.phase in ('lobby','playing') and p['ammo']<WEAPONS[p['weapon']]['mag'] and not p['reload_at']:
             p['reload_at']=now+WEAPONS[p['weapon']]['reload']
@@ -432,15 +452,15 @@ class Room:
 
 rooms={}
 async def create_room(request):
-    if len(rooms)>=40:return web.json_response({'error':'Server full. Try later.'},status=503)
+    if len(rooms)>=len(ROOM_CODES65):return web.json_response({'error':'All named rooms are occupied. Join a friend or try later.'},status=503)
     try:
         data=await request.json() if request.can_read_body else {}
         if not isinstance(data,dict):raise ValueError()
         map_id=data.get('mapId',DEFAULT.id)
         if not isinstance(map_id,str) or map_id not in ARENAS:raise ValueError()
     except (ValueError,TypeError):return web.json_response({'error':'Choose an available map.'},status=400)
-    code=secrets.token_hex(3).upper()
-    while code in rooms:code=secrets.token_hex(3).upper()
+    code=next((name for name in ROOM_CODES65 if name not in rooms),None)
+    if code is None:return web.json_response({'error':'All named rooms are occupied.'},status=503)
     rooms[code]=Room(code,map_id);return web.json_response({'room':code,'mapId':map_id})
 
 def aim(p,data):
@@ -493,6 +513,9 @@ async def socket(request):
                     # Acknowledge received input even when gameplay cooldown rejects it.
                     p['ack_shot']=shot
                     room.shoot(p,now,shot,data.get('viewServerTime'))
+                elif action=='respawn':
+                    ok,reason=room.manual_respawn65(pid,now)
+                    await ws.send_json({'type':'manual_respawn_result65','ok':ok,'message':reason})
                 elif action=='reload':room.reload(p,now)
                 elif action=='weapon':room.select(p,data.get('weapon'),now)
                 elif action=='start':room.start(pid,now)
@@ -553,10 +576,16 @@ async def health(request):
 async def room_info(request):
     r=rooms.get(request.match_info['code'].upper())
     return web.json_response({'players':len(r.players),'max':MAX_PLAYERS,'phase':r.phase,'mapId':r.arena.id,'mapName':r.arena.data['name']} if r else {'error':'Room expired or not found.'},status=200 if r else 404)
+async def list_rooms65(request):
+    return web.json_response({'rooms':[
+        {'code':code,'players':len(rooms[code].players) if code in rooms else 0,
+         'max':MAX_PLAYERS,'phase':rooms[code].phase if code in rooms else 'empty',
+         'active':code in rooms}
+        for code in ROOM_CODES65]})
 async def list_maps(request):return web.json_response(REGISTRY)
 def make_app():
     app=web.Application(client_max_size=4096,middlewares=[cache_policy]);app['perf36']=ServerMetrics();app.router.add_get('/',index);app.router.add_get('/health',health)
-    app.router.add_get('/api/maps',list_maps);app.router.add_post('/api/rooms',create_room);app.router.add_get('/api/rooms/{code}',room_info);app.router.add_get('/ws/{code}',socket);app.router.add_static('/static/',ROOT/'static');app.cleanup_ctx.append(lifecycle);return app
+    app.router.add_get('/api/maps',list_maps);app.router.add_post('/api/rooms',create_room);app.router.add_get('/api/rooms',list_rooms65);app.router.add_get('/api/rooms/{code}',room_info);app.router.add_get('/ws/{code}',socket);app.router.add_static('/static/',ROOT/'static');app.cleanup_ctx.append(lifecycle);return app
 if __name__=='__main__':
     import argparse
     parser=argparse.ArgumentParser();parser.add_argument('--host',default='0.0.0.0');parser.add_argument('--port',type=int,default=int(os.environ.get('PORT','3000')));parser.add_argument('--strictPort',action='store_true');args=parser.parse_args();web.run_app(make_app(),host=args.host,port=args.port)

@@ -42,8 +42,8 @@ jobs:
       - name: Install server dependencies
         run: pip install -r requirements.txt
       - name: Check Python syntax
-        run: python -m compileall -q server.py map_registry.py movement_live.py match35.py modes54.py competitive55.py cosmetics56.py bot57.py perf36.py combat64.py test_combat64.py test_release56.py test_bot57.py
+        run: python -m compileall -q server.py map_registry.py movement_live.py match35.py modes54.py competitive55.py cosmetics56.py bot57.py perf36.py combat64.py test_combat64.py test_interface65.py test_release56.py test_bot57.py
       - name: Compile deterministic updated map before server regressions
         run: python build_map.py
       - name: Test HTTP routes, WebSocket rooms, multiplayer snapshots and map
-        run: python -m unittest -v test_server test_combat64 test_map test_match35 test_release51 test_modes54 test_competitive55 test_release56 test_bot57
+        run: python -m unittest -v test_server test_combat64 test_map test_match35 test_release51 test_modes54 test_competitive55 test_interface65 test_release56 test_bot57

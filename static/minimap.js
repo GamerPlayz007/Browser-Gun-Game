@@ -1,4 +1,5 @@
 // Cache the architecture layer at the actual display density, including expanded M view.
+import {radarType65} from './interface65.js';
 export function createMinimap(canvas,label,map){
  const SIZE=240,PAD=10,SCALE=(SIZE-PAD*2)/map.size;
  const base=document.createElement('canvas'),bg=base.getContext('2d'),ctx=canvas.getContext('2d');
@@ -24,15 +25,15 @@ export function createMinimap(canvas,label,map){
  return {draw(p,yaw,time,markers={}){
   const changed=resize();if(!changed&&time-last<.1)return;last=time;
   ctx.clearRect(0,0,SIZE,SIZE);ctx.drawImage(base,0,0,SIZE,SIZE);
-  // Draw only teammates, never enemy positions or other hidden game state.
-  const team=markers.team;
-  if(team==='azure'||team==='ember'){
-   ctx.fillStyle=team==='azure'?'#57ddff':'#ff996c';
-   for(const mate of markers.players||[]){
-    if(mate.id===markers.meId||mate.team!==team||mate.hp<=0||
-       !Number.isFinite(mate.x)||!Number.isFinite(mate.z))continue;
-    ctx.beginPath();ctx.arc(px(mate.x),px(mate.z),3.5,0,Math.PI*2);ctx.fill();
-   }
+  // Live multiplayer radar; includes all living opponents in every mode.
+  // The server already shares positions to render remote player models.
+  for(const player of markers.players||[]){
+   const type=radarType65(player,markers);
+   if(!type)continue;
+   const color=type==='ally'?'#5de6fc':'#ff607a';
+   ctx.beginPath();ctx.arc(px(player.x),px(player.z),type==='enemy'?4:3.5,0,Math.PI*2);
+   ctx.fillStyle=color;ctx.fill();
+   ctx.strokeStyle='#102335';ctx.lineWidth=1.4;ctx.stroke();
   }
   const point=markers.objective;
   if(point&&Number.isFinite(point.x)&&Number.isFinite(point.z)){

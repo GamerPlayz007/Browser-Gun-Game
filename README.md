@@ -1,3 +1,20 @@
+## Phase 6.5 — DAYBREAK / multiplayer interface and recovery
+
+- Live K / D / K-D HUD and hold-TAB scoreboard, including team rankings.
+- Player name sprites visible within 55m; existing depth-testing keeps them
+  occluded by solid geometry.
+- Minimap now displays living opponents in red and allies in cyan; in
+  Bot Assault, bots are red while friendly human operators are cyan.
+  Existing multiplayer snapshots supply all positions (no extra bandwidth).
+- Creating a lobby chooses a free name from 12 predefined short codes
+  (MAX, ACE, FOX, RED, SKY, NEO, ZEN, PRO, WOLF, NOVA, ECHO, LIME).
+  Join uses a dropdown with live room occupancy and no custom input.
+- Settings offers an emergency manual respawn with confirmation. The server
+  chooses a safe spawn, counts one death in active matches, preserves kills,
+  and enforces 20s between requests. No client is permitted to respawn
+  another player. Return to 200 HP with temporary spawn protection.
+- Added frontend and WebSocket integration regressions for every new feature.
+
 ## Phase 6.4 — DAYBREAK / combat overhaul
 
 - Human and AI players spawn/respawn with **200 HP**; practice dummies retain
