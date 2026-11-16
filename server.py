@@ -565,9 +565,15 @@ async def cache_policy(request,handler):
     response=await handler(request)
     if isinstance(response,web.WebSocketResponse):return response
     path=request.path
-    # Immutable content-hashed Vite bundles: major repeat-load win for the
-    # large native Neon map. HTML, gameplay JSON and APIs remain fresh.
-    if path.startswith('/neon/assets/') and re.search(r'-[A-Za-z0-9_-]{8,}\\.[A-Za-z0-9]+
+    # Native Neon bundles are content-hashed; reuse unchanged files across matches.
+    if path.startswith('/neon/assets/'):
+        response.headers['Cache-Control']='public, max-age=31536000, immutable'
+    elif path.startswith(('/tex/','/district/','/models/','/audio/',
+                          '/neon/tex/','/neon/district/','/neon/models/')):
+        response.headers['Cache-Control']='public, max-age=86400'
+    else:
+        response.headers['Cache-Control']='no-cache'
+    return response
 async def index(request):return web.FileResponse(ROOT/'static/index.html')
 async def health(request):
     summary=request.app['perf36'].summary(sum(len(r.players) for r in rooms.values()),len(rooms))
