@@ -1,0 +1,47 @@
+name: Import native Neon Zenith map preview
+on:
+  push:
+    branches: [main]
+    paths:
+      - integrations/crossfire_walk.js
+      - scripts/import_neon_zenith.sh
+      - .github/workflows/neon-native.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: neon-zenith-native-import
+  cancel-in-progress: false
+
+jobs:
+  import-original-scene:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Build original Neon Zenith without geometric reconstruction
+        run: bash scripts/import_neon_zenith.sh
+      - name: Check bundled files
+        run: |
+          test -s static/neon/index.html
+          test -s static/neon/NEON_ZENITH_CREDITS.md
+          test -s static/neon/NEON_ZENITH_LICENSE.txt
+          du -sh static/neon
+      - name: Commit native scene into CROSSFIRE static hosting
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f static/neon
+          if git diff --cached --quiet; then
+            echo "No changes in pinned upstream scene"
+          else
+            git commit -m "Vendor pinned original Neon Zenith native scene (full fidelity)"
+            git push origin HEAD:main
+          fi
