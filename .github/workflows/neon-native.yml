@@ -4,6 +4,8 @@ on:
     branches: [main]
     paths:
       - integrations/crossfire_walk.js
+      - integrations/crossfire_neon_multiplayer.js
+      - scripts/export_neon_zenith_arena.mjs
       - scripts/import_neon_zenith.sh
       - .github/workflows/neon-native.yml
   workflow_dispatch:
@@ -30,6 +32,8 @@ jobs:
         run: bash scripts/import_neon_zenith.sh
       - name: Check bundled files
         run: |
+          test -s static/maps/neon_zenith.json
+          python -m json.tool static/maps/neon_zenith.json >/dev/null
           test -s static/neon/index.html
           test -s static/neon/NEON_ZENITH_CREDITS.md
           test -s static/neon/NEON_ZENITH_LICENSE.txt
@@ -38,7 +42,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -f static/neon
+          git add -f static/neon static/maps/neon_zenith.json
           if git diff --cached --quiet; then
             echo "No changes in pinned upstream scene"
           else
