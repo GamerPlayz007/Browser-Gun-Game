@@ -262,7 +262,7 @@ class NetworkTests(unittest.IsolatedAsyncioTestCase):
         ws=await self.client.ws_connect('/ws/'+data['room']);welcome=await ws.receive_json();self.assertEqual(welcome['mapId'],'cyberpunk')
         await ws.send_json({'type':'map','mapId':'solstice'})
         self.assertEqual((await self.state(ws))['mapId'],'cyberpunk');await ws.close()
-        html=await (await self.client.get('/')).text();self.assertIn('<sup>V3.0 RC2</sup>',html);self.assertIn('id="map-select"',html)
+        html=await (await self.client.get('/')).text();self.assertIn('<sup>V3.1 DAYBREAK</sup>',html);self.assertIn('id="map-select"',html)
         arena=await (await self.client.get('/static/maps/cyberpunk.json')).json();self.assertEqual(arena['id'],'cyberpunk');self.assertEqual(len(arena['routes']),13)
     async def test_host_only_queues_next_mode_without_rewriting_finished_match(self):
         code=(await (await self.client.post('/api/rooms')).json())['room']
@@ -318,8 +318,8 @@ class NetworkTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual((await self.client.get('/api/rooms/XXXXXX')).status,404)
         health=await (await self.client.get('/health')).json()
         self.assertEqual(health['version'],5)
-        self.assertEqual(health['release'],'3.0.0-rc.2')
-        self.assertEqual(health['phase'],'05.7')
+        self.assertEqual(health['release'],'3.1.0')
+        self.assertEqual(health['phase'],'06.8')
         self.assertEqual(health['mapId'],'cyberpunk')
         self.assertIn('buildCommit',health)
 if __name__=='__main__':unittest.main()

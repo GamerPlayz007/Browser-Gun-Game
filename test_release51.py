@@ -69,7 +69,7 @@ class ReleaseMultiplayer(unittest.IsolatedAsyncioTestCase):
         health = await res.json()
         self.assertTrue(health["ok"])
         self.assertEqual(health["release"], RELEASE)
-        self.assertEqual(health["phase"], "05.7")
+        self.assertEqual(health["phase"], "06.8")
         self.assertEqual(health["mapId"], "cyberpunk")
         self.assertIn("buildCommit", health)
         self.assertIsInstance(health["metrics"], dict)
