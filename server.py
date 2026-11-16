@@ -563,7 +563,63 @@ async def lifecycle(app):
 @web.middleware
 async def cache_policy(request,handler):
     response=await handler(request)
-    if not isinstance(response,web.WebSocketResponse):response.headers['Cache-Control']='no-cache'
+    if isinstance(response,web.WebSocketResponse):return response
+    path=request.path
+    # Immutable content-hashed Vite bundles: major repeat-load win for the
+    # large native Neon map. HTML, gameplay JSON and APIs remain fresh.
+    if path.startswith('/neon/assets/') and re.search(r'-[A-Za-z0-9_-]{8,}\\.[A-Za-z0-9]+
+async def index(request):return web.FileResponse(ROOT/'static/index.html')
+async def health(request):
+    summary=request.app['perf36'].summary(sum(len(r.players) for r in rooms.values()),len(rooms))
+    return web.json_response({'ok':True,'version':API_VERSION,'release':RELEASE,
+        'buildCommit':os.environ.get('RENDER_GIT_COMMIT','')[:12] or None,
+        'revision':MAP['revision'], 'phase':PHASE,
+        'network':'03.3','match':'05.7','mapId':DEFAULT.id,
+        'rooms':len(rooms),'metrics':summary})
+async def room_info(request):
+    r=rooms.get(request.match_info['code'].upper())
+    return web.json_response({'players':len(r.players),'max':MAX_PLAYERS,'phase':r.phase,'mapId':r.arena.id,'mapName':r.arena.data['name']} if r else {'error':'Room expired or not found.'},status=200 if r else 404)
+async def list_rooms65(request):
+    return web.json_response({'rooms':[
+        {'code':code,'players':len(rooms[code].players) if code in rooms else 0,
+         'max':MAX_PLAYERS,'phase':rooms[code].phase if code in rooms else 'empty',
+         'active':code in rooms}
+        for code in ROOM_CODES65]})
+async def list_maps(request):return web.json_response(REGISTRY)
+
+# Native Neon Zenith is bundled from its pinned upstream source by GitHub Actions.
+# This route NEVER substitutes a simplified CROSSFIRE world for upstream visuals.
+NEON_ROOT=ROOT/'static/neon'
+async def neon_preview_status(request):
+    return web.json_response({'ready':(NEON_ROOT/'index.html').is_file(),
+        'type':'original-scene-walkthrough','multiplayer':False})
+async def neon_entry(request):
+    if not (NEON_ROOT/'index.html').is_file():
+        raise web.HTTPServiceUnavailable(text='Original Neon Zenith build not installed.')
+    return web.FileResponse(NEON_ROOT/'index.html')
+async def neon_asset(request):
+    name=request.match_info.get('asset','')
+    base=NEON_ROOT.resolve()
+    path=(base/name).resolve()
+    if not path.is_relative_to(base) or not path.is_file():
+        raise web.HTTPNotFound()
+    return web.FileResponse(path)
+
+def make_app():
+    app=web.Application(client_max_size=4096,middlewares=[cache_policy]);app['perf36']=ServerMetrics();app.router.add_get('/',index);app.router.add_get('/health',health)
+    app.router.add_get('/api/maps',list_maps);app.router.add_get('/api/neon-preview',neon_preview_status);app.router.add_get('/neon',neon_entry);app.router.add_get('/neon/',neon_entry);app.router.add_post('/api/rooms',create_room);app.router.add_get('/api/rooms',list_rooms65);app.router.add_get('/api/rooms/{code}',room_info);app.router.add_get('/ws/{code}',socket);app.router.add_static('/static/',ROOT/'static');app.router.add_get('/neon/{asset:.*}',neon_asset);app.router.add_get('/{asset:.*}',neon_asset);app.cleanup_ctx.append(lifecycle);return app
+if __name__=='__main__':
+    import argparse
+    parser=argparse.ArgumentParser();parser.add_argument('--host',default='0.0.0.0');parser.add_argument('--port',type=int,default=int(os.environ.get('PORT','3000')));parser.add_argument('--strictPort',action='store_true');args=parser.parse_args();web.run_app(make_app(),host=args.host,port=args.port)
+,path):
+        response.headers['Cache-Control']='public, max-age=31536000, immutable'
+    elif path.startswith(('/tex/','/district/','/models/','/audio/',
+                          '/neon/tex/','/neon/district/','/neon/models/')):
+        # Assets belong to a pinned upstream revision; daily revalidation
+        # prevents stale originals if a future explicit import changes them.
+        response.headers['Cache-Control']='public, max-age=86400'
+    else:
+        response.headers['Cache-Control']='no-cache'
     return response
 async def index(request):return web.FileResponse(ROOT/'static/index.html')
 async def health(request):
