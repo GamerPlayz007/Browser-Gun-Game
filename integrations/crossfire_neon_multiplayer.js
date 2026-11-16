@@ -62,6 +62,11 @@ export async function installCrossfireMultiplayer(nz) {
     <select id="cfmp-mode-select"><option value="deathmatch">Deathmatch</option>
        <option value="gungame">Gun Game</option><option value="teamdeathmatch">Team Deathmatch</option>
        <option value="botmatch">Bot Assault</option></select>
+    <label for="cfmp-quality">GRAPHICS / PERFORMANCE</label>
+    <select id="cfmp-quality"><option value="school">School / Performance (fastest)</option>
+      <option value="balanced">Balanced (recommended)</option>
+      <option value="high">High / Original (demanding)</option></select>
+    <small style="display:block;color:#a8c7d5;margin:5px 0 11px">Switching quality reloads this map and rejoins the same room.</small>
     <button id="cfmp-start">START MATCH</button><button id="cfmp-respawn">EMERGENCY RESPAWN</button>
     <button id="cfmp-resume">RESUME / LOCK MOUSE</button>
     <a href="/">LEAVE TO CROSSFIRE</a>
@@ -73,6 +78,13 @@ export async function installCrossfireMultiplayer(nz) {
   const url=new URL(location.href);
   const room=(url.searchParams.get('room')||'').toUpperCase();
   const name=(url.searchParams.get('name')||'Player').slice(0,16);
+  const profile=['school','balanced','high'].includes(url.searchParams.get('cfquality'))
+    ? url.searchParams.get('cfquality') : 'balanced';
+  $('quality').value=profile;
+  $('quality').onchange=e=>{
+    url.searchParams.set('cfquality',e.target.value);
+    location.assign(url.href);
+  };
   const skin=clamp(Number(url.searchParams.get('skin')||0),0,3);
   let selected=clamp(Number(url.searchParams.get('weapon')||0),0,3);
   const status=(s)=>{$('prompt').textContent=s;};
