@@ -26,15 +26,25 @@ class ReleaseAssets(unittest.TestCase):
                 self.assertTrue(dest.is_file(),
                                 f"{path.name}: missing local import: {rel}")
 
-    def test_only_one_active_city_in_registry_and_same_map_bytes(self):
+    def test_primary_live_city_and_multiple_native_maps_share_registry(self):
         first = (ROOT / "static/map.json").read_bytes()
         active = (ROOT / "static/maps/cyberpunk.json").read_bytes()
         self.assertEqual(first, active, "Editor/test map differs from live map")
         registry = json.loads((ROOT / "static/maps/index.json").read_text())
         active_maps = [m for m in registry["maps"] if m["available"]]
-        self.assertEqual(len(active_maps), 1)
-        self.assertEqual(active_maps[0]["url"], "/static/maps/cyberpunk.json")
+        self.assertGreaterEqual(len(active_maps), 2)
         self.assertEqual(registry["default"], "cyberpunk")
+        by_id = {entry["id"]: entry for entry in active_maps}
+        self.assertIn("cyberpunk", by_id)
+        self.assertIn("neon_zenith", by_id)
+        self.assertNotIn("dust_corridor", by_id,
+                         "Dust cannot be selectable before server physics parity")
+        self.assertEqual(by_id["cyberpunk"]["url"], "/static/maps/cyberpunk.json")
+        for entry in active_maps:
+            url = entry["url"]
+            self.assertTrue(url.startswith("/static/maps/"))
+            self.assertTrue((ROOT / url.lstrip("/")).is_file(),
+                            f"Enabled arena missing its JSON: {url}")
 
     def test_release_version_is_consistent(self):
         pkg = json.loads((ROOT / "package.json").read_text())

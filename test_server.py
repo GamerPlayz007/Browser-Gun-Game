@@ -251,8 +251,13 @@ class NetworkTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_map_selector_validation_and_join_contract(self):
         registry=await (await self.client.get('/api/maps')).json()
-        self.assertEqual(registry['default'],'cyberpunk');self.assertEqual(len(registry['maps']),1)
-        self.assertEqual([m['id'] for m in registry['maps'] if m['available']],['cyberpunk'])
+        self.assertEqual(registry['default'],'cyberpunk')
+        available={m['id'] for m in registry['maps'] if m['available']}
+        # Phase 6 added Neon Zenith as a second native arena; Dust Corridor is
+        # still a local collision preview and must NOT enter multiplayer yet.
+        self.assertIn('cyberpunk',available)
+        self.assertIn('neon_zenith',available)
+        self.assertNotIn('dust_corridor',available)
         for value in ['rainforest','solstice','missing','../server.py',None,[]]:
             response=await self.client.post('/api/rooms',json={'mapId':value});self.assertEqual(response.status,400)
         self.assertEqual((await self.client.post('/api/rooms',data='broken')).status,400)

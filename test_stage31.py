@@ -11,10 +11,13 @@ class LiveCityTests(unittest.TestCase):
     def setUpClass(cls):
         cls.map=json.loads((ROOT/'static/maps/cyberpunk.json').read_text())
 
-    def test_single_playable_arena(self):
-        self.assertEqual(set(ARENAS),{'cyberpunk'})
+    def test_cyberpunk_remains_default_with_native_multi_map_registry(self):
+        # The default city must retain its ID, data and route contract even
+        # when other *native* maps are enabled in the same multiplayer game.
+        self.assertIn('cyberpunk',ARENAS)
+        self.assertIn('neon_zenith',ARENAS)
+        self.assertNotIn('dust_corridor',ARENAS)
         self.assertEqual(registry.REGISTRY['default'],'cyberpunk')
-        self.assertEqual(len(registry.REGISTRY['maps']),1)
         self.assertEqual(registry.REGISTRY['maps'][0]['id'],'cyberpunk')
         self.assertFalse((ROOT/'static/experimental').exists(), 'Remove obsolete duplicate movement prototypes')
         self.assertEqual(DEFAULT.data,self.map)
