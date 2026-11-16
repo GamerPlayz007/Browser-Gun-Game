@@ -602,14 +602,15 @@ async def neon_preview_status(request):
     return web.json_response({'ready':(NEON_ROOT/'index.html').is_file(),
         'type':'original-scene-walkthrough','multiplayer':False})
 async def neon_entry(request):
-    # Old standalone-map URLs now open the CROSSFIRE unified map runtime.
-    if 'crossfire-mp' in request.query:
+    # The former second engine has been retired. Even legacy Neon bookmarks
+    # resolve to CROSSFIRE's single lobby / renderer, not standalone WebGPU.
+    query={}
+    if request.query.get('room'):query['room']=request.query['room']
+    if request.query.get('name'):query['name']=request.query['name']
+    if query:
         from urllib.parse import urlencode
-        query={'map':'neon_zenith',**dict(request.query)}
         raise web.HTTPFound('/?'+urlencode(query))
-    if not (NEON_ROOT/'index.html').is_file():
-        raise web.HTTPServiceUnavailable(text='Original Neon Zenith build not installed.')
-    return web.FileResponse(NEON_ROOT/'index.html')
+    raise web.HTTPFound('/')
 async def neon_asset(request):
     name=request.match_info.get('asset','')
     base=NEON_ROOT.resolve()
