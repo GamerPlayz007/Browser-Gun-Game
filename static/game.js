@@ -184,7 +184,8 @@ if(data.mapId==='neon_zenith'){
   const callsign=safeName56($('name').value);
   safeWrite56('cf-name',callsign);
   const params=new URLSearchParams({
-    room:code,name:callsign,weapon:String(selected),skin:String(preferredSkin56)
+    room:code,name:callsign,weapon:String(selected),skin:String(preferredSkin56),
+    cfquality:document.getElementById('cf-neon-quality')?.value||'balanced'
   });
   location.assign('/neon/?crossfire-mp&'+params.toString());
   return;
