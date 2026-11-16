@@ -178,18 +178,6 @@ async function refreshRooms65(prefer){
  }catch{ /* The room can still be entered with a known premade code. */ }
 }
 async function enter(create){$('create').disabled=$('join').disabled=true;$('rejoin56').hidden=true;$('status').textContent='Connecting to arena…';try{let code=$('code').value.trim().toUpperCase();const response=await fetch(create?'/api/rooms':'/api/rooms/'+code,create?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mapId:$('map-select').value})}:{});const data=await response.json();if(!response.ok)throw Error(data.error||'Connection failed.');if(create){code=data.room;$('code').value=code;}else if(data.players>=data.max)throw Error('This room is full.');
-if(data.mapId==='neon_zenith'){
-  // Native renderer owns this arena's graphics. Never call buildWorld() here:
-  // that would reconstruct / degrade its TSL city, lighting and materials.
-  const callsign=safeName56($('name').value);
-  safeWrite56('cf-name',callsign);
-  const params=new URLSearchParams({
-    room:code,name:callsign,weapon:String(selected),skin:String(preferredSkin56),
-    cfquality:document.getElementById('cf-neon-quality')?.value||'balanced'
-  });
-  location.assign('/?map=neon_zenith&crossfire-mp&'+params.toString());
-  return;
-}
 await loadArena(data.mapId);const name=safeName56($('name').value);safeWrite56('cf-name',name);const conn=new WebSocket(`${location.protocol==='https:'?'wss':'ws'}://${location.host}/ws/${code}?name=${encodeURIComponent(name)}&weapon=${selected}&skin=${preferredSkin56}`);ws=conn;const timeout=setTimeout(()=>{if(conn.readyState!==1)conn.close();},12000);conn.onopen=()=>clearTimeout(timeout);conn.onmessage=e=>{if(ws===conn)handle(JSON.parse(e.data));};conn.onclose=()=>{clearTimeout(timeout);if(ws===conn)disconnect('Connection closed. Rejoining creates a new player identity.',code);};conn.onerror=()=>{$('status').textContent='Could not connect. Check the server is awake.';};}catch(e){$('status').textContent=e.message;$('create').disabled=$('join').disabled=false;refreshRooms65();}}
 function disconnect(message,rejoinCode56=null){
  const code56=validRoom65(rejoinCode56)?rejoinCode56.toUpperCase():null;
@@ -519,7 +507,7 @@ function frame(ms){try{const now=ms/1000,rawMs=ms-clock,dt=Math.min(rawMs/1000,.
   $('crosshair').style.opacity=me.hp<=0||ads>.75?'0':'1';
   $('crosshair').style.width=$('crosshair').style.height=crosshairSize52.toFixed(1)+'px';
   if(moving&&local.grounded&&locked()&&now-lastStep>(input.sprint?.28:.4)){audio.step(input.sprint?.07:.045);lastStep=now;}
- }else{camera.position.set(7+Math.sin(now*.045)*2,9,30+Math.cos(now*.045)*2);camera.lookAt(-5,3,14);camera.fov=65;camera.updateProjectionMatrix();for(const g of weaponModels)g.visible=false;}
+ }else{const anchor=map.center||{x:0,z:0};camera.position.set(anchor.x+7+Math.sin(now*.045)*2,9,anchor.z+30+Math.cos(now*.045)*2);camera.lookAt(anchor.x-5,3,anchor.z+14);camera.fov=65;camera.updateProjectionMatrix();for(const g of weaponModels)g.visible=false;}
  for(let i=effects.length-1;i>=0;i--)if(now>effects[i].until){const e=effects.splice(i,1)[0];e.obj.removeFromParent();if(e.own){e.obj.geometry.dispose();e.obj.material.dispose();}}
  $('damage').style.opacity=now<damageUntil?.65:0;$('damage-direction').style.opacity=now<damageUntil?1:0;const sample52=feedback52.sample(now);
  $('hitmarker').style.opacity=$('damage-number').style.opacity=sample52.alpha;
