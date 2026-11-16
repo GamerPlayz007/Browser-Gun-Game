@@ -47,6 +47,7 @@ echo "[CROSSFIRE] Building native Neon scene (no texture or geometry downgrade)"
   --bundle --format=esm --platform=node --outfile="$WORK/neon_layout.mjs"
 node "$ROOT/scripts/export_neon_zenith_arena.mjs" "$WORK/neon_layout.mjs" \
   "$ROOT/static/maps/neon_zenith.json" "$ROOT/static/weapons.json"
+python3 "$ROOT/build_map.py"
 (cd "$WORK/upstream" && npm run build -- --base=/neon/ --outDir="$ROOT/static/neon")
 
 # Add a diagnostic boot overlay separately from original renderer code.
