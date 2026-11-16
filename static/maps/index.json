@@ -10,11 +10,11 @@
     },
     {
       "id": "neon_zenith",
-      "name": "Neon Zenith \u00b7 Original",
+      "name": "Neon Zenith · Lite",
       "available": true,
       "url": "/static/maps/neon_zenith.json",
-      "theme": "cyberpunk-native",
-      "engine": "neon-zenith-native"
+      "theme": "cyberpunk-night",
+      "engine": "crossfire-webgl"
     }
   ]
 }
