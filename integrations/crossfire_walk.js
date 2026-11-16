@@ -52,6 +52,7 @@ export function installCrossfireWalk(nz) {
        <span class="cf-warning">Original map preview; multiplayer integration not enabled yet.</span>
     </div>`;
   document.body.append(shell);
+  window.__crossfireNeonReady?.();
   const info = document.getElementById('cf-neon-info');
 
   // Spawn at a genuine intersection from the ORIGINAL city layout.
