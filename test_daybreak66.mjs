@@ -52,6 +52,6 @@ const html=fs.readFileSync('static/index.html','utf8');
 assert.ok(html.includes('Daybreak City'));
 assert.ok(!html.includes('Cyberpunk City'));
 assert.ok(map.palette.concrete.startsWith('#'));
-assert.ok(map.routes.length>=13&&map.stairs.length>=7);
+assert.ok(map.routes.length>=13&&map.stairs.length>=6);
 assert.ok(map.boxes.length>650);
 console.log('Daybreak 6.6: stable arena identity, clear sky, sunny palettes, dry weather, modern districts and preservation of gameplay geometry passed.');

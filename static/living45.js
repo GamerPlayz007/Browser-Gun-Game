@@ -68,13 +68,13 @@ const DISPLAY_F=[
  'varying vec2 vUv;',
  'uniform sampler2D uMap;uniform float uTime;uniform float uBoost;uniform vec3 uTint;',
  'void main(){',
- 'vec2 uv=vUv;'
+ 'vec2 uv=vUv;',
  'vec3 col=texture2D(uMap,uv).rgb;',
- 'float scan=1.0;'
- 'float sweep=0.0;'
+ 'float scan=1.0;',
+ 'float sweep=0.0;',
  'float slow=.97+.025*sin(uTime*.79);',
- 'col=col*scan*slow+uTint*(.012*sweep+.02*uBoost);'
- 'gl_FragColor=vec4(col,clamp(.93+.02*uBoost,0.0,.98));'
+ 'col=col*scan*slow+uTint*(.012*sweep+.02*uBoost);',
+ 'gl_FragColor=vec4(col,clamp(.93+.02*uBoost,0.0,.98));',
  '}'
 ].join('\n');
 export function createLivingWorld45(T,map){
