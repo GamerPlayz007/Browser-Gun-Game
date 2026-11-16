@@ -71,9 +71,8 @@ if (spawns.length<6)
   throw new Error(`Neon arena generated only ${spawns.length} safe spawns; inspect upstream layout`);
 
 const output={
-  id:'neon_zenith',name:'Neon Zenith',revision:'03.2-native',
-  theme:'cyberpunk-native',engine:'neon-zenith-native',
-  originalScene:'/neon/?crossfire-mp',
+  id:'neon_zenith',name:'Neon Zenith · Lite',revision:'03.2-native',
+  theme:'cyberpunk-night',engine:'crossfire-webgl',
   upstream:'billpwchan/neon-zenith',seed:20261002,
   size:half*2,center:{x:cx,z:cz},
   bounds:{minX,maxX,minZ,maxZ},
