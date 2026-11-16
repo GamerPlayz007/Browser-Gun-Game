@@ -36,6 +36,19 @@ PY
 echo "[CROSSFIRE] Building native Neon scene (no texture or geometry downgrade)"
 (cd "$WORK/upstream" && npm ci --no-audit --no-fund && npm run build -- --base=/neon/ --outDir="$ROOT/static/neon")
 
+# Add a diagnostic boot overlay separately from original renderer code.
+# Preserve upstream geometry, shaders, textures and all visual effects.
+python3 - "$ROOT/static/neon/index.html" <<'PY'
+from pathlib import Path
+import sys
+p=Path(sys.argv[1])
+s=p.read_text()
+tag='<script src="/static/neon_boot_diagnostics.js"></script>'
+assert '</head>' in s
+s=s.replace('</head>',f'    {tag}\n  </head>',1)
+p.write_text(s)
+PY
+
 cp "$WORK/upstream/LICENSE" "$ROOT/static/neon/NEON_ZENITH_LICENSE.txt"
 cp "$WORK/upstream/CREDITS.md" "$ROOT/static/neon/NEON_ZENITH_CREDITS.md"
 echo "$PIN" > "$ROOT/static/neon/UPSTREAM_COMMIT.txt"
