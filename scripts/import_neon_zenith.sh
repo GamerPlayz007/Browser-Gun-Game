@@ -22,6 +22,9 @@ for name in physics.js spatial.js lean63.js models.js animation34.js; do
   cp "$ROOT/static/$name" "$WORK/upstream/src/crossfire_lib/$name"
 done
 
+# Apply quality-preserving Fast Boot profiles to the pinned original project.
+python3 "$ROOT/scripts/patch_neon_fast_boot.py" "$WORK/upstream"
+
 # One additive import and one hook. All original geometry, rendering and assets
 # remain owned by the upstream scene.
 python3 - "$WORK/upstream/src/main.js" <<'PY'
