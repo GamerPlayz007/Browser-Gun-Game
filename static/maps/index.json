@@ -3,10 +3,10 @@
   "maps": [
     {
       "id": "cyberpunk",
-      "name": "Cyberpunk City",
+      "name": "Daybreak City",
       "available": true,
       "url": "/static/maps/cyberpunk.json",
-      "theme": "cyberpunk"
+      "theme": "modern-daylight"
     }
   ]
 }
