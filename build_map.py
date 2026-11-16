@@ -17,8 +17,8 @@ def main():
     (out/'cyberpunk.json').write_text(payload,encoding='utf-8')
     (ROOT/'static/map.json').write_text(payload,encoding='utf-8')
     registry={'default':'cyberpunk','maps':[
-        {'id':'cyberpunk','name':'Cyberpunk City','available':True,
-         'url':'/static/maps/cyberpunk.json','theme':'cyberpunk'},
+        {'id':'cyberpunk','name':'Daybreak City','available':True,
+         'url':'/static/maps/cyberpunk.json','theme':'modern-daylight'},
     ]}
     (out/'index.json').write_text(json.dumps(registry,indent=2)+'\n',encoding='utf-8')
     # Stale 80 m map guide and old optional candidate are deliberately removed.

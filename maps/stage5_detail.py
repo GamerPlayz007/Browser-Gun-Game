@@ -248,7 +248,7 @@ class Detailer:
           dict(id='SIG-M03',text='REPAIR ARCADE',x=-18.25,y=4.32,z=15.1,face='west',district='market'),
           dict(id='SIG-AX',text='AXIOM TECH',x=26.0,y=4.35,z=-5.18,face='north',district='axiom'),
           dict(id='SIG-T01',text='TRANSIT DECK',x=2.5,y=12.7,z=-15.35,face='south',district='transit'),
-          dict(id='SIG-PLAZA',text='NEON PLAZA',x=2.0,y=4.9,z=10.3,face='south',district='plaza'),
+          dict(id='SIG-PLAZA',text='CENTRAL PLAZA',x=2.0,y=4.9,z=10.3,face='south',district='plaza'),
         ])
 
     def market_awning(self):

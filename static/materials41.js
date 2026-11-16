@@ -5,23 +5,23 @@ export const SURFACE_STYLES=[
  'pale','glass','tile','garden','leather','window'
 ];
 export const NEON_STYLES=['cyan','magenta','amber','white'];
-const NEON={cyan:'#38eff7',magenta:'#ff4b9e',amber:'#ffb454',white:'#c8f8ff'};
+const NEON={cyan:'#4d8396',magenta:'#a67b80',amber:'#c5a57b',white:'#e4e8e2'};
 const SPECS={
- facade:{base:[54,70,87],rough:.77,metal:.18,bump:.065,glow:1.55},
- concrete:{base:[105,115,129],rough:.88,metal:.04,bump:.07},
- dark:{base:[46,60,76],rough:.76,metal:.20,bump:.052},
- road:{base:[48,54,65],rough:.88,metal:.04,bump:.075},
- asphalt:{base:[42,48,56],rough:.87,metal:.03,bump:.075},
- metal:{base:[120,135,149],rough:.43,metal:.78,bump:.045},
- grate:{base:[99,111,124],rough:.55,metal:.72,bump:.07},
- rust:{base:[122,92,84],rough:.81,metal:.48,bump:.085},
- wood:{base:[114,82,71],rough:.88,metal:.02,bump:.055},
- pale:{base:[145,163,174],rough:.59,metal:.18,bump:.04},
- glass:{base:[45,76,103],rough:.24,metal:.16,bump:.012,glow:.11},
- window:{base:[41,72,95],rough:.19,metal:.12,bump:.012,glow:1.7},
- tile:{base:[112,126,143],rough:.47,metal:.14,bump:.047},
- garden:{base:[69,104,81],rough:.94,metal:0,bump:.075},
- leather:{base:[87,69,82],rough:.77,metal:.02,bump:.045}
+ facade:{base:[166,177,174],rough:.78,metal:.07,bump:.062,glow:.015},
+ concrete:{base:[178,179,171],rough:.9,metal:.01,bump:.07},
+ dark:{base:[106,114,119],rough:.81,metal:.11,bump:.052},
+ road:{base:[101,108,109],rough:.91,metal:.02,bump:.075},
+ asphalt:{base:[92,102,106],rough:.90,metal:.02,bump:.075},
+ metal:{base:[146,153,157],rough:.5,metal:.6,bump:.045},
+ grate:{base:[124,132,133],rough:.62,metal:.62,bump:.07},
+ rust:{base:[142,120,104],rough:.83,metal:.24,bump:.085},
+ wood:{base:[155,127,99],rough:.87,metal:.02,bump:.055},
+ pale:{base:[204,202,188],rough:.73,metal:.07,bump:.04},
+ glass:{base:[127,161,177],rough:.31,metal:.10,bump:.012,glow:.006},
+ window:{base:[137,170,188],rough:.25,metal:.08,bump:.012,glow:.045},
+ tile:{base:[190,185,176],rough:.64,metal:.07,bump:.047},
+ garden:{base:[91,132,91],rough:.94,metal:0,bump:.075},
+ leather:{base:[121,107,98],rough:.79,metal:.02,bump:.045}
 };
 const clamp=n=>Math.max(0,Math.min(255,Math.round(n)));
 const rgb=a=>'rgb('+a.map(clamp).join(',')+')';
@@ -52,18 +52,20 @@ function atlas(T,style,size=512){
   if(style==='facade'||style==='dark'||style==='glass'||style==='window'){
    // Recessed facade bays with differently lit interiors and reflective glazing.
    paint(x+2,y+2,cell-4,cell-4,base,202,144);
-   paint(x+8,y+8,cell-16,cell-16,[9,22,37],65,54);
-   const lit=style==='window'||(style==='facade'?r()>.46:style==='glass'?r()>.89:r()>.88);
-   const color=style==='window'?[197,222,235]:
-    r()>.73?[255,175,99]:r()>.47?[229,67,152]:[63,209,244];
-   const glass=lit?color:[18+r()*15,34+r()*22,53+r()*20];
-   paint(x+11,y+11,cell-22,cell-22,glass,lit?52:80,lit?86:58,
-    lit?style==='window'?[255,255,255]:color:[0,0,0]);
+   paint(x+8,y+8,cell-16,cell-16,[56,89,105],105,74);
+   // Reflect bright blue sky and adjacent buildings instead of neon
+   // interior screens. A few warmer windows suggest ordinary occupancy.
+   const lit=r()>.89;
+   const color=style==='window'?[155,192,211]:
+    lit?[210,197,172]:r()>.5?[116,165,190]:[101,143,164];
+   const glass=lit?color:[color[0]*.78,color[1]*.82,color[2]*.85];
+   paint(x+11,y+11,cell-22,cell-22,glass,lit?87:101,lit?104:78,
+    [0,0,0]);
    // Metallic mullions, ledges and interior floor strips.
-   paint(x+cell/2-2,y+7,4,cell-14,[31,39,51],161,191);
-   paint(x+7,y+cell-13,cell-14,5,[24,32,47],166,192);
+   paint(x+cell/2-2,y+7,4,cell-14,[117,130,138],174,194);
+   paint(x+7,y+cell-13,cell-14,5,[123,132,138],166,192);
    if(lit){c[0].fillStyle='rgba(255,255,255,.18)';c[0].fillRect(x+13,y+12,3,cell-30);}
-   if(style==='facade'){paint(x,y+cell-5,cell,5,[87,103,120],194,212);}
+   if(style==='facade'){paint(x,y+cell-5,cell,5,[190,190,178],194,212);}
   }else if(style==='metal'||style==='rust'||style==='grate'){
    paint(x+2,y+2,cell-4,cell-4,base,style==='rust'?215:115,146);
    paint(x+8,y+8,cell-16,cell-16,base.map(v=>v-18),175,98);
@@ -137,7 +139,7 @@ export function createCyberMaterialLibrary(T){
   const key=[known,options.tint||'',options.glow??'',options.emissive||'',options.roughness??''].join('|');
   if(materialCache.has(key))return materialCache.get(key);
   if(NEON_STYLES.includes(known)){
-   const m=new T.MeshBasicMaterial({color:NEON[known],toneMapped:false,side:T.DoubleSide});
+   const m=new T.MeshBasicMaterial({color:NEON[known],toneMapped:true,side:T.DoubleSide});
    materialCache.set(key,m);return m;
   }
   if(!textureCache.has(known))textureCache.set(known,atlas(T,known));

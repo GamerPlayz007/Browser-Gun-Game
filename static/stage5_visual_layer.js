@@ -33,9 +33,9 @@ export function createStage5VisualLayer(THREE,map,quality='high',library=null){
   const tint=new THREE.Color(finishes[finish]||'#9aa9b8');
   tint.lerp(new THREE.Color('#ffffff'),isLit?.55:.48);
   const emissive=isLit?(finishes[finish]||'#87d8f2'):'#ffffff';
-  const mat=library?library.get(source,{tint:'#'+tint.getHexString(),emissive,glow:isLit?(finish==='lamp'?2.3:1.35):isUnlit?.02:undefined}):
+  const mat=library?library.get(source,{tint:'#'+tint.getHexString(),emissive,glow:isLit?(finish==='lamp'?.32:.075):isUnlit?.005:undefined}):
    new THREE.MeshStandardMaterial({color:tint,roughness:isLit?.3:.79,metalness:isLit?.09:.22,
-     emissive:isLit?emissive:'#000000',emissiveIntensity:isLit?1.1:0});
+     emissive:isLit?emissive:'#000000',emissiveIntensity:isLit?.1:0});
   if(!library)fallbackMaterials.push(mat);
   const geometries=entries.map(b=>createSurfaceBoxGeometry(THREE,b,source==='window'?1.6:2.4));
   const geometry=mergeGeometries(geometries,false);

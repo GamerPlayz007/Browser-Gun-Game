@@ -99,7 +99,7 @@ CONTEXT_PARCELS=[
 ]
 
 FINISHES={'market':'facade','corporate':'glass','industrial':'concrete','transit':'metal','civic':'tile'}
-COLORS={'market':'#c67f9e','industrial':'#99aebd','corporate':'#79bcca','transit':'#c7b184','civic':'#b2c8be'}
+COLORS={'market':'#b69d8c','industrial':'#a8afb2','corporate':'#a3b9c5','transit':'#c2b594','civic':'#abc2b2'}
 
 def _box(bounds,style='facade',kind='building',**meta):
     x0,y0,z0,x1,y1,z1=map(float,bounds)

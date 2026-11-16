@@ -40,8 +40,8 @@ assert.ok(s5.children.every(o=>o.isMesh&&o.material.isMeshStandardMaterial));
 assert.ok(s6.children.every(o=>o.isMesh&&o.material.isMeshStandardMaterial));
 assert.ok(s5.children.every(o=>o.userData.collidable===false));
 assert.ok(s6.children.every(o=>o.userData.collidable===false));
-assert.ok(s6.children.some(o=>o.name.includes('urbanWindow')&&o.material.emissiveIntensity>1),
- 'The extended skyline must have lit windows');
+assert.ok(s6.children.some(o=>o.name.includes('urbanWindow')&&o.material.emissiveIntensity>0&&o.material.emissiveIntensity<.1),
+ 'The extended skyline must use subtle daytime window reflection, not neon emission');
 assert.equal(map.boxes.length,initialColliderCount,'Visual material passes cannot alter collision data');
 s5.userData.disposeStage5();s6.userData.disposeStage6();materials.dispose();
 console.log('Phase 4.1: shared PBR atlases, tiled UVs, lit skyline, tiers and collision isolation passed.');

@@ -4,34 +4,34 @@ import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 // The simulation's map.boxes, routes, spawns and network payload are never edited.
 // Instanced surfaces and four shared sign atlases keep the layer affordable.
 export const DISTRICT_STORIES={
- market:{color:'#ff5aa6',neon:'magenta',theme:'After-hours food, repairs and tiny independent shops'},
- plaza:{color:'#52ebff',neon:'cyan',theme:'Public plaza, arcade advertising and civic wayfinding'},
- atrium:{color:'#60efd0',neon:'cyan',theme:'Corporate campus, data services and security'},
- transit:{color:'#ffbc69',neon:'amber',theme:'Late-night transit, maintenance and logistics'}
+ market:{color:'#9d7568',neon:'magenta',theme:'Local shops, cafes and independent repairs'},
+ plaza:{color:'#527e91',neon:'cyan',theme:'Open civic square, offices and public services'},
+ atrium:{color:'#5e877c',neon:'cyan',theme:'Modern office campus, reception and retail'},
+ transit:{color:'#a38a60',neon:'amber',theme:'Daytime station, service facilities and logistics'}
 };
 export const STORY_SIGNS=[
  // All wall signs sit on existing physical facades. Normal points away from wall.
- {zone:'market',text:'NOCTURNE NOODLES',sub:'OPEN ALL NIGHT',x:-30.89,y:3.55,z:-6,rotation:Math.PI/2},
- {zone:'market',text:'CHROME TEA',sub:'STREET LEVEL 01',x:-30.89,y:3.55,z:-1,rotation:Math.PI/2},
- {zone:'market',text:'BYTE REPAIR',sub:'DEVICE SERVICE',x:-30.89,y:3.55,z:9,rotation:Math.PI/2},
- {zone:'market',text:'SYNTH RECORDS',sub:'ANALOG / DIGITAL',x:-30.89,y:3.55,z:19,rotation:Math.PI/2},
- {zone:'market',text:'MOON MARKET',sub:'EST. 2088',x:-27.91,y:3.55,z:25,rotation:Math.PI/2},
- {zone:'market',text:'NEON BENTO',sub:'TAKEAWAY 24/7',x:-27.91,y:3.55,z:31,rotation:Math.PI/2},
- {zone:'plaza',text:'KINETIC ARCADE',sub:'INSERT CREDIT',x:-8.30,y:8.05,z:-6,rotation:Math.PI/2},
- {zone:'plaza',text:'CIVIC NETWORK',sub:'DISTRICT ONLINE',x:-8.30,y:8.05,z:-2,rotation:Math.PI/2},
+ {zone:'market',text:'CORNER NOODLES',sub:'LUNCH & DINNER',x:-30.89,y:3.55,z:-6,rotation:Math.PI/2},
+ {zone:'market',text:'RIVER CAFE',sub:'STREET LEVEL 01',x:-30.89,y:3.55,z:-1,rotation:Math.PI/2},
+ {zone:'market',text:'PHONE REPAIR',sub:'DEVICE SERVICE',x:-30.89,y:3.55,z:9,rotation:Math.PI/2},
+ {zone:'market',text:'RECORD SHOP',sub:'ANALOG / DIGITAL',x:-30.89,y:3.55,z:19,rotation:Math.PI/2},
+ {zone:'market',text:'FRESH MARKET',sub:'EST. 1998',x:-27.91,y:3.55,z:25,rotation:Math.PI/2},
+ {zone:'market',text:'BENTO KITCHEN',sub:'TAKEAWAY 24/7',x:-27.91,y:3.55,z:31,rotation:Math.PI/2},
+ {zone:'plaza',text:'CITY LIBRARY',sub:'PUBLIC HOURS',x:-8.30,y:8.05,z:-6,rotation:Math.PI/2},
+ {zone:'plaza',text:'CITY SERVICES',sub:'PUBLIC OFFICE',x:-8.30,y:8.05,z:-2,rotation:Math.PI/2},
  {zone:'plaza',text:'CITY EXCHANGE',sub:'OPEN / ACCESS',x:-8.30,y:8.05,z:2,rotation:Math.PI/2},
- {zone:'plaza',text:'SKYLINE MEDIA',sub:'EAST PLAZA',x:-8.30,y:8.05,z:5.5,rotation:Math.PI/2},
+ {zone:'plaza',text:'SKYLINE OFFICES',sub:'EAST PLAZA',x:-8.30,y:8.05,z:5.5,rotation:Math.PI/2},
  {zone:'plaza',text:'WAYPOINT 02',sub:'PLAZA CONNECTION',x:5.52,y:4.15,z:-5,rotation:-Math.PI/2},
- {zone:'plaza',text:'NOVA 24',sub:'HOLO DISPLAY',x:5.52,y:4.15,z:3,rotation:-Math.PI/2},
- {zone:'atrium',text:'AXIOM SYSTEMS',sub:'CAMPUS ACCESS',x:18.53,y:11.55,z:-2,rotation:-Math.PI/2},
- {zone:'atrium',text:'DATA CONCOURSE',sub:'LEVEL TWO',x:18.53,y:11.55,z:4,rotation:-Math.PI/2},
- {zone:'atrium',text:'LUMIN LABS',sub:'OPTICAL RESEARCH',x:18.53,y:11.55,z:10,rotation:-Math.PI/2},
- {zone:'atrium',text:'CIRCUIT HOUSE',sub:'SECURE NETWORK',x:18.53,y:11.55,z:16,rotation:-Math.PI/2},
+ {zone:'plaza',text:'PLAZA CAFE',sub:'COFFEE & BAKERY',x:5.52,y:4.15,z:3,rotation:-Math.PI/2},
+ {zone:'atrium',text:'AXIOM TOWER',sub:'CAMPUS ACCESS',x:18.53,y:11.55,z:-2,rotation:-Math.PI/2},
+ {zone:'atrium',text:'OFFICE CONCOURSE',sub:'LEVEL TWO',x:18.53,y:11.55,z:4,rotation:-Math.PI/2},
+ {zone:'atrium',text:'LUMEN DESIGN',sub:'DESIGN STUDIO',x:18.53,y:11.55,z:10,rotation:-Math.PI/2},
+ {zone:'atrium',text:'CIVIC BANK',sub:'MAIN BRANCH',x:18.53,y:11.55,z:16,rotation:-Math.PI/2},
  {zone:'atrium',text:'UNIT 07',sub:'AUTHORIZED ENTRY',x:18.53,y:11.55,z:22,rotation:-Math.PI/2},
- {zone:'atrium',text:'ORBITAL GRID',sub:'ROUTING ACTIVE',x:18.53,y:11.55,z:28,rotation:-Math.PI/2},
- {zone:'transit',text:'LAST SERVICE',sub:'NIGHT NETWORK',x:-29,y:3.55,z:-26.92,rotation:0},
+ {zone:'atrium',text:'METRO BUILDING',sub:'OFFICE OPEN',x:18.53,y:11.55,z:28,rotation:-Math.PI/2},
+ {zone:'transit',text:'CITY TRANSIT',sub:'ROUTE MAP',x:-29,y:3.55,z:-26.92,rotation:0},
  {zone:'transit',text:'PLATFORM 07',sub:'EASTBOUND',x:-23,y:3.55,z:-26.92,rotation:0},
- {zone:'transit',text:'NIGHT FREIGHT',sub:'LOGISTICS',x:-17,y:3.55,z:-26.92,rotation:0},
+ {zone:'transit',text:'FREIGHT DEPOT',sub:'LOGISTICS',x:-17,y:3.55,z:-26.92,rotation:0},
  {zone:'transit',text:'LINE CONTROL',sub:'TRANSIT AUTHORITY',x:-11,y:3.55,z:-26.92,rotation:0},
  {zone:'transit',text:'METRO ACCESS',sub:'DECK CONNECTION',x:33.43,y:4.2,z:-14,rotation:-Math.PI/2},
  {zone:'transit',text:'MAINTENANCE',sub:'STATION SERVICES',x:33.43,y:4.2,z:-8,rotation:-Math.PI/2}
@@ -147,18 +147,19 @@ function paintSignAtlas(T,zone,signs){
  const c=canvas.getContext('2d'),accent=DISTRICT_STORIES[zone].color;
  for(let i=0;i<16;i++){
   const x=(i%4)*256,y=Math.floor(i/4)*128;
-  c.fillStyle='#0b1728';c.fillRect(x,y,256,128);
-  c.fillStyle='#1b3247';c.fillRect(x+4,y+4,248,120);
+  // Printed matte outdoor signs: beige paper, cool charcoal lettering.
+  c.fillStyle='#e9e4d9';c.fillRect(x,y,256,128);
+  c.fillStyle='#f9f5ed';c.fillRect(x+4,y+4,248,120);
   c.fillStyle=accent;c.fillRect(x+7,y+7,242,5);
   c.fillRect(x+7,y+116,242,4);
-  c.fillStyle='#091522';c.fillRect(x+12,y+18,232,87);
+  c.fillStyle='#ebe9e2';c.fillRect(x+12,y+18,232,87);
   c.textBaseline='middle';c.textAlign='center';
   const sign=signs[i];
   if(!sign)continue;
   // Big legible bilingual-feeling glyph hierarchy without an external font.
-  c.shadowColor=accent;c.shadowBlur=9;c.fillStyle=accent;
+  c.shadowBlur=0;c.fillStyle='#253e4b';
   c.font='bold 25px sans-serif';c.fillText(sign.text,x+128,y+53,226);
-  c.shadowBlur=0;c.fillStyle='#d3eff7';c.font='bold 12px monospace';
+  c.fillStyle='#5d6a6c';c.font='bold 12px sans-serif';
   c.fillText(sign.sub,x+128,y+88,222);
   c.fillStyle=accent;c.fillRect(x+21,y+99,27,2);c.fillRect(x+208,y+99,27,2);
  }
@@ -197,7 +198,7 @@ export function createEnvironment43(T,map,materials){
   const local=plan.signs.filter(s=>s.zone===zone);
   if(!local.length)continue;
   const tex=paintSignAtlas(T,zone,local);textures.push(tex);
-  const mat=new T.MeshBasicMaterial({map:tex,toneMapped:false,side:T.DoubleSide});
+  const mat=new T.MeshBasicMaterial({map:tex,toneMapped:true,side:T.DoubleSide});
   ownedMaterials.push(mat);
   const perTier=new Map();
   local.forEach(sign=>{

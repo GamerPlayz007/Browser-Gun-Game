@@ -1,11 +1,11 @@
-// Phase 4.2 — cinematic night lighting for the single playable Cyberpunk City.
+// Phase 6.6 — daylight lighting for one playable modern city (legacy API retained).
 // Render-only module: creates no colliders and never affects multiplayer state.
 export const LIGHTING_PRESETS={
- performance:{pointBudget:2,signBudget:0,spots:0,shadow:false,shadowSize:1024,groundGlow:0,key:1.0,ambient:.94,fog:.0064},
- auto:{pointBudget:4,signBudget:2,spots:1,shadow:true,shadowSize:1536,groundGlow:2,key:1.65,ambient:.78,fog:.0085},
- high:{pointBudget:4,signBudget:4,spots:2,shadow:true,shadowSize:1536,groundGlow:4,key:1.65,ambient:.78,fog:.0085},
- ultra:{pointBudget:4,signBudget:6,spots:4,shadow:true,shadowSize:2048,groundGlow:4,key:1.85,ambient:.72,fog:.0092},
- native:{pointBudget:4,signBudget:4,spots:2,shadow:true,shadowSize:1536,groundGlow:4,key:1.65,ambient:.78,fog:.0085}
+ performance:{pointBudget:0,signBudget:0,spots:0,shadow:false,shadowSize:512,groundGlow:0,key:1.85,ambient:1.65,fog:.002},
+ auto:{pointBudget:0,signBudget:0,spots:0,shadow:false,shadowSize:1024,groundGlow:0,key:2.05,ambient:1.70,fog:.0022},
+ high:{pointBudget:0,signBudget:0,spots:0,shadow:true,shadowSize:1536,groundGlow:0,key:2.15,ambient:1.75,fog:.0025},
+ ultra:{pointBudget:0,signBudget:0,spots:0,shadow:true,shadowSize:2048,groundGlow:0,key:2.25,ambient:1.80,fog:.0028},
+ native:{pointBudget:0,signBudget:0,spots:0,shadow:true,shadowSize:1536,groundGlow:0,key:2.15,ambient:1.75,fog:.0025}
 };
 export const DISTRICT_LIGHTS=[
  {zone:'market',x:-24,y:5.5,z:6,color:'#ff559f',power:17,radius:23},
@@ -15,15 +15,16 @@ export const DISTRICT_LIGHTS=[
 ];
 // Each authored district receives its own color, without moving its geometry.
 export function createCinematicLighting(T,scene,root,map){
- const hemi=new T.HemisphereLight('#8ea6cc','#3a2438',.78);
- const moon=new T.DirectionalLight('#a4d5ff',1.65);
- moon.position.set(-40,75,-28);moon.target.position.set(0,0,0);
+ const hemi=new T.HemisphereLight('#bde5fa','#b8a98d',1.7);
+ const moon=new T.DirectionalLight('#fff2d9',2.15);
+ moon.name='daybreak66-directional-sun';
+ moon.position.set(-48,94,-36);moon.target.position.set(0,0,0);
  moon.shadow.mapSize.set(1536,1536);
  Object.assign(moon.shadow.camera,{left:-80,right:80,top:80,bottom:-80,near:2,far:210});
  moon.shadow.bias=-.00016;moon.shadow.normalBias=.042;
  if('radius' in moon.shadow)moon.shadow.radius=2.2;
- const rim=new T.DirectionalLight('#ba72ab',.55);
- rim.position.set(38,21,35);
+ const rim=new T.DirectionalLight('#cce9f9',.35);
+ rim.position.set(38,31,35);
  root.add(hemi,moon,moon.target,rim);
  // A few honest light sources are better than dozens of costly shadow casters.
  const districtLights=DISTRICT_LIGHTS.map((p,i)=>{
@@ -90,7 +91,7 @@ export function createCinematicLighting(T,scene,root,map){
  function setQuality(mode='high'){
   active=LIGHTING_PRESETS[mode]?mode:'high';
   const cfg=LIGHTING_PRESETS[active];
-  hemi.intensity=cfg.ambient;moon.intensity=cfg.key;rim.intensity=active==='performance'?.23:.55;
+  hemi.intensity=cfg.ambient;moon.intensity=cfg.key;rim.intensity=active==='performance'?.18:.35;
   moon.castShadow=cfg.shadow;
   if(moon.shadow.mapSize.width!==cfg.shadowSize){
    moon.shadow.mapSize.set(cfg.shadowSize,cfg.shadowSize);
@@ -101,8 +102,8 @@ export function createCinematicLighting(T,scene,root,map){
   for(let i=0;i<signLights.length;i++)signLights[i].visible=i<cfg.signBudget;
   for(let i=0;i<spotAnchors.length;i++)spotAnchors[i].visible=i<cfg.spots;
   for(let i=0;i<pools.length;i++)pools[i].visible=i<cfg.groundGlow;
-  strips.visible=true;
-  if(scene.fog)scene.fog.density=cfg.fog;
+  strips.visible=false; // Ordinary printed signs don't emit light at midday.
+  if(scene.fog){scene.fog.density=cfg.fog;scene.fog.color.set('#cbdce8');}
  }
  function animate(time){
   if(!Number.isFinite(time))return;

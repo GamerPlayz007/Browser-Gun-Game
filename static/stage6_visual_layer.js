@@ -21,8 +21,8 @@ export function createStage6VisualLayer(THREE,map,quality='high',library=null){
  }
  const sceneGroup=new THREE.Group();sceneGroup.name='stage6-visual-city-context';
  sceneGroup.userData.collidable=false;
- const colorByFamily={market:'#f16fa7',industrial:'#f4a66c',corporate:'#72cbee',
-  transit:'#ffd18b',civic:'#70e9d3'};
+ const colorByFamily={market:'#cbb7a4',industrial:'#a8afb2',corporate:'#99b7c9',
+  transit:'#c0b497',civic:'#a9c3b6'};
  const fallbackMaterials=[];
  for(const [key,items] of groups){
   const sample=items[0],isWindow=sample.kind==='urbanWindow',lit=key.endsWith('::lit');
@@ -31,14 +31,14 @@ export function createStage6VisualLayer(THREE,map,quality='high',library=null){
    sample.style==='facade'?'facade':sample.style==='glass'?'glass':
    sample.style==='metal'?'metal':sample.style==='rust'?'rust':
    sample.style==='road'?'road':sample.style==='dark'?'dark':'concrete';
-  const tint=isWindow?'#edf5ff':new THREE.Color(map?.palette?.[sample.style]||'#a8b6c4')
+  const tint=isWindow?'#d6e8ed':new THREE.Color(map?.palette?.[sample.style]||'#b8c0bd')
    .lerp(new THREE.Color('#e5e9ed'),.55).getStyle();
   const material=library?library.get(style,{tint,emissive:familyColor,
-   glow:isWindow?(lit?1.55:.015):0}):
+   glow:isWindow?(lit?.065:.005):0}):
    new THREE.MeshStandardMaterial({color:isWindow?familyColor:tint,
     roughness:isWindow?.27:.79,metalness:isWindow?.08:.22,
     emissive:isWindow&&lit?familyColor:'#000000',
-    emissiveIntensity:isWindow&&lit?.9:0});
+    emissiveIntensity:isWindow&&lit?.065:0});
   if(!library)fallbackMaterials.push(material);
   const geos=items.map(b=>createSurfaceBoxGeometry(THREE,b,isWindow?1.7:2.7));
   const merged=mergeGeometries(geos,false);for(const g of geos)g.dispose();

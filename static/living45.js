@@ -10,10 +10,10 @@ export const LIVING45_PRESETS={
  native:{ads:8,fans:4,drones:3,reactive:true}
 };
 const STORY_ADS={
- market:['NIGHT SHIFT','OPEN 24H','FOOD DISTRICT'],
- plaza:['LIVE / LINK','CITY STREAM','PLAY ALL NIGHT'],
- atrium:['AXIOM / 07','SYSTEM ONLINE','CIRCUIT LAB'],
- transit:['EASTBOUND','SERVICE ACTIVE','NEXT ARRIVAL']
+ market:['LOCAL MARKET','FRESH & OPEN','FOOD DISTRICT'],
+ plaza:['CITY PLAZA','PUBLIC SQUARE','WELCOME'],
+ atrium:['OFFICE TOWER','OPEN TODAY','BUSINESS DISTRICT'],
+ transit:['CENTRAL LINE','SERVICE ACTIVE','NEXT ARRIVAL']
 };
 const DIRS=['market','plaza','atrium','transit'];
 const clamp=(a,min,max)=>Math.max(min,Math.min(max,a));
@@ -47,7 +47,7 @@ export function planLiving45(map){
 function createAdTexture(T,zone){
  const c=document.createElement('canvas');c.width=512;c.height=256;
  const ctx=c.getContext('2d'),ink=DISTRICT_STORIES[zone].color;
- ctx.fillStyle='#061321';ctx.fillRect(0,0,512,256);
+ ctx.fillStyle='#ece8df';ctx.fillRect(0,0,512,256);
  // Procedural ad screen: no external image, font or media downloads.
  for(let i=0;i<28;i++){
   ctx.globalAlpha=.06+(i%3)*.02;ctx.fillStyle=ink;
@@ -57,9 +57,9 @@ function createAdTexture(T,zone){
  const title=STORY_ADS[zone][0],sub=STORY_ADS[zone][1];
  ctx.fillStyle=ink;ctx.fillRect(16,18,480,5);ctx.fillRect(16,226,480,4);
  ctx.textAlign='center';ctx.textBaseline='middle';
- ctx.shadowColor=ink;ctx.shadowBlur=14;ctx.font='bold 65px sans-serif';
- ctx.fillText(title,256,112,470);ctx.shadowBlur=0;
- ctx.fillStyle='#dcf4ff';ctx.font='bold 24px monospace';ctx.fillText(sub,256,185,460);
+ ctx.shadowBlur=0;ctx.fillStyle='#2c505e';ctx.font='bold 65px sans-serif';
+ ctx.fillText(title,256,112,470);
+ ctx.fillStyle='#63777e';ctx.font='bold 24px sans-serif';ctx.fillText(sub,256,185,460);
  const tex=new T.CanvasTexture(c);tex.colorSpace=T.SRGBColorSpace;tex.anisotropy=4;tex.needsUpdate=true;
  return tex;
 }
@@ -68,13 +68,13 @@ const DISPLAY_F=[
  'varying vec2 vUv;',
  'uniform sampler2D uMap;uniform float uTime;uniform float uBoost;uniform vec3 uTint;',
  'void main(){',
- 'vec2 uv=vUv;uv.x+=sin(uv.y*16.0+uTime*.38)*.0022;',
+ 'vec2 uv=vUv;'
  'vec3 col=texture2D(uMap,uv).rgb;',
- 'float scan=.94+.06*sin((uv.y*280.0)-uTime*1.2);',
- 'float sweep=pow(max(0.0,1.0-abs(fract(uv.y+uTime*.028)*2.0-1.0)),10.0);',
+ 'float scan=1.0;'
+ 'float sweep=0.0;'
  'float slow=.97+.025*sin(uTime*.79);',
- 'col=col*scan*slow+uTint*(.045*sweep+.065*uBoost);',
- 'gl_FragColor=vec4(col,clamp(.78+.1*uBoost,0.0,.9));',
+ 'col=col*scan*slow+uTint*(.012*sweep+.02*uBoost);'
+ 'gl_FragColor=vec4(col,clamp(.93+.02*uBoost,0.0,.98));'
  '}'
 ].join('\n');
 export function createLivingWorld45(T,map){
@@ -100,8 +100,8 @@ export function createLivingWorld45(T,map){
   mesh.renderOrder=3;mesh.userData={living45:true,collidable:false,tier:p.slot,zone:p.zone};
   root.add(mesh);ads.push({mesh,...p});
  });
- const steel=new T.MeshStandardMaterial({color:'#263e4f',metalness:.78,roughness:.48});
- const glow=new T.MeshBasicMaterial({color:'#5ce6fa',toneMapped:false,side:T.DoubleSide});
+ const steel=new T.MeshStandardMaterial({color:'#8b9696',metalness:.65,roughness:.58});
+ const glow=new T.MeshBasicMaterial({color:'#9bc5c4',toneMapped:true,side:T.DoubleSide});
  materials.push(steel,glow);
  const hubGeo=new T.CylinderGeometry(.15,.15,.22,10),bladeGeo=new T.BoxGeometry(.08,.75,.045);
  const ringGeo=new T.TorusGeometry(.5,.055,5,24);

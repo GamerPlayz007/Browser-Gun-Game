@@ -1,3 +1,30 @@
+## Phase 6.6 — DAYBREAK CITY / daytime visual redesign
+
+- Retains the original single playable 120m world, full G/I/U/S travel routes,
+  physical collision boxes, spawns, multiplayer map ID `cyberpunk`,
+  weapons, movement and gameplay data unchanged. The stable map ID prevents
+  old room URLs, API references and map tests from breaking.
+- Public-facing map renamed **Daybreak City** (theme `modern-daylight`).
+  Central Plaza, Market Street, Business District and Central Station replace
+  neon/night labels, including storefronts, route labels, and wayfinding.
+- Shader-gradient daytime sky; pale-blue distance haze; a warm directional
+  sun plus neutral sky/ground fill. Sign, district and neon ground lights are
+  disabled at every graphics setting; shadows only on High/Ultra/Native.
+- Reworked procedural PBR base colors for pale concrete, metal, realistic
+  asphalt, daytime glass reflections and warmer wood. Window emissive
+  intensity is much lower; no glowing apartment-grid windows at noon.
+- Rain, puddle overlays and wet-material effects are disabled in *all* presets.
+  High/Ultra retain subtle non-colliding atmospheric specks.
+- Printed street-level sign atlases replace neon signs; 24 authored local
+  business/transport names, and muted digital ads keep the city recognizable.
+- Bloom, vignette and grain reduced to keep player silhouettes readable
+  without a washed-out neon appearance. School/Performance remains a
+  single-pass dry daylight renderer with no shadows or weather.
+- Added `test_daybreak66.mjs` and revised visual regression checks for
+  daytime sky, fog, lighting budgets, signs, names and unchanged gameplay routes.
+- **Stage 6.7** will add interactive-looking street density/outer-area
+  utilization and detailed weapon/player visuals. No geometry redesign in 6.6.
+
 ## Phase 6.5 — DAYBREAK / multiplayer interface and recovery
 
 - Live K / D / K-D HUD and hold-TAB scoreboard, including team rankings.

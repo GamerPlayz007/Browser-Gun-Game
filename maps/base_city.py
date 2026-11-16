@@ -3,7 +3,7 @@ Solid architecture is carved into rooms and passages. Routes compile into both
 navigation metadata and real floor/ramp colliders. No hidden collision risers.
 """
 from html import escape
-PALETTE={'concrete':'#303b4b','dark':'#172331','road':'#273243','metal':'#53667c','pale':'#9cb7c9','glass':'#244d60','cyan':'#3df2f5','magenta':'#ff438f','amber':'#ffb845','white':'#d8faff','garden':'#427968','wood':'#655043','rust':'#705347','grate':'#637482','tile':'#51657b','asphalt':'#252f3b','facade':'#253847','leather':'#463a45'}
+PALETTE={'concrete':'#b8b9af','dark':'#687980','road':'#656e70','metal':'#969fa0','pale':'#d8d4c8','glass':'#88aabc','cyan':'#4d8396','magenta':'#a67b80','amber':'#c5a57b','white':'#edf0eb','garden':'#679470','wood':'#ad896a','rust':'#aa907a','grate':'#878f8d','tile':'#c2bdb2','asphalt':'#707a7c','facade':'#adb8b4','leather':'#7e7169'}
 def subtract(a,c):
     x0,y0,z0,x1,y1,z1=a;u0,v0,w0,u1,v1,w1=c
     u0,v0,w0=max(x0,u0),max(y0,v0),max(z0,w0);u1,v1,w1=min(x1,u1),min(y1,v1),min(z1,w1)
@@ -103,14 +103,14 @@ def build(weapons):
     for x in [33,38,43,48,53,58]:box(x,14.42,8,x+.12,14.5,24,'amber','neon',decor)
     box(46.4,0,56,47.6,.35,57.2,'dark','signBase')
     signs=[dict(text=t,x=x-40,y=y,z=z-40,w=w,h=h,color=c,zone=area) for t,x,y,z,w,h,c,area in [
-        ('NEON / 04',47,3.4,56.6,3,1,'cyan','plaza'),('NIGHT MARKET',13,7.2,41,8,1.1,'magenta','market'),
-        ('AXIOM TECH',65,10.4,69.1,9,1.4,'cyan','atrium'),('TRANSIT / 07',45,12.7,23.5,10,1.1,'amber','transit')]]
+        ('CITY / 04',47,3.4,56.6,3,1,'cyan','plaza'),('MARKET STREET',13,7.2,41,8,1.1,'magenta','market'),
+        ('AXIOM OFFICES',65,10.4,69.1,9,1.4,'cyan','atrium'),('CENTRAL STATION',45,12.7,23.5,10,1.1,'amber','transit')]]
     # Utility units and food signage belong to the market facade, above movement space.
     for z in [34,44,54]:
         box(9.02,9,z,9.7,9.9,z+1.8,'metal','airConditioner',decor)
         for n in range(3):box(9.71,9.15+n*.2,z+.12,9.74,9.22+n*.2,z+1.68,'dark','vent',decor)
-    signs.extend([dict(text='BENTO / 24H',x=-30.94,y=4,z=4,w=3,h=.65,color='amber',zone='market',rotationY=1.5707963267948966),
-                  dict(text='NIGHT NOODLES',x=-30.94,y=4,z=14,w=3,h=.65,color='magenta',zone='market',rotationY=1.5707963267948966)])
+    signs.extend([dict(text='BENTO CAFE',x=-30.94,y=4,z=4,w=3,h=.65,color='amber',zone='market',rotationY=1.5707963267948966),
+                  dict(text='NOODLE HOUSE',x=-30.94,y=4,z=14,w=3,h=.65,color='magenta',zone='market',rotationY=1.5707963267948966)])
     for i in range(16):
         x=-12+i*7;z=-12 if i%2 else 89;h=25+(i*7)%22
         box(x,0,z,x+5,h,z+7,'dark','skyline',decor,detail=True)
@@ -192,10 +192,10 @@ def build(weapons):
         feature('billboard',x,y,z,color='cyan' if int(x)%2 else 'magenta')
     for x,z in ((11,40),(58,48),(68,38),(38,14),(34,62),(55,71)):
         feature('pipeduct',x,7,z)
-    zones=[dict(id='market',name='NIGHT MARKET',x=-24,y=1,z=6,w=25,d=39,color=PALETTE['magenta']),dict(id='plaza',name='NEON PLAZA',x=.5,y=0,z=22,w=23,d=27,color=PALETTE['cyan']),dict(id='atrium',name='TECH ATRIUM',x=25,y=1,z=12,w=23,d=35,color=PALETTE['cyan']),dict(id='transit',name='TRANSIT DECK',x=4,y=9,z=-23,w=33,d=29,color=PALETTE['amber'])]
+    zones=[dict(id='market',name='MARKET STREET',x=-24,y=1,z=6,w=25,d=39,color=PALETTE['magenta']),dict(id='plaza',name='CENTRAL PLAZA',x=.5,y=0,z=22,w=23,d=27,color=PALETTE['cyan']),dict(id='atrium',name='BUSINESS DISTRICT',x=25,y=1,z=12,w=23,d=35,color=PALETTE['glass']),dict(id='transit',name='CENTRAL STATION',x=4,y=9,z=-23,w=33,d=29,color=PALETTE['amber'])]
     for r in paths:r['points']=[[x-40,y,z-40] for x,y,z in r['points']]
     spawns=[(15,1,58),(17,1,35),(40,0,68),(37,0,52),(64,1,61),(71,1,41),(34,9,12),(51,9,21)]
-    return dict(id='cyberpunk',name='Cyberpunk City',revision='02.5',theme='cyberpunk',size=80,palette=PALETTE,boxes=boxes,decor=decor,features=features,signs=signs,zones=zones,routes=routes,stairs=stairs,spawns=[[x-40,y,z-40] for x,y,z in spawns],practiceTargets=[[-24,1,4],[25,1,0]],weapons=weapons,clearance=4.2)
+    return dict(id='cyberpunk',name='Daybreak City',revision='02.5',theme='modern-daylight',size=80,palette=PALETTE,boxes=boxes,decor=decor,features=features,signs=signs,zones=zones,routes=routes,stairs=stairs,spawns=[[x-40,y,z-40] for x,y,z in spawns],practiceTargets=[[-24,1,4],[25,1,0]],weapons=weapons,clearance=4.2)
 
 def guide(m):
     items=['<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="1040" viewBox="0 0 1280 1040"><rect width="1280" height="1040" fill="#101923"/>','<g font-family="Arial" fill="#e8f7ff"><text x="45" y="48" font-size="28" font-weight="bold">CROSSFIRE 02.5 / CYBERPUNK CITY</text><text x="45" y="76" font-size="15">80 × 80 m · North ↑ · Street 1 m / Plaza 0 m / Canopies 5 m / Transit 9 m</text></g><rect x="45" y="110" width="800" height="800" fill="#293444"/>']

@@ -2,13 +2,13 @@ import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 
 // CROSSFIRE 04.4. Atmospheric visuals only; no collision or server state.
 export const ATMOSPHERE_PRESETS={
- performance:{rain:0,motes:0,puddles:false,wetness:0,fog:.0064,opacity:0},
- auto:{rain:220,motes:110,puddles:true,wetness:.38,fog:.0078,opacity:.31},
- high:{rain:420,motes:190,puddles:true,wetness:.53,fog:.0085,opacity:.43},
- ultra:{rain:850,motes:320,puddles:true,wetness:.70,fog:.0094,opacity:.56},
- native:{rain:420,motes:190,puddles:true,wetness:.53,fog:.0085,opacity:.43}
+ performance:{rain:0,motes:0,puddles:false,wetness:0,fog:.0020,opacity:0},
+ auto:{rain:0,motes:80,puddles:false,wetness:0,fog:.0022,opacity:.15},
+ high:{rain:0,motes:140,puddles:false,wetness:0,fog:.0025,opacity:.18},
+ ultra:{rain:0,motes:220,puddles:false,wetness:0,fog:.0028,opacity:.22},
+ native:{rain:0,motes:140,puddles:false,wetness:0,fog:.0025,opacity:.18}
 };
-const PALETTE={market:'#fa9abd',plaza:'#9deef8',atrium:'#a9ebdc',transit:'#ffe0ad'};
+const PALETTE={market:'#ddcfbd',plaza:'#d9e5e8',atrium:'#b8d8cf',transit:'#f2e6c7'};
 const rng=seed=>()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
 const RAIN_VERTEX=`
 attribute float aPhase;
@@ -149,7 +149,7 @@ export function createAtmosphere44(T,map,scene){
    mesh.visible=cfg.puddles&&(active!=='auto'||detailEnabled);
    mesh.material.uniforms.uOpacity.value=cfg.opacity*.68;
   }
-  if(scene.fog){scene.fog.density=cfg.fog;scene.fog.color.set(active==='ultra'?'#111d33':'#101c30');}
+  if(scene.fog){scene.fog.density=cfg.fog;scene.fog.color.set('#cbdce8');}
  }
  function setDetail(enabled){detailEnabled=Boolean(enabled);setQuality(active);}
  function animate(time){

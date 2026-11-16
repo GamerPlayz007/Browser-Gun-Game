@@ -8,11 +8,12 @@ import {createCinematicLighting} from './lighting42.js';
 import {createEnvironment43} from './environment43.js';
 import {createAtmosphere44} from './atmosphere44.js';
 import {createLivingWorld45} from './living45.js';
+import {DAYBREAK_SKY66,createDaybreakSky66} from './daybreak66.js';
 
 // 04.6: one live map, managed lifecycle and tiered cinematic polish.
 // Only map.boxes are authoritative colliders. All map.features and map.decor
 // are purely visual. The rendering pipeline never changes simulation geometry.
-const PAINT={cyan:'#38eff7',magenta:'#ff4b9e',amber:'#ffb454',white:'#c8f8ff'};
+const PAINT={cyan:'#477e98',magenta:'#a16b79',amber:'#b99b6a',white:'#e6f0f0'};
 const MATERIALS=Object.fromEntries([...SURFACE_STYLES,...NEON_STYLES].map(name=>[name,true]));
 const NEON=new Set(NEON_STYLES);
 function makeCanvas(size){const c=document.createElement('canvas');c.width=c.height=size;return c;}
@@ -21,10 +22,10 @@ function makeCanvas(size){const c=document.createElement('canvas');c.width=c.hei
 function environment(renderer){
  if(!renderer)return null;
  const sides=Array.from({length:6},(_,side)=>{
-  const c=makeCanvas(256),g=c.getContext('2d');g.fillStyle=side===2?'#667d92':'#101b30';g.fillRect(0,0,256,256);
-  const colors=['#6be5f8','#ef4b9f','#ffba69'];
+  const c=makeCanvas(256),g=c.getContext('2d');g.fillStyle=side===2?'#daedfa':'#a3c5d8';g.fillRect(0,0,256,256);
+  const colors=['#dcebf1','#b4ccd6','#f4e6d6'];
   for(let i=0;i<24;i++){const x=(i*73+side*41)%256,y=(i*47+17)%256;
-   g.globalAlpha=.18+(i%4)*.09;g.fillStyle=colors[(i+side)%3];g.fillRect(x,y,6+(i%5)*3,30+i%7*13);
+   g.globalAlpha=.08+(i%4)*.05;g.fillStyle=colors[(i+side)%3];g.fillRect(x,y,6+(i%5)*3,30+i%7*13);
   }g.globalAlpha=1;return c;
  });
  const cubemap=new T.CubeTexture(sides);cubemap.colorSpace=T.SRGBColorSpace;cubemap.needsUpdate=true;
@@ -50,9 +51,10 @@ function rampGeometry(b){
 export function buildWorld(scene,map,{renderer,quality='high'}={}){
  const root=new T.Group();scene.add(root);const batches=new Map(),details=[],mats=new Map();
  const materialSystem=createCyberMaterialLibrary(T);
- scene.background=new T.Color('#091525');scene.fog=new T.FogExp2('#0a1628',.0085);
- // The lighting controller owns moon, rim, sign bounce, architectural washes,
- // grounded neon pools, shadows and quality presets, never physics objects.
+ scene.background=new T.Color(DAYBREAK_SKY66.horizon);scene.fog=new T.FogExp2(DAYBREAK_SKY66.fog,.0025);
+ const sky66=createDaybreakSky66(T);root.add(sky66);
+ // Daylight controller keeps one honest sun and ambient fill; artificial city
+ // accent fixtures remain disabled, with no new collision or network objects.
  const lighting=createCinematicLighting(T,scene,root,map);
  const sun=lighting.moon;
  let env=null;try{env=environment(renderer);if(env)scene.environment=env.texture;}catch(error){console.warn('Environment map unavailable:',error);}
@@ -162,16 +164,17 @@ export function buildWorld(scene,map,{renderer,quality='high'}={}){
   const canvas=document.createElement('canvas');canvas.width=1024;canvas.height=128*map.signs.length;
   const ctx=canvas.getContext('2d'),geometries=[];
   map.signs.forEach((s,i)=>{
-   const y=i*128;ctx.fillStyle='#0a1020';ctx.fillRect(0,y,1024,128);
+   const y=i*128;ctx.fillStyle='#f0e9dd';ctx.fillRect(0,y,1024,128);
    ctx.fillStyle=map.palette[s.color]||PAINT.cyan;ctx.fillRect(10,y+7,1004,5);ctx.fillRect(10,y+116,1004,5);
    ctx.fillRect(10,y+8,5,108);ctx.fillRect(1008,y+8,5,108);
-   ctx.font='bold 68px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(s.text,512,y+65,964);
+   ctx.fillStyle='#243e4b';ctx.font='bold 68px sans-serif';
+   ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(s.text,512,y+65,964);
    const g=new T.PlaneGeometry(s.w,s.h),uv=g.attributes.uv;
    for(let j=0;j<uv.count;j++)uv.setY(j,(map.signs.length-i-1+uv.getY(j))/map.signs.length);
    g.rotateY(s.rotationY||0);g.translate(s.x,s.y,s.z);geometries.push(g);
   });
   signTexture=new T.CanvasTexture(canvas);signTexture.colorSpace=T.SRGBColorSpace;
-  signMaterial=new T.MeshBasicMaterial({map:signTexture,transparent:true,side:T.DoubleSide,toneMapped:false});
+  signMaterial=new T.MeshBasicMaterial({map:signTexture,transparent:true,side:T.DoubleSide,toneMapped:true});
   const merged=mergeGeometries(geometries);if(merged){const s=new T.Mesh(merged,signMaterial);root.add(s);}geometries.forEach(g=>g.dispose());
  }
  for(const [key,b] of batches){
@@ -213,7 +216,7 @@ export function buildWorld(scene,map,{renderer,quality='high'}={}){
   materialSystem.setWetness(atmosphere44.wetness);
  }
  setQuality(quality);
- return {sun,lighting,environment43,atmosphere44,living45,targets,staticBatches:batches.size+(map.signs?.length?1:0),featureCount:map.features?.length||0,
+ return {sun,sky66,lighting,environment43,atmosphere44,living45,targets,staticBatches:batches.size+(map.signs?.length?1:0),featureCount:map.features?.length||0,
   environmentCount:environment43.stats.parts,environmentSigns:environment43.stats.signs,
   setDetail(enabled){detailEnabled=enabled;for(const mesh of details)mesh.visible=enabled;showStageDetail();},setQuality,
   animate(time,player=null){lighting.animate(time);atmosphere44.animate(time);living45.animate(time,player);for(const s of steam){const p=s.cloud.geometry.attributes.position;
@@ -223,6 +226,6 @@ export function buildWorld(scene,map,{renderer,quality='high'}={}){
    // Core geometry is owned by this world. Stage 5/6 use shared materials
    // owned by materialSystem; never dispose those materials twice.
    root.traverse(o=>{o.geometry?.dispose();if(o.isPoints)o.material?.dispose();});
-   materialSystem.dispose();for(const m of [targetMat,headMat,signMaterial])m?.dispose();signTexture?.dispose();env?.dispose();scene.environment=null;root.removeFromParent();}
+   materialSystem.dispose();for(const m of [targetMat,headMat,signMaterial,sky66.material])m?.dispose();signTexture?.dispose();env?.dispose();scene.environment=null;root.removeFromParent();}
  };
 }

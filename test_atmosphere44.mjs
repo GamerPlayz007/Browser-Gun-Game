@@ -28,18 +28,20 @@ for(const mode of modes){
  const cfg=ATMOSPHERE_PRESETS[mode];
  assert.equal(fx.rain.geometry.drawRange.count,cfg.rain);
  assert.equal(fx.motes.geometry.drawRange.count,cfg.motes);
- assert.equal(fx.puddleMeshes.filter(m=>m.visible).length,cfg.puddles?4:0);
+ assert.equal(fx.puddleMeshes.filter(m=>m.visible).length,0,'Daylight should have dry streets');
  assert.equal(fx.wetness,cfg.wetness);
  assert.equal(scene.fog.density,cfg.fog);
  assert.equal(fx.rain.visible,cfg.rain>0);
  assert.equal(CINEMATIC_PRESETS[mode].bloom===0,mode==='performance');
+ assert.equal(cfg.rain,0,'Clear skies have no precipitation');
+ assert.equal(cfg.wetness,0,'Road materials remain dry');
 }
 fx.setQuality('auto');fx.setDetail(false);
-assert.ok(fx.rain.geometry.drawRange.count<ATMOSPHERE_PRESETS.auto.rain,
- 'Adaptive detail should reduce rain draw count');
+assert.ok(fx.motes.geometry.drawRange.count<ATMOSPHERE_PRESETS.auto.motes,
+ 'Adaptive detail should reduce floating daytime dust');
 assert.equal(fx.puddleMeshes.filter(m=>m.visible).length,0);
 fx.setDetail(true);
-assert.equal(fx.rain.geometry.drawRange.count,ATMOSPHERE_PRESETS.auto.rain);
+assert.equal(fx.motes.geometry.drawRange.count,ATMOSPHERE_PRESETS.auto.motes);
 fx.animate(12.125);
 assert.equal(fx.rain.material.uniforms.uTime.value,12.125);
 assert.ok(fx.puddleMeshes.every(m=>m.material.uniforms.uTime.value===12.125));
@@ -48,7 +50,7 @@ globalThis.document={createElement:()=>({width:0,height:0,getContext:()=>ctx})};
 const library=createCyberMaterialLibrary(THREE),road=library.get('road'),facade=library.get('facade');
 const dryRoad=road.roughness,dryFacade=facade.roughness;
 library.setQuality('ultra');library.setWetness(ATMOSPHERE_PRESETS.ultra.wetness);
-assert.ok(road.roughness<dryRoad,'Wet asphalt must react to atmospheric quality');
+assert.equal(road.roughness,dryRoad,'Dry daylight must not make asphalt glossy');
 assert.equal(facade.roughness,dryFacade,'Rain must not change unrelated facades');
 library.setQuality('performance');library.setWetness(0);
 assert.equal(road.roughness,dryRoad,'Performance should restore dry-road roughness');
@@ -58,5 +60,5 @@ assert.equal(JSON.stringify({boxes:map.boxes,spawns:map.spawns,routes:map.routes
  'Atmosphere may not mutate gameplay map or spawn definitions');
 fx.dispose();
 assert.equal(scene.children.length,0,'Atmospheric meshes should be cleaned on arena unload');
-console.log('Phase 4.4: 4 district puddles, 1170 GPU particles at Ultra,');
-console.log('adaptive quality, cinematic presets, wet PBR and world isolation passed.');
+console.log('Daybreak 6.6: dry streets, clear sky, lightweight dust and pale distance haze,');
+console.log('adaptive quality, daylight grading and unchanged collision topology passed.');

@@ -1,6 +1,6 @@
 """Single CROSSFIRE production map generator.
 
-Rebuilds the complete 120 m cyberpunk city from one deterministic source.
+Rebuilds the complete 120 m daytime city from one deterministic source.
 No old selectable Cyberpunk arena remains in the game registry.
 """
 from maps.base_city import build as build_original
@@ -83,7 +83,10 @@ def build(weapons, quality="ultra"):
     original = build_original(weapons)
     result = expansion(detail(greybox(original), quality), quality)
     result["id"] = "cyberpunk"
-    result["name"] = "Cyberpunk City"
+    # Preserve the stable internal ID for existing room URLs and saved refs.
+    result["name"] = "Daybreak City"
+    result["theme"] = "modern-daylight"
+    result["lighting"] = "clear-sky-noon"
     result["revision"] = "03.2"
     # Stage 2.5 discovered and simulated this arcade, but did not change its colliders.
     assert all(route["id"] != ARCADE["id"] for route in result["routes"])

@@ -32,12 +32,12 @@ for(const mesh of [...lights.pools,...lights.strips.children])
  assert.equal(mesh.userData.collidable,false);
 const initial=lights.districtLights.map(l=>l.intensity);
 lights.animate(12.5);const first=lights.districtLights.map(l=>l.intensity);
-assert.notDeepEqual(initial,first,'Slow neon fluctuation should animate');
+assert.notDeepEqual(initial,first,'Legacy fixture timing remains deterministic though fixtures are hidden in daylight');
 lights.animate(12.5);
 assert.deepEqual(first,lights.districtLights.map(l=>l.intensity),'Animated light timing must be deterministic');
 assert.equal(map.boxes.length,startBoxes);
 assert.equal(map.decor.length,startDecor);
 lights.dispose();
 assert.equal(root.children.length,0,'All created light objects should be removed on dispose');
-console.log('Phase 4.2 lighting: 4 districts, tiered fixtures, moon shadows,');
-console.log('subtle flicker, 0 shadowing accent lights, collision isolation and cleanup passed.');
+console.log('Daybreak 6.6 lighting: clear midday sky, warm sun shadows,');
+console.log('zero artificial night lights, performance tiers, collision isolation and cleanup passed.');

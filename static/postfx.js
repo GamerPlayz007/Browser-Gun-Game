@@ -4,10 +4,10 @@ import * as T from 'three';
 // five-draw compositor. No extra full-screen passes or external assets.
 export const CINEMATIC_PRESETS={
  performance:{bloom:0,threshold:1,radius:0,contrast:1,saturation:1,vignette:0,grain:0,samples:0},
- auto:{bloom:.82,threshold:.72,radius:1,contrast:1.055,saturation:1.08,vignette:.13,grain:.006,samples:0},
- high:{bloom:.96,threshold:.69,radius:1.12,contrast:1.07,saturation:1.095,vignette:.17,grain:.008,samples:4},
- ultra:{bloom:1.18,threshold:.66,radius:1.48,contrast:1.085,saturation:1.12,vignette:.205,grain:.01,samples:8},
- native:{bloom:.96,threshold:.69,radius:1.12,contrast:1.07,saturation:1.095,vignette:.17,grain:.008,samples:4}
+ auto:{bloom:.055,threshold:1.32,radius:.6,contrast:1.005,saturation:1.025,vignette:.02,grain:0,samples:0},
+ high:{bloom:.085,threshold:1.24,radius:.75,contrast:1.015,saturation:1.035,vignette:.035,grain:.001,samples:4},
+ ultra:{bloom:.11,threshold:1.2,radius:.83,contrast:1.02,saturation:1.045,vignette:.045,grain:.001,samples:8},
+ native:{bloom:.085,threshold:1.24,radius:.75,contrast:1.015,saturation:1.035,vignette:.035,grain:.001,samples:4}
 };
 const vertex='varying vec2 vUv; void main(){vUv=uv;gl_Position=vec4(position.xy,0.,1.);}';
 const sample='uniform sampler2D tDiffuse; varying vec2 vUv;';

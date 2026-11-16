@@ -10,14 +10,14 @@ export function createMinimap(canvas,label,map){
   if(needed===resolution)return false;
   resolution=needed;canvas.width=canvas.height=base.width=base.height=needed;
   const ratio=needed/SIZE;bg.setTransform(ratio,0,0,ratio,0,0);ctx.setTransform(ratio,0,0,ratio,0,0);
-  bg.fillStyle='#243044';bg.fillRect(0,0,SIZE,SIZE);
+  bg.fillStyle='#c9d8db';bg.fillRect(0,0,SIZE,SIZE);
   for(const zone of map.zones){bg.globalAlpha=.24;bg.fillStyle=zone.color;bg.fillRect(px(zone.x-zone.w/2),px(zone.z-zone.d/2),zone.w*SCALE,zone.d*SCALE);}
   bg.globalAlpha=1;
   for(const b of map.boxes){
    if(['floor','routeFloor','deck','ramp','stationRoof'].includes(b.kind))continue;
    bg.fillStyle=map.palette[b.style]||'#53667c';bg.fillRect(px(b.x-b.w/2),px(b.z-b.d/2),Math.max(1,b.w*SCALE),Math.max(1,b.d*SCALE));
   }
-  bg.font='bold 9px sans-serif';bg.textAlign='center';bg.fillStyle='#e8f7ff';
+  bg.font='bold 9px sans-serif';bg.textAlign='center';bg.fillStyle='#304a51';
   for(const z of map.zones)bg.fillText(z.name,px(z.x),px(z.z));
   return true;
  }
@@ -46,7 +46,7 @@ export function createMinimap(canvas,label,map){
    ctx.fillText('C',px(point.x),px(point.z)+4);
   }
   ctx.save();ctx.translate(px(p.x),px(p.z));ctx.rotate(-yaw);
-  ctx.fillStyle='#ff558f';ctx.strokeStyle='#112333';ctx.lineWidth=2;
+  ctx.fillStyle='#1b86b1';ctx.strokeStyle='#eef7f3';ctx.lineWidth=2;
   ctx.beginPath();ctx.moveTo(0,-8);ctx.lineTo(5,5);ctx.lineTo(0,2);ctx.lineTo(-5,5);ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();
   const zone=map.zones.find(z=>Math.abs(p.x-z.x)<=z.w/2&&Math.abs(p.z-z.z)<=z.d/2)?.name||'CITY STREETS';
   const text=zone+(p.y>=4.5?' / UPPER LEVEL':'');if(lastZone!==text){lastZone=text;label.textContent=text;}
