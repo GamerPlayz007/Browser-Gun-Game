@@ -16,6 +16,11 @@ git clone --quiet --no-checkout https://github.com/billpwchan/neon-zenith.git "$
 git -C "$WORK/upstream" checkout --quiet "$PIN"
 
 cp "$ROOT/integrations/crossfire_walk.js" "$WORK/upstream/src/crossfire_walk.js"
+cp "$ROOT/integrations/crossfire_neon_multiplayer.js" "$WORK/upstream/src/crossfire_mp.js"
+mkdir -p "$WORK/upstream/src/crossfire_lib"
+for name in physics.js spatial.js lean63.js models.js animation34.js; do
+  cp "$ROOT/static/$name" "$WORK/upstream/src/crossfire_lib/$name"
+done
 
 # One additive import and one hook. All original geometry, rendering and assets
 # remain owned by the upstream scene.
@@ -26,15 +31,23 @@ p=Path(sys.argv[1])
 s=p.read_text()
 anchor="import * as THREE from 'three/webgpu';"
 assert s.count(anchor)==1, "Neon entrypoint changed; stop rather than corrupt it"
-s=s.replace(anchor, anchor+"\nimport { installCrossfireWalk } from './crossfire_walk.js';", 1)
+s=s.replace(anchor, anchor+"\nimport { installCrossfireWalk } from './crossfire_walk.js';\nimport { installCrossfireMultiplayer } from './crossfire_mp.js';", 1)
 needle="window.__nz = { renderer, scene, camera, post, gov, city, lightmap, fly, U, ground, facadeKit, shopKit, district, kite, rig, input, traffic, game, runs, shards, sound, hud, screens, ready: true, backend: renderer.backend.isWebGPUBackend ? 'webgpu' : 'webgl' };"
 assert s.count(needle)==1, "Neon boot API changed; manual upstream review needed"
-s=s.replace(needle, needle+"\n  if (params.has('crossfire')) installCrossfireWalk(window.__nz);")
+s=s.replace(needle, needle+"\n  if (params.has('crossfire')) installCrossfireWalk(window.__nz);\n  if (params.has('crossfire-mp')) await installCrossfireMultiplayer(window.__nz);")
 p.write_text(s)
 PY
 
 echo "[CROSSFIRE] Building native Neon scene (no texture or geometry downgrade)"
-(cd "$WORK/upstream" && npm ci --no-audit --no-fund && npm run build -- --base=/neon/ --outDir="$ROOT/static/neon")
+(cd "$WORK/upstream" && npm ci --no-audit --no-fund)
+# Bundle ONLY the original CPU city generator into a temporary Node module.
+# Every server collision/spawn derives from the same upstream world seed and
+# geometry that the native renderer uses. No visual geometry is reconstructed.
+"$WORK/upstream/node_modules/.bin/esbuild" "$WORK/upstream/src/city/layout.js" \
+  --bundle --format=esm --platform=node --outfile="$WORK/neon_layout.mjs"
+node "$ROOT/scripts/export_neon_zenith_arena.mjs" "$WORK/neon_layout.mjs" \
+  "$ROOT/static/maps/neon_zenith.json" "$ROOT/static/weapons.json"
+(cd "$WORK/upstream" && npm run build -- --base=/neon/ --outDir="$ROOT/static/neon")
 
 # Add a diagnostic boot overlay separately from original renderer code.
 # Preserve upstream geometry, shaders, textures and all visual effects.
