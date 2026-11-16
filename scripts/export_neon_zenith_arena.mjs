@@ -54,14 +54,19 @@ function clear(x,z) {
 const spawns=[];
 const streetsX=city.xs.filter(l=>l.p>minX+12&&l.p<maxX-12);
 const streetsZ=city.zs.filter(l=>l.p>minZ+12&&l.p<maxZ-12);
-for (const x of streetsX) for (const z of streetsZ) {
-  for (const [dx,dz] of [[0,0],[3,0],[-3,0],[0,3],[0,-3]]) {
-    const px=x.p+dx,pz=z.p+dz;
-    if(clear(px,pz) && spawns.every(([sx,,sz])=>Math.hypot(px-sx,pz-sz)>14)){
-      spawns.push([r(px),0,r(pz)]);break;
-    }
-  }
+function addSpawn(x,z) {
+  if(x<minX+8||x>maxX-8||z<minZ+8||z>maxZ-8)return;
+  if(!clear(x,z) || spawns.some(([sx,,sz])=>Math.hypot(x-sx,z-sz)<16))return;
+  spawns.push([r(x),0,r(z)]);
 }
+// Distributed street-level spawn points along the actual original roads,
+// not just intersections (a 210m district may have only four junctions).
+for (const x of streetsX) for(let z=minZ+12;z<maxZ-12;z+=24)
+  addSpawn(x.p,z);
+for (const z of streetsZ) for(let x=minX+12;x<maxX-12;x+=24)
+  addSpawn(x,z.p);
+for (const x of streetsX) for(const z of streetsZ)
+  addSpawn(x.p,z.p);
 if (spawns.length<6)
   throw new Error(`Neon arena generated only ${spawns.length} safe spawns; inspect upstream layout`);
 
