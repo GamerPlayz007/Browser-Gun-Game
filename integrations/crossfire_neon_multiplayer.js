@@ -48,7 +48,7 @@ export async function installCrossfireMultiplayer(nz) {
   shell.innerHTML=`<header id="cfmp-bar">
     <div><strong>CROSSFIRE <span style="color:#54e8ef">/ NEON ZENITH</span></strong>
       <small>ORIGINAL CITY · NATIVE GRAPHICS</small></div>
-    <div><strong id="cfmp-mode">CONNECTING</strong><small id="cfmp-round">SERVER AUTHORITY</small></div>
+    <div><strong id="cfmp-mode">CONNECTING</strong><small id="cfmp-round">SERVER AUTHORITY</small><small id="cfmp-fps">FPS —</small></div>
     <button id="cfmp-menu-toggle">ROOM / ESC</button>
   </header>
   <div id="cfmp-feed"></div><div id="cfmp-cross"></div>
@@ -262,10 +262,15 @@ export async function installCrossfireMultiplayer(nz) {
   ws.onerror=()=>status('CROSSFIRE server connection failed. Return to lobby.');
   ws.onclose=()=>status('Disconnected from CROSSFIRE. Return to lobby to rejoin.');
   window.addEventListener('pagehide',()=>{manualDisconnect=true;ws?.close();});
-  let lastInfo=0;
+  let lastInfo=0, fpsFrames=0, fpsClock=0;
   // Run native City's existing render loop. Do not interfere with its quality,
   // culling, reflection probes, weather, geometry or post-processing.
   fly.update=(dt)=>{
+    fpsClock+=dt;fpsFrames++;
+    if(fpsClock>=1){
+      $('fps').textContent='FPS '+Math.round(fpsFrames/fpsClock)+' · '+profile.toUpperCase();
+      fpsClock=0;fpsFrames=0;
+    }
     if(!local)return;
     accum=Math.min(.2,accum+dt);
     for(let n=0;n<5&&accum>=FIXED_DT;n++,accum-=FIXED_DT)moveTick();
