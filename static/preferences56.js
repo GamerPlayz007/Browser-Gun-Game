@@ -21,5 +21,5 @@ export function safeWrite56(key,value){
 }
 export function safeName56(raw){return String(raw||'').trim().slice(0,16)||'Player';}
 export function safeQuality56(raw){
- return ['auto','performance','high','ultra','native'].includes(raw)?raw:'high';
+ return ['auto','performance','high','ultra','native'].includes(raw)?raw:'auto';
 }

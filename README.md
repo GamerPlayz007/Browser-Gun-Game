@@ -1,3 +1,22 @@
+## Phase 6.1 — DAYBREAK / school-first renderer (implemented on main)
+
+- Default **Auto** mode now begins with reduced effects and a real 1280×720
+  framebuffer cap (rather than booting into High graphics). Existing explicit
+  High, Ultra and Native preferences remain respected.
+- **School / Performance** mode targets Intel UHD-class school laptops with
+  a 960×540 maximum framebuffer, no compositor bloom or optional shadows,
+  and reduced decorative detail. This is a rendering preset, not a gameplay
+  or network change.
+- Auto measures frame intervals, scales to 60% of its baseline resolution if
+  needed, and only enables richer visuals after sustained stable frame pacing.
+  It does not measure true GPU execution time and does not guarantee 60 FPS.
+- WebGL context antialiasing is disabled; High and Ultra retain their
+  multisampled scene-render targets. School users avoid both costs.
+- The F7/F8 diagnostics show actual framebuffer size and selected preset.
+  Use an actual i5-1035G1 / 8 GB / Intel UHD school PC to validate FPS.
+- Gameplay physics, map geometry, multiplayer protocol and damage remain
+  unchanged. The full Daybreak city/artwork redesign is scheduled for later stages.
+
 # CROSSFIRE V3.0 RC2 — BOT ASSAULT (SOLO + CO-OP)
 
 **Single source of truth:** `main`, Render auto-deploys to

@@ -19,7 +19,7 @@ assert.equal(safeName56('  '),'Player');
 assert.equal(safeName56('A'.repeat(32)).length,16);
 assert.equal(safeQuality56('ultra'),'ultra');
 assert.equal(safeQuality56('auto'),'auto');
-assert.equal(safeQuality56('surprise'),'high');
+assert.equal(safeQuality56('surprise'),'auto');
 
 const stored=new Map();
 globalThis.localStorage={

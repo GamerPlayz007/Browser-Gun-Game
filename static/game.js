@@ -22,7 +22,8 @@ const $=id=>document.getElementById(id),clamp=T.MathUtils.clamp;
 const audio=new AudioEngine();
 const settings={sens:clamp(Number(safeRead56('cf-sens','1'))||1,.4,2.5),
  motion:safeRead56('cf-motion','true')!=='false',
- quality:safeQuality56(safeRead56('cf-quality-25','high'))};
+ quality:safeQuality56(safeRead56('cf-quality-25','auto'))};
+const qualityTier61=(detail=false)=>settings.quality==='auto'?(detail?'auto':'performance'):settings.quality;
 let preferredSkin56=skinId56(safeRead56('cf-skin56','0'));
 const storedVolume56=clamp(Number(safeRead56('cf-volume','0.5'))||0,.0,1);
 $('sensitivity').value=settings.sens;
@@ -34,16 +35,21 @@ try{
  const catalog=await fetch('/api/maps');if(!catalog.ok)throw Error('Map list could not load.');registry=await catalog.json();
  const entry=registry.maps.find(m=>m.id===registry.default&&m.available);
  const response=await fetch(entry.url);if(!response.ok)throw Error('Arena data could not load.');map=await response.json();
- ambience45=createUrbanAmbience45(audio,map);ambience45.setQuality(settings.quality);
+ ambience45=createUrbanAmbience45(audio,map);ambience45.setQuality(qualityTier61());
  scene=new T.Scene();camera=new T.PerspectiveCamera(82,innerWidth/innerHeight,.06,600);camera.rotation.order='YXZ';
- renderer=new T.WebGLRenderer({antialias:true,powerPreference:'high-performance'});renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.13;renderer.autoClear=false;
+ renderer=new T.WebGLRenderer({antialias:false,powerPreference:'high-performance'});renderer.shadowMap.enabled=qualityTier61()!=='performance';renderer.shadowMap.type=T.PCFSoftShadowMap;renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.13;renderer.autoClear=false;
  renderer.info.autoReset=false; // Count draw calls across every compositor and weapon pass.
  $('viewport').appendChild(renderer.domElement);
- world=buildWorld(scene,map,{renderer,quality:settings.quality});
+ world=buildWorld(scene,map,{renderer,quality:qualityTier61()});
  controlBeacon54=createControlBeacon54(T,scene);
  postfx=createPostProcessing(renderer,scene,camera,settings.quality);viewScene=new T.Scene();viewCamera=new T.PerspectiveCamera(65,innerWidth/innerHeight,.03,10);viewScene.add(new T.HemisphereLight(0xf0f8f5,0x697f7a,2.8));const light=new T.DirectionalLight(0xffe5bb,3);light.position.set(-2,4,3);viewScene.add(light);
 }catch(e){$('status').textContent=e.message.includes('WebGL')?'3D graphics unavailable. Enable hardware acceleration and use Chrome or Edge.':e.message;throw e;}
-display=createDisplay(renderer,[camera,viewCamera],enabled=>{world.setDetail(enabled);postfx.setDetail(enabled);},settings.quality);
+display=createDisplay(renderer,[camera,viewCamera],enabled=>{
+ const tier=qualityTier61(enabled);
+ world.setQuality(tier);world.setDetail(enabled);
+ renderer.shadowMap.enabled=tier!=='performance';
+ postfx.setDetail(enabled);ambience45.setQuality(tier);
+},settings.quality);
 minimap=createMinimap($('minimap'),$('district-label'),map);
 for(const entry of registry.maps){const option=document.createElement('option');option.value=entry.id;option.textContent=entry.name+(entry.available?'':' — coming later');option.disabled=!entry.available;$('map-select').append(option);}
 $('map-select').value=map.id;
@@ -52,7 +58,7 @@ async function loadArena(id){
  const entry=registry.maps.find(m=>m.id===id&&m.available);if(!entry)throw Error('This map is not available on this server.');
  const response=await fetch(entry.url);if(!response.ok)throw Error('Could not load the room map.');
  const next=await response.json();if(next.id!==id)throw Error('Map data mismatch. Refresh and try again.');
- const nextScene=new T.Scene(),nextWorld=buildWorld(nextScene,next,{renderer,quality:settings.quality});
+ const nextScene=new T.Scene(),nextWorld=buildWorld(nextScene,next,{renderer,quality:qualityTier61()});
  clearVisualEffects52();controlBeacon54.dispose();world.dispose();postfx.dispose();
  scene=nextScene;world=nextWorld;controlBeacon54=createControlBeacon54(T,scene);
  postfx=createPostProcessing(renderer,scene,camera,settings.quality);map=next;
@@ -489,8 +495,7 @@ $('volume').oninput=e=>{audio.volume=clamp(Number(e.target.value)||0,0,1);safeWr
 $('quality').onchange=e=>{
  settings.quality=safeQuality56(e.target.value);
  safeWrite56('cf-quality-25',settings.quality);
- display.setMode(settings.quality);world.setQuality(settings.quality);
- postfx.setMode(settings.quality);ambience45.setQuality(settings.quality);
+ postfx.setMode(settings.quality);display.setMode(settings.quality);
 };
 function pickSkin56(raw){
  preferredSkin56=skinId56(raw);
