@@ -18,6 +18,11 @@ if (select) {
   note.style.cssText='display:block;margin-top:8px;line-height:1.5;opacity:.78;';
   box.append(title,a,note);
   select.insertAdjacentElement('afterend',box);
+  // A playable map belongs in the normal selector; don't show the old
+  // standalone walkthrough card once the native multiplayer map is registered.
+  fetch('/api/maps').then(r=>r.ok?r.json():null).then(catalog=>{
+    if(catalog?.maps?.some(m=>m.id==='neon_zenith'&&m.available))box.remove();
+  }).catch(()=>{});
   fetch('/api/neon-preview').then(r=>r.ok?r.json():null).then(status=>{
     if(status?.ready){
       a.href='/neon/?crossfire';a.target='_self';a.removeAttribute('rel');
