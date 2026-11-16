@@ -24,10 +24,13 @@ assert.notStrictEqual(warm,cyan,'Distinct window colors must be separate materia
 const oldMap=warm.map;
 materials.setQuality('performance');
 assert.equal(warm.bumpMap,null);
-assert.strictEqual(warm.map,oldMap);
-assert.ok(warm.emissiveMap,'Performance must retain lit windows');
+assert.notStrictEqual(warm.map,oldMap,'Switching to School releases high-res texture atlases');
+assert.equal(warm.map.image.width,256);
+assert.equal(warm.emissiveMap,null,'Unnecessary emissions omitted on School');
+assert.equal(warm.emissiveMap,null,'Daybreak printed windows do not need emission on School');
 materials.setQuality('ultra');
 assert.ok(warm.bumpMap,'Ultra restores surface bump');
+assert.equal(warm.map.image.width,512,'Ultra restores higher texture resolution');
 const sample=createSurfaceBoxGeometry(THREE,{x:2,y:1,z:3,w:12,h:8,d:1},2.5);
 const uvs=sample.attributes.uv.array;
 assert.ok(uvs.some(v=>Math.abs(v)>1),'Large walls must tile, not stretch, PBR maps');

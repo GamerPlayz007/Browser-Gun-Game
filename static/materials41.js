@@ -6,6 +6,11 @@ export const SURFACE_STYLES=[
 ];
 export const NEON_STYLES=['cyan','magenta','amber','white'];
 const NEON={cyan:'#4d8396',magenta:'#a67b80',amber:'#c5a57b',white:'#e4e8e2'};
+// V3.1: 256px atlases on School/Auto use one quarter of the texture
+// area of High/Ultra 512px atlases. High detail remains fully selectable.
+export const MATERIAL_ATLAS_SIZE68=Object.freeze({
+ performance:256,auto:256,high:512,ultra:512,native:512
+});
 const SPECS={
  facade:{base:[166,177,174],rough:.78,metal:.07,bump:.062,glow:.015},
  concrete:{base:[178,179,171],rough:.9,metal:.01,bump:.07},
@@ -132,8 +137,10 @@ export function createSurfaceBoxGeometry(T,b,unit=2.4){
  g.translate(b.x,b.y+b.h/2,b.z);
  return g;
 }
-export function createCyberMaterialLibrary(T){
+export function createCyberMaterialLibrary(T,{initialQuality='high'}={}){
  const textureCache=new Map(),materialCache=new Map();
+ let currentQuality=MATERIAL_ATLAS_SIZE68[initialQuality]?initialQuality:'high';
+ let atlasSize=MATERIAL_ATLAS_SIZE68[currentQuality],textureRebuilds68=0;
  const get=(style,options={})=>{
   const known=NEON_STYLES.includes(style)||SURFACE_STYLES.includes(style)?style:'concrete';
   const key=[known,options.tint||'',options.glow??'',options.emissive||'',options.roughness??''].join('|');
@@ -142,14 +149,15 @@ export function createCyberMaterialLibrary(T){
    const m=new T.MeshBasicMaterial({color:NEON[known],toneMapped:true,side:T.DoubleSide});
    materialCache.set(key,m);return m;
   }
-  if(!textureCache.has(known))textureCache.set(known,atlas(T,known));
+  if(!textureCache.has(known))textureCache.set(known,atlas(T,known,atlasSize));
   const maps=textureCache.get(known),spec=SPECS[known];
   const m=new T.MeshStandardMaterial({
    color:options.tint||'#f3f6fc',map:maps.map,roughnessMap:maps.roughnessMap,
-   bumpMap:maps.bumpMap,emissiveMap:maps.emissiveMap,
+   bumpMap:currentQuality==='performance'?null:maps.bumpMap,
+   emissiveMap:currentQuality==='performance'?null:maps.emissiveMap,
    roughness:options.roughness??spec.rough,metalness:spec.metal,bumpScale:spec.bump,
    emissive:options.emissive||'#ffffff',emissiveIntensity:options.glow??spec.glow??0,
-   envMapIntensity:1.1,side:T.FrontSide
+   envMapIntensity:currentQuality==='performance'?.28:1.1,side:T.FrontSide
   });
   m.userData.baseMaps=maps;m.userData.baseBump=spec.bump;
   m.userData.surfaceStyle=known;m.userData.baseRoughness=options.roughness??spec.rough;
@@ -168,22 +176,40 @@ export function createCyberMaterialLibrary(T){
   for(const m of materialCache.values())applyWetness(m);
  };
  const setQuality=mode=>{
-  const low=mode==='performance';
+  const nextQuality=MATERIAL_ATLAS_SIZE68[mode]?mode:'high';
+  if(nextQuality===currentQuality)return false; // No redundant shader recompiles.
+  const nextSize=MATERIAL_ATLAS_SIZE68[nextQuality],low=nextQuality==='performance';
+  if(nextSize!==atlasSize){
+   // Explicit High/Ultra selection can upgrade textures; returning to School
+   // releases the 512px textures instead of retaining both memory tiers.
+   for(const [style,oldMaps] of textureCache){
+    const nextMaps=atlas(T,style,nextSize);
+    textureCache.set(style,nextMaps);
+    for(const t of Object.values(oldMaps))t.dispose();
+   }
+   atlasSize=nextSize;textureRebuilds68++;
+  }
   for(const m of materialCache.values()){
    if(!m.isMeshStandardMaterial)continue;
-   const maps=m.userData.baseMaps;
+   const maps=textureCache.get(m.userData.surfaceStyle);
+   const changedMaps=m.userData.baseMaps!==maps;
+   m.userData.baseMaps=maps;
+   const hadBump=Boolean(m.bumpMap),hadEmission=Boolean(m.emissiveMap);
    m.map=maps.map;m.roughnessMap=maps.roughnessMap;
    m.bumpMap=low?null:maps.bumpMap;
-   // Preserve neon window emission even on Performance.
-   m.emissiveMap=maps.emissiveMap;
-   m.bumpScale=mode==='ultra'?m.userData.baseBump*1.28:m.userData.baseBump;
-   m.envMapIntensity=low?.28:mode==='ultra'?1.55:1.08;
+   m.emissiveMap=low?null:maps.emissiveMap;
+   m.bumpScale=nextQuality==='ultra'?m.userData.baseBump*1.28:m.userData.baseBump;
+   m.envMapIntensity=low?.28:nextQuality==='ultra'?1.55:1.08;
    applyWetness(m);
-   m.needsUpdate=true;
+   if(changedMaps||hadBump!==Boolean(m.bumpMap)||hadEmission!==Boolean(m.emissiveMap))m.needsUpdate=true;
   }
+  currentQuality=nextQuality;
+  return true;
  };
  return {get,setQuality,setWetness,dispose(){
   for(const m of materialCache.values())m.dispose();
   for(const maps of textureCache.values())for(const t of Object.values(maps))t.dispose();
- },get materialCount(){return materialCache.size;},get atlasCount(){return textureCache.size;}};
+ },get materialCount(){return materialCache.size;},get atlasCount(){return textureCache.size;},
+  get atlasSize68(){return atlasSize;},get textureRebuilds68(){return textureRebuilds68;},
+  get currentQuality68(){return currentQuality;}};
 }

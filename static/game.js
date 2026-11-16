@@ -85,7 +85,10 @@ const movementControls63=createMovementControls63();
 let netSync=createNetSync();
 const frameMeter=new FrameMeter();
 const opponents=new Map(),effects=[],hitGeometry=new T.IcosahedronGeometry(.035,0),hitMaterial=new T.MeshBasicMaterial({color:0xffc98a});
+let rigTier68=null;
 updateRigQuality67=tier=>{
+ if(tier===rigTier68)return;
+ rigTier68=tier;
  for(const rig of weaponModels)setModelQuality67(rig,tier);
  for(const rig of opponents.values())setModelQuality67(rig,tier);
 };
@@ -424,7 +427,12 @@ function handle(data){if(data.type==='manual_respawn_result65'){toast(data.messa
  $('rematch').disabled=data.host!==myId;$('rematch').textContent=data.host===myId?'PLAY AGAIN →':'WAITING FOR HOST';
  for(const e of data.events)processEvent(e);
 }
-function frame(ms){try{const now=ms/1000,rawMs=ms-clock,dt=Math.min(rawMs/1000,.2);clock=ms;display.frame(rawMs);frameMeter.record(rawMs,!document.hidden);fpsFrames++;
+function frame(ms){try{const now=ms/1000,rawMs=ms-clock,dt=Math.min(rawMs/1000,.2);clock=ms;display.frame(rawMs);frameMeter.record(rawMs,!document.hidden);
+ // A background tab should not burn the school laptop's shared iGPU/RAM.
+ // The authoritative server continues the room; visibilitychange resets
+ // prediction and frame meters before we resume rendering.
+ if(document.hidden){fpsFrames=0;fpsLast=ms;movementAccumulator=0;return;}
+ fpsFrames++;
  controlBeacon54.update(state?.objective,now,joined&&state?.mode==='control');
  if(ms-fpsLast>600){
   fps=Math.round(fpsFrames*1000/(ms-fpsLast));fpsLast=ms;fpsFrames=0;
@@ -546,7 +554,7 @@ document.addEventListener('keyup',e=>{keys[e.code]=false;if(e.code==='Tab')$('sc
 function createDebugReport51(){
  const net=syncStats(netSync,performance.now());
  const data=captureRenderHealth46(renderer,scene,world,display);
- return ['CROSSFIRE V3.0 RC1 / PLAYTEST REPORT',
+ return ['CROSSFIRE V3.1 DAYBREAK / PLAYTEST REPORT',
    'Map: '+(map?.name||map?.id||'unknown'),
    'Connection: '+(joined?'joined':'not joined'),
    'Quality setting: '+settings.quality,

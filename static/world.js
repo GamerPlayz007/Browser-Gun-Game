@@ -51,14 +51,24 @@ function rampGeometry(b){
 }
 export function buildWorld(scene,map,{renderer,quality='high'}={}){
  const root=new T.Group();scene.add(root);const batches=new Map(),details=[],mats=new Map();
- const materialSystem=createCyberMaterialLibrary(T);
+ const materialSystem=createCyberMaterialLibrary(T,{initialQuality:quality});
  scene.background=new T.Color(DAYBREAK_SKY66.horizon);scene.fog=new T.FogExp2(DAYBREAK_SKY66.fog,.0025);
  const sky66=createDaybreakSky66(T);root.add(sky66);
  // Daylight controller keeps one honest sun and ambient fill; artificial city
  // accent fixtures remain disabled, with no new collision or network objects.
  const lighting=createCinematicLighting(T,scene,root,map);
  const sun=lighting.moon;
- let env=null;try{env=environment(renderer);if(env)scene.environment=env.texture;}catch(error){console.warn('Environment map unavailable:',error);}
+ // V3.1: do not generate a six-sided PMREM on a school iGPU at boot.
+ // Create it once if the player explicitly selects higher graphics.
+ let env=null,envAttempted=false;
+ function setEnvironment68(mode){
+  if(mode==='performance'){scene.environment=null;return;}
+  if(!env&&renderer&&!envAttempted){
+   envAttempted=true;
+   try{env=environment(renderer);}catch(error){console.warn('Environment map unavailable:',error);}
+  }
+  scene.environment=env?.texture||null;
+ }
  // One 512px four-channel atlas per surface, shared by the core city and
  // every visual-only building and window across Stage 5 and Stage 6.
  for(const style of Object.keys(MATERIALS))mats.set(style,materialSystem.get(style));
@@ -189,8 +199,26 @@ export function buildWorld(scene,map,{renderer,quality='high'}={}){
   const group=new T.Group(),body=new T.Mesh(new T.CylinderGeometry(.36,.4,1.05,10),targetMat),head=new T.Mesh(new T.IcosahedronGeometry(.25,1),headMat);
   body.position.y=.95;head.position.y=1.62;body.castShadow=true;group.add(body,head);group.position.set(...pos);root.add(group);targets.set('t'+i,group);
  }
- const stage5Group=createStage5VisualLayer(T,map,'ultra',materialSystem);
-  const stage6Group=createStage6VisualLayer(T,map,'ultra',materialSystem);
+ // Expensive facade/skyline geometry is not constructed for School or
+ // initial Auto. High layers are assembled lazily on a deliberate upgrade.
+ const initialTier68=quality==='performance'?'performance':'ultra';
+ const stage5Group=createStage5VisualLayer(T,map,initialTier68,materialSystem);
+ const stage6Group=createStage6VisualLayer(T,map,initialTier68,materialSystem);
+ let fullArchitecture68=initialTier68==='ultra';
+ function ensureArchitecture68(){
+  if(fullArchitecture68)return;
+  const full5=createStage5VisualLayer(T,map,'ultra',materialSystem);
+  const full6=createStage6VisualLayer(T,map,'ultra',materialSystem);
+  // Old visible tier-0 meshes are replaced, not leaked.
+  stage5Group.userData.disposeStage5();
+  stage6Group.userData.disposeStage6();
+  stage5Group.clear();stage6Group.clear();
+  for(const child of [...full5.children])stage5Group.add(child);
+  for(const child of [...full6.children])stage6Group.add(child);
+  stage5Group.userData.disposeStage5=()=>stage5Group.traverse(o=>o.geometry?.dispose());
+  stage6Group.userData.disposeStage6=()=>stage6Group.traverse(o=>o.geometry?.dispose());
+  fullArchitecture68=true;
+ }
   root.add(stage5Group,stage6Group);
   const urban67=createUrbanDetails67(T,map,materialSystem);
   root.add(urban67.root);
@@ -200,7 +228,7 @@ export function buildWorld(scene,map,{renderer,quality='high'}={}){
   root.add(atmosphere44.group);
   const living45=createLivingWorld45(T,map);
   root.add(living45.root);
-  let detailEnabled=true,activeVisualMode=quality;
+  let detailEnabled=true,activeVisualMode=null;
   function showStageDetail(){
    const level=activeVisualMode==='performance'?0:activeVisualMode==='ultra'?2:1;
    for(const mesh of stage5Group.children)mesh.visible=detailEnabled&&(mesh.userData.stage5Tier||0)<=level;
@@ -210,11 +238,16 @@ export function buildWorld(scene,map,{renderer,quality='high'}={}){
    living45.setDetail(detailEnabled);
    urban67.setDetail(detailEnabled);
   }
-  function setQuality(mode){activeVisualMode=mode;showStageDetail();
+  function setQuality(mode){
+  if(mode===activeVisualMode)return;
   const low=mode==='performance';
+  materialSystem.setQuality(mode);
+  if(!low)ensureArchitecture68();
+  activeVisualMode=mode;
+  showStageDetail();
+  setEnvironment68(mode);
   for(const d of details)d.visible=!low;
   lighting.setQuality(mode);
-  materialSystem.setQuality(mode);
   environment43.setQuality(mode);
   atmosphere44.setQuality(mode);
   living45.setQuality(mode);
@@ -224,7 +257,17 @@ export function buildWorld(scene,map,{renderer,quality='high'}={}){
  setQuality(quality);
  return {sun,sky66,lighting,environment43,atmosphere44,living45,urban67,targets,staticBatches:batches.size+(map.signs?.length?1:0),featureCount:map.features?.length||0,
   environmentCount:environment43.stats.parts,environmentSigns:environment43.stats.signs,
-  setDetail(enabled){detailEnabled=enabled;for(const mesh of details)mesh.visible=enabled;showStageDetail();},setQuality,
+  get resourceProfile68(){return {
+   atlasSize:materialSystem.atlasSize68,atlases:materialSystem.atlasCount,
+   atlasRebuilds:materialSystem.textureRebuilds68,
+   fullArchitecture:fullArchitecture68,hasEnvironment:!!env,
+   stage5Meshes:stage5Group.children.length,stage6Meshes:stage6Group.children.length
+  };},
+  setDetail(enabled){
+   if(detailEnabled===Boolean(enabled))return;
+   detailEnabled=Boolean(enabled);
+   for(const mesh of details)mesh.visible=detailEnabled;showStageDetail();
+  },setQuality,
   animate(time,player=null){lighting.animate(time);atmosphere44.animate(time);living45.animate(time,player);for(const s of steam){const p=s.cloud.geometry.attributes.position;
    for(let i=0;i<s.seeds.length;i++){const k=(time*.38+s.seeds[i])%1;p.setXYZ(i,s.x+Math.sin(time+i)*.3*k,s.y+.2+3*k,s.z+Math.cos(time*.7+i)*.25*k);}p.needsUpdate=true;
   }},

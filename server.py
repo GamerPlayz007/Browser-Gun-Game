@@ -1,4 +1,4 @@
-"""CROSSFIRE V3.0 RC2. Server-authoritative multiplayer arena with release diagnostics."""
+"""CROSSFIRE v3.1 Daybreak. Server-authoritative multiplayer arena with release diagnostics."""
 import asyncio, contextlib, json, math, os, random, re, secrets, time
 from collections import deque
 from pathlib import Path
@@ -19,7 +19,7 @@ from match35 import (DEATHMATCH_GOAL,KILLS_PER_TIER,MATCH_DURATION,COUNTDOWN_DUR
                      RESPAWN_DURATION,goal,tier_for_kills,standings,leading_player,
                      timed_winner,rules)
 MAP=DEFAULT.data;BOXES=DEFAULT.boxes;SPAWNS=DEFAULT.spawns
-RELEASE='3.0.0-rc.2'; PHASE='05.7'; API_VERSION=5
+RELEASE='3.1.0'; PHASE='06.8'; API_VERSION=5
 TICK=1/60; LIMIT=DEATHMATCH_GOAL; ROUND_SECONDS=MATCH_DURATION; MAX_PLAYERS=8; MAX_REWIND=.30
 # Fixed memorable lobby names, never player-entered or randomly generated codes.
 ROOM_CODES65=('MAX','ACE','FOX','RED','SKY','NEO','ZEN','PRO','WOLF','NOVA','ECHO','LIME')

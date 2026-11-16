@@ -1,3 +1,32 @@
+# CROSSFIRE v3.1 — DAYBREAK RELEASE (Stage 6.8)
+
+**Release:** 3.1.0 · **Phase:** 06.8 · **Map:** Daybreak City (legacy ID `cyberpunk` for existing rooms)
+
+School-first release hardening:
+- New **256×256 material texture atlases** for Auto and School/Performance, compared to
+  512×512 for High/Ultra/Native: 75% less texture area per atlas at low settings.
+  Shader channels unnecessary in School Mode are disabled.
+- Texture tier swaps release old GPU resources; world materials avoid redundant
+  shader compilation on unchanged quality settings.
+- Stage 5/6 architectural cladding builds at the inexpensive tier on School and
+  initial Auto, with higher-detail geometry created only when requested.
+  Critical G/I/U/stair routes and all 828 server colliders are unchanged.
+- The sky environment reflection PMREM is generated lazily on high-quality
+  devices rather than during low-end startup.
+- Adaptive Auto quality responds to truly slow visible frames instead of
+  discarding frames over 100ms; GPU and local movement work pause when the
+  game tab is hidden. No multiplayer server or physics rules are modified.
+- All version indicators, server `/health` release, npm manifest and lockfile
+  now agree on **3.1.0**, with the V3.1 DAYBREAK in-game badge.
+- Run automated checks via `npm test`, `python -m unittest` and the GitHub
+  main build gate; F7/F8 provide frame, network and render diagnostics.
+- **Validation limitation:** headless Chromium smoke tests are not the school
+  i5-1035G1 / Intel UHD / 8GB hardware. We cannot promise a specific FPS
+  without testing on an actual school machine. Start in **School / Performance**
+  there and use F7 to report FPS average, 1% low, draw calls and framebuffer.
+
+---
+
 ## Phase 6.7 — DAYBREAK / outer-city and character fidelity
 
 - 25-ish independently validated, server-colliding urban fixtures are placed

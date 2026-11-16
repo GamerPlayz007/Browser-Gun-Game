@@ -30,11 +30,13 @@ export class AutoQuality{
  }
  setMode(mode){this.mode=QUALITY_MODES.includes(mode)?mode:'auto';this.reset();}
  sample(ms,dpr=1,visible=true){
-  if(this.mode!=='auto'||!visible||!Number.isFinite(ms)||ms<=0||ms>100){
+  if(this.mode!=='auto'||!visible||!Number.isFinite(ms)||ms<=0){
    this.total=this.count=0;return false;
   }
   if(this.warmup>0){this.warmup--;return false;}
-  this.total+=ms;this.count++;if(this.count<90)return false;
+  // 7-10 FPS frames must trigger downscaling, not be discarded as outliers.
+  // Cap massive stalls (e.g. browser UI) so one pause cannot dominate.
+  this.total+=Math.min(ms,100);this.count++;if(this.count<90)return false;
   const avg=this.total/this.count;this.total=this.count=0;
   // Hysteresis avoids quality oscillation on ordinary 60 Hz school screens.
   this.slow=avg>21.5?this.slow+1:0;
