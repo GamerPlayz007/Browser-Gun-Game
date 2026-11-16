@@ -138,7 +138,7 @@ export function createDustCorridorPreview({renderer,getQuality}){
   const label=document.createElement('strong');
   label.textContent='DUST CORRIDOR · NATIVE RENDER PREVIEW';
   toolbar.append(label);
-  modeButton=document.createElement('button');modeButton.type='button';
+  modeButton=document.createElement('button');modeButton.type='button';modeButton.id='cf-dust63-mode';
   modeButton.style.cssText='border:1px solid #a9daa6;background:#24362a;color:#c6ffd1;padding:8px;border-radius:5px;font-weight:bold;cursor:pointer;';
   modeButton.onclick=()=>{
     if(!walk)return;
@@ -152,7 +152,7 @@ export function createDustCorridorPreview({renderer,getQuality}){
    button.style.cssText='border:1px solid #8f8c7d;background:#222a29;color:#fff;padding:8px;border-radius:5px;cursor:pointer;';
    button.onclick=()=>selectView(name);toolbar.append(button);
   }
-  const back=document.createElement('button');back.type='button';back.textContent='RETURN TO LOBBY';
+  const back=document.createElement('button');back.type='button';back.id='cf-dust63-back';back.textContent='RETURN TO LOBBY';
   back.style.cssText='border:0;background:#e4c99b;color:#222;padding:8px;border-radius:5px;font-weight:bold;cursor:pointer;';
   back.onclick=close;toolbar.append(back);
   const hint=document.createElement('small');hint.textContent='WASD move · Shift sprint · Space jump · Ctrl crouch · Free fly: Q/E vertical · Drag mouse to look';
@@ -175,13 +175,17 @@ export function createDustCorridorPreview({renderer,getQuality}){
    // Original triangles + original BVH/capsule: collision geometry matches visuals.
    walk=createDustWalk63(data);
    const q=getQuality();const size=q==='performance'?96:q==='high'?192:q==='ultra'||q==='native'?256:128;
-   try{
-    bake=new MaterialLibrary(renderer,size,q==='performance'?2:4);
-    await bake.compile();await bake.draw();
-   }catch(err){
-    console.warn('Dust 6.2: original texture bake unavailable, geometry-preserving shader fallback',err);
-    bake?.dispose();bake=null;
+   if(q!=='performance'){
+    try{
+     bake=new MaterialLibrary(renderer,size,4);
+     await bake.compile();await bake.draw();
+    }catch(err){
+     console.warn('Dust: original textures unavailable; preserving all source geometry.',err);
+     bake?.dispose();bake=null;
+    }
    }
+   // Low-end mode avoids costly GPU texture-array compilation but retains
+   // ALL original building, stall, and prop geometry and authored vertex tints.
    mat=makeMaterial(bake);
    const scene=new T.Scene();scene.background=new T.Color('#b4c6ce');
    for(const batch of data.batches){
@@ -201,7 +205,14 @@ export function createDustCorridorPreview({renderer,getQuality}){
    const home=document.getElementById('home'),shade=document.getElementById('shade');
    homeWasHidden=home.hidden;shadeDisplay=shade.style.display;
    home.hidden=true;shade.style.display='none';controls();active=true;
-   window.__crossfireDustPreview62={ready:true,usingMainRenderer:true,stats:world.stats};
+   window.__crossfireDustPreview62={
+    ready:true,usingMainRenderer:true,stats:world.stats,
+    get mode(){return mode;},
+    get position(){return walk?.position.toArray()||null;},
+    get grounded(){return walk?.grounded??false;},
+    get crouched(){return walk?.crouched??false;},
+    get steps(){return walk?.steps??0;}
+   };
   }catch(err){
    cloth?.dispose();cables?.dispose();mat?.dispose();bake?.dispose();
    for(const geo of geos)geo.dispose();
