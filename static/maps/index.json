@@ -7,6 +7,14 @@
       "available": true,
       "url": "/static/maps/cyberpunk.json",
       "theme": "modern-daylight"
+    },
+    {
+      "id": "neon_zenith",
+      "name": "Neon Zenith \u00b7 Original",
+      "available": true,
+      "url": "/static/maps/neon_zenith.json",
+      "theme": "cyberpunk-native",
+      "engine": "neon-zenith-native"
     }
   ]
 }
