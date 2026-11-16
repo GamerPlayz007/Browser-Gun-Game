@@ -76,6 +76,13 @@ async def main():
             assert 'DRAW CALLS' in telemetry
             # Opening the room menu is the supported way to resume match
             # setup after the game viewport takes focus/pointer lock.
+            # Capture diagnostic state if software WebGL loses the page or HUD.
+            print('Daybreak 6.5 browser checkpoint:',
+                  {'url':page.url,'closed':page.is_closed(),
+                   'menu':await page.locator('#menu-button').count(),
+                   'hud':await page.locator('#hud').count(),
+                   'roster':await page.locator('#roster .roster-row').count(),
+                   'pageErrors':failures[:8]})
             await page.locator('#menu-button').click(timeout=12000,force=True)
             await page.locator('#room-panel').wait_for(state='visible',timeout=12000)
             assert game.rooms[code].phase=='lobby'
