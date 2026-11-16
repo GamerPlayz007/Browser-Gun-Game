@@ -66,6 +66,27 @@ console.log(JSON.stringify(cases.map(c=>{const p={...c.initial};return c.command
                         floor=max(supports)
                         blockers=[o for o in near if s.overlaps(x,floor+.29,z,o,2.7) and not (side!=0 and o.get('kind') in ('stairTread','stairLanding') and o.get('route')!=route['id'])]
                         self.assertFalse(blockers,(route['id'],[x,floor,z],[(o['kind'],o['x'],o['z']) for o in blockers]))
+    def test_switchback_landings_are_wide_and_deep(self):
+        for name in ('S4','S4-E','S5','S6'):
+            landings=sorted((b for b in s.BOXES if b.get('kind')=='stairLanding'
+                            and b.get('route')==name),key=lambda b:b['landing'])
+            self.assertEqual(len(landings),4,name)
+            for landing in landings:
+                self.assertGreaterEqual(landing['d'],1.8,(name,landing))
+                self.assertGreaterEqual(landing['w'],4.3,(name,landing))
+            for landing in landings[:3]:
+                self.assertGreaterEqual(landing['w'],6.1,(name,landing))
+        # The small market awning bar and low station stair signs must no
+        # longer appear inside the playable stair headroom.
+        for d in s.MAP['decor']:
+            if d.get('detailKind') not in ('awning-edge','station-stair-sign-band'):
+                continue
+            for stair in s.MAP['stairs']:
+                for x,y,z in stair['points']:
+                    if abs(x-d['x'])<d['w']/2+.33 and abs(z-d['z'])<d['d']/2+.33:
+                        self.assertFalse(y+.30<d['y']+d['h'] and y+2.05>d['y'],
+                                         (stair['id'],d.get('detailKind'),x,y,z))
+
     def test_spawns_and_street_connectivity(self):
         for pos in s.SPAWNS:
             self.assertFalse(any(s.overlaps(*pos,b) for b in s.BOXES),pos)

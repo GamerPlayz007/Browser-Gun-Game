@@ -254,7 +254,7 @@ class Detailer:
     def market_awning(self):
         # Canopies below +5m and above +1m, outside main shop-through portals.
         for k,(x0,x1,z) in enumerate([(5.20,8.80,38),(5.20,8.80,48),
-                                      (6.2,11.8,68),(22.3,27.3,67)]):
+                                      (6.2,11.8,68),(22.3,24.8,67)]):
             y=4.24
             self.add((x0,y,z-.80,x1,y+.11,z+.8),'shop-awning', 'M01' if k<2 else ('M02' if k==2 else 'M03'),
                      finish='awning_gold' if k%2 else 'awning',style='rust' if k%2 else 'magenta',tier=1)
@@ -344,7 +344,8 @@ class Detailer:
                      'atrium-structural-light','A01',finish='glass_teal',style='cyan',tier=1)
         # Lintels and signage above player clearance at the two station stairs.
         for x in (36.5,51.0):
-            self.add((x-2.4,10.85,28.5,x+2.4,11.13,28.72),
+            # Raise this overhead sign above the station stair exit headroom.
+            self.add((x-2.4,12.10,28.5,x+2.4,12.38,28.72),
                      'station-stair-sign-band','T01',finish='iron',style='metal',tier=1)
 
     def fixed_signboards(self):

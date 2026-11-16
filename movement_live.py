@@ -11,8 +11,8 @@ M=dict(walk=5.35,sprint=8.2,crouch=3.15,groundAccel=60,groundBrake=42,
        airAccel=9.5,airBrake=1.7,slideMin=5,slideBoost=1.13,slideMax=10,
        slideTime=.70,slideCD=1.05,slideDrag=2.7,slideSteer=3.6,
        slideHopSpeed=7.95,slideHopCarry=1.07,slideHopCap=10,
-       buffer=.125,coyote=.1,jumpSpeed=7.5,shortHop=.52,gravity=22,
-       stepHeight=.29,height=1.8,lowHeight=1.12,wallKickRange=.52,
+       buffer=.18,coyote=.14,jumpSpeed=7.5,shortHop=.52,gravity=22,
+       stepHeight=.29,stairStepHeight=.36,height=1.8,lowHeight=1.12,wallKickRange=.52,
        wallKickLift=5.3,wallKickPush=5.1,mantleExitSpeed=2.7)
 SUPPORTS={'building','atriumShell','railing','deck','stairLanding','routeFloor'}
 
@@ -23,6 +23,10 @@ def seed_movement(p):
 
 def overlap(x,y,z,b,height):
     return abs(x-b['x'])<b['w']/2+.32 and abs(z-b['z'])<b['d']/2+.32 and y<top_at(b,x,z)-.015 and y+height>bottom_at(b,x,z)+.015
+
+def blocks_head(p,b):
+    # A step edge close to the player's feet must never count as a ceiling.
+    return bottom_at(b,p['x'],p['z'])>=p['y']+M['lowHeight']-.03 and overlap(p['x'],p['y'],p['z'],b,M['height'])
 
 def clamp(x,a,b):return max(a,min(b,x))
 
@@ -102,7 +106,7 @@ def step_player(p,dt,now,arena,weapons):
     sliding=now<p['slide_until'];p['crouch']=sliding or slide
     height=M['lowHeight'] if p['crouch'] else M['height']
     boxes=arena.nearby(p['x'],p['z'],max(abs(p['vx']),abs(p['vz']))*dt+1.25)
-    if not p['crouch'] and any(overlap(p['x'],p['y'],p['z'],b,M['height']) for b in boxes):
+    if not p['crouch'] and any(blocks_head(p,b) for b in boxes):
         p['crouch']=True;height=M['lowHeight']
     if sliding:
         drag=math.exp(-M['slideDrag']*dt)
@@ -129,13 +133,15 @@ def step_player(p,dt,now,arena,weapons):
         obstacles=[b for b in boxes if standing_overlap(x,p['y'],z,b)]
         if obstacles and p['grounded']:
             top=max(top_at(b,x,z) for b in obstacles)
-            if top-p['y']<=M['stepHeight'] and not any(standing_overlap(x,top,z,b) for b in boxes):
+            stair_surface=all(b.get('kind') in ('stairTread','stairLanding','routeFloor','deck') for b in obstacles)
+            step_limit=M['stairStepHeight'] if stair_surface else M['stepHeight']
+            if top-p['y']<=step_limit and not any(standing_overlap(x,top,z,b) for b in boxes):
                 p['y']=top;obstacles=[]
         if not obstacles:p[axis]=value
         else:p[velocity]=0
     if jump_edge:p['jump_buffer_until']=now+M['buffer']
     if start_grounded:p['coyote_until']=now+M['coyote']
-    can_stand=not p['crouch'] or not any(overlap(p['x'],p['y'],p['z'],b,M['height']) for b in boxes)
+    can_stand=not p['crouch'] or not any(blocks_head(p,b) for b in boxes)
     jumped=False
     if now<=p['jump_buffer_until'] and now<=p['coyote_until'] and not p['jump_consumed'] and can_stand:
         slide_hop=sliding and start_grounded

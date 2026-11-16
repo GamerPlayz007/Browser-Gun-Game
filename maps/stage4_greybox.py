@@ -250,21 +250,24 @@ def _make_switchback(b,id,cx,z_south,low=1,high=9,lane_sep=3.15,width=2.45):
             cross_z=zN if flight%2==0 else zS
             y=low+(flight+1)*2
             # Landing begins *after* the last tread, so it cannot become a low ceiling.
-            z0,z1=(cross_z-.80,cross_z) if flight%2==0 else (cross_z,cross_z+.80)
-            b.flat((left-width/2,y-.20,z0,right+width/2,y,z1),
+            # The previous 0.8m strips were narrower than a normal turning
+            # stride. Expand OUTWARD from the incoming tread, not backward over
+            # the lower flight (that would create a low ceiling).
+            z0,z1=(cross_z-1.90,cross_z) if flight%2==0 else (cross_z,cross_z+1.90)
+            b.flat((left-width/2-.33,y-.20,z0,right+width/2+.33,y,z1),
                    'grate','stairLanding',route=id,landing=flight+1)
             points.append([right if flight%2==0 else left,y,cross_z])
     # At +9, the last stair finishes on the south side; a dedicated lateral
     # deck lane leads north to the south-side train platform. It does not cross tracks.
-    b.flat((right-width/2,high-.20,zS,bridge_x+.9,high,zS+.72),
+    b.flat((right-width/2-.33,high-.20,zS,bridge_x+1.22,high,zS+1.95),
            'grate','stairLanding',route=id,landing=4)
-    b.flat((bridge_x-.92,high-.20,zN-.8,bridge_x+.92,high,zS+.72),
+    b.flat((bridge_x-1.08,high-.20,zN-1.12,bridge_x+1.08,high,zS+1.95),
            'grate','deck',route=id,structure='stair-exit-bridge')
-    b.flat((cx-2.1,high-.20,zN-1.1,bridge_x+.92,high,zN-.47),
+    b.flat((cx-2.4,high-.20,zN-1.4,bridge_x+1.08,high,zN-.37),
            'grate','deck',route=id,structure='station-landing')
     points.extend([[bridge_x,high,zS],[bridge_x,high,zN-.25],[cx,high,zN-.88]])
     b.stair_paths[id]=points
-    b.cut_passage((cx-3.5,low,zN-1.2,cx+5.0,high+3.1,zS+1.0),
+    b.cut_passage((cx-3.85,low,zN-2.25,cx+5.35,high+3.1,zS+2.2),
                   'stairwell/headroom '+id)
     return points
 

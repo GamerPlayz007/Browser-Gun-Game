@@ -24,6 +24,8 @@ jobs:
         run: pip install -r requirements.txt
       - name: Install locked JavaScript dependencies
         run: npm ci --no-audit --no-fund
+      - name: Compile deterministic updated map before client regressions
+        run: python build_map.py
       - name: Test client physics, network synchronization, world, and graphics
         run: npm test
 
@@ -41,5 +43,7 @@ jobs:
         run: pip install -r requirements.txt
       - name: Check Python syntax
         run: python -m compileall -q server.py map_registry.py movement_live.py match35.py modes54.py competitive55.py cosmetics56.py bot57.py perf36.py test_release56.py test_bot57.py
+      - name: Compile deterministic updated map before server regressions
+        run: python build_map.py
       - name: Test HTTP routes, WebSocket rooms, multiplayer snapshots and map
         run: python -m unittest -v test_server test_map test_match35 test_release51 test_modes54 test_competitive55 test_release56 test_bot57

@@ -2,6 +2,7 @@ import * as T from 'three';
 import {buildWorld} from './world.js';
 import {makeWeapon,animateWeapon,makePlayer,setPlayerSkin56,animatePlayer,markPlayerEvent,disposePlayer} from './models.js';
 import {simulate,FIXED_DT} from './physics.js';
+import {createJumpLatch62} from './input62.js';
 import {movementCue53,cameraFeel53} from './flow53.js';
 import {createMinimap} from './minimap.js';
 import {createDisplay} from './display.js';
@@ -74,6 +75,7 @@ let ads=0,kick=0,eye=1.55,visualRecoil=0,lastShot=-10,flashUntil=0,hitUntil=0,da
 let clock=performance.now(),fpsFrames=0,fpsLast=performance.now(),fps=60,lastStep=0,shotRecovery=0,frameError=false,matchBannerUntil=0,crosshairSize52=24,flashPower52=1;
 const feedback52=makeCombatFeedback52();
 const combatTrigger=makeTrigger();
+const jumpLatch62=createJumpLatch62();
 let netSync=createNetSync();
 const frameMeter=new FrameMeter();
 const opponents=new Map(),effects=[],hitGeometry=new T.IcosahedronGeometry(.035,0),hitMaterial=new T.MeshBasicMaterial({color:0xffc98a});
@@ -86,7 +88,7 @@ function updateSelection(id){document.querySelectorAll('.weapon-card').forEach(b
 function toast(text){$('toast').textContent=text;$('toast').style.opacity=1;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').style.opacity=0,3000);}
 function notice(text){$('notice').textContent=text;clearTimeout(noticeTimer);noticeTimer=setTimeout(()=>$('notice').textContent='',3000);}
 function locked(){return document.pointerLockElement===renderer.domElement;}
-function controls(){const enabled=joined&&locked()&&me?.hp>0&&['lobby','playing'].includes(state?.phase);return {w:enabled&&!!keys.KeyW,a:enabled&&!!keys.KeyA,s:enabled&&!!keys.KeyS,d:enabled&&!!keys.KeyD,jump:enabled&&!!keys.Space,sprint:enabled&&(!!keys.ShiftLeft||!!keys.ShiftRight),slide:enabled&&!!keys.KeyC,interact:enabled&&!!keys.KeyE,ads:enabled&&aiming};}
+function controls(){const enabled=joined&&locked()&&me?.hp>0&&['lobby','playing'].includes(state?.phase);return {w:enabled&&!!keys.KeyW,a:enabled&&!!keys.KeyA,s:enabled&&!!keys.KeyS,d:enabled&&!!keys.KeyD,jump:enabled&&jumpLatch62.read(keys.Space),sprint:enabled&&(!!keys.ShiftLeft||!!keys.ShiftRight),slide:enabled&&!!keys.KeyC,interact:enabled&&!!keys.KeyE,ads:enabled&&aiming};}
 function sendInput(){} // Input is sampled and sent by the fixed-step predictor below.
 function predictStep(input){
  const command={type:'input',seq:++seq,spawn:me.spawn,yaw,pitch,...input};
@@ -95,6 +97,7 @@ function predictStep(input){
  const wasSliding=local.slide_until>local.motion_time&&local.grounded;
  const beforeHeld=local.jump_held;
  simulate(local,input,FIXED_DT,local.motion_time,map.boxes,weapons[me.weapon]);
+ jumpLatch62.consume();
  if(wasSliding&&input.jump&&!beforeHeld&&local.vy>0&&!local.grounded)
   slideHopUntil53=performance.now()/1000+.48;
  if(!lastLocalGrounded&&local.grounded&&local.vy===0)landingPulse=Math.max(landingPulse,.16);
@@ -103,7 +106,7 @@ function predictStep(input){
  pendingMoves.push(command);send(command);
  if(pendingMoves.length>150){pendingMoves=[];local={...me};viewError.set(0,0,0);}
 }
-function resetInput(){$('map-panel').classList.remove('expanded');keys={};aiming=false;releaseTrigger(combatTrigger);sendInput();}
+function resetInput(){$('map-panel').classList.remove('expanded');keys={};jumpLatch62.clear();aiming=false;releaseTrigger(combatTrigger);sendInput();}
 setInterval(()=>send({type:'ping',t:performance.now()}),2000);
 function ammo(){return me?predictedAmmo(me.ammo,pendingShots,me.weapon):0;}
 function tryTriggerFire(now){if(me&&takeTriggerPulse(combatTrigger,weapons[me.weapon]))fireWeapon(now);}
@@ -375,7 +378,7 @@ function frame(ms){try{const now=ms/1000,rawMs=ms-clock,dt=Math.min(rawMs/1000,.
    team:me?.team,meId:myId});
   if(me.hp>0&&['lobby','playing'].includes(state.phase)){
    movementAccumulator+=dt;
-   let steps=0;while(movementAccumulator>=FIXED_DT&&steps++<6){predictStep(input);movementAccumulator-=FIXED_DT;}if(steps>=6)movementAccumulator=Math.min(movementAccumulator,FIXED_DT*2);
+   let steps=0;while(movementAccumulator>=FIXED_DT&&steps++<6){predictStep(controls());movementAccumulator-=FIXED_DT;}if(steps>=6)movementAccumulator=Math.min(movementAccumulator,FIXED_DT*2);
   }else movementAccumulator=0;
   viewError.multiplyScalar(Math.exp(-dt*14));
   tryTriggerFire(now);
@@ -455,7 +458,9 @@ document.addEventListener('keydown',e=>{if(!joined)return;
    cycleCurrentSpectator55(e.code==='ArrowRight'?1:-1);
   return;
  }
- if(e.code==='F7'){e.preventDefault();if(!e.repeat)$('perf-panel').hidden=!$('perf-panel').hidden;return;}if(e.code==='F8'){e.preventDefault();if(!e.repeat)copyDebugReport51();return;}if(['INPUT','SELECT','TEXTAREA'].includes(document.activeElement.tagName))return;if(['Tab','Space','KeyW','KeyA','KeyS','KeyD'].includes(e.code))e.preventDefault();keys[e.code]=true;if(e.code==='Tab')$('scoreboard').hidden=false;if(e.code==='KeyM')$('map-panel').classList.add('expanded');if(e.repeat)return;if(e.code==='KeyR'&&locked()){send({type:'reload'});if(me.ammo<weapons[me.weapon].mag&&!me.reload)audio.reload();}if(/^Digit[1-4]$/.test(e.code))selectWeapon(Number(e.code.slice(-1))-1);});
+ if(e.code==='F7'){e.preventDefault();if(!e.repeat)$('perf-panel').hidden=!$('perf-panel').hidden;return;}if(e.code==='F8'){e.preventDefault();if(!e.repeat)copyDebugReport51();return;}if(['INPUT','SELECT','TEXTAREA'].includes(document.activeElement.tagName))return;if(['Tab','Space','KeyW','KeyA','KeyS','KeyD'].includes(e.code))e.preventDefault();
+ if(e.code==='Space'&&!e.repeat&&locked()&&me?.hp>0)jumpLatch62.press();
+ keys[e.code]=true;if(e.code==='Tab')$('scoreboard').hidden=false;if(e.code==='KeyM')$('map-panel').classList.add('expanded');if(e.repeat)return;if(e.code==='KeyR'&&locked()){send({type:'reload'});if(me.ammo<weapons[me.weapon].mag&&!me.reload)audio.reload();}if(/^Digit[1-4]$/.test(e.code))selectWeapon(Number(e.code.slice(-1))-1);});
 document.addEventListener('keyup',e=>{keys[e.code]=false;if(e.code==='Tab')$('scoreboard').hidden=true;if(e.code==='KeyM')$('map-panel').classList.remove('expanded');});window.addEventListener('blur',()=>{resetInput();$('scoreboard').hidden=true;});
 function createDebugReport51(){
  const net=syncStats(netSync,performance.now());

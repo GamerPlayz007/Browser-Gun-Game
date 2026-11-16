@@ -6,7 +6,7 @@ export const FIXED_DT=1/60;
 export const MOVE={walk:5.35,sprint:8.2,crouch:3.15,groundAccel:60,groundBrake:42,airAccel:9.5,airBrake:1.7,
  slideMin:5,slideBoost:1.13,slideMax:10,slideTime:.70,slideCD:1.05,slideDrag:2.7,slideSteer:3.6,
  slideHopSpeed:7.95,slideHopCarry:1.07,slideHopCap:10,
- buffer:.125,coyote:.1,jumpSpeed:7.5,shortHop:.52,gravity:22,stepHeight:.29,
+ buffer:.18,coyote:.14,jumpSpeed:7.5,shortHop:.52,gravity:22,stepHeight:.29,stairStepHeight:.36,
  height:1.8,lowHeight:1.12,wallKickRange:.52,wallKickLift:5.3,wallKickPush:5.1,
  mantleExitSpeed:2.7};
 export function topAt(b,x,z){
@@ -21,6 +21,11 @@ export function seedMovement(p){
 }
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
 const supports=new Set(['building','atriumShell','railing','deck','stairLanding','routeFloor']);
+// A low tread/landing touching the player's feet is NOT a ceiling.
+function blocksHead(p,b){
+ return bottomAt(b,p.x,p.z)>=p.y+MOVE.lowHeight-.03 &&
+   overlaps(p.x,p.y,p.z,b,MOVE.height);
+}
 function overlaps(x,y,z,b,height){
  return Math.abs(x-b.x)<b.w/2+.32&&Math.abs(z-b.z)<b.d/2+.32&&y<topAt(b,x,z)-.015&&y+height>bottomAt(b,x,z)+.015;
 }
@@ -98,7 +103,7 @@ export function simulate(p,input,dt,now,allBoxes,weapon){
  p.crouch=sliding||slide;
  let height=p.crouch?M.lowHeight:M.height;
  let boxes=nearbyBoxes(allBoxes,p.x,p.z,Math.max(Math.abs(p.vx),Math.abs(p.vz))*dt+1.25);
- if(!p.crouch&&boxes.some(b=>overlaps(p.x,p.y,p.z,b,M.height))){p.crouch=true;height=M.lowHeight;}
+ if(!p.crouch&&boxes.some(b=>blocksHead(p,b))){p.crouch=true;height=M.lowHeight;}
  if(sliding){
   const drag=Math.exp(-M.slideDrag*dt);p.vx=p.vx*drag+ix*M.slideSteer*dt;p.vz=p.vz*drag+iz*M.slideSteer*dt;
   const v=Math.hypot(p.vx,p.vz);if(v>M.slideMax){p.vx*=M.slideMax/v;p.vz*=M.slideMax/v;}
@@ -119,13 +124,14 @@ export function simulate(p,input,dt,now,allBoxes,weapon){
   const value=p[axis]+p[velocity]*dt,x=axis==='x'?value:p.x,z=axis==='z'?value:p.z;
   let obstacles=boxes.filter(b=>overlap(x,p.y,z,b));
   if(obstacles.length&&p.grounded){const top=Math.max(...obstacles.map(b=>topAt(b,x,z)));
-   if(top-p.y<=M.stepHeight&&!boxes.some(b=>overlap(x,top,z,b))){p.y=top;obstacles=[];}
+   const stairSurface=obstacles.every(b=>['stairTread','stairLanding','routeFloor','deck'].includes(b.kind));
+   if(top-p.y<=(stairSurface?M.stairStepHeight:M.stepHeight)&&!boxes.some(b=>overlap(x,top,z,b))){p.y=top;obstacles=[];}
   }
   if(!obstacles.length)p[axis]=value;else p[velocity]=0;
  }
  if(jumpEdge)p.jump_buffer_until=now+M.buffer;
  if(startGrounded)p.coyote_until=now+M.coyote;
- const canStand=!p.crouch||!boxes.some(b=>overlaps(p.x,p.y,p.z,b,M.height));
+ const canStand=!p.crouch||!boxes.some(b=>blocksHead(p,b));
  let jumped=false;
  if(now<=p.jump_buffer_until&&now<=p.coyote_until&&!p.jump_consumed&&canStand){
   const slideHop=sliding&&startGrounded;

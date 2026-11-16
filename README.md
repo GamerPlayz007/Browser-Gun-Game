@@ -1,3 +1,21 @@
+## Phase 6.2 — DAYBREAK / stair and jump recovery
+
+- Expand all four-flight switchback turn/exit platforms from 0.8m strips to
+  1.9m turning pads, with wider side margins and a larger top exit.
+- Keep stairwell ceiling cutouts aligned with the widened platforms.
+- Move/remove two ornamental crossbars from stair headroom (market awning and
+  transit station stair sign bands).
+- Client and server both distinguish real overhead clearance from foot-level
+  stair/landing geometry. Stair surfaces can be stepped up to 0.36m; ordinary
+  collision step height remains 0.29m.
+- Buffer jump requests for 0.18s, coyote window 0.14s; latch quick Space taps
+  independently of render frames so high- and low-FPS play cannot drop a tap.
+- Stage 6.3 will add hold-to-repeat jump, toggle crouch, cooldown-free sliding,
+  and Q/E lean; these features are deliberately unchanged in Stage 6.2.
+- GitHub build gate compiles updated maps; CI tests now compile before exercising
+  client/server regressions. The resulting canonical map is published to main
+  by the existing workflow.
+
 ## Phase 6.1 — DAYBREAK / school-first renderer (implemented on main)
 
 - Default **Auto** mode now begins with reduced effects and a real 1280×720
