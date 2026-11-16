@@ -89,11 +89,13 @@ const views={
 };
 export function createDustCorridorPreview({renderer,getQuality}){
  let active=false,loading=false,world=null,toolbar=null,homeWasHidden=false,shadeDisplay='';
+ let walk=null,mode='walk',tickBank=0,modeButton=null;
  const keys=new Set();
  const camera=new T.PerspectiveCamera(74,1,.065,400);
  camera.rotation.order='YXZ';
  let yaw=0,pitch=0,dragging=false,lastX=0,lastY=0;
  const selectView=name=>{
+  if(active&&mode==='walk'){mode='fly';tickBank=0;updateModeButton();}
   const [pos,look]=views[name];
   camera.position.fromArray(pos);
   const dir=new T.Vector3(...look).sub(camera.position).normalize();
@@ -111,6 +113,12 @@ export function createDustCorridorPreview({renderer,getQuality}){
  const onKey=e=>{
   if(!active)return;
   if(e.code==='Escape'){e.preventDefault();close();return;}
+  if(mode==='walk'&&(e.code==='ControlLeft'||e.code==='ControlRight')){
+    e.preventDefault();if(!e.repeat)walk?.toggleCrouch();return;
+  }
+  if(mode==='walk'&&e.code==='Space'){
+    e.preventDefault();if(!e.repeat)walk?.requestJump();return;
+  }
   if(/^(Key[WASDQE]|ShiftLeft|ShiftRight|ArrowUp|ArrowDown|ArrowLeft|ArrowRight)$/.test(e.code)){
     keys.add(e.code);e.preventDefault();
   }
@@ -121,12 +129,24 @@ export function createDustCorridorPreview({renderer,getQuality}){
  document.addEventListener('keydown',onKey);
  document.addEventListener('keyup',e=>keys.delete(e.code));
  window.addEventListener('blur',()=>{keys.clear();dragging=false;});
+ function updateModeButton(){
+  if(modeButton)modeButton.textContent=mode==='walk'?'FREE FLY / INSPECT':'WALK / COLLISION ON';
+ }
  function controls(){
   toolbar=document.createElement('div');toolbar.id='cf-dust62-controls';
   toolbar.style.cssText='position:fixed;z-index:10000;top:12px;left:50%;transform:translateX(-50%);display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;padding:12px;border:1px solid #dcc9a4;background:#141b1bea;color:#f8f0e2;font:12px system-ui,sans-serif;border-radius:8px;box-shadow:0 8px 32px #0008;';
   const label=document.createElement('strong');
   label.textContent='DUST CORRIDOR · NATIVE RENDER PREVIEW';
   toolbar.append(label);
+  modeButton=document.createElement('button');modeButton.type='button';
+  modeButton.style.cssText='border:1px solid #a9daa6;background:#24362a;color:#c6ffd1;padding:8px;border-radius:5px;font-weight:bold;cursor:pointer;';
+  modeButton.onclick=()=>{
+    if(!walk)return;
+    mode=mode==='walk'?'fly':'walk';
+    if(mode==='walk')walk.resetSpawn('A');
+    tickBank=0;keys.clear();updateModeButton();
+  };
+  updateModeButton();toolbar.append(modeButton);
   for(const name of Object.keys(views)){
    const button=document.createElement('button');button.type='button';button.textContent=name.toUpperCase();
    button.style.cssText='border:1px solid #8f8c7d;background:#222a29;color:#fff;padding:8px;border-radius:5px;cursor:pointer;';
@@ -135,7 +155,7 @@ export function createDustCorridorPreview({renderer,getQuality}){
   const back=document.createElement('button');back.type='button';back.textContent='RETURN TO LOBBY';
   back.style.cssText='border:0;background:#e4c99b;color:#222;padding:8px;border-radius:5px;font-weight:bold;cursor:pointer;';
   back.onclick=close;toolbar.append(back);
-  const hint=document.createElement('small');hint.textContent='WASD: move · Q/E: rise/fall · Shift: faster · Drag: look · Esc: back';
+  const hint=document.createElement('small');hint.textContent='WASD move · Shift sprint · Space jump · Ctrl crouch · Free fly: Q/E vertical · Drag mouse to look';
   hint.style.cssText='flex-basis:100%;text-align:center;opacity:.8';toolbar.append(hint);
   document.body.append(toolbar);
  }
@@ -145,12 +165,15 @@ export function createDustCorridorPreview({renderer,getQuality}){
   const geos=[];
   try{
    if(!renderer.capabilities.isWebGL2)throw Error('WebGL2 is required.');
-   const [{MapGenerator},{MaterialLibrary},{ClothSystem,CableSystem}]=await Promise.all([
+   const [{MapGenerator},{MaterialLibrary},{ClothSystem,CableSystem},{createDustWalk63}]=await Promise.all([
      import('./dust_corridor/src/world/MapGenerator.js'),
      import('./dust_corridor/src/world/MaterialLibrary.js'),
-     import('./dust_corridor/src/world/ClothSystem.js')
+     import('./dust_corridor/src/world/ClothSystem.js'),
+     import('./dust_corridor_walk63.js')
    ]);
    const data=new MapGenerator().generate();
+   // Original triangles + original BVH/capsule: collision geometry matches visuals.
+   walk=createDustWalk63(data);
    const q=getQuality();const size=q==='performance'?96:q==='high'?192:q==='ultra'||q==='native'?256:128;
    try{
     bake=new MaterialLibrary(renderer,size,q==='performance'?2:4);
@@ -171,8 +194,10 @@ export function createDustCorridorPreview({renderer,getQuality}){
    cables=new CableSystem(data.cables,mat);
    scene.add(cloth.mesh,cables.mesh);
    world={scene,geos,mat,bake,cloth,cables,
-    stats:{triangles:data.triangleCount,batches:data.batches.length,cloth:data.cloth.length,cables:data.cables.length,originalMaterialLayers:bake?20:0}};
-   selectView('Street');
+    stats:{triangles:data.triangleCount,batches:data.batches.length,cloth:data.cloth.length,
+      cables:data.cables.length,originalMaterialLayers:bake?20:0,
+      collisionTriangles:walk.triangles,collisionSystem:'original-triangle-bvh'}};
+   selectView('Street');mode='walk';tickBank=0;
    const home=document.getElementById('home'),shade=document.getElementById('shade');
    homeWasHidden=home.hidden;shadeDisplay=shade.style.display;
    home.hidden=true;shade.style.display='none';controls();active=true;
@@ -180,17 +205,20 @@ export function createDustCorridorPreview({renderer,getQuality}){
   }catch(err){
    cloth?.dispose();cables?.dispose();mat?.dispose();bake?.dispose();
    for(const geo of geos)geo.dispose();
+   walk=null;
    throw err;
   }finally{loading=false;}
  }
  function close(){
   if(!active)return;
-  active=false;dragging=false;keys.clear();toolbar?.remove();toolbar=null;
+  active=false;dragging=false;keys.clear();toolbar?.remove();toolbar=null;modeButton=null;tickBank=0;
   document.getElementById('home').hidden=homeWasHidden;
   document.getElementById('shade').style.display=shadeDisplay;
   world.cloth.dispose();world.cables.dispose();
   for(const geo of world.geos)geo.dispose();
-  world.mat.dispose();world.bake?.dispose();world=null;
+  world.mat.dispose();world.bake?.dispose();world=null;walk=null;
+  const status=document.getElementById('status');
+  if(status)status.textContent='Dust Corridor collision preview closed. Existing arenas are ready.';
   delete window.__crossfireDustPreview62;
  }
  function render(dt,now){
@@ -198,13 +226,26 @@ export function createDustCorridorPreview({renderer,getQuality}){
   const forward=Number(keys.has('KeyW')||keys.has('ArrowUp'))-Number(keys.has('KeyS')||keys.has('ArrowDown'));
   const strafe=Number(keys.has('KeyD')||keys.has('ArrowRight'))-Number(keys.has('KeyA')||keys.has('ArrowLeft'));
   const rise=Number(keys.has('KeyE'))-Number(keys.has('KeyQ'));
-  const move=(keys.has('ShiftLeft')||keys.has('ShiftRight')?26:11)*Math.min(dt,.05)/Math.max(1,Math.hypot(forward,strafe,rise));
-  camera.position.x+=(-forward*Math.sin(yaw)+strafe*Math.cos(yaw))*move;
-  camera.position.z+=(-forward*Math.cos(yaw)-strafe*Math.sin(yaw))*move;
-  camera.position.y+=rise*move;
-  camera.position.x=T.MathUtils.clamp(camera.position.x,-107,107);
-  camera.position.z=T.MathUtils.clamp(camera.position.z,-137,137);
-  camera.position.y=T.MathUtils.clamp(camera.position.y,.45,38);
+  if(mode==='walk'){
+   // Conservative fixed-step collision, even with an uneven browser frame rate.
+   tickBank=Math.min(.12,tickBank+Math.min(.12,dt));
+   let count=0;
+   while(tickBank>=1/60&&count++<7){
+    walk.step(1/60,{forward,strafe,yaw,
+     sprint:keys.has('ShiftLeft')||keys.has('ShiftRight')});
+    tickBank-=1/60;
+   }
+   const pos=walk.position;
+   camera.position.set(pos.x,pos.y+(walk.crouched?.9:1.56),pos.z);
+  }else{
+   const move=(keys.has('ShiftLeft')||keys.has('ShiftRight')?26:11)*Math.min(dt,.05)/Math.max(1,Math.hypot(forward,strafe,rise));
+   camera.position.x+=(-forward*Math.sin(yaw)+strafe*Math.cos(yaw))*move;
+   camera.position.z+=(-forward*Math.cos(yaw)-strafe*Math.sin(yaw))*move;
+   camera.position.y+=rise*move;
+   camera.position.x=T.MathUtils.clamp(camera.position.x,-107,107);
+   camera.position.z=T.MathUtils.clamp(camera.position.z,-137,137);
+   camera.position.y=T.MathUtils.clamp(camera.position.y,.45,38);
+  }
   const size=renderer.getDrawingBufferSize(new T.Vector2());
   camera.aspect=Math.max(.1,size.x/Math.max(1,size.y));camera.updateProjectionMatrix();
   world.mat.uniforms.uEye.value.copy(camera.position);

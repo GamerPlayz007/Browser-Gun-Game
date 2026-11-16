@@ -24,6 +24,10 @@ jobs:
           cache: npm
       - run: pip install -r requirements.txt
       - run: npm ci
+      - name: Export original Dust Corridor triangle collision
+        run: node scripts/export_dust_collision63.mjs
+      - name: Validate Dust Corridor mesh physics and Python-readable collider
+        run: node test_dust63.mjs && python -m unittest -v test_dust_collision63
       - name: Compile the ONE live map
         run: python build_map.py
       - name: Python map and multiplayer regressions

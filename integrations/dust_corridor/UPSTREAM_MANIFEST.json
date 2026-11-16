@@ -57,6 +57,10 @@
     {
       "path": "LICENSE",
       "upstream_git_blob_sha": "48a2f6640b81ff8eca9ce7f6a96337692713ef5b"
+    },
+    {
+      "path": "src/physics/CharacterController.js",
+      "upstream_git_blob_sha": "5847a37d4fc7e55537632576664ad27d265f74c3"
     }
   ]
 }
