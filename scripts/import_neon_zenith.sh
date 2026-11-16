@@ -40,6 +40,10 @@ PY
 
 echo "[CROSSFIRE] Building native Neon scene (no texture or geometry downgrade)"
 (cd "$WORK/upstream" && npm ci --no-audit --no-fund)
+# Neon Zenith uses Vite 8 / Rolldown and does not itself include esbuild.
+# Install the standalone exporter bundler explicitly; otherwise the native
+# multiplayer build fails before the original scene is packaged.
+(cd "$WORK/upstream" && npm install --no-save --no-audit --no-fund esbuild@0.27.0)
 # Bundle ONLY the original CPU city generator into a temporary Node module.
 # Every server collision/spawn derives from the same upstream world seed and
 # geometry that the native renderer uses. No visual geometry is reconstructed.
