@@ -5,6 +5,9 @@ on:
     branches: [main]
     paths:
       - ".github/workflows/octavus-navigation.yml"
+      - "dust_world64.py"
+      - "octavus_world.py"
+      - "scripts/build_octavus_navigation.py"
   workflow_dispatch:
 
 permissions:
