@@ -66,9 +66,9 @@ def resolve_walls(world,x,y,z,h,old_x,old_z,vx,vz):
     return x,z,vx,vz
 
 
-def dust_step65(p,dt,now,weapon):
+def dust_step65(p,dt,now,weapon,world=None):
     if abs(dt-DT)>1e-8:raise ValueError('Dust movement is fixed at 60 Hz')
-    world=get_dust_world64()
+    if world is None:world=get_dust_world64()
     inp=p.get('input',{}) if now-p.get('last_input',now)<.4 else {}
     f=int(bool(inp.get('w')))-int(bool(inp.get('s')))
     r=int(bool(inp.get('d')))-int(bool(inp.get('a')))
