@@ -6,10 +6,12 @@ on:
     paths:
       - ".github/workflows/octavus-phase3.yml"
       - "octavus_world.py"
+      - "dust_world64.py"
       - "dust_motion65.py"
       - "bot57.py"
       - "octavus_nav73.py"
       - "static/dust_motion65.js"
+      - "static/dust_corridor/src/physics/BVH.js"
       - "static/octavus_match.js"
       - "static/octavus_preview.js"
       - "static/octavus_props.js"
@@ -30,48 +32,85 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
-      - name: Install original multiplayer test requirements
+      - name: Install multiplayer test requirements
         run: pip install -r requirements.txt
-      - name: Validate exact Octavus terrain, motion and safe spawn sources
-        run: python -m unittest test_octavus_phase1 test_octavus_motion73 -v
-      - name: Verify browser import graph
+      - id: pytests
+        name: Verify Octavus source, server motion and collision
+        run: |
+          python -m unittest test_octavus_phase1 test_octavus_motion73 -v > octavus-py.log 2>&1
+          code=$?
+          cat octavus-py.log
+          exit $code
+      - id: imports
+        name: Validate browser's complete import graph
         run: python scripts/check_browser_imports.py
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
           cache: npm
       - run: npm ci --no-audit --no-fund
-      - name: Check JavaScript syntax and matched capsule parity
+      - id: jstests
+        name: Validate module syntax and browser-side capsule parity
         run: |
-          node --check static/game.js
-          node --check static/octavus_match.js
-          node --check static/octavus_preview.js
-          node --check static/octavus_environment.js
-          node --check static/octavus_props.js
-          node --check static/octavus_decals.js
-          node test_octavus_motion73.mjs
-      - name: Verify existing multiplayer and default-map regressions
-        run: python -m unittest test_server -q
-      - name: Commit verified status for visible inspection
+          node --check static/game.js &&
+          node --check static/octavus_match.js &&
+          node --check static/octavus_preview.js &&
+          node --check static/octavus_environment.js &&
+          node --check static/octavus_props.js &&
+          node --check static/octavus_decals.js &&
+          node --check static/dust_corridor/src/physics/BVH.js &&
+          node test_octavus_motion73.mjs > octavus-js.log 2>&1
+          code=$?
+          if [ -f octavus-js.log ]; then cat octavus-js.log; fi
+          exit $code
+      - id: servertests
+        name: Verify existing multiplayer and default-map regressions
+        run: |
+          python -m unittest test_server -q > octavus-server.log 2>&1
+          code=$?
+          cat octavus-server.log
+          exit $code
+      - name: Persist success or failure diagnostics to main
+        if: always()
+        env:
+          PY_STATUS: ${{ steps.pytests.outcome }}
+          IMPORT_STATUS: ${{ steps.imports.outcome }}
+          JS_STATUS: ${{ steps.jstests.outcome }}
+          SERVER_STATUS: ${{ steps.servertests.outcome }}
         run: |
           python - <<'PY'
-          import json
+          import json,os
           from pathlib import Path
-          from datetime import datetime, timezone
+          from datetime import datetime,timezone
+          steps={key:os.environ.get(env,"skipped")
+                 for key,env in [
+                   ("octavusServerMotion","PY_STATUS"),
+                   ("browserImportClosure","IMPORT_STATUS"),
+                   ("octavusClientMotion","JS_STATUS"),
+                   ("existingMultiplayer","SERVER_STATUS")
+                 ]}
+          errors={}
+          for name,path in [
+            ("python","octavus-py.log"),("javascript","octavus-js.log"),
+            ("server","octavus-server.log")
+          ]:
+            f=Path(path)
+            if f.is_file():errors[name]=f.read_text(errors="replace").splitlines()[-28:]
+          passed=all(value=="success" for value in steps.values())
           p=Path("static/maps/octavus.phase3-tests.json")
           p.write_text(json.dumps({
-            "status":"passed",
+            "status":"passed" if passed else "failed",
             "verifiedAt":datetime.now(timezone.utc).isoformat(),
-            "tests":["Octavus mesh and original UVs","Octavus server stairs and ceiling",
-                     "Bot line-of-sight","Browser import closure",
-                     "Client movement stair and ceiling",
-                     "Existing server multiplayer regression suite"],
-            "scope":"Automated tests; does not replace interactive browser gameplay"
-          },indent=2)+"\n")
+            "steps":steps,
+            "logTail":errors,
+            "scope":"Automated tests; interactive browser gameplay still requires playtesting"
+          },indent=2))
           PY
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add static/maps/octavus.phase3-tests.json
-          git commit -m "test(octavus 3.3): record passing multiplayer and source mesh smoke checks"
-          git pull --rebase origin main
-          git push origin HEAD:main
+          if ! git diff --cached --quiet; then
+            git commit -m "test(octavus 3.3): record automated gameplay success or failure"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
