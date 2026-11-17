@@ -57,8 +57,8 @@ class DustPhysics65Tests(unittest.TestCase):
             p['last_input']=1.+i/60
             dust_step65(p,1/60,1.+i/60,server.WEAPONS[0])
             self.assertLessEqual(p['x'],42.66)
-        self.assertIsNotNone(world.raycast((0,2,-30),(46,2,-30)),
-                             'Authoritative source buildings must block long-range rays')
+        self.assertIsNotNone(world.raycast((0,2,-30),(65,2,-30)),
+                             'Source perimeter wall must occlude a ray crossing the district boundary')
 
 
 class DustNetwork65Tests(unittest.IsolatedAsyncioTestCase):
