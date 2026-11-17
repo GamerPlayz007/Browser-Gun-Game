@@ -9,6 +9,7 @@ from movement_live import step_player, seed_movement, allowed_lean
 from combat64 import MAX_HEALTH, KILL_SIPHON, REGEN_DELAY, reset_health, take_damage, siphon, regenerate
 from perf36 import ServerMetrics
 from dust_world64 import get_dust_world64
+from octavus_world import get_octavus_world
 from dust_motion65 import dust_step65
 from modes54 import (TEAM_MODES,TEAM_IDS,TEAM_NAMES,CONTROL_POINT,
     is_team_mode,next_team,balance_teams,winner_team,controller,presence)
@@ -45,9 +46,11 @@ def overlaps(x,y,z,b,height=1.8):
     return abs(x-b['x'])<b['w']/2+.32 and abs(z-b['z'])<b['d']/2+.32 and y<top_at(b,x,z)-.015 and y+height>bottom_at(b,x,z)+.015
 
 def move(p,dt,now,arena=DEFAULT):
-    """60 Hz authority: original triangle solver for Dust only."""
+    """60 Hz authority: source triangles for Dust Corridor and Octavus."""
     if arena.id=='dust_corridor':
         return dust_step65(p,dt,now,WEAPONS[p['weapon']])
+    if arena.id=='octavus':
+        return dust_step65(p,dt,now,WEAPONS[p['weapon']],get_octavus_world())
     return step_player(p,dt,now,arena,WEAPONS)
 
 def spawn(p,players,now,arena=DEFAULT,history=None):
@@ -62,13 +65,18 @@ def spawn(p,players,now,arena=DEFAULT,history=None):
             vec=(x-origin[0],y+1.55-origin[1],z-origin[2])
             dist=math.sqrt(sum(v*v for v in vec))
             direction=tuple(v/max(dist,.01) for v in vec)
-            if not (get_dust_world64().raycast(origin,(x,y+1.55,z))
-                    if arena.id=='dust_corridor' else any(
+            if not ((get_dust_world64() if arena.id=='dust_corridor' else
+                     get_octavus_world()).raycast(origin,(x,y+1.55,z))
+                    if arena.id in ('dust_corridor','octavus') else any(
                      (h:=ray_solid(origin,direction,b)) is not None and h<dist
                      for b in arena.boxes)):
                 visible.append(q)
         return spawn_score(pos,p,players,history,now,visible)
-    points=random.sample(arena.spawns,len(arena.spawns))
+    pool=arena.spawns
+    if arena.id=='octavus' and p.get('team') in ('azure','ember'):
+        side=arena.octavus_spawn_groups.get(p['team'])
+        if side:pool=side
+    points=random.sample(pool,len(pool))
     x,y,z=max(points,key=rank)
     history[(x,y,z)]=now
     p.update(x=x,y=y,z=z,yaw=math.atan2(x,z),vx=0.,vy=0.,vz=0.,
@@ -92,7 +100,25 @@ def new_player(room,pid,name,now,weapon=0,skin=0):
 class Room:
     def __init__(self,code,map_id=None):
         self.arena=ARENAS[map_id or DEFAULT.id]
-        self.control_point=CONTROL_POINT
+        self.control_point=self.arena.data.get('controlPoint',CONTROL_POINT)
+        if self.arena.id=='octavus' and not getattr(self.arena,'octavus_checked',False):
+            mesh=get_octavus_world()
+            safe=[]
+            for point in self.arena.spawns:
+                x,y,z=point
+                ground=mesh.ground_at(x,z,y)
+                if (mesh.inside(x,z) and ground is not None and
+                        abs(ground-y)<.18 and mesh.capsule_clear(point)):
+                    safe.append(point)
+            if len(safe)<6:
+                raise RuntimeError('Octavus requires at least six collision-safe spawns')
+            accepted={tuple(p) for p in safe}
+            self.arena.octavus_spawn_groups={
+                'azure':[p for p in self.arena.data['spawnSets']['A'] if tuple(p) in accepted],
+                'ember':[p for p in self.arena.data['spawnSets']['B'] if tuple(p) in accepted]
+            }
+            self.arena.spawns=safe
+            self.arena.octavus_checked=True
         self.code=code;self.players={};self.sockets={};self.joining=0;self.host=None;self.mode='deathmatch';self.next_mode='deathmatch'
         self.phase='lobby';self.started=0.;self.ended_at=0.;self.countdown_at=0.;self.winner=None;self.winner_id=None;self.win_reason=None;self.round_number=0;self.leader_id=None;self.events=[];self.last_active=time.monotonic();self.snapshot_sequence=0
         self.targets=[dict(id='t'+str(i),x=x,y=y,z=z,hp=100,reset_at=0) for i,(x,y,z) in enumerate(self.arena.data['practiceTargets'])]
@@ -288,7 +314,7 @@ class Room:
         p['last_shot']=now;p['ammo']-=1;p['shield']=0;p['shot_seq']=shot_id
         # Recompute peek on every shot with the current aim; clients cannot
         # provide an arbitrary gun origin or peek through an opaque wall.
-        p['lean']=0. if self.arena.id=='dust_corridor' else allowed_lean(p,p.get('input',{}),self.arena)
+        p['lean']=0. if self.arena.id in ('dust_corridor','octavus') else allowed_lean(p,p.get('input',{}),self.arena)
         shift=.52*p['lean']
         origin=(p['x']+math.cos(p['yaw'])*shift,
                 p['y']+(.9 if p['crouch'] else 1.55),
@@ -304,9 +330,10 @@ class Room:
             yaw=p['yaw']+random.uniform(-spread,spread);pitch=p['pitch']+random.uniform(-spread,spread);cp=math.cos(pitch)
             direction=(-math.sin(yaw)*cp,math.sin(pitch),-math.cos(yaw)*cp)
             distance=w['range'];victim=None;head=False
-            if self.arena.id=='dust_corridor':
+            if self.arena.id in ('dust_corridor','octavus'):
                 endpoint=tuple(origin[i]+direction[i]*distance for i in range(3))
-                hit=get_dust_world64().raycast(origin,endpoint)
+                mesh=get_dust_world64() if self.arena.id=='dust_corridor' else get_octavus_world()
+                hit=mesh.raycast(origin,endpoint)
                 if hit is not None:distance=min(distance,hit['distance'])
             else:
                 for b in self.arena.boxes:
