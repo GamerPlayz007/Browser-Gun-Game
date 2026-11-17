@@ -1,0 +1,32 @@
+name: Archive pinned Octavus native map source
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/octavus-source.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  archive-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Retrieve and verify upstream Octavus binary
+        run: python scripts/fetch_octavus_native.py
+      - name: Commit original map source and verification manifest
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add sources/octavus.original.mpz sources/octavus.original.json
+          if ! git diff --cached --quiet; then
+            git commit -m "source: archive pinned original Octavus mpz for offline conversion"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
