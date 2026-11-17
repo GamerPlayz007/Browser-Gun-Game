@@ -4,7 +4,9 @@
  * Map provenance and CC BY-SA 3.0: maps/OCTAVUS_ATTRIBUTION.md.
  */
 import {createDustPhysics65} from './dust_motion65.js';
-import {loadOctavusPacked,loadOctavusMaterials,createOctavusScene} from './octavus_preview.js';
+import {loadOctavusOriginalUV} from './octavus_uv.js';
+import {loadOctavusPacked,loadOctavusMaterials,createOctavusScene,
+ OCTAVUS_LOCAL_RATIO,OCTAVUS_GROUND_Y} from './octavus_preview.js';
 
 let cachedPhysics=null;
 function collisionSource(packed,map){
@@ -18,9 +20,9 @@ function collisionSource(packed,map){
    const out=triangle*9;
    for(let v=0;v<3;v++){
     const src=indices[i+v]*3;
-    positions[out+v*3]=points[src];
-    positions[out+v*3+1]=points[src+1];
-    positions[out+v*3+2]=points[src+2];
+    positions[out+v*3]=points[src]*OCTAVUS_LOCAL_RATIO;
+    positions[out+v*3+1]=points[src+1]*OCTAVUS_LOCAL_RATIO-OCTAVUS_GROUND_Y;
+    positions[out+v*3+2]=points[src+2]*OCTAVUS_LOCAL_RATIO;
    }
    surfaces[triangle++]=slot;
   }
@@ -37,7 +39,9 @@ function collisionSource(packed,map){
 export async function buildOctavusMatch(scene,map,{quality='auto'}={}){
  if(map.id!=='octavus'||map.collisionFormat!=='OCT1'||!map.octavusOriginal)
   throw Error('Refusing to load an unverified Octavus multiplayer map');
- const [packed,materials]=await Promise.all([loadOctavusPacked(),loadOctavusMaterials()]);
+ const [packed,materials,authoredUV]=await Promise.all([
+  loadOctavusPacked(),loadOctavusMaterials(),loadOctavusOriginalUV()
+ ]);
  const source=collisionSource(packed,map);
  const physics=createDustPhysics65(source);
  // Map-only linework sampled from the genuine vertical geometry. This is
@@ -65,7 +69,7 @@ export async function buildOctavusMatch(scene,map,{quality='auto'}={}){
  }
  // The preview's actual 111 material-slot meshes, UVs, lighting and textures
  // are used directly. No duplicate block-built level or iframe is involved.
- const visual=createOctavusScene(packed,materials,scene);
+ const visual=createOctavusScene(packed,materials,scene,authoredUV,true);
  let detail=true,mode=quality;
  return {
   isOctavusMatch:true,
@@ -73,6 +77,9 @@ export async function buildOctavusMatch(scene,map,{quality='auto'}={}){
   targets:new Map(),
   staticBatches:visual.meshCount,
   originalVisualTriangles:packed.triangles,
+  originalTextureVertices:authoredUV.textureVertexCount,
+  sourceScaleRatio:OCTAVUS_LOCAL_RATIO,
+  originalUV:visual.preservedTextureCoordinates,
   featureCount:packed.triangles,
   environmentCount:0,
   environmentSigns:0,
