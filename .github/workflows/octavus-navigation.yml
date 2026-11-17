@@ -1,0 +1,30 @@
+name: Build native Octavus walkability/navigation map
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/octavus-navigation.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  source-navigation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify original terrain and generate safe navigation markers
+        run: python scripts/build_octavus_navigation.py
+      - name: Commit navigation and verification summary
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add static/maps/octavus.navigation.json static/maps/octavus.nav-summary.json
+          if ! git diff --cached --quiet; then
+            git commit -m "assets(octavus 3.3): verified original-map walking graph and spawn candidate summary"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
