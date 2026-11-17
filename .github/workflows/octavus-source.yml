@@ -20,6 +20,8 @@ jobs:
           persist-credentials: true
       - name: Retrieve and verify upstream Octavus binary
         run: python scripts/fetch_octavus_native.py
+      - name: Verify Octavus source geometry, UVs and safe spawns
+        run: python -m unittest test_octavus_phase1 -v
       - name: Commit original map source and verification manifest
         run: |
           git config user.name "github-actions[bot]"
