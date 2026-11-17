@@ -43,6 +43,42 @@ vec3 fallback(int i){
   if(i==11||i==17)return vec3(.57,.48,.37);
   return vec3(.74,.68,.57);
 }
+// GPU-cheap material-specific microdetail for Auto and Performance. No extra
+// texture fetches, no new geometry, and no loss of the original authored UVs.
+vec3 proceduralSurface(int i,vec2 uv){
+  vec3 base=fallback(i);
+  float grain=hash(floor(uv*97.))*0.15+hash(floor(uv*17.))*0.08;
+  if(i==3){ // Offset masonry and dark recessed mortar joints
+    vec2 q=uv*vec2(3.2,5.8);
+    q.x+=mod(floor(q.y),2.)*.5;
+    vec2 edge=abs(fract(q)-.5);
+    float mortar=step(.465,max(edge.x,edge.y));
+    base*=mix(.91+grain,.35,mortar);
+  }else if(i==13){ // Tiled floors, grout and gently mottled glaze
+    vec2 edge=abs(fract(uv*5.5)-.5);
+    float grout=step(.472,max(edge.x,edge.y));
+    base*=mix(.93+grain,.48,grout);
+  }else if(i==11||i==17){ // Woven cloth with subtle dyed stripes
+    float stripe=step(.53,fract(uv.x*4.));
+    base*=.86+grain+stripe*.15;
+  }else if(i==19){ // Ribbed sheet metal with shadowed corrugations
+    float rib=pow(abs(sin(uv.x*24.)),5.);
+    base*=.72+rib*.30+grain*.4;
+  }else if(i==8){ // Wood planks and long grain
+    float plank=step(.96,fract(uv.y*3.));
+    base*=.85+grain*.55+.12*sin(uv.x*31.+sin(uv.y*9.));
+    base*=1.-plank*.34;
+  }else if(i==9||i==15){ // Asphalt aggregate and scattered pebbles
+    base*=.77+grain*1.3;
+  }else if(i==6||i==7){ // Weathered metal panels
+    float seam=step(.97,fract(uv.x*2.));
+    base*=.84+grain*.7-seam*.2;
+  }else{
+    // Stucco, plaster, sand, concrete and sandbags
+    base*=.86+grain;
+  }
+  return base;
+}
 void main(){
   vec3 texColor;
   vec3 texNormal=vec3(0.,0.,1.);
@@ -53,7 +89,7 @@ void main(){
     texNormal=texture(uNormalTex,uvw).rgb*2.-1.;
     orm=texture(uOrm,uvw).rgb;
   }else{
-    texColor=fallback(vLayer)*(.83+.12*hash(floor(vUv*81.))+.08*hash(floor(vUv*9.)));
+    texColor=proceduralSurface(vLayer,vUv);
   }
   vec3 n=normalize(vNormal);
   if(uOriginal){

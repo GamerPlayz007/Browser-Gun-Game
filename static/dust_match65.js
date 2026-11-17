@@ -10,8 +10,9 @@ import * as THREE from 'three';
 import {ClothSystem,CableSystem} from './dust_corridor/src/world/ClothSystem.js';
 import {createDustPhysics65} from './dust_motion65.js';
 import {makeDustMaterial65} from './dust_corridor_preview.js';
+import {MaterialLibrary} from './dust_corridor/src/world/MaterialLibrary.js';
 
-export function buildDustMatch65(scene,map,{quality='auto',source=null}={}){
+export async function buildDustMatch65(scene,map,{renderer=null,quality='auto',source=null}={}){
  if(map.id!=='dust_corridor'||map.collisionFormat!=='DUSTCOL3'||!map.dustOriginal)
   throw Error('Refusing to render an unverified native Dust Corridor map');
  if(!source)throw Error('Dust 6.6 scene must be loaded before renderer creation');
@@ -27,7 +28,22 @@ export function buildDustMatch65(scene,map,{quality='auto',source=null}={}){
  const group=new THREE.Group();group.name='CROSSFIRE native Dust Corridor original district';
  scene.add(group);
  scene.background=new THREE.Color('#bdc9c9');
- const mat=makeDustMaterial65(null);
+ // Preserve the original author's 20 GPU-synthesized surface layers for
+ // High/Ultra/Native. Performance and Auto keep full source geometry but use
+ // the lightweight procedural material (no expensive shader compilation).
+ let bake=null;
+ const textured=mode=>['high','ultra','native'].includes(mode);
+ if(textured(quality)&&renderer?.capabilities?.isWebGL2){
+  try{
+   const size=quality==='high'?192:256;
+   bake=new MaterialLibrary(renderer,size,4);
+   await bake.compile();await bake.draw();
+  }catch(err){
+   console.warn('Dust original material baking unavailable; using full-geometry procedural fallback.',err);
+   bake?.dispose();bake=null;
+  }
+ }
+ const mat=makeDustMaterial65(bake);
  const meshes=[],geometries=[];
  let cloth=null,cables=null,last=0;
  try{
@@ -46,14 +62,14 @@ export function buildDustMatch65(scene,map,{quality='auto',source=null}={}){
  }catch(error){
   cloth?.dispose();cables?.dispose();
   for(const geo of geometries)geo.dispose();
-  mat.dispose();group.removeFromParent();throw error;
+  mat.dispose();bake?.dispose();group.removeFromParent();throw error;
  }
  const sun=new THREE.DirectionalLight(0xffe7c1,.9);
  sun.position.set(-24,57,24);
  const hemi=new THREE.HemisphereLight(0xf2f3e7,0x705a40,1.1);
  group.add(sun,hemi);
  const targets=new Map(); // No artificial targets over the source district.
- let detail=true,setting=quality;
+ let detail=true,setting=quality,disposed=false,materialJob=null;
  const world={
   isDustCorridor65:true,
   targets,
@@ -62,6 +78,7 @@ export function buildDustMatch65(scene,map,{quality='auto',source=null}={}){
    data.batches.reduce((n,b)=>n+b.triangleCount,0),
   packedScene66:!!data.packed,
   packedTransferBytes66:data.transferBytes||0,
+  get originalMaterialLayers(){return bake?20:0;},
   featureCount:data.buildings.length,
   environmentCount:data.cloth.length+data.cables.length,
   environmentSigns:0,
@@ -71,7 +88,39 @@ export function buildDustMatch65(scene,map,{quality='auto',source=null}={}){
     fullArchitecture:true,hasEnvironment:true,atlasSize:0,atlases:0,
     atlasRebuilds:0,stage5Meshes:meshes.length,stage6Meshes:0
   };},
-  setQuality(mode){setting=mode;},
+  setQuality(mode){
+   setting=mode;
+   // Changing quality in Settings should actually upgrade/downgrade the
+   // material, not require players to disconnect and rejoin.
+   if(!textured(mode)){
+    mat.uniforms.uOriginal.value=false;
+    if(bake){bake.dispose();bake=null;}
+    return;
+   }
+   if(bake){
+    mat.uniforms.uOriginal.value=true;
+    return;
+   }
+   if(materialJob||!renderer?.capabilities?.isWebGL2)return;
+   materialJob=(async()=>{
+    let next=null;
+    try{
+     next=new MaterialLibrary(renderer,mode==='high'?192:256,4);
+     await next.compile();
+     if(disposed||!textured(setting)){next.dispose();return;}
+     await next.draw();
+     if(disposed||!textured(setting)){next.dispose();return;}
+     bake=next;
+     mat.uniforms.uAlbedo.value=bake.albedo;
+     mat.uniforms.uNormalTex.value=bake.normal;
+     mat.uniforms.uOrm.value=bake.orm;
+     mat.uniforms.uOriginal.value=true;
+    }catch(err){
+     console.warn('Dust detailed materials could not be enabled:',err);
+     next?.dispose();
+    }finally{materialJob=null;}
+   })();
+  },
   setDetail(value){
    // Throttle updates instead of removing decorative detail. Awnings and
    // cables are visible at every quality level, including Performance.
@@ -88,13 +137,15 @@ export function buildDustMatch65(scene,map,{quality='auto',source=null}={}){
    cloth.update(dt,time);cables.update(dt,time);
   },
   dispose(){
+   disposed=true;
    cloth.dispose();cables.dispose();
    for(const geo of geometries)geo.dispose();
-   mat.dispose();
+   mat.dispose();bake?.dispose();bake=null;
    group.removeFromParent();
    scene.background=null;
   }
  };
- world.setQuality(setting);
+ // Initial High/Ultra bake already completed before world construction.
+ // No second compile is necessary on first entry.
  return world;
 }

@@ -30,6 +30,8 @@ jobs:
         run: node scripts/pack_dust_scene66.mjs
       - name: Verify all original triangles, cloth and props survive scene packing
         run: node test_dust_scene66.mjs
+      - name: Verify final Dust Corridor material quality fallback and scene lifecycle
+        run: node test_dust_release67.mjs
       - name: Compile deterministic updated map before client regressions
         run: python build_map.py
       - name: Validate source mesh, spawns, Python/JS rays and predicted movement

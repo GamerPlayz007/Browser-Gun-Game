@@ -1,0 +1,42 @@
+/** CROSSFire Stage 6.7 release: full original map, scene lifecycle and tiers. */
+import assert from 'node:assert/strict';
+import * as THREE from 'three';
+import {MapGenerator} from './static/dust_corridor/src/world/MapGenerator.js';
+import {buildDustMatch65} from './static/dust_match65.js';
+import {makeDustMaterial65} from './static/dust_corridor_preview.js';
+const source=new MapGenerator().generate();
+source.packed=false;
+source.visualTriangles=source.batches.reduce((n,b)=>n+b.triangleCount,0);
+assert.equal(source.soup.count,96588);
+assert.equal(source.visualTriangles,284456);
+const map={id:'dust_corridor',collisionFormat:'DUSTCOL3',dustOriginal:true};
+const scene=new THREE.Scene();
+// This mock intentionally has no WebGL2 support. A high-quality request must
+// fall back to ALL source geometry instead of showing a blank world.
+const renderer={capabilities:{isWebGL2:false}};
+const world=await buildDustMatch65(scene,map,{quality:'high',renderer,source});
+assert.equal(world.originalVisualTriangles,284456);
+assert.equal(world.staticBatches,5);
+assert.equal(world.originalMaterialLayers,0);
+assert.equal(world.physics.source.soup.count,96588);
+assert.equal(world.environmentCount,source.cloth.length+source.cables.length);
+assert.equal(scene.children.length,1);
+assert.equal(map.dustFootprints.length,source.buildings.length);
+const district=scene.children[0];
+assert.equal(district.children.filter(x=>x.isMesh).length,7);
+assert.ok(district.children.filter(x=>x.isMesh).every(x=>x.visible));
+world.setQuality('performance');
+world.setDetail(false);
+world.animate(1,{x:0,y:0,z:0});
+world.setQuality('ultra');
+world.animate(1.1,{x:0,y:0,z:0});
+assert.equal(world.originalMaterialLayers,0);
+assert.ok(district.children.filter(x=>x.isMesh).every(x=>x.visible));
+world.dispose();
+assert.equal(scene.children.length,0);
+assert.equal(scene.background,null);
+const mat=makeDustMaterial65(null);
+assert.equal(mat.uniforms.uOriginal.value,false);
+assert.equal(mat.side,THREE.DoubleSide);
+mat.dispose();
+console.log('Stage 6.7 native Dust full-geometry quality fallback and cleanup PASS');

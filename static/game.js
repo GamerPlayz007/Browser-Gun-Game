@@ -106,7 +106,7 @@ async function loadArena(id){
  const loadMs=performance.now()-loadStart;
  const nextScene=new T.Scene();
  const nextWorld=next.dustOriginal?
-   buildDustMatch65(nextScene,next,{renderer,quality:qualityTier61(),source:dustSource}):
+   await buildDustMatch65(nextScene,next,{renderer,quality:qualityTier61(),source:dustSource}):
    buildWorld(nextScene,next,{renderer,quality:qualityTier61()});
  clearVisualEffects52();controlBeacon54.dispose();world.dispose();postfx.dispose();
  scene=nextScene;world=nextWorld;controlBeacon54=createControlBeacon54(T,scene);
@@ -119,6 +119,7 @@ async function loadArena(id){
    packedScene:world.packedScene66,
    packedChunks:world.staticBatches,
    packedBytes:world.packedTransferBytes66,
+   originalMaterialLayers:world.originalMaterialLayers,
    loadMs:Math.round(loadMs),
    sourceChecksum:next.collisionSha256,
    get active(){return map?.id==='dust_corridor'&&joined;}
@@ -626,6 +627,12 @@ function createDebugReport51(){
    'Map: '+(map?.name||map?.id||'unknown'),
    'Connection: '+(joined?'joined':'not joined'),
    'Quality setting: '+settings.quality,
+   ...(world?.isDustCorridor65?[
+    'Dust visual triangles: '+world.originalVisualTriangles,
+    'Dust render sections: '+world.staticBatches,
+    'Dust original texture layers: '+world.originalMaterialLayers,
+    'Dust packed source: '+world.packedScene66
+   ]:[]),
    'Capture: '+new Date().toISOString(),
    '',
    formatDiagnostics(frameMeter.summary(),net,data)].join('\n');
