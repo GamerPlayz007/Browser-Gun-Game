@@ -35,6 +35,23 @@ export function createDustPhysics65(source){
   const hit=raycast([x,y+.48,z],[x,y-1,z]);
   return hit&&Math.abs(hit.normal.y)>=.67?hit.point.y:null;
  }
+ function capsuleClear(x,y,z,height=HEIGHT){
+  if(!inside(x,z,R))return false;
+  const count=Math.max(3,Math.ceil((height-2*R)/(R*.55))+1);
+  const ids=[];bvh.overlapBox(x-R,y-R,z-R,x+R,y+height+R,z+R,index=>ids.push(index));
+  for(const tri of ids){
+   const k=tri*9;
+   const lo=Math.min(positions[k+1],positions[k+4],positions[k+7]);
+   const hi=Math.max(positions[k+1],positions[k+4],positions[k+7]);
+   if(lo>y+height+R||hi<y-R)continue;
+   for(let i=0;i<count;i++){
+    const cy=y+R+(height-2*R)*i/(count-1);
+    closestPointOnTriangleSoup(source.soup,tri,x,cy,z,q);
+    if((x-q.x)**2+(cy-q.y)**2+(z-q.z)**2<(R-.012)**2)return false;
+   }
+  }
+  return true;
+ }
  function resolve(x,y,z,h,oldX,oldZ,vx,vz){
   for(let iter=0;iter<2;iter++){
    let moved=false;
@@ -97,7 +114,11 @@ export function createDustPhysics65(source){
    p.vx*=boost;p.vz*=boost;
   }
   const sliding=now<p.slide_until;
-  p.crouch=sliding||!!input.crouch;
+  let requestedCrouch=sliding||!!input.crouch;
+  const nativeOctavus=!!source.nativeOctavus;
+  if(nativeOctavus&&p.crouch&&!requestedCrouch&&!capsuleClear(p.x,p.y,p.z,HEIGHT))
+   requestedCrouch=true;
+  p.crouch=requestedCrouch;
   let height=p.crouch?LOW:HEIGHT;
   if(sliding){
    const drag=Math.exp(-2.7*dt);
@@ -122,17 +143,26 @@ export function createDustPhysics65(source){
   const oldX=p.x,oldZ=p.z,oldY=p.y;
   const total=Math.hypot(p.vx*dt,p.vz*dt);
   const parts=Math.max(1,Math.min(4,Math.ceil(total/.14)));
-  let x=oldX,z=oldZ,vx=p.vx,vz=p.vz;
+  let x=oldX,z=oldZ,vx=p.vx,vz=p.vz,stepFeet=oldY;
   for(let i=0;i<parts;i++){
-   let xx=x+vx*dt/parts,zz=z+vz*dt/parts;
-   [xx,zz,vx,vz]=resolve(xx,oldY,zz,height,x,z,vx,vz);
+   const proposedX=x+vx*dt/parts,proposedZ=z+vz*dt/parts;
+   let xx,zz;
+   [xx,zz,vx,vz]=resolve(proposedX,stepFeet,proposedZ,height,x,z,vx,vz);
+   if(nativeOctavus&&grounded&&Math.hypot(proposedX-xx,proposedZ-zz)>.018&&
+      inside(proposedX,proposedZ,R)){
+    const rise=groundAt(proposedX,proposedZ,stepFeet+STEP);
+    if(rise!==null&&rise>=stepFeet+.025&&rise<=stepFeet+STEP+.012&&
+       rise<=oldY+STEP+.012&&capsuleClear(proposedX,rise,proposedZ,height)){
+     xx=proposedX;zz=proposedZ;stepFeet=rise;vx=p.vx;vz=p.vz;
+    }
+   }
    if(!inside(xx,zz,R)){
     xx=Math.max(bounds.x0+R,Math.min(bounds.x1-R,xx));
     zz=Math.max(bounds.z0+R,Math.min(bounds.z1-R,zz));vx=vz=0;
    }
    x=xx;z=zz;
   }
-  let ground=groundAt(x,z,oldY);
+  let ground=groundAt(x,z,stepFeet);
   if(grounded&&ground!==null&&ground>oldY+STEP+.02){
    x=oldX;z=oldZ;vx=vz=0;ground=groundAt(x,z,oldY);
   }
@@ -149,7 +179,7 @@ export function createDustPhysics65(source){
   if(p.grounded){p.jump_consumed=false;p.jump_cut=false;}
   return p;
  }
- const physics={bvh,source,bounds,simulate,inside,groundAt,raycast};
+ const physics={bvh,source,bounds,simulate,inside,groundAt,raycast,capsuleClear};
  cache.set(source,physics);
  return physics;
 }
