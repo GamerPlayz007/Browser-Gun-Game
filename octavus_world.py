@@ -16,7 +16,8 @@ from pathlib import Path
 from dust_world64 import DustWorld64
 
 ROOT = Path(__file__).parent
-SCALE = 120.0 / 8192.0
+SCALE = 0.05  # Full-size original geometry; upstream OBJ README recommends ~0.05
+GROUND_SOURCE_Y = 2816.0  # Center courtyard ground in source Cube 2 units
 VERTICES = 52061
 TRIANGLES = 86500
 PARTS = 8
@@ -39,6 +40,7 @@ class OctavusCollision:
         points = struct.unpack_from(f'<{VERTICES * 3}h', raw, 12)
         positions = array('f')
         surfaces = bytearray(TRIANGLES)
+        self.cell_size = 10.0  # Broadphase tuned for 409.6-unit outdoor map
         offset = 12 + VERTICES * 6
         for tri in range(TRIANGLES):
             a, b, c, material = struct.unpack_from('<HHHB', raw, offset)
@@ -48,14 +50,15 @@ class OctavusCollision:
             for vertex in (a, b, c):
                 i = vertex * 3
                 positions.extend((points[i] * SCALE,
-                                  points[i + 1] * SCALE,
+                                  (points[i + 1] - GROUND_SOURCE_Y) * SCALE,
                                   points[i + 2] * SCALE))
             surfaces[tri] = material
         self.vertices = positions.tobytes()  # Same float32 triangle soup used by JS BVH.
         self._surfaces = surfaces
         self.count = TRIANGLES
         self.metadata = {
-            'playBounds': {'x0': -57, 'x1': 57, 'z0': -57, 'z1': 57},
+            'playBounds': {'x0': -194.56, 'x1': 194.56,
+                           'z0': -194.56, 'z1': 194.56},
             'spawns': {},
             'rawSha256': hashlib.sha256(raw).hexdigest(),
         }
