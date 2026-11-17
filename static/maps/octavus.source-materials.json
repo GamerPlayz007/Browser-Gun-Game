@@ -1,0 +1,2061 @@
+{
+  "origin": {
+    "cfgSha": "8e15bd6e933a1a81c33b782e94b23399d531cba1",
+    "mtlSha": "944c2144265194e278d4e43fae1e8341dc0bb559"
+  },
+  "license": "Octavus map CC BY-SA 3.0; individual external texture licenses must be verified before copying",
+  "originalGameMaterialDefinitions": 68,
+  "exportedOBJMaterialSlots": 111,
+  "cfgSlots": [
+    {
+      "cfgSlot": 0,
+      "sourceImage": "textures/sky.png",
+      "shader": "stdworld",
+      "parameters": {},
+      "layers": {},
+      "textureScale": 1
+    },
+    {
+      "cfgSlot": 1,
+      "sourceImage": "mikeplus64/plain.png",
+      "shader": "stdworld",
+      "parameters": {},
+      "layers": {},
+      "textureScale": 1
+    },
+    {
+      "cfgSlot": 2,
+      "sourceImage": "trak/trak6/tile3.jpg",
+      "shader": "bumpspecmapworld",
+      "parameters": {},
+      "layers": {
+        "n": "trak/trak6/tile3_nm.png",
+        "s": "trak/trak6/tile3_gloss.jpg"
+      },
+      "textureScale": 0.25,
+      "tint": [
+        0.75,
+        0.25,
+        0.125
+      ]
+    },
+    {
+      "cfgSlot": 3,
+      "sourceImage": "trak/trak6/tile3.jpg",
+      "shader": "bumpspecmapworld",
+      "parameters": {},
+      "layers": {
+        "n": "trak/trak6/tile3_nm.png",
+        "s": "trak/trak6/tile3_gloss.jpg"
+      },
+      "textureScale": 0.25,
+      "tint": [
+        0.125,
+        0.25,
+        0.75
+      ]
+    },
+    {
+      "cfgSlot": 4,
+      "sourceImage": "trak/trak6/tile3.jpg",
+      "shader": "bumpspecmapworld",
+      "parameters": {},
+      "layers": {
+        "n": "trak/trak6/tile3_nm.png",
+        "s": "trak/trak6/tile3_gloss.jpg"
+      },
+      "textureScale": 0.25
+    },
+    {
+      "cfgSlot": 5,
+      "sourceImage": "trak/trak5/light3a.jpg",
+      "shader": "bumpspecmapglowworld",
+      "parameters": {},
+      "layers": {
+        "n": "trak/trak5/light3_n.png",
+        "s": "trak/trak5/light3_s.jpg",
+        "g": "trak/trak5/light3a_g.jpg"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 6,
+      "sourceImage": "trak/trak5/ribs1a.jpg",
+      "shader": "bumpspecmapworld",
+      "parameters": {},
+      "layers": {
+        "n": "trak/trak5/ribs1_n.png",
+        "s": "trak/trak5/ribs1_s.jpg"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 7,
+      "sourceImage": "trak/trak5/tile1e.jpg",
+      "shader": "bumpspecmapworld",
+      "parameters": {},
+      "layers": {
+        "n": "trak/trak5/tile1_n.png",
+        "s": "trak/trak5/tile1_s.jpg"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 8,
+      "sourceImage": "trak/trak5/trim3e.jpg",
+      "shader": "bumpspecmapworld",
+      "parameters": {},
+      "layers": {
+        "n": "trak/trak5/trim3_n.png",
+        "s": "trak/trak5/trim3_s.jpg"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 9,
+      "sourceImage": "trak/trak6/light1.jpg",
+      "shader": "bumpglowworld",
+      "parameters": {
+        "specscale": [
+          0.25,
+          0.25,
+          0.25,
+          0
+        ],
+        "parallaxscale": [
+          0.04,
+          -0.02,
+          0,
+          0
+        ]
+      },
+      "layers": {
+        "n": "trak/trak6/light1_nm.png",
+        "g": "trak/trak6/light1.blend.jpg"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 10,
+      "sourceImage": "philipk/pk01/panel_small01_d.png",
+      "shader": "bumpspecmapglowworld",
+      "parameters": {
+        "specscale": [
+          2,
+          2,
+          2,
+          0
+        ],
+        "glowcolor": [
+          0.5,
+          0.5,
+          0.5,
+          0
+        ]
+      },
+      "layers": {
+        "n": "philipk/pk01/panel_small01_local.png",
+        "s": "philipk/pk01/panel_small01_s.png",
+        "g": "philipk/pk01/panel_small01_add.png"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 11,
+      "sourceImage": "philipk/pk01/floor01a_d.png",
+      "shader": "bumpenvspecmapworld",
+      "parameters": {
+        "specscale": [
+          2,
+          2,
+          2,
+          0
+        ]
+      },
+      "layers": {
+        "n": "philipk/pk01/floor01_local.png",
+        "s": "philipk/pk01/floor01_s.png"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 12,
+      "sourceImage": "philipk/pk01/floor02b_d.png",
+      "shader": "bumpspecmapworld",
+      "parameters": {
+        "specscale": [
+          2,
+          2,
+          2,
+          0
+        ]
+      },
+      "layers": {
+        "n": "philipk/pk01/floor02_local.png",
+        "s": "philipk/pk01/floor02_s.png"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 13,
+      "sourceImage": "philipk/pk01/gra_floor02_d.png",
+      "shader": "bumpspecmapworld",
+      "parameters": {
+        "specscale": [
+          2,
+          2,
+          2,
+          0
+        ]
+      },
+      "layers": {
+        "n": "philipk/pk01/gra_floor02_local.png",
+        "s": "philipk/pk01/gra_floor02_s.png"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 14,
+      "sourceImage": "philipk/pk01/vent_wall01a_d.png",
+      "shader": "bumpspecmapworld",
+      "parameters": {
+        "specscale": [
+          2,
+          2,
+          2,
+          0
+        ]
+      },
+      "layers": {
+        "n": "philipk/pk01/vent_wall01_local.png",
+        "s": "philipk/pk01/vent_wall01_s.png"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 15,
+      "sourceImage": "philipk/pk02/light01b_c.png",
+      "shader": "bumpspecmapglowworld",
+      "parameters": {
+        "specscale": [
+          2,
+          2,
+          2,
+          0
+        ],
+        "glowcolor": [
+          0.5,
+          0.5,
+          0.5,
+          0
+        ]
+      },
+      "layers": {
+        "n": "philipk/pk02/light01_n.png",
+        "s": "philipk/pk02/light01_s.png",
+        "g": "philipk/pk02/light01b_c.png"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 16,
+      "sourceImage": "philipk/pk02/pipes01_c.png",
+      "shader": "bumpspecmapglowworld",
+      "parameters": {
+        "specscale": [
+          2,
+          2,
+          2,
+          0
+        ],
+        "glowcolor": [
+          0.5,
+          0.5,
+          0.5,
+          0
+        ]
+      },
+      "layers": {
+        "n": "philipk/pk02/pipes01_n.png",
+        "s": "philipk/pk02/pipes01_s.png",
+        "g": "philipk/pk02/pipes01_i.png"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 17,
+      "sourceImage": "philipk/pk02/switches01b_c.png",
+      "shader": "bumpspecmapglowworld",
+      "parameters": {
+        "specscale": [
+          2,
+          2,
+          2,
+          0
+        ],
+        "glowcolor": [
+          0.5,
+          0.5,
+          0.5,
+          0
+        ]
+      },
+      "layers": {
+        "n": "philipk/pk02/switches01b_n.png",
+        "s": "philipk/pk02/switches01b_s.png",
+        "g": "philipk/pk02/switches01b_c.png"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 18,
+      "sourceImage": "philipk/pk02/switches01c_c.png",
+      "shader": "bumpspecmapglowworld",
+      "parameters": {
+        "specscale": [
+          2,
+          2,
+          2,
+          0
+        ],
+        "glowcolor": [
+          0.5,
+          0.5,
+          0.5,
+          0
+        ]
+      },
+      "layers": {
+        "n": "philipk/pk02/switches01c_n.png",
+        "s": "philipk/pk02/switches01c_s.png",
+        "g": "philipk/pk02/switches01c_c.png"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 19,
+      "sourceImage": "philipk/pk02/floor01_c.png",
+      "shader": "bumpenvspecmapworld",
+      "parameters": {
+        "specscale": [
+          2,
+          2,
+          2,
+          0
+        ]
+      },
+      "layers": {
+        "n": "philipk/pk02/floor01_n.png",
+        "s": "philipk/pk02/floor01_s.png"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 20,
+      "sourceImage": "philipk/pk02/floor03_c.png",
+      "shader": "bumpspecmapworld",
+      "parameters": {
+        "specscale": [
+          2,
+          2,
+          2,
+          0
+        ]
+      },
+      "layers": {
+        "n": "philipk/pk02/floor03_n.png",
+        "s": "philipk/pk02/floor03_s.png"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 21,
+      "sourceImage": "philipk/pk02/floor05_c.png",
+      "shader": "bumpspecmapworld",
+      "parameters": {
+        "specscale": [
+          2,
+          2,
+          2,
+          0
+        ]
+      },
+      "layers": {
+        "n": "philipk/pk02/floor05_n.png",
+        "s": "philipk/pk02/floor05_s.png"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 22,
+      "sourceImage": "philipk/pk02/floor06a_c.png",
+      "shader": "bumpspecmapworld",
+      "parameters": {
+        "specscale": [
+          2,
+          2,
+          2,
+          0
+        ]
+      },
+      "layers": {
+        "n": "philipk/pk02/floor06a_n.png",
+        "s": "philipk/pk02/floor06a_s.png"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 23,
+      "sourceImage": "philipk/pk02/floor07_c.png",
+      "shader": "bumpspecmapworld",
+      "parameters": {
+        "specscale": [
+          2,
+          2,
+          2,
+          0
+        ]
+      },
+      "layers": {
+        "n": "philipk/pk02/floor07_n.png",
+        "s": "philipk/pk02/floor07_s.png"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 24,
+      "sourceImage": "philipk/pk02/generic01b_c.png",
+      "shader": "bumpspecmapworld",
+      "parameters": {
+        "specscale": [
+          2,
+          2,
+          2,
+          0
+        ]
+      },
+      "layers": {
+        "n": "philipk/pk02/generic01_n.png",
+        "s": "philipk/pk02/generic01_s.png"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 25,
+      "sourceImage": "philipk/pk02/switches01a_c.png",
+      "shader": "bumpspecmapworld",
+      "parameters": {
+        "specscale": [
+          2,
+          2,
+          2,
+          0
+        ]
+      },
+      "layers": {
+        "n": "philipk/pk02/switches01a_n.png",
+        "s": "philipk/pk02/switches01a_s.png"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 26,
+      "sourceImage": "philipk/pk02/trim04a_c.png",
+      "shader": "bumpspecmapworld",
+      "parameters": {
+        "specscale": [
+          2,
+          2,
+          2,
+          0
+        ]
+      },
+      "layers": {
+        "n": "philipk/pk02/trim04a_n.png",
+        "s": "philipk/pk02/trim04a_s.png"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 27,
+      "sourceImage": "philipk/pk02/wall_big01a_c.png",
+      "shader": "bumpspecmapworld",
+      "parameters": {
+        "specscale": [
+          2,
+          2,
+          2,
+          0
+        ]
+      },
+      "layers": {
+        "n": "philipk/pk02/wall_big01a_n.png",
+        "s": "philipk/pk02/wall_big01a_s.png"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 28,
+      "sourceImage": "philipk/pk02/wall_big01b_c.png",
+      "shader": "bumpenvspecmapworld",
+      "parameters": {
+        "specscale": [
+          2,
+          2,
+          2,
+          0
+        ]
+      },
+      "layers": {
+        "n": "philipk/pk02/wall_big01b_n.png",
+        "s": "philipk/pk02/wall_big01b_s.png"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 29,
+      "sourceImage": "jojo/windowstile04_g.png",
+      "shader": "envspecworld",
+      "parameters": {},
+      "layers": {},
+      "textureScale": 1
+    },
+    {
+      "cfgSlot": 30,
+      "sourceImage": "jojo/map.png",
+      "shader": "glowworld",
+      "parameters": {},
+      "layers": {
+        "g": "jojo/map_g.png"
+      },
+      "textureScale": 0.25
+    },
+    {
+      "cfgSlot": 31,
+      "sourceImage": "jojo/sand01.png",
+      "shader": "bumpspecparallaxworld",
+      "parameters": {
+        "specscale": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "parallaxscale": [
+          0.01,
+          0.01,
+          0.01,
+          0
+        ]
+      },
+      "layers": {
+        "n": "jojo/sand01_n.png",
+        "z": "jojo/sand01_z.png"
+      },
+      "textureScale": 1
+    },
+    {
+      "cfgSlot": 32,
+      "sourceImage": "philipk/pk02/switches01c_c.png",
+      "shader": "bumpspecmappulseglowworld",
+      "parameters": {
+        "specscale": [
+          2,
+          2,
+          2,
+          0
+        ],
+        "glowcolor": [
+          0.5,
+          0.5,
+          0.5,
+          0
+        ]
+      },
+      "layers": {
+        "n": "philipk/pk02/switches01c_n.png",
+        "s": "philipk/pk02/switches01c_s.png",
+        "g": "philipk/pk02/switches01c_c.png"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 33,
+      "sourceImage": "philipk/pk02/switches01c_c.png",
+      "shader": "bumpspecmapworld",
+      "parameters": {
+        "specscale": [
+          2,
+          2,
+          2,
+          0
+        ]
+      },
+      "layers": {
+        "n": "philipk/pk02/switches01c_n.png",
+        "s": "philipk/pk02/switches01c_s.png"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 34,
+      "sourceImage": "appleflap/danger.jpg",
+      "shader": "bumpspecmapworld",
+      "parameters": {
+        "specscale": [
+          0.25,
+          0.25,
+          0.25,
+          0
+        ]
+      },
+      "layers": {
+        "n": "appleflap/danger_nm.jpg",
+        "s": "appleflap/danger_spec.jpg"
+      },
+      "textureScale": 1
+    },
+    {
+      "cfgSlot": 35,
+      "sourceImage": "trak/trak6/trim1.jpg",
+      "shader": "bumpspecmapparallaxworld",
+      "parameters": {
+        "specscale": [
+          1,
+          1,
+          1,
+          0
+        ]
+      },
+      "layers": {
+        "s": "trak/trak6/trim1_gloss.jpg",
+        "n": "trak/trak6/trim1_nm.png"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 36,
+      "sourceImage": "mikeplus64/plain.png",
+      "shader": "glowworld",
+      "parameters": {},
+      "layers": {
+        "g": "mikeplus64/plain.png"
+      },
+      "textureScale": 1
+    },
+    {
+      "cfgSlot": 37,
+      "sourceImage": "misc/agf81/concrete1w_diffuse.png",
+      "shader": "bumpspecmapworld",
+      "parameters": {
+        "specscale": [
+          2,
+          2.1,
+          2,
+          0
+        ]
+      },
+      "layers": {
+        "n": "misc/agf81/concrete0_normal.png",
+        "s": "misc/agf81/concrete0_spec.png"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 38,
+      "sourceImage": "nieb/complex/step02.png",
+      "shader": "bumpspecmapworld",
+      "parameters": {
+        "specscale": [
+          0.5,
+          0.5,
+          0.5,
+          0
+        ]
+      },
+      "layers": {
+        "n": "nieb/complex/step02_normal.png",
+        "s": "philipk/pk02/generic01_s.png"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 39,
+      "sourceImage": "nieb/complex/step03.png",
+      "shader": "bumpspecmapworld",
+      "parameters": {
+        "specscale": [
+          0.5,
+          0.5,
+          0.5,
+          0
+        ]
+      },
+      "layers": {
+        "n": "nieb/complex/step03_normal.png",
+        "s": "philipk/pk02/generic01_s.png"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 40,
+      "sourceImage": "nieb/complex/wall01.png",
+      "shader": "bumpspecmapworld",
+      "parameters": {
+        "specscale": [
+          0.5,
+          0.5,
+          0.5,
+          0
+        ]
+      },
+      "layers": {
+        "n": "nieb/complex/wall01_normal.png",
+        "s": "nieb/complex/wall01_spec.png"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 41,
+      "sourceImage": "philipk/pk02/floor12a_c.png",
+      "shader": "bumpspecmapworld",
+      "parameters": {
+        "specscale": [
+          0.5,
+          0.5,
+          0.5,
+          0
+        ]
+      },
+      "layers": {
+        "n": "philipk/pk02/floor12_n.png",
+        "s": "philipk/pk02/floor12_s.png"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 42,
+      "sourceImage": "philipk/pk02/generic01b_c.png",
+      "shader": "bumpspecmapworld",
+      "parameters": {
+        "specscale": [
+          0.5,
+          0.5,
+          0.5,
+          0
+        ]
+      },
+      "layers": {
+        "n": "philipk/pk02/generic01_n.png",
+        "s": "philipk/pk02/generic01_s.png"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 43,
+      "sourceImage": "acerspyro/light1/light1.png",
+      "shader": "bumpspecmapparallaxglowworld",
+      "parameters": {},
+      "layers": {
+        "n": "acerspyro/light1/light1_normal.png",
+        "s": "acerspyro/light1/light1_specular.jpg",
+        "g": "acerspyro/light1/light1_glow.jpg",
+        "z": "acerspyro/light1/light1_parallax.png"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 44,
+      "sourceImage": "trak/trak5/tile3d.jpg",
+      "shader": "bumpspecmapparallaxworld",
+      "parameters": {
+        "specscale": [
+          0.5,
+          0.5,
+          0.5,
+          0
+        ]
+      },
+      "layers": {
+        "n": "trak/trak5/tile3_n.png",
+        "s": "trak/trak5/tile3_s.jpg"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 45,
+      "sourceImage": "trak/trak5/tile5c.jpg",
+      "shader": "bumpspecmapparallaxworld",
+      "parameters": {
+        "specscale": [
+          0.5,
+          0.5,
+          0.5,
+          0
+        ]
+      },
+      "layers": {
+        "n": "trak/trak5/tile5_n.png",
+        "s": "trak/trak5/tile5_s.jpg"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 46,
+      "sourceImage": "trak/trak5/wall1e.jpg",
+      "shader": "bumpspecmapparallaxworld",
+      "parameters": {
+        "specscale": [
+          0.5,
+          0.5,
+          0.5,
+          0
+        ]
+      },
+      "layers": {
+        "n": "trak/trak5/wall1_n.png",
+        "s": "trak/trak5/wall1_s.jpg"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 47,
+      "sourceImage": "nieb/complex/step03.png",
+      "shader": "bumpspecmapworld",
+      "parameters": {
+        "specscale": [
+          0.5,
+          0.5,
+          0.5,
+          0
+        ]
+      },
+      "layers": {
+        "n": "nieb/complex/step03_normal.png",
+        "s": "philipk/pk02/generic01_s.png"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 48,
+      "sourceImage": "acerspyro/light2/light2.png",
+      "shader": "bumpspecmapparallaxglowworld",
+      "parameters": {},
+      "layers": {
+        "n": "acerspyro/light2/light2_normal.png",
+        "s": "acerspyro/light2/light2_specular.jpg",
+        "g": "acerspyro/light2/light2_glow.jpg",
+        "z": "acerspyro/light2/light2_parallax.png"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 49,
+      "sourceImage": "nieb/complex/step01.png",
+      "shader": "bumpspecmapworld",
+      "parameters": {
+        "specscale": [
+          0.5,
+          0.5,
+          0.5,
+          0
+        ]
+      },
+      "layers": {
+        "n": "nieb/complex/step01_normal.png",
+        "s": "philipk/pk02/generic01_s.png"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 50,
+      "sourceImage": "philipk/pk02/light02a_c.png",
+      "shader": "bumpspecmapglowworld",
+      "parameters": {
+        "specscale": [
+          0.5,
+          0.5,
+          0.5,
+          0
+        ],
+        "glowcolor": [
+          0.5,
+          0.5,
+          0.5,
+          0
+        ]
+      },
+      "layers": {
+        "n": "philipk/pk02/light02_n.png",
+        "s": "philipk/pk02/light02_s.png",
+        "g": "philipk/pk02/light02_i.png"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 51,
+      "sourceImage": "philipk/pk02/floor05_c.png",
+      "shader": "bumpspecmapworld",
+      "parameters": {
+        "specscale": [
+          0.5,
+          0.5,
+          0.5,
+          0
+        ]
+      },
+      "layers": {
+        "n": "philipk/pk02/floor05_n.png",
+        "s": "philipk/pk02/floor05_s.png"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 52,
+      "sourceImage": "acerspyro/light1/light1.png",
+      "shader": "bumpspecmapparallaxglowworld",
+      "parameters": {},
+      "layers": {
+        "n": "acerspyro/light1/light1_normal.png",
+        "s": "acerspyro/light1/light1_specular.jpg",
+        "g": "acerspyro/light1/light1_glow.jpg",
+        "z": "acerspyro/light1/light1_parallax.png"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 53,
+      "sourceImage": "jojo/sand01.png",
+      "shader": "bumpspecparallaxworld",
+      "parameters": {
+        "specscale": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "parallaxscale": [
+          0.01,
+          0.01,
+          0.01,
+          0
+        ]
+      },
+      "layers": {
+        "n": "jojo/sand01_n.png",
+        "z": "jojo/sand01_z.png"
+      },
+      "textureScale": 1
+    },
+    {
+      "cfgSlot": 54,
+      "sourceImage": "jojo/sand01.png",
+      "shader": "triplanarbumpspecparallaxworld",
+      "parameters": {
+        "specscale": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "parallaxscale": [
+          0.01,
+          0.01,
+          0.01,
+          0
+        ]
+      },
+      "layers": {
+        "n": "jojo/sand01_n.png",
+        "z": "jojo/sand01_z.png"
+      },
+      "textureScale": 1
+    },
+    {
+      "cfgSlot": 55,
+      "sourceImage": "misc/agf81/concrete1w_diffuse.png",
+      "shader": "triplanarbumpspecparallaxworld",
+      "parameters": {
+        "specscale": [
+          2,
+          2.1,
+          2,
+          0
+        ]
+      },
+      "layers": {
+        "n": "misc/agf81/concrete0_normal.png",
+        "s": "misc/agf81/concrete0_spec.png"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 56,
+      "sourceImage": "dziq/metal_paint_old01",
+      "shader": "bumpenvspecmapparallaxworld",
+      "parameters": {
+        "specscale": [
+          2,
+          2,
+          2,
+          0
+        ],
+        "parallaxscale": [
+          0.004,
+          0,
+          0,
+          0
+        ],
+        "envscale": [
+          0.1,
+          0.1,
+          0.1,
+          0
+        ],
+        "gloss": [
+          12,
+          12,
+          12,
+          0
+        ]
+      },
+      "layers": {
+        "n": "dziq/metal_paint_old01_n",
+        "z": "dziq/metal_paint_old01_b",
+        "s": "dziq/metal_paint_old01_s"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 57,
+      "sourceImage": "<comp:1>ticker",
+      "shader": "glowworld",
+      "parameters": {},
+      "layers": {
+        "g": "<comp:1>ticker"
+      },
+      "textureScale": 1
+    },
+    {
+      "cfgSlot": 58,
+      "sourceImage": "jojo/interface03.png",
+      "shader": "glowworld",
+      "parameters": {
+        "glowcolor": [
+          0.4,
+          0.9,
+          0,
+          0
+        ]
+      },
+      "layers": {
+        "g": "jojo/interface03.png"
+      },
+      "textureScale": 0.25,
+      "tint": [
+        0.4,
+        0.9,
+        0
+      ]
+    },
+    {
+      "cfgSlot": 59,
+      "sourceImage": "trak/trak6/crate1.jpg",
+      "shader": "bumpspecmapparallaxworld",
+      "parameters": {},
+      "layers": {
+        "s": "trak/trak6/crate1_gloss.jpg",
+        "n": "trak/trak6/crate1_nm.png"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 60,
+      "sourceImage": "torley/desat/clumpedverticalpaint.png",
+      "shader": "bumpspecmapparallaxworld",
+      "parameters": {
+        "specscale": [
+          0.25,
+          0.25,
+          0.25,
+          0
+        ]
+      },
+      "layers": {
+        "n": "torley/desat/clumpedverticalpaint_n.png",
+        "s": "torley/desat/clumpedverticalpaint_s.png",
+        "z": "torley/desat/clumpedverticalpaint_z.png"
+      },
+      "textureScale": 1
+    },
+    {
+      "cfgSlot": 61,
+      "sourceImage": "torley/desat/grittyblack2clear3.png",
+      "shader": "bumpspecmapparallaxworld",
+      "parameters": {
+        "specscale": [
+          0.25,
+          0.25,
+          0.25,
+          0
+        ]
+      },
+      "layers": {
+        "n": "torley/desat/grittyblack2clear3_n.png",
+        "s": "torley/desat/grittyblack2clear3_s.png",
+        "z": "torley/desat/grittyblack2clear3_z.png"
+      },
+      "textureScale": 1
+    },
+    {
+      "cfgSlot": 62,
+      "sourceImage": "torley/desat/sketchstorm.png",
+      "shader": "bumpspecmapparallaxworld",
+      "parameters": {
+        "specscale": [
+          0.25,
+          0.25,
+          0.25,
+          0
+        ]
+      },
+      "layers": {
+        "n": "torley/desat/sketchstorm_n.png",
+        "s": "torley/desat/sketchstorm_s.png",
+        "z": "torley/desat/sketchstorm_z.png"
+      },
+      "textureScale": 1
+    },
+    {
+      "cfgSlot": 63,
+      "sourceImage": "luckystrike/barlight.jpg",
+      "shader": "bumpglowworld",
+      "parameters": {
+        "glowcolor": [
+          0.8,
+          0.8,
+          0.8,
+          0
+        ]
+      },
+      "layers": {
+        "n": "luckystrike/barlight-n.jpg",
+        "g": "luckystrike/barlight.jpg"
+      },
+      "textureScale": 0.25,
+      "tint": [
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    {
+      "cfgSlot": 64,
+      "sourceImage": "philipk/pk01/pan_floor01b_d.png",
+      "shader": "bumpspecmapworld",
+      "parameters": {
+        "specscale": [
+          0.5,
+          0.5,
+          0.5,
+          0
+        ]
+      },
+      "layers": {
+        "n": "philipk/pk01/pan_floor01_local.png",
+        "s": "philipk/pk01/pan_floor01_s.png"
+      },
+      "textureScale": 0.5
+    },
+    {
+      "cfgSlot": 65,
+      "sourceImage": "<comp:100>cathode [tex = unixfreak/textures/planetsurvey.png]",
+      "shader": "stdworld",
+      "parameters": {},
+      "layers": {},
+      "textureScale": 1
+    },
+    {
+      "cfgSlot": 66,
+      "sourceImage": "jojo/redrock02.png",
+      "shader": "bumpparallaxworld",
+      "parameters": {
+        "parallaxscale": [
+          0.01,
+          0.01,
+          0.01,
+          0
+        ]
+      },
+      "layers": {
+        "n": "jojo/redrock01_n.png",
+        "z": "jojo/redrock01_z.png"
+      },
+      "textureScale": 1
+    },
+    {
+      "cfgSlot": 67,
+      "sourceImage": "unnamed/solar_cell02.png",
+      "shader": "bumpenvspecmapparallaxworld",
+      "parameters": {
+        "parallaxscale": [
+          0.004,
+          0.004,
+          0.004,
+          0
+        ],
+        "specscale": [
+          0.6,
+          0.64,
+          0.7,
+          0
+        ],
+        "envscale": [
+          0.35,
+          0.4,
+          0.5,
+          0
+        ]
+      },
+      "layers": {
+        "n": "decals/unixfreak/wanted-norm.png",
+        "s": "decals/dziq/stain03_s.jpg",
+        "g": "decals/unixfreak/barsign.png",
+        "z": "decals/dziq/radiation_z.jpg"
+      },
+      "textureScale": 0.5
+    }
+  ],
+  "meshSlots": [
+    {
+      "objSlot": 1,
+      "diffuseSource": "data/mikeplus64/plain.png",
+      "potentialConfigSlots": [
+        1,
+        36
+      ]
+    },
+    {
+      "objSlot": 3,
+      "diffuseSource": "data/trak/trak6/tile3.jpg",
+      "potentialConfigSlots": [
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "objSlot": 5,
+      "diffuseSource": "data/trak/trak5/light3a.jpg",
+      "potentialConfigSlots": [
+        5
+      ]
+    },
+    {
+      "objSlot": 6,
+      "diffuseSource": "data/trak/trak5/pipe1b.jpg",
+      "potentialConfigSlots": []
+    },
+    {
+      "objSlot": 7,
+      "diffuseSource": "data/trak/trak5/pipe1c.jpg",
+      "potentialConfigSlots": []
+    },
+    {
+      "objSlot": 8,
+      "diffuseSource": "data/trak/trak5/ribs1a.jpg",
+      "potentialConfigSlots": [
+        6
+      ]
+    },
+    {
+      "objSlot": 9,
+      "diffuseSource": "data/trak/trak5/tile1e.jpg",
+      "potentialConfigSlots": [
+        7
+      ]
+    },
+    {
+      "objSlot": 10,
+      "diffuseSource": "data/trak/trak5/trim3e.jpg",
+      "potentialConfigSlots": [
+        8
+      ]
+    },
+    {
+      "objSlot": 12,
+      "diffuseSource": "data/philipk/pk01/panel_small01_d.png",
+      "potentialConfigSlots": [
+        10
+      ]
+    },
+    {
+      "objSlot": 13,
+      "diffuseSource": "data/philipk/pk01/floor01a_d.png",
+      "potentialConfigSlots": [
+        11
+      ]
+    },
+    {
+      "objSlot": 14,
+      "diffuseSource": "data/philipk/pk01/floor02b_d.png",
+      "potentialConfigSlots": [
+        12
+      ]
+    },
+    {
+      "objSlot": 15,
+      "diffuseSource": "data/philipk/pk01/gra_floor02_d.png",
+      "potentialConfigSlots": [
+        13
+      ]
+    },
+    {
+      "objSlot": 16,
+      "diffuseSource": "data/philipk/pk01/vent_wall01a_d.png",
+      "potentialConfigSlots": [
+        14
+      ]
+    },
+    {
+      "objSlot": 17,
+      "diffuseSource": "data/philipk/pk02/light01b_c.png",
+      "potentialConfigSlots": [
+        15
+      ]
+    },
+    {
+      "objSlot": 18,
+      "diffuseSource": "data/philipk/pk02/pipes01_c.png",
+      "potentialConfigSlots": [
+        16
+      ]
+    },
+    {
+      "objSlot": 19,
+      "diffuseSource": "data/philipk/pk02/switches01b_c.png",
+      "potentialConfigSlots": [
+        17
+      ]
+    },
+    {
+      "objSlot": 20,
+      "diffuseSource": "data/philipk/pk02/switches01c_c.png",
+      "potentialConfigSlots": [
+        18,
+        32,
+        33
+      ]
+    },
+    {
+      "objSlot": 21,
+      "diffuseSource": "data/philipk/pk02/floor01_c.png",
+      "potentialConfigSlots": [
+        19
+      ]
+    },
+    {
+      "objSlot": 23,
+      "diffuseSource": "data/philipk/pk02/floor05_c.png",
+      "potentialConfigSlots": [
+        21,
+        51
+      ]
+    },
+    {
+      "objSlot": 24,
+      "diffuseSource": "data/philipk/pk02/floor06a_c.png",
+      "potentialConfigSlots": [
+        22
+      ]
+    },
+    {
+      "objSlot": 25,
+      "diffuseSource": "data/philipk/pk02/floor07_c.png",
+      "potentialConfigSlots": [
+        23
+      ]
+    },
+    {
+      "objSlot": 26,
+      "diffuseSource": "data/philipk/pk02/generic01b_c.png",
+      "potentialConfigSlots": [
+        24,
+        42
+      ]
+    },
+    {
+      "objSlot": 27,
+      "diffuseSource": "data/philipk/pk02/switches01a_c.png",
+      "potentialConfigSlots": [
+        25
+      ]
+    },
+    {
+      "objSlot": 28,
+      "diffuseSource": "data/philipk/pk02/trim04a_c.png",
+      "potentialConfigSlots": [
+        26
+      ]
+    },
+    {
+      "objSlot": 29,
+      "diffuseSource": "data/philipk/pk02/wall_big01a_c.png",
+      "potentialConfigSlots": [
+        27
+      ]
+    },
+    {
+      "objSlot": 30,
+      "diffuseSource": "data/philipk/pk02/wall_big01b_c.png",
+      "potentialConfigSlots": [
+        28
+      ]
+    },
+    {
+      "objSlot": 34,
+      "diffuseSource": "data/philipk/pk02/switches01c_c.png",
+      "potentialConfigSlots": [
+        18,
+        32,
+        33
+      ]
+    },
+    {
+      "objSlot": 35,
+      "diffuseSource": "data/philipk/pk02/switches01c_c.png",
+      "potentialConfigSlots": [
+        18,
+        32,
+        33
+      ]
+    },
+    {
+      "objSlot": 36,
+      "diffuseSource": "data/appleflap/danger.jpg",
+      "potentialConfigSlots": [
+        34
+      ]
+    },
+    {
+      "objSlot": 38,
+      "diffuseSource": "data/trak/trak6/trim1.jpg",
+      "potentialConfigSlots": [
+        35
+      ]
+    },
+    {
+      "objSlot": 40,
+      "diffuseSource": "data/misc/agf81/concrete1w_diffuse.png",
+      "potentialConfigSlots": [
+        37,
+        55
+      ]
+    },
+    {
+      "objSlot": 41,
+      "diffuseSource": "data/nieb/complex/step02.png",
+      "potentialConfigSlots": [
+        38
+      ]
+    },
+    {
+      "objSlot": 42,
+      "diffuseSource": "data/nieb/complex/step03.png",
+      "potentialConfigSlots": [
+        39,
+        47
+      ]
+    },
+    {
+      "objSlot": 45,
+      "diffuseSource": "data/philipk/pk02/generic01b_c.png",
+      "potentialConfigSlots": [
+        24,
+        42
+      ]
+    },
+    {
+      "objSlot": 47,
+      "diffuseSource": "data/trak/trak5/tile3d.jpg",
+      "potentialConfigSlots": [
+        44
+      ]
+    },
+    {
+      "objSlot": 48,
+      "diffuseSource": "data/trak/trak5/tile5c.jpg",
+      "potentialConfigSlots": [
+        45
+      ]
+    },
+    {
+      "objSlot": 53,
+      "diffuseSource": "data/nieb/complex/step01.png",
+      "potentialConfigSlots": [
+        49
+      ]
+    },
+    {
+      "objSlot": 54,
+      "diffuseSource": "data/philipk/pk02/light02a_c.png",
+      "potentialConfigSlots": [
+        50
+      ]
+    },
+    {
+      "objSlot": 60,
+      "diffuseSource": "data/misc/agf81/concrete1w_diffuse.png",
+      "potentialConfigSlots": [
+        37,
+        55
+      ]
+    },
+    {
+      "objSlot": 61,
+      "diffuseSource": "data/jojo/sand01.png",
+      "potentialConfigSlots": [
+        31,
+        53,
+        54
+      ]
+    },
+    {
+      "objSlot": 62,
+      "diffuseSource": "data/jojo/sand01.png",
+      "potentialConfigSlots": [
+        31,
+        53,
+        54
+      ]
+    },
+    {
+      "objSlot": 63,
+      "diffuseSource": "data/jojo/sand01.png",
+      "potentialConfigSlots": [
+        31,
+        53,
+        54
+      ]
+    },
+    {
+      "objSlot": 64,
+      "diffuseSource": "data/jojo/sand01.png",
+      "potentialConfigSlots": [
+        31,
+        53,
+        54
+      ]
+    },
+    {
+      "objSlot": 65,
+      "diffuseSource": "data/philipk/pk02/generic01b_c.png",
+      "potentialConfigSlots": [
+        24,
+        42
+      ]
+    },
+    {
+      "objSlot": 66,
+      "diffuseSource": "data/philipk/pk02/generic01b_c.png",
+      "potentialConfigSlots": [
+        24,
+        42
+      ]
+    },
+    {
+      "objSlot": 67,
+      "diffuseSource": "data/nieb/complex/wall01.png",
+      "potentialConfigSlots": [
+        40
+      ]
+    },
+    {
+      "objSlot": 68,
+      "diffuseSource": "data/philipk/pk02/generic01b_c.png",
+      "potentialConfigSlots": [
+        24,
+        42
+      ]
+    },
+    {
+      "objSlot": 69,
+      "diffuseSource": "data/trak/trak6/tile3.jpg",
+      "potentialConfigSlots": [
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "objSlot": 70,
+      "diffuseSource": "data/philipk/pk02/floor12a_c.png",
+      "potentialConfigSlots": [
+        41
+      ]
+    },
+    {
+      "objSlot": 71,
+      "diffuseSource": "data/nieb/complex/step02.png",
+      "potentialConfigSlots": [
+        38
+      ]
+    },
+    {
+      "objSlot": 72,
+      "diffuseSource": "data/trak/trak5/tile1e.jpg",
+      "potentialConfigSlots": [
+        7
+      ]
+    },
+    {
+      "objSlot": 73,
+      "diffuseSource": "data/trak/trak5/wall3e.jpg",
+      "potentialConfigSlots": []
+    },
+    {
+      "objSlot": 74,
+      "diffuseSource": "data/trak/trak5/wall1e.jpg",
+      "potentialConfigSlots": [
+        46
+      ]
+    },
+    {
+      "objSlot": 75,
+      "diffuseSource": "data/trak/trak6/tile3.jpg",
+      "potentialConfigSlots": [
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "objSlot": 76,
+      "diffuseSource": "data/trak/trak5/ribs1a.jpg",
+      "potentialConfigSlots": [
+        6
+      ]
+    },
+    {
+      "objSlot": 77,
+      "diffuseSource": "data/philipk/pk02/floor05_c.png",
+      "potentialConfigSlots": [
+        21,
+        51
+      ]
+    },
+    {
+      "objSlot": 78,
+      "diffuseSource": "data/trak/trak5/tile1e.jpg",
+      "potentialConfigSlots": [
+        7
+      ]
+    },
+    {
+      "objSlot": 79,
+      "diffuseSource": "data/philipk/pk02/generic01b_c.png",
+      "potentialConfigSlots": [
+        24,
+        42
+      ]
+    },
+    {
+      "objSlot": 80,
+      "diffuseSource": "data/trak/trak5/tile1e.jpg",
+      "potentialConfigSlots": [
+        7
+      ]
+    },
+    {
+      "objSlot": 81,
+      "diffuseSource": "data/trak/trak6/light1.jpg",
+      "potentialConfigSlots": [
+        9
+      ]
+    },
+    {
+      "objSlot": 82,
+      "diffuseSource": "data/trak/trak5/light3a.jpg",
+      "potentialConfigSlots": [
+        5
+      ]
+    },
+    {
+      "objSlot": 83,
+      "diffuseSource": "data/nieb/complex/step03.png",
+      "potentialConfigSlots": [
+        39,
+        47
+      ]
+    },
+    {
+      "objSlot": 84,
+      "diffuseSource": "data/acerspyro/light1/light1.png",
+      "potentialConfigSlots": [
+        43,
+        52
+      ]
+    },
+    {
+      "objSlot": 85,
+      "diffuseSource": "data/philipk/pk02/trim04a_c.png",
+      "potentialConfigSlots": [
+        26
+      ]
+    },
+    {
+      "objSlot": 87,
+      "diffuseSource": "data/trak/trak6/tile3.jpg",
+      "potentialConfigSlots": [
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "objSlot": 88,
+      "diffuseSource": "data/trak/trak6/trim1.jpg",
+      "potentialConfigSlots": [
+        35
+      ]
+    },
+    {
+      "objSlot": 89,
+      "diffuseSource": "data/acerspyro/light1/light1.png",
+      "potentialConfigSlots": [
+        43,
+        52
+      ]
+    },
+    {
+      "objSlot": 91,
+      "diffuseSource": "data/acerspyro/light1/light1.png",
+      "potentialConfigSlots": [
+        43,
+        52
+      ]
+    },
+    {
+      "objSlot": 92,
+      "diffuseSource": "data/trak/trak6/light1.jpg",
+      "potentialConfigSlots": [
+        9
+      ]
+    },
+    {
+      "objSlot": 94,
+      "diffuseSource": "data/philipk/pk02/light01b_c.png",
+      "potentialConfigSlots": [
+        15
+      ]
+    },
+    {
+      "objSlot": 95,
+      "diffuseSource": "data/philipk/pk02/light01b_c.png",
+      "potentialConfigSlots": [
+        15
+      ]
+    },
+    {
+      "objSlot": 96,
+      "diffuseSource": "data/trak/trak5/tile1e.jpg",
+      "potentialConfigSlots": [
+        7
+      ]
+    },
+    {
+      "objSlot": 97,
+      "diffuseSource": "data/trak/trak5/light3a.jpg",
+      "potentialConfigSlots": [
+        5
+      ]
+    },
+    {
+      "objSlot": 98,
+      "diffuseSource": "data/trak/trak5/tile1e.jpg",
+      "potentialConfigSlots": [
+        7
+      ]
+    },
+    {
+      "objSlot": 99,
+      "diffuseSource": "data/trak/trak6/trim1.jpg",
+      "potentialConfigSlots": [
+        35
+      ]
+    },
+    {
+      "objSlot": 100,
+      "diffuseSource": "data/trak/trak6/trim1.jpg",
+      "potentialConfigSlots": [
+        35
+      ]
+    },
+    {
+      "objSlot": 101,
+      "diffuseSource": "data/trak/trak6/trim1.jpg",
+      "potentialConfigSlots": [
+        35
+      ]
+    },
+    {
+      "objSlot": 102,
+      "diffuseSource": "data/trak/trak6/trim1.jpg",
+      "potentialConfigSlots": [
+        35
+      ]
+    },
+    {
+      "objSlot": 103,
+      "diffuseSource": "data/trak/trak6/trim1.jpg",
+      "potentialConfigSlots": [
+        35
+      ]
+    },
+    {
+      "objSlot": 104,
+      "diffuseSource": "data/philipk/pk02/generic01b_c.png",
+      "potentialConfigSlots": [
+        24,
+        42
+      ]
+    },
+    {
+      "objSlot": 105,
+      "diffuseSource": "data/trak/trak5/trim3e.jpg",
+      "potentialConfigSlots": [
+        8
+      ]
+    },
+    {
+      "objSlot": 106,
+      "diffuseSource": "data/philipk/pk01/floor02b_d.png",
+      "potentialConfigSlots": [
+        12
+      ]
+    },
+    {
+      "objSlot": 107,
+      "diffuseSource": "data/acerspyro/light1/light1.png",
+      "potentialConfigSlots": [
+        43,
+        52
+      ]
+    },
+    {
+      "objSlot": 108,
+      "diffuseSource": "data/philipk/pk01/floor01a_d.png",
+      "potentialConfigSlots": [
+        11
+      ]
+    },
+    {
+      "objSlot": 109,
+      "diffuseSource": "data/acerspyro/light1/light1.png",
+      "potentialConfigSlots": [
+        43,
+        52
+      ]
+    },
+    {
+      "objSlot": 110,
+      "diffuseSource": "data/philipk/pk02/floor07_c.png",
+      "potentialConfigSlots": [
+        23
+      ]
+    },
+    {
+      "objSlot": 111,
+      "diffuseSource": "data/philipk/pk02/wall_big01b_c.png",
+      "potentialConfigSlots": [
+        28
+      ]
+    },
+    {
+      "objSlot": 112,
+      "diffuseSource": "data/trak/trak5/ribs1a.jpg",
+      "potentialConfigSlots": [
+        6
+      ]
+    },
+    {
+      "objSlot": 113,
+      "diffuseSource": "data/trak/trak6/trim1.jpg",
+      "potentialConfigSlots": [
+        35
+      ]
+    },
+    {
+      "objSlot": 114,
+      "diffuseSource": "data/trak/trak5/light3a.jpg",
+      "potentialConfigSlots": [
+        5
+      ]
+    },
+    {
+      "objSlot": 115,
+      "diffuseSource": "data/philipk/pk01/floor02b_d.png",
+      "potentialConfigSlots": [
+        12
+      ]
+    },
+    {
+      "objSlot": 116,
+      "diffuseSource": "data/philipk/pk02/switches01a_c.png",
+      "potentialConfigSlots": [
+        25
+      ]
+    },
+    {
+      "objSlot": 117,
+      "diffuseSource": "data/trak/trak6/light1.jpg",
+      "potentialConfigSlots": [
+        9
+      ]
+    },
+    {
+      "objSlot": 118,
+      "diffuseSource": "data/acerspyro/light2/light2.png",
+      "potentialConfigSlots": [
+        48
+      ]
+    },
+    {
+      "objSlot": 119,
+      "diffuseSource": "data/philipk/pk01/floor02b_d.png",
+      "potentialConfigSlots": [
+        12
+      ]
+    },
+    {
+      "objSlot": 120,
+      "diffuseSource": "data/acerspyro/light1/light1.png",
+      "potentialConfigSlots": [
+        43,
+        52
+      ]
+    },
+    {
+      "objSlot": 121,
+      "diffuseSource": "data/trak/trak5/light3a.jpg",
+      "potentialConfigSlots": [
+        5
+      ]
+    },
+    {
+      "objSlot": 122,
+      "diffuseSource": "data/mikeplus64/plain.png",
+      "potentialConfigSlots": [
+        1,
+        36
+      ]
+    },
+    {
+      "objSlot": 123,
+      "diffuseSource": "data/philipk/pk02/switches01a_c.png",
+      "potentialConfigSlots": [
+        25
+      ]
+    },
+    {
+      "objSlot": 124,
+      "diffuseSource": "data/trak/trak6/tile3.jpg",
+      "potentialConfigSlots": [
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "objSlot": 125,
+      "diffuseSource": "data/jojo/sand01.png",
+      "potentialConfigSlots": [
+        31,
+        53,
+        54
+      ]
+    },
+    {
+      "objSlot": 127,
+      "diffuseSource": "data/jojo/windowstile04_g.png",
+      "potentialConfigSlots": [
+        29
+      ]
+    },
+    {
+      "objSlot": 128,
+      "diffuseSource": "data/acerspyro/light1/light1.png",
+      "potentialConfigSlots": [
+        43,
+        52
+      ]
+    },
+    {
+      "objSlot": 129,
+      "diffuseSource": "data/trak/trak6/tile3.jpg",
+      "potentialConfigSlots": [
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "objSlot": 130,
+      "diffuseSource": "data/trak/trak6/tile3.jpg",
+      "potentialConfigSlots": [
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "objSlot": 131,
+      "diffuseSource": "data/mikeplus64/plain.png",
+      "potentialConfigSlots": [
+        1,
+        36
+      ]
+    },
+    {
+      "objSlot": 132,
+      "diffuseSource": "data/trak/trak6/tile3.jpg",
+      "potentialConfigSlots": [
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "objSlot": 133,
+      "diffuseSource": "data/nieb/complex/step03.png",
+      "potentialConfigSlots": [
+        39,
+        47
+      ]
+    },
+    {
+      "objSlot": 134,
+      "diffuseSource": "data/trak/trak5/light3a.jpg",
+      "potentialConfigSlots": [
+        5
+      ]
+    },
+    {
+      "objSlot": 135,
+      "diffuseSource": "data/trak/trak6/trim1.jpg",
+      "potentialConfigSlots": [
+        35
+      ]
+    },
+    {
+      "objSlot": 136,
+      "diffuseSource": "data/trak/trak6/trim1.jpg",
+      "potentialConfigSlots": [
+        35
+      ]
+    }
+  ],
+  "requiresTextureExtraction": true,
+  "containsTextureFiles": false,
+  "warning": "CFG and Wavefront OBJ exporter may describe different revisions; potentialConfigSlots are suggestions, not authoritative slot identity"
+}
