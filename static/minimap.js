@@ -33,6 +33,23 @@ export function createMinimap(canvas,label,map){
     }
    }
   }
+  if(map.octavusOriginal){
+   // Octavus: linework projected from the actual imported source triangles.
+   bg.save();bg.globalAlpha=.6;bg.strokeStyle='#43585b';bg.lineWidth=.65;
+   bg.beginPath();
+   for(const [x0,z0,x1,z1] of map.octavusRadarEdges||[]){
+    bg.moveTo(px(x0),pz(z0));bg.lineTo(px(x1),pz(z1));
+   }
+   bg.stroke();bg.restore();
+   bg.strokeStyle='#607378';bg.lineWidth=1;
+   bg.strokeRect(px(-57),pz(-57),114*SCALE,114*SCALE);
+   for(const [side,points] of Object.entries(map.spawnSets||{})){
+    bg.fillStyle=side==='A'?'#4c91b5':'#be8055';
+    for(const [x,,z] of points){
+     bg.beginPath();bg.arc(px(x),pz(z),1.2,0,Math.PI*2);bg.fill();
+    }
+   }
+  }
   for(const b of map.boxes){
    if(['floor','routeFloor','deck','ramp','stationRoof'].includes(b.kind))continue;
    bg.fillStyle=map.palette[b.style]||'#53667c';bg.fillRect(px(b.x-b.w/2),pz(b.z-b.d/2),Math.max(1,b.w*SCALE),Math.max(1,b.d*SCALE));
@@ -69,6 +86,6 @@ export function createMinimap(canvas,label,map){
   ctx.fillStyle='#1b86b1';ctx.strokeStyle='#eef7f3';ctx.lineWidth=2;
   ctx.beginPath();ctx.moveTo(0,-8);ctx.lineTo(5,5);ctx.lineTo(0,2);ctx.lineTo(-5,5);ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();
   const zone=map.zones.find(z=>Math.abs(p.x-z.x)<=z.w/2&&Math.abs(p.z-z.z)<=z.d/2)?.name||(map.dustOriginal?'MARKET STREETS':'CITY STREETS');
-  const text=zone+(p.y>=4.5?' / UPPER LEVEL':'');if(lastZone!==text){lastZone=text;label.textContent=text;}
+  const text=zone+(p.y>=4.5&&!map.octavusOriginal?' / UPPER LEVEL':'');if(lastZone!==text){lastZone=text;label.textContent=text;}
  }};
 }
