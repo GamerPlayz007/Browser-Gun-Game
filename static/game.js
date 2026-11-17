@@ -1,7 +1,6 @@
 import * as T from 'three';
 import {buildWorld} from './world.js';
-import {createDustCorridorPreview} from './dust_corridor_preview.js';
-import {createOctavusPreview,loadOctavusPacked} from './octavus_preview.js';
+import {loadOctavusPacked} from './octavus_preview.js';
 import {buildOctavusMatch} from './octavus_match.js';
 import {buildDustMatch65} from './dust_match65.js';
 import {loadDustSource66} from './dust_source66.js';
@@ -62,52 +61,6 @@ display=createDisplay(renderer,[camera,viewCamera],enabled=>{
  postfx.setDetail(enabled);ambience45.setQuality(tier);updateRigQuality67(tier);
 },settings.quality);
 minimap=createMinimap($('minimap'),$('district-label'),map);
-const dust62=createDustCorridorPreview({renderer,getQuality:()=>settings.quality});
-const dust62Button=document.createElement('button');
-dust62Button.type='button';dust62Button.id='dust-preview-62';
-dust62Button.textContent='EXPLORE DUST CORRIDOR · ORIGINAL MAP PREVIEW';
-dust62Button.className='secondary';
-dust62Button.style.cssText='width:100%;margin:12px 0;padding:12px 8px;';
-$('map-select').insertAdjacentElement('afterend',dust62Button);
-dust62Button.onclick=async()=>{
- if(joined||dust62.loading||dust62.active)return;
- dust62Button.disabled=true;
- dust62Button.textContent='GENERATING ORIGINAL DISTRICT…';
- $('status').textContent='Loading original Dust Corridor geometry into CROSSFire…';
- try{await dust62.open();}catch(error){
-  console.error('Dust Corridor native preview',error);
-  toast('Dust preview unavailable: '+(error?.message||'renderer issue'));
-  $('status').textContent='Dust Corridor preview could not load. Existing maps still work.';
- }finally{
-  dust62Button.disabled=false;
-  dust62Button.textContent='EXPLORE DUST CORRIDOR · ORIGINAL MAP PREVIEW';
- }
-};
-// Octavus's original geometry can still be explored separately before
-// selecting it as a fully playable native multiplayer room map.
-const octavusPreview=createOctavusPreview();
-const octavusButton=document.createElement('button');
-octavusButton.type='button';
-octavusButton.id='octavus-preview';
-octavusButton.className='secondary';
-octavusButton.textContent='EXPLORE OCTAVUS · RED ECLIPSE 2 ORIGINAL GEOMETRY';
-octavusButton.style.cssText='width:100%;margin:8px 0;padding:12px 8px;';
-$('map-select').insertAdjacentElement('afterend',octavusButton);
-octavusButton.onclick=async()=>{
- if(joined||dust62.active||dust62.loading||octavusPreview.active||octavusPreview.loading)return;
- octavusButton.disabled=true;
- octavusButton.textContent='LOADING RED ECLIPSE OCTAVUS…';
- $('status').textContent='Reading the original Octavus terrain into CROSSFire…';
- try{await octavusPreview.open();}
- catch(error){
-  console.error('Octavus native walkthrough',error);
-  toast('Octavus preview unavailable: '+(error?.message||'graphics issue'));
-  $('status').textContent='Octavus preview could not load. Live arenas are unchanged.';
- }finally{
-  octavusButton.disabled=false;
-  octavusButton.textContent='EXPLORE OCTAVUS · RED ECLIPSE 2 ORIGINAL GEOMETRY';
- }
-};
 for(const entry of registry.maps){const option=document.createElement('option');option.value=entry.id;option.textContent=entry.name+(entry.available?'':' — coming later');option.disabled=!entry.available;$('map-select').append(option);}
 $('map-select').value=map.id;
 // Begin downloading the immutable, precompiled original district as soon as
@@ -538,11 +491,6 @@ function frame(ms){try{const now=ms/1000,rawMs=ms-clock,dt=Math.min(rawMs/1000,.
  // prediction and frame meters before we resume rendering.
  if(document.hidden){fpsFrames=0;fpsLast=ms;movementAccumulator=0;return;}
  fpsFrames++;
- if(dust62.active){
-  // Same renderer + canvas, no separate game and no speculative server map.
-  dust62.render(dt,now);
-  return;
- }
  controlBeacon54.update(state?.objective,now,joined&&state?.mode==='control');
  if(ms-fpsLast>600){
   fps=Math.round(fpsFrames*1000/(ms-fpsLast));fpsLast=ms;fpsFrames=0;
