@@ -1,6 +1,6 @@
 {
   "status": "failed",
-  "verifiedAt": "2026-11-17T19:21:41.691090+00:00",
+  "verifiedAt": "2026-11-17T19:21:57.911704+00:00",
   "steps": {
     "octavusServerMotion": "failure",
     "browserImportClosure": "skipped",
@@ -28,7 +28,7 @@
       "AssertionError: -5.551115123125783e-17 != 0.24 within 0.06 delta (0.24000000000000005 difference)",
       "",
       "----------------------------------------------------------------------",
-      "Ran 7 tests in 0.500s",
+      "Ran 7 tests in 0.369s",
       "",
       "FAILED (failures=1)"
     ]
