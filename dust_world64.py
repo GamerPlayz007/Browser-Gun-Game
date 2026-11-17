@@ -92,14 +92,19 @@ class DustWorld64:
         self.bounds=dict(self.collision.metadata['playBounds'])
         self.spawns=self.collision.metadata['spawns']
         self.sha256=self.collision.metadata['rawSha256']
+        # The original Dust source uses 4m cells. Large imported Octavus
+        # geometry uses a coarser index to avoid duplicating huge terrain
+        # triangles across thousands of grid cells on a 512MB server.
+        self.cell=float(getattr(self.collision,'cell_size',CELL))
+        if not 2.0<=self.cell<=32.0:raise ValueError('Invalid native map cell size')
         cells=defaultdict(list)
         p=self.points
         for tri in range(self.count):
             k=9*tri
             ax,bx,cx=p[k],p[k+3],p[k+6]
             az,bz,cz=p[k+2],p[k+5],p[k+8]
-            for gx in range(math.floor(min(ax,bx,cx)/CELL),math.floor(max(ax,bx,cx)/CELL)+1):
-                for gz in range(math.floor(min(az,bz,cz)/CELL),math.floor(max(az,bz,cz)/CELL)+1):
+            for gx in range(math.floor(min(ax,bx,cx)/self.cell),math.floor(max(ax,bx,cx)/self.cell)+1):
+                for gz in range(math.floor(min(az,bz,cz)/self.cell),math.floor(max(az,bz,cz)/self.cell)+1):
                     cells[gx,gz].append(tri)
         self.cells=dict(cells)
 
@@ -112,8 +117,8 @@ class DustWorld64:
     def candidates(self,x0,z0,x1,z1):
         """Shared broadphase for ground, spawn and line-of-sight queries."""
         seen=set()
-        for gx in range(math.floor(x0/CELL),math.floor(x1/CELL)+1):
-            for gz in range(math.floor(z0/CELL),math.floor(z1/CELL)+1):
+        for gx in range(math.floor(x0/self.cell),math.floor(x1/self.cell)+1):
+            for gz in range(math.floor(z0/self.cell),math.floor(z1/self.cell)+1):
                 seen.update(self.cells.get((gx,gz),()))
         return sorted(seen)
 
