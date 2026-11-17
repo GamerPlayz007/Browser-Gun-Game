@@ -1,7 +1,8 @@
 import * as T from 'three';
 import {buildWorld} from './world.js';
 import {createDustCorridorPreview} from './dust_corridor_preview.js';
-import {createOctavusPreview} from './octavus_preview.js';
+import {createOctavusPreview,loadOctavusPacked} from './octavus_preview.js';
+import {buildOctavusMatch} from './octavus_match.js';
 import {buildDustMatch65} from './dust_match65.js';
 import {loadDustSource66} from './dust_source66.js';
 import {makeWeapon,animateWeapon,makePlayer,setPlayerSkin56,animatePlayer,markPlayerEvent,disposePlayer,setModelQuality67} from './models.js';
@@ -82,8 +83,8 @@ dust62Button.onclick=async()=>{
   dust62Button.textContent='EXPLORE DUST CORRIDOR · ORIGINAL MAP PREVIEW';
  }
 };
-// Octavus uses the original Red Eclipse 2 arena geometry. Walkthrough only
-// until the server/client triangle collision implementations are in parity.
+// Octavus's original geometry can still be explored separately before
+// selecting it as a fully playable native multiplayer room map.
 const octavusPreview=createOctavusPreview();
 const octavusButton=document.createElement('button');
 octavusButton.type='button';
@@ -112,6 +113,11 @@ $('map-select').value=map.id;
 // Begin downloading the immutable, precompiled original district as soon as
 // it is selected, overlapping network latency with the player's lobby setup.
 $('map-select').addEventListener('change',async()=>{
+ if($('map-select').value==='octavus'){
+  try{await loadOctavusPacked();}
+  catch(error){console.warn('Octavus preload failed (will retry on join)',error);}
+  return;
+ }
  if($('map-select').value!=='dust_corridor')return;
  try{
   const item=registry.maps.find(x=>x.id==='dust_corridor');
@@ -131,9 +137,11 @@ async function loadArena(id){
  const dustSource=next.dustOriginal?await loadDustSource66(next.collisionSha256):null;
  const loadMs=performance.now()-loadStart;
  const nextScene=new T.Scene();
- const nextWorld=next.dustOriginal?
-   await buildDustMatch65(nextScene,next,{renderer,quality:qualityTier61(),source:dustSource}):
-   buildWorld(nextScene,next,{renderer,quality:qualityTier61()});
+ const nextWorld=next.octavusOriginal?
+   await buildOctavusMatch(nextScene,next,{renderer,quality:qualityTier61()}):
+   next.dustOriginal?
+    await buildDustMatch65(nextScene,next,{renderer,quality:qualityTier61(),source:dustSource}):
+    buildWorld(nextScene,next,{renderer,quality:qualityTier61()});
  clearVisualEffects52();controlBeacon54.dispose();world.dispose();postfx.dispose();
  scene=nextScene;world=nextWorld;controlBeacon54=createControlBeacon54(T,scene);
  if(next.dustOriginal){
@@ -151,6 +159,13 @@ async function loadArena(id){
    get active(){return map?.id==='dust_corridor'&&joined;}
   };
  }else delete window.__crossfireDustMatch65;
+ if(next.octavusOriginal){
+  window.__crossfireOctavus={
+   ready:true,usingMainRenderer:true,collisionTriangles:world.physics.source.soup.count,
+   visualTriangles:world.originalVisualTriangles,renderSections:world.staticBatches,
+   loadMs:Math.round(loadMs)
+  };
+ }else delete window.__crossfireOctavus;
  postfx=createPostProcessing(renderer,scene,camera,settings.quality);map=next;
  ambience45.setMap(map);
  minimap=createMinimap($('minimap'),$('district-label'),map);$('map-select').value=id;
@@ -211,7 +226,7 @@ function predictStep(input){
  const beforeY=local.y;
  const wasSliding=local.slide_until>local.motion_time&&local.grounded;
  const beforeHeld=local.jump_held;
- if(map.dustOriginal)world.physics.simulate(local,input,FIXED_DT,local.motion_time,weapons[me.weapon]);
+ if(map.dustOriginal||map.octavusOriginal)world.physics.simulate(local,input,FIXED_DT,local.motion_time,weapons[me.weapon]);
  else simulate(local,input,FIXED_DT,local.motion_time,map.boxes,weapons[me.weapon]);
  jumpLatch62.consume();
  if(wasSliding&&input.jump&&!beforeHeld&&local.vy>0&&!local.grounded)
@@ -426,7 +441,7 @@ function handle(data){if(data.type==='manual_respawn_result65'){toast(data.messa
   local={...me};
   for(const cmd of pendingMoves){
    local.yaw=cmd.yaw;local.motion_time+=FIXED_DT;
-   if(map.dustOriginal)world.physics.simulate(local,cmd,FIXED_DT,local.motion_time,weapons[me.weapon]);
+   if(map.dustOriginal||map.octavusOriginal)world.physics.simulate(local,cmd,FIXED_DT,local.motion_time,weapons[me.weapon]);
    else simulate(local,cmd,FIXED_DT,local.motion_time,map.boxes,weapons[me.weapon]);
   }
   const correction=cameraCorrection(old,local,2.5);
@@ -601,7 +616,7 @@ function frame(ms){try{const now=ms/1000,rawMs=ms-clock,dt=Math.min(rawMs/1000,.
   $('crosshair').style.opacity=me.hp<=0||ads>.75?'0':'1';
   $('crosshair').style.width=$('crosshair').style.height=crosshairSize52.toFixed(1)+'px';
   if(moving&&local.grounded&&locked()&&now-lastStep>(input.sprint?.28:.4)){audio.step(input.sprint?.07:.045);lastStep=now;}
- }else{const anchor=map.center||{x:0,z:0};camera.position.set(anchor.x+7+Math.sin(now*.045)*2,9,anchor.z+30+Math.cos(now*.045)*2);camera.lookAt(anchor.x-5,3,anchor.z+14);camera.fov=65;camera.updateProjectionMatrix();for(const g of weaponModels)g.visible=false;}
+ }else{const anchor=map.center||{x:0,z:0};camera.position.set(anchor.x+7+Math.sin(now*.045)*2,map.octavusOriginal?49:9,anchor.z+30+Math.cos(now*.045)*2);camera.lookAt(anchor.x-5,map.octavusOriginal?42:3,anchor.z+14);camera.fov=65;camera.updateProjectionMatrix();for(const g of weaponModels)g.visible=false;}
  for(let i=effects.length-1;i>=0;i--)if(now>effects[i].until){const e=effects.splice(i,1)[0];e.obj.removeFromParent();if(e.own){e.obj.geometry.dispose();e.obj.material.dispose();}}
  $('damage').style.opacity=now<damageUntil?.65:0;$('damage-direction').style.opacity=now<damageUntil?1:0;const sample52=feedback52.sample(now);
  $('hitmarker').style.opacity=$('damage-number').style.opacity=sample52.alpha;
