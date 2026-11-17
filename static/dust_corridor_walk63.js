@@ -20,8 +20,9 @@ export function createDustWalk63(data){
     radius:.34,height:1.8,crouchHeight:1.12,stepOffset:.36,slopeLimit:48
   });
   let crouched=false,jumpQueued=false,steps=0;
-  function resetSpawn(side='A'){
-    const pos=data.spawns[side]?.[0];
+  const playBounds=data.playBounds;
+  function resetSpawn(side='A',index=0){
+    const pos=data.spawns[side]?.[index];
     if(!pos)throw Error('Invalid Dust Corridor spawn side: '+side);
     capsule.position.copy(pos);
     capsule.velocity.set(0,0,0);
@@ -52,7 +53,17 @@ export function createDustWalk63(data){
     jumpQueued=false;
     if(!capsule.grounded)v.y=Math.max(-35,v.y-GRAVITY*dt);
     else v.y=Math.min(v.y,0);
+    const oldX=capsule.position.x,oldZ=capsule.position.z;
     capsule.move(dt,DISPLACEMENT.copy(v).multiplyScalar(dt));
+    // Authoritative play region from source data; prevents walking outside
+    // the intended arena if a physics edge case escapes the perimeter wall.
+    if(playBounds&&(capsule.position.x<playBounds.x0+.34||
+        capsule.position.x>playBounds.x1-.34||
+        capsule.position.z<playBounds.z0+.34||
+        capsule.position.z>playBounds.z1-.34)){
+      capsule.position.x=oldX;capsule.position.z=oldZ;
+      capsule.velocity.x=0;capsule.velocity.z=0;
+    }
     steps++;return capsule.position;
   }
   resetSpawn('A');

@@ -3,6 +3,7 @@
  * WebGLRenderer/canvas. Upstream provenance: integrations/dust_corridor/LICENSE.
  * Preview ONLY; authoritative collision and multiplayer arrive in 6.3–6.5. */
 import * as T from 'three';
+import {createDustMinimap64} from './dust_minimap64.js';
 
 const vertex = `
 in float aLayer;
@@ -89,7 +90,7 @@ const views={
 };
 export function createDustCorridorPreview({renderer,getQuality}){
  let active=false,loading=false,world=null,toolbar=null,homeWasHidden=false,shadeDisplay='';
- let walk=null,mode='walk',tickBank=0,modeButton=null;
+ let walk=null,mode='walk',tickBank=0,modeButton=null,sourceContract=null;
  const keys=new Set();
  const camera=new T.PerspectiveCamera(74,1,.065,400);
  camera.rotation.order='YXZ';
@@ -132,6 +133,12 @@ export function createDustCorridorPreview({renderer,getQuality}){
  function updateModeButton(){
   if(modeButton)modeButton.textContent=mode==='walk'?'FREE FLY / INSPECT':'WALK / COLLISION ON';
  }
+ function warpToSafeSpawn64(side){
+  const safe=sourceContract?.validatedSpawns?.[side]?.safeIndices||[];
+  if(!walk||!safe.length)return;
+  walk.resetSpawn(side,safe[0]);mode='walk';tickBank=0;keys.clear();
+  updateModeButton();
+ }
  function controls(){
   toolbar=document.createElement('div');toolbar.id='cf-dust62-controls';
   toolbar.style.cssText='position:fixed;z-index:10000;top:12px;left:50%;transform:translateX(-50%);display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;padding:12px;border:1px solid #dcc9a4;background:#141b1bea;color:#f8f0e2;font:12px system-ui,sans-serif;border-radius:8px;box-shadow:0 8px 32px #0008;';
@@ -147,6 +154,15 @@ export function createDustCorridorPreview({renderer,getQuality}){
     tickBank=0;keys.clear();updateModeButton();
   };
   updateModeButton();toolbar.append(modeButton);
+  for(const side of ['A','B']){
+   const button=document.createElement('button');button.type='button';
+   button.id='cf-dust64-spawn-'+side.toLowerCase();
+   button.textContent='SPAWN '+side;
+   button.style.cssText='border:1px solid #a9b8b3;background:#1e3536;color:white;padding:8px;border-radius:5px;cursor:pointer;';
+   button.onclick=()=>warpToSafeSpawn64(side);
+   button.disabled=!(sourceContract?.validatedSpawns?.[side]?.safeIndices||[]).length;
+   toolbar.append(button);
+  }
   for(const name of Object.keys(views)){
    const button=document.createElement('button');button.type='button';button.textContent=name.toUpperCase();
    button.style.cssText='border:1px solid #8f8c7d;background:#222a29;color:#fff;padding:8px;border-radius:5px;cursor:pointer;';
@@ -172,6 +188,20 @@ export function createDustCorridorPreview({renderer,getQuality}){
      import('./dust_corridor_walk63.js')
    ]);
    const data=new MapGenerator().generate();
+   // Server-side contract comes from the SAME CROSSFire deployment.
+   // Fail closed on source mismatch rather than silently enabling fake spawns.
+   const response=await fetch('/api/dust-corridor/preview64',{cache:'no-store'});
+   if(!response.ok)throw Error('Dust Corridor server map contract unavailable');
+   const contract=await response.json();
+   if(contract.available!==false||contract.multiplayer!==false||
+      contract.triangleCount!==data.soup.count||
+      contract.collisionFormat!=='DUSTCOL3')
+     throw Error('Dust Corridor server and browser collision disagree');
+   for(const side of ['A','B']){
+    if(!(contract.validatedSpawns?.[side]?.safeIndices||[]).length)
+      throw Error('No server-validated Dust Corridor spawn for '+side);
+   }
+   sourceContract=contract;
    // Original triangles + original BVH/capsule: collision geometry matches visuals.
    walk=createDustWalk63(data);
    const q=getQuality();const size=q==='performance'?96:q==='high'?192:q==='ultra'||q==='native'?256:128;
@@ -188,6 +218,7 @@ export function createDustCorridorPreview({renderer,getQuality}){
    // ALL original building, stall, and prop geometry and authored vertex tints.
    mat=makeMaterial(bake);
    const scene=new T.Scene();scene.background=new T.Color('#b4c6ce');
+   const mini=createDustMinimap64({source:data,contract});
    for(const batch of data.batches){
     const geo=batch.build();geos.push(geo);
     const mesh=new T.Mesh(geo,mat);
@@ -197,11 +228,15 @@ export function createDustCorridorPreview({renderer,getQuality}){
    cloth=new ClothSystem(data.cloth,mat);
    cables=new CableSystem(data.cables,mat);
    scene.add(cloth.mesh,cables.mesh);
-   world={scene,geos,mat,bake,cloth,cables,
+   world={scene,geos,mat,bake,cloth,cables,minimap:mini,
     stats:{triangles:data.triangleCount,batches:data.batches.length,cloth:data.cloth.length,
       cables:data.cables.length,originalMaterialLayers:bake?20:0,
-      collisionTriangles:walk.triangles,collisionSystem:'original-triangle-bvh'}};
+      collisionTriangles:walk.triangles,collisionSystem:'original-triangle-bvh',
+      serverValidatedA:contract.validatedSpawns.A.safeIndices.length,
+      serverValidatedB:contract.validatedSpawns.B.safeIndices.length,
+      serverChecksum:contract.sha256}};
    selectView('Street');mode='walk';tickBank=0;
+   walk.resetSpawn('A',contract.validatedSpawns.A.safeIndices[0]);
    const home=document.getElementById('home'),shade=document.getElementById('shade');
    homeWasHidden=home.hidden;shadeDisplay=shade.style.display;
    home.hidden=true;shade.style.display='none';controls();active=true;
@@ -211,12 +246,16 @@ export function createDustCorridorPreview({renderer,getQuality}){
     get position(){return walk?.position.toArray()||null;},
     get grounded(){return walk?.grounded??false;},
     get crouched(){return walk?.crouched??false;},
-    get steps(){return walk?.steps??0;}
+    get steps(){return walk?.steps??0;},
+    get sourceMatched(){return sourceContract?.triangleCount===walk?.triangles;},
+    get bounds(){return sourceContract?.playBounds||null;}
    };
   }catch(err){
    cloth?.dispose();cables?.dispose();mat?.dispose();bake?.dispose();
    for(const geo of geos)geo.dispose();
-   walk=null;
+   world?.minimap?.dispose();
+   walk=null;sourceContract=null;world=null;
+   document.getElementById('cf-dust64-map')?.remove();
    throw err;
   }finally{loading=false;}
  }
@@ -227,7 +266,7 @@ export function createDustCorridorPreview({renderer,getQuality}){
   document.getElementById('shade').style.display=shadeDisplay;
   world.cloth.dispose();world.cables.dispose();
   for(const geo of world.geos)geo.dispose();
-  world.mat.dispose();world.bake?.dispose();world=null;walk=null;
+  world.mat.dispose();world.bake?.dispose();world.minimap?.dispose();world=null;walk=null;sourceContract=null;
   const status=document.getElementById('status');
   if(status)status.textContent='Dust Corridor collision preview closed. Existing arenas are ready.';
   delete window.__crossfireDustPreview62;
@@ -259,6 +298,7 @@ export function createDustCorridorPreview({renderer,getQuality}){
   }
   const size=renderer.getDrawingBufferSize(new T.Vector2());
   camera.aspect=Math.max(.1,size.x/Math.max(1,size.y));camera.updateProjectionMatrix();
+  world.minimap?.draw(mode==='walk'?walk.position:camera.position,yaw,now,mode);
   world.mat.uniforms.uEye.value.copy(camera.position);
   world.cloth.update(dt,now);world.cables.update(dt,now);
   renderer.setRenderTarget(null);renderer.clear(true,true,true);renderer.render(world.scene,camera);

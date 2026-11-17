@@ -8,6 +8,7 @@ from map_registry import ARENAS, DEFAULT, REGISTRY, WEAPONS, Arena, top_at, bott
 from movement_live import step_player, seed_movement, allowed_lean
 from combat64 import MAX_HEALTH, KILL_SIPHON, REGEN_DELAY, reset_health, take_damage, siphon, regenerate
 from perf36 import ServerMetrics
+from dust_world64 import get_dust_world64
 from modes54 import (TEAM_MODES,TEAM_IDS,TEAM_NAMES,CONTROL_POINT,
     is_team_mode,next_team,balance_teams,winner_team,controller,presence)
 from competitive55 import spawn_score,balanced_draft,ready_summary
@@ -598,6 +599,14 @@ async def list_maps(request):return web.json_response(REGISTRY)
 # Native Neon Zenith is bundled from its pinned upstream source by GitHub Actions.
 # This route NEVER substitutes a simplified CROSSFIRE world for upstream visuals.
 NEON_ROOT=ROOT/'static/neon'
+async def dust_preview_status64(request):
+    """Read-only native map/collision contract. Not in multiplayer registry.
+
+    Lazily indexes exact original geometry; used by the Dust Corridor
+    inspection/minimap and Stage 6.4 authoritative spawn preflight.
+    """
+    return web.json_response(get_dust_world64().metadata())
+
 async def neon_preview_status(request):
     return web.json_response({'ready':(NEON_ROOT/'index.html').is_file(),
         'type':'original-scene-walkthrough','multiplayer':False})
@@ -621,7 +630,7 @@ async def neon_asset(request):
 
 def make_app():
     app=web.Application(client_max_size=4096,middlewares=[cache_policy]);app['perf36']=ServerMetrics();app.router.add_get('/',index);app.router.add_get('/health',health)
-    app.router.add_get('/api/maps',list_maps);app.router.add_get('/api/neon-preview',neon_preview_status);app.router.add_get('/neon',neon_entry);app.router.add_get('/neon/',neon_entry);app.router.add_post('/api/rooms',create_room);app.router.add_get('/api/rooms',list_rooms65);app.router.add_get('/api/rooms/{code}',room_info);app.router.add_get('/ws/{code}',socket);app.router.add_static('/static/',ROOT/'static');app.router.add_get('/neon/{asset:.*}',neon_asset);app.router.add_get('/{asset:.*}',neon_asset);app.cleanup_ctx.append(lifecycle);return app
+    app.router.add_get('/api/maps',list_maps);app.router.add_get('/api/dust-corridor/preview64',dust_preview_status64);app.router.add_get('/api/neon-preview',neon_preview_status);app.router.add_get('/neon',neon_entry);app.router.add_get('/neon/',neon_entry);app.router.add_post('/api/rooms',create_room);app.router.add_get('/api/rooms',list_rooms65);app.router.add_get('/api/rooms/{code}',room_info);app.router.add_get('/ws/{code}',socket);app.router.add_static('/static/',ROOT/'static');app.router.add_get('/neon/{asset:.*}',neon_asset);app.router.add_get('/{asset:.*}',neon_asset);app.cleanup_ctx.append(lifecycle);return app
 if __name__=='__main__':
     import argparse
     parser=argparse.ArgumentParser();parser.add_argument('--host',default='0.0.0.0');parser.add_argument('--port',type=int,default=int(os.environ.get('PORT','3000')));parser.add_argument('--strictPort',action='store_true');args=parser.parse_args();web.run_app(make_app(),host=args.host,port=args.port)

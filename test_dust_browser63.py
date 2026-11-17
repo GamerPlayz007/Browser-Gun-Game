@@ -34,6 +34,13 @@ async def main():
             meta=await page.evaluate('window.__crossfireDustPreview62.stats')
             assert meta['collisionTriangles']>1000,meta
             assert meta['collisionSystem']=='original-triangle-bvh',meta
+            assert meta['serverValidatedA']>=1,meta
+            assert meta['serverValidatedB']>=1,meta
+            assert await page.evaluate('window.__crossfireDustPreview62.sourceMatched')
+            assert await page.locator('#cf-dust64-map canvas').count()==1
+            contract=await (await app.get('/api/dust-corridor/preview64')).json()
+            assert contract['triangleCount']==meta['collisionTriangles']
+            assert contract['sha256']==meta['serverChecksum']
             assert await page.evaluate('window.__crossfireDustPreview62.mode')=='walk'
             assert await page.locator('#home').is_hidden()
             assert await page.locator('#viewport canvas').count()==1
@@ -44,6 +51,10 @@ async def main():
             await page.keyboard.press('ControlLeft')
             await page.wait_for_function(
                 'window.__crossfireDustPreview62?.crouched===false',timeout=6000)
+            await page.locator('#cf-dust64-spawn-b').click(timeout=10000)
+            await page.wait_for_function('window.__crossfireDustPreview62.position[2]>45',timeout=10000)
+            await page.locator('#cf-dust64-spawn-a').click(timeout=10000)
+            await page.wait_for_function('window.__crossfireDustPreview62.position[2]<-45',timeout=10000)
             await page.locator('#cf-dust63-mode').click(timeout=10000)
             assert await page.evaluate('window.__crossfireDustPreview62.mode')=='fly'
             await page.locator('#cf-dust63-mode').click(timeout=10000)
