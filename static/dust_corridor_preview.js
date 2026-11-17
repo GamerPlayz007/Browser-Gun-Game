@@ -73,7 +73,7 @@ void main(){
   color=mix(color,vec3(.68,.70,.66),fog*.6);
   outColor=vec4(color,1.);
 }`;
-function makeMaterial(bake){
+export function makeDustMaterial65(bake=null){
  return new T.ShaderMaterial({
   glslVersion:T.GLSL3,vertexShader:vertex,fragmentShader:fragment,side:T.DoubleSide,
   uniforms:{
@@ -216,7 +216,7 @@ export function createDustCorridorPreview({renderer,getQuality}){
    }
    // Low-end mode avoids costly GPU texture-array compilation but retains
    // ALL original building, stall, and prop geometry and authored vertex tints.
-   mat=makeMaterial(bake);
+   mat=makeDustMaterial65(bake);
    const scene=new T.Scene();scene.background=new T.Color('#b4c6ce');
    const mini=createDustMinimap64({source:data,contract});
    for(const batch of data.batches){

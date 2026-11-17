@@ -16,7 +16,7 @@ class LiveCityTests(unittest.TestCase):
         # when other *native* maps are enabled in the same multiplayer game.
         self.assertIn('cyberpunk',ARENAS)
         self.assertIn('neon_zenith',ARENAS)
-        self.assertNotIn('dust_corridor',ARENAS)
+        self.assertIn('dust_corridor',ARENAS)
         self.assertEqual(registry.REGISTRY['default'],'cyberpunk')
         self.assertEqual(registry.REGISTRY['maps'][0]['id'],'cyberpunk')
         self.assertFalse((ROOT/'static/experimental').exists(), 'Remove obsolete duplicate movement prototypes')

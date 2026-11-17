@@ -1,6 +1,7 @@
 import * as T from 'three';
 import {buildWorld} from './world.js';
 import {createDustCorridorPreview} from './dust_corridor_preview.js';
+import {buildDustMatch65} from './dust_match65.js';
 import {makeWeapon,animateWeapon,makePlayer,setPlayerSkin56,animatePlayer,markPlayerEvent,disposePlayer,setModelQuality67} from './models.js';
 import {simulate,FIXED_DT} from './physics.js';
 import {createJumpLatch62} from './input62.js';
@@ -86,9 +87,21 @@ async function loadArena(id){
  const entry=registry.maps.find(m=>m.id===id&&m.available);if(!entry)throw Error('This map is not available on this server.');
  const response=await fetch(entry.url);if(!response.ok)throw Error('Could not load the room map.');
  const next=await response.json();if(next.id!==id)throw Error('Map data mismatch. Refresh and try again.');
- const nextScene=new T.Scene(),nextWorld=buildWorld(nextScene,next,{renderer,quality:qualityTier61()});
+ const nextScene=new T.Scene();
+ const nextWorld=next.dustOriginal?
+   buildDustMatch65(nextScene,next,{renderer,quality:qualityTier61()}):
+   buildWorld(nextScene,next,{renderer,quality:qualityTier61()});
  clearVisualEffects52();controlBeacon54.dispose();world.dispose();postfx.dispose();
  scene=nextScene;world=nextWorld;controlBeacon54=createControlBeacon54(T,scene);
+ if(next.dustOriginal){
+  window.__crossfireDustMatch65={
+   ready:true,usingMainRenderer:true,
+   collisionTriangles:world.physics.source.soup.count,
+   visualBatches:world.staticBatches,
+   sourceChecksum:next.collisionSha256,
+   get active(){return map?.id==='dust_corridor'&&joined;}
+  };
+ }else delete window.__crossfireDustMatch65;
  postfx=createPostProcessing(renderer,scene,camera,settings.quality);map=next;
  ambience45.setMap(map);
  minimap=createMinimap($('minimap'),$('district-label'),map);$('map-select').value=id;
@@ -149,7 +162,8 @@ function predictStep(input){
  const beforeY=local.y;
  const wasSliding=local.slide_until>local.motion_time&&local.grounded;
  const beforeHeld=local.jump_held;
- simulate(local,input,FIXED_DT,local.motion_time,map.boxes,weapons[me.weapon]);
+ if(map.dustOriginal)world.physics.simulate(local,input,FIXED_DT,local.motion_time,weapons[me.weapon]);
+ else simulate(local,input,FIXED_DT,local.motion_time,map.boxes,weapons[me.weapon]);
  jumpLatch62.consume();
  if(wasSliding&&input.jump&&!beforeHeld&&local.vy>0&&!local.grounded)
   slideHopUntil53=performance.now()/1000+.48;
@@ -361,7 +375,11 @@ function handle(data){if(data.type==='manual_respawn_result65'){toast(data.messa
   const old=new T.Vector3(local.x+viewError.x,local.y+viewError.y,local.z+viewError.z);
   pendingMoves=pendingMoves.filter(cmd=>cmd.seq>me.seq&&cmd.spawn===me.spawn);
   local={...me};
-  for(const cmd of pendingMoves){local.yaw=cmd.yaw;local.motion_time+=FIXED_DT;simulate(local,cmd,FIXED_DT,local.motion_time,map.boxes,weapons[me.weapon]);}
+  for(const cmd of pendingMoves){
+   local.yaw=cmd.yaw;local.motion_time+=FIXED_DT;
+   if(map.dustOriginal)world.physics.simulate(local,cmd,FIXED_DT,local.motion_time,weapons[me.weapon]);
+   else simulate(local,cmd,FIXED_DT,local.motion_time,map.boxes,weapons[me.weapon]);
+  }
   const correction=cameraCorrection(old,local,2.5);
    viewError.set(correction.x,correction.y,correction.z);
   // Large corrections are snapped above; small corrections decay visually.

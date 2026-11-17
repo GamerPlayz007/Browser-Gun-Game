@@ -26,10 +26,14 @@ jobs:
       - run: npm ci
       - name: Export original Dust Corridor triangle collision
         run: node scripts/export_dust_collision63.mjs
-      - name: Validate Dust Corridor mesh physics and Python-readable collider
-        run: node test_dust63.mjs && node scripts/gen_dust_probe64.mjs && python -m unittest -v test_dust_collision63 test_dust64
-      - name: Compile the ONE live map
+      - name: Compile all native multiplayer maps
         run: python build_map.py
+      - name: Validate Dust original geometry and cross-language physics
+        run: |
+          node test_dust63.mjs
+          node scripts/gen_dust_probe64.mjs
+          node scripts/gen_dust_replay65.mjs
+          python -m unittest -v test_dust_collision63 test_dust64 test_dust65
       - name: Python map and multiplayer regressions
         run: python -m unittest test_map test_daybreak67 test_server test_combat64 test_interface65 test_stage31 test_match35 test_stage36
       - name: JavaScript rendering, gameplay and combat regressions
@@ -44,6 +48,8 @@ jobs:
         run: python test_browser36.py
       - name: Smoke-test Dust Corridor original mesh and collision preview
         run: python test_dust_browser63.py
+      - name: Smoke-test Dust Corridor live native multiplayer with two players
+        run: python test_dust_browser65.py
       - name: Save Phase 3 validation evidence
         if: always()
         uses: actions/upload-artifact@v4

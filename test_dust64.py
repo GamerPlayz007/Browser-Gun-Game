@@ -79,7 +79,7 @@ class DustServer64Tests(unittest.IsolatedAsyncioTestCase):
         await self.client.close()
         server.rooms.clear()
 
-    async def test_preview_contract_never_enables_online_rooms(self):
+    async def test_preview_contract_and_native_room_share_original_source(self):
         response=await self.client.get('/api/dust-corridor/preview64')
         self.assertEqual(response.status,200)
         result=await response.json()
@@ -90,9 +90,14 @@ class DustServer64Tests(unittest.IsolatedAsyncioTestCase):
         self.assertGreater(len(result['validatedSpawns']['A']['safeIndices']),0)
         self.assertGreater(len(result['validatedSpawns']['B']['safeIndices']),0)
         registry=await (await self.client.get('/api/maps')).json()
-        self.assertNotIn('dust_corridor',{m['id'] for m in registry['maps'] if m['available']})
-        forbidden=await self.client.post('/api/rooms',json={'mapId':'dust_corridor'})
-        self.assertEqual(forbidden.status,400)
+        self.assertIn('dust_corridor',{m['id'] for m in registry['maps'] if m['available']})
+        # The preview-only read API remains intentionally unjoinable, while
+        # the native server-authored registry now enables online matches.
+        created=await self.client.post('/api/rooms',json={'mapId':'dust_corridor'})
+        self.assertEqual(created.status,200)
+        room=await created.json()
+        self.assertEqual(room['mapId'],'dust_corridor')
+        self.assertEqual(server.rooms[room['room']].arena.id,'dust_corridor')
 
 
 if __name__=='__main__':

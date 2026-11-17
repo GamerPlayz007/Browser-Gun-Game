@@ -257,7 +257,7 @@ class NetworkTests(unittest.IsolatedAsyncioTestCase):
         # still a local collision preview and must NOT enter multiplayer yet.
         self.assertIn('cyberpunk',available)
         self.assertIn('neon_zenith',available)
-        self.assertNotIn('dust_corridor',available)
+        self.assertIn('dust_corridor',available)
         for value in ['rainforest','solstice','missing','../server.py',None,[]]:
             response=await self.client.post('/api/rooms',json={'mapId':value});self.assertEqual(response.status,400)
         self.assertEqual((await self.client.post('/api/rooms',data='broken')).status,400)

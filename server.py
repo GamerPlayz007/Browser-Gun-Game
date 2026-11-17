@@ -9,6 +9,7 @@ from movement_live import step_player, seed_movement, allowed_lean
 from combat64 import MAX_HEALTH, KILL_SIPHON, REGEN_DELAY, reset_health, take_damage, siphon, regenerate
 from perf36 import ServerMetrics
 from dust_world64 import get_dust_world64
+from dust_motion65 import dust_step65
 from modes54 import (TEAM_MODES,TEAM_IDS,TEAM_NAMES,CONTROL_POINT,
     is_team_mode,next_team,balance_teams,winner_team,controller,presence)
 from competitive55 import spawn_score,balanced_draft,ready_summary
@@ -44,7 +45,9 @@ def overlaps(x,y,z,b,height=1.8):
     return abs(x-b['x'])<b['w']/2+.32 and abs(z-b['z'])<b['d']/2+.32 and y<top_at(b,x,z)-.015 and y+height>bottom_at(b,x,z)+.015
 
 def move(p,dt,now,arena=DEFAULT):
-    """60 Hz server authority; static/physics.js implements matching prediction."""
+    """60 Hz authority: original triangle solver for Dust only."""
+    if arena.id=='dust_corridor':
+        return dust_step65(p,dt,now,WEAPONS[p['weapon']])
     return step_player(p,dt,now,arena,WEAPONS)
 
 def spawn(p,players,now,arena=DEFAULT,history=None):
@@ -59,8 +62,10 @@ def spawn(p,players,now,arena=DEFAULT,history=None):
             vec=(x-origin[0],y+1.55-origin[1],z-origin[2])
             dist=math.sqrt(sum(v*v for v in vec))
             direction=tuple(v/max(dist,.01) for v in vec)
-            if not any((h:=ray_solid(origin,direction,b)) is not None and
-                       h<dist for b in arena.boxes):
+            if not (get_dust_world64().raycast(origin,(x,y+1.55,z))
+                    if arena.id=='dust_corridor' else any(
+                     (h:=ray_solid(origin,direction,b)) is not None and h<dist
+                     for b in arena.boxes)):
                 visible.append(q)
         return spawn_score(pos,p,players,history,now,visible)
     points=random.sample(arena.spawns,len(arena.spawns))
@@ -284,7 +289,7 @@ class Room:
         p['last_shot']=now;p['ammo']-=1;p['shield']=0;p['shot_seq']=shot_id
         # Recompute peek on every shot with the current aim; clients cannot
         # provide an arbitrary gun origin or peek through an opaque wall.
-        p['lean']=allowed_lean(p,p.get('input',{}),self.arena)
+        p['lean']=0. if self.arena.id=='dust_corridor' else allowed_lean(p,p.get('input',{}),self.arena)
         shift=.52*p['lean']
         origin=(p['x']+math.cos(p['yaw'])*shift,
                 p['y']+(.9 if p['crouch'] else 1.55),
@@ -300,9 +305,14 @@ class Room:
             yaw=p['yaw']+random.uniform(-spread,spread);pitch=p['pitch']+random.uniform(-spread,spread);cp=math.cos(pitch)
             direction=(-math.sin(yaw)*cp,math.sin(pitch),-math.cos(yaw)*cp)
             distance=w['range'];victim=None;head=False
-            for b in self.arena.boxes:
-                h=ray_solid(origin,direction,b)
-                if h is not None and h<distance:distance=h
+            if self.arena.id=='dust_corridor':
+                endpoint=tuple(origin[i]+direction[i]*distance for i in range(3))
+                hit=get_dust_world64().raycast(origin,endpoint)
+                if hit is not None:distance=min(distance,hit['distance'])
+            else:
+                for b in self.arena.boxes:
+                    h=ray_solid(origin,direction,b)
+                    if h is not None and h<distance:distance=h
             candidates=list(self.targets) if self.mode!=BOT_MODE or self.phase=='lobby' else []
             if self.phase=='playing':
                 if self.mode==BOT_MODE:
