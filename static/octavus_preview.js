@@ -4,6 +4,7 @@
  * Engine code, navigation, shaders and replacement textures are CROSSFire code.
  */
 import * as THREE from 'three';
+import {createOctavusPBRMaterial} from './octavus_materials.js';
 
 const PARTS=8, SCALE=120/8192;
 // Calinou's original Cube 2 OBJ export recommends an import scale around 0.05.
@@ -88,7 +89,7 @@ function texture(type){
  const tex=new THREE.CanvasTexture(c);tex.wrapS=tex.wrapT=THREE.RepeatWrapping;
  tex.colorSpace=THREE.SRGBColorSpace;tex.anisotropy=2;return tex;
 }
-function createScene(packed,types,scene=new THREE.Scene(),sourceUV=null,nativeScale=false){
+function createScene(packed,types,scene=new THREE.Scene(),sourceUV=null,nativeScale=false,media=null){
  scene.background=new THREE.Color('#cdd7d7');
  scene.fog=new THREE.Fog('#cdd7d7',nativeScale?240:100,nativeScale?680:250);
  scene.add(new THREE.HemisphereLight('#f7f2e9','#5d6465',2.0));
@@ -100,7 +101,8 @@ function createScene(packed,types,scene=new THREE.Scene(),sourceUV=null,nativeSc
  }
  const textures=new Map();
  for(const kind of Object.keys(PALETTES))textures.set(kind,texture(kind));
- let meshCount=0,faceOffset=0;
+ let meshCount=0,faceOffset=0,originalMaterials=0;
+ const materialInstances=[];
  if(sourceUV?.triangleCount!==undefined&&sourceUV.triangleCount!==packed.triangles)
   throw Error('Octavus original UV triangle count mismatch');
  for(const [slot,indices] of packed.groups){
@@ -131,23 +133,45 @@ function createScene(packed,types,scene=new THREE.Scene(),sourceUV=null,nativeSc
   }
   const geo=new THREE.BufferGeometry();
   geo.setAttribute('position',new THREE.BufferAttribute(positions,3));
+  const sourceMat=media?.channels?.get(slot);
+  if(sourceMat?.map&&preservedUV){
+   // OBJ's original UV numbers are texel-space offsets, not normalized.
+   // A 512px source texture repeats every 512 native UV units.
+   const iw=1/Math.max(1,sourceMat.width),ih=1/Math.max(1,sourceMat.height);
+   for(let u=0;u<preservedUV.length;u+=2){
+    uvs[u]=preservedUV[u]*iw;
+    uvs[u+1]=preservedUV[u+1]*ih;
+   }
+  }
   geo.setAttribute('uv',new THREE.BufferAttribute(uvs,2));
   // Keep the authored UVs intact for the original-material Phase 2 renderer;
   // temporary procedural replacement materials still use their own mapping.
   if(preservedUV)geo.setAttribute('originalUv',new THREE.BufferAttribute(preservedUV,2));
   geo.computeVertexNormals();geo.computeBoundingSphere();
+  const original=createOctavusPBRMaterial(slot,media,null,'auto');
   const variation=.91+(slot%13)*.012;
-  const mat=new THREE.MeshLambertMaterial({
+  const mat=original.material||new THREE.MeshLambertMaterial({
    map:textures.get(kind),color:new THREE.Color(variation,variation,variation),
    side:THREE.DoubleSide
   });
+  if(original.original){originalMaterials++;materialInstances.push({mat,normal:original.normalMap,roughness:original.roughnessMap});}
   const mesh=new THREE.Mesh(geo,mat);mesh.name='Octavus material slot '+slot;
   ground.add(mesh);meshCount++;faceOffset+=indices.length;
  }
  if(sourceUV&&faceOffset!==sourceUV.indices.length)throw Error('Octavus UV face count does not match geometry');
- return {scene,meshCount,textures,geometryRoot:ground,preservedTextureCoordinates:!!sourceUV,dispose(){
+ return {scene,meshCount,textures,originalMaterials,geometryRoot:ground,preservedTextureCoordinates:!!sourceUV,
+  setQuality(mode){
+   const low=mode==='performance';
+   for(const entry of materialInstances){
+    entry.mat.normalMap=low?null:entry.normal;
+    entry.mat.roughnessMap=low?null:entry.roughness;
+    entry.mat.needsUpdate=true;
+   }
+   for(const t of media?.textures||[])t.anisotropy=low?1:4;
+  },dispose(){
   ground.traverse(obj=>{if(obj.isMesh){obj.geometry.dispose();obj.material.dispose();}});
   for(const tex of textures.values())tex.dispose();
+  media?.dispose?.();
   ground.removeFromParent();
  }};
 }
