@@ -66,6 +66,43 @@ console.log(JSON.stringify(cases.map(c=>{const p={...c.initial};return c.command
                         floor=max(supports)
                         blockers=[o for o in near if s.overlaps(x,floor+.29,z,o,2.7) and not (side!=0 and o.get('kind') in ('stairTread','stairLanding') and o.get('route')!=route['id'])]
                         self.assertFalse(blockers,(route['id'],[x,floor,z],[(o['kind'],o['x'],o['z']) for o in blockers]))
+    def test_stair_overhead_clearance_across_player_width(self):
+        """Regression: wide landings do not help if +9 decks hit your head.
+
+        The old route audit only sampled the centreline. A player can stand
+        75 cm to either side of it (especially while turning) and still
+        collide with an upper bridge. Sample both shoulders at every tread.
+        """
+        stairs=list(s.MAP['stairs'])
+        # The station's second public switchback is registered as G4.
+        stairs.append(next(r for r in s.MAP['routes'] if r['id']=='G4'))
+        for stair in stairs:
+            for a,b in zip(stair['points'],stair['points'][1:]):
+                dx,dz=b[0]-a[0],b[2]-a[2]
+                length=math.hypot(dx,dz)
+                if length<.01:continue
+                if stair['id']=='G4' and min(a[1],b[1])<6.8:continue
+                for t in (0,.25,.5,.75,1):
+                    x=a[0]+dx*t
+                    y=a[1]+(b[1]-a[1])*t
+                    z=a[2]+dz*t
+                    for side in (-.75,0,.75):
+                        px=x-dz/length*side
+                        pz=z+dx/length*side
+                        overhead=[
+                            q for q in s.nearby_boxes(px,pz)
+                            if q['kind'] in ('deck','routeFloor','stairLanding')
+                            and abs(px-q['x'])<q['w']/2+.32
+                            and abs(pz-q['z'])<q['d']/2+.32
+                            and y+.40<q['y']<y+1.82
+                        ]
+                        self.assertFalse(
+                            overhead,
+                            (stair['id'],'overhead platform blocks stair',
+                             round(px,2),round(y,2),round(pz,2),
+                             [(q['kind'],q.get('structure'),q.get('route')) for q in overhead])
+                        )
+
     def test_switchback_landings_are_wide_and_deep(self):
         for name in ('S4','S4-E','S5','S6'):
             landings=sorted((b for b in s.BOXES if b.get('kind')=='stairLanding'

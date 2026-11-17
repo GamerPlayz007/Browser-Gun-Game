@@ -172,7 +172,9 @@ def _curbs_and_buildings(b,plan):
     station_pieces=[(30,8.68,21.15,60,9.0,24.7)]
     for cx in (36.5,51.0):
         # Open a REAL stairwell in the station slab; no ceiling above flight 3.
-        hole=(cx-2.7,8.3,23.54,cx+2.7,9.3,25.2)
+        # Widen the north-side stair opening by the full player radius.
+        # The original platform lips reached into the upper stair turn.
+        hole=(cx-3.45,8.3,23.54,cx+3.45,9.3,25.2)
         station_pieces=[piece for p in station_pieces for piece in subtract(p,hole)]
     for part in station_pieces:b.flat(part,'metal','deck',structure='T01-S-platform')
     # Rail bed is above road, and continues beyond the station (no walkable slabs across track).
@@ -231,7 +233,9 @@ def _make_switchback(b,id,cx,z_south,low=1,high=9,lane_sep=3.15,width=2.45):
     assert (high-low)==8
     zN=z_south-4.2;zS=z_south
     left=cx-lane_sep/2;right=cx+lane_sep/2
-    bridge_x=cx+3.75
+    # Place the exit bridge outside the ascending final flight.
+    # The old bridge lip intersected head space on the upper treads.
+    bridge_x=cx+5.0
     points=[[left,low,zS]]
     for flight in range(4):
         x=left if flight%2==0 else right
@@ -288,9 +292,10 @@ def _staff_transfers(b):
     for p,q,level,who in [
         ((15,5,30),(26,5,30),5,'U3'),
         ((26,5,30),(26,5,29.6),5,'U3'),
-        ((26,9,23),(38,9,23),9,'U3'),
-        ((69.25,9,31.2),(69.25,9,23),9,'U4'),
-        ((69.25,9,23),(53,9,23),9,'U4'),
+        # Keep the upper service corridors north of stair headroom.
+        ((28.5,9,21.8),(38,9,21.8),9,'U3'),
+        ((70.5,9,31.2),(70.5,9,21.8),9,'U4'),
+        ((70.5,9,21.8),(53,9,21.8),9,'U4'),
     ]: b.corridor(p,q,3.0 if level==5 else 3.1,level,who)
     # Landings only extend OUT of the staircase, not above the incoming flight.
     b.flat((24.5,4.8,28.2,29.3,5,30.1),'metal','stairLanding',route='U3',landing='service')
@@ -304,7 +309,9 @@ def _floors_and_supports(b):
             # Station and staff staircase voids must cut through EVERY upper
             # slab, not just the primary platform slab.
             for cx,zS in ((36.5,28.2),(51.,28.2),(23.5,28.2),(65.5,31.2)):
-                void=(cx-2.7,8.4,zS-4.66,cx+2.7,9.3,zS-3.0)
+                # Cut secondary +9 walkway slabs as well as the station
+                # platform, with side clearance for the full player capsule.
+                void=(cx-3.45,8.4,zS-4.85,cx+3.45,9.3,zS-3.0)
                 pieces=[part for p in pieces for part in subtract(p,void)]
         if level==5:
             for x,z in ((11,38),(26.5,55)):
