@@ -1,0 +1,15 @@
+{
+  "format": "DUSTPK66",
+  "version": 66,
+  "collisionSha256": "82dadbb5b72efd6b8095994ca783f4a6a8afe2c84a7682507abbc1f0ab36887b",
+  "rawSha256": "b3f0fc223bfee754608a6f00c904b2551cf180ae1930db4df125308717ca6bb7",
+  "sourceTriangles": 96588,
+  "originalVisualTriangles": 284456,
+  "packedVisualTriangles": 284456,
+  "originalVisualVertices": 393033,
+  "packedVisualVertices": 396079,
+  "chunkCount": 125,
+  "gzipBytes": 3733846,
+  "rawBytes": 14115304,
+  "elapsedBuildMs": 862
+}
