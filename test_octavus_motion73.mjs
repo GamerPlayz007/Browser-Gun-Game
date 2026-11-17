@@ -24,7 +24,7 @@ for(const [height,shouldClimb] of [[.24,true],[2.2,false]]){
  for(let i=0;i<55;i++)physics.simulate(player,{d:true},DT,100+i*DT,{speed:1});
  if(shouldClimb){
   assert.ok(player.x>.5,'A real 0.24-unit source riser must be climbable');
-  assert.ok(Math.abs(player.y-height)<.06,'Player feet snap to stair top');
+  assert.ok(Math.abs(player.y-height)<.06,'Player feet snap to stair top '+JSON.stringify(player)+' ground '+physics.groundAt(player.x,player.z,player.y));
  }else{
   assert.ok(player.x<-.28,'A tall source wall remains solid');
   assert.ok(Math.abs(player.y)<.05,'Tall wall does not teleport player upward');
