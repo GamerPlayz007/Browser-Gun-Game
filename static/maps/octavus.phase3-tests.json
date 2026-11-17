@@ -1,10 +1,10 @@
 {
   "status": "failed",
-  "verifiedAt": "2026-11-17T19:21:57.911704+00:00",
+  "verifiedAt": "2026-11-17T19:22:27.562460+00:00",
   "steps": {
-    "octavusServerMotion": "failure",
-    "browserImportClosure": "skipped",
-    "octavusClientMotion": "skipped",
+    "octavusServerMotion": "success",
+    "browserImportClosure": "success",
+    "octavusClientMotion": "failure",
     "existingMultiplayer": "skipped"
   },
   "logTail": {
@@ -13,24 +13,34 @@
       "test_registry_preserves_octavus (test_octavus_phase1.OctavusPhase1Tests.test_registry_preserves_octavus) ... ok",
       "test_source_clearance_for_all_respawn_candidates (test_octavus_phase1.OctavusPhase1Tests.test_source_clearance_for_all_respawn_candidates) ... ok",
       "test_uv_package_keeps_all_authored_coordinates (test_octavus_phase1.OctavusPhase1Tests.test_uv_package_keeps_all_authored_coordinates) ... ok",
-      "test_native_stairs_are_walkable_but_tall_walls_are_not (test_octavus_motion73.OctavusStage31Tests.test_native_stairs_are_walkable_but_tall_walls_are_not) ... ",
-      "  test_native_stairs_are_walkable_but_tall_walls_are_not (test_octavus_motion73.OctavusStage31Tests.test_native_stairs_are_walkable_but_tall_walls_are_not) (height=0.24) ... FAIL",
+      "test_native_stairs_are_walkable_but_tall_walls_are_not (test_octavus_motion73.OctavusStage31Tests.test_native_stairs_are_walkable_but_tall_walls_are_not) ... ok",
       "test_original_triangles_block_bot_visibility (test_octavus_motion73.OctavusStage31Tests.test_original_triangles_block_bot_visibility) ... ok",
       "test_uncontrolled_standing_is_blocked_by_original_roof (test_octavus_motion73.OctavusStage31Tests.test_uncontrolled_standing_is_blocked_by_original_roof) ... ok",
       "",
-      "======================================================================",
-      "FAIL: test_native_stairs_are_walkable_but_tall_walls_are_not (test_octavus_motion73.OctavusStage31Tests.test_native_stairs_are_walkable_but_tall_walls_are_not) (height=0.24)",
       "----------------------------------------------------------------------",
-      "Traceback (most recent call last):",
-      "  File \"/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/test_octavus_motion73.py\", line 67, in test_native_stairs_are_walkable_but_tall_walls_are_not",
-      "    self.assertAlmostEqual(p['y'],height,delta=.06)",
-      "    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^",
-      "AssertionError: -5.551115123125783e-17 != 0.24 within 0.06 delta (0.24000000000000005 difference)",
+      "Ran 7 tests in 0.498s",
       "",
-      "----------------------------------------------------------------------",
-      "Ran 7 tests in 0.369s",
+      "OK"
+    ],
+    "javascript": [
+      "node:internal/modules/run_main:123",
+      "    triggerUncaughtException(",
+      "    ^",
       "",
-      "FAILED (failures=1)"
+      "AssertionError [ERR_ASSERTION]: Player feet snap to stair top",
+      "    at file:///home/runner/work/Browser-Gun-Game/Browser-Gun-Game/test_octavus_motion73.mjs:27:10",
+      "    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)",
+      "    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)",
+      "    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {",
+      "  generatedMessage: false,",
+      "  code: 'ERR_ASSERTION',",
+      "  actual: false,",
+      "  expected: true,",
+      "  operator: '==',",
+      "  diff: 'simple'",
+      "}",
+      "",
+      "Node.js v22.23.4"
     ]
   },
   "scope": "Automated tests; interactive browser gameplay still requires playtesting"
