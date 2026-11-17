@@ -1,0 +1,107 @@
+{
+  "format": "OCTAVUS-PROPS2",
+  "source": "Red Eclipse original map model aliases and original OBJ meshes",
+  "mapModelEntities": 149,
+  "originalTypes": 19,
+  "convertedTypes": 0,
+  "convertedInstances": 0,
+  "convertedBytes": 0,
+  "models": {
+    "dziq/glow_plate": {
+      "missing": true,
+      "count": 31,
+      "reason": "ModuleNotFoundError: No module named 'PIL'"
+    },
+    "unixfreak/models/railing/6": {
+      "missing": true,
+      "count": 24,
+      "reason": "ModuleNotFoundError: No module named 'PIL'"
+    },
+    "nobiax/tiny_weed_01": {
+      "missing": true,
+      "count": 17,
+      "reason": "ModuleNotFoundError: No module named 'PIL'"
+    },
+    "nobiax/metal_barrel/omega": {
+      "missing": true,
+      "count": 10,
+      "reason": "No original OBJ source"
+    },
+    "dziq/pipe/curved_short": {
+      "missing": true,
+      "count": 10,
+      "reason": "ModuleNotFoundError: No module named 'PIL'"
+    },
+    "misc/lowpoly_eagle": {
+      "missing": true,
+      "count": 8,
+      "reason": "No original OBJ source"
+    },
+    "dziq/pipe/straight_long": {
+      "missing": true,
+      "count": 7,
+      "reason": "ModuleNotFoundError: No module named 'PIL'"
+    },
+    "mikeplus64/crate": {
+      "missing": true,
+      "count": 6,
+      "reason": "ModuleNotFoundError: No module named 'PIL'"
+    },
+    "nobiax/gaz_tank": {
+      "missing": true,
+      "count": 5,
+      "reason": "ModuleNotFoundError: No module named 'PIL'"
+    },
+    "nobiax/metal_barrel/alpha": {
+      "missing": true,
+      "count": 5,
+      "reason": "No original OBJ source"
+    },
+    "snipergoth/cable/short": {
+      "missing": true,
+      "count": 4,
+      "reason": "ModuleNotFoundError: No module named 'PIL'"
+    },
+    "luckystrike/door1": {
+      "missing": true,
+      "count": 4,
+      "reason": "No original OBJ source"
+    },
+    "dziq/pipe/straight_normal": {
+      "missing": true,
+      "count": 4,
+      "reason": "ModuleNotFoundError: No module named 'PIL'"
+    },
+    "dc/models/virtual-platform-ripple": {
+      "missing": true,
+      "count": 4,
+      "reason": "ModuleNotFoundError: No module named 'PIL'"
+    },
+    "snipergoth/cable/long": {
+      "missing": true,
+      "count": 3,
+      "reason": "ModuleNotFoundError: No module named 'PIL'"
+    },
+    "misc/radio_dish": {
+      "missing": true,
+      "count": 2,
+      "reason": "No original OBJ source"
+    },
+    "dziq/pipe/straight_short": {
+      "missing": true,
+      "count": 2,
+      "reason": "ModuleNotFoundError: No module named 'PIL'"
+    },
+    "john/forklift": {
+      "missing": true,
+      "count": 2,
+      "reason": "ModuleNotFoundError: No module named 'PIL'"
+    },
+    "misc/scifi_plane": {
+      "missing": true,
+      "count": 1,
+      "reason": "ModuleNotFoundError: No module named 'PIL'"
+    }
+  },
+  "license": "Individual content licenses apply; retain attribution to original Red Eclipse media modules"
+}
