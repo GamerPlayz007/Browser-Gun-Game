@@ -92,6 +92,9 @@ def next_octavus_waypoint(bot,target,now):
         if math.hypot(point[0]-bot['x'],point[2]-bot['z'])>=4.7:break
         path.pop(0)
     if not path:return None
+    if len(path)==1 and math.hypot(nodes[path[0]]['p'][0]-bot['x'],
+                                   nodes[path[0]]['p'][2]-bot['z'])<5.0:
+        return None
     # If a nearby target is directly visible, bot57 keeps its current
     # native sightline behavior instead of following stale graph points.
     waypoint=nodes[path[0]]['p']
