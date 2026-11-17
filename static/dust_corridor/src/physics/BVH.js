@@ -452,6 +452,27 @@ export function closestPointOnTriangleSoup(soup, tri, px, py, pz, out) {
   const acx = cx - ax, acy = cy - ay, acz = cz - az;
   const apx = px - ax, apy = py - ay, apz = pz - az;
 
+  // Exported Octavus OBJ data contains zero-area triangles, including
+  // vertices collapsed by source quantization. Treat those as line
+  // segments to keep client/server capsule math finite and deterministic.
+  const nx = aby*acz-abz*acy, ny = abz*acx-abx*acz, nz = abx*acy-aby*acx;
+  const ab2=abx*abx+aby*aby+abz*abz, ac2=acx*acx+acy*acy+acz*acz;
+  if(nx*nx+ny*ny+nz*nz<1e-18*Math.max(1,ab2*ac2)){
+    const fallback = new THREE.Vector3();
+    const edges=[
+      [ax,ay,az,bx,by,bz],
+      [ax,ay,az,cx,cy,cz],
+      [bx,by,bz,cx,cy,cz]
+    ];
+    let best=Infinity;
+    for(const edge of edges){
+      closestPointOnSegment(...edge,px,py,pz,fallback);
+      const d=(fallback.x-px)**2+(fallback.y-py)**2+(fallback.z-pz)**2;
+      if(d<best){best=d;out.copy(fallback);}
+    }
+    return out;
+  }
+
   const d1 = abx * apx + aby * apy + abz * apz;
   const d2 = acx * apx + acy * apy + acz * apz;
   if (d1 <= 0 && d2 <= 0) { out.set(ax, ay, az); return out; }
@@ -463,7 +484,7 @@ export function closestPointOnTriangleSoup(soup, tri, px, py, pz, out) {
 
   const vc = d1 * d4 - d3 * d2;
   if (vc <= 0 && d1 >= 0 && d3 <= 0) {
-    const v = d1 / (d1 - d3);
+    const v = Math.abs(d1-d3)>1e-18 ? d1 / (d1 - d3) : 0;
     out.set(ax + abx * v, ay + aby * v, az + abz * v);
     return out;
   }
@@ -475,19 +496,22 @@ export function closestPointOnTriangleSoup(soup, tri, px, py, pz, out) {
 
   const vb = d5 * d2 - d1 * d6;
   if (vb <= 0 && d2 >= 0 && d6 <= 0) {
-    const w = d2 / (d2 - d6);
+    const w = Math.abs(d2-d6)>1e-18 ? d2 / (d2 - d6) : 0;
     out.set(ax + acx * w, ay + acy * w, az + acz * w);
     return out;
   }
 
   const va = d3 * d6 - d5 * d4;
   if (va <= 0 && (d4 - d3) >= 0 && (d5 - d6) >= 0) {
-    const w = (d4 - d3) / ((d4 - d3) + (d5 - d6));
+    const den=(d4-d3)+(d5-d6);
+    const w = Math.abs(den)>1e-18 ? (d4 - d3) / den : 0;
     out.set(bx + (cx - bx) * w, by + (cy - by) * w, bz + (cz - bz) * w);
     return out;
   }
 
-  const denom = 1 / (va + vb + vc);
+  const total=va+vb+vc;
+  if(Math.abs(total)<1e-18){out.set(ax,ay,az);return out;}
+  const denom = 1 / total;
   const v = vb * denom, w = vc * denom;
   out.set(ax + abx * v + acx * w, ay + aby * v + acy * w, az + abz * v + acz * w);
   return out;
