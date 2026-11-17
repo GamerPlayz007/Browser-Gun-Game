@@ -6,7 +6,7 @@ function quad(a,b,c,d){return [a,b,c,a,c,d];}
 function fixture(stepHeight,ceiling=false){
  const tris=[
   ...quad([-5,0,-5],[-5,0,5],[5,0,5],[5,0,-5]),
-  ...quad([0,stepHeight,-3],[3,stepHeight,-3],[3,stepHeight,3],[0,stepHeight,3]),
+  ...quad([0,stepHeight,-3],[5,stepHeight,-3],[5,stepHeight,3],[0,stepHeight,3]),
   ...quad([0,0,-3],[0,stepHeight,-3],[0,stepHeight,3],[0,0,3])
  ];
  if(ceiling)tris.push(...quad([-2,1.24,-2],[2,1.24,-2],[2,1.24,2],[-2,1.24,2]));
