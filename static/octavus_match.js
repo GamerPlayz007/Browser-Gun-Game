@@ -40,6 +40,29 @@ export async function buildOctavusMatch(scene,map,{quality='auto'}={}){
  const [packed,materials]=await Promise.all([loadOctavusPacked(),loadOctavusMaterials()]);
  const source=collisionSource(packed,map);
  const physics=createDustPhysics65(source);
+ // Map-only linework sampled from the genuine vertical geometry. This is
+ // never used as collision or as a replacement for the rendered mesh.
+ if(!map.octavusRadarEdges){
+  const p=source.soup.positions,edges=[];
+  for(let i=0;i<source.soup.count;i+=4){
+   const k=i*9;
+   const ax=p[k],ay=p[k+1],az=p[k+2],bx=p[k+3],by=p[k+4],bz=p[k+5],
+         cx=p[k+6],cy=p[k+7],cz=p[k+8];
+   const ux=bx-ax,uy=by-ay,uz=bz-az,vx=cx-ax,vy=cy-ay,vz=cz-az;
+   const nx=uy*vz-uz*vy,ny=uz*vx-ux*vz,nz=ux*vy-uy*vx;
+   if(Math.abs(ny)/Math.max(.00001,Math.hypot(nx,ny,nz))>.62)continue;
+   if(Math.max(ay,by,cy)<39||Math.min(ay,by,cy)>48)continue;
+   const candidates=[[ax,ay,az,bx,by,bz],[bx,by,bz,cx,cy,cz],[cx,cy,cz,ax,ay,az]];
+   let best=null,score=0;
+   for(const edge of candidates){
+    const dist=Math.hypot(edge[3]-edge[0],edge[5]-edge[2]);
+    if(Math.abs(edge[4]-edge[1])>.35||dist<.8||dist>30)continue;
+    if(dist>score){score=dist;best=edge;}
+   }
+   if(best){edges.push([best[0],best[2],best[3],best[5]]);if(edges.length>=5500)break;}
+  }
+  map.octavusRadarEdges=edges;
+ }
  // The preview's actual 111 material-slot meshes, UVs, lighting and textures
  // are used directly. No duplicate block-built level or iframe is involved.
  const visual=createOctavusScene(packed,materials,scene);
