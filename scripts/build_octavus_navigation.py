@@ -12,6 +12,8 @@ from collections import Counter,defaultdict,deque
 import json
 import math
 from pathlib import Path
+import sys
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 
 from octavus_world import get_octavus_world
 
@@ -178,6 +180,7 @@ def main():
         'warning':'Generated routes must be playtested. Original assets do not establish a new designed FPS combat district.'
     }
     (MAPS/'octavus.navigation.json').write_text(json.dumps(summary,separators=(',',':'))+'\n')
+    (MAPS/'octavus.nav-summary.json').write_text(json.dumps(summary['stats'],indent=2)+'\n')
     print(json.dumps(summary['stats'],indent=2))
 
 
