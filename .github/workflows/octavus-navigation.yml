@@ -39,7 +39,7 @@ jobs:
             'status':'passed' if summary.exists() else 'failed',
             'logTail':log.read_text(errors='replace').splitlines()[-35:] if log.exists() else [],
             'originalSources':'static/maps/octavus.native-entities.json'
-          },indent=2)+'\\n')
+          },indent=2)+'\n')
           PY
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
