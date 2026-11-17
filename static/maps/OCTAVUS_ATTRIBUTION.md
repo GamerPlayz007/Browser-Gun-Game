@@ -12,9 +12,17 @@ by Red Eclipse.
     `8e15bd6e933a1a81c33b782e94b23399d531cba1`
   - License text: `octavus.txt`, SHA
     `f0463bb3e04a03b2f9f62f7e7958fc9936d2b366`
-  - Native `octavus.mpz` exists upstream, SHA
+  - Native `octavus.mpz` source SHA
     `c3d927bdb016927f1f96868b435dfdf174a01af9`.
-    **Its binary content has not yet been ingested or converted.**
+    Its **verified original binary has now been archived** at
+    `sources/octavus.original.mpz` (1,469,341 bytes compressed;
+    14,987,053 bytes decompressed). Source SHA-256 and header are in
+    `sources/octavus.original.json`.
+  - Native MPZ v59 metadata parsed from its source encoding:
+    892 entities including 233 lights, 149 mapmodels, and 33 playerstarts.
+    `static/maps/octavus.native-entities.json` stores the original
+    positions/attributes/links (reference only, not yet rendered), while
+    `sources/octavus.native-variables.json` stores source map variables.
 - Source OBJ mesh: https://github.com/Calinou/game-maps-obj
   - `redeclipse/octavus.obj`, SHA
     `ad408f0c35ffb98aa1c19d4fb01943decac3b8de`
@@ -40,14 +48,21 @@ The initial prototype exported only the OBJ mesh and shrunk its source
   unit visual footprint. The central courtyard at source Y=2816 is
   translated to gameplay Y=0. The exact same transform is applied to
   server collision, client collision, and player spawn data.
-- Preserves authored UVs for future use; **original texture images,
-  native map entities, mapmodels, and lightmaps are not yet imported**.
-  Current procedural materials are temporary rendering replacements.
+- Preserves authored UVs for future use. Native **map entity metadata**
+  has been imported and indexed, but **entity models, visual effects,
+  original texture images, and native lightmaps are not yet rendered**.
+  Current procedural materials are temporary replacements. A source
+  material manifest with 111 OBJ slots, 68 native CFG definitions,
+  shader names, scaling/tint and texture filenames is available in
+  `static/maps/octavus.source-materials.json`. This does not grant
+  permission to redistribute assets under separate media licenses.
 - Stores upstream map configuration as `octavus.original.cfg` and
   original license as `octavus.source-license.txt`. Its revision may
   differ from the older pinned OBJ geometry; it is a reference for the
-  next material-reconstruction phase, not evidence that all original
-  native entities were converted.
+  next material-reconstruction phase; the MPZ entity inventory is
+  now extracted, but the native octree's rendering topology has NOT
+  been independently converted. The current static rendered mesh is
+  still the pinned 86,500-triangle OBJ export.
 
 The derived map files, source UV pack, and geometric adaptations
 remain CC BY-SA 3.0; retain this notice and mark further changes.
