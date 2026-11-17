@@ -72,7 +72,7 @@ export async function createOctavusEnvironment(scene,quality='auto'){
     id:e.id
    };
  });
- const MAX_LIGHTS=24;
+ const MAX_LIGHTS=16;
  for(let i=0;i<MAX_LIGHTS;i++){
   const light=new THREE.PointLight(0xffffff,0,12,2);
   light.name='Octavus original light '+i;
@@ -82,7 +82,7 @@ export async function createOctavusEnvironment(scene,quality='auto'){
  let tier=quality,visibleMax=12,lastUpdate=-100,activeLights=0;
  function setQuality(next){
   tier=next;
-  visibleMax=next==='performance'?5:next==='ultra'?24:next==='high'?18:12;
+  visibleMax=next==='performance'?2:next==='ultra'?16:next==='high'?9:5;
   sun.castShadow=(next==='high'||next==='ultra');
   sun.shadow.mapSize.set(next==='ultra'?2048:1024,next==='ultra'?2048:1024);
   if(sun.castShadow)sun.shadow.needsUpdate=true;
