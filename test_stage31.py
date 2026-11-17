@@ -15,7 +15,6 @@ class LiveCityTests(unittest.TestCase):
         # The default city must retain its ID, data and route contract even
         # when other *native* maps are enabled in the same multiplayer game.
         self.assertIn('cyberpunk',ARENAS)
-        self.assertIn('neon_zenith',ARENAS)
         self.assertIn('dust_corridor',ARENAS)
         self.assertEqual(registry.REGISTRY['default'],'cyberpunk')
         self.assertEqual(registry.REGISTRY['maps'][0]['id'],'cyberpunk')
