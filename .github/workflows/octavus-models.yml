@@ -16,7 +16,9 @@ jobs:
     timeout-minutes: 14
     steps:
       - uses: actions/checkout@v4
-      - name: Archive original Octavus native OBJ models without external Python dependencies
+      - name: Validate original OBJ importer syntax
+        run: python -m py_compile scripts/package_octavus_obj_sources.py
+      - name: Archive original Octavus native OBJ models and source skins
         run: python scripts/package_octavus_obj_sources.py
       - name: Commit original source environment models
         run: |
