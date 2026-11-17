@@ -26,6 +26,10 @@ jobs:
         run: npm ci --no-audit --no-fund
       - name: Export original Dust Corridor triangle collision
         run: node scripts/export_dust_collision63.mjs
+      - name: Precompile complete Dust Corridor geometry into a compressed spatial scene
+        run: node scripts/pack_dust_scene66.mjs
+      - name: Verify all original triangles, cloth and props survive scene packing
+        run: node test_dust_scene66.mjs
       - name: Compile deterministic updated map before client regressions
         run: python build_map.py
       - name: Validate source mesh, spawns, Python/JS rays and predicted movement

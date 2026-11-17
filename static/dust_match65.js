@@ -7,15 +7,15 @@
  * License: Leonxlnx/claude-of-duty @ 7f8a15ae (MIT); THIRD_PARTY.md.
  */
 import * as THREE from 'three';
-import {MapGenerator} from './dust_corridor/src/world/MapGenerator.js';
 import {ClothSystem,CableSystem} from './dust_corridor/src/world/ClothSystem.js';
 import {createDustPhysics65} from './dust_motion65.js';
 import {makeDustMaterial65} from './dust_corridor_preview.js';
 
-export function buildDustMatch65(scene,map,{quality='auto'}={}){
+export function buildDustMatch65(scene,map,{quality='auto',source=null}={}){
  if(map.id!=='dust_corridor'||map.collisionFormat!=='DUSTCOL3'||!map.dustOriginal)
   throw Error('Refusing to render an unverified native Dust Corridor map');
- const data=new MapGenerator().generate();
+ if(!source)throw Error('Dust 6.6 scene must be loaded before renderer creation');
+ const data=source;
  if(!data?.soup?.count||data.soup.count!==96588)
   throw Error('Dust Corridor source triangle count mismatch');
  const physics=createDustPhysics65(data);
@@ -58,6 +58,10 @@ export function buildDustMatch65(scene,map,{quality='auto'}={}){
   isDustCorridor65:true,
   targets,
   staticBatches:meshes.length,
+  originalVisualTriangles:data.visualTriangles||
+   data.batches.reduce((n,b)=>n+b.triangleCount,0),
+  packedScene66:!!data.packed,
+  packedTransferBytes66:data.transferBytes||0,
   featureCount:data.buildings.length,
   environmentCount:data.cloth.length+data.cables.length,
   environmentSigns:0,
@@ -68,11 +72,18 @@ export function buildDustMatch65(scene,map,{quality='auto'}={}){
     atlasRebuilds:0,stage5Meshes:meshes.length,stage6Meshes:0
   };},
   setQuality(mode){setting=mode;},
-  setDetail(value){detail=Boolean(value);cloth.mesh.visible=cables.mesh.visible=detail;},
+  setDetail(value){
+   // Throttle updates instead of removing decorative detail. Awnings and
+   // cables are visible at every quality level, including Performance.
+   detail=Boolean(value);
+  },
   animate(time,player=null){
    if(player&&Number.isFinite(player.x)){
     mat.uniforms.uEye.value.set(player.x,player.y+1.55,player.z);
    }
+   const frequency=setting==='performance'?15:
+    setting==='auto'&&!detail?22:45;
+   if(time-last<1/frequency)return;
    const dt=Math.max(0,Math.min(.05,time-last));last=time;
    cloth.update(dt,time);cables.update(dt,time);
   },

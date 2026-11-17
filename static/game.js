@@ -2,6 +2,7 @@ import * as T from 'three';
 import {buildWorld} from './world.js';
 import {createDustCorridorPreview} from './dust_corridor_preview.js';
 import {buildDustMatch65} from './dust_match65.js';
+import {loadDustSource66} from './dust_source66.js';
 import {makeWeapon,animateWeapon,makePlayer,setPlayerSkin56,animatePlayer,markPlayerEvent,disposePlayer,setModelQuality67} from './models.js';
 import {simulate,FIXED_DT} from './physics.js';
 import {createJumpLatch62} from './input62.js';
@@ -82,14 +83,30 @@ dust62Button.onclick=async()=>{
 };
 for(const entry of registry.maps){const option=document.createElement('option');option.value=entry.id;option.textContent=entry.name+(entry.available?'':' — coming later');option.disabled=!entry.available;$('map-select').append(option);}
 $('map-select').value=map.id;
+// Begin downloading the immutable, precompiled original district as soon as
+// it is selected, overlapping network latency with the player's lobby setup.
+$('map-select').addEventListener('change',async()=>{
+ if($('map-select').value!=='dust_corridor')return;
+ try{
+  const item=registry.maps.find(x=>x.id==='dust_corridor');
+  if(!item)return;
+  const response=await fetch(item.url);
+  if(!response.ok)throw Error('Dust map metadata unavailable');
+  const info=await response.json();
+  await loadDustSource66(info.collisionSha256);
+ }catch(error){console.warn('Dust scene preload failed (will retry on join)',error);}
+});
 async function loadArena(id){
  if(id===map.id)return;
  const entry=registry.maps.find(m=>m.id===id&&m.available);if(!entry)throw Error('This map is not available on this server.');
  const response=await fetch(entry.url);if(!response.ok)throw Error('Could not load the room map.');
  const next=await response.json();if(next.id!==id)throw Error('Map data mismatch. Refresh and try again.');
+ const loadStart=performance.now();
+ const dustSource=next.dustOriginal?await loadDustSource66(next.collisionSha256):null;
+ const loadMs=performance.now()-loadStart;
  const nextScene=new T.Scene();
  const nextWorld=next.dustOriginal?
-   buildDustMatch65(nextScene,next,{renderer,quality:qualityTier61()}):
+   buildDustMatch65(nextScene,next,{renderer,quality:qualityTier61(),source:dustSource}):
    buildWorld(nextScene,next,{renderer,quality:qualityTier61()});
  clearVisualEffects52();controlBeacon54.dispose();world.dispose();postfx.dispose();
  scene=nextScene;world=nextWorld;controlBeacon54=createControlBeacon54(T,scene);
@@ -98,6 +115,11 @@ async function loadArena(id){
    ready:true,usingMainRenderer:true,
    collisionTriangles:world.physics.source.soup.count,
    visualBatches:world.staticBatches,
+   visualTriangles:world.originalVisualTriangles,
+   packedScene:world.packedScene66,
+   packedChunks:world.staticBatches,
+   packedBytes:world.packedTransferBytes66,
+   loadMs:Math.round(loadMs),
    sourceChecksum:next.collisionSha256,
    get active(){return map?.id==='dust_corridor'&&joined;}
   };

@@ -12,8 +12,11 @@ const DT=1/60,R=.34,HEIGHT=1.8,LOW=1.12,GRAVITY=22,STEP=.36,EPS=.003;
 const q=new THREE.Vector3(),rayOrigin=new THREE.Vector3(),rayDirection=new THREE.Vector3();
 const a=new THREE.Vector3(),b=new THREE.Vector3(),c=new THREE.Vector3();
 const approach=(v,target,delta)=>v<target?Math.min(target,v+delta):Math.max(target,v-delta);
+const cache=new WeakMap();
 
 export function createDustPhysics65(source){
+ const existing=cache.get(source);
+ if(existing)return existing;
  const bvh=new BVH(source.soup);
  const {positions}=source.soup;
  const bounds=source.playBounds;
@@ -146,5 +149,7 @@ export function createDustPhysics65(source){
   if(p.grounded){p.jump_consumed=false;p.jump_cut=false;}
   return p;
  }
- return {bvh,source,bounds,simulate,inside,groundAt,raycast};
+ const physics={bvh,source,bounds,simulate,inside,groundAt,raycast};
+ cache.set(source,physics);
+ return physics;
 }

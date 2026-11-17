@@ -3,6 +3,7 @@
  * WebGLRenderer/canvas. Upstream provenance: integrations/dust_corridor/LICENSE.
  * Preview ONLY; authoritative collision and multiplayer arrive in 6.3–6.5. */
 import * as T from 'three';
+import {loadDustSource66} from './dust_source66.js';
 import {createDustMinimap64} from './dust_minimap64.js';
 
 const vertex = `
@@ -90,7 +91,7 @@ const views={
 };
 export function createDustCorridorPreview({renderer,getQuality}){
  let active=false,loading=false,world=null,toolbar=null,homeWasHidden=false,shadeDisplay='';
- let walk=null,mode='walk',tickBank=0,modeButton=null,sourceContract=null;
+ let walk=null,mode='walk',tickBank=0,modeButton=null,sourceContract=null,lastWind66=0;
  const keys=new Set();
  const camera=new T.PerspectiveCamera(74,1,.065,400);
  camera.rotation.order='YXZ';
@@ -181,18 +182,18 @@ export function createDustCorridorPreview({renderer,getQuality}){
   const geos=[];
   try{
    if(!renderer.capabilities.isWebGL2)throw Error('WebGL2 is required.');
-   const [{MapGenerator},{MaterialLibrary},{ClothSystem,CableSystem},{createDustWalk63}]=await Promise.all([
-     import('./dust_corridor/src/world/MapGenerator.js'),
+   const [{MaterialLibrary},{ClothSystem,CableSystem},{createDustWalk63}]=await Promise.all([
      import('./dust_corridor/src/world/MaterialLibrary.js'),
      import('./dust_corridor/src/world/ClothSystem.js'),
      import('./dust_corridor_walk63.js')
    ]);
-   const data=new MapGenerator().generate();
    // Server-side contract comes from the SAME CROSSFire deployment.
    // Fail closed on source mismatch rather than silently enabling fake spawns.
    const response=await fetch('/api/dust-corridor/preview64',{cache:'no-store'});
    if(!response.ok)throw Error('Dust Corridor server map contract unavailable');
    const contract=await response.json();
+   // Reuse the same precompiled authored world as live multiplayer.
+   const data=await loadDustSource66(contract.sha256);
    if(contract.available!==false||contract.multiplayer!==false||
       contract.triangleCount!==data.soup.count||
       contract.collisionFormat!=='DUSTCOL3')
@@ -205,7 +206,7 @@ export function createDustCorridorPreview({renderer,getQuality}){
    // Original triangles + original BVH/capsule: collision geometry matches visuals.
    walk=createDustWalk63(data);
    const q=getQuality();const size=q==='performance'?96:q==='high'?192:q==='ultra'||q==='native'?256:128;
-   if(q!=='performance'){
+   if(['high','ultra','native'].includes(q)){
     try{
      bake=new MaterialLibrary(renderer,size,4);
      await bake.compile();await bake.draw();
@@ -232,6 +233,8 @@ export function createDustCorridorPreview({renderer,getQuality}){
     stats:{triangles:data.triangleCount,batches:data.batches.length,cloth:data.cloth.length,
       cables:data.cables.length,originalMaterialLayers:bake?20:0,
       collisionTriangles:walk.triangles,collisionSystem:'original-triangle-bvh',
+      packedScene:!!data.packed,packedChunks:data.chunkCount||data.batches.length,
+      visualTriangles:data.visualTriangles||0,
       serverValidatedA:contract.validatedSpawns.A.safeIndices.length,
       serverValidatedB:contract.validatedSpawns.B.safeIndices.length,
       serverChecksum:contract.sha256}};
@@ -300,7 +303,13 @@ export function createDustCorridorPreview({renderer,getQuality}){
   camera.aspect=Math.max(.1,size.x/Math.max(1,size.y));camera.updateProjectionMatrix();
   world.minimap?.draw(mode==='walk'?walk.position:camera.position,yaw,now,mode);
   world.mat.uniforms.uEye.value.copy(camera.position);
-  world.cloth.update(dt,now);world.cables.update(dt,now);
+  // Keep fabrics visible, but avoid rebuilding vertex buffers at 60+Hz.
+   const hz=getQuality()==='performance'?15:getQuality()==='auto'?22:45;
+   if(now-lastWind66>=1/hz){
+    const windDt=Math.max(0,Math.min(.05,now-lastWind66));
+    lastWind66=now;
+    world.cloth.update(windDt,now);world.cables.update(windDt,now);
+   }
   renderer.setRenderTarget(null);renderer.clear(true,true,true);renderer.render(world.scene,camera);
  }
  return {get active(){return active;},get loading(){return loading;},open,close,render};

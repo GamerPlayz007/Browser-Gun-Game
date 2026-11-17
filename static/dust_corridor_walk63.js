@@ -7,7 +7,7 @@
  * Upstream original physics Copyright (c) 2026 Leonxlnx, MIT.
  */
 import * as THREE from 'three';
-import {BVH} from './dust_corridor/src/physics/BVH.js';
+import {createDustPhysics65} from './dust_motion65.js';
 import {CharacterController} from './dust_corridor/src/physics/CharacterController.js';
 
 const TICK=1/60,GRAVITY=22,DISPLACEMENT=new THREE.Vector3();
@@ -15,7 +15,7 @@ const approach=(value,target,delta)=>value<target?Math.min(target,value+delta):M
 
 export function createDustWalk63(data){
   if(!data?.soup?.count||!data?.spawns?.A?.length)throw Error('Source collision or spawns missing');
-  const bvh=new BVH(data.soup);
+  const bvh=createDustPhysics65(data).bvh;
   const capsule=new CharacterController(bvh,{
     radius:.34,height:1.8,crouchHeight:1.12,stepOffset:.36,slopeLimit:48
   });

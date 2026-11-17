@@ -34,6 +34,8 @@ async def main():
             meta=await page.evaluate('window.__crossfireDustPreview62.stats')
             assert meta['collisionTriangles']>1000,meta
             assert meta['collisionSystem']=='original-triangle-bvh',meta
+            assert meta['packedScene'] is True,meta
+            assert meta['packedChunks']>=12,meta
             assert meta['serverValidatedA']>=1,meta
             assert meta['serverValidatedB']>=1,meta
             assert await page.evaluate('window.__crossfireDustPreview62.sourceMatched')

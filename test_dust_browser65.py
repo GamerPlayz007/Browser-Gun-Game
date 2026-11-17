@@ -45,7 +45,11 @@ async def main():
             assert await page.locator('#viewport canvas').count()==1
             source=await page.evaluate("window.__crossfireDustMatch65")
             assert source['collisionTriangles']==96588
-            assert source['visualBatches']>=5
+            assert source['visualBatches']>=12
+            assert source['packedScene'] is True,source
+            assert source['packedChunks']>=12
+            assert source['packedBytes']>0
+            assert source['visualTriangles']>96588
             code=await page.locator('#room-code').inner_text()
             room=game.rooms.get(code)
             assert room is not None and room.arena.id=='dust_corridor'
