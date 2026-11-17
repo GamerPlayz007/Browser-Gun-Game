@@ -5,6 +5,7 @@
  */
 import {createDustPhysics65} from './dust_motion65.js';
 import {loadOctavusOriginalUV} from './octavus_uv.js';
+import {loadOctavusMaterialLibrary} from './octavus_materials.js';
 import {loadOctavusPacked,loadOctavusMaterials,createOctavusScene,
  OCTAVUS_LOCAL_RATIO,OCTAVUS_GROUND_Y} from './octavus_preview.js';
 
@@ -39,8 +40,9 @@ function collisionSource(packed,map){
 export async function buildOctavusMatch(scene,map,{quality='auto'}={}){
  if(map.id!=='octavus'||map.collisionFormat!=='OCT1'||!map.octavusOriginal)
   throw Error('Refusing to load an unverified Octavus multiplayer map');
- const [packed,materials,authoredUV]=await Promise.all([
-  loadOctavusPacked(),loadOctavusMaterials(),loadOctavusOriginalUV()
+ const [packed,materials,authoredUV,originalMedia]=await Promise.all([
+  loadOctavusPacked(),loadOctavusMaterials(),loadOctavusOriginalUV(),
+  loadOctavusMaterialLibrary(quality)
  ]);
  const source=collisionSource(packed,map);
  const physics=createDustPhysics65(source);
@@ -55,7 +57,7 @@ export async function buildOctavusMatch(scene,map,{quality='auto'}={}){
    const ux=bx-ax,uy=by-ay,uz=bz-az,vx=cx-ax,vy=cy-ay,vz=cz-az;
    const nx=uy*vz-uz*vy,ny=uz*vx-ux*vz,nz=ux*vy-uy*vx;
    if(Math.abs(ny)/Math.max(.00001,Math.hypot(nx,ny,nz))>.62)continue;
-   if(Math.max(ay,by,cy)<39||Math.min(ay,by,cy)>48)continue;
+   if(Math.max(ay,by,cy)<-9||Math.min(ay,by,cy)>13)continue;
    const candidates=[[ax,ay,az,bx,by,bz],[bx,by,bz,cx,cy,cz],[cx,cy,cz,ax,ay,az]];
    let best=null,score=0;
    for(const edge of candidates){
@@ -69,7 +71,8 @@ export async function buildOctavusMatch(scene,map,{quality='auto'}={}){
  }
  // The preview's actual 111 material-slot meshes, UVs, lighting and textures
  // are used directly. No duplicate block-built level or iframe is involved.
- const visual=createOctavusScene(packed,materials,scene,authoredUV,true);
+ const visual=createOctavusScene(packed,materials,scene,authoredUV,true,originalMedia);
+ visual.setQuality(quality);
  let detail=true,mode=quality;
  return {
   isOctavusMatch:true,
@@ -80,17 +83,19 @@ export async function buildOctavusMatch(scene,map,{quality='auto'}={}){
   originalTextureVertices:authoredUV.textureVertexCount,
   sourceScaleRatio:OCTAVUS_LOCAL_RATIO,
   originalUV:visual.preservedTextureCoordinates,
+  originalMaterialSlots:visual.originalMaterials,
+  originalTextureImages:originalMedia.statistics?.sourceImages||0,
   featureCount:packed.triangles,
   environmentCount:0,
   environmentSigns:0,
   packedScene66:true,
   packedTransferBytes66:917878,
-  get originalMaterialLayers(){return 6;},
+  get originalMaterialLayers(){return originalMedia.statistics?.sourceImages||0;},
   get resourceProfile68(){return{
-   fullArchitecture:true,hasEnvironment:false,atlasSize:128,atlases:6,
+   fullArchitecture:true,hasEnvironment:false,atlasSize:1024,atlases:originalMedia.statistics?.sourceImages||0,
    atlasRebuilds:0,stage5Meshes:visual.meshCount,stage6Meshes:0
   };},
-  setQuality(value){mode=value;},
+  setQuality(value){mode=value;visual.setQuality(value);},
   setDetail(value){detail=Boolean(value);},
   animate(_time,_player){void mode;void detail;},
   dispose(){visual.dispose();scene.background=null;scene.fog=null;}
