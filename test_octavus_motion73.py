@@ -36,8 +36,8 @@ def fixture(step_height,ceiling=False):
     tris=[]
     def add(*triangles):tris.extend(triangles)
     add(*square((-5,0,-5),(-5,0,5),(5,0,5),(5,0,-5)))
-    add(*square((0,step_height,-3),(3,step_height,-3),
-                (3,step_height,3),(0,step_height,3)))
+    add(*square((0,step_height,-3),(5,step_height,-3),
+                (5,step_height,3),(0,step_height,3)))
     add(*square((0,0,-3),(0,step_height,-3),
                 (0,step_height,3),(0,0,3)))
     if ceiling:
