@@ -1,0 +1,43 @@
+{
+  "status": "failed",
+  "verifiedAt": "2026-11-17T19:16:19.644159+00:00",
+  "steps": {
+    "octavusServerMotion": "failure",
+    "browserImportClosure": "skipped",
+    "octavusClientMotion": "skipped",
+    "existingMultiplayer": "skipped"
+  },
+  "logTail": {
+    "python": [
+      "  File \"/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/test_octavus_motion73.py\", line 82, in test_original_triangles_block_bot_visibility",
+      "    world=fixture(2.2)",
+      "  File \"/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/test_octavus_motion73.py\", line 45, in fixture",
+      "    return DustWorld64(SyntheticCollision(tris))",
+      "                       ~~~~~~~~~~~~~~~~~~^^^^^^",
+      "  File \"/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/test_octavus_motion73.py\", line 24, in __init__",
+      "    data.extend(p)",
+      "    ~~~~~~~~~~~^^^",
+      "TypeError: 'int' object is not iterable",
+      "",
+      "======================================================================",
+      "ERROR: test_uncontrolled_standing_is_blocked_by_original_roof (test_octavus_motion73.OctavusStage31Tests.test_uncontrolled_standing_is_blocked_by_original_roof)",
+      "----------------------------------------------------------------------",
+      "Traceback (most recent call last):",
+      "  File \"/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/test_octavus_motion73.py\", line 73, in test_uncontrolled_standing_is_blocked_by_original_roof",
+      "    world=fixture(0.24,ceiling=True)",
+      "  File \"/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/test_octavus_motion73.py\", line 45, in fixture",
+      "    return DustWorld64(SyntheticCollision(tris))",
+      "                       ~~~~~~~~~~~~~~~~~~^^^^^^",
+      "  File \"/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/test_octavus_motion73.py\", line 24, in __init__",
+      "    data.extend(p)",
+      "    ~~~~~~~~~~~^^^",
+      "TypeError: 'int' object is not iterable",
+      "",
+      "----------------------------------------------------------------------",
+      "Ran 7 tests in 0.268s",
+      "",
+      "FAILED (errors=4)"
+    ]
+  },
+  "scope": "Automated tests; interactive browser gameplay still requires playtesting"
+}
