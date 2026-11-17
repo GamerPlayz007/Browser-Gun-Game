@@ -6,6 +6,11 @@
 import * as THREE from 'three';
 
 const PARTS=8, SCALE=120/8192;
+// Calinou's original Cube 2 OBJ export recommends an import scale around 0.05.
+// Original source coordinates are +/-4096; the courtyard is near y=2816.
+export const OCTAVUS_WORLD_SCALE=0.05;
+export const OCTAVUS_LOCAL_RATIO=OCTAVUS_WORLD_SCALE/SCALE;
+export const OCTAVUS_GROUND_Y=2816*OCTAVUS_WORLD_SCALE;
 let cached=null;
 const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
 const chunkName=i=>'/static/maps/octavus_'+String(i+1).padStart(2,'0')+'.b64';
@@ -83,19 +88,25 @@ function texture(type){
  const tex=new THREE.CanvasTexture(c);tex.wrapS=tex.wrapT=THREE.RepeatWrapping;
  tex.colorSpace=THREE.SRGBColorSpace;tex.anisotropy=2;return tex;
 }
-function createScene(packed,types,scene=new THREE.Scene()){
-
+function createScene(packed,types,scene=new THREE.Scene(),sourceUV=null,nativeScale=false){
  scene.background=new THREE.Color('#cdd7d7');
- scene.fog=new THREE.Fog('#cdd7d7',100,250);
+ scene.fog=new THREE.Fog('#cdd7d7',nativeScale?240:100,nativeScale?680:250);
  scene.add(new THREE.HemisphereLight('#f7f2e9','#5d6465',2.0));
  const sun=new THREE.DirectionalLight('#fff4df',2.6);sun.position.set(-45,100,25);scene.add(sun);
  const ground=new THREE.Group();ground.name='Octavus source geometry';scene.add(ground);
+ if(nativeScale){
+  ground.scale.setScalar(OCTAVUS_LOCAL_RATIO);
+  ground.position.y=-OCTAVUS_GROUND_Y;
+ }
  const textures=new Map();
  for(const kind of Object.keys(PALETTES))textures.set(kind,texture(kind));
- let meshCount=0;
+ let meshCount=0,faceOffset=0;
+ if(sourceUV?.triangleCount!==undefined&&sourceUV.triangleCount!==packed.triangles)
+  throw Error('Octavus original UV triangle count mismatch');
  for(const [slot,indices] of packed.groups){
   const path=types.get(slot)||'',kind=surfaceKind(path,slot);
   const positions=new Float32Array(indices.length*3),uvs=new Float32Array(indices.length*2);
+  const preservedUV=sourceUV?new Float32Array(indices.length*2):null;
   const all=packed.points;
   for(let i=0;i<indices.length;i+=3){
    const a=indices[i]*3,b=indices[i+1]*3,c=indices[i+2]*3;
@@ -108,6 +119,11 @@ function createScene(packed,types,scene=new THREE.Scene()){
     const src=indices[i+t]*3,dst=(i+t)*3,uv=(i+t)*2;
     const x=all[src],y=all[src+1],z=all[src+2];
     positions[dst]=x;positions[dst+1]=y;positions[dst+2]=z;
+    if(preservedUV){
+     const sourceIndex=sourceUV.indices[faceOffset+i+t]*2;
+     preservedUV[uv]=sourceUV.coordinates[sourceIndex];
+     preservedUV[uv+1]=sourceUV.coordinates[sourceIndex+1];
+    }
     if(axis==='y'){uvs[uv]=x/5;uvs[uv+1]=z/5;}
     else if(axis==='x'){uvs[uv]=z/5;uvs[uv+1]=y/5;}
     else{uvs[uv]=x/5;uvs[uv+1]=y/5;}
@@ -116,6 +132,9 @@ function createScene(packed,types,scene=new THREE.Scene()){
   const geo=new THREE.BufferGeometry();
   geo.setAttribute('position',new THREE.BufferAttribute(positions,3));
   geo.setAttribute('uv',new THREE.BufferAttribute(uvs,2));
+  // Keep the authored UVs intact for the original-material Phase 2 renderer;
+  // temporary procedural replacement materials still use their own mapping.
+  if(preservedUV)geo.setAttribute('originalUv',new THREE.BufferAttribute(preservedUV,2));
   geo.computeVertexNormals();geo.computeBoundingSphere();
   const variation=.91+(slot%13)*.012;
   const mat=new THREE.MeshLambertMaterial({
@@ -123,11 +142,13 @@ function createScene(packed,types,scene=new THREE.Scene()){
    side:THREE.DoubleSide
   });
   const mesh=new THREE.Mesh(geo,mat);mesh.name='Octavus material slot '+slot;
-  ground.add(mesh);meshCount++;
+  ground.add(mesh);meshCount++;faceOffset+=indices.length;
  }
- return {scene,meshCount,textures,dispose(){
+ if(sourceUV&&faceOffset!==sourceUV.indices.length)throw Error('Octavus UV face count does not match geometry');
+ return {scene,meshCount,textures,geometryRoot:ground,preservedTextureCoordinates:!!sourceUV,dispose(){
   ground.traverse(obj=>{if(obj.isMesh){obj.geometry.dispose();obj.material.dispose();}});
   for(const tex of textures.values())tex.dispose();
+  ground.removeFromParent();
  }};
 }
 export { readPacked as loadOctavusPacked, materialTypes as loadOctavusMaterials, createScene as createOctavusScene };
