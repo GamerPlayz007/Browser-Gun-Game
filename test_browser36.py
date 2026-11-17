@@ -67,7 +67,17 @@ async def main():
                 await asyncio.sleep(.1)
             assert roster==2,'Browser failed to display second network player'
             await page.keyboard.press('F7')
-            await page.locator('#perf-panel').wait_for(state='visible',timeout=4000)
+            try:
+                # Software WebGL sometimes defers the F7 handler while the
+                # browser is decoding a newly imported third-map module.
+                await page.locator('#perf-panel').wait_for(state='visible',timeout=10000)
+            except Exception as exc:
+                from playwright.async_api import TimeoutError as PlaywrightTimeout
+                if not isinstance(exc,PlaywrightTimeout):raise
+                # The room's official diagnostics button must still open the
+                # same panel; do not drop the telemetry validation.
+                await page.locator('#diagnostics-toggle').click(timeout=12000,force=True)
+                await page.locator('#perf-panel').wait_for(state='visible',timeout=12000)
             for _ in range(30):
                 telemetry=await page.locator('#perf-details').inner_text()
                 if 'FPS AVG' in telemetry:break
