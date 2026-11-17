@@ -86,7 +86,13 @@ def dust_step65(p,dt,now,weapon,world=None):
         boost=min(10.,velocity*1.13)/max(.1,velocity)
         p['vx']*=boost;p['vz']*=boost
     sliding=now<p['slide_until']
-    p['crouch']=sliding or bool(inp.get('crouch'))
+    requested_crouch=sliding or bool(inp.get('crouch'))
+    native_octavus=bool(getattr(world.collision,'native_step_assist',False))
+    # Do not stand into a low roof after leaving a crawlway.
+    if native_octavus and p.get('crouch') and not requested_crouch:
+        if not world.capsule_clear((p['x'],p['y'],p['z']),HEIGHT):
+            requested_crouch=True
+    p['crouch']=requested_crouch
     h=LOW_HEIGHT if p['crouch'] else HEIGHT
     if sliding:
         drag=math.exp(-2.7*dt)
@@ -121,9 +127,23 @@ def dust_step65(p,dt,now,weapon,world=None):
     parts=max(1,min(4,math.ceil(total/.14)))
     x,z=old_x,old_z
     vx,vz=p['vx'],p['vz']
+    step_feet=old_y
     for _ in range(parts):
-        nxt_x=x+vx*dt/parts;nxt_z=z+vz*dt/parts
-        nxt_x,nxt_z,vx,vz=resolve_walls(world,nxt_x,old_y,nxt_z,h,x,z,vx,vz)
+        proposed_x=x+vx*dt/parts;proposed_z=z+vz*dt/parts
+        nxt_x,nxt_z,vx,vz=resolve_walls(world,proposed_x,step_feet,proposed_z,h,x,z,vx,vz)
+        if (native_octavus and grounded and
+                math.hypot(proposed_x-nxt_x,proposed_z-nxt_z)>.018 and
+                world.inside(proposed_x,proposed_z,RADIUS)):
+            # A stair riser may block a 1.8m capsule at foot height. Try a
+            # short, genuinely supported step; never climb a wall or roof.
+            rise=world.ground_at(proposed_x,proposed_z,step_feet+STEP)
+            if (rise is not None and
+                    step_feet+.025<=rise<=step_feet+STEP+.012 and
+                    rise<=old_y+STEP+.012 and
+                    world.capsule_clear((proposed_x,rise,proposed_z),h)):
+                nxt_x,nxt_z=proposed_x,proposed_z
+                step_feet=rise
+                vx,vz=p['vx'],p['vz']
         if not world.inside(nxt_x,nxt_z,RADIUS):
             bounds=world.bounds
             nxt_x=max(bounds['x0']+RADIUS,min(bounds['x1']-RADIUS,nxt_x))
@@ -131,7 +151,7 @@ def dust_step65(p,dt,now,weapon,world=None):
             vx=vz=0.
         x,z=nxt_x,nxt_z
     # Don't climb props higher than the authored step threshold.
-    ground=world.ground_at(x,z,old_y)
+    ground=world.ground_at(x,z,step_feet)
     if grounded and ground is not None and ground>old_y+STEP+.02:
         x,z=old_x,old_z;vx=vz=0.
         ground=world.ground_at(x,z,old_y)
