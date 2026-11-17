@@ -20,13 +20,6 @@ def main():
         {'id':'cyberpunk','name':'Daybreak City','available':True,
          'url':'/static/maps/cyberpunk.json','theme':'modern-daylight'},
     ]}
-    # Register Neon Zenith only after its authoritative map export exists.
-    # Original exported geometry is rendered by CROSSFIRE WebGL, not a second engine.
-    if (out/'neon_zenith.json').is_file():
-        registry['maps'].append({
-            'id':'neon_zenith','name':'Neon Zenith · Lite',
-            'available':True,'url':'/static/maps/neon_zenith.json',
-            'theme':'cyberpunk-night','engine':'crossfire-webgl'})
     # CROSSFIRE 6.5: compile the original Dust Corridor world-contract map.
     # Visual geometry and collision remain in the pinned upstream generator/
     # DUSTCOL3 mesh; JSON contains only lobby metadata and safe native spawns.

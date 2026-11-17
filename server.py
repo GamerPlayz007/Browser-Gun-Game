@@ -92,8 +92,7 @@ def new_player(room,pid,name,now,weapon=0,skin=0):
 class Room:
     def __init__(self,code,map_id=None):
         self.arena=ARENAS[map_id or DEFAULT.id]
-        center=self.arena.data.get('center',{'x':0,'z':0})
-        self.control_point={**CONTROL_POINT,'x':center['x'],'z':center['z'],'y':0.} if self.arena.id=='neon_zenith' else CONTROL_POINT
+        self.control_point=CONTROL_POINT
         self.code=code;self.players={};self.sockets={};self.joining=0;self.host=None;self.mode='deathmatch';self.next_mode='deathmatch'
         self.phase='lobby';self.started=0.;self.ended_at=0.;self.countdown_at=0.;self.winner=None;self.winner_id=None;self.win_reason=None;self.round_number=0;self.leader_id=None;self.events=[];self.last_active=time.monotonic();self.snapshot_sequence=0
         self.targets=[dict(id='t'+str(i),x=x,y=y,z=z,hp=100,reset_at=0) for i,(x,y,z) in enumerate(self.arena.data['practiceTargets'])]
@@ -576,15 +575,7 @@ async def lifecycle(app):
 @web.middleware
 async def cache_policy(request,handler):
     response=await handler(request)
-    if isinstance(response,web.WebSocketResponse):return response
-    path=request.path
-    # Native Neon bundles are content-hashed; reuse unchanged files across matches.
-    if path.startswith('/neon/assets/'):
-        response.headers['Cache-Control']='public, max-age=31536000, immutable'
-    elif path.startswith(('/tex/','/district/','/models/','/audio/',
-                          '/neon/tex/','/neon/district/','/neon/models/')):
-        response.headers['Cache-Control']='public, max-age=86400'
-    else:
+    if not isinstance(response,web.WebSocketResponse):
         response.headers['Cache-Control']='no-cache'
     return response
 async def index(request):return web.FileResponse(ROOT/'static/index.html')
@@ -606,9 +597,6 @@ async def list_rooms65(request):
         for code in ROOM_CODES65]})
 async def list_maps(request):return web.json_response(REGISTRY)
 
-# Native Neon Zenith is bundled from its pinned upstream source by GitHub Actions.
-# This route NEVER substitutes a simplified CROSSFIRE world for upstream visuals.
-NEON_ROOT=ROOT/'static/neon'
 async def dust_preview_status64(request):
     """Read-only native map/collision contract. Not in multiplayer registry.
 
@@ -617,30 +605,10 @@ async def dust_preview_status64(request):
     """
     return web.json_response(get_dust_world64().metadata())
 
-async def neon_preview_status(request):
-    return web.json_response({'ready':(NEON_ROOT/'index.html').is_file(),
-        'type':'original-scene-walkthrough','multiplayer':False})
-async def neon_entry(request):
-    # The former second engine has been retired. Even legacy Neon bookmarks
-    # resolve to CROSSFIRE's single lobby / renderer, not standalone WebGPU.
-    query={}
-    if request.query.get('room'):query['room']=request.query['room']
-    if request.query.get('name'):query['name']=request.query['name']
-    if query:
-        from urllib.parse import urlencode
-        raise web.HTTPFound('/?'+urlencode(query))
-    raise web.HTTPFound('/')
-async def neon_asset(request):
-    name=request.match_info.get('asset','')
-    base=NEON_ROOT.resolve()
-    path=(base/name).resolve()
-    if not path.is_relative_to(base) or not path.is_file():
-        raise web.HTTPNotFound()
-    return web.FileResponse(path)
 
 def make_app():
     app=web.Application(client_max_size=4096,middlewares=[cache_policy]);app['perf36']=ServerMetrics();app.router.add_get('/',index);app.router.add_get('/health',health)
-    app.router.add_get('/api/maps',list_maps);app.router.add_get('/api/dust-corridor/preview64',dust_preview_status64);app.router.add_get('/api/neon-preview',neon_preview_status);app.router.add_get('/neon',neon_entry);app.router.add_get('/neon/',neon_entry);app.router.add_post('/api/rooms',create_room);app.router.add_get('/api/rooms',list_rooms65);app.router.add_get('/api/rooms/{code}',room_info);app.router.add_get('/ws/{code}',socket);app.router.add_static('/static/',ROOT/'static');app.router.add_get('/neon/{asset:.*}',neon_asset);app.router.add_get('/{asset:.*}',neon_asset);app.cleanup_ctx.append(lifecycle);return app
+    app.router.add_get('/api/maps',list_maps);app.router.add_get('/api/dust-corridor/preview64',dust_preview_status64);app.router.add_post('/api/rooms',create_room);app.router.add_get('/api/rooms',list_rooms65);app.router.add_get('/api/rooms/{code}',room_info);app.router.add_get('/ws/{code}',socket);app.router.add_static('/static/',ROOT/'static');app.cleanup_ctx.append(lifecycle);return app
 if __name__=='__main__':
     import argparse
     parser=argparse.ArgumentParser();parser.add_argument('--host',default='0.0.0.0');parser.add_argument('--port',type=int,default=int(os.environ.get('PORT','3000')));parser.add_argument('--strictPort',action='store_true');args=parser.parse_args();web.run_app(make_app(),host=args.host,port=args.port)

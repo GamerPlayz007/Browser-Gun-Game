@@ -9,14 +9,6 @@
       "theme": "modern-daylight"
     },
     {
-      "id": "neon_zenith",
-      "name": "Neon Zenith \u00b7 Lite",
-      "available": true,
-      "url": "/static/maps/neon_zenith.json",
-      "theme": "cyberpunk-night",
-      "engine": "crossfire-webgl"
-    },
-    {
       "id": "dust_corridor",
       "name": "Dust Corridor",
       "available": true,

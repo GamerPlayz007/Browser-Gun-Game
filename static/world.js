@@ -1,5 +1,4 @@
 import * as T from 'three';
-import {createNeonWorld} from './neon_world.js';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 import {topAt} from './physics.js';
 import {createStage5VisualLayer} from './stage5_visual_layer.js';
@@ -51,7 +50,6 @@ function rampGeometry(b){
  g.setAttribute('uv',new T.Float32BufferAttribute(uv,2));g.computeVertexNormals();return g;
 }
 export function buildWorld(scene,map,{renderer,quality='high'}={}){
- if(map.id==='neon_zenith')return createNeonWorld(scene,map,{renderer,quality});
  const root=new T.Group();scene.add(root);const batches=new Map(),details=[],mats=new Map();
  const materialSystem=createCyberMaterialLibrary(T,{initialQuality:quality});
  scene.background=new T.Color(DAYBREAK_SKY66.horizon);scene.fog=new T.FogExp2(DAYBREAK_SKY66.fog,.0025);

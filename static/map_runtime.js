@@ -1,4 +1,2 @@
-// One CROSSFIRE runtime, one renderer, one HUD, one multiplayer protocol.
-// Both Daybreak City and Neon Zenith load through game.js -> buildWorld().
-// Neon never imports the original standalone WebGPU application.
+// CROSSFIRE shared runtime; Daybreak City and Dust Corridor use the same multiplayer engine.
 import './game.js';
