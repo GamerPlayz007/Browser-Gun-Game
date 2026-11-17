@@ -564,7 +564,7 @@ function frame(ms){try{const now=ms/1000,rawMs=ms-clock,dt=Math.min(rawMs/1000,.
   $('crosshair').style.opacity=me.hp<=0||ads>.75?'0':'1';
   $('crosshair').style.width=$('crosshair').style.height=crosshairSize52.toFixed(1)+'px';
   if(moving&&local.grounded&&locked()&&now-lastStep>(input.sprint?.28:.4)){audio.step(input.sprint?.07:.045);lastStep=now;}
- }else{const anchor=map.center||{x:0,z:0};camera.position.set(anchor.x+7+Math.sin(now*.045)*2,map.octavusOriginal?49:9,anchor.z+30+Math.cos(now*.045)*2);camera.lookAt(anchor.x-5,map.octavusOriginal?42:3,anchor.z+14);camera.fov=65;camera.updateProjectionMatrix();for(const g of weaponModels)g.visible=false;}
+ }else{const anchor=map.center||{x:0,z:0};camera.position.set(anchor.x+7+Math.sin(now*.045)*2,map.octavusOriginal?16:9,anchor.z+30+Math.cos(now*.045)*2);camera.lookAt(anchor.x-5,map.octavusOriginal?2:3,anchor.z+14);camera.fov=65;camera.updateProjectionMatrix();for(const g of weaponModels)g.visible=false;}
  for(let i=effects.length-1;i>=0;i--)if(now>effects[i].until){const e=effects.splice(i,1)[0];e.obj.removeFromParent();if(e.own){e.obj.geometry.dispose();e.obj.material.dispose();}}
  $('damage').style.opacity=now<damageUntil?.65:0;$('damage-direction').style.opacity=now<damageUntil?1:0;const sample52=feedback52.sample(now);
  $('hitmarker').style.opacity=$('damage-number').style.opacity=sample52.alpha;
