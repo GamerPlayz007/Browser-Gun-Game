@@ -3,24 +3,87 @@
   "source": "Red Eclipse original map model aliases and original OBJ meshes",
   "mapModelEntities": 149,
   "originalTypes": 19,
-  "convertedTypes": 0,
-  "convertedInstances": 0,
-  "convertedBytes": 0,
+  "convertedTypes": 14,
+  "convertedInstances": 120,
+  "convertedBytes": 442872,
   "models": {
     "dziq/glow_plate": {
-      "missing": true,
+      "url": "/static/maps/octavus_props/5f13cb9a67f579.glb",
+      "source": "https://raw.githubusercontent.com/redeclipse/dziq/master/glow_plate/mesh.obj",
+      "sha256": "a7b4e90785d05f307c916cbbda236dbbdbf7ca3fd781f758e1c050f7f682db9f",
       "count": 31,
-      "reason": "ModuleNotFoundError: No module named 'PIL'"
+      "triangles": 1264,
+      "originalBounds": [
+        [
+          -0.396741,
+          -0.396813,
+          -0.09547
+        ],
+        [
+          0.396741,
+          0.396813,
+          0.049213
+        ]
+      ],
+      "originalUV": true,
+      "cfg": "glow_plate/obj.cfg",
+      "sourceScale": 1600.0,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "sourceSkin": "diff"
     },
     "unixfreak/models/railing/6": {
-      "missing": true,
+      "url": "/static/maps/octavus_props/4da03fd4910c64.glb",
+      "source": "https://raw.githubusercontent.com/redeclipse/unixfreak/master/models/railing/6/mesh.obj",
+      "sha256": "13d537c03758b62d157ac559f6c0d089d754bddf6ff5a6a2ca96f6be4d048cee",
       "count": 24,
-      "reason": "ModuleNotFoundError: No module named 'PIL'"
+      "triangles": 576,
+      "originalBounds": [
+        [
+          -0.113435,
+          -3.113435,
+          -2.14289
+        ],
+        [
+          0.113435,
+          3.113435,
+          0.0
+        ]
+      ],
+      "originalUV": true,
+      "cfg": "models/railing/6/obj.cfg",
+      "sourceScale": 750.0,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "sourceSkin": "../../../../unnamed/unnamedmetal04.png"
     },
     "nobiax/tiny_weed_01": {
-      "missing": true,
+      "url": "/static/maps/octavus_props/d497c9f30be2e0.glb",
+      "source": "https://raw.githubusercontent.com/redeclipse/nobiax/master/tiny_weed_01/tiny_weeds_03_01.obj",
+      "sha256": "c61313a603106dd20fa9f0fd1c8b87361b4fbad81600df9288323ad8535e1b58",
       "count": 17,
-      "reason": "ModuleNotFoundError: No module named 'PIL'"
+      "triangles": 136,
+      "originalBounds": [
+        [
+          -31.7292,
+          -35.0558,
+          -128.0
+        ],
+        [
+          34.2725,
+          29.6808,
+          0.0
+        ]
+      ],
+      "originalUV": true,
+      "cfg": "tiny_weed_01/obj.cfg",
+      "sourceScale": 25.0,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "sourceSkin": "diffuse"
     },
     "nobiax/metal_barrel/omega": {
       "missing": true,
@@ -28,9 +91,30 @@
       "reason": "No original OBJ source"
     },
     "dziq/pipe/curved_short": {
-      "missing": true,
+      "url": "/static/maps/octavus_props/95b570cb2a6b35.glb",
+      "source": "https://raw.githubusercontent.com/redeclipse/dziq/master/pipe/curved_short/mesh.obj",
+      "sha256": "5ca1d59a6ed0e90a2725f92a60a987d0a0e517ff03a75d7b8dd8dec3d979eeab",
       "count": 10,
-      "reason": "ModuleNotFoundError: No module named 'PIL'"
+      "triangles": 1348,
+      "originalBounds": [
+        [
+          -0.326563,
+          -0.326785,
+          -0.825222
+        ],
+        [
+          0.5,
+          0.326785,
+          0.0
+        ]
+      ],
+      "originalUV": true,
+      "cfg": "pipe/curved_short/obj.cfg",
+      "sourceScale": 100,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "sourceSkin": null
     },
     "misc/lowpoly_eagle": {
       "missing": true,
@@ -38,19 +122,82 @@
       "reason": "No original OBJ source"
     },
     "dziq/pipe/straight_long": {
-      "missing": true,
+      "url": "/static/maps/octavus_props/6dda1e5baa496f.glb",
+      "source": "https://raw.githubusercontent.com/redeclipse/dziq/master/pipe/straight_long/mesh.obj",
+      "sha256": "3f36eed11a24679ab83e05b437a128d6547b89b0cd5bc118e99f00412ca266de",
       "count": 7,
-      "reason": "ModuleNotFoundError: No module named 'PIL'"
+      "triangles": 1112,
+      "originalBounds": [
+        [
+          -0.326563,
+          -0.326785,
+          -2.000001
+        ],
+        [
+          0.327007,
+          0.326785,
+          2.0
+        ]
+      ],
+      "originalUV": true,
+      "cfg": "pipe/straight_long/obj.cfg",
+      "sourceScale": 100,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "sourceSkin": null
     },
     "mikeplus64/crate": {
-      "missing": true,
+      "url": "/static/maps/octavus_props/94d04784c94823.glb",
+      "source": "https://raw.githubusercontent.com/redeclipse/mikeplus64/master/crate/crate.obj",
+      "sha256": "51c8e90180e8b4750883cc8b7ee8a0cff658141ec58b6b8119593916ac56d7ca",
       "count": 6,
-      "reason": "ModuleNotFoundError: No module named 'PIL'"
+      "triangles": 787,
+      "originalBounds": [
+        [
+          -1.018314,
+          -1.018314,
+          -1.099509
+        ],
+        [
+          1.018314,
+          1.018314,
+          1.000093
+        ]
+      ],
+      "originalUV": true,
+      "cfg": "crate/obj.cfg",
+      "sourceScale": 718.75,
+      "yaw": 90.0,
+      "pitch": 0,
+      "roll": 0,
+      "sourceSkin": "diffuse.png"
     },
     "nobiax/gaz_tank": {
-      "missing": true,
+      "url": "/static/maps/octavus_props/51a52894c29c0d.glb",
+      "source": "https://raw.githubusercontent.com/redeclipse/nobiax/master/gaz_tank/gaz.obj",
+      "sha256": "0a40f3191f2c90d8b6dc079e4b210b8a8c2c3797be3e341d91a5986876e63117",
       "count": 5,
-      "reason": "ModuleNotFoundError: No module named 'PIL'"
+      "triangles": 812,
+      "originalBounds": [
+        [
+          -49.983501,
+          -49.447201,
+          -130.467697
+        ],
+        [
+          49.983501,
+          49.447201,
+          0.0
+        ]
+      ],
+      "originalUV": true,
+      "cfg": "gaz_tank/obj.cfg",
+      "sourceScale": 7.5,
+      "yaw": 90.0,
+      "pitch": 0,
+      "roll": 0,
+      "sourceSkin": "diffus.png"
     },
     "nobiax/metal_barrel/alpha": {
       "missing": true,
@@ -58,9 +205,30 @@
       "reason": "No original OBJ source"
     },
     "snipergoth/cable/short": {
-      "missing": true,
+      "url": "/static/maps/octavus_props/6b179ab7950590.glb",
+      "source": "https://raw.githubusercontent.com/redeclipse/snipergoth/master/cable/short/mesh.obj",
+      "sha256": "da58b7320179bfb371a45336c8d27cf2e2291c8f612bb391d88d8582d90654f6",
       "count": 4,
-      "reason": "ModuleNotFoundError: No module named 'PIL'"
+      "triangles": 2400,
+      "originalBounds": [
+        [
+          -16.173798,
+          -4.200001,
+          -0.110296
+        ],
+        [
+          16.173798,
+          4.2,
+          15.809757
+        ]
+      ],
+      "originalUV": true,
+      "cfg": "cable/short/obj.cfg",
+      "sourceScale": 100,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "sourceSkin": "../diff"
     },
     "luckystrike/door1": {
       "missing": true,
@@ -68,19 +236,82 @@
       "reason": "No original OBJ source"
     },
     "dziq/pipe/straight_normal": {
-      "missing": true,
+      "url": "/static/maps/octavus_props/0c24c8b6264f68.glb",
+      "source": "https://raw.githubusercontent.com/redeclipse/dziq/master/pipe/straight_normal/mesh.obj",
+      "sha256": "c33ae9e1eb8dfc471ca9abfb80595c59c0c6b9bbd099183001826be685a8fe91",
       "count": 4,
-      "reason": "ModuleNotFoundError: No module named 'PIL'"
+      "triangles": 1112,
+      "originalBounds": [
+        [
+          -0.326563,
+          -0.326785,
+          -1.000001
+        ],
+        [
+          0.327007,
+          0.326785,
+          1.0
+        ]
+      ],
+      "originalUV": true,
+      "cfg": "pipe/straight_normal/obj.cfg",
+      "sourceScale": 100,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "sourceSkin": null
     },
     "dc/models/virtual-platform-ripple": {
-      "missing": true,
+      "url": "/static/maps/octavus_props/941de33b4b86e0.glb",
+      "source": "https://raw.githubusercontent.com/redeclipse/dc/master/models/virtual-platform-ripple/virtual-platform-ripple.obj",
+      "sha256": "9c1d6a173404b91b8713baa6e4c51cd59cffa6ec0e671bde187341a51c48c430",
       "count": 4,
-      "reason": "ModuleNotFoundError: No module named 'PIL'"
+      "triangles": 320,
+      "originalBounds": [
+        [
+          -1.0,
+          -1.0,
+          -0.1
+        ],
+        [
+          1.0,
+          1.0,
+          0.1
+        ]
+      ],
+      "originalUV": true,
+      "cfg": "models/virtual-platform-ripple/obj.cfg",
+      "sourceScale": 1600.0,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "sourceSkin": "ripplevr1.png"
     },
     "snipergoth/cable/long": {
-      "missing": true,
+      "url": "/static/maps/octavus_props/1795426ffc037f.glb",
+      "source": "https://raw.githubusercontent.com/redeclipse/snipergoth/master/cable/long/mesh.obj",
+      "sha256": "e8dc06a55169b2031a9f869dd0b9b689a295d46d3c10c195e5892dae36b278e8",
       "count": 3,
-      "reason": "ModuleNotFoundError: No module named 'PIL'"
+      "triangles": 2400,
+      "originalBounds": [
+        [
+          -32.132027,
+          -4.2,
+          -0.158822
+        ],
+        [
+          32.132027,
+          4.2,
+          15.824047
+        ]
+      ],
+      "originalUV": true,
+      "cfg": "cable/long/obj.cfg",
+      "sourceScale": 100,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "sourceSkin": "../diff"
     },
     "misc/radio_dish": {
       "missing": true,
@@ -88,19 +319,82 @@
       "reason": "No original OBJ source"
     },
     "dziq/pipe/straight_short": {
-      "missing": true,
+      "url": "/static/maps/octavus_props/ca793f692dec93.glb",
+      "source": "https://raw.githubusercontent.com/redeclipse/dziq/master/pipe/straight_short/mesh.obj",
+      "sha256": "61d2e2618f67ab817e70d942272df7d77b8c7582ababb71cce7e405424b744a4",
       "count": 2,
-      "reason": "ModuleNotFoundError: No module named 'PIL'"
+      "triangles": 1112,
+      "originalBounds": [
+        [
+          -0.326563,
+          -0.326785,
+          -0.500001
+        ],
+        [
+          0.327007,
+          0.326784,
+          0.5
+        ]
+      ],
+      "originalUV": true,
+      "cfg": "pipe/straight_short/obj.cfg",
+      "sourceScale": 100,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "sourceSkin": null
     },
     "john/forklift": {
-      "missing": true,
+      "url": "/static/maps/octavus_props/a1c7f7e89e7ab0.glb",
+      "source": "https://raw.githubusercontent.com/redeclipse/john/master/forklift/forklift.obj",
+      "sha256": "f8c2c79f7827384f6db0d49fe9cf725b2d2821990eb7bbbdf6911d9d7e8d966c",
       "count": 2,
-      "reason": "ModuleNotFoundError: No module named 'PIL'"
+      "triangles": 1688,
+      "originalBounds": [
+        [
+          -37.164833,
+          -129.604111,
+          -113.716843
+        ],
+        [
+          37.325127,
+          74.700844,
+          0.88765
+        ]
+      ],
+      "originalUV": true,
+      "cfg": "forklift/obj.cfg",
+      "sourceScale": 25.0,
+      "yaw": 90.0,
+      "pitch": 0,
+      "roll": 0,
+      "sourceSkin": "diffuse.png"
     },
     "misc/scifi_plane": {
-      "missing": true,
+      "url": "/static/maps/octavus_props/f5ef60c575b420.glb",
+      "source": "https://raw.githubusercontent.com/redeclipse/misc/master/scifi_plane/mesh.obj",
+      "sha256": "dea62e25eb42c7993c557878540219c5f51a1499c72c6422656f047d1ffe21d3",
       "count": 1,
-      "reason": "ModuleNotFoundError: No module named 'PIL'"
+      "triangles": 2291,
+      "originalBounds": [
+        [
+          -3.626201,
+          -1.442767,
+          -6.534403
+        ],
+        [
+          3.626201,
+          3.471795,
+          1.001075
+        ]
+      ],
+      "originalUV": true,
+      "cfg": "scifi_plane/obj.cfg",
+      "sourceScale": 2000.0,
+      "yaw": 90.0,
+      "pitch": 0,
+      "roll": 0,
+      "sourceSkin": "diff.png"
     }
   },
   "license": "Individual content licenses apply; retain attribution to original Red Eclipse media modules"
