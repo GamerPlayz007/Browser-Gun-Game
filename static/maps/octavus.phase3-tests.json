@@ -1,6 +1,6 @@
 {
   "status": "failed",
-  "verifiedAt": "2026-11-17T19:19:19.956190+00:00",
+  "verifiedAt": "2026-11-17T19:20:54.972663+00:00",
   "steps": {
     "octavusServerMotion": "failure",
     "browserImportClosure": "skipped",
@@ -28,7 +28,7 @@
       "AssertionError: -0.3279615345346528 not greater than 0.5 : {'x': -0.3279615345346528, 'y': -5.551115123125783e-17, 'z': 0.0, 'vx': 0.0, 'vy': 0.0, 'vz': 0.0, 'yaw': 0.0, 'crouch': False, 'grounded': True, 'slide_until': 0.0, 'slide_ready': 0.0, 'jump_held': False, 'slide_held': False, 'last_input': 100.9, 'input': {'d': True}, 'jump_consumed': False, 'jump_cut': False, 'interact_held': False, 'mantle': None, 'lean': 0.0, 'wall_kick_used': False}",
       "",
       "----------------------------------------------------------------------",
-      "Ran 7 tests in 0.156s",
+      "Ran 7 tests in 0.377s",
       "",
       "FAILED (failures=1)"
     ]
