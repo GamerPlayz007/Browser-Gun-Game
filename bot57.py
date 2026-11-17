@@ -70,7 +70,12 @@ def decide(bot,humans,arena,now):
         bot['input']={}
         bot['think_at']=now+BOT_THINK_SECONDS
         return
-    dx=target['x']-bot['x'];dz=target['z']-bot['z']
+    waypoint=None
+    if arena.id=='octavus' and not can_see:
+        from octavus_nav73 import next_octavus_waypoint
+        waypoint=next_octavus_waypoint(bot,target,now)
+    goal_x,goal_z=(waypoint[0],waypoint[2]) if waypoint else (target['x'],target['z'])
+    dx=goal_x-bot['x'];dz=goal_z-bot['z']
     dist=math.hypot(dx,dz)
     angle=math.atan2(-dx,-dz)
     bot['yaw']=(bot['yaw']+max(-.52,min(.52,normalize_angle(angle-bot['yaw']))))%(2*math.pi)
@@ -86,11 +91,11 @@ def decide(bot,humans,arena,now):
     detour=now<bot.get('detour_until',0)
     side=(int(bot['id'].split('-')[-1])%2)==0
     bot['input']={
-        'w':dist>12 and not detour,
-        's':can_see and dist<7,
+        'w':(dist>2.5 if waypoint else dist>12) and not detour,
+        's':not waypoint and can_see and dist<7,
         'a':(side and can_see and dist<24) or (detour and side),
         'd':((not side) and can_see and dist<24) or (detour and not side),
-        'sprint':dist>22 and not can_see,
+        'sprint':dist>(10 if waypoint else 22) and not can_see,
         'jump':detour and int(now*2)%2==0,
         'ads':False,
     }
