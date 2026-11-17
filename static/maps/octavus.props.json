@@ -3,8 +3,8 @@
   "source": "Red Eclipse original map-model Wavefront sources",
   "mapModelEntities": 149,
   "originalTypes": 19,
-  "convertedTypes": 13,
-  "convertedInstances": 115,
+  "convertedTypes": 16,
+  "convertedInstances": 135,
   "models": {
     "dziq/glow_plate": {
       "url": "/static/maps/octavus_props/5f13cb9a67f579.obj.gz",
@@ -19,7 +19,10 @@
       "yaw": 0,
       "pitch": 0,
       "roll": 0,
-      "cfgPath": "glow_plate/obj.cfg"
+      "cfgPath": "glow_plate/obj.cfg",
+      "skinUrl": "/static/maps/octavus_props/1e93bd6e3b070d.png",
+      "skinSource": "https://raw.githubusercontent.com/redeclipse/dziq/master/glow_plate/diff.png",
+      "skinSHA256": "840c974550d7a1bea06dc77520467bcc51f84b371e1fecac7cf9efd24921ee5f"
     },
     "unixfreak/models/railing/6": {
       "url": "/static/maps/octavus_props/4da03fd4910c64.obj.gz",
@@ -34,7 +37,10 @@
       "yaw": 0,
       "pitch": 0,
       "roll": 0,
-      "cfgPath": "models/railing/6/obj.cfg"
+      "cfgPath": "models/railing/6/obj.cfg",
+      "skinUrl": "/static/maps/octavus_props/b94ea660fdf8f3.png",
+      "skinSource": "https://raw.githubusercontent.com/redeclipse/unnamed/master/unnamedmetal04.png",
+      "skinSHA256": "bc1186e2b8d80ab30d37a73646fd8f393a519e8c379193611122d891e0b33ffd"
     },
     "nobiax/tiny_weed_01": {
       "url": "/static/maps/octavus_props/d497c9f30be2e0.obj.gz",
@@ -49,12 +55,28 @@
       "yaw": 0,
       "pitch": 0,
       "roll": 0,
-      "cfgPath": "tiny_weed_01/obj.cfg"
+      "cfgPath": "tiny_weed_01/obj.cfg",
+      "skinUrl": "/static/maps/octavus_props/042ed801c6d83f.png",
+      "skinSource": "https://raw.githubusercontent.com/redeclipse/nobiax/master/tiny_weed_01/diffuse.png",
+      "skinSHA256": "5b9b3a4e1e88bc8b2e514ad8cc58e43f1f291609aa0937c06d0aa712c82c3244"
     },
     "nobiax/metal_barrel/omega": {
-      "missing": true,
+      "url": "/static/maps/octavus_props/98edca41818089.obj.gz",
+      "source": "https://raw.githubusercontent.com/redeclipse/nobiax/master/metal_barrel/mesh.obj",
+      "sha256": "f37036f4f6158d0c374390798f8ef10960f75019bba0d98e58410efe61605469",
+      "codec": "gzip-obj",
       "count": 10,
-      "reason": "Original source OBJ not found"
+      "triangles": 568,
+      "vertices": 1048,
+      "compressedBytes": 21162,
+      "sourceScale": 15.0,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "cfgPath": "metal_barrel/omega/obj.cfg",
+      "skinUrl": "/static/maps/octavus_props/5463288269a1fc.png",
+      "skinSource": "https://raw.githubusercontent.com/redeclipse/nobiax/master/metal_barrel/plain/diffuse.png",
+      "skinSHA256": "ea298719a976821d489a59d04518f9592a0d9a0933f3a7b62c4faabcdbad2991"
     },
     "dziq/pipe/curved_short": {
       "url": "/static/maps/octavus_props/95b570cb2a6b35.obj.gz",
@@ -104,17 +126,46 @@
       "yaw": 90.0,
       "pitch": 0,
       "roll": 0,
-      "cfgPath": "crate/obj.cfg"
+      "cfgPath": "crate/obj.cfg",
+      "skinUrl": "/static/maps/octavus_props/4c3d3c93cf85e0.png",
+      "skinSource": "https://raw.githubusercontent.com/redeclipse/mikeplus64/master/crate/diffuse.png",
+      "skinSHA256": "aeb35f3c9146b0dce5ef1dff6159c048a9ae01997101fec593b4dc92a823c277"
     },
     "nobiax/gaz_tank": {
-      "missing": true,
+      "url": "/static/maps/octavus_props/51a52894c29c0d.obj.gz",
+      "source": "https://raw.githubusercontent.com/redeclipse/nobiax/master/gaz_tank/gaz.obj",
+      "sha256": "0a40f3191f2c90d8b6dc079e4b210b8a8c2c3797be3e341d91a5986876e63117",
+      "codec": "gzip-obj",
       "count": 5,
-      "reason": "ValueError: Original source is not Wavefront OBJ"
+      "triangles": 435,
+      "vertices": 408,
+      "compressedBytes": 15616,
+      "sourceScale": 7.5,
+      "yaw": 90.0,
+      "pitch": 0,
+      "roll": 0,
+      "cfgPath": "gaz_tank/obj.cfg",
+      "skinUrl": "/static/maps/octavus_props/e1f59608fa5b80.png",
+      "skinSource": "https://raw.githubusercontent.com/redeclipse/nobiax/master/gaz_tank/diffus.png",
+      "skinSHA256": "a8e561f0182f500e843789b0cf05ecbe8c8135093a109e93a54b3d4e87ae5421"
     },
     "nobiax/metal_barrel/alpha": {
-      "missing": true,
+      "url": "/static/maps/octavus_props/31046ee95553ac.obj.gz",
+      "source": "https://raw.githubusercontent.com/redeclipse/nobiax/master/metal_barrel/mesh.obj",
+      "sha256": "f37036f4f6158d0c374390798f8ef10960f75019bba0d98e58410efe61605469",
+      "codec": "gzip-obj",
       "count": 5,
-      "reason": "Original source OBJ not found"
+      "triangles": 568,
+      "vertices": 1048,
+      "compressedBytes": 21162,
+      "sourceScale": 15.0,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "cfgPath": "metal_barrel/alpha/obj.cfg",
+      "skinUrl": "/static/maps/octavus_props/8374813a4ac1f6.png",
+      "skinSource": "https://raw.githubusercontent.com/redeclipse/nobiax/master/metal_barrel/plain/diffuse.png",
+      "skinSHA256": "ea298719a976821d489a59d04518f9592a0d9a0933f3a7b62c4faabcdbad2991"
     },
     "snipergoth/cable/short": {
       "url": "/static/maps/octavus_props/6b179ab7950590.obj.gz",
@@ -129,7 +180,10 @@
       "yaw": 0,
       "pitch": 0,
       "roll": 0,
-      "cfgPath": "cable/short/obj.cfg"
+      "cfgPath": "cable/short/obj.cfg",
+      "skinUrl": "/static/maps/octavus_props/8755fc7be60d9f.png",
+      "skinSource": "https://raw.githubusercontent.com/redeclipse/snipergoth/master/cable/diff.png",
+      "skinSHA256": "46c2a0704249af0e23f7cf0f8cb128e71b19d18bc964a146186b19001d02d851"
     },
     "luckystrike/door1": {
       "missing": true,
@@ -164,7 +218,10 @@
       "yaw": 0,
       "pitch": 0,
       "roll": 0,
-      "cfgPath": "models/virtual-platform-ripple/obj.cfg"
+      "cfgPath": "models/virtual-platform-ripple/obj.cfg",
+      "skinUrl": "/static/maps/octavus_props/c98fcf2e67eab1.png",
+      "skinSource": "https://raw.githubusercontent.com/redeclipse/dc/master/models/virtual-platform-ripple/ripplevr1.png",
+      "skinSHA256": "a3e55b2fa274e6ad3a589b673c12a03a128f14be7123c869bc2982f9275dcd05"
     },
     "snipergoth/cable/long": {
       "url": "/static/maps/octavus_props/1795426ffc037f.obj.gz",
@@ -179,7 +236,10 @@
       "yaw": 0,
       "pitch": 0,
       "roll": 0,
-      "cfgPath": "cable/long/obj.cfg"
+      "cfgPath": "cable/long/obj.cfg",
+      "skinUrl": "/static/maps/octavus_props/98d12a8c366c82.png",
+      "skinSource": "https://raw.githubusercontent.com/redeclipse/snipergoth/master/cable/diff.png",
+      "skinSHA256": "46c2a0704249af0e23f7cf0f8cb128e71b19d18bc964a146186b19001d02d851"
     },
     "misc/radio_dish": {
       "missing": true,
@@ -214,7 +274,10 @@
       "yaw": 90.0,
       "pitch": 0,
       "roll": 0,
-      "cfgPath": "forklift/obj.cfg"
+      "cfgPath": "forklift/obj.cfg",
+      "skinUrl": "/static/maps/octavus_props/08c6002f427d02.png",
+      "skinSource": "https://raw.githubusercontent.com/redeclipse/john/master/forklift/diffuse.png",
+      "skinSHA256": "516faff57faf061625716e2454d36a139812a5b856a641fd616b1fe752d7c008"
     },
     "misc/scifi_plane": {
       "url": "/static/maps/octavus_props/f5ef60c575b420.obj.gz",
@@ -229,7 +292,10 @@
       "yaw": 90.0,
       "pitch": 0,
       "roll": 0,
-      "cfgPath": "scifi_plane/obj.cfg"
+      "cfgPath": "scifi_plane/obj.cfg",
+      "skinUrl": "/static/maps/octavus_props/f735f4f9a7978d.png",
+      "skinSource": "https://raw.githubusercontent.com/redeclipse/misc/master/scifi_plane/diff.png",
+      "skinSHA256": "c1521a81c093a8f8ca49ed834e36531a4526fcaf1a4b65eabc1e930bbc4413a7"
     }
   },
   "license": "Original environment meshes retain Red Eclipse individual module licenses; see ATTRIBUTION.md"
