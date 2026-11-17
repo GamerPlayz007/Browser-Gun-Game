@@ -83,8 +83,8 @@ function texture(type){
  const tex=new THREE.CanvasTexture(c);tex.wrapS=tex.wrapT=THREE.RepeatWrapping;
  tex.colorSpace=THREE.SRGBColorSpace;tex.anisotropy=2;return tex;
 }
-function createScene(packed,types){
- const scene=new THREE.Scene();
+function createScene(packed,types,scene=new THREE.Scene()){
+
  scene.background=new THREE.Color('#cdd7d7');
  scene.fog=new THREE.Fog('#cdd7d7',100,250);
  scene.add(new THREE.HemisphereLight('#f7f2e9','#5d6465',2.0));
@@ -130,6 +130,8 @@ function createScene(packed,types){
   for(const tex of textures.values())tex.dispose();
  }};
 }
+export { readPacked as loadOctavusPacked, materialTypes as loadOctavusMaterials, createScene as createOctavusScene };
+
 export function createOctavusPreview(){
  let active=false,loading=false,closeCurrent=null;
  return {
