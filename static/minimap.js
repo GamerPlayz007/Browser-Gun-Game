@@ -42,7 +42,9 @@ export function createMinimap(canvas,label,map){
    }
    bg.stroke();bg.restore();
    bg.strokeStyle='#607378';bg.lineWidth=1;
-   bg.strokeRect(px(-57),pz(-57),114*SCALE,114*SCALE);
+   const bounds=map.playBounds||{x0:-map.size/2,x1:map.size/2,z0:-map.size/2,z1:map.size/2};
+   bg.strokeRect(px(bounds.x0),pz(bounds.z0),
+    (bounds.x1-bounds.x0)*SCALE,(bounds.z1-bounds.z0)*SCALE);
    for(const [side,points] of Object.entries(map.spawnSets||{})){
     bg.fillStyle=side==='A'?'#4c91b5':'#be8055';
     for(const [x,,z] of points){
@@ -85,7 +87,7 @@ export function createMinimap(canvas,label,map){
   ctx.save();ctx.translate(px(p.x),pz(p.z));ctx.rotate(map.dustOriginal?Math.PI-yaw:-yaw);
   ctx.fillStyle='#1b86b1';ctx.strokeStyle='#eef7f3';ctx.lineWidth=2;
   ctx.beginPath();ctx.moveTo(0,-8);ctx.lineTo(5,5);ctx.lineTo(0,2);ctx.lineTo(-5,5);ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();
-  const zone=map.zones.find(z=>Math.abs(p.x-z.x)<=z.w/2&&Math.abs(p.z-z.z)<=z.d/2)?.name||(map.dustOriginal?'MARKET STREETS':'CITY STREETS');
+  const zone=map.zones.find(z=>Math.abs(p.x-z.x)<=z.w/2&&Math.abs(p.z-z.z)<=z.d/2)?.name||(map.octavusOriginal?'OUTER OCTAVUS':map.dustOriginal?'MARKET STREETS':'CITY STREETS');
   const text=zone+(p.y>=4.5&&!map.octavusOriginal?' / UPPER LEVEL':'');if(lastZone!==text){lastZone=text;label.textContent=text;}
  }};
 }
