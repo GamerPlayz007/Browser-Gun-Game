@@ -80,7 +80,27 @@ def settings(module,alias,obj,files):
 def archive_skin(module,model,options,alias):
     cfg=options.get('cfgPath')
     skin=options.get('skin')
-    if not cfg or not skin or skin.startswith(('<','
+    if not cfg or not skin or skin.startswith('<'):
+        return {}
+    path=posixpath.normpath('data/'+module+'/'+posixpath.dirname(cfg)+'/'+skin)
+    if not path.startswith('data/'):return {}
+    rel=path.removeprefix('data/')
+    if '/' not in rel:return {}
+    asset_module,rest=rel.split('/',1)
+    attempts=[rest] if rest.lower().endswith(('.jpg','.jpeg','.png')) else [rest+'.png',rest+'.jpg',rest+'.jpeg']
+    for filename in attempts:
+        url=f"https://raw.githubusercontent.com/redeclipse/{asset_module}/master/{quote(filename,safe='/')}"
+        try:original=read(url,5*1024*1024)
+        except Exception:continue
+        extension='png' if original.startswith(bytes((137,80,78,71,13,10,26,10))) else ('jpg' if original.startswith(bytes((255,216))) else None)
+        if extension is None:continue
+        name=sha1((alias+':source-skin').encode()).hexdigest()[:14]+'.'+extension
+        (OUT/name).write_bytes(original)
+        return {'skinUrl':'/static/maps/octavus_props/'+name,'skinSource':url,'skinSHA256':sha256(original).hexdigest()}
+    return {}
+
+
+def main():
     aliases=re.findall(r'^mapmodel\s+"([^"]+)"',SOURCE.read_text(),flags=re.M)
     native=json.loads(ENTITIES.read_text())
     allentities=[e for e in native["visualEntities"] if e["type"]=="mapmodel"]
