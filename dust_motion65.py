@@ -132,18 +132,24 @@ def dust_step65(p,dt,now,weapon,world=None):
         proposed_x=x+vx*dt/parts;proposed_z=z+vz*dt/parts
         nxt_x,nxt_z,vx,vz=resolve_walls(world,proposed_x,step_feet,proposed_z,h,x,z,vx,vz)
         if (native_octavus and grounded and
-                math.hypot(proposed_x-nxt_x,proposed_z-nxt_z)>.018 and
-                world.inside(proposed_x,proposed_z,RADIUS)):
-            # A stair riser may block a 1.8m capsule at foot height. Try a
-            # short, genuinely supported step; never climb a wall or roof.
-            rise=world.ground_at(proposed_x,proposed_z,step_feet+STEP)
-            if (rise is not None and
-                    step_feet+.025<=rise<=step_feet+STEP+.012 and
-                    rise<=old_y+STEP+.012 and
-                    world.capsule_clear((proposed_x,rise,proposed_z),h)):
-                nxt_x,nxt_z=proposed_x,proposed_z
-                step_feet=rise
-                vx,vz=p['vx'],p['vz']
+                math.hypot(proposed_x-nxt_x,proposed_z-nxt_z)>.018):
+            # Source stair risers stop the capsule RADIUS metres *before*
+            # the higher top. Probe past the riser, then accept only an
+            # actual supported STEP-height surface with full headroom.
+            run_x=proposed_x-x;run_z=proposed_z-z
+            length=math.hypot(run_x,run_z)
+            if length>1e-8:
+                probe_x=proposed_x+run_x/length*(RADIUS+.10)
+                probe_z=proposed_z+run_z/length*(RADIUS+.10)
+                if world.inside(probe_x,probe_z,RADIUS):
+                    rise=world.ground_at(probe_x,probe_z,step_feet+STEP)
+                    if (rise is not None and
+                            step_feet+.025<=rise<=step_feet+STEP+.012 and
+                            rise<=old_y+STEP+.012 and
+                            world.capsule_clear((probe_x,rise,probe_z),h)):
+                        nxt_x,nxt_z=probe_x,probe_z
+                        step_feet=rise
+                        vx,vz=p['vx'],p['vz']
         if not world.inside(nxt_x,nxt_z,RADIUS):
             bounds=world.bounds
             nxt_x=max(bounds['x0']+RADIUS,min(bounds['x1']-RADIUS,nxt_x))
