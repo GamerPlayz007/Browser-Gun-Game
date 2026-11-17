@@ -1,0 +1,20 @@
+{
+  "format": "OCTAVUS-ENV2",
+  "source": "Native Red Eclipse MPZ v59 revision 829",
+  "sourcePath": "sources/octavus.native-variables.json",
+  "skybox": "jojo/redcliff",
+  "ambient": 3351056,
+  "skylight": 16756351,
+  "sunlight": 12277026,
+  "sunYaw": 300,
+  "sunPitch": 40,
+  "sunScale": 0.699999988079071,
+  "fog": 1800,
+  "fogColour": "#9a4f20",
+  "atmosphere": {
+    "density": 0.5,
+    "brightness": 4,
+    "light": 16742195
+  },
+  "notes": "Adapted source lighting parameters for Three.js; original baked lightmaps not imported."
+}
