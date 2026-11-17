@@ -1,0 +1,86 @@
+{
+  "name": "jojo/redcliff",
+  "source": "https://github.com/redeclipse/jojo",
+  "licenseNote": "Original image authorship and licensing retained; see redeclipse module licenses",
+  "format": "OCTAVUS-SKY1",
+  "sides": {
+    "rt": {
+      "url": "/static/maps/octavus_assets/redcliff_rt.webp",
+      "originalSource": "https://raw.githubusercontent.com/redeclipse/jojo/master/redcliff_rt.png",
+      "sha256": "de15a627a161f90873e34fbc1514ee7711ba0777c0236073b9fc9dce5e79e04f",
+      "originalSize": [
+        800,
+        800
+      ],
+      "optimizedSize": [
+        800,
+        800
+      ]
+    },
+    "lf": {
+      "url": "/static/maps/octavus_assets/redcliff_lf.webp",
+      "originalSource": "https://raw.githubusercontent.com/redeclipse/jojo/master/redcliff_lf.png",
+      "sha256": "cf6c3b103b61e5c3fd0634aee8f5077de91d61835ebfcfbe347ae31ebf5c3bb9",
+      "originalSize": [
+        800,
+        800
+      ],
+      "optimizedSize": [
+        800,
+        800
+      ]
+    },
+    "up": {
+      "url": "/static/maps/octavus_assets/redcliff_up.webp",
+      "originalSource": "https://raw.githubusercontent.com/redeclipse/jojo/master/redcliff_up.png",
+      "sha256": "98dc33cbb9f140fe6e0ebb6499ce346e5dba845ea0bf38c4029e4db1ee5c2d29",
+      "originalSize": [
+        800,
+        800
+      ],
+      "optimizedSize": [
+        800,
+        800
+      ]
+    },
+    "dn": {
+      "url": "/static/maps/octavus_assets/redcliff_dn.webp",
+      "originalSource": "https://raw.githubusercontent.com/redeclipse/jojo/master/redcliff_dn.png",
+      "sha256": "d7c734f397c5be0f6e82b74c97c1033eab6b141787244551d97ab3721734a585",
+      "originalSize": [
+        800,
+        800
+      ],
+      "optimizedSize": [
+        800,
+        800
+      ]
+    },
+    "ft": {
+      "url": "/static/maps/octavus_assets/redcliff_ft.webp",
+      "originalSource": "https://raw.githubusercontent.com/redeclipse/jojo/master/redcliff_ft.png",
+      "sha256": "93d80ff82e42a23189bef932b5f3fd019d4c5af061550c2b7d58f76632632a06",
+      "originalSize": [
+        800,
+        800
+      ],
+      "optimizedSize": [
+        800,
+        800
+      ]
+    },
+    "bk": {
+      "url": "/static/maps/octavus_assets/redcliff_bk.webp",
+      "originalSource": "https://raw.githubusercontent.com/redeclipse/jojo/master/redcliff_bk.png",
+      "sha256": "47ef6db489973e54b34ad56f1b376e6b84e1b1e5a7d339d16ee27c851db2cb81",
+      "originalSize": [
+        800,
+        800
+      ],
+      "optimizedSize": [
+        800,
+        800
+      ]
+    }
+  }
+}
