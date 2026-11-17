@@ -7,6 +7,8 @@ import {createDustPhysics65} from './dust_motion65.js';
 import {loadOctavusOriginalUV} from './octavus_uv.js';
 import {loadOctavusMaterialLibrary} from './octavus_materials.js';
 import {createOctavusEnvironment} from './octavus_environment.js';
+import {createOctavusDecals} from './octavus_decals.js';
+import {createOctavusProps} from './octavus_props.js';
 import {loadOctavusPacked,loadOctavusMaterials,createOctavusScene,
  OCTAVUS_LOCAL_RATIO,OCTAVUS_GROUND_Y} from './octavus_preview.js';
 
@@ -75,6 +77,9 @@ export async function buildOctavusMatch(scene,map,{quality='auto'}={}){
  const visual=createOctavusScene(packed,materials,scene,authoredUV,true,originalMedia);
  visual.setQuality(quality);
  const environment=await createOctavusEnvironment(scene,quality);
+ const [decals,props]=await Promise.all([
+  createOctavusDecals(scene,quality),createOctavusProps(scene,quality)
+ ]);
  let detail=true,mode=quality;
  return {
   isOctavusMatch:true,
@@ -89,19 +94,26 @@ export async function buildOctavusMatch(scene,map,{quality='auto'}={}){
   originalTextureImages:originalMedia.statistics?.sourceImages||0,
   originalSkybox:environment.skybox,
   sourceLights:environment.sourceLightCount,
+  nativeDecals:decals.count,
+  nativeProps:props.instances,
+  nativePropTypes:props.modelTypes,
   featureCount:packed.triangles,
-  environmentCount:0,
-  environmentSigns:0,
+  environmentCount:props.instances+decals.count,
+  environmentSigns:decals.count,
   packedScene66:true,
   packedTransferBytes66:917878,
   get originalMaterialLayers(){return originalMedia.statistics?.sourceImages||0;},
   get resourceProfile68(){return{
    fullArchitecture:true,hasEnvironment:true,atlasSize:1024,atlases:originalMedia.statistics?.sourceImages||0,
-   atlasRebuilds:0,stage5Meshes:visual.meshCount,stage6Meshes:0
+   atlasRebuilds:0,stage5Meshes:visual.meshCount,
+   stage6Meshes:props.instances+decals.materials
   };},
-  setQuality(value){mode=value;visual.setQuality(value);environment.setQuality(value);},
+  setQuality(value){mode=value;visual.setQuality(value);environment.setQuality(value);
+    decals.setQuality(value);props.setQuality(value);},
   setDetail(value){detail=Boolean(value);},
-  animate(time,player){environment.animate(time,player);void mode;void detail;},
-  dispose(){environment.dispose();visual.dispose();scene.background=null;scene.fog=null;}
+  animate(time,player){environment.animate(time,player);props.animate(time,player);
+    void mode;void detail;},
+  dispose(){props.dispose();decals.dispose();environment.dispose();visual.dispose();
+    scene.background=null;scene.fog=null;}
  };
 }
