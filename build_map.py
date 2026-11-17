@@ -53,6 +53,24 @@ def main():
         'id':'dust_corridor','name':'Dust Corridor',
         'available':True,'url':'/static/maps/dust_corridor.json',
         'theme':'sandstone-market','engine':'crossfire-three-original-geometry'})
+    # Keep the native Octavus arena registered on every automated map rebuild.
+    # Earlier builds reset index.json to only Daybreak and Dust, silently
+    # removing Octavus from the live lobby after each GitHub Actions run.
+    octavus_path=out/'octavus.json'
+    octavus_files=[out/f'octavus_{i:02d}.b64' for i in range(1,9)]
+    if not octavus_path.is_file() or not all(path.is_file() for path in octavus_files):
+        raise RuntimeError('Octavus source geometry is missing; refusing to drop playable map')
+    octavus=json.loads(octavus_path.read_text(encoding='utf-8'))
+    if (octavus.get('id')!='octavus' or not octavus.get('octavusOriginal') or
+            octavus.get('collisionFormat')!='OCT1' or
+            octavus.get('collisionTriangles')!=86500 or
+            not octavus.get('spawns') or
+            not all(octavus.get('spawnSets',{}).get(side) for side in ('A','B'))):
+        raise RuntimeError('Octavus map registration contract is invalid')
+    registry['maps'].append({
+        'id':'octavus','name':'Octavus','available':True,
+        'url':'/static/maps/octavus.json','theme':'original-stone-arena',
+        'engine':'crossfire-three-original-geometry'})
     (out/'index.json').write_text(json.dumps(registry,indent=2)+'\n',encoding='utf-8')
     # Stale 80 m map guide and old optional candidate are deliberately removed.
     for legacy in (out/'cyberpunk-next.json',ROOT/'MAP_GUIDE.svg'):
