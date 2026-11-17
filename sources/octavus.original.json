@@ -1,0 +1,13 @@
+{
+  "source": "https://raw.githubusercontent.com/redeclipse/maps/master/octavus.mpz",
+  "upstreamRepository": "https://github.com/redeclipse/maps",
+  "sourceFile": "octavus.mpz",
+  "sourceBlobSha": "c3d927bdb016927f1f96868b435dfdf174a01af9",
+  "compressedBytes": 1469341,
+  "unpackedBytes": 14987053,
+  "gzip": true,
+  "headerHex": "4d41505a3b0000002c000000002000007c0300000000000002000000df000000200100003d03000066707300110400000d0000006c6176616275726e64656c61790000000000e8030000160000007761746572327265666c656374636f6c6f75",
+  "rawSha256": "31f07750a7610d069609a35ac6eb070e8ea3dc52571da9f529d3d643a212dde5",
+  "license": "CC BY-SA 3.0 (original Octavus map license)",
+  "usage": "Reference-only; native map has not yet been decoded into the Three.js scene"
+}
