@@ -41,6 +41,7 @@ class OctavusCollision:
         positions = array('f')
         surfaces = bytearray(TRIANGLES)
         self.cell_size = 10.0  # Broadphase tuned for 409.6-unit outdoor map
+        self.native_step_assist = True  # Enable matched Python/JS source-mesh stair handling
         offset = 12 + VERTICES * 6
         for tri in range(TRIANGLES):
             a, b, c, material = struct.unpack_from('<HHHB', raw, offset)
