@@ -1,0 +1,33 @@
+{
+  "originalTriangles": 86500,
+  "sourcePlayerstarts": 33,
+  "nativeSafeStarts": 12,
+  "existingSafeSpawns": 22,
+  "nodeCount": 989,
+  "connectedComponents": 87,
+  "largestComponent": 437,
+  "componentSizes": [
+    437,
+    81,
+    80,
+    44,
+    42,
+    33,
+    32,
+    25,
+    21,
+    18,
+    17,
+    13
+  ],
+  "xRange": [
+    -152,
+    152
+  ],
+  "zRange": [
+    -152,
+    152
+  ],
+  "newSpawnCandidates": 10,
+  "outerSectorCandidates": 6
+}
