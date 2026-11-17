@@ -44,9 +44,8 @@ function collisionSource(packed,map){
 export async function buildOctavusMatch(scene,map,{quality='auto'}={}){
  if(map.id!=='octavus'||map.collisionFormat!=='OCT1'||!map.octavusOriginal)
   throw Error('Refusing to load an unverified Octavus multiplayer map');
- const [packed,materials,authoredUV,originalMedia]=await Promise.all([
-  loadOctavusPacked(),loadOctavusMaterials(),loadOctavusOriginalUV(),
-  loadOctavusMaterialLibrary(quality)
+ const [packed,materials,authoredUV]=await Promise.all([
+  loadOctavusPacked(),loadOctavusMaterials(),loadOctavusOriginalUV()
  ]);
  const source=collisionSource(packed,map);
  const physics=createDustPhysics65(source);
@@ -73,15 +72,33 @@ export async function buildOctavusMatch(scene,map,{quality='auto'}={}){
   }
   map.octavusRadarEdges=edges;
  }
- // The preview's actual 111 material-slot meshes, UVs, lighting and textures
- // are used directly. No duplicate block-built level or iframe is involved.
- const visual=createOctavusScene(packed,materials,scene,authoredUV,true,originalMedia);
+ // Critical path: original terrain, reliable server-matched collision,
+ // and source UV coordinates. Decorative resources must never block join.
+ const visual=createOctavusScene(packed,materials,scene,authoredUV,true,null);
+ let detail=true,mode=quality,disposed=false;
+ let media=null;
+ const noop={count:0,materials:0,instances:0,modelTypes:0,sourceLightCount:0,
+  skybox:false,setQuality(){},animate(){},dispose(){}};
+ let environment=noop,decals=noop,props=noop;
+ // Do not permit a failed optional source texture, sky, decal or prop file
+ // to turn a playable arena into an endlessly loading join screen.
+ function attach(promise,kind){
+  promise.then(value=>{
+   if(disposed){value?.dispose?.();return;}
+   if(kind==='media'){
+    media=value;
+    visual.applyOriginalMaterials(value,mode);
+   }else if(kind==='environment')environment=value;
+   else if(kind==='decals')decals=value;
+   else if(kind==='props')props=value;
+   if(kind!=='media')value?.setQuality?.(mode);
+  }).catch(error=>console.warn('Octavus optional '+kind+' unavailable:',error));
+ }
+ attach(loadOctavusMaterialLibrary(quality),'media');
+ attach(createOctavusEnvironment(scene,quality),'environment');
+ attach(createOctavusDecals(scene,quality),'decals');
+ attach(createOctavusProps(scene,quality),'props');
  visual.setQuality(quality);
- const environment=await createOctavusEnvironment(scene,quality);
- const [decals,props]=await Promise.all([
-  createOctavusDecals(scene,quality),createOctavusProps(scene,quality)
- ]);
- let detail=true,mode=quality;
  return {
   isOctavusMatch:true,
   physics,
@@ -91,30 +108,32 @@ export async function buildOctavusMatch(scene,map,{quality='auto'}={}){
   originalTextureVertices:authoredUV.textureVertexCount,
   sourceScaleRatio:OCTAVUS_LOCAL_RATIO,
   originalUV:visual.preservedTextureCoordinates,
-  originalMaterialSlots:visual.originalMaterials,
-  originalTextureImages:originalMedia.statistics?.sourceImages||0,
-  originalSkybox:environment.skybox,
-  sourceLights:environment.sourceLightCount,
-  nativeDecals:decals.count,
-  nativeProps:props.instances,
-  nativePropTypes:props.modelTypes,
+  get originalMaterialSlots(){return visual.originalMaterials;},
+  get originalTextureImages(){return media?.statistics?.sourceImages||0;},
+  get originalSkybox(){return environment.skybox;},
+  get sourceLights(){return environment.sourceLightCount;},
+  get nativeDecals(){return decals.count;},
+  get nativeProps(){return props.instances;},
+  get nativePropTypes(){return props.modelTypes;},
   featureCount:packed.triangles,
-  environmentCount:props.instances+decals.count,
-  environmentSigns:decals.count,
+  get environmentCount(){return props.instances+decals.count;},
+  get environmentSigns(){return decals.count;},
   packedScene66:true,
   packedTransferBytes66:917878,
-  get originalMaterialLayers(){return originalMedia.statistics?.sourceImages||0;},
+  get originalMaterialLayers(){return media?.statistics?.sourceImages||0;},
   get resourceProfile68(){return{
-   fullArchitecture:true,hasEnvironment:true,atlasSize:1024,atlases:originalMedia.statistics?.sourceImages||0,
+   fullArchitecture:true,hasEnvironment:true,atlasSize:1024,atlases:media?.statistics?.sourceImages||0,
    atlasRebuilds:0,stage5Meshes:visual.meshCount,
-   stage6Meshes:props.instances+decals.materials
+   stage6Meshes:props.instances+decals.materials,
+   streamedAssets:true
   };},
-  setQuality(value){mode=value;visual.setQuality(value);environment.setQuality(value);
-    decals.setQuality(value);props.setQuality(value);},
+  setQuality(value){mode=value;visual.setQuality(value);
+   environment.setQuality(value);decals.setQuality(value);props.setQuality(value);},
   setDetail(value){detail=Boolean(value);},
   animate(time,player){environment.animate(time,player);props.animate(time,player);
-    void mode;void detail;},
-  dispose(){props.dispose();decals.dispose();environment.dispose();visual.dispose();
-    scene.background=null;scene.fog=null;}
+   void mode;void detail;},
+  dispose(){if(disposed)return;disposed=true;
+   props.dispose();decals.dispose();environment.dispose();visual.dispose();
+   scene.background=null;scene.fog=null;}
  };
 }
