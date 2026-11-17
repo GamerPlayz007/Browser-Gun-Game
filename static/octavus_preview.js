@@ -154,7 +154,7 @@ export function createOctavusPreview(){
    status.style.cssText='position:absolute;inset:0;display:grid;place-items:center;font-size:16px;text-align:center;padding:24px;';
    shell.append(status);
    const caption=document.createElement('div');
-   caption.textContent='SOURCE GEOMETRY WALKTHROUGH · NO MULTIPLAYER COLLISION YET · ATTRIBUTION: OCTAVUS_ATTRIBUTION.md';
+   caption.textContent='FREE-CAMERA PREVIEW · SELECT OCTAVUS IN THE MAP LIST TO PLAY MULTIPLAYER · SOURCE: OCTAVUS_ATTRIBUTION.md';
    caption.style.cssText='position:absolute;z-index:2;left:16px;bottom:13px;background:#101923b9;border-radius:5px;padding:9px 12px;font-size:10px;letter-spacing:.5px;';
    shell.append(caption);document.body.append(shell);
    let renderer=null,geometry=null,raf=0;
