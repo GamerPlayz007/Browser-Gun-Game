@@ -15,6 +15,14 @@
       "url": "/static/maps/dust_corridor.json",
       "theme": "sandstone-market",
       "engine": "crossfire-three-original-geometry"
+    },
+    {
+      "id": "octavus",
+      "name": "Octavus",
+      "available": true,
+      "url": "/static/maps/octavus.json",
+      "theme": "original-stone-arena",
+      "engine": "crossfire-three-original-geometry"
     }
   ]
 }
