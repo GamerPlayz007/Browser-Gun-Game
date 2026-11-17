@@ -27,21 +27,34 @@ def closest_on_triangle(point, a, b, c):
     dot=lambda p,q:sum(x*y for x,y in zip(p,q))
     add=lambda p,q,t:(p[0]+q[0]*t,p[1]+q[1]*t,p[2]+q[2]*t)
     ab=sub(b,a); ac=sub(c,a); ap=sub(point,a)
+    n=(ab[1]*ac[2]-ab[2]*ac[1], ab[2]*ac[0]-ab[0]*ac[2],
+       ab[0]*ac[1]-ab[1]*ac[0])
+    if dot(n,n)<1e-18*max(1.0,dot(ab,ab)*dot(ac,ac)):
+        # Quantized source OBJs contain zero-area faces. Do not divide by
+        # zero or return NaNs; find the closest point on the three edges.
+        def on_segment(p0,p1):
+            edge=sub(p1,p0)
+            length2=dot(edge,edge)
+            t=max(0.,min(1.,dot(sub(point,p0),edge)/length2)) if length2>1e-18 else 0.
+            return add(p0,edge,t)
+        candidates=(on_segment(a,b),on_segment(a,c),on_segment(b,c))
+        return min(candidates,key=lambda p:dot(sub(point,p),sub(point,p)))
     d1=dot(ab,ap);d2=dot(ac,ap)
     if d1<=0 and d2<=0:return a
     bp=sub(point,b);d3=dot(ab,bp);d4=dot(ac,bp)
     if d3>=0 and d4<=d3:return b
     vc=d1*d4-d3*d2
     if vc<=0 and d1>=0 and d3<=0:
-        return add(a,ab,d1/(d1-d3))
+        return add(a,ab,d1/(d1-d3)) if abs(d1-d3)>1e-18 else a
     cp=sub(point,c);d5=dot(ab,cp);d6=dot(ac,cp)
     if d6>=0 and d5<=d6:return c
     vb=d5*d2-d1*d6
     if vb<=0 and d2>=0 and d6<=0:
-        return add(a,ac,d2/(d2-d6))
+        return add(a,ac,d2/(d2-d6)) if abs(d2-d6)>1e-18 else a
     va=d3*d6-d5*d4
     if va<=0 and d4-d3>=0 and d5-d6>=0:
-        t=(d4-d3)/((d4-d3)+(d5-d6))
+        divisor=(d4-d3)+(d5-d6)
+        t=(d4-d3)/divisor if abs(divisor)>1e-18 else 0.
         bc=sub(c,b)
         return add(b,bc,t)
     denom=va+vb+vc
