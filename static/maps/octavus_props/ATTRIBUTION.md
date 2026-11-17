@@ -1,10 +1,10 @@
-# Octavus original environmental models
+# Original Octavus map model source archive
 
-Derived from Red Eclipse source module OBJ meshes, with original
-model aliases, source URLs and hashes retained in octavus.props.json.
-Model authors own the original content; individual licensing terms apply.
-No missing source models are replaced with invented geometry.
-https://github.com/redeclipse/base
+Exact original Wavefront OBJ meshes, gzip-compressed without
+geometric approximation. Individual authors and licenses are
+retained via original source URLs and per-source SHA-256 in
+static/maps/octavus.props.json. Missing assets are not
+silently substituted.
 
 - https://github.com/redeclipse/dc
 - https://github.com/redeclipse/dziq
