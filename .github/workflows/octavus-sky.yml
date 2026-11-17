@@ -1,0 +1,31 @@
+name: Archive Octavus original Redcliff skybox
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/octavus-sky.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  skybox:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m pip install --disable-pip-version-check Pillow==11.3.0
+      - name: Package original Red Eclipse Octavus sky
+        run: python scripts/package_octavus_sky.py
+      - name: Commit sky assets
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add static/maps/octavus_assets/ static/maps/octavus.skybox.json
+          if ! git diff --cached --quiet; then
+            git commit -m "assets(octavus): retain original Redcliff skybox under source attribution"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
