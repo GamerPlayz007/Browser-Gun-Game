@@ -16,15 +16,42 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
-      - name: Verify original terrain and generate safe navigation markers
-        run: python scripts/build_octavus_navigation.py
-      - name: Commit navigation and verification summary
+      - name: Analyze source mesh; capture a testable navigation report
+        id: build
+        shell: bash
         run: |
+          set +e
+          python scripts/build_octavus_navigation.py > octavus-navigation-run.log 2>&1
+          code=$?
+          echo "status=$code" >> "$GITHUB_OUTPUT"
+          cat octavus-navigation-run.log
+          exit 0
+      - name: Commit navigation data or machine-readable failure diagnostics
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          log=Path('octavus-navigation-run.log')
+          output=Path('static/maps/octavus.nav-build-report.json')
+          summary=Path('static/maps/octavus.nav-summary.json')
+          output.write_text(json.dumps({
+            'status':'passed' if summary.exists() else 'failed',
+            'logTail':log.read_text(errors='replace').splitlines()[-35:] if log.exists() else [],
+            'originalSources':'static/maps/octavus.native-entities.json'
+          },indent=2)+'\\n')
+          PY
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add static/maps/octavus.navigation.json static/maps/octavus.nav-summary.json
+          git add static/maps/octavus.nav-build-report.json
+          if [ -f static/maps/octavus.navigation.json ] && [ -f static/maps/octavus.nav-summary.json ]; then
+            git add static/maps/octavus.navigation.json static/maps/octavus.nav-summary.json
+          fi
           if ! git diff --cached --quiet; then
-            git commit -m "assets(octavus 3.3): verified original-map walking graph and spawn candidate summary"
+            git commit -m "test(octavus 3.3): persist navigation validation results and diagnostics"
             git pull --rebase origin main
             git push origin HEAD:main
           fi
+      - name: Enforce valid original navigation geometry
+        if: steps.build.outputs.status != '0'
+        run: exit 1
