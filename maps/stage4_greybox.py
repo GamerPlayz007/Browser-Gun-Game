@@ -267,15 +267,15 @@ def _make_switchback(b,id,cx,z_south,low=1,high=9,lane_sep=3.15,width=2.45):
     # deck lane leads north to the south-side train platform. It does not cross tracks.
     b.flat((right-width/2-.33,high-.20,zS,bridge_x+1.22,high,zS+1.95),
            'grate','stairLanding',route=id,landing=4)
-    b.flat((bridge_x-1.08,high-.20,zN-1.12,bridge_x+1.08,high,zS+1.95),
+    b.flat((bridge_x-1.08,high-.20,zN-3.10,bridge_x+1.08,high,zS+1.95),
            'grate','deck',route=id,structure='stair-exit-bridge')
     # Thin supported deck (same top and route) leaves standing headroom
     # during the lower north-side turn.
     # The old horizontal transfer formed a ceiling over the flight below.
     # Keep the access lane OUTSIDE the stairwell, alongside the east bridge.
-    b.flat((bridge_x-1.08,high-.065,zN-1.4,bridge_x+1.08,high,zN-.37),
+    b.flat((bridge_x-1.08,high-.065,zN-3.10,bridge_x+1.08,high,zN-.37),
            'grate','deck',route=id,structure='station-landing')
-    points.extend([[bridge_x,high,zS],[bridge_x,high,zN-.25],[bridge_x,high,zN-.88]])
+    points.extend([[bridge_x,high,zS],[bridge_x,high,zN-.25],[bridge_x,high,zN-2.60]])
     b.stair_paths[id]=points
     b.cut_passage((cx-3.85,low,zN-2.25,cx+5.35,high+3.1,zS+2.2),
                   'stairwell/headroom '+id)
@@ -299,9 +299,9 @@ def _staff_transfers(b):
         ((15,5,30),(26,5,30),5,'U3'),
         ((26,5,30),(26,5,29.6),5,'U3'),
         # Keep the upper service corridors north of stair headroom.
-        ((28.5,9,21.8),(38,9,21.8),9,'U3'),
-        ((70.5,9,31.2),(70.5,9,21.8),9,'U4'),
-        ((70.5,9,21.8),(53,9,21.8),9,'U4'),
+        ((28.5,9,21.4),(38,9,21.4),9,'U3'),
+        ((70.5,9,31.2),(70.5,9,21.4),9,'U4'),
+        ((70.5,9,21.4),(53,9,21.4),9,'U4'),
     ]: b.corridor(p,q,3.0 if level==5 else 3.1,level,who)
     # Landings only extend OUT of the staircase, not above the incoming flight.
     b.flat((24.5,4.8,28.2,29.3,5,30.1),'metal','stairLanding',route='U3',landing='service')
@@ -361,8 +361,11 @@ def _open_station_stair_roofs(b):
     for cx,zS in cores:
         # The flights are 2.45m wide, centred +-1.575m from cx.
         # Allow 3.5m half-width including player radius and turning.
-        # Keep the +9 access strip at the north edge (zN-.88).
-        roof_cuts.append((cx-40-3.5,8.35,zS-40-4.65,
+        # The y=7 landing occupies zN-1.90..zN (4.2m north of zS).
+        # A roof at zN-1.4 is STILL above the turning player's head.
+        # Open all the way to zN-1.70 and carry the upper route around
+        # the north side at zN-2.60, away from the stairwell.
+        roof_cuts.append((cx-40-3.5,8.35,zS-40-5.90,
                           cx-40+3.5,9.35,zS-40-.40))
     result=[]
     removed=0
@@ -402,16 +405,16 @@ def _legacy_routes(base, b):
         'I2':[(47,0,60),(48.7,0,60),(52.7,1,60),(53,1,64),(57,1,64),(65,1,60)],
         'U1':[(11,5,38),(20,5,38),(26,5,38),(26,5,49),(26,5,55),(29,5,55),(35,5,55)],
         'U2':[(35,5,55),(35,5,62),(53,5,62),(53,5,65),(63,5,65),(63,5,55),(65,5,55)],
-        'G3':[(17,1,30),(38,1,30),(36.5,1,28.2),*b.stair_paths['S4'],(36.5,9,23),(44,9,23)],
-        'G4':[(65,1,37),(57,1,37),(57,1,30),(51,1,30),*b.stair_paths['S4-E'],(53,9,23),(44,9,23)],
-        'I3':[(16,1,29),(23.5,1,29),*b.stair_paths['S5'],(30,9,23),(38,9,23)],
-        'I4':[(70,1,38),(70,1,34),(63.925,1,34),(63.925,1,31.2),*b.stair_paths['S6'],(69.25,9,26.12),(69.25,9,23),(53,9,23)],
+        'G3':[(17,1,30),(38,1,30),(36.5,1,28.2),*b.stair_paths['S4'],(36.5,9,21.4),(44,9,21.4)],
+        'G4':[(65,1,37),(57,1,37),(57,1,30),(51,1,30),*b.stair_paths['S4-E'],(53,9,21.4),(44,9,21.4)],
+        'I3':[(16,1,29),(23.5,1,29),*b.stair_paths['S5'],(30,9,21.4),(38,9,21.4)],
+        'I4':[(70,1,38),(70,1,34),(63.925,1,34),(63.925,1,31.2),*b.stair_paths['S6'],(69.25,9,21.4),(53,9,21.4)],
         'U3':[(15,5,30),(26,5,28),(26,5,26),(30,5,26),(30,9,23),(38,9,23)],
         'U4':[(60,5,47),(60,5,28),(60,9,23),(53,9,23)]}
     # Use the built workshop/operations stair upper flights for U3/U4.
     staff_upper={rid:path[next(i for i,p in enumerate(path) if abs(p[1]-5)<.001 and i>3):] for rid,path in [(i,b.stair_paths[i]) for i in ('S5','S6')]}
-    updates['U3']=[(15,5,30),(26,5,30),(26,5,29.6),(25.075,5,28.2),*staff_upper['S5'],(30,9,23),(38,9,23)]
-    updates['U4']=[(60,5,47),(60,5,34.4),(69.25,5,34.4),(67.075,5,31.2),*staff_upper['S6'],(69.25,9,26.12),(69.25,9,23),(53,9,23)]
+    updates['U3']=[(15,5,30),(26,5,30),(26,5,29.6),(25.075,5,28.2),*staff_upper['S5'],(30,9,21.4),(38,9,21.4)]
+    updates['U4']=[(60,5,47),(60,5,34.4),(69.25,5,34.4),(67.075,5,31.2),*staff_upper['S6'],(69.25,9,21.4),(53,9,21.4)]
     for rid,pts in updates.items():
         if rid in by_id:
             by_id[rid]['points']=[[x-40,y,z-40] for x,y,z in pts]
@@ -427,8 +430,11 @@ def overlay(base):
     nav=_load('stage4_navigation.json')
     plan=_load('stage4_buildings.json')
     # Correct Stage3 error: the central +9 node must be on a platform, not on track.
-    nav['nodes']['T9_C']['z']=23
-    nav['nodes']['T9_C']['world_z']=-17
+    # The upper-level connection must skirt the north side of the four
+    # open stairwells, not roof the turning landings.
+    for id in ('T9_W','T9_C','T9_E'):
+        nav['nodes'][id]['z']=21.4
+        nav['nodes'][id]['world_z']=-18.6
     nav['nodes']['T5_W'].update(x=25.075,z=28.2,world_x=-14.925,world_z=-11.8)
     nav['nodes']['T5_E'].update(x=67.075,z=31.2,world_x=27.075,world_z=-8.8)
     # Stage 3 thresholds were drawn exactly on the rim of a 1m drop. Move
@@ -463,5 +469,5 @@ def overlay(base):
     # Original spawn placement is not trusted after major colliders change.
     # Candidate locations are tested in validation before any activation.
     output['spawns']=[[-24,1,13],[-24,1,-7],[2,0,22],[-5,0,22],
-                      [25,1,20],[27,1,-3],[-2,9,-17],[13,9,-17]]
+                      [25,1,20],[27,1,-3],[-2,9,-18.6],[13,9,-18.6]]
     return output
