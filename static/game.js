@@ -1,6 +1,7 @@
 import * as T from 'three';
 import {buildWorld} from './world.js';
 import {createDustCorridorPreview} from './dust_corridor_preview.js';
+import {createOctavusPreview} from './octavus_preview.js';
 import {buildDustMatch65} from './dust_match65.js';
 import {loadDustSource66} from './dust_source66.js';
 import {makeWeapon,animateWeapon,makePlayer,setPlayerSkin56,animatePlayer,markPlayerEvent,disposePlayer,setModelQuality67} from './models.js';
@@ -79,6 +80,31 @@ dust62Button.onclick=async()=>{
  }finally{
   dust62Button.disabled=false;
   dust62Button.textContent='EXPLORE DUST CORRIDOR · ORIGINAL MAP PREVIEW';
+ }
+};
+// Octavus uses the original Red Eclipse 2 arena geometry. Walkthrough only
+// until the server/client triangle collision implementations are in parity.
+const octavusPreview=createOctavusPreview();
+const octavusButton=document.createElement('button');
+octavusButton.type='button';
+octavusButton.id='octavus-preview';
+octavusButton.className='secondary';
+octavusButton.textContent='EXPLORE OCTAVUS · RED ECLIPSE 2 ORIGINAL GEOMETRY';
+octavusButton.style.cssText='width:100%;margin:8px 0;padding:12px 8px;';
+$('map-select').insertAdjacentElement('afterend',octavusButton);
+octavusButton.onclick=async()=>{
+ if(joined||dust62.active||dust62.loading||octavusPreview.active||octavusPreview.loading)return;
+ octavusButton.disabled=true;
+ octavusButton.textContent='LOADING RED ECLIPSE OCTAVUS…';
+ $('status').textContent='Reading the original Octavus terrain into CROSSFire…';
+ try{await octavusPreview.open();}
+ catch(error){
+  console.error('Octavus native walkthrough',error);
+  toast('Octavus preview unavailable: '+(error?.message||'graphics issue'));
+  $('status').textContent='Octavus preview could not load. Live arenas are unchanged.';
+ }finally{
+  octavusButton.disabled=false;
+  octavusButton.textContent='EXPLORE OCTAVUS · RED ECLIPSE 2 ORIGINAL GEOMETRY';
  }
 };
 for(const entry of registry.maps){const option=document.createElement('option');option.value=entry.id;option.textContent=entry.name+(entry.available?'':' — coming later');option.disabled=!entry.available;$('map-select').append(option);}
