@@ -1,7 +1,5 @@
 import * as T from 'three';
 import {buildWorld} from './world.js';
-import {loadOctavusPacked} from './octavus_preview.js';
-import {buildOctavusMatch} from './octavus_match.js';
 import {buildDustMatch65} from './dust_match65.js';
 import {loadDustSource66} from './dust_source66.js';
 import {makeWeapon,animateWeapon,makePlayer,setPlayerSkin56,animatePlayer,markPlayerEvent,disposePlayer,setModelQuality67} from './models.js';
@@ -67,7 +65,8 @@ $('map-select').value=map.id;
 // it is selected, overlapping network latency with the player's lobby setup.
 $('map-select').addEventListener('change',async()=>{
  if($('map-select').value==='octavus'){
-  try{await loadOctavusPacked();}
+  try{const {loadOctavusPacked}=await import('./octavus_preview.js');
+   await loadOctavusPacked();}
   catch(error){console.warn('Octavus preload failed (will retry on join)',error);}
   return;
  }
@@ -90,11 +89,16 @@ async function loadArena(id){
  const dustSource=next.dustOriginal?await loadDustSource66(next.collisionSha256):null;
  const loadMs=performance.now()-loadStart;
  const nextScene=new T.Scene();
- const nextWorld=next.octavusOriginal?
-   await buildOctavusMatch(nextScene,next,{renderer,quality:qualityTier61()}):
-   next.dustOriginal?
-    await buildDustMatch65(nextScene,next,{renderer,quality:qualityTier61(),source:dustSource}):
-    buildWorld(nextScene,next,{renderer,quality:qualityTier61()});
+ let nextWorld;
+ if(next.octavusOriginal){
+  // An optional map must never prevent the lobby and other maps from loading.
+  const {buildOctavusMatch}=await import('./octavus_match.js');
+  nextWorld=await buildOctavusMatch(nextScene,next,{renderer,quality:qualityTier61()});
+ }else if(next.dustOriginal){
+  nextWorld=await buildDustMatch65(nextScene,next,{renderer,quality:qualityTier61(),source:dustSource});
+ }else{
+  nextWorld=buildWorld(nextScene,next,{renderer,quality:qualityTier61()});
+ }
  clearVisualEffects52();controlBeacon54.dispose();world.dispose();postfx.dispose();
  scene=nextScene;world=nextWorld;controlBeacon54=createControlBeacon54(T,scene);
  if(next.dustOriginal){
