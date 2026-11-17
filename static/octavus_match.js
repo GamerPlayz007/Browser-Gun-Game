@@ -34,7 +34,8 @@ function collisionSource(packed,map){
  if(triangle!==86500)throw Error('Octavus multiplayer collision triangle count mismatch');
  const source={
   soup:{count:triangle,positions,surfaces},
-  playBounds:map.playBounds
+  playBounds:map.playBounds,
+  nativeOctavus:true
  };
  cachedPhysics={packed,source};
  return source;
