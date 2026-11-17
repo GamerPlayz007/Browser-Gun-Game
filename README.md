@@ -1,3 +1,13 @@
+## Daybreak City — stairwell roof collision hotfix
+
+The station's four multi-flight stair cores now have **actual openings in the
+upper-floor deck meshes and colliders**, not just thinner slabs. The landing
+sizes remain enlarged. Each final stair connects to the +9 walkway using an
+outside exit bridge, without a wide platform spanning the ascending flight.
+The `test_station_stair_roofs_have_visible_openings` regression checks
+real geometry throughout all four stairwell voids, three shoulder positions
+on stair flights, and floor support at the upper exits.
+
 # CROSSFIRE v3.1 — DAYBREAK RELEASE (Stage 6.8)
 
 **Release:** 3.1.0 · **Phase:** 06.8 · **Map:** Daybreak City (legacy ID `cyberpunk` for existing rooms)

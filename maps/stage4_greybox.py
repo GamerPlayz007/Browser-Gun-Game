@@ -271,9 +271,11 @@ def _make_switchback(b,id,cx,z_south,low=1,high=9,lane_sep=3.15,width=2.45):
            'grate','deck',route=id,structure='stair-exit-bridge')
     # Thin supported deck (same top and route) leaves standing headroom
     # during the lower north-side turn.
-    b.flat((cx-2.4,high-.065,zN-1.4,bridge_x+1.08,high,zN-.37),
+    # The old horizontal transfer formed a ceiling over the flight below.
+    # Keep the access lane OUTSIDE the stairwell, alongside the east bridge.
+    b.flat((bridge_x-1.08,high-.065,zN-1.4,bridge_x+1.08,high,zN-.37),
            'grate','deck',route=id,structure='station-landing')
-    points.extend([[bridge_x,high,zS],[bridge_x,high,zN-.25],[cx,high,zN-.88]])
+    points.extend([[bridge_x,high,zS],[bridge_x,high,zN-.25],[bridge_x,high,zN-.88]])
     b.stair_paths[id]=points
     b.cut_passage((cx-3.85,low,zN-2.25,cx+5.35,high+3.1,zS+2.2),
                   'stairwell/headroom '+id)
@@ -346,6 +348,46 @@ def _floors_and_supports(b):
                     b.box((x1+.36,1,z-.14,x1+.64,level-.28,z+.14),'metal','column',decor=True,structure=label)
 
 
+def _open_station_stair_roofs(b):
+    """Cut upper-floor geometry above stairs, not merely raise its underside.
+
+    All four switchbacks run from ground to the +9 rail platform. The last
+    ascending flights require a true stairwell void, with player-width room
+    through every slab that crossed the upper turn. The outside exit bridge
+    and north-side station walkway remain separate and walkable.
+    """
+    cores=((36.5,28.2),(51.0,28.2),(23.5,28.2),(65.5,31.2))
+    roof_cuts=[]
+    for cx,zS in cores:
+        # The flights are 2.45m wide, centred +-1.575m from cx.
+        # Allow 3.5m half-width including player radius and turning.
+        # Keep the +9 access strip at the north edge (zN-.88).
+        roof_cuts.append((cx-40-3.5,8.35,zS-40-4.65,
+                          cx-40+3.5,9.35,zS-40-.40))
+    result=[]
+    removed=0
+    for box in b.solids:
+        if box['kind'] not in ('routeFloor','deck') or box['y']+box['h']<8.7:
+            result.append(box)
+            continue
+        bounds=(box['x']-box['w']/2,box['y'],box['z']-box['d']/2,
+                box['x']+box['w']/2,box['y']+box['h'],box['z']+box['d']/2)
+        pieces=[bounds]
+        for cut in roof_cuts:
+            pieces=[fragment for part in pieces for fragment in subtract(part,cut)]
+        if len(pieces)!=1 or pieces[0]!=bounds:removed+=1
+        for x0,y0,z0,x1,y1,z1 in pieces:
+            part=dict(box)
+            part.update(x=round((x0+x1)/2,4),y=round(y0,4),
+                        z=round((z0+z1)/2,4),w=round(x1-x0,4),
+                        h=round(y1-y0,4),d=round(z1-z0,4))
+            result.append(part)
+    assert removed>=4, 'No upper station platform slabs were cut'
+    b.solids=result
+    b.stair_roof_cuts=roof_cuts
+    b.stair_roof_replaced=removed
+
+
 def _legacy_routes(base, b):
     # Keep the original 12 identities, replace obvious inconsistent station
     # heights with consistent +9 south-platform endpoints. Stage3 planning
@@ -401,6 +443,7 @@ def overlay(base):
     _staff_transfers(b)
     _curbs_and_buildings(b,plan)
     _floors_and_supports(b)
+    _open_station_stair_roofs(b)
     # The original feature lights and textures are intentionally excluded here;
     # retain only the recognisable landmark signs and zone metadata.
     output=copy.deepcopy(base)
@@ -410,6 +453,8 @@ def overlay(base):
                   zones_preserved=True,identity='Cyberpunk City',
                   physical_staircases=['S1','S2','S3','S4','S4-E','S5','S6'],
                   graph=nav['edges'],nodes=nav['nodes'],
+                  stair_roof_openings=b.stair_roof_cuts,
+                  stair_roof_replaced=b.stair_roof_replaced,
                   structure_count=len(b.structures),structures=b.structures,
                   portal_cuts=b.portal_cuts,
                   unresolved=['full server/client traversal', 'complete portal-by-portal sweeps',

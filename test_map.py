@@ -103,6 +103,65 @@ console.log(JSON.stringify(cases.map(c=>{const p={...c.initial};return c.command
                              [(q['kind'],q.get('structure'),q.get('route')) for q in overhead])
                         )
 
+    def test_station_stair_roofs_have_visible_openings(self):
+        """The actual renderable deck slabs must be ABSENT above stairwells.
+
+        Old fixes lifted paper-thin slabs or cleared only the route centre.
+        Neither creates the open stairwell visible to an approaching player.
+        The authoritative map boxes also generate the visible world mesh.
+        """
+        opens=s.MAP['stage4']['stair_roof_openings']
+        self.assertEqual(len(opens),4)
+        self.assertGreaterEqual(s.MAP['stage4']['stair_roof_replaced'],4)
+        decks=[b for b in s.BOXES
+               if b['kind'] in ('routeFloor','deck') and b['y']+b['h']>=8.7]
+        for n,(x0,y0,z0,x1,y1,z1) in enumerate(opens):
+            with self.subTest(stairwell=n):
+                conflicts=[]
+                for box in decks:
+                    bx0=box['x']-box['w']/2;bx1=box['x']+box['w']/2
+                    bz0=box['z']-box['d']/2;bz1=box['z']+box['d']/2
+                    if (min(x1,bx1)-max(x0,bx0)>.04
+                        and min(z1,bz1)-max(z0,bz0)>.04
+                        and min(y1,box['y']+box['h'])-max(y0,box['y'])>.04):
+                        conflicts.append((box['kind'],box.get('structure'),box.get('route')))
+                self.assertFalse(conflicts,(n,'upper floor still covers stairwell',conflicts))
+        # Check the full shoulders of the upper flights, not only x/z
+        # sampled precisely on the navigation polyline.
+        paths=list(s.MAP['stairs'])+[
+            next(r for r in s.MAP['routes'] if r['id']=='G4')]
+        for path in paths:
+            if path['id'] not in ('S4','S5','S6','G4'):continue
+            for a,b in zip(path['points'],path['points'][1:]):
+                dx,dz=b[0]-a[0],b[2]-a[2]
+                length=math.hypot(dx,dz)
+                if length<.01:continue
+                for t in (0,.5,1):
+                    y=a[1]+t*(b[1]-a[1])
+                    if y<5.2 or y>8.15:continue
+                    x=a[0]+t*dx;z=a[2]+t*dz
+                    for sideways in (-.9,0,.9):
+                        px=x-sideways*dz/length
+                        pz=z+sideways*dx/length
+                        roof=[q for q in s.nearby_boxes(px,pz)
+                              if q['kind'] in ('deck','routeFloor')
+                              and q['y']+q['h']>8.7
+                              and abs(px-q['x'])<q['w']/2+.30
+                              and abs(pz-q['z'])<q['d']/2+.30
+                              and y+.25<q['y']<y+2.45]
+                        self.assertFalse(roof,
+                            (path['id'],'stair shoulder under deck',px,y,pz,roof))
+        # The relocated upper exit still leads to a supported walkable path.
+        for st in paths:
+            if st['id'] not in ('S4','S5','S6'):continue
+            x,y,z=st['points'][-1]
+            self.assertEqual(y,9)
+            self.assertTrue(any(abs(s.top_at(q,x,z)-9)<.02 and
+                                abs(x-q['x'])<=q['w']/2+.1 and
+                                abs(z-q['z'])<=q['d']/2+.1
+                                for q in s.nearby_boxes(x,z)),
+                            ('upper stair exit missing floor',st['id'],x,z))
+
     def test_switchback_landings_are_wide_and_deep(self):
         for name in ('S4','S4-E','S5','S6'):
             landings=sorted((b for b in s.BOXES if b.get('kind')=='stairLanding'
