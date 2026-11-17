@@ -1,0 +1,13 @@
+name: Browser import-graph smoke check
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verify-modules:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate all browser module dependencies
+        run: python scripts/check_browser_imports.py
