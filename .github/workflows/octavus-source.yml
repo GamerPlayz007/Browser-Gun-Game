@@ -20,13 +20,15 @@ jobs:
           persist-credentials: true
       - name: Retrieve and verify upstream Octavus binary
         run: python scripts/fetch_octavus_native.py
+      - name: Extract native map entities and source-level environmental metadata
+        run: python scripts/extract_octavus_entities.py
       - name: Verify Octavus source geometry, UVs and safe spawns
         run: python -m unittest test_octavus_phase1 -v
       - name: Commit original map source and verification manifest
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add sources/octavus.original.mpz sources/octavus.original.json
+          git add sources/octavus.original.mpz sources/octavus.original.json sources/octavus.native-variables.json static/maps/octavus.native-entities.json
           if ! git diff --cached --quiet; then
             git commit -m "source: archive pinned original Octavus mpz for offline conversion"
             git pull --rebase origin main
