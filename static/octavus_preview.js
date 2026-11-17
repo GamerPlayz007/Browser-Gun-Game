@@ -92,8 +92,14 @@ function texture(type){
 function createScene(packed,types,scene=new THREE.Scene(),sourceUV=null,nativeScale=false,media=null){
  scene.background=new THREE.Color('#cdd7d7');
  scene.fog=new THREE.Fog('#cdd7d7',nativeScale?240:100,nativeScale?680:250);
- scene.add(new THREE.HemisphereLight('#f7f2e9','#5d6465',2.0));
- const sun=new THREE.DirectionalLight('#fff4df',2.6);sun.position.set(-45,100,25);scene.add(sun);
+ // Native multiplayer mode owns its authentic original MPZ environment.
+ // The disused independent preview retains its basic fallback lighting only.
+ const previewLights=[];
+ if(!nativeScale){
+  const fill=new THREE.HemisphereLight('#f7f2e9','#5d6465',2.0);
+  const sun=new THREE.DirectionalLight('#fff4df',2.6);sun.position.set(-45,100,25);
+  scene.add(fill,sun);previewLights.push(fill,sun);
+ }
  const ground=new THREE.Group();ground.name='Octavus source geometry';scene.add(ground);
  if(nativeScale){
   ground.scale.setScalar(OCTAVUS_LOCAL_RATIO);
@@ -171,6 +177,7 @@ function createScene(packed,types,scene=new THREE.Scene(),sourceUV=null,nativeSc
   },dispose(){
   ground.traverse(obj=>{if(obj.isMesh){obj.geometry.dispose();obj.material.dispose();}});
   for(const tex of textures.values())tex.dispose();
+  for(const light of previewLights)light.removeFromParent();
   media?.dispose?.();
   ground.removeFromParent();
  }};
