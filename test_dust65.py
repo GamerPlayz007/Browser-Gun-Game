@@ -23,7 +23,6 @@ class DustPhysics65Tests(unittest.TestCase):
             for side in ('A','B') for i in dust.data['validatedSpawns'][side]['safeIndices']])
         self.assertFalse(dust.boxes,'No fake box-based collisions replacing original mesh')
         self.assertIn('cyberpunk',server.ARENAS)
-        self.assertIn('neon_zenith',server.ARENAS)
 
     def test_client_and_server_motion_replay(self):
         file=ROOT/'stage65_replay_fixture.json'

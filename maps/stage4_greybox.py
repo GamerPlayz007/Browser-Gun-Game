@@ -169,7 +169,9 @@ def _curbs_and_buildings(b,plan):
     # Small supported market roof at +5, aligned to U1.
     b.flat((21,4.76,34,30,5.0,46),'wood','deck',structure='M04-roof')
     # Physically continuous elevated station platform on SOUTH side of track.
-    station_pieces=[(30,8.68,21.15,60,9.0,24.7)]
+    # The upper platform stays walkable at +9, but its old 32 cm slab
+    # hung into shoulder space at the y=7 stair switchback.
+    station_pieces=[(30,8.93,21.15,60,9.0,24.7)]
     for cx in (36.5,51.0):
         # Open a REAL stairwell in the station slab; no ceiling above flight 3.
         # Widen the north-side stair opening by the full player radius.
@@ -267,7 +269,9 @@ def _make_switchback(b,id,cx,z_south,low=1,high=9,lane_sep=3.15,width=2.45):
            'grate','stairLanding',route=id,landing=4)
     b.flat((bridge_x-1.08,high-.20,zN-1.12,bridge_x+1.08,high,zS+1.95),
            'grate','deck',route=id,structure='stair-exit-bridge')
-    b.flat((cx-2.4,high-.20,zN-1.4,bridge_x+1.08,high,zN-.37),
+    # Thin supported deck (same top and route) leaves standing headroom
+    # during the lower north-side turn.
+    b.flat((cx-2.4,high-.065,zN-1.4,bridge_x+1.08,high,zN-.37),
            'grate','deck',route=id,structure='station-landing')
     points.extend([[bridge_x,high,zS],[bridge_x,high,zN-.25],[cx,high,zN-.88]])
     b.stair_paths[id]=points
@@ -324,7 +328,13 @@ def _floors_and_supports(b):
             for cx,zS in ((23.5,28.2),(65.5,31.2)):
                 void=(cx-2.7,4.5,zS-4.7,cx+2.7,5.2,zS-.35)
                 pieces=[part for p in pieces for part in subtract(p,void)]
-        for part in pieces:b.flat(part,'grate' if level>5 else 'wood','routeFloor',structure=label)
+        for part in pieces:
+            if level==9:
+                # Preserve the routeFloor top at +9 while lifting its underside
+                # clear of the penultimate stair landing's player capsule.
+                part=(part[0],max(part[1],level-.065),part[2],
+                      part[3],part[4],part[5])
+            b.flat(part,'grate' if level>5 else 'wood','routeFloor',structure=label)
         x0,y0,z0,x1,_,z1=bounds
         # Supports beyond the traffic corridor at endpoints, if at upper levels.
         if level==5 and max(x1-x0,z1-z0)>5:

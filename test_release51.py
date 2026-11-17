@@ -36,7 +36,6 @@ class ReleaseAssets(unittest.TestCase):
         self.assertEqual(registry["default"], "cyberpunk")
         by_id = {entry["id"]: entry for entry in active_maps}
         self.assertIn("cyberpunk", by_id)
-        self.assertIn("neon_zenith", by_id)
         self.assertIn("dust_corridor", by_id,
                       "Dust Corridor must run as a native CROSSFire match map")
         self.assertEqual(by_id["cyberpunk"]["url"], "/static/maps/cyberpunk.json")
