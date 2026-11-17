@@ -3,7 +3,7 @@
  * blocks when source media cannot be faithfully converted.
  */
 import * as THREE from 'three';
-import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import {OBJLoader} from 'three/addons/loaders/OBJLoader.js';
 import {octavusEntityPosition} from './octavus_environment.js';
 
 const base='/static/maps/';
@@ -18,7 +18,7 @@ export async function createOctavusProps(scene,quality='auto'){
   fetchSource('octavus.native-entities.json'),
   fetch('/static/maps/octavus.original.cfg').then(r=>r.ok?r.text():'').catch(()=> '')
  ]);
- if(manifest?.format!=='OCTAVUS-PROPS2'||!entitiesResponse?.visualEntities)
+ if(manifest?.format!=='OCTAVUS-PROPS3'||!entitiesResponse?.visualEntities)
   return {instances:0,modelTypes:0,missing:0,setQuality(){},animate(){},dispose(){}};
  const aliases=[...sourceCFG.matchAll(/^mapmodel\s+"([^"]+)"/gm)].map(x=>x[1]);
  const instances=entitiesResponse.visualEntities.filter(e=>e.type==='mapmodel'&&
@@ -27,20 +27,29 @@ export async function createOctavusProps(scene,quality='auto'){
  for(const e of instances){
   const alias=aliases[e.attrs[0]];
   const source=manifest.models?.[alias];
-  if(source?.missing||!source?.url?.startsWith('/static/maps/octavus_props/'))continue;
+  if(source?.missing||source?.codec!=='gzip-obj'||
+     !source?.url?.startsWith('/static/maps/octavus_props/'))continue;
   if(!placements.has(alias))placements.set(alias,[]);
   placements.get(alias).push(e);
  }
  const root=new THREE.Group();root.name='Octavus original native decorative models';scene.add(root);
- const loader=new GLTFLoader(),sprites=[];
+ const loader=new OBJLoader(),sprites=[];
  const geometries=new Set(),materials=new Set(),originalTextures=new Set();
  let modelTypes=0;
  for(const [alias,list]of placements){
   const info=manifest.models[alias];
-  let original;
-  try{original=await loader.loadAsync(info.url);}catch(e){continue;}
-  if(!original.scene)continue;
-  const prototype=original.scene;
+  let prototype;
+  try{
+   const response=await fetch(info.url);
+   if(!response.ok||typeof DecompressionStream==='undefined')continue;
+   const compressed=await response.arrayBuffer();
+   const stream=new Blob([compressed]).stream().pipeThrough(new DecompressionStream('gzip'));
+   const text=await new Response(stream).text();
+   prototype=loader.parse(text);
+   if(!prototype)continue;
+   // Native Red Eclipse map models were authored with Z-up geometry.
+   prototype.rotation.x=-Math.PI/2;
+  }catch(error){console.warn('Octavus source OBJ unavailable',alias,error);continue;}
   // Static model source is already transformed from Z-up to Y-up at build time.
   const baseScale=(Number(info.sourceScale)||100)/100*.05;
   if(!Number.isFinite(baseScale)||baseScale<=0||baseScale>35)continue;
@@ -65,7 +74,8 @@ export async function createOctavusProps(scene,quality='auto'){
    }
   });
   for(const e of list){
-   const node=prototype.clone(true);
+   const node=new THREE.Group();
+   const model=prototype.clone(true);node.add(model);
    node.name='Octavus source mapmodel '+alias+' #'+e.id;
    node.position.copy(octavusEntityPosition(e.sourcePosition));
    node.rotation.order='YXZ';
