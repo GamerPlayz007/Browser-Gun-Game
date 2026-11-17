@@ -11,7 +11,7 @@ from bot57 import visible
 
 
 def square(a, b, c, d):
-    return (a,b,c,a,c,d)
+    return ((a,b,c),(a,c,d))
 
 
 class SyntheticCollision:
