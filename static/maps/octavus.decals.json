@@ -1,0 +1,169 @@
+{
+  "format": "OCTAVUS-DECALS2",
+  "source": "Original Red Eclipse native Octavus map decals",
+  "nativeDecals": 141,
+  "materialCount": 21,
+  "enabledEntities": 135,
+  "materials": {
+    "21": {
+      "url": "/static/maps/octavus_assets/decal_224b76a524de82.webp",
+      "source": "https://raw.githubusercontent.com/redeclipse/decals/master/snowy/reflection/snw_planet_01.png",
+      "sha256": "103a502bbfb282f304cc60c8b9fc4b4dedba56f2e3c1e80291444f99ab88338c",
+      "placed": 2,
+      "licenseAttribution": "decals"
+    },
+    "30": {
+      "url": "/static/maps/octavus_assets/decal_d69a66bd6970de.webp",
+      "source": "https://raw.githubusercontent.com/redeclipse/decals/master/molexted/chevron.png",
+      "sha256": "a9870b5a502810d0754766a5c2616016888da94d390035cbaa5f53cbcc3d9e42",
+      "placed": 28,
+      "licenseAttribution": "decals"
+    },
+    "36": {
+      "url": "/static/maps/octavus_assets/decal_14d3e1c4e1c5a6.webp",
+      "source": "https://raw.githubusercontent.com/redeclipse/decals/master/molexted/letters/1.png",
+      "sha256": "ea6aa9ac1cad0478cd7d280b2c038106bd167095c7384bf447b1e5f67bd24409",
+      "placed": 2,
+      "licenseAttribution": "decals"
+    },
+    "37": {
+      "url": "/static/maps/octavus_assets/decal_6def12537c0ceb.webp",
+      "source": "https://raw.githubusercontent.com/redeclipse/decals/master/molexted/letters/2.png",
+      "sha256": "5a3db99b73f3e8444a111bb472ce1f3bbebeb473a5f85b7b4666df3ff5eef839",
+      "placed": 2,
+      "licenseAttribution": "decals"
+    },
+    "38": {
+      "url": "/static/maps/octavus_assets/decal_7e3ff209d525c4.webp",
+      "source": "https://raw.githubusercontent.com/redeclipse/decals/master/molexted/letters/3.png",
+      "sha256": "87572bf6585b7b240f25f08df35cfbb7ab282bba8ab674cf94f08c13f8c3a2b2",
+      "placed": 2,
+      "licenseAttribution": "decals"
+    },
+    "39": {
+      "url": "/static/maps/octavus_assets/decal_fc9240276b87a2.webp",
+      "source": "https://raw.githubusercontent.com/redeclipse/decals/master/molexted/letters/4.png",
+      "sha256": "630a8c3eb7cfbc4ccf88ac9f7390f2fc30118639c7a9cc7b20cce252f33b373b",
+      "placed": 2,
+      "licenseAttribution": "decals"
+    },
+    "43": {
+      "url": "/static/maps/octavus_assets/decal_5767aef153452a.webp",
+      "source": "https://raw.githubusercontent.com/redeclipse/decals/master/molexted/letters/8.png",
+      "sha256": "e73e80e84937576646a7cca67d5e97e04c63ddc77ced5eed6b3b9dec85877dab",
+      "placed": 2,
+      "licenseAttribution": "decals"
+    },
+    "44": {
+      "url": "/static/maps/octavus_assets/decal_751353efb9d4c7.webp",
+      "source": "https://raw.githubusercontent.com/redeclipse/decals/master/molexted/letters/9.png",
+      "sha256": "4d1f6bd13f69df2bfc49b84bf01515a3f781c225a55f633d98fadda8c4ecd914",
+      "placed": 2,
+      "licenseAttribution": "decals"
+    },
+    "49": {
+      "url": "/static/maps/octavus_assets/decal_3098a1e09fe07b.webp",
+      "source": "https://raw.githubusercontent.com/redeclipse/decals/master/molexted/letters/a.png",
+      "sha256": "737f897a0f449c6f95c970c848929a6a8592eebd35dabeba3b228b673dff9d7c",
+      "placed": 2,
+      "licenseAttribution": "decals"
+    },
+    "50": {
+      "url": "/static/maps/octavus_assets/decal_6260403dc2cae4.webp",
+      "source": "https://raw.githubusercontent.com/redeclipse/decals/master/molexted/letters/b.png",
+      "sha256": "30008b68608aaa3ed4d4ad0d622832d7d3bd1a1d90b48a931d69206131358821",
+      "placed": 2,
+      "licenseAttribution": "decals"
+    },
+    "51": {
+      "url": "/static/maps/octavus_assets/decal_e309900eae28b9.webp",
+      "source": "https://raw.githubusercontent.com/redeclipse/decals/master/molexted/letters/c.png",
+      "sha256": "1360b06899ebbfe55aa823ba5796b4ddd1734f40db3a14c415cd92727d65312a",
+      "placed": 2,
+      "licenseAttribution": "decals"
+    },
+    "53": {
+      "url": "/static/maps/octavus_assets/decal_2eae12646bd18c.webp",
+      "source": "https://raw.githubusercontent.com/redeclipse/decals/master/molexted/letters/e.png",
+      "sha256": "1aa26f1888212013dd654122cb0651be7d4492dbcbb8a9710e640eb14eb6499f",
+      "placed": 2,
+      "licenseAttribution": "decals"
+    },
+    "54": {
+      "url": "/static/maps/octavus_assets/decal_afe8a8e6781cee.webp",
+      "source": "https://raw.githubusercontent.com/redeclipse/decals/master/molexted/letters/f.png",
+      "sha256": "523235316a602897c93dff74ccb985ef9b0f7b7cda99e95c6ee7d73a563f36ee",
+      "placed": 2,
+      "licenseAttribution": "decals"
+    },
+    "56": {
+      "url": "/static/maps/octavus_assets/decal_c0100a3984880a.webp",
+      "source": "https://raw.githubusercontent.com/redeclipse/decals/master/molexted/letters/h.png",
+      "sha256": "603d3edb69979cd2c6908dd4d91708d13c9d221b78185277f1cd0ca8edfab07e",
+      "placed": 1,
+      "licenseAttribution": "decals"
+    },
+    "66": {
+      "url": "/static/maps/octavus_assets/decal_4bcaba6691e6a1.webp",
+      "source": "https://raw.githubusercontent.com/redeclipse/decals/master/molexted/letters/r.png",
+      "sha256": "e5ec602a2c26db27c8b6d72a951f2fc29075092f2f2b1edaf623b4552b10d843",
+      "placed": 2,
+      "licenseAttribution": "decals"
+    },
+    "90": {
+      "url": "/static/maps/octavus_assets/decal_58203f25d67f5d.webp",
+      "source": "https://raw.githubusercontent.com/redeclipse/decals/master/dziq/leaks01.png",
+      "sha256": "774e726da9cb664794fa25b9255f15e8d92278beed6a06c3494712afb8dfb0d0",
+      "placed": 18,
+      "licenseAttribution": "decals"
+    },
+    "97": {
+      "url": "/static/maps/octavus_assets/decal_dab583c1cb7310.webp",
+      "source": "https://raw.githubusercontent.com/redeclipse/decals/master/dziq/stain02.png",
+      "sha256": "b5ca64af6313dd7210d3c39194b5b3dcd2d5fc7d5766c748d92f14c50bafeefd",
+      "placed": 42,
+      "licenseAttribution": "decals"
+    },
+    "105": {
+      "url": "/static/maps/octavus_assets/decal_51cb532a85b900.webp",
+      "source": "https://raw.githubusercontent.com/redeclipse/decals/master/unixfreak/keycard.png",
+      "sha256": "229a80733977e60dbc7020f57f40e0033b9ae6b85bafb23a957d2d15fc4ebbc8",
+      "placed": 1,
+      "licenseAttribution": "decals"
+    },
+    "109": {
+      "url": "/static/maps/octavus_assets/decal_a7579395123046.webp",
+      "source": "https://raw.githubusercontent.com/redeclipse/decals/master/unixfreak/soup.png",
+      "sha256": "213a5562a5df63625adea0f2d55a46732feb92c85df69ea6fe1593a5243e011d",
+      "placed": 8,
+      "licenseAttribution": "decals"
+    },
+    "110": {
+      "url": "/static/maps/octavus_assets/decal_e92fcf527a026b.webp",
+      "source": "https://raw.githubusercontent.com/redeclipse/decals/master/unixfreak/spray_grid.png",
+      "sha256": "c676792749bf27ce36fea53c888e951a145b5c4bb0f1fbb6c14d198b280369bc",
+      "placed": 8,
+      "licenseAttribution": "decals"
+    },
+    "111": {
+      "url": "/static/maps/octavus_assets/decal_8120e6ac521f89.webp",
+      "source": "https://raw.githubusercontent.com/redeclipse/decals/master/unixfreak/square.png",
+      "sha256": "3318f2ef07dc299c454783598e75e453eafda07736771f8c96e9777e705169ec",
+      "placed": 3,
+      "licenseAttribution": "decals"
+    }
+  },
+  "missing": [
+    {
+      "slot": 9,
+      "source": "jojo/teamalpha/skin.png",
+      "reason": "UnidentifiedImageError"
+    },
+    {
+      "slot": 10,
+      "source": "jojo/teamomega/skin.png",
+      "reason": "UnidentifiedImageError"
+    }
+  ],
+  "license": "Individual upstream Red Eclipse media module licensing applies"
+}
