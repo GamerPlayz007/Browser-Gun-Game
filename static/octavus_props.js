@@ -50,9 +50,20 @@ export async function createOctavusProps(scene,quality='auto'){
    // Native Red Eclipse map models were authored with Z-up geometry.
    prototype.rotation.x=-Math.PI/2;
   }catch(error){console.warn('Octavus source OBJ unavailable',alias,error);continue;}
-  // Static model source is already transformed from Z-up to Y-up at build time.
+  // The original OBJ stays unaltered; it is transformed into Three.js Y-up
+  // by the prototype group above, while MPZ placement remains authoritative.
   const baseScale=(Number(info.sourceScale)||100)/100*.05;
   if(!Number.isFinite(baseScale)||baseScale<=0||baseScale>35)continue;
+  const skinUrl=info.skinUrl;
+  let nativeSkin=null;
+  if(typeof skinUrl==='string'&&skinUrl.startsWith('/static/maps/octavus_props/')){
+   try{
+    nativeSkin=await new THREE.TextureLoader().loadAsync(skinUrl);
+    nativeSkin.colorSpace=THREE.SRGBColorSpace;
+    nativeSkin.anisotropy=quality==='performance'?1:4;
+    originalTextures.add(nativeSkin);
+   }catch(error){console.warn('Octavus original prop skin unavailable:',alias);}
+  }
   prototype.traverse(child=>{
    if(!child.isMesh)return;
    geometries.add(child.geometry);materials.add(child.material);
@@ -65,7 +76,10 @@ export async function createOctavusProps(scene,quality='auto'){
       /glow|light/.test(name)?0x89c6c9:
       /crate|door/.test(name)?0x9a7860:0x8d9397;
     const mat=new THREE.MeshStandardMaterial({
-     color,roughness:.72,metalness:/metal|pipe|plate|rail|barrel/.test(name)?.48:.12,
+     color:nativeSkin?0xffffff:color,map:nativeSkin,
+     roughness:.72,metalness:/metal|pipe|plate|rail|barrel/.test(name)?.48:.12,
+     transparent:!!nativeSkin&&/weed|bush|plant/.test(name),
+     alphaTest:!!nativeSkin&&/weed|bush|plant/.test(name)?.16:0,
      emissive:/glow|light/.test(name)?new THREE.Color('#2d6c76'):new THREE.Color('#000000'),
      emissiveIntensity:/glow|light/.test(name)?.65:0,
      side:THREE.DoubleSide
