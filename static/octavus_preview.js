@@ -107,8 +107,8 @@ function createScene(packed,types,scene=new THREE.Scene(),sourceUV=null,nativeSc
  }
  const textures=new Map();
  for(const kind of Object.keys(PALETTES))textures.set(kind,texture(kind));
- let meshCount=0,faceOffset=0,originalMaterials=0;
- const materialInstances=[];
+ let meshCount=0,faceOffset=0,originalMaterials=0,disposed=false,mediaState=media;
+ const materialInstances=[],renderedSlots=new Map();
  if(sourceUV?.triangleCount!==undefined&&sourceUV.triangleCount!==packed.triangles)
   throw Error('Octavus original UV triangle count mismatch');
  for(const [slot,indices] of packed.groups){
@@ -162,10 +162,40 @@ function createScene(packed,types,scene=new THREE.Scene(),sourceUV=null,nativeSc
   });
   if(original.original){originalMaterials++;materialInstances.push({mat,normal:original.normalMap,roughness:original.roughnessMap});}
   const mesh=new THREE.Mesh(geo,mat);mesh.name='Octavus material slot '+slot;
-  ground.add(mesh);meshCount++;faceOffset+=indices.length;
+  ground.add(mesh);renderedSlots.set(slot,mesh);meshCount++;faceOffset+=indices.length;
  }
  if(sourceUV&&faceOffset!==sourceUV.indices.length)throw Error('Octavus UV face count does not match geometry');
- return {scene,meshCount,textures,originalMaterials,geometryRoot:ground,preservedTextureCoordinates:!!sourceUV,
+ return {scene,meshCount,textures,
+  get originalMaterials(){return originalMaterials;},
+  geometryRoot:ground,preservedTextureCoordinates:!!sourceUV,
+  // The original media package is optional. Apply source PBR materials
+  // when its images arrive without blocking collision or first gameplay.
+  applyOriginalMaterials(library,mode='auto'){
+   if(disposed){library?.dispose?.();return 0;}
+   if(!library?.usable)return 0;
+   mediaState=library;
+   const low=mode==='performance';
+   for(const [slot,mesh] of renderedSlots){
+    const def=library.channels?.get(slot);
+    const raw=mesh.geometry.getAttribute('originalUv');
+    if(!def?.map||!raw)continue;
+    const uv=mesh.geometry.getAttribute('uv');
+    const iw=1/Math.max(1,def.width),ih=1/Math.max(1,def.height);
+    for(let i=0;i<raw.count;i++){
+     uv.array[i*2]=raw.array[i*2]*iw;
+     uv.array[i*2+1]=raw.array[i*2+1]*ih;
+    }
+    uv.needsUpdate=true;
+    const result=createOctavusPBRMaterial(slot,library,null,mode);
+    if(!result.material)continue;
+    mesh.material.dispose();
+    mesh.material=result.material;
+    originalMaterials++;
+    materialInstances.push({mat:result.material,normal:result.normalMap,roughness:result.roughnessMap});
+   }
+   this.setQuality(mode);
+   return originalMaterials;
+  },
   setQuality(mode){
    const low=mode==='performance';
    for(const entry of materialInstances){
@@ -173,14 +203,17 @@ function createScene(packed,types,scene=new THREE.Scene(),sourceUV=null,nativeSc
     entry.mat.roughnessMap=low?null:entry.roughness;
     entry.mat.needsUpdate=true;
    }
-   for(const t of media?.textures||[])t.anisotropy=low?1:4;
-  },dispose(){
-  ground.traverse(obj=>{if(obj.isMesh){obj.geometry.dispose();obj.material.dispose();}});
-  for(const tex of textures.values())tex.dispose();
-  for(const light of previewLights)light.removeFromParent();
-  media?.dispose?.();
-  ground.removeFromParent();
- }};
+   for(const t of mediaState?.textures||[])t.anisotropy=low?1:4;
+  },
+  dispose(){
+   if(disposed)return;
+   disposed=true;
+   ground.traverse(obj=>{if(obj.isMesh){obj.geometry.dispose();obj.material.dispose();}});
+   for(const tex of textures.values())tex.dispose();
+   for(const light of previewLights)light.removeFromParent();
+   mediaState?.dispose?.();
+   ground.removeFromParent();
+  }};
 }
 export { readPacked as loadOctavusPacked, materialTypes as loadOctavusMaterials, createScene as createOctavusScene };
 
