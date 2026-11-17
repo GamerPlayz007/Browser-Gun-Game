@@ -148,12 +148,17 @@ export function createDustPhysics65(source){
    const proposedX=x+vx*dt/parts,proposedZ=z+vz*dt/parts;
    let xx,zz;
    [xx,zz,vx,vz]=resolve(proposedX,stepFeet,proposedZ,height,x,z,vx,vz);
-   if(nativeOctavus&&grounded&&Math.hypot(proposedX-xx,proposedZ-zz)>.018&&
-      inside(proposedX,proposedZ,R)){
-    const rise=groundAt(proposedX,proposedZ,stepFeet+STEP);
-    if(rise!==null&&rise>=stepFeet+.025&&rise<=stepFeet+STEP+.012&&
-       rise<=oldY+STEP+.012&&capsuleClear(proposedX,rise,proposedZ,height)){
-     xx=proposedX;zz=proposedZ;stepFeet=rise;vx=p.vx;vz=p.vz;
+   if(nativeOctavus&&grounded&&Math.hypot(proposedX-xx,proposedZ-zz)>.018){
+    const runX=proposedX-x,runZ=proposedZ-z,len=Math.hypot(runX,runZ);
+    if(len>1e-8){
+     const probeX=proposedX+runX/len*(R+.10),probeZ=proposedZ+runZ/len*(R+.10);
+     if(inside(probeX,probeZ,R)){
+      const rise=groundAt(probeX,probeZ,stepFeet+STEP);
+      if(rise!==null&&rise>=stepFeet+.025&&rise<=stepFeet+STEP+.012&&
+         rise<=oldY+STEP+.012&&capsuleClear(probeX,rise,probeZ,height)){
+       xx=probeX;zz=probeZ;stepFeet=rise;vx=p.vx;vz=p.vz;
+      }
+     }
     }
    }
    if(!inside(xx,zz,R)){
