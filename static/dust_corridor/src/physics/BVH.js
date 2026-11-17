@@ -442,6 +442,7 @@ function surfaceArea(minx, miny, minz, maxx, maxy, maxz) {
 }
 
 /** Closest point on triangle `tri` to point p. Writes into `out`. */
+const _degenerateClosestScratch = new THREE.Vector3();
 export function closestPointOnTriangleSoup(soup, tri, px, py, pz, out) {
   const p = soup.positions, b = tri * 9;
   const ax = p[b], ay = p[b + 1], az = p[b + 2];
@@ -458,7 +459,7 @@ export function closestPointOnTriangleSoup(soup, tri, px, py, pz, out) {
   const nx = aby*acz-abz*acy, ny = abz*acx-abx*acz, nz = abx*acy-aby*acx;
   const ab2=abx*abx+aby*aby+abz*abz, ac2=acx*acx+acy*acy+acz*acz;
   if(nx*nx+ny*ny+nz*nz<1e-18*Math.max(1,ab2*ac2)){
-    const fallback = new THREE.Vector3();
+    const fallback = _degenerateClosestScratch;
     const edges=[
       [ax,ay,az,bx,by,bz],
       [ax,ay,az,cx,cy,cz],
