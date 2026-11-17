@@ -26,8 +26,18 @@ def visible(arena,start,end):
     delta=tuple(end[i]-start[i] for i in range(3))
     length=math.sqrt(sum(v*v for v in delta))
     if length<=1e-5:return True
+    # Octavus and Dust use original triangle surfaces, never the legacy
+    # (empty) box lists. Bots otherwise have unfair vision through walls.
+    if arena.id in ('octavus','dust_corridor'):
+        if arena.id=='octavus':
+            from octavus_world import get_octavus_world
+            mesh=get_octavus_world()
+        else:
+            from dust_world64 import get_dust_world64
+            mesh=get_dust_world64()
+        hit=mesh.raycast(start,end)
+        return hit is None or hit['distance']>=length-.12
     direction=tuple(v/length for v in delta)
-    # Use geometry, never a value supplied by the browser.
     for solid in arena.boxes:
         hit=ray_solid(start,direction,solid)
         if hit is not None and hit<length-.12:return False
