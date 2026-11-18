@@ -91,7 +91,7 @@ async function json(path){
 }
 function hex(buffer){return [...new Uint8Array(buffer)].map(b=>b.toString(16).padStart(2,'0')).join('')}
 async function download(which){
- const base=which==='core'?'octavus.native-core':which==='merged'?'octavus.native-merged':'octavus.native-stage1';
+ const base=which==='core'?'octavus.native-core':which==='optimized'?'octavus.native-optimized':which==='merged'?'octavus.native-merged':'octavus.native-stage1';
  const manifestPath=ROOT+base+'.json',binaryPath=ROOT+base+'.bin.gz';
  const [meta,response]=await Promise.all([json(manifestPath),fetch(binaryPath,{cache:'no-cache'})]);
  if(!response.ok)throw Error('Native geometry is unavailable (HTTP '+response.status+')');
@@ -169,10 +169,10 @@ function recolor(){
   }
   m.needsUpdate=true;
  });
- $('view-label').textContent=current.which==='core'?'NATIVE ARCHITECTURE CORE':current.which==='merged'?'SOURCE PLANE-MERGED CANDIDATE':'HEAVY UNCULLED CANDIDATE';
+ $('view-label').textContent=current.which==='core'?'NATIVE ARCHITECTURE CORE':current.which==='optimized'?'NATIVE PARTIAL-VISIBILITY CANDIDATE':current.which==='merged'?'SOURCE PLANE-MERGED CANDIDATE':'HEAVY UNCULLED CANDIDATE';
  $('render-label').textContent=current.which==='core'
   ?fmt(current.slots.length)+' native material slots; plain slot 1 deliberately omitted'
-  :current.which==='merged'?'Exact source rectangle tessellation merged; plain slot 1 is still unverified':'Source slot 1 marked pink; most raw faces are not proven visible';
+  :current.which==='optimized'?'New triangle-occlusion plus exact plane merging; NOT native renderer parity':current.which==='merged'?'Exact source rectangle tessellation merged; plain slot 1 is still unverified':'Source slot 1 marked pink; most raw faces are not proven visible';
 }
 function disposeOld(){
  if(!current)return;
@@ -182,12 +182,13 @@ function disposeOld(){
 async function activate(which){
  const id=++requestID;active=which;
  state.hidden=false;
- $('load-title').textContent=which==='core'?'Loading native Octavus architecture':which==='merged'?'Loading plane-merged Octavus candidate':'Loading raw candidate (heavy)';
+ $('load-title').textContent=which==='core'?'Loading native Octavus architecture':which==='optimized'?'Loading visibility-corrected Octavus candidate':which==='merged'?'Loading plane-merged Octavus candidate':'Loading raw candidate (heavy)';
  $('load-detail').textContent=which==='core'
   ?'Validating compressed source geometry and rebuilding 98,358 triangles.'
-  :which==='merged'?'Loading 1.12m source triangles with exact coplanar merging; some interior faces remain unverified.':'This diagnostic loads 1,661,200 unverified candidate triangles; it may be slow.';
+  :which==='optimized'?'Loading 863,803 triangles with source partial-face occlusion and lossless planar merging.':which==='merged'?'Loading 1.12m source triangles with exact coplanar merging; some interior faces remain unverified.':'This diagnostic loads 1,661,200 unverified candidate triangles; it may be slow.';
  $('raw-btn').setAttribute('aria-pressed',String(which==='raw'));
  $('merged-btn').setAttribute('aria-pressed',String(which==='merged'));
+ $('optimized-btn').setAttribute('aria-pressed',String(which==='optimized'));
  $('core-btn').setAttribute('aria-pressed',String(which==='core'));
  try{
   const asset=await download(which);if(id!==requestID)return;
@@ -211,6 +212,11 @@ $('mode').addEventListener('change',recolor);
 $('wire').addEventListener('change',recolor);
 $('spawns').addEventListener('change',()=>{markers.visible=$('spawns').checked});
 $('core-btn').addEventListener('click',()=>{if(active!=='core')activate('core')});
+$('optimized-btn').addEventListener('click',()=>{
+ if(active==='optimized')return;
+ if(!window.confirm('This source visibility candidate still has 864k triangles and is not yet renderer-exact. It may be slow. View the corrected stage?'))return;
+ activate('optimized');
+});
 $('merged-btn').addEventListener('click',()=>{
  if(active==='merged')return;
  if(!window.confirm('The source plane-merged MPZ candidate contains 1.12 million triangles. It is NOT a finished original renderer and may be slow. Display it for inspection?'))return;
