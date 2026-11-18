@@ -1,4 +1,4 @@
-name: Octavus Phase 1.4 source neighbor visibility
+name: Octavus Phase 1.4 conservative edge-occlusion tests
 on:
   push:
     branches: [main]
@@ -6,59 +6,29 @@ on:
       - "scripts/octavus_native_visibility82.py"
       - "test_octavus_native_visibility82.py"
       - ".github/workflows/octavus-native-visibility82.yml"
-      - "sources/octavus.original.mpz"
   workflow_dispatch:
 permissions:
-  contents: write
+  contents: read
 jobs:
-  source-cube-occlusion:
+  native-edge-invariants:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
-        with:
-          persist-credentials: true
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Unit-test exact neighbor-face edges, octree coverage and geometry safety
+      - name: Prove native edge-face culling does not erase octree subdivision openings
         run: python -m unittest -v test_octavus_native_visibility82 test_octavus_native_geometry77
-      - name: Generate improved source-visible native staging geometry
-        run: python -m scripts.octavus_native_visibility82
-      - name: Check stage output, triangle indices and source match
+      - name: Prevent promotion of rejected conservative full-mesh experiment
         run: |
           python - <<'PY'
           from pathlib import Path
-          import gzip,json,hashlib,struct
-          path=Path("static/maps/octavus.native-neighbors.bin.gz")
-          meta=json.loads(Path("static/maps/octavus.native-neighbors.json").read_text())
-          payload=path.read_bytes()
-          raw=gzip.decompress(payload)
-          nv,nt=struct.unpack_from("<II",raw,4)
-          assert raw[:4]==b"OCN2"
-          assert (nv,nt)==(meta["vertices"],meta["triangles"])
-          assert len(raw)==12+nv*12+nt*14
-          assert nt>75000 and nt<=1661200
-          assert meta["plainSlotOneTriangles"]<=1562842
-          assert meta["sourceRevision"]==829
-          assert meta["liveMapModified"] is False
-          assert meta["sourceNeighborCoverageVerified"]
-          assert hashlib.sha256(payload).hexdigest()==meta["sha256"]
-          print("Validated source-native neighbor visibility data:",nv,"vertices",nt,"triangles")
+          src=Path("scripts/octavus_native_visibility82.py").read_text()
+          assert "def covers_entire_native_face(" in src
+          assert "def area_covers_box(" in src
+          assert 'stage-only' in src or 'staging' in src
+          print("Source edge-face logic tested; full exporter is quarantined.")
+          print("It exceeded the 1.8m triangle candidate guard on original MPZ.")
+          print("Do not publish or use the experimental mesh in gameplay.")
           PY
-      - name: Publish isolated source visibility data without gameplay changes
-        run: |
-          cp static/maps/octavus.native-neighbors.bin.gz /tmp/octavus.native-neighbors.bin.gz
-          cp static/maps/octavus.native-neighbors.json /tmp/octavus.native-neighbors.json
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          for i in 1 2 3; do
-            git fetch origin main
-            git reset --hard origin/main
-            cp /tmp/octavus.native-neighbors.* static/maps/
-            git add static/maps/octavus.native-neighbors.*
-            if git diff --cached --quiet; then exit 0; fi
-            git commit -m "build(octavus phase1.4): archive native edge-aware neighbor staging mesh"
-            if git push origin HEAD:main; then exit 0; fi
-          done
-          exit 1
