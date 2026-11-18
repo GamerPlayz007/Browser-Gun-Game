@@ -4,6 +4,7 @@ on:
     branches: [main]
     paths:
       - "scripts/octavus_native_geometry77.py"
+      - "scripts/octavus_native_core78.py"
       - "scripts/decode_octavus_octree76.py"
       - "test_octavus_native_geometry77.py"
       - "sources/octavus.original.mpz"
@@ -46,13 +47,34 @@ jobs:
           assert manifest["status"]=="staging-only-not-live"
           print("Verified binary OCN2 geometry, triangle provenance and safe staging")
           PY
+      - name: Separate native architecture from unculled plain-fill geometry
+        run: |
+          python -m scripts.octavus_native_core78
+          python - <<'PY'
+          import gzip,hashlib,json,struct
+          from pathlib import Path
+          f=Path("static/maps/octavus.native-core.bin.gz")
+          m=json.loads(Path("static/maps/octavus.native-core.json").read_text())
+          raw=gzip.decompress(f.read_bytes())
+          magic,verts,triangles=struct.unpack_from("<4sII",raw)
+          assert magic==b"OCN2"
+          assert len(raw)==12+verts*12+triangles*14
+          assert (verts,triangles)==(m["vertices"],m["triangles"])
+          assert 75000<=triangles<=150000
+          assert 10000<=verts<=250000
+          assert m["excludedTriangles"]+triangles==1661200
+          assert sum(int(n) for n in m["triangleMaterials"].values())==triangles
+          assert "1" not in m["triangleMaterials"]
+          assert hashlib.sha256(f.read_bytes()).hexdigest()==m["sha256"]
+          print("OCN2 native architecture verified; plain fill preserved in original staging archive")
+          PY
       - name: Publish reproducible staging-only mesh and audit report
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add static/maps/octavus.native-stage1.bin.gz static/maps/octavus.native-stage1.json
+          git add static/maps/octavus.native-stage1.bin.gz static/maps/octavus.native-stage1.json static/maps/octavus.native-core.bin.gz static/maps/octavus.native-core.json
           if ! git diff --cached --quiet; then
-            git commit -m "build(octavus phase1.2): publish source-native isolated staging mesh"
+            git commit -m "build(octavus phase1.2): publish native core geometry and full preserved source mesh"
             git pull --rebase origin main
             git push origin HEAD:main
           fi
