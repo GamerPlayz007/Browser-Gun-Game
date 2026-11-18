@@ -1,11 +1,11 @@
 {
-  "status": "failed",
-  "verifiedAt": "2026-11-18T13:50:05.158642+00:00",
+  "status": "passed",
+  "verifiedAt": "2026-11-18T13:50:58.699553+00:00",
   "steps": {
     "octavusServerMotion": "success",
     "browserImportClosure": "success",
-    "octavusClientMotion": "failure",
-    "existingMultiplayer": "skipped"
+    "octavusClientMotion": "success",
+    "existingMultiplayer": "success"
   },
   "logTail": {
     "python": [
@@ -21,24 +21,22 @@
       "test_wall_index_matches_original_filter (test_octavus_perf74.OctavusPerformanceTests.test_wall_index_matches_original_filter) ... ok",
       "",
       "----------------------------------------------------------------------",
-      "Ran 10 tests in 0.695s",
+      "Ran 10 tests in 0.395s",
       "",
       "OK",
-      "Octavus exact ground probes: reference=0.0045s accelerated=0.0005s speedup=9.2x"
+      "Octavus exact ground probes: reference=0.0026s accelerated=0.0003s speedup=8.4x"
     ],
     "javascript": [
-      "file:///home/runner/work/Browser-Gun-Game/Browser-Gun-Game/static/dust_motion65.js:102",
-      "  if(Math.abs(dt-requiredDt)>1e-8)throw Error('Native mesh physics timestep mismatch');",
-      "                                        ^",
+      "Octavus 3.4: 30 Hz exact client mesh stairs, tall walls and roof clearance passed."
+    ],
+    "server": [
+      "/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/server.py:656: NotAppKeyWarning: It is recommended to use web.AppKey instances for keys.",
+      "https://docs.aiohttp.org/en/stable/web_advanced.html#application-s-config",
+      "  app=web.Application(client_max_size=4096,middlewares=[cache_policy]);app['perf36']=ServerMetrics();app.router.add_get('/',index);app.router.add_get('/health',health)",
+      "----------------------------------------------------------------------",
+      "Ran 28 tests in 1.576s",
       "",
-      "Error: Native mesh physics timestep mismatch",
-      "    at Object.simulate (file:///home/runner/work/Browser-Gun-Game/Browser-Gun-Game/static/dust_motion65.js:102:41)",
-      "    at file:///home/runner/work/Browser-Gun-Game/Browser-Gun-Game/test_octavus_motion73.mjs:24:31",
-      "    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)",
-      "    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)",
-      "    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)",
-      "",
-      "Node.js v22.23.4"
+      "OK"
     ]
   },
   "scope": "Automated tests; interactive browser gameplay still requires playtesting"
