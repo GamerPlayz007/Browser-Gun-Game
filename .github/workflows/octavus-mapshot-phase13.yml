@@ -1,0 +1,50 @@
+name: Archive Octavus original mapshot for native preview
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/octavus-mapshot-phase13.yml"
+      - "static/octavus-native-preview.html"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  mapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Download and verify original Red Eclipse 2 Octavus mapshot
+        run: |
+          curl --fail --location --retry 3 --retry-delay 2 \
+            "https://raw.githubusercontent.com/redeclipse/maps/20ae7bc0a4e89e5662712b65fd5aa857e7dbeaa8/octavus.png" \
+            --output "/tmp/octavus.reference-source.png"
+          # Upstream source's pinned Git blob SHA: redeclipse/maps/octavus.png
+          test "$(git hash-object /tmp/octavus.reference-source.png)" = \
+            "6b8bfa071be14550d9fbfdb7594eb69769202786"
+          python3 - <<'PY'
+          from pathlib import Path
+          import struct
+          b=Path("/tmp/octavus.reference-source.png").read_bytes()
+          assert b[:8]==bytes((137,80,78,71,13,10,26,10))
+          assert len(b)==391220
+          w,h=struct.unpack_from(">II",b,16)
+          assert 128<=w<=4096 and 128<=h<=4096
+          print("Verified authentic Red Eclipse Octavus PNG:",w,h,len(b))
+          PY
+      - name: Publish self-hosted CC BY-SA mapshot
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3; do
+            git fetch origin main
+            git reset --hard origin/main
+            cp /tmp/octavus.reference-source.png static/maps/octavus.reference-source.png
+            git add static/maps/octavus.reference-source.png
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m "build(octavus phase1.3): bundle verified original Red Eclipse mapshot"
+            if git push origin HEAD:main; then exit 0; fi
+          done
+          exit 1
