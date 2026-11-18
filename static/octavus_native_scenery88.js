@@ -13,8 +13,8 @@
  */
 import * as THREE from 'three';
 import {createOctavusEnvironment} from './octavus_environment.js';
-import {createOctavusProps} from './octavus_props.js';
-import {createOctavusDecals} from './octavus_decals.js';
+import {createOctavusProps} from './octavus_native_props89.js';
+import {createOctavusDecals} from './octavus_native_decals89.js';
 
 function assertNativeEnvironment(){
  // Restrict to controlled geometry lab, not imported gameplay.
