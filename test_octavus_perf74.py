@@ -55,7 +55,12 @@ class OctavusPerformanceTests(unittest.TestCase):
                     maxz = max(p[2], q[2], r[2])
                     if minx <= c and maxx >= a and minz <= d and maxz >= b:
                         brute.add(tri)
-            self.assertEqual(set(w.wall_candidates(a, b, c, d)), brute)
+            actual = set(w.wall_candidates(a, b, c, d))
+            self.assertFalse(
+                actual.symmetric_difference(brute),
+                f'at {x:.2f},{z:.2f}: expected {len(brute)} got {len(actual)}; '
+                f'missing {sorted(brute-actual)[:8]}; extra {sorted(actual-brute)[:8]}'
+            )
 
     def test_wall_bins_have_nearby_tris_only(self):
         # The original 10m broadphase contained many distant wall triangles.
