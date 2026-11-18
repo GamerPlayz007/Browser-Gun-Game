@@ -1,6 +1,6 @@
 {
   "status": "passed",
-  "verifiedAt": "2026-11-17T19:24:24.554337+00:00",
+  "verifiedAt": "2026-11-18T12:19:41.843040+00:00",
   "steps": {
     "octavusServerMotion": "success",
     "browserImportClosure": "success",
@@ -18,7 +18,7 @@
       "test_uncontrolled_standing_is_blocked_by_original_roof (test_octavus_motion73.OctavusStage31Tests.test_uncontrolled_standing_is_blocked_by_original_roof) ... ok",
       "",
       "----------------------------------------------------------------------",
-      "Ran 7 tests in 0.476s",
+      "Ran 7 tests in 0.368s",
       "",
       "OK"
     ],
@@ -30,7 +30,7 @@
       "https://docs.aiohttp.org/en/stable/web_advanced.html#application-s-config",
       "  app=web.Application(client_max_size=4096,middlewares=[cache_policy]);app['perf36']=ServerMetrics();app.router.add_get('/',index);app.router.add_get('/health',health)",
       "----------------------------------------------------------------------",
-      "Ran 28 tests in 1.689s",
+      "Ran 28 tests in 1.564s",
       "",
       "OK"
     ]
