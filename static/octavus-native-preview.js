@@ -3,6 +3,7 @@
  * OCN2 staging data is not the active multiplayer map.
  */
 import * as THREE from 'three';
+import {OctavusNativeMaterialPreview} from './octavus_native_material_preview87.js';
 const ROOT='/static/maps/';
 const $=id=>document.getElementById(id);
 const fmt=n=>Number(n).toLocaleString('en-US');
@@ -23,6 +24,7 @@ const grid=new THREE.GridHelper(420,42,0x57687a,0x233449);
 grid.position.y=-15.2;
 grid.material.opacity=.38;grid.material.transparent=true;
 scene.add(grid);
+const nativeMaterialPreview=new OctavusNativeMaterialPreview();
 const markers=new THREE.Group();markers.name='33 original MPZ player starts';markers.visible=false;scene.add(markers);
 const markerGeom=new THREE.SphereGeometry(.7,8,6);
 const markerMat=new THREE.MeshBasicMaterial({color:0x8ee1b7});
@@ -153,6 +155,8 @@ function construct(asset){
 function recolor(){
  if(!current)return;
  const mode=$('mode').value,wire=$('wire').checked;
+ if(mode!=='source')nativeMaterialPreview.reset(current);
+ const sourceMesh=current;
  current.materials.forEach((m,i)=>{
   const slot=current.slots[i];
   m.wireframe=wire;m.vertexColors=mode==='height';
@@ -173,6 +177,19 @@ function recolor(){
  $('render-label').textContent=current.which==='core'
   ?fmt(current.slots.length)+' native material slots; plain slot 1 deliberately omitted'
   :current.which==='optimized'?'New triangle-occlusion plus exact plane merging; NOT native renderer parity':current.which==='merged'?'Exact source rectangle tessellation merged; plain slot 1 is still unverified':'Source slot 1 marked pink; most raw faces are not proven visible';
+ if(mode==='source'){
+  $('render-label').textContent='Loading attributed original source images; projected UVs are an approximation';
+  nativeMaterialPreview.apply(sourceMesh,()=>current===sourceMesh&&$('mode').value==='source')
+    .then(out=>{
+     if(!out||current!==sourceMesh||$('mode').value!=='source')return;
+     $('render-label').textContent=fmt(out.mappedSlots)+' material slots using '+fmt(out.distinctSourceImages)+' original image files; UV parity pending';
+     note('SOURCE TEXTURES: '+fmt(out.mappedSlots)+' native material slots using '+fmt(out.distinctSourceImages)+' attributed source images. '+fmt(out.appliedTriangles)+' candidate triangles have source images; '+fmt(out.missingSlots)+' slots are fallback or deliberately untrusted. The texture projection is approximate, not an engine-exact reproduction.');
+    })
+    .catch(e=>{
+     if(current===sourceMesh&&$('mode').value==='source')
+       note('SOURCE TEXTURES UNAVAILABLE: '+e.message);
+    });
+ }
 }
 function disposeOld(){
  if(!current)return;
