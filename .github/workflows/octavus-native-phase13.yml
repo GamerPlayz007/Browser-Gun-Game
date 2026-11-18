@@ -7,6 +7,7 @@ on:
       - "static/octavus-native-preview.html"
       - "static/maps/octavus.native-core.*"
       - "static/maps/octavus.native-stage1.*"
+      - "static/maps/octavus.native-merged.*"
       - "static/maps/octavus.native-entities.json"
       - "static/maps/octavus.native-spawn-audit.json"
       - "static/maps/octavus.reference-source.png"
