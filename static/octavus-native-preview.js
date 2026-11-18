@@ -238,6 +238,35 @@ async function activate(which){
 $('mode').addEventListener('change',recolor);
 $('wire').addEventListener('change',recolor);
 $('spawns').addEventListener('change',()=>{markers.visible=$('spawns').checked});
+$('restored-btn').addEventListener('click',async()=>{
+ const button=$('restored-btn');
+ if(button.disabled)return;
+ button.disabled=true;button.textContent='Loading source scene…';
+ try{
+  await activate('optimized');
+  if(current?.which!=='optimized')throw Error('Corrected native source geometry did not finish loading');
+  $('mode').value='source';recolor();
+  const layers=[
+   ['source-env','environment'],
+   ['source-props','props'],
+   ['source-decals','decals']
+  ];
+  await Promise.all(layers.map(async([control,name])=>{
+   $(control).checked=true;
+   await originalScenery.switch(name,true);
+  }));
+  if(starts.length){
+   target.set(...toWorld(starts[0].sourcePosition));
+   distance=42;yaw=.72;pitch=.42;updateCamera();
+  }
+  note('RESTORED SOURCE SCENE: visibility-corrected native terrain, attributed texture images, all recovered original decorative OBJ placements, source decals and Redcliff lighting. Visual parity and original collision remain incomplete.');
+ }catch(error){
+  note('RESTORE PRESET FAILED: '+(error.message||String(error)));
+ }finally{
+  button.disabled=false;button.textContent='Show restored scene';
+ }
+});
+
 for(const [control,layer] of [['source-env','environment'],['source-props','props'],['source-decals','decals']]){
  $(control).addEventListener('change',()=>{void originalScenery.switch(layer,$(control).checked)});
 }
