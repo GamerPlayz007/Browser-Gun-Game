@@ -78,8 +78,14 @@ class OctavusWorld(DustWorld64):
     def __init__(self):
         super().__init__(OctavusCollision())
         import math
+        from collections import defaultdict
         from array import array
         points = self.points
+        # Independent narrowphase index: large terrain keeps the 10m grid,
+        # but 44k steep wall faces are indexed by their own 2m X/Z bounds.
+        # Original triangles, normals and collision tolerances stay untouched.
+        self.wall_cell = 2.0
+        fine_walls = defaultdict(list)
         normals = array('f', [0.0]) * (self.count * 3)
         y_bounds = array('f', [0.0]) * (self.count * 2)
         xz_bounds = array('f', [0.0]) * (self.count * 4)
@@ -98,13 +104,16 @@ class OctavusWorld(DustWorld64):
             xz_bounds[tri*4:tri*4+4] = array(
                 'f', (min(ax,bx,cx), max(ax,bx,cx), min(az,bz,cz), max(az,bz,cz)))
             wall[tri] = length >= 1e-8 and abs(ny)/length <= .65
+            if wall[tri]:
+                for gx in range(math.floor(min(ax,bx,cx)/self.wall_cell),
+                                math.floor(max(ax,bx,cx)/self.wall_cell)+1):
+                    for gz in range(math.floor(min(az,bz,cz)/self.wall_cell),
+                                    math.floor(max(az,bz,cz)/self.wall_cell)+1):
+                        fine_walls[gx,gz].append(tri)
         self.wall_normals = normals
         self.wall_y_bounds = y_bounds
         self.ground_xz_bounds = xz_bounds
-        self.wall_cells = {
-            key: tuple(tri for tri in indices if wall[tri])
-            for key, indices in self.cells.items()
-        }
+        self.wall_cells = {key: tuple(indices) for key, indices in fine_walls.items()}
 
     @lru_cache(maxsize=4096)
     def _wall_candidates_cells(self, gx0, gz0, gx1, gz1):
@@ -119,8 +128,8 @@ class OctavusWorld(DustWorld64):
     def wall_candidates(self, x0, z0, x1, z1):
         import math
         return self._wall_candidates_cells(
-            math.floor(x0 / self.cell), math.floor(z0 / self.cell),
-            math.floor(x1 / self.cell), math.floor(z1 / self.cell))
+            math.floor(x0 / self.wall_cell), math.floor(z0 / self.wall_cell),
+            math.floor(x1 / self.wall_cell), math.floor(z1 / self.wall_cell))
 
     def ground_at(self, x, z, feet_y=0.0):
         """Same highest two-sided vertical ray hit as DustWorld64.ground_at.
