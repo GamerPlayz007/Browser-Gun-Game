@@ -6,6 +6,8 @@ on:
     paths:
       - ".github/workflows/octavus-phase3.yml"
       - "octavus_world.py"
+      - "server.py"
+      - "static/game.js"
       - "dust_world64.py"
       - "dust_motion65.py"
       - "bot57.py"
