@@ -98,7 +98,8 @@ export function createDustPhysics65(source){
   return [x,z,vx,vz];
  }
  function simulate(p,input,dt,now,weapon){
-  if(Math.abs(dt-DT)>1e-8)throw Error('Dust physics requires 60Hz fixed timestep');
+  const requiredDt=source.nativeOctavus?1/30:DT;
+  if(Math.abs(dt-requiredDt)>1e-8)throw Error('Native mesh physics timestep mismatch');
   const f0=Number(!!input.w)-Number(!!input.s);
   const r0=Number(!!input.d)-Number(!!input.a);
   const length=Math.max(1,Math.hypot(f0,r0));
