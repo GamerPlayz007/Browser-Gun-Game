@@ -68,7 +68,107 @@ class OctavusCollision:
         return self._surfaces[triangle]
 
 
+class OctavusWorld(DustWorld64):
+    """Exact source collision with reusable wall and vertical-ground indexes.
+
+    The 86,500 source triangles are unchanged. The regular Dust controller
+    continues using DustWorld64; only the large Octavus arena gets this index.
+    """
+
+    def __init__(self):
+        super().__init__(OctavusCollision())
+        import math
+        from array import array
+        points = self.points
+        normals = array('f', [0.0]) * (self.count * 3)
+        y_bounds = array('f', [0.0]) * (self.count * 2)
+        xz_bounds = array('f', [0.0]) * (self.count * 4)
+        wall = bytearray(self.count)
+        for tri in range(self.count):
+            k = tri * 9
+            ax, ay, az, bx, by, bz, cx, cy, cz = points[k:k+9]
+            ux, uy, uz = bx-ax, by-ay, bz-az
+            vx, vy, vz = cx-ax, cy-ay, cz-az
+            nx = uy*vz-uz*vy
+            ny = uz*vx-ux*vz
+            nz = ux*vy-uy*vx
+            length = math.sqrt(nx*nx+ny*ny+nz*nz)
+            normals[tri*3:tri*3+3] = array('f', (nx, ny, nz))
+            y_bounds[tri*2:tri*2+2] = array('f', (min(ay,by,cy), max(ay,by,cy)))
+            xz_bounds[tri*4:tri*4+4] = array(
+                'f', (min(ax,bx,cx), max(ax,bx,cx), min(az,bz,cz), max(az,bz,cz)))
+            wall[tri] = length >= 1e-8 and abs(ny)/length <= .65
+        self.wall_normals = normals
+        self.wall_y_bounds = y_bounds
+        self.ground_xz_bounds = xz_bounds
+        self.wall_cells = {
+            key: tuple(tri for tri in indices if wall[tri])
+            for key, indices in self.cells.items()
+        }
+
+    @lru_cache(maxsize=4096)
+    def _wall_candidates_cells(self, gx0, gz0, gx1, gz1):
+        if gx0 == gx1 and gz0 == gz1:
+            return self.wall_cells.get((gx0, gz0), ())
+        found = set()
+        for gx in range(gx0, gx1 + 1):
+            for gz in range(gz0, gz1 + 1):
+                found.update(self.wall_cells.get((gx, gz), ()))
+        return tuple(sorted(found))
+
+    def wall_candidates(self, x0, z0, x1, z1):
+        import math
+        return self._wall_candidates_cells(
+            math.floor(x0 / self.cell), math.floor(z0 / self.cell),
+            math.floor(x1 / self.cell), math.floor(z1 / self.cell))
+
+    def ground_at(self, x, z, feet_y=0.0):
+        """Same highest two-sided vertical ray hit as DustWorld64.ground_at.
+
+        Direct XZ barycentric interpolation avoids rebuilding hundreds of
+        Python triangle tuples, rays and sorted candidate sets per player tick.
+        Non-walkable faces still mask the ground just like the original raycast.
+        """
+        import math
+        gx, gz = math.floor(x / self.cell), math.floor(z / self.cell)
+        candidates = self.cells.get((gx, gz), ())
+        points = self.points
+        xy = self.ground_xz_bounds
+        heights = self.wall_y_bounds
+        normals = self.wall_normals
+        low, high = feet_y - 1.0, feet_y + .48
+        best = low
+        chosen = -1
+        for tri in candidates:
+            b = tri*4
+            if x < xy[b] or x > xy[b+1] or z < xy[b+2] or z > xy[b+3]:
+                continue
+            t = tri*2
+            if heights[t] > high or heights[t+1] < low:
+                continue
+            k = tri*9
+            ax, ay, az = points[k], points[k+1], points[k+2]
+            bx, by, bz = points[k+3], points[k+4], points[k+5]
+            cx, cy, cz = points[k+6], points[k+7], points[k+8]
+            denom = (bz-cz)*(ax-cx)+(cx-bx)*(az-cz)
+            if abs(denom) < 1e-9:
+                continue
+            u = ((bz-cz)*(x-cx)+(cx-bx)*(z-cz))/denom
+            v = ((cz-az)*(x-cx)+(ax-cx)*(z-cz))/denom
+            if u < 0.0 or v < 0.0 or u+v > 1.0:
+                continue
+            y = u*ay + v*by + (1-u-v)*cy
+            if low+1e-6 < y < high-1e-6 and y > best:
+                best, chosen = y, tri
+        if chosen < 0:
+            return None
+        n = chosen*3
+        nx, ny, nz = normals[n], normals[n+1], normals[n+2]
+        length = math.sqrt(nx*nx+ny*ny+nz*nz)
+        return best if length >= 1e-8 and abs(ny)/length >= .67 else None
+
+
 @lru_cache(maxsize=1)
 def get_octavus_world():
-    """Keep a single indexed 86,500-triangle arena shared by all Octavus rooms."""
-    return DustWorld64(OctavusCollision())
+    """Single accelerated authoritative Octavus world shared by all rooms."""
+    return OctavusWorld()
