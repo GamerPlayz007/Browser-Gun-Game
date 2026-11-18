@@ -12,6 +12,7 @@ on:
       - "static/maps/octavus.native-materials87.json"
       - "static/octavus_native_material_preview87.js"
       - "static/octavus_native_scenery88.js"
+      - "static/octavus_native_transform89.js"
       - "static/octavus_props.js"
       - "static/octavus_decals.js"
       - "static/octavus_environment.js"
@@ -85,5 +86,6 @@ jobs:
             /tmp/octavus-native-source-textures-preview.png
             /tmp/octavus-native-source-scenery-preview.png
             /tmp/octavus-native-source-scenery-full.png
+            /tmp/octavus-native-geometry-anchors-preview.png
           if-no-files-found: ignore
           retention-days: 14
