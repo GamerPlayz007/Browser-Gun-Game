@@ -1,42 +1,44 @@
 {
-  "status": "failed",
-  "verifiedAt": "2026-11-18T13:58:28.000974+00:00",
+  "status": "passed",
+  "verifiedAt": "2026-11-18T13:59:04.045165+00:00",
   "steps": {
-    "octavusServerMotion": "failure",
-    "browserImportClosure": "skipped",
-    "octavusClientMotion": "skipped",
-    "existingMultiplayer": "skipped"
+    "octavusServerMotion": "success",
+    "browserImportClosure": "success",
+    "octavusClientMotion": "success",
+    "existingMultiplayer": "success"
   },
   "logTail": {
     "python": [
-      "947",
-      "950",
-      "951",
-      "36218",
-      "72659",
-      "72660",
-      "72661",
-      "72662",
-      "72663",
-      "72664",
-      "72665",
-      "72666",
-      "36219",
-      "36220",
-      "36221",
-      "36222",
-      "36223",
-      "36224",
-      "36225",
-      "36226",
-      "36227",
-      "35839",
+      "test_map_and_world_dimensions (test_octavus_phase1.OctavusPhase1Tests.test_map_and_world_dimensions) ... ok",
+      "test_registry_preserves_octavus (test_octavus_phase1.OctavusPhase1Tests.test_registry_preserves_octavus) ... ok",
+      "test_source_clearance_for_all_respawn_candidates (test_octavus_phase1.OctavusPhase1Tests.test_source_clearance_for_all_respawn_candidates) ... ok",
+      "test_uv_package_keeps_all_authored_coordinates (test_octavus_phase1.OctavusPhase1Tests.test_uv_package_keeps_all_authored_coordinates) ... ok",
+      "test_native_stairs_are_walkable_but_tall_walls_are_not (test_octavus_motion73.OctavusStage31Tests.test_native_stairs_are_walkable_but_tall_walls_are_not) ... ok",
+      "test_original_triangles_block_bot_visibility (test_octavus_motion73.OctavusStage31Tests.test_original_triangles_block_bot_visibility) ... ok",
+      "test_uncontrolled_standing_is_blocked_by_original_roof (test_octavus_motion73.OctavusStage31Tests.test_uncontrolled_standing_is_blocked_by_original_roof) ... ok",
+      "test_fast_ground_matches_original_triangle_raycast (test_octavus_perf74.OctavusPerformanceTests.test_fast_ground_matches_original_triangle_raycast) ... ok",
+      "test_reference_speed_profile (test_octavus_perf74.OctavusPerformanceTests.test_reference_speed_profile) ... ok",
+      "test_wall_bins_have_nearby_tris_only (test_octavus_perf74.OctavusPerformanceTests.test_wall_bins_have_nearby_tris_only) ... ok",
+      "test_wall_index_matches_original_filter (test_octavus_perf74.OctavusPerformanceTests.test_wall_index_matches_original_filter) ... ok",
+      "test_30hz_commands_do_not_build_a_queue (test_octavus_network75.OctavusInputCadenceTests.test_30hz_commands_do_not_build_a_queue) ... ok",
       "",
       "----------------------------------------------------------------------",
-      "Ran 11 tests in 0.548s",
+      "Ran 12 tests in 0.626s",
       "",
-      "FAILED (failures=1)",
-      "Octavus exact ground probes: reference=0.0027s accelerated=0.0003s speedup=9.3x"
+      "OK",
+      "Octavus exact ground probes: reference=0.0030s accelerated=0.0003s speedup=10.4x"
+    ],
+    "javascript": [
+      "Octavus 3.4: 30 Hz exact client mesh stairs, tall walls and roof clearance passed."
+    ],
+    "server": [
+      "/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/server.py:656: NotAppKeyWarning: It is recommended to use web.AppKey instances for keys.",
+      "https://docs.aiohttp.org/en/stable/web_advanced.html#application-s-config",
+      "  app=web.Application(client_max_size=4096,middlewares=[cache_policy]);app['perf36']=ServerMetrics();app.router.add_get('/',index);app.router.add_get('/health',health)",
+      "----------------------------------------------------------------------",
+      "Ran 28 tests in 1.558s",
+      "",
+      "OK"
     ]
   },
   "scope": "Automated tests; interactive browser gameplay still requires playtesting"
