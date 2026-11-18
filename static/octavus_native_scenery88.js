@@ -131,6 +131,7 @@ export class OctavusNativeScenery {
  setAnchorDebug(enabled){
   this.anchorDebug=!!enabled;
   this.props?.setAnchorMarkers?.(this.anchorDebug);
+  this.metrics();
   this.report(this.anchorDebug?'ALIGNMENT INSPECTION: cyan markers show exact original MPZ model anchors. Markers never shift the authored models.':'ALIGNMENT INSPECTION: original MPZ anchor markers hidden.');
  }
  setQuality(tier){
