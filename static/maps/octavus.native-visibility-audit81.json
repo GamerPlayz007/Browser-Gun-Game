@@ -1,0 +1,48 @@
+{
+  "format": "OCTAVUS-NATIVE-FACE-AUDIT81",
+  "sourceRevision": 829,
+  "inputSHA256": "fe3f9df17732f258683a6a69a13e89a43ab1ba4020fffe3e357de369c981e1cd",
+  "totalTriangles": 1661200,
+  "materialOneTriangleCount": 1562842,
+  "detailedTriangleCount": 98358,
+  "materialOneDominantFaceAxis": {
+    "X": 508910,
+    "Y": 514752,
+    "Z": 539180,
+    "flatAxisX": 508763,
+    "flatAxisY": 514650,
+    "flatAxisZ": 538913
+  },
+  "materialOneFullyOutsideWorldBoundary": 488,
+  "materialOneBoundaryPlanes": {
+    "X=0": 122,
+    "X=65536": 116,
+    "Y=0": 109,
+    "Y=65536": 109,
+    "Z=0": 32
+  },
+  "materialOneLocation": {
+    "center": 1555509,
+    "outside-center": 7333
+  },
+  "materialOneNativeZBins": {
+    "0": 32,
+    "640": 16,
+    "1280": 16,
+    "2176": 64,
+    "2304": 64,
+    "2432": 4108,
+    "2560": 17831,
+    "2688": 215122,
+    "2816": 1228976,
+    "2944": 81061,
+    "3072": 15552
+  },
+  "maxNativeEighths": [
+    65536,
+    65536,
+    25536
+  ],
+  "note": "Triangle counts are raw staging candidates; this is NOT original engine-visibility equivalence.",
+  "liveMapModified": false
+}
