@@ -101,14 +101,58 @@ Additional spawn-surface audit:
 33 source MPZ player-start locations. This is a validation diagnostic,
 not a replacement of server collision.
 
-## Stage 1.3 — INCOMPLETE: verified browser preview
+## Stage 1.3 — STANDALONE VIEWER COMPLETE; visual parity gate open
 
-Load the native visual mesh behind a clearly identified source-geometry
-preview/test mode, without changing gameplay. Compare geometry bounds, terrain
-heights, building exposure, doors and stair openings. Validate performance
-on low-end devices and on the strong workstation. Only replace the old live
-OBJ after native geometry and server/client collision agree.
+**Standalone preview route:**
+[`/static/octavus-native-preview.html`](/static/octavus-native-preview.html)
+
+This is a diagnostic page, **not** a new option in the main game's menus.
+It does not replace or touch the live arena, client movement or server collision.
+
+**Implemented and independently tested:**
+- `static/octavus-native-preview.html` and
+  `static/octavus-native-preview.js` load and SHA-256 verify both
+  source-native `OCN2` staging meshes in a Three.js WebGL browser viewer.
+- Default core preview: **98,358 triangles**, **123,915 vertices**, 195
+  native material-slot IDs, presented with neutral shading rather than
+  falsely applying mismatched older OBJ textures.
+- Optional heavy diagnostic: **1,661,200 candidate triangles** from the
+  complete original octree. Unresolved plain material VSlot 1 is marked
+  untrusted and translucent; this is NOT an engine-exact render.
+- Orbit, zoom, pan, top-down, first-authored-spawn camera, wireframe,
+  material-ID colours, elevation colouring, original 33 MPZ spawn markers.
+- Creator's official Red Eclipse 2 `octavus.png` mapshot is
+  self-hosted as `static/maps/octavus.reference-source.png`, downloaded
+  from the pinned upstream commit, verified against Git blob
+  `6b8bfa071be14550d9fbfdb7594eb69769202786` and attributed
+  under the source map's CC BY-SA 3.0 license.
+- `test_octavus_native_preview79.mjs` validates every binary triangle
+  index, the checksum, the missing slot-1 safety separation, and the
+  source spawn metadata.
+- `test_octavus_native_browser80.mjs` launches real headless Chrome
+  with software WebGL, verifies 3D canvas rendering of the compact
+  mesh, exercises the inspection controls and asserts all 33 original
+  spawns are loaded. It captures an Octavus WebGL screenshot and a
+  side-by-side original-mapshot screenshot as CI artifacts.
+- `.github/workflows/octavus-native-phase13.yml` checks JavaScript
+  syntax, static HTTP serving, binary data and actual browser rendering.
+
+**Inspection limits:** An actual side-by-side view is provided, but
+camera-angle alignment to the creator's source screenshot has **not** been
+automatically measured. Our renderer still lacks native `visibletris`
+partial-face culling, original material UVs and exact merged-face handling.
+The smaller mesh deliberately omits source material slot 1; some valid
+exterior surfaces may be missing. A screenshot of the viewer is **not proof
+of native rendering equivalence**.
+
+**Next required tasks before any gameplay replacement:** compare the
+courtyard, dunes, entrances and ground heights interactively against the
+original mapshot; correct hidden-face exposure, merged surfaces and
+material/UV definitions; generate matching client and server collision;
+test all player starts and routes, then benchmark multiplayer load on
+both school laptops and high-end machines.
 
 **Guardrail:** Do not modify `static/maps/octavus.json`,
 `static/octavus_match.js`, `octavus_world.py`, or server gameplay
-collision until the replacement is tested.
+collision until the native geometry replacement passes the visual
+and physical parity gates.
