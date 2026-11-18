@@ -4,9 +4,10 @@
  */
 import * as THREE from 'three';
 import {OBJLoader} from 'three/addons/loaders/OBJLoader.js';
-import {originalNativePosition,octavusModelNativeToViewer,octavusSourceQuaternion} from './octavus_native_transform89.js';
+import {octavusEntityPosition} from './octavus_environment.js';
 
 const base='/static/maps/';
+const RAD=Math.PI/180;
 async function fetchSource(path){
  try{const r=await fetch(base+path);return r.ok?await r.json():null;}
  catch{return null;}
@@ -46,9 +47,8 @@ export async function createOctavusProps(scene,quality='auto'){
    const text=await new Response(stream).text();
    prototype=loader.parse(text);
    if(!prototype)continue;
-   // Original MPZ uses (X,Y,Z) with Z-up, while Three renders Y-up.
-   // Reflection is intentional: Rx(-90deg) alone reverses native Y.
-   octavusModelNativeToViewer(prototype);
+   // Native Red Eclipse map models were authored with Z-up geometry.
+   prototype.rotation.x=-Math.PI/2;
   }catch(error){console.warn('Octavus source OBJ unavailable',alias,error);continue;}
   // The original OBJ stays unaltered; it is transformed into Three.js Y-up
   // by the prototype group above, while MPZ placement remains authoritative.
@@ -91,34 +91,16 @@ export async function createOctavusProps(scene,quality='auto'){
    const node=new THREE.Group();
    const model=prototype.clone(true);node.add(model);
    node.name='Octavus source mapmodel '+alias+' #'+e.id;
-   node.position.copy(originalNativePosition(e.sourcePosition));
-   // Native yaw Z, pitch X, roll -Y (conjugated into Three's basis).
-   node.quaternion.copy(octavusSourceQuaternion(e.attrs[1],e.attrs[2],e.attrs[3]));
+   node.position.copy(octavusEntityPosition(e.sourcePosition));
+   node.rotation.order='YXZ';
+   node.rotation.set((Number(e.attrs[2])||0)*RAD,-(Number(e.attrs[1])||0)*RAD,
+                     (Number(e.attrs[3])||0)*RAD);
    const attrScale=Number(e.attrs[5])>0?Number(e.attrs[5])/100:1;
    node.scale.setScalar(baseScale*attrScale);
    root.add(node);sprites.push({node,pos:node.position.clone(),alias});
   }
   modelTypes++;
  }
- // Exact MPZ source anchors let the inspector verify prop alignment
- // without attempting to move original instances or snap to guessed floors.
- const anchorGeometry=new THREE.IcosahedronGeometry(.27,0);
- const anchorMaterial=new THREE.MeshBasicMaterial({
-  color:0x32e5c3,transparent:true,opacity:.95,
-  depthTest:false,depthWrite:false
- });
- const anchorMesh=new THREE.InstancedMesh(anchorGeometry,anchorMaterial,sprites.length);
- anchorMesh.name='Authoritative MPZ original prop positions';
- anchorMesh.frustumCulled=false;
- anchorMesh.visible=false;
- anchorMesh.renderOrder=100;
- const anchorMatrix=new THREE.Matrix4();
- for(let i=0;i<sprites.length;i++){
-  anchorMatrix.makeTranslation(sprites[i].pos.x,sprites[i].pos.y,sprites[i].pos.z);
-  anchorMesh.setMatrixAt(i,anchorMatrix);
- }
- anchorMesh.instanceMatrix.needsUpdate=true;
- root.add(anchorMesh);
  let level=quality,rendered=0,last=-1;
  function setQuality(tier){
   level=tier;
@@ -143,10 +125,7 @@ export async function createOctavusProps(scene,quality='auto'){
  return {
   instances:sprites.length,modelTypes,missing:instances.length-sprites.length,
   get renderedInstances(){return rendered;},setQuality,animate,
-  anchorCount:sprites.length,
-  setAnchorMarkers(on){anchorMesh.visible=!!on;},
   dispose(){
-   anchorGeometry.dispose();anchorMaterial.dispose();
    root.removeFromParent();
    for(const g of geometries)g.dispose();
    for(const m of materials)m?.dispose?.();
