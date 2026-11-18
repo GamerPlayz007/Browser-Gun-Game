@@ -408,6 +408,70 @@ material orientation and prop alignment where needed, then compact
 spatial batches and matching server/client collision before replacing
 the old live arena.
 
+## Stage 1.8 — SOURCE PROP AND DECAL TRANSFORM ALIGNMENT
+
+This stage repairs a genuine source-coordinate bug in the independent
+native Octavus preview.
+
+### Original source transform
+
+Red Eclipse 2 src/engine/worldio.cpp and src/engine/octarender.cpp
+apply Euler angles in native Z-up coordinates in this order:
+
+1. yaw about native Z
+2. pitch about native X
+3. NEGATIVE roll about native Y
+
+The native viewer maps (X,Y,Z) to viewer (X,Z,Y): this is a reflection
+with determinant -1, NOT a simple rotation. The correct mapping is
+viewer yaw=-yaw, pitch=-pitch, roll=+roll (YXZ order).
+The former OBJ importer used +pitch and converted native vertices
+with Rx(-90deg) alone, yielding (x,z,-y) instead of (x,z,y).
+The new source adapter applies the required reflection.
+
+Among the 135 recovered original OBJ mapmodel instances, 50 have
+nonzero authored yaw, 17 have nonzero pitch, 14 nonzero roll, and
+39 have an authored nondefault per-instance scale.
+
+The same corrected native orientation is applied to the independently
+staged decal planes. The Red Eclipse gendecal renderer actually clips
+world polygons against a 3D projector volume. Our visual planes still
+need to be replaced with native-clipped decal geometry before parity
+can be claimed.
+
+### New visual QA controls
+
+- Model anchor markers: 135 cyan original-source position markers
+  allow checking whether objects are floating, buried, or rotated
+  without modifying the original MPZ placement data.
+- Source props close-up: positions the inspection camera on the
+  densest original MPZ model sector.
+- Show restored scene: now focuses that same original architecture
+  cluster rather than an unrelated first player start.
+- The headless-Chrome check tests source yaw/pitch/roll and OBJ
+  handedness mathematically and screenshots the geometry with and
+  without the 135 source anchor gizmos.
+
+### Live multiplayer map is untouched
+
+The original multiplayer files static/octavus_props.js and
+static/octavus_decals.js are byte-for-byte identical to the previous
+stage. The corrected native adapters have independent filenames:
+
+- static/octavus_native_transform89.js
+- static/octavus_native_props89.js
+- static/octavus_native_decals89.js
+
+Only the independent preview scenery module imports these.
+Tests enforce that the original live loaders never reference them.
+The live map, collisions, scoreboard and gameplay remain unchanged.
+
+Further original renderer fidelity checks are needed for decal
+projection, uncommon model origin offsets/animations, exact texture
+coordinates, source-renderer comparison views, batching, and
+client/server collision. Neither source-coordinate proof nor a Chrome
+screenshot alone verifies original visual parity.
+
 **Guardrail:** Do not modify `static/maps/octavus.json`,
 `static/octavus_match.js`, `octavus_world.py`, or server gameplay
 collision until the native geometry replacement passes the visual
