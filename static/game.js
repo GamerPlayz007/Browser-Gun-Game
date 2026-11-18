@@ -131,6 +131,8 @@ async function loadArena(id){
 const weapons=map.weapons,weaponModels=weapons.map(w=>makeWeapon(w.id));for(const g of weaponModels){g.visible=false;viewScene.add(g);}
 let selected=0,desiredWeapon64=null,weaponMags64=weapons.map(w=>w.mag),ws=null,myId=null,roomCode='',state=null,me=null,local=null,joined=false,keys={},aiming=false,yaw=0,pitch=0,seq=0,shotId=0,pendingShots=[];let pendingMoves=[],movementAccumulator=0,viewError=new T.Vector3(),rosterSignature='',scoreSignature='';
 let groundVelocity=0,landingPulse=0,lastLocalGrounded=true,movementHint='',slideHopUntil53=0,visualLean63=0,lastReconcileAt=0;
+// Octavus only: lighter authoritative input cadence, unchanged render FPS.
+const movementDt=()=>map.octavusOriginal?1/30:FIXED_DT;
 let spectatorTarget55=null;
 let ads=0,kick=0,eye=1.55,visualRecoil=0,lastShot=-10,flashUntil=0,hitUntil=0,damageUntil=0,elimUntil=0,noticeTimer,toastTimer,lastPhase='',lastSpawn=-1,switchVisual=0,rtt=50;
 let clock=performance.now(),fpsFrames=0,fpsLast=performance.now(),fps=60,lastStep=0,shotRecovery=0,frameError=false,matchBannerUntil=0,crosshairSize52=24,flashPower52=1;
@@ -179,18 +181,19 @@ function controls(){
 function sendInput(){} // Input is sampled and sent by the fixed-step predictor below.
 function predictStep(input){
  const command={type:'input',seq:++seq,spawn:me.spawn,yaw,pitch,...input};
- local.yaw=yaw;local.motion_time+=FIXED_DT;
+ const stepDt=movementDt();
+ local.yaw=yaw;local.motion_time+=stepDt;
  const beforeY=local.y;
  const wasSliding=local.slide_until>local.motion_time&&local.grounded;
  const beforeHeld=local.jump_held;
- if(map.dustOriginal||map.octavusOriginal)world.physics.simulate(local,input,FIXED_DT,local.motion_time,weapons[me.weapon]);
- else simulate(local,input,FIXED_DT,local.motion_time,map.boxes,weapons[me.weapon]);
+ if(map.dustOriginal||map.octavusOriginal)world.physics.simulate(local,input,stepDt,local.motion_time,weapons[me.weapon]);
+ else simulate(local,input,stepDt,local.motion_time,map.boxes,weapons[me.weapon]);
  jumpLatch62.consume();
  if(wasSliding&&input.jump&&!beforeHeld&&local.vy>0&&!local.grounded)
   slideHopUntil53=performance.now()/1000+.48;
  if(!lastLocalGrounded&&local.grounded&&local.vy===0)landingPulse=Math.max(landingPulse,.16);
  lastLocalGrounded=!!local.grounded;
- groundVelocity=local.grounded?clamp((local.y-beforeY)/FIXED_DT,-6,6):0;
+ groundVelocity=local.grounded?clamp((local.y-beforeY)/stepDt,-6,6):0;
  pendingMoves.push(command);send(command);
  if(pendingMoves.length>150){pendingMoves=[];local={...me};viewError.set(0,0,0);}
 }
@@ -402,10 +405,11 @@ function handle(data){if(data.type==='manual_respawn_result65'){toast(data.messa
    lastReconcileAt=now;
    const old=new T.Vector3(local.x+viewError.x,local.y+viewError.y,local.z+viewError.z);
    local={...me};
+   const stepDt=movementDt();
    for(const cmd of pendingMoves){
-   local.yaw=cmd.yaw;local.motion_time+=FIXED_DT;
-   if(map.dustOriginal||map.octavusOriginal)world.physics.simulate(local,cmd,FIXED_DT,local.motion_time,weapons[me.weapon]);
-   else simulate(local,cmd,FIXED_DT,local.motion_time,map.boxes,weapons[me.weapon]);
+   local.yaw=cmd.yaw;local.motion_time+=stepDt;
+   if(map.dustOriginal||map.octavusOriginal)world.physics.simulate(local,cmd,stepDt,local.motion_time,weapons[me.weapon]);
+   else simulate(local,cmd,stepDt,local.motion_time,map.boxes,weapons[me.weapon]);
   }
    const correction=cameraCorrection(old,local,2.5);
    viewError.set(correction.x,correction.y,correction.z);
@@ -521,7 +525,8 @@ function frame(ms){try{const now=ms/1000,rawMs=ms-clock,dt=Math.min(rawMs/1000,.
    team:me?.team,mode:state?.mode,meId:myId});
   if(me.hp>0&&['lobby','playing'].includes(state.phase)){
    movementAccumulator+=dt;
-   let steps=0;while(movementAccumulator>=FIXED_DT&&steps++<6){predictStep(controls());movementAccumulator-=FIXED_DT;}if(steps>=6)movementAccumulator=Math.min(movementAccumulator,FIXED_DT*2);
+   const stepDt=movementDt();
+   let steps=0;while(movementAccumulator>=stepDt&&steps++<6){predictStep(controls());movementAccumulator-=stepDt;}if(steps>=6)movementAccumulator=Math.min(movementAccumulator,stepDt*2);
   }else movementAccumulator=0;
   viewError.multiplyScalar(Math.exp(-dt*14));
   tryTriggerFire(now);
@@ -629,6 +634,7 @@ function createDebugReport51(){
    'Map: '+(map?.name||map?.id||'unknown'),
    'Connection: '+(joined?'joined':'not joined'),
    'Quality setting: '+settings.quality,
+   'Movement simulation: '+Math.round(1/movementDt())+' Hz',
    'Unacknowledged movement inputs: '+pendingMoves.length,
    'Server input queue: '+(me?.inputQueue??'unknown'),
    'Dropped stale inputs (server): '+(me?.inputOverruns??'unknown'),
