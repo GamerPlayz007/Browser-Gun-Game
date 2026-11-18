@@ -40,6 +40,7 @@ export class OctavusNativeScenery {
   this.lastUpdate=0;
   this.tier='auto';
   this.disposed=false;
+  this.anchorDebug=false;
   this.active={environment:false,props:false,decals:false};
   this.originalBackground=scene.background;
   this.originalFog=scene.fog;
@@ -98,6 +99,7 @@ export class OctavusNativeScenery {
     this.restoreLighting();return;
    }
    this[type]=next;
+   if(type==='props')next.setAnchorMarkers?.(this.anchorDebug);
    this.restoreLighting();
    this.metrics();
    if(type==='environment')
@@ -124,6 +126,11 @@ export class OctavusNativeScenery {
   this.environment?.animate(now,center);
   this.props?.animate(now,center);
   this.metrics();
+ }
+ setAnchorDebug(enabled){
+  this.anchorDebug=!!enabled;
+  this.props?.setAnchorMarkers?.(this.anchorDebug);
+  this.report(this.anchorDebug?'ALIGNMENT INSPECTION: cyan markers show exact original MPZ model anchors. Markers never shift the authored models.':'ALIGNMENT INSPECTION: original MPZ anchor markers hidden.');
  }
  setQuality(tier){
   if(!['auto','performance','high','ultra'].includes(tier))throw Error('Invalid scenic quality');
