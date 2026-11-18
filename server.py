@@ -157,9 +157,18 @@ class Room:
                 continue
             if now>=bot.get('think_at',0):
                 bot_decide(bot,self.players,self.arena,now)
-            bot['motion_time']+=TICK
-            bot['last_input']=bot['motion_time']
-            move(bot,TICK,bot['motion_time'],self.arena)
+            if self.arena.id=='octavus':
+                # Run the same native-map cadence for bots; otherwise enabling
+                # AI mode multiplies CPU-heavy collision by every bot at 60Hz.
+                if now>=bot.get('next_octavus_motion_at',0):
+                    bot['next_octavus_motion_at']=now+OCTAVUS_TICK
+                    bot['motion_time']+=OCTAVUS_TICK
+                    bot['last_input']=bot['motion_time']
+                    move(bot,OCTAVUS_TICK,bot['motion_time'],self.arena)
+            else:
+                bot['motion_time']+=TICK
+                bot['last_input']=bot['motion_time']
+                move(bot,TICK,bot['motion_time'],self.arena)
             regenerate(bot,now)
             if bot['ammo']<=0:bot['ammo']=WEAPONS[bot['weapon']]['mag']
             target=bot_can_attack(bot,self.players,self.arena,now)
