@@ -8,6 +8,7 @@ on:
       - "static/maps/octavus.native-core.*"
       - "static/maps/octavus.native-stage1.*"
       - "static/maps/octavus.native-merged.*"
+      - "static/maps/octavus.native-optimized.*"
       - "static/maps/octavus.native-entities.json"
       - "static/maps/octavus.native-spawn-audit.json"
       - "static/maps/octavus.reference-source.png"
@@ -70,5 +71,6 @@ jobs:
           path: |
             /tmp/octavus-native-core-preview.png
             /tmp/octavus-native-side-by-side.png
+            /tmp/octavus-native-optimized-preview.png
           if-no-files-found: ignore
           retention-days: 14
