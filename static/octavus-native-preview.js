@@ -91,14 +91,14 @@ async function json(path){
 }
 function hex(buffer){return [...new Uint8Array(buffer)].map(b=>b.toString(16).padStart(2,'0')).join('')}
 async function download(which){
- const base=which==='core'?'octavus.native-core':'octavus.native-stage1';
+ const base=which==='core'?'octavus.native-core':which==='neighbors'?'octavus.native-neighbors':'octavus.native-stage1';
  const manifestPath=ROOT+base+'.json',binaryPath=ROOT+base+'.bin.gz';
  const [meta,response]=await Promise.all([json(manifestPath),fetch(binaryPath,{cache:'no-cache'})]);
  if(!response.ok)throw Error('Native geometry is unavailable (HTTP '+response.status+')');
  if(typeof DecompressionStream==='undefined')throw Error('A recent Chrome or Edge browser is required for gzip decoding');
  const compressed=await response.arrayBuffer();
  const sha=hex(await crypto.subtle.digest('SHA-256',compressed));
- const expected=which==='core'?meta.sha256:meta.stagingSHA256;
+ const expected=which==='raw'?meta.stagingSHA256:meta.sha256;
  if(sha!==expected)throw Error('Native geometry checksum mismatch');
  if(meta.format!=='OCN2'||meta.status!=='staging-only-not-live')throw Error('Source stage metadata is invalid');
  const decoded=await new Response(new Blob([compressed]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();
@@ -161,7 +161,7 @@ function recolor(){
    m.color.setHSL((slot*.61803398875)%1,.55,.55);
   }else if(mode==='height'){
    m.color.set('#ffffff');
-  }else if(slot===1&&current.which==='raw'){
+  }else if(slot===1&&current.which!=='core'){
    m.color.set('#e99caa');m.transparent=true;m.opacity=.27;m.depthWrite=false;
   }else{
    const n=.90+((slot*37)%13)*.014;
@@ -169,10 +169,10 @@ function recolor(){
   }
   m.needsUpdate=true;
  });
- $('view-label').textContent=current.which==='core'?'NATIVE ARCHITECTURE CORE':'HEAVY UNCULLED CANDIDATE';
+ $('view-label').textContent=current.which==='core'?'NATIVE ARCHITECTURE CORE':current.which==='neighbors'?'NATIVE EDGE-AWARE CANDIDATE':'HEAVY UNCULLED CANDIDATE';
  $('render-label').textContent=current.which==='core'
   ?fmt(current.slots.length)+' native material slots; plain slot 1 deliberately omitted'
-  :'Source slot 1 marked pink; most raw faces are not proven visible';
+  :current.which==='neighbors'?'Native edge-covered faces removed; remaining slot 1 is still unverified':'Source slot 1 marked pink; most raw faces are not proven visible';
 }
 function disposeOld(){
  if(!current)return;
@@ -182,11 +182,12 @@ function disposeOld(){
 async function activate(which){
  const id=++requestID;active=which;
  state.hidden=false;
- $('load-title').textContent=which==='core'?'Loading native Octavus architecture':'Loading raw candidate (heavy)';
+ $('load-title').textContent=which==='core'?'Loading native Octavus architecture':which==='neighbors'?'Loading edge-aware Octavus candidate':'Loading raw candidate (heavy)';
  $('load-detail').textContent=which==='core'
   ?'Validating compressed source geometry and rebuilding 98,358 triangles.'
-  :'This diagnostic loads 1,661,200 unverified candidate triangles; it may be slow.';
+  :which==='neighbors'?'Testing original source edge-nibble visibility; some internal faces remain unverified.':'This diagnostic loads 1,661,200 unverified candidate triangles; it may be slow.';
  $('raw-btn').setAttribute('aria-pressed',String(which==='raw'));
+ $('neighbor-btn').setAttribute('aria-pressed',String(which==='neighbors'));
  $('core-btn').setAttribute('aria-pressed',String(which==='core'));
  try{
   const asset=await download(which);if(id!==requestID)return;
@@ -210,6 +211,11 @@ $('mode').addEventListener('change',recolor);
 $('wire').addEventListener('change',recolor);
 $('spawns').addEventListener('change',()=>{markers.visible=$('spawns').checked});
 $('core-btn').addEventListener('click',()=>{if(active!=='core')activate('core')});
+$('neighbor-btn').addEventListener('click',()=>{
+ if(active==='neighbors')return;
+ if(!window.confirm('The edge-aware MPZ candidate is NOT the finished original renderer and may have a large polygon count. Display it for geometry inspection?'))return;
+ activate('neighbors');
+});
 $('raw-btn').addEventListener('click',()=>{
  if(active==='raw')return;
  if(!window.confirm('Raw candidate mode loads 1.66 million unverified triangles and may lag. It is NOT the original finished world. Proceed?'))return;
