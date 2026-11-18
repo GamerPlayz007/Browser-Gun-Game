@@ -5,6 +5,7 @@ on:
     paths:
       - "scripts/octavus_native_geometry77.py"
       - "scripts/octavus_native_core78.py"
+      - "scripts/audit_octavus_native_spawns78.py"
       - "scripts/decode_octavus_octree76.py"
       - "test_octavus_native_geometry77.py"
       - "sources/octavus.original.mpz"
@@ -68,11 +69,23 @@ jobs:
           assert hashlib.sha256(f.read_bytes()).hexdigest()==m["sha256"]
           print("OCN2 native architecture verified; plain fill preserved in original staging archive")
           PY
+      - name: Cross-check reconstructed surface elevations at original native spawns
+        run: |
+          python -m scripts.audit_octavus_native_spawns78
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.loads(Path("static/maps/octavus.native-spawn-audit.json").read_text())
+          assert a["originalPlayerStartCount"]==33
+          assert len(a["spawns"])==33
+          assert a["liveMapModified"] is False
+          print("Documented native map spawn-to-ground discrepancies:",len(a["outliers"]))
+          PY
       - name: Publish reproducible staging-only mesh and audit report
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add static/maps/octavus.native-stage1.bin.gz static/maps/octavus.native-stage1.json static/maps/octavus.native-core.bin.gz static/maps/octavus.native-core.json
+          git add static/maps/octavus.native-stage1.bin.gz static/maps/octavus.native-stage1.json static/maps/octavus.native-core.bin.gz static/maps/octavus.native-core.json static/maps/octavus.native-spawn-audit.json
           if ! git diff --cached --quiet; then
             git commit -m "build(octavus phase1.2): publish native core geometry and full preserved source mesh"
             git pull --rebase origin main
