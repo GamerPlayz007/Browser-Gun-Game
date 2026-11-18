@@ -152,6 +152,70 @@ material/UV definitions; generate matching client and server collision;
 test all player starts and routes, then benchmark multiplayer load on
 both school laptops and high-end machines.
 
+## Stage 1.4 — NATIVE SOURCE PLANE MERGING COMPLETE; FULL VISIBILITY PENDING
+
+The source-coordinate visibility audit (scripts/audit_octavus_visibility81.py;
+published as octavus.native-visibility-audit81.json) confirms:
+
+- Original plain-material triangles: **1,562,842**
+- In the native central map region: **1,555,509**
+- Exactly on outer world boundaries: **488**
+
+This proves that simply hiding the outer shell cannot fix the map.
+
+### Geometry-preserving plane compaction
+
+scripts/octavus_native_merge83.py reconstructs exact coplanar source
+quadrilaterals and merges only *full-edge aligned* rectangles with matching
+material, source plane and original winding. It verifies that the original
+surface area is conserved, with no holes filled and no surfaces moved.
+
+| Source-native candidate | Triangles | Unique vertices | Compressed bytes |
+|---|---:|---:|---:|
+| Raw octree staging | 1,661,200 | 822,787 | 8,963,100 |
+| **Exact plane-merged staging** | **1,115,718** | **767,090** | **7,500,424** |
+| Compact core (plain slot 1 omitted) | 98,358 | 123,915 | 822,182 |
+
+The merger **removes 545,482 unnecessary triangles (~32.8%)** while
+retaining all 196 original source texture-slot IDs. It is geometry
+compaction, NOT proof that all remaining triangles belong on screen.
+
+The merged archive is an optional *heavy diagnostic* in the independent
+Octavus inspection viewer, never loaded by current live gameplay.
+The source remains in static/maps/octavus.native-stage1.bin.gz.
+
+The exact plane merge is independently tested in
+test_octavus_native_merge83.py and the CI workflow
+.github/workflows/octavus-native-merge83.yml. The workflow verifies
+hashes, all triangle indices, source material conservation, untouched
+non-plain triangles, and synthetic gap/winding invariants.
+
+### Rejected conservative visibility experiment
+
+Inspecting the original engine reveals that a deformed map cube may
+still have a **fully occluding face**: source edge nibbles, not the
+stored cube kind, determine coverage. The experimental
+scripts/octavus_native_visibility82.py incorporates these tests and
+recursive bounding-rectangle occlusion; its unit tests pass.
+
+However its conservative full-map reconstruction **exceeded the safe
+1.8-million-triangle cap** and was prevented from publishing. It is
+not a usable replacement mesh and is not offered in the inspector.
+Its CI now runs the verified source-invariant tests only.
+
+### What still prevents native-renderer parity
+
+- Original classifyface/visibletris partial-face visibility, face
+  merging and polygon triangulation must be fully reconstructed.
+- Original source texture UVs, blend layers and model placement remain.
+- Map-view comparisons must check base buildings, courtyard, dunes,
+  doors and walkable routes against the original engine.
+- Client and authoritative server geometry/collision must be rebuilt
+  together and benchmarked before any map switch.
+
+**Phase 1.4 completes deterministic mesh compaction and visibility
+diagnosis, not the replacement of the live multiplayer map.**
+
 **Guardrail:** Do not modify `static/maps/octavus.json`,
 `static/octavus_match.js`, `octavus_world.py`, or server gameplay
 collision until the native geometry replacement passes the visual
