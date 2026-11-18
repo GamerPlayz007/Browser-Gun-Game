@@ -1,0 +1,6569 @@
+{
+  "format": "OCTAVUS-NATIVE-VSLOTS86",
+  "sourceRevision": 829,
+  "sourceChecksum": "31f07750a7610d069609a35ac6eb070e8ea3dc52571da9f529d3d643a212dde5",
+  "nativeVSlotCount": 223,
+  "modifiedNativeSlots": 155,
+  "nativeRootCount": 68,
+  "nativeRootHistogram": {
+    "0": 1,
+    "1": 3,
+    "2": 2,
+    "3": 1,
+    "4": 11,
+    "5": 12,
+    "6": 3,
+    "7": 6,
+    "8": 2,
+    "9": 6,
+    "10": 3,
+    "11": 3,
+    "12": 4,
+    "13": 1,
+    "14": 1,
+    "15": 4,
+    "16": 1,
+    "17": 1,
+    "18": 1,
+    "19": 4,
+    "20": 2,
+    "21": 1,
+    "22": 2,
+    "23": 2,
+    "24": 7,
+    "25": 3,
+    "26": 2,
+    "27": 1,
+    "28": 5,
+    "29": 2,
+    "30": 2,
+    "31": 9,
+    "32": 3,
+    "33": 1,
+    "34": 6,
+    "35": 18,
+    "36": 3,
+    "37": 7,
+    "38": 2,
+    "39": 2,
+    "40": 5,
+    "41": 3,
+    "42": 3,
+    "43": 9,
+    "44": 1,
+    "45": 1,
+    "46": 2,
+    "47": 2,
+    "48": 2,
+    "49": 1,
+    "50": 1,
+    "51": 2,
+    "52": 3,
+    "53": 2,
+    "54": 2,
+    "55": 1,
+    "56": 5,
+    "57": 1,
+    "58": 2,
+    "59": 7,
+    "60": 2,
+    "61": 3,
+    "62": 1,
+    "63": 1,
+    "64": 1,
+    "65": 7,
+    "66": 2,
+    "67": 1
+  },
+  "nativeFieldChanges": {
+    "alpha": 13,
+    "angle": 3,
+    "color": 66,
+    "layer": 26,
+    "offset": 53,
+    "palette": 34,
+    "refract": 2,
+    "rotation": 26,
+    "scale": 55,
+    "scroll": 13,
+    "shaderParams": 14,
+    "shadow": 2
+  },
+  "maxVariantDepth": 17,
+  "cfgTextureDefinitions": 68,
+  "preexistingObjAtlasMaterials": 111,
+  "registryIndexCandidates": 223,
+  "candidateWithReusableAsset": 185,
+  "notInCFGOrder": [],
+  "sourceNativeSlots": [
+    {
+      "index": 0,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 0
+    },
+    {
+      "index": 1,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 1
+    },
+    {
+      "index": 2,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 2
+    },
+    {
+      "index": 3,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 3
+    },
+    {
+      "index": 4,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 4
+    },
+    {
+      "index": 5,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 5
+    },
+    {
+      "index": 6,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 6
+    },
+    {
+      "index": 7,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 7
+    },
+    {
+      "index": 8,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 8
+    },
+    {
+      "index": 9,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 9
+    },
+    {
+      "index": 10,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 10
+    },
+    {
+      "index": 11,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 11
+    },
+    {
+      "index": 12,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 12
+    },
+    {
+      "index": 13,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 13
+    },
+    {
+      "index": 14,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 14
+    },
+    {
+      "index": 15,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 15
+    },
+    {
+      "index": 16,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 16
+    },
+    {
+      "index": 17,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 17
+    },
+    {
+      "index": 18,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 18
+    },
+    {
+      "index": 19,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 19
+    },
+    {
+      "index": 20,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 20
+    },
+    {
+      "index": 21,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 21
+    },
+    {
+      "index": 22,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 22
+    },
+    {
+      "index": 23,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 23
+    },
+    {
+      "index": 24,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 24
+    },
+    {
+      "index": 25,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 25
+    },
+    {
+      "index": 26,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 26
+    },
+    {
+      "index": 27,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 27
+    },
+    {
+      "index": 28,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 28
+    },
+    {
+      "index": 29,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 29
+    },
+    {
+      "index": 30,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 30
+    },
+    {
+      "index": 31,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 31
+    },
+    {
+      "index": 32,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 32
+    },
+    {
+      "index": 33,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 33
+    },
+    {
+      "index": 34,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 34
+    },
+    {
+      "index": 35,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 35
+    },
+    {
+      "index": 36,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 36
+    },
+    {
+      "index": 37,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 37
+    },
+    {
+      "index": 38,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 38
+    },
+    {
+      "index": 39,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 39
+    },
+    {
+      "index": 40,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 40
+    },
+    {
+      "index": 41,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 41
+    },
+    {
+      "index": 42,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 42
+    },
+    {
+      "index": 43,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 43
+    },
+    {
+      "index": 44,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 44
+    },
+    {
+      "index": 45,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 45
+    },
+    {
+      "index": 46,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 46
+    },
+    {
+      "index": 47,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 47
+    },
+    {
+      "index": 48,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 48
+    },
+    {
+      "index": 49,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 49
+    },
+    {
+      "index": 50,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 50
+    },
+    {
+      "index": 51,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 51
+    },
+    {
+      "index": 52,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 52
+    },
+    {
+      "index": 53,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 53
+    },
+    {
+      "index": 54,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 54
+    },
+    {
+      "index": 55,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 55
+    },
+    {
+      "index": 56,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 56
+    },
+    {
+      "index": 57,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 57
+    },
+    {
+      "index": 58,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 58
+    },
+    {
+      "index": 59,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 59
+    },
+    {
+      "index": 60,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 60
+    },
+    {
+      "index": 61,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 61
+    },
+    {
+      "index": 62,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 62
+    },
+    {
+      "index": 63,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 63
+    },
+    {
+      "index": 64,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 64
+    },
+    {
+      "index": 65,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 65
+    },
+    {
+      "index": 66,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 66
+    },
+    {
+      "index": 67,
+      "changedMaskHex": "0x0",
+      "prev": -1,
+      "overrides": {},
+      "rootVSlot": 67
+    },
+    {
+      "index": 68,
+      "changedMaskHex": "0x2",
+      "prev": 31,
+      "overrides": {
+        "scale": 6.0
+      },
+      "rootVSlot": 31,
+      "depth": 1
+    },
+    {
+      "index": 69,
+      "changedMaskHex": "0x12",
+      "prev": 70,
+      "overrides": {
+        "scale": 3.0,
+        "scroll": [
+          2.9999999242136255e-05,
+          0.0
+        ]
+      },
+      "rootVSlot": 31,
+      "depth": 8
+    },
+    {
+      "index": 70,
+      "changedMaskHex": "0xa0",
+      "prev": 114,
+      "overrides": {
+        "layer": 71,
+        "color": [
+          0.8999999761581421,
+          0.8999999761581421,
+          0.8999999761581421
+        ]
+      },
+      "rootVSlot": 31,
+      "depth": 7
+    },
+    {
+      "index": 71,
+      "changedMaskHex": "0x80",
+      "prev": 66,
+      "overrides": {
+        "color": [
+          0.800000011920929,
+          0.7039999961853027,
+          0.6399999856948853
+        ]
+      },
+      "rootVSlot": 66,
+      "depth": 1
+    },
+    {
+      "index": 72,
+      "changedMaskHex": "0x81",
+      "prev": 135,
+      "overrides": {
+        "shaderParams": [
+          {
+            "name": "envmin",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "name": "envscale",
+            "values": [
+              0.10000000149011612,
+              0.10000000149011612,
+              0.10000000149011612,
+              0.0
+            ]
+          },
+          {
+            "name": "parallaxscale",
+            "values": [
+              0.004000000189989805,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "name": "normalscale",
+            "values": [
+              2.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "name": "specscale",
+            "values": [
+              1.5,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "name": "gloss",
+            "values": [
+              2.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "color": [
+          0.4000000059604645,
+          0.21333299577236176,
+          0.11999999731779099
+        ]
+      },
+      "rootVSlot": 56,
+      "depth": 3
+    },
+    {
+      "index": 73,
+      "changedMaskHex": "0x80",
+      "prev": 1,
+      "overrides": {
+        "color": [
+          0.699999988079071,
+          0.699999988079071,
+          0.699999988079071
+        ]
+      },
+      "rootVSlot": 1,
+      "depth": 1
+    },
+    {
+      "index": 74,
+      "changedMaskHex": "0x10a",
+      "prev": 206,
+      "overrides": {
+        "scale": 0.25,
+        "offset": [
+          64,
+          0
+        ],
+        "palette": [
+          1,
+          2
+        ]
+      },
+      "rootVSlot": 5,
+      "depth": 11
+    },
+    {
+      "index": 75,
+      "changedMaskHex": "0x81",
+      "prev": 97,
+      "overrides": {
+        "shaderParams": [
+          {
+            "name": "specscale",
+            "values": [
+              0.800000011920929,
+              0.75,
+              0.75,
+              0.0
+            ]
+          }
+        ],
+        "color": [
+          0.5,
+          0.5,
+          0.5
+        ]
+      },
+      "rootVSlot": 24,
+      "depth": 2
+    },
+    {
+      "index": 76,
+      "changedMaskHex": "0x80",
+      "prev": 40,
+      "overrides": {
+        "color": [
+          0.20000000298023224,
+          0.20000000298023224,
+          0.20000000298023224
+        ]
+      },
+      "rootVSlot": 40,
+      "depth": 1
+    },
+    {
+      "index": 77,
+      "changedMaskHex": "0x80",
+      "prev": 75,
+      "overrides": {
+        "color": [
+          0.5,
+          0.5,
+          0.5
+        ]
+      },
+      "rootVSlot": 24,
+      "depth": 3
+    },
+    {
+      "index": 78,
+      "changedMaskHex": "0x10",
+      "prev": 2,
+      "overrides": {
+        "scroll": [
+          -0.0010000000474974513,
+          0.0
+        ]
+      },
+      "rootVSlot": 2,
+      "depth": 1
+    },
+    {
+      "index": 79,
+      "changedMaskHex": "0x80",
+      "prev": 72,
+      "overrides": {
+        "color": [
+          0.6000000238418579,
+          0.36000001430511475,
+          0.23999999463558197
+        ]
+      },
+      "rootVSlot": 56,
+      "depth": 4
+    },
+    {
+      "index": 80,
+      "changedMaskHex": "0xa1",
+      "prev": 19,
+      "overrides": {
+        "shaderParams": [
+          {
+            "name": "normalscale",
+            "values": [
+              1.5,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "name": "envmin",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "name": "envscale",
+            "values": [
+              0.4000000059604645,
+              0.4000000059604645,
+              0.4000000059604645,
+              0.0
+            ]
+          },
+          {
+            "name": "gloss",
+            "values": [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "layer": 81,
+        "color": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "rootVSlot": 19,
+      "depth": 1
+    },
+    {
+      "index": 81,
+      "changedMaskHex": "0xa0",
+      "prev": 102,
+      "overrides": {
+        "layer": 82,
+        "color": [
+          0.8999999761581421,
+          0.8999999761581421,
+          0.8999999761581421
+        ]
+      },
+      "rootVSlot": 31,
+      "depth": 3
+    },
+    {
+      "index": 82,
+      "changedMaskHex": "0x82",
+      "prev": 53,
+      "overrides": {
+        "scale": 0.5,
+        "color": [
+          0.699999988079071,
+          0.699999988079071,
+          0.699999988079071
+        ]
+      },
+      "rootVSlot": 53,
+      "depth": 1
+    },
+    {
+      "index": 83,
+      "changedMaskHex": "0x2",
+      "prev": 38,
+      "overrides": {
+        "scale": 1.0
+      },
+      "rootVSlot": 38,
+      "depth": 1
+    },
+    {
+      "index": 84,
+      "changedMaskHex": "0xa0",
+      "prev": 56,
+      "overrides": {
+        "layer": 81,
+        "color": [
+          0.5,
+          0.23749999701976776,
+          0.15000000596046448
+        ]
+      },
+      "rootVSlot": 56,
+      "depth": 1
+    },
+    {
+      "index": 85,
+      "changedMaskHex": "0xa0",
+      "prev": 163,
+      "overrides": {
+        "layer": 81,
+        "color": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "rootVSlot": 11,
+      "depth": 2
+    },
+    {
+      "index": 86,
+      "changedMaskHex": "0x80",
+      "prev": 37,
+      "overrides": {
+        "color": [
+          0.699999988079071,
+          0.699999988079071,
+          0.699999988079071
+        ]
+      },
+      "rootVSlot": 37,
+      "depth": 1
+    },
+    {
+      "index": 87,
+      "changedMaskHex": "0xa2",
+      "prev": 81,
+      "overrides": {
+        "scale": 0.25,
+        "layer": 82,
+        "color": [
+          0.5,
+          0.23749999701976776,
+          0.15000000596046448
+        ]
+      },
+      "rootVSlot": 31,
+      "depth": 4
+    },
+    {
+      "index": 88,
+      "changedMaskHex": "0x2440",
+      "prev": 61,
+      "overrides": {
+        "alpha": [
+          0.20000000298023224,
+          0.0
+        ],
+        "refract": [
+          0.20000000298023224,
+          0.3117380142211914,
+          0.4564589858055115,
+          0.5529400110244751
+        ],
+        "shadow": 1.0
+      },
+      "rootVSlot": 61,
+      "depth": 1
+    },
+    {
+      "index": 89,
+      "changedMaskHex": "0x180",
+      "prev": 86,
+      "overrides": {
+        "color": [
+          0.699999988079071,
+          0.699999988079071,
+          0.699999988079071
+        ],
+        "palette": [
+          1,
+          2
+        ]
+      },
+      "rootVSlot": 37,
+      "depth": 2
+    },
+    {
+      "index": 90,
+      "changedMaskHex": "0x180",
+      "prev": 181,
+      "overrides": {
+        "color": [
+          0.699999988079071,
+          0.699999988079071,
+          0.699999988079071
+        ],
+        "palette": [
+          1,
+          2
+        ]
+      },
+      "rootVSlot": 4,
+      "depth": 6
+    },
+    {
+      "index": 91,
+      "changedMaskHex": "0x2",
+      "prev": 46,
+      "overrides": {
+        "scale": 0.25
+      },
+      "rootVSlot": 46,
+      "depth": 1
+    },
+    {
+      "index": 92,
+      "changedMaskHex": "0x84",
+      "prev": 191,
+      "overrides": {
+        "rotation": 1,
+        "color": [
+          1.2999999523162842,
+          1.2999999523162842,
+          1.2999999523162842
+        ]
+      },
+      "rootVSlot": 35,
+      "depth": 12
+    },
+    {
+      "index": 93,
+      "changedMaskHex": "0x4",
+      "prev": 6,
+      "overrides": {
+        "rotation": 1
+      },
+      "rootVSlot": 6,
+      "depth": 1
+    },
+    {
+      "index": 94,
+      "changedMaskHex": "0x8",
+      "prev": 51,
+      "overrides": {
+        "offset": [
+          0,
+          256
+        ]
+      },
+      "rootVSlot": 51,
+      "depth": 1
+    },
+    {
+      "index": 95,
+      "changedMaskHex": "0x20",
+      "prev": 42,
+      "overrides": {
+        "layer": 81
+      },
+      "rootVSlot": 42,
+      "depth": 1
+    },
+    {
+      "index": 96,
+      "changedMaskHex": "0x122",
+      "prev": 140,
+      "overrides": {
+        "scale": 1.0,
+        "layer": 81,
+        "palette": [
+          2,
+          11
+        ]
+      },
+      "rootVSlot": 7,
+      "depth": 4
+    },
+    {
+      "index": 97,
+      "changedMaskHex": "0x1",
+      "prev": 24,
+      "overrides": {
+        "shaderParams": [
+          {
+            "name": "specscale",
+            "values": [
+              0.800000011920929,
+              0.75,
+              0.75,
+              0.0
+            ]
+          }
+        ]
+      },
+      "rootVSlot": 24,
+      "depth": 1
+    },
+    {
+      "index": 98,
+      "changedMaskHex": "0x2",
+      "prev": 7,
+      "overrides": {
+        "scale": 0.25
+      },
+      "rootVSlot": 7,
+      "depth": 1
+    },
+    {
+      "index": 99,
+      "changedMaskHex": "0x8",
+      "prev": 157,
+      "overrides": {
+        "offset": [
+          64,
+          0
+        ]
+      },
+      "rootVSlot": 5,
+      "depth": 7
+    },
+    {
+      "index": 100,
+      "changedMaskHex": "0x8e",
+      "prev": 160,
+      "overrides": {
+        "scale": 1.0,
+        "rotation": 1,
+        "offset": [
+          0,
+          160
+        ],
+        "color": [
+          0.5,
+          0.5,
+          0.5
+        ]
+      },
+      "rootVSlot": 35,
+      "depth": 15
+    },
+    {
+      "index": 101,
+      "changedMaskHex": "0x20",
+      "prev": 95,
+      "overrides": {
+        "layer": 102
+      },
+      "rootVSlot": 42,
+      "depth": 2
+    },
+    {
+      "index": 102,
+      "changedMaskHex": "0x12",
+      "prev": 68,
+      "overrides": {
+        "scale": 6.0,
+        "scroll": [
+          2.9999999242136255e-05,
+          0.0
+        ]
+      },
+      "rootVSlot": 31,
+      "depth": 2
+    },
+    {
+      "index": 103,
+      "changedMaskHex": "0xe0",
+      "prev": 87,
+      "overrides": {
+        "layer": 82,
+        "alpha": [
+          1.0,
+          0.0
+        ],
+        "color": [
+          0.8999999761581421,
+          0.8999999761581421,
+          0.8999999761581421
+        ]
+      },
+      "rootVSlot": 31,
+      "depth": 5
+    },
+    {
+      "index": 104,
+      "changedMaskHex": "0x82",
+      "prev": 105,
+      "overrides": {
+        "scale": 0.25,
+        "color": [
+          0.75,
+          0.75,
+          0.75
+        ]
+      },
+      "rootVSlot": 59,
+      "depth": 2
+    },
+    {
+      "index": 105,
+      "changedMaskHex": "0x8a",
+      "prev": 59,
+      "overrides": {
+        "scale": 0.25,
+        "offset": [
+          512,
+          0
+        ],
+        "color": [
+          0.75,
+          0.75,
+          0.75
+        ]
+      },
+      "rootVSlot": 59,
+      "depth": 1
+    },
+    {
+      "index": 106,
+      "changedMaskHex": "0x2",
+      "prev": 34,
+      "overrides": {
+        "scale": 0.5
+      },
+      "rootVSlot": 34,
+      "depth": 1
+    },
+    {
+      "index": 107,
+      "changedMaskHex": "0x80",
+      "prev": 41,
+      "overrides": {
+        "color": [
+          0.30000001192092896,
+          0.30000001192092896,
+          0.30000001192092896
+        ]
+      },
+      "rootVSlot": 41,
+      "depth": 1
+    },
+    {
+      "index": 108,
+      "changedMaskHex": "0x8",
+      "prev": 172,
+      "overrides": {
+        "offset": [
+          0,
+          256
+        ]
+      },
+      "rootVSlot": 9,
+      "depth": 2
+    },
+    {
+      "index": 109,
+      "changedMaskHex": "0x84",
+      "prev": 92,
+      "overrides": {
+        "rotation": 1,
+        "color": [
+          0.5,
+          0.5,
+          0.5
+        ]
+      },
+      "rootVSlot": 35,
+      "depth": 13
+    },
+    {
+      "index": 110,
+      "changedMaskHex": "0xa0",
+      "prev": 148,
+      "overrides": {
+        "layer": 81,
+        "color": [
+          0.20000000298023224,
+          0.20000000298023224,
+          0.20000000298023224
+        ]
+      },
+      "rootVSlot": 40,
+      "depth": 3
+    },
+    {
+      "index": 111,
+      "changedMaskHex": "0xa0",
+      "prev": 154,
+      "overrides": {
+        "layer": 81,
+        "color": [
+          0.5,
+          0.5,
+          0.5
+        ]
+      },
+      "rootVSlot": 24,
+      "depth": 5
+    },
+    {
+      "index": 112,
+      "changedMaskHex": "0x100",
+      "prev": 144,
+      "overrides": {
+        "palette": [
+          2,
+          4
+        ]
+      },
+      "rootVSlot": 5,
+      "depth": 2
+    },
+    {
+      "index": 113,
+      "changedMaskHex": "0xa1",
+      "prev": 80,
+      "overrides": {
+        "shaderParams": [
+          {
+            "name": "normalscale",
+            "values": [
+              1.5,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "name": "envmin",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "name": "envscale",
+            "values": [
+              0.4000000059604645,
+              0.4000000059604645,
+              0.4000000059604645,
+              0.0
+            ]
+          },
+          {
+            "name": "gloss",
+            "values": [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "layer": 81,
+        "color": [
+          0.5,
+          0.5,
+          0.5
+        ]
+      },
+      "rootVSlot": 19,
+      "depth": 2
+    },
+    {
+      "index": 114,
+      "changedMaskHex": "0xa0",
+      "prev": 103,
+      "overrides": {
+        "layer": 81,
+        "color": [
+          0.8999999761581421,
+          0.8999999761581421,
+          0.8999999761581421
+        ]
+      },
+      "rootVSlot": 31,
+      "depth": 6
+    },
+    {
+      "index": 115,
+      "changedMaskHex": "0x4",
+      "prev": 47,
+      "overrides": {
+        "rotation": 1
+      },
+      "rootVSlot": 47,
+      "depth": 1
+    },
+    {
+      "index": 116,
+      "changedMaskHex": "0x82",
+      "prev": 104,
+      "overrides": {
+        "scale": 0.125,
+        "color": [
+          0.75,
+          0.75,
+          0.75
+        ]
+      },
+      "rootVSlot": 59,
+      "depth": 3
+    },
+    {
+      "index": 117,
+      "changedMaskHex": "0x188",
+      "prev": 90,
+      "overrides": {
+        "offset": [
+          128,
+          0
+        ],
+        "color": [
+          0.699999988079071,
+          0.699999988079071,
+          0.699999988079071
+        ],
+        "palette": [
+          1,
+          2
+        ]
+      },
+      "rootVSlot": 4,
+      "depth": 7
+    },
+    {
+      "index": 118,
+      "changedMaskHex": "0x4",
+      "prev": 26,
+      "overrides": {
+        "rotation": 1
+      },
+      "rootVSlot": 26,
+      "depth": 1
+    },
+    {
+      "index": 119,
+      "changedMaskHex": "0x5e",
+      "prev": 204,
+      "overrides": {
+        "scale": 2.0,
+        "rotation": 1,
+        "offset": [
+          164,
+          0
+        ],
+        "scroll": [
+          0.0,
+          0.00010000000474974513
+        ],
+        "alpha": [
+          0.30000001192092896,
+          0.0
+        ]
+      },
+      "rootVSlot": 65,
+      "depth": 3
+    },
+    {
+      "index": 120,
+      "changedMaskHex": "0x5e",
+      "prev": 119,
+      "overrides": {
+        "scale": 2.0,
+        "rotation": 1,
+        "offset": [
+          220,
+          0
+        ],
+        "scroll": [
+          0.0,
+          0.00010000000474974513
+        ],
+        "alpha": [
+          0.30000001192092896,
+          0.0
+        ]
+      },
+      "rootVSlot": 65,
+      "depth": 4
+    },
+    {
+      "index": 121,
+      "changedMaskHex": "0x108",
+      "prev": 4,
+      "overrides": {
+        "offset": [
+          448,
+          0
+        ],
+        "palette": [
+          1,
+          2
+        ]
+      },
+      "rootVSlot": 4,
+      "depth": 1
+    },
+    {
+      "index": 122,
+      "changedMaskHex": "0x88",
+      "prev": 106,
+      "overrides": {
+        "offset": [
+          32,
+          0
+        ],
+        "color": [
+          0.5,
+          0.5,
+          0.5
+        ]
+      },
+      "rootVSlot": 34,
+      "depth": 2
+    },
+    {
+      "index": 123,
+      "changedMaskHex": "0x8c",
+      "prev": 169,
+      "overrides": {
+        "rotation": 1,
+        "offset": [
+          128,
+          0
+        ],
+        "color": [
+          0.699999988079071,
+          0.699999988079071,
+          0.699999988079071
+        ]
+      },
+      "rootVSlot": 35,
+      "depth": 2
+    },
+    {
+      "index": 124,
+      "changedMaskHex": "0x102",
+      "prev": 161,
+      "overrides": {
+        "scale": 0.125,
+        "palette": [
+          2,
+          12
+        ]
+      },
+      "rootVSlot": 43,
+      "depth": 3
+    },
+    {
+      "index": 125,
+      "changedMaskHex": "0xa",
+      "prev": 166,
+      "overrides": {
+        "scale": 0.25,
+        "offset": [
+          128,
+          0
+        ]
+      },
+      "rootVSlot": 43,
+      "depth": 6
+    },
+    {
+      "index": 126,
+      "changedMaskHex": "0x22",
+      "prev": 162,
+      "overrides": {
+        "scale": 0.5,
+        "layer": 81
+      },
+      "rootVSlot": 34,
+      "depth": 4
+    },
+    {
+      "index": 127,
+      "changedMaskHex": "0xa0",
+      "prev": 107,
+      "overrides": {
+        "layer": 81,
+        "color": [
+          0.699999988079071,
+          0.30000001192092896,
+          0.15000000596046448
+        ]
+      },
+      "rootVSlot": 41,
+      "depth": 2
+    },
+    {
+      "index": 128,
+      "changedMaskHex": "0x20",
+      "prev": 22,
+      "overrides": {
+        "layer": 81
+      },
+      "rootVSlot": 22,
+      "depth": 1
+    },
+    {
+      "index": 129,
+      "changedMaskHex": "0x20",
+      "prev": 126,
+      "overrides": {
+        "layer": 81
+      },
+      "rootVSlot": 34,
+      "depth": 5
+    },
+    {
+      "index": 130,
+      "changedMaskHex": "0x4e",
+      "prev": 108,
+      "overrides": {
+        "scale": 1.25,
+        "rotation": 1,
+        "offset": [
+          0,
+          510
+        ],
+        "alpha": [
+          0.20000000298023224,
+          0.0
+        ]
+      },
+      "rootVSlot": 9,
+      "depth": 3
+    },
+    {
+      "index": 131,
+      "changedMaskHex": "0x5a",
+      "prev": 30,
+      "overrides": {
+        "scale": 0.5,
+        "offset": [
+          450,
+          0
+        ],
+        "scroll": [
+          0.0,
+          -0.00015999999595806003
+        ],
+        "alpha": [
+          0.699999988079071,
+          0.0
+        ]
+      },
+      "rootVSlot": 30,
+      "depth": 1
+    },
+    {
+      "index": 132,
+      "changedMaskHex": "0x20",
+      "prev": 201,
+      "overrides": {
+        "layer": 81
+      },
+      "rootVSlot": 37,
+      "depth": 5
+    },
+    {
+      "index": 133,
+      "changedMaskHex": "0x8",
+      "prev": 139,
+      "overrides": {
+        "offset": [
+          34,
+          0
+        ]
+      },
+      "rootVSlot": 5,
+      "depth": 5
+    },
+    {
+      "index": 134,
+      "changedMaskHex": "0xa",
+      "prev": 136,
+      "overrides": {
+        "scale": 1.0,
+        "offset": [
+          64,
+          0
+        ]
+      },
+      "rootVSlot": 15,
+      "depth": 2
+    },
+    {
+      "index": 135,
+      "changedMaskHex": "0x80",
+      "prev": 84,
+      "overrides": {
+        "color": [
+          0.30000001192092896,
+          0.20999999344348907,
+          0.18000000715255737
+        ]
+      },
+      "rootVSlot": 56,
+      "depth": 2
+    },
+    {
+      "index": 136,
+      "changedMaskHex": "0x2",
+      "prev": 15,
+      "overrides": {
+        "scale": 1.0
+      },
+      "rootVSlot": 15,
+      "depth": 1
+    },
+    {
+      "index": 137,
+      "changedMaskHex": "0x1a0",
+      "prev": 132,
+      "overrides": {
+        "layer": 81,
+        "color": [
+          0.699999988079071,
+          0.699999988079071,
+          0.699999988079071
+        ],
+        "palette": [
+          1,
+          2
+        ]
+      },
+      "rootVSlot": 37,
+      "depth": 6
+    },
+    {
+      "index": 138,
+      "changedMaskHex": "0xa1",
+      "prev": 111,
+      "overrides": {
+        "shaderParams": [
+          {
+            "name": "specscale",
+            "values": [
+              0.800000011920929,
+              0.75,
+              0.75,
+              0.0
+            ]
+          }
+        ],
+        "layer": 81,
+        "color": [
+          0.5,
+          0.5,
+          0.5
+        ]
+      },
+      "rootVSlot": 24,
+      "depth": 6
+    },
+    {
+      "index": 139,
+      "changedMaskHex": "0x8",
+      "prev": 205,
+      "overrides": {
+        "offset": [
+          32,
+          0
+        ]
+      },
+      "rootVSlot": 5,
+      "depth": 4
+    },
+    {
+      "index": 140,
+      "changedMaskHex": "0x100",
+      "prev": 141,
+      "overrides": {
+        "palette": [
+          2,
+          12
+        ]
+      },
+      "rootVSlot": 7,
+      "depth": 3
+    },
+    {
+      "index": 141,
+      "changedMaskHex": "0x180",
+      "prev": 98,
+      "overrides": {
+        "color": [
+          2.0,
+          2.0,
+          2.0
+        ],
+        "palette": [
+          2,
+          4
+        ]
+      },
+      "rootVSlot": 7,
+      "depth": 2
+    },
+    {
+      "index": 142,
+      "changedMaskHex": "0x8e",
+      "prev": 149,
+      "overrides": {
+        "scale": 1.0,
+        "rotation": 1,
+        "offset": [
+          0,
+          128
+        ],
+        "color": [
+          0.5,
+          0.5,
+          0.5
+        ]
+      },
+      "rootVSlot": 35,
+      "depth": 17
+    },
+    {
+      "index": 143,
+      "changedMaskHex": "0x102",
+      "prev": 43,
+      "overrides": {
+        "scale": 0.125,
+        "palette": [
+          2,
+          11
+        ]
+      },
+      "rootVSlot": 43,
+      "depth": 1
+    },
+    {
+      "index": 144,
+      "changedMaskHex": "0x100",
+      "prev": 5,
+      "overrides": {
+        "palette": [
+          2,
+          5
+        ]
+      },
+      "rootVSlot": 5,
+      "depth": 1
+    },
+    {
+      "index": 145,
+      "changedMaskHex": "0xa",
+      "prev": 178,
+      "overrides": {
+        "scale": 0.125,
+        "offset": [
+          128,
+          128
+        ]
+      },
+      "rootVSlot": 52,
+      "depth": 2
+    },
+    {
+      "index": 146,
+      "changedMaskHex": "0x8c",
+      "prev": 147,
+      "overrides": {
+        "rotation": 7,
+        "offset": [
+          256,
+          0
+        ],
+        "color": [
+          0.699999988079071,
+          0.699999988079071,
+          0.699999988079071
+        ]
+      },
+      "rootVSlot": 35,
+      "depth": 4
+    },
+    {
+      "index": 147,
+      "changedMaskHex": "0x8c",
+      "prev": 123,
+      "overrides": {
+        "rotation": 3,
+        "offset": [
+          128,
+          0
+        ],
+        "color": [
+          0.699999988079071,
+          0.699999988079071,
+          0.699999988079071
+        ]
+      },
+      "rootVSlot": 35,
+      "depth": 3
+    },
+    {
+      "index": 148,
+      "changedMaskHex": "0x80",
+      "prev": 76,
+      "overrides": {
+        "color": [
+          0.5,
+          0.5,
+          0.5
+        ]
+      },
+      "rootVSlot": 40,
+      "depth": 2
+    },
+    {
+      "index": 149,
+      "changedMaskHex": "0x86",
+      "prev": 100,
+      "overrides": {
+        "scale": 0.25,
+        "rotation": 1,
+        "color": [
+          1.0,
+          0.6666669845581055,
+          0.5
+        ]
+      },
+      "rootVSlot": 35,
+      "depth": 16
+    },
+    {
+      "index": 150,
+      "changedMaskHex": "0x1088",
+      "prev": 196,
+      "overrides": {
+        "offset": [
+          1110704128,
+          1060439283
+        ],
+        "color": [
+          0.7071067690849304,
+          6.726232628759122e-43,
+          2.6904930515036488e-43
+        ],
+        "angle": [
+          2.0,
+          2.0,
+          2.0
+        ]
+      },
+      "rootVSlot": 28,
+      "depth": 3
+    },
+    {
+      "index": 151,
+      "changedMaskHex": "0x8c",
+      "prev": 152,
+      "overrides": {
+        "rotation": 7,
+        "offset": [
+          640,
+          0
+        ],
+        "color": [
+          0.699999988079071,
+          0.699999988079071,
+          0.699999988079071
+        ]
+      },
+      "rootVSlot": 35,
+      "depth": 6
+    },
+    {
+      "index": 152,
+      "changedMaskHex": "0x8c",
+      "prev": 146,
+      "overrides": {
+        "rotation": 7,
+        "offset": [
+          0,
+          0
+        ],
+        "color": [
+          0.699999988079071,
+          0.699999988079071,
+          0.699999988079071
+        ]
+      },
+      "rootVSlot": 35,
+      "depth": 5
+    },
+    {
+      "index": 153,
+      "changedMaskHex": "0x5a",
+      "prev": 158,
+      "overrides": {
+        "scale": 1.0,
+        "offset": [
+          0,
+          36
+        ],
+        "scroll": [
+          0.00010000000474974513,
+          0.0
+        ],
+        "alpha": [
+          0.30000001192092896,
+          0.0
+        ]
+      },
+      "rootVSlot": 65,
+      "depth": 6
+    },
+    {
+      "index": 154,
+      "changedMaskHex": "0x100",
+      "prev": 77,
+      "overrides": {
+        "palette": [
+          2,
+          12
+        ]
+      },
+      "rootVSlot": 24,
+      "depth": 4
+    },
+    {
+      "index": 155,
+      "changedMaskHex": "0x100",
+      "prev": 8,
+      "overrides": {
+        "palette": [
+          2,
+          12
+        ]
+      },
+      "rootVSlot": 8,
+      "depth": 1
+    },
+    {
+      "index": 156,
+      "changedMaskHex": "0x108",
+      "prev": 177,
+      "overrides": {
+        "offset": [
+          64,
+          0
+        ],
+        "palette": [
+          2,
+          12
+        ]
+      },
+      "rootVSlot": 12,
+      "depth": 3
+    },
+    {
+      "index": 157,
+      "changedMaskHex": "0x8",
+      "prev": 133,
+      "overrides": {
+        "offset": [
+          98,
+          0
+        ]
+      },
+      "rootVSlot": 5,
+      "depth": 6
+    },
+    {
+      "index": 158,
+      "changedMaskHex": "0x5a",
+      "prev": 120,
+      "overrides": {
+        "scale": 1.0,
+        "offset": [
+          0,
+          226
+        ],
+        "scroll": [
+          0.00010000000474974513,
+          0.0
+        ],
+        "alpha": [
+          0.30000001192092896,
+          0.0
+        ]
+      },
+      "rootVSlot": 65,
+      "depth": 5
+    },
+    {
+      "index": 159,
+      "changedMaskHex": "0x1088",
+      "prev": 150,
+      "overrides": {
+        "offset": [
+          1110704128,
+          1060439283
+        ],
+        "color": [
+          0.7071067690849304,
+          4.035739577255473e-43,
+          1.3004049748934302e-42
+        ],
+        "angle": [
+          2.0,
+          2.0,
+          2.0
+        ]
+      },
+      "rootVSlot": 28,
+      "depth": 4
+    },
+    {
+      "index": 160,
+      "changedMaskHex": "0x84",
+      "prev": 109,
+      "overrides": {
+        "rotation": 1,
+        "color": [
+          1.0,
+          0.6666669845581055,
+          0.5
+        ]
+      },
+      "rootVSlot": 35,
+      "depth": 14
+    },
+    {
+      "index": 161,
+      "changedMaskHex": "0x102",
+      "prev": 143,
+      "overrides": {
+        "scale": 0.125,
+        "palette": [
+          2,
+          7
+        ]
+      },
+      "rootVSlot": 43,
+      "depth": 2
+    },
+    {
+      "index": 162,
+      "changedMaskHex": "0x80",
+      "prev": 122,
+      "overrides": {
+        "color": [
+          0.5,
+          0.5,
+          0.5
+        ]
+      },
+      "rootVSlot": 34,
+      "depth": 3
+    },
+    {
+      "index": 163,
+      "changedMaskHex": "0x20",
+      "prev": 11,
+      "overrides": {
+        "layer": 31
+      },
+      "rootVSlot": 11,
+      "depth": 1
+    },
+    {
+      "index": 164,
+      "changedMaskHex": "0x102",
+      "prev": 124,
+      "overrides": {
+        "scale": 0.125,
+        "palette": [
+          2,
+          8
+        ]
+      },
+      "rootVSlot": 43,
+      "depth": 4
+    },
+    {
+      "index": 165,
+      "changedMaskHex": "0x20",
+      "prev": 23,
+      "overrides": {
+        "layer": 81
+      },
+      "rootVSlot": 23,
+      "depth": 1
+    },
+    {
+      "index": 166,
+      "changedMaskHex": "0xa",
+      "prev": 164,
+      "overrides": {
+        "scale": 0.125,
+        "offset": [
+          128,
+          128
+        ]
+      },
+      "rootVSlot": 43,
+      "depth": 5
+    },
+    {
+      "index": 167,
+      "changedMaskHex": "0x80",
+      "prev": 28,
+      "overrides": {
+        "color": [
+          0.5,
+          0.5,
+          0.5
+        ]
+      },
+      "rootVSlot": 28,
+      "depth": 1
+    },
+    {
+      "index": 168,
+      "changedMaskHex": "0x8",
+      "prev": 93,
+      "overrides": {
+        "offset": [
+          32,
+          0
+        ]
+      },
+      "rootVSlot": 6,
+      "depth": 2
+    },
+    {
+      "index": 169,
+      "changedMaskHex": "0x8",
+      "prev": 35,
+      "overrides": {
+        "offset": [
+          128,
+          0
+        ]
+      },
+      "rootVSlot": 35,
+      "depth": 1
+    },
+    {
+      "index": 170,
+      "changedMaskHex": "0x8",
+      "prev": 12,
+      "overrides": {
+        "offset": [
+          64,
+          0
+        ]
+      },
+      "rootVSlot": 12,
+      "depth": 1
+    },
+    {
+      "index": 171,
+      "changedMaskHex": "0x8",
+      "prev": 182,
+      "overrides": {
+        "offset": [
+          64,
+          0
+        ]
+      },
+      "rootVSlot": 25,
+      "depth": 2
+    },
+    {
+      "index": 172,
+      "changedMaskHex": "0x4a",
+      "prev": 9,
+      "overrides": {
+        "scale": 1.25,
+        "offset": [
+          0,
+          510
+        ],
+        "alpha": [
+          0.20000000298023224,
+          0.0
+        ]
+      },
+      "rootVSlot": 9,
+      "depth": 1
+    },
+    {
+      "index": 173,
+      "changedMaskHex": "0x2",
+      "prev": 48,
+      "overrides": {
+        "scale": 0.25
+      },
+      "rootVSlot": 48,
+      "depth": 1
+    },
+    {
+      "index": 174,
+      "changedMaskHex": "0x1",
+      "prev": 99,
+      "overrides": {
+        "shaderParams": [
+          {
+            "name": "glowcolor",
+            "values": [
+              0.6666669845581055,
+              2.0,
+              0.0,
+              0.0
+            ]
+          }
+        ]
+      },
+      "rootVSlot": 5,
+      "depth": 8
+    },
+    {
+      "index": 175,
+      "changedMaskHex": "0xa0",
+      "prev": 110,
+      "overrides": {
+        "layer": 70,
+        "color": [
+          0.20000000298023224,
+          0.20000000298023224,
+          0.20000000298023224
+        ]
+      },
+      "rootVSlot": 40,
+      "depth": 4
+    },
+    {
+      "index": 176,
+      "changedMaskHex": "0x181",
+      "prev": 36,
+      "overrides": {
+        "shaderParams": [
+          {
+            "name": "glowcolor",
+            "values": [
+              0.10000000149011612,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "color": [
+          0.5,
+          0.5,
+          0.5
+        ],
+        "palette": [
+          1,
+          2
+        ]
+      },
+      "rootVSlot": 36,
+      "depth": 1
+    },
+    {
+      "index": 177,
+      "changedMaskHex": "0x8",
+      "prev": 170,
+      "overrides": {
+        "offset": [
+          192,
+          0
+        ]
+      },
+      "rootVSlot": 12,
+      "depth": 2
+    },
+    {
+      "index": 178,
+      "changedMaskHex": "0xa",
+      "prev": 52,
+      "overrides": {
+        "scale": 0.25,
+        "offset": [
+          128,
+          128
+        ]
+      },
+      "rootVSlot": 52,
+      "depth": 1
+    },
+    {
+      "index": 179,
+      "changedMaskHex": "0x2",
+      "prev": 134,
+      "overrides": {
+        "scale": 0.25
+      },
+      "rootVSlot": 15,
+      "depth": 3
+    },
+    {
+      "index": 180,
+      "changedMaskHex": "0x106",
+      "prev": 212,
+      "overrides": {
+        "scale": 0.25,
+        "rotation": 1,
+        "palette": [
+          1,
+          2
+        ]
+      },
+      "rootVSlot": 35,
+      "depth": 10
+    },
+    {
+      "index": 181,
+      "changedMaskHex": "0x102",
+      "prev": 183,
+      "overrides": {
+        "scale": 0.125,
+        "palette": [
+          1,
+          2
+        ]
+      },
+      "rootVSlot": 4,
+      "depth": 5
+    },
+    {
+      "index": 182,
+      "changedMaskHex": "0x8",
+      "prev": 25,
+      "overrides": {
+        "offset": [
+          64,
+          0
+        ]
+      },
+      "rootVSlot": 25,
+      "depth": 1
+    },
+    {
+      "index": 183,
+      "changedMaskHex": "0x108",
+      "prev": 188,
+      "overrides": {
+        "offset": [
+          64,
+          0
+        ],
+        "palette": [
+          1,
+          2
+        ]
+      },
+      "rootVSlot": 4,
+      "depth": 4
+    },
+    {
+      "index": 184,
+      "changedMaskHex": "0x80",
+      "prev": 54,
+      "overrides": {
+        "color": [
+          0.8999999761581421,
+          0.8999999761581421,
+          0.8999999761581421
+        ]
+      },
+      "rootVSlot": 54,
+      "depth": 1
+    },
+    {
+      "index": 185,
+      "changedMaskHex": "0x2",
+      "prev": 20,
+      "overrides": {
+        "scale": 1.0
+      },
+      "rootVSlot": 20,
+      "depth": 1
+    },
+    {
+      "index": 186,
+      "changedMaskHex": "0x2",
+      "prev": 29,
+      "overrides": {
+        "scale": 8.0
+      },
+      "rootVSlot": 29,
+      "depth": 1
+    },
+    {
+      "index": 187,
+      "changedMaskHex": "0x3",
+      "prev": 125,
+      "overrides": {
+        "shaderParams": [
+          {
+            "name": "glowcolor",
+            "values": [
+              2.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "scale": 0.25
+      },
+      "rootVSlot": 43,
+      "depth": 7
+    },
+    {
+      "index": 188,
+      "changedMaskHex": "0x108",
+      "prev": 199,
+      "overrides": {
+        "offset": [
+          64,
+          0
+        ],
+        "palette": [
+          1,
+          1
+        ]
+      },
+      "rootVSlot": 4,
+      "depth": 3
+    },
+    {
+      "index": 189,
+      "changedMaskHex": "0x180",
+      "prev": 89,
+      "overrides": {
+        "color": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "palette": [
+          1,
+          1
+        ]
+      },
+      "rootVSlot": 37,
+      "depth": 3
+    },
+    {
+      "index": 190,
+      "changedMaskHex": "0x180",
+      "prev": 117,
+      "overrides": {
+        "color": [
+          0.699999988079071,
+          0.699999988079071,
+          0.699999988079071
+        ],
+        "palette": [
+          1,
+          1
+        ]
+      },
+      "rootVSlot": 4,
+      "depth": 8
+    },
+    {
+      "index": 191,
+      "changedMaskHex": "0x106",
+      "prev": 180,
+      "overrides": {
+        "scale": 0.25,
+        "rotation": 1,
+        "palette": [
+          1,
+          1
+        ]
+      },
+      "rootVSlot": 35,
+      "depth": 11
+    },
+    {
+      "index": 192,
+      "changedMaskHex": "0x102",
+      "prev": 208,
+      "overrides": {
+        "scale": 0.125,
+        "palette": [
+          1,
+          1
+        ]
+      },
+      "rootVSlot": 4,
+      "depth": 10
+    },
+    {
+      "index": 193,
+      "changedMaskHex": "0x181",
+      "prev": 176,
+      "overrides": {
+        "shaderParams": [
+          {
+            "name": "glowcolor",
+            "values": [
+              0.10000000149011612,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "color": [
+          0.5,
+          0.5,
+          0.5
+        ],
+        "palette": [
+          1,
+          1
+        ]
+      },
+      "rootVSlot": 36,
+      "depth": 2
+    },
+    {
+      "index": 194,
+      "changedMaskHex": "0x1c",
+      "prev": 130,
+      "overrides": {
+        "rotation": 1,
+        "offset": [
+          502,
+          0
+        ],
+        "scroll": [
+          0.0,
+          0.0004000000189989805
+        ]
+      },
+      "rootVSlot": 9,
+      "depth": 4
+    },
+    {
+      "index": 195,
+      "changedMaskHex": "0x1c",
+      "prev": 194,
+      "overrides": {
+        "rotation": 1,
+        "offset": [
+          14,
+          0
+        ],
+        "scroll": [
+          0.0,
+          0.0004000000189989805
+        ]
+      },
+      "rootVSlot": 9,
+      "depth": 5
+    },
+    {
+      "index": 196,
+      "changedMaskHex": "0x1088",
+      "prev": 167,
+      "overrides": {
+        "offset": [
+          1110704128,
+          1060439283
+        ],
+        "color": [
+          0.7071067690849304,
+          0.0,
+          3.587324068671532e-43
+        ],
+        "angle": [
+          2.0,
+          2.0,
+          2.0
+        ]
+      },
+      "rootVSlot": 28,
+      "depth": 2
+    },
+    {
+      "index": 197,
+      "changedMaskHex": "0x80",
+      "prev": 96,
+      "overrides": {
+        "color": [
+          2.0,
+          2.0,
+          2.0
+        ]
+      },
+      "rootVSlot": 7,
+      "depth": 5
+    },
+    {
+      "index": 198,
+      "changedMaskHex": "0x20",
+      "prev": 174,
+      "overrides": {
+        "layer": 81
+      },
+      "rootVSlot": 5,
+      "depth": 9
+    },
+    {
+      "index": 199,
+      "changedMaskHex": "0x108",
+      "prev": 121,
+      "overrides": {
+        "offset": [
+          448,
+          0
+        ],
+        "palette": [
+          1,
+          1
+        ]
+      },
+      "rootVSlot": 4,
+      "depth": 2
+    },
+    {
+      "index": 200,
+      "changedMaskHex": "0x8c",
+      "prev": 211,
+      "overrides": {
+        "rotation": 1,
+        "offset": [
+          512,
+          0
+        ],
+        "color": [
+          0.699999988079071,
+          0.699999988079071,
+          0.699999988079071
+        ]
+      },
+      "rootVSlot": 35,
+      "depth": 8
+    },
+    {
+      "index": 201,
+      "changedMaskHex": "0x180",
+      "prev": 189,
+      "overrides": {
+        "color": [
+          0.699999988079071,
+          0.699999988079071,
+          0.699999988079071
+        ],
+        "palette": [
+          1,
+          1
+        ]
+      },
+      "rootVSlot": 37,
+      "depth": 4
+    },
+    {
+      "index": 202,
+      "changedMaskHex": "0x4",
+      "prev": 39,
+      "overrides": {
+        "rotation": 1
+      },
+      "rootVSlot": 39,
+      "depth": 1
+    },
+    {
+      "index": 203,
+      "changedMaskHex": "0x5a",
+      "prev": 65,
+      "overrides": {
+        "scale": 1.0,
+        "offset": [
+          0,
+          64
+        ],
+        "scroll": [
+          0.00010000000474974513,
+          0.0
+        ],
+        "alpha": [
+          0.30000001192092896,
+          0.0
+        ]
+      },
+      "rootVSlot": 65,
+      "depth": 1
+    },
+    {
+      "index": 204,
+      "changedMaskHex": "0x5a",
+      "prev": 203,
+      "overrides": {
+        "scale": 1.0,
+        "offset": [
+          0,
+          0
+        ],
+        "scroll": [
+          0.00010000000474974513,
+          0.0
+        ],
+        "alpha": [
+          0.30000001192092896,
+          0.0
+        ]
+      },
+      "rootVSlot": 65,
+      "depth": 2
+    },
+    {
+      "index": 205,
+      "changedMaskHex": "0x100",
+      "prev": 112,
+      "overrides": {
+        "palette": [
+          2,
+          11
+        ]
+      },
+      "rootVSlot": 5,
+      "depth": 3
+    },
+    {
+      "index": 206,
+      "changedMaskHex": "0x10a",
+      "prev": 198,
+      "overrides": {
+        "scale": 0.25,
+        "offset": [
+          64,
+          0
+        ],
+        "palette": [
+          1,
+          1
+        ]
+      },
+      "rootVSlot": 5,
+      "depth": 10
+    },
+    {
+      "index": 207,
+      "changedMaskHex": "0x3",
+      "prev": 187,
+      "overrides": {
+        "shaderParams": [
+          {
+            "name": "glowcolor",
+            "values": [
+              0.0,
+              0.16666600108146667,
+              2.0,
+              0.0
+            ]
+          }
+        ],
+        "scale": 0.25
+      },
+      "rootVSlot": 43,
+      "depth": 8
+    },
+    {
+      "index": 208,
+      "changedMaskHex": "0x188",
+      "prev": 190,
+      "overrides": {
+        "offset": [
+          128,
+          0
+        ],
+        "color": [
+          0.699999988079071,
+          0.699999988079071,
+          0.699999988079071
+        ],
+        "palette": [
+          1,
+          1
+        ]
+      },
+      "rootVSlot": 4,
+      "depth": 9
+    },
+    {
+      "index": 209,
+      "changedMaskHex": "0x1",
+      "prev": 210,
+      "overrides": {
+        "shaderParams": [
+          {
+            "name": "pulseglowspeed",
+            "values": [
+              0.75,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "name": "pulseglowoffset",
+            "values": [
+              0.20000000298023224,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ]
+      },
+      "rootVSlot": 32,
+      "depth": 2
+    },
+    {
+      "index": 210,
+      "changedMaskHex": "0x1",
+      "prev": 32,
+      "overrides": {
+        "shaderParams": [
+          {
+            "name": "pulseglowoffset",
+            "values": [
+              0.4000000059604645,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "name": "pulseglowspeed",
+            "values": [
+              2.119999885559082,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ]
+      },
+      "rootVSlot": 32,
+      "depth": 1
+    },
+    {
+      "index": 211,
+      "changedMaskHex": "0x8c",
+      "prev": 151,
+      "overrides": {
+        "rotation": 1,
+        "offset": [
+          0,
+          0
+        ],
+        "color": [
+          0.699999988079071,
+          0.699999988079071,
+          0.699999988079071
+        ]
+      },
+      "rootVSlot": 35,
+      "depth": 7
+    },
+    {
+      "index": 212,
+      "changedMaskHex": "0x8c",
+      "prev": 200,
+      "overrides": {
+        "rotation": 1,
+        "offset": [
+          448,
+          0
+        ],
+        "color": [
+          0.699999988079071,
+          0.699999988079071,
+          0.699999988079071
+        ]
+      },
+      "rootVSlot": 35,
+      "depth": 9
+    },
+    {
+      "index": 213,
+      "changedMaskHex": "0x1a1",
+      "prev": 113,
+      "overrides": {
+        "shaderParams": [
+          {
+            "name": "normalscale",
+            "values": [
+              1.5,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "name": "envmin",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "name": "envscale",
+            "values": [
+              0.4000000059604645,
+              0.4000000059604645,
+              0.4000000059604645,
+              0.0
+            ]
+          },
+          {
+            "name": "gloss",
+            "values": [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "layer": 81,
+        "color": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "palette": [
+          0,
+          0
+        ]
+      },
+      "rootVSlot": 19,
+      "depth": 3
+    },
+    {
+      "index": 214,
+      "changedMaskHex": "0x82",
+      "prev": 215,
+      "overrides": {
+        "scale": 0.125,
+        "color": [
+          0.949999988079071,
+          0.949999988079071,
+          0.949999988079071
+        ]
+      },
+      "rootVSlot": 59,
+      "depth": 5
+    },
+    {
+      "index": 215,
+      "changedMaskHex": "0x82",
+      "prev": 116,
+      "overrides": {
+        "scale": 0.125,
+        "color": [
+          0.6499999761581421,
+          0.6499999761581421,
+          0.6499999761581421
+        ]
+      },
+      "rootVSlot": 59,
+      "depth": 4
+    },
+    {
+      "index": 216,
+      "changedMaskHex": "0x82",
+      "prev": 214,
+      "overrides": {
+        "scale": 0.125,
+        "color": [
+          0.550000011920929,
+          0.550000011920929,
+          0.550000011920929
+        ]
+      },
+      "rootVSlot": 59,
+      "depth": 6
+    },
+    {
+      "index": 217,
+      "changedMaskHex": "0x2440",
+      "prev": 88,
+      "overrides": {
+        "alpha": [
+          0.6000000238418579,
+          0.0
+        ],
+        "refract": [
+          0.20000000298023224,
+          0.3117380142211914,
+          0.4564589858055115,
+          0.5529400110244751
+        ],
+        "shadow": 1.0
+      },
+      "rootVSlot": 61,
+      "depth": 2
+    },
+    {
+      "index": 218,
+      "changedMaskHex": "0x40",
+      "prev": 73,
+      "overrides": {
+        "alpha": [
+          0.6000000238418579,
+          0.0
+        ]
+      },
+      "rootVSlot": 1,
+      "depth": 2
+    },
+    {
+      "index": 219,
+      "changedMaskHex": "0x2",
+      "prev": 60,
+      "overrides": {
+        "scale": 0.25
+      },
+      "rootVSlot": 60,
+      "depth": 1
+    },
+    {
+      "index": 220,
+      "changedMaskHex": "0x12",
+      "prev": 58,
+      "overrides": {
+        "scale": 0.125,
+        "scroll": [
+          0.0,
+          0.0002500000118743628
+        ]
+      },
+      "rootVSlot": 58,
+      "depth": 1
+    },
+    {
+      "index": 221,
+      "changedMaskHex": "0x2",
+      "prev": 10,
+      "overrides": {
+        "scale": 1.0
+      },
+      "rootVSlot": 10,
+      "depth": 1
+    },
+    {
+      "index": 222,
+      "changedMaskHex": "0xe",
+      "prev": 221,
+      "overrides": {
+        "scale": 1.0,
+        "rotation": 2,
+        "offset": [
+          0,
+          120
+        ]
+      },
+      "rootVSlot": 10,
+      "depth": 2
+    }
+  ],
+  "candidatesBySlot": {
+    "0": {
+      "root": 0,
+      "candidateSourceImage": "textures/sky.png",
+      "availableSourceAsset": null,
+      "cfgBaseScale": 1,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "1": {
+      "root": 1,
+      "candidateSourceImage": "mikeplus64/plain.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/32bf0d230d8253dc.webp",
+      "cfgBaseScale": 1,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "2": {
+      "root": 2,
+      "candidateSourceImage": "trak/trak6/tile3.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/31efdabf1d2afb45.webp",
+      "cfgBaseScale": 0.25,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "3": {
+      "root": 3,
+      "candidateSourceImage": "trak/trak6/tile3.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/31efdabf1d2afb45.webp",
+      "cfgBaseScale": 0.25,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "4": {
+      "root": 4,
+      "candidateSourceImage": "trak/trak6/tile3.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/31efdabf1d2afb45.webp",
+      "cfgBaseScale": 0.25,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "5": {
+      "root": 5,
+      "candidateSourceImage": "trak/trak5/light3a.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/090183f6d0199fe3.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "6": {
+      "root": 6,
+      "candidateSourceImage": "trak/trak5/ribs1a.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/33204ab2dd694caa.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "7": {
+      "root": 7,
+      "candidateSourceImage": "trak/trak5/tile1e.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/faf0c135569f4276.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "8": {
+      "root": 8,
+      "candidateSourceImage": "trak/trak5/trim3e.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/d03b52f2f4a54976.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "9": {
+      "root": 9,
+      "candidateSourceImage": "trak/trak6/light1.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/b1153cd74704ff68.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "10": {
+      "root": 10,
+      "candidateSourceImage": "philipk/pk01/panel_small01_d.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/9cf312cde81a1005.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "11": {
+      "root": 11,
+      "candidateSourceImage": "philipk/pk01/floor01a_d.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/07717366c27b6ef9.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "12": {
+      "root": 12,
+      "candidateSourceImage": "philipk/pk01/floor02b_d.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/8742f853adc21e03.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "13": {
+      "root": 13,
+      "candidateSourceImage": "philipk/pk01/gra_floor02_d.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/2c29b4160b750c70.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "14": {
+      "root": 14,
+      "candidateSourceImage": "philipk/pk01/vent_wall01a_d.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/b952d69713f2778e.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "15": {
+      "root": 15,
+      "candidateSourceImage": "philipk/pk02/light01b_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/af55446077b32bfd.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "16": {
+      "root": 16,
+      "candidateSourceImage": "philipk/pk02/pipes01_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/1a35f3b3b1f77934.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "17": {
+      "root": 17,
+      "candidateSourceImage": "philipk/pk02/switches01b_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/117c16d6fb1e484f.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "18": {
+      "root": 18,
+      "candidateSourceImage": "philipk/pk02/switches01c_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/397b450a7e4b8ed3.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "19": {
+      "root": 19,
+      "candidateSourceImage": "philipk/pk02/floor01_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/4f5b7749a658e15d.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "20": {
+      "root": 20,
+      "candidateSourceImage": "philipk/pk02/floor03_c.png",
+      "availableSourceAsset": null,
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "21": {
+      "root": 21,
+      "candidateSourceImage": "philipk/pk02/floor05_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/f818fe290b84be9a.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "22": {
+      "root": 22,
+      "candidateSourceImage": "philipk/pk02/floor06a_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/7e6e530f55a1bca3.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "23": {
+      "root": 23,
+      "candidateSourceImage": "philipk/pk02/floor07_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/e5ed5a491e9b66c0.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "24": {
+      "root": 24,
+      "candidateSourceImage": "philipk/pk02/generic01b_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/d9549cb183da75bc.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "25": {
+      "root": 25,
+      "candidateSourceImage": "philipk/pk02/switches01a_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/41105fa041c4d4e8.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "26": {
+      "root": 26,
+      "candidateSourceImage": "philipk/pk02/trim04a_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/31bd5b5848488a12.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "27": {
+      "root": 27,
+      "candidateSourceImage": "philipk/pk02/wall_big01a_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/fbcddfee55f7a4f4.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "28": {
+      "root": 28,
+      "candidateSourceImage": "philipk/pk02/wall_big01b_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/99d030dc4ac4f892.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "29": {
+      "root": 29,
+      "candidateSourceImage": "jojo/windowstile04_g.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/8df50b2f8a5569bd.webp",
+      "cfgBaseScale": 1,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "30": {
+      "root": 30,
+      "candidateSourceImage": "jojo/map.png",
+      "availableSourceAsset": null,
+      "cfgBaseScale": 0.25,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "31": {
+      "root": 31,
+      "candidateSourceImage": "jojo/sand01.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/880560c611c66ecc.webp",
+      "cfgBaseScale": 1,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "32": {
+      "root": 32,
+      "candidateSourceImage": "philipk/pk02/switches01c_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/397b450a7e4b8ed3.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "33": {
+      "root": 33,
+      "candidateSourceImage": "philipk/pk02/switches01c_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/397b450a7e4b8ed3.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "34": {
+      "root": 34,
+      "candidateSourceImage": "appleflap/danger.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/b2e15684532b472a.webp",
+      "cfgBaseScale": 1,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "35": {
+      "root": 35,
+      "candidateSourceImage": "trak/trak6/trim1.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "36": {
+      "root": 36,
+      "candidateSourceImage": "mikeplus64/plain.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/32bf0d230d8253dc.webp",
+      "cfgBaseScale": 1,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "37": {
+      "root": 37,
+      "candidateSourceImage": "misc/agf81/concrete1w_diffuse.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/bd907b2904b90d12.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "38": {
+      "root": 38,
+      "candidateSourceImage": "nieb/complex/step02.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/b71b5999c0cf8cee.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "39": {
+      "root": 39,
+      "candidateSourceImage": "nieb/complex/step03.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/b90967e4bc5efb1d.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "40": {
+      "root": 40,
+      "candidateSourceImage": "nieb/complex/wall01.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/617f939d226609c9.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "41": {
+      "root": 41,
+      "candidateSourceImage": "philipk/pk02/floor12a_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/2fec6613f4a2daed.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "42": {
+      "root": 42,
+      "candidateSourceImage": "philipk/pk02/generic01b_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/d9549cb183da75bc.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "43": {
+      "root": 43,
+      "candidateSourceImage": "acerspyro/light1/light1.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/b6a21ae3c0164f1c.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "44": {
+      "root": 44,
+      "candidateSourceImage": "trak/trak5/tile3d.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/8a4ba5d6580d2cb3.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "45": {
+      "root": 45,
+      "candidateSourceImage": "trak/trak5/tile5c.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/721154c3befae156.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "46": {
+      "root": 46,
+      "candidateSourceImage": "trak/trak5/wall1e.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/c1bac841dedb5009.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "47": {
+      "root": 47,
+      "candidateSourceImage": "nieb/complex/step03.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/b90967e4bc5efb1d.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "48": {
+      "root": 48,
+      "candidateSourceImage": "acerspyro/light2/light2.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/f78d6834fa64e58e.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "49": {
+      "root": 49,
+      "candidateSourceImage": "nieb/complex/step01.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/e54b6147a2ac3baf.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "50": {
+      "root": 50,
+      "candidateSourceImage": "philipk/pk02/light02a_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/7f3f474233b3f147.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "51": {
+      "root": 51,
+      "candidateSourceImage": "philipk/pk02/floor05_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/f818fe290b84be9a.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "52": {
+      "root": 52,
+      "candidateSourceImage": "acerspyro/light1/light1.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/b6a21ae3c0164f1c.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "53": {
+      "root": 53,
+      "candidateSourceImage": "jojo/sand01.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/880560c611c66ecc.webp",
+      "cfgBaseScale": 1,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "54": {
+      "root": 54,
+      "candidateSourceImage": "jojo/sand01.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/880560c611c66ecc.webp",
+      "cfgBaseScale": 1,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "55": {
+      "root": 55,
+      "candidateSourceImage": "misc/agf81/concrete1w_diffuse.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/bd907b2904b90d12.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "56": {
+      "root": 56,
+      "candidateSourceImage": "dziq/metal_paint_old01",
+      "availableSourceAsset": null,
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "57": {
+      "root": 57,
+      "candidateSourceImage": "<comp:1>ticker",
+      "availableSourceAsset": null,
+      "cfgBaseScale": 1,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "58": {
+      "root": 58,
+      "candidateSourceImage": "jojo/interface03.png",
+      "availableSourceAsset": null,
+      "cfgBaseScale": 0.25,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "59": {
+      "root": 59,
+      "candidateSourceImage": "trak/trak6/crate1.jpg",
+      "availableSourceAsset": null,
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "60": {
+      "root": 60,
+      "candidateSourceImage": "torley/desat/clumpedverticalpaint.png",
+      "availableSourceAsset": null,
+      "cfgBaseScale": 1,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "61": {
+      "root": 61,
+      "candidateSourceImage": "torley/desat/grittyblack2clear3.png",
+      "availableSourceAsset": null,
+      "cfgBaseScale": 1,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "62": {
+      "root": 62,
+      "candidateSourceImage": "torley/desat/sketchstorm.png",
+      "availableSourceAsset": null,
+      "cfgBaseScale": 1,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "63": {
+      "root": 63,
+      "candidateSourceImage": "luckystrike/barlight.jpg",
+      "availableSourceAsset": null,
+      "cfgBaseScale": 0.25,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "64": {
+      "root": 64,
+      "candidateSourceImage": "philipk/pk01/pan_floor01b_d.png",
+      "availableSourceAsset": null,
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "65": {
+      "root": 65,
+      "candidateSourceImage": "<comp:100>cathode [tex = unixfreak/textures/planetsurvey.png]",
+      "availableSourceAsset": null,
+      "cfgBaseScale": 1,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "66": {
+      "root": 66,
+      "candidateSourceImage": "jojo/redrock02.png",
+      "availableSourceAsset": null,
+      "cfgBaseScale": 1,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "67": {
+      "root": 67,
+      "candidateSourceImage": "unnamed/solar_cell02.png",
+      "availableSourceAsset": null,
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {},
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "68": {
+      "root": 31,
+      "candidateSourceImage": "jojo/sand01.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/880560c611c66ecc.webp",
+      "cfgBaseScale": 1,
+      "nativeOverrides": {
+        "scale": 6.0
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "69": {
+      "root": 31,
+      "candidateSourceImage": "jojo/sand01.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/880560c611c66ecc.webp",
+      "cfgBaseScale": 1,
+      "nativeOverrides": {
+        "scale": 3.0,
+        "scroll": [
+          2.9999999242136255e-05,
+          0.0
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "70": {
+      "root": 31,
+      "candidateSourceImage": "jojo/sand01.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/880560c611c66ecc.webp",
+      "cfgBaseScale": 1,
+      "nativeOverrides": {
+        "layer": 71,
+        "color": [
+          0.8999999761581421,
+          0.8999999761581421,
+          0.8999999761581421
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "71": {
+      "root": 66,
+      "candidateSourceImage": "jojo/redrock02.png",
+      "availableSourceAsset": null,
+      "cfgBaseScale": 1,
+      "nativeOverrides": {
+        "color": [
+          0.800000011920929,
+          0.7039999961853027,
+          0.6399999856948853
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "72": {
+      "root": 56,
+      "candidateSourceImage": "dziq/metal_paint_old01",
+      "availableSourceAsset": null,
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "shaderParams": [
+          {
+            "name": "envmin",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "name": "envscale",
+            "values": [
+              0.10000000149011612,
+              0.10000000149011612,
+              0.10000000149011612,
+              0.0
+            ]
+          },
+          {
+            "name": "parallaxscale",
+            "values": [
+              0.004000000189989805,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "name": "normalscale",
+            "values": [
+              2.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "name": "specscale",
+            "values": [
+              1.5,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "name": "gloss",
+            "values": [
+              2.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "color": [
+          0.4000000059604645,
+          0.21333299577236176,
+          0.11999999731779099
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "73": {
+      "root": 1,
+      "candidateSourceImage": "mikeplus64/plain.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/32bf0d230d8253dc.webp",
+      "cfgBaseScale": 1,
+      "nativeOverrides": {
+        "color": [
+          0.699999988079071,
+          0.699999988079071,
+          0.699999988079071
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "74": {
+      "root": 5,
+      "candidateSourceImage": "trak/trak5/light3a.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/090183f6d0199fe3.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "scale": 0.25,
+        "offset": [
+          64,
+          0
+        ],
+        "palette": [
+          1,
+          2
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "75": {
+      "root": 24,
+      "candidateSourceImage": "philipk/pk02/generic01b_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/d9549cb183da75bc.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "shaderParams": [
+          {
+            "name": "specscale",
+            "values": [
+              0.800000011920929,
+              0.75,
+              0.75,
+              0.0
+            ]
+          }
+        ],
+        "color": [
+          0.5,
+          0.5,
+          0.5
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "76": {
+      "root": 40,
+      "candidateSourceImage": "nieb/complex/wall01.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/617f939d226609c9.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "color": [
+          0.20000000298023224,
+          0.20000000298023224,
+          0.20000000298023224
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "77": {
+      "root": 24,
+      "candidateSourceImage": "philipk/pk02/generic01b_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/d9549cb183da75bc.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "color": [
+          0.5,
+          0.5,
+          0.5
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "78": {
+      "root": 2,
+      "candidateSourceImage": "trak/trak6/tile3.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/31efdabf1d2afb45.webp",
+      "cfgBaseScale": 0.25,
+      "nativeOverrides": {
+        "scroll": [
+          -0.0010000000474974513,
+          0.0
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "79": {
+      "root": 56,
+      "candidateSourceImage": "dziq/metal_paint_old01",
+      "availableSourceAsset": null,
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "color": [
+          0.6000000238418579,
+          0.36000001430511475,
+          0.23999999463558197
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "80": {
+      "root": 19,
+      "candidateSourceImage": "philipk/pk02/floor01_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/4f5b7749a658e15d.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "shaderParams": [
+          {
+            "name": "normalscale",
+            "values": [
+              1.5,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "name": "envmin",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "name": "envscale",
+            "values": [
+              0.4000000059604645,
+              0.4000000059604645,
+              0.4000000059604645,
+              0.0
+            ]
+          },
+          {
+            "name": "gloss",
+            "values": [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "layer": 81,
+        "color": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "81": {
+      "root": 31,
+      "candidateSourceImage": "jojo/sand01.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/880560c611c66ecc.webp",
+      "cfgBaseScale": 1,
+      "nativeOverrides": {
+        "layer": 82,
+        "color": [
+          0.8999999761581421,
+          0.8999999761581421,
+          0.8999999761581421
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "82": {
+      "root": 53,
+      "candidateSourceImage": "jojo/sand01.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/880560c611c66ecc.webp",
+      "cfgBaseScale": 1,
+      "nativeOverrides": {
+        "scale": 0.5,
+        "color": [
+          0.699999988079071,
+          0.699999988079071,
+          0.699999988079071
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "83": {
+      "root": 38,
+      "candidateSourceImage": "nieb/complex/step02.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/b71b5999c0cf8cee.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "scale": 1.0
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "84": {
+      "root": 56,
+      "candidateSourceImage": "dziq/metal_paint_old01",
+      "availableSourceAsset": null,
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "layer": 81,
+        "color": [
+          0.5,
+          0.23749999701976776,
+          0.15000000596046448
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "85": {
+      "root": 11,
+      "candidateSourceImage": "philipk/pk01/floor01a_d.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/07717366c27b6ef9.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "layer": 81,
+        "color": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "86": {
+      "root": 37,
+      "candidateSourceImage": "misc/agf81/concrete1w_diffuse.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/bd907b2904b90d12.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "color": [
+          0.699999988079071,
+          0.699999988079071,
+          0.699999988079071
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "87": {
+      "root": 31,
+      "candidateSourceImage": "jojo/sand01.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/880560c611c66ecc.webp",
+      "cfgBaseScale": 1,
+      "nativeOverrides": {
+        "scale": 0.25,
+        "layer": 82,
+        "color": [
+          0.5,
+          0.23749999701976776,
+          0.15000000596046448
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "88": {
+      "root": 61,
+      "candidateSourceImage": "torley/desat/grittyblack2clear3.png",
+      "availableSourceAsset": null,
+      "cfgBaseScale": 1,
+      "nativeOverrides": {
+        "alpha": [
+          0.20000000298023224,
+          0.0
+        ],
+        "refract": [
+          0.20000000298023224,
+          0.3117380142211914,
+          0.4564589858055115,
+          0.5529400110244751
+        ],
+        "shadow": 1.0
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "89": {
+      "root": 37,
+      "candidateSourceImage": "misc/agf81/concrete1w_diffuse.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/bd907b2904b90d12.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "color": [
+          0.699999988079071,
+          0.699999988079071,
+          0.699999988079071
+        ],
+        "palette": [
+          1,
+          2
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "90": {
+      "root": 4,
+      "candidateSourceImage": "trak/trak6/tile3.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/31efdabf1d2afb45.webp",
+      "cfgBaseScale": 0.25,
+      "nativeOverrides": {
+        "color": [
+          0.699999988079071,
+          0.699999988079071,
+          0.699999988079071
+        ],
+        "palette": [
+          1,
+          2
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "91": {
+      "root": 46,
+      "candidateSourceImage": "trak/trak5/wall1e.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/c1bac841dedb5009.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "scale": 0.25
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "92": {
+      "root": 35,
+      "candidateSourceImage": "trak/trak6/trim1.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "rotation": 1,
+        "color": [
+          1.2999999523162842,
+          1.2999999523162842,
+          1.2999999523162842
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "93": {
+      "root": 6,
+      "candidateSourceImage": "trak/trak5/ribs1a.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/33204ab2dd694caa.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "rotation": 1
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "94": {
+      "root": 51,
+      "candidateSourceImage": "philipk/pk02/floor05_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/f818fe290b84be9a.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "offset": [
+          0,
+          256
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "95": {
+      "root": 42,
+      "candidateSourceImage": "philipk/pk02/generic01b_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/d9549cb183da75bc.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "layer": 81
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "96": {
+      "root": 7,
+      "candidateSourceImage": "trak/trak5/tile1e.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/faf0c135569f4276.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "scale": 1.0,
+        "layer": 81,
+        "palette": [
+          2,
+          11
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "97": {
+      "root": 24,
+      "candidateSourceImage": "philipk/pk02/generic01b_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/d9549cb183da75bc.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "shaderParams": [
+          {
+            "name": "specscale",
+            "values": [
+              0.800000011920929,
+              0.75,
+              0.75,
+              0.0
+            ]
+          }
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "98": {
+      "root": 7,
+      "candidateSourceImage": "trak/trak5/tile1e.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/faf0c135569f4276.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "scale": 0.25
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "99": {
+      "root": 5,
+      "candidateSourceImage": "trak/trak5/light3a.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/090183f6d0199fe3.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "offset": [
+          64,
+          0
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "100": {
+      "root": 35,
+      "candidateSourceImage": "trak/trak6/trim1.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "scale": 1.0,
+        "rotation": 1,
+        "offset": [
+          0,
+          160
+        ],
+        "color": [
+          0.5,
+          0.5,
+          0.5
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "101": {
+      "root": 42,
+      "candidateSourceImage": "philipk/pk02/generic01b_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/d9549cb183da75bc.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "layer": 102
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "102": {
+      "root": 31,
+      "candidateSourceImage": "jojo/sand01.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/880560c611c66ecc.webp",
+      "cfgBaseScale": 1,
+      "nativeOverrides": {
+        "scale": 6.0,
+        "scroll": [
+          2.9999999242136255e-05,
+          0.0
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "103": {
+      "root": 31,
+      "candidateSourceImage": "jojo/sand01.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/880560c611c66ecc.webp",
+      "cfgBaseScale": 1,
+      "nativeOverrides": {
+        "layer": 82,
+        "alpha": [
+          1.0,
+          0.0
+        ],
+        "color": [
+          0.8999999761581421,
+          0.8999999761581421,
+          0.8999999761581421
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "104": {
+      "root": 59,
+      "candidateSourceImage": "trak/trak6/crate1.jpg",
+      "availableSourceAsset": null,
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "scale": 0.25,
+        "color": [
+          0.75,
+          0.75,
+          0.75
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "105": {
+      "root": 59,
+      "candidateSourceImage": "trak/trak6/crate1.jpg",
+      "availableSourceAsset": null,
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "scale": 0.25,
+        "offset": [
+          512,
+          0
+        ],
+        "color": [
+          0.75,
+          0.75,
+          0.75
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "106": {
+      "root": 34,
+      "candidateSourceImage": "appleflap/danger.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/b2e15684532b472a.webp",
+      "cfgBaseScale": 1,
+      "nativeOverrides": {
+        "scale": 0.5
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "107": {
+      "root": 41,
+      "candidateSourceImage": "philipk/pk02/floor12a_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/2fec6613f4a2daed.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "color": [
+          0.30000001192092896,
+          0.30000001192092896,
+          0.30000001192092896
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "108": {
+      "root": 9,
+      "candidateSourceImage": "trak/trak6/light1.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/b1153cd74704ff68.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "offset": [
+          0,
+          256
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "109": {
+      "root": 35,
+      "candidateSourceImage": "trak/trak6/trim1.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "rotation": 1,
+        "color": [
+          0.5,
+          0.5,
+          0.5
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "110": {
+      "root": 40,
+      "candidateSourceImage": "nieb/complex/wall01.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/617f939d226609c9.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "layer": 81,
+        "color": [
+          0.20000000298023224,
+          0.20000000298023224,
+          0.20000000298023224
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "111": {
+      "root": 24,
+      "candidateSourceImage": "philipk/pk02/generic01b_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/d9549cb183da75bc.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "layer": 81,
+        "color": [
+          0.5,
+          0.5,
+          0.5
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "112": {
+      "root": 5,
+      "candidateSourceImage": "trak/trak5/light3a.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/090183f6d0199fe3.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "palette": [
+          2,
+          4
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "113": {
+      "root": 19,
+      "candidateSourceImage": "philipk/pk02/floor01_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/4f5b7749a658e15d.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "shaderParams": [
+          {
+            "name": "normalscale",
+            "values": [
+              1.5,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "name": "envmin",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "name": "envscale",
+            "values": [
+              0.4000000059604645,
+              0.4000000059604645,
+              0.4000000059604645,
+              0.0
+            ]
+          },
+          {
+            "name": "gloss",
+            "values": [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "layer": 81,
+        "color": [
+          0.5,
+          0.5,
+          0.5
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "114": {
+      "root": 31,
+      "candidateSourceImage": "jojo/sand01.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/880560c611c66ecc.webp",
+      "cfgBaseScale": 1,
+      "nativeOverrides": {
+        "layer": 81,
+        "color": [
+          0.8999999761581421,
+          0.8999999761581421,
+          0.8999999761581421
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "115": {
+      "root": 47,
+      "candidateSourceImage": "nieb/complex/step03.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/b90967e4bc5efb1d.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "rotation": 1
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "116": {
+      "root": 59,
+      "candidateSourceImage": "trak/trak6/crate1.jpg",
+      "availableSourceAsset": null,
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "scale": 0.125,
+        "color": [
+          0.75,
+          0.75,
+          0.75
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "117": {
+      "root": 4,
+      "candidateSourceImage": "trak/trak6/tile3.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/31efdabf1d2afb45.webp",
+      "cfgBaseScale": 0.25,
+      "nativeOverrides": {
+        "offset": [
+          128,
+          0
+        ],
+        "color": [
+          0.699999988079071,
+          0.699999988079071,
+          0.699999988079071
+        ],
+        "palette": [
+          1,
+          2
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "118": {
+      "root": 26,
+      "candidateSourceImage": "philipk/pk02/trim04a_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/31bd5b5848488a12.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "rotation": 1
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "119": {
+      "root": 65,
+      "candidateSourceImage": "<comp:100>cathode [tex = unixfreak/textures/planetsurvey.png]",
+      "availableSourceAsset": null,
+      "cfgBaseScale": 1,
+      "nativeOverrides": {
+        "scale": 2.0,
+        "rotation": 1,
+        "offset": [
+          164,
+          0
+        ],
+        "scroll": [
+          0.0,
+          0.00010000000474974513
+        ],
+        "alpha": [
+          0.30000001192092896,
+          0.0
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "120": {
+      "root": 65,
+      "candidateSourceImage": "<comp:100>cathode [tex = unixfreak/textures/planetsurvey.png]",
+      "availableSourceAsset": null,
+      "cfgBaseScale": 1,
+      "nativeOverrides": {
+        "scale": 2.0,
+        "rotation": 1,
+        "offset": [
+          220,
+          0
+        ],
+        "scroll": [
+          0.0,
+          0.00010000000474974513
+        ],
+        "alpha": [
+          0.30000001192092896,
+          0.0
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "121": {
+      "root": 4,
+      "candidateSourceImage": "trak/trak6/tile3.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/31efdabf1d2afb45.webp",
+      "cfgBaseScale": 0.25,
+      "nativeOverrides": {
+        "offset": [
+          448,
+          0
+        ],
+        "palette": [
+          1,
+          2
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "122": {
+      "root": 34,
+      "candidateSourceImage": "appleflap/danger.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/b2e15684532b472a.webp",
+      "cfgBaseScale": 1,
+      "nativeOverrides": {
+        "offset": [
+          32,
+          0
+        ],
+        "color": [
+          0.5,
+          0.5,
+          0.5
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "123": {
+      "root": 35,
+      "candidateSourceImage": "trak/trak6/trim1.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "rotation": 1,
+        "offset": [
+          128,
+          0
+        ],
+        "color": [
+          0.699999988079071,
+          0.699999988079071,
+          0.699999988079071
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "124": {
+      "root": 43,
+      "candidateSourceImage": "acerspyro/light1/light1.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/b6a21ae3c0164f1c.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "scale": 0.125,
+        "palette": [
+          2,
+          12
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "125": {
+      "root": 43,
+      "candidateSourceImage": "acerspyro/light1/light1.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/b6a21ae3c0164f1c.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "scale": 0.25,
+        "offset": [
+          128,
+          0
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "126": {
+      "root": 34,
+      "candidateSourceImage": "appleflap/danger.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/b2e15684532b472a.webp",
+      "cfgBaseScale": 1,
+      "nativeOverrides": {
+        "scale": 0.5,
+        "layer": 81
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "127": {
+      "root": 41,
+      "candidateSourceImage": "philipk/pk02/floor12a_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/2fec6613f4a2daed.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "layer": 81,
+        "color": [
+          0.699999988079071,
+          0.30000001192092896,
+          0.15000000596046448
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "128": {
+      "root": 22,
+      "candidateSourceImage": "philipk/pk02/floor06a_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/7e6e530f55a1bca3.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "layer": 81
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "129": {
+      "root": 34,
+      "candidateSourceImage": "appleflap/danger.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/b2e15684532b472a.webp",
+      "cfgBaseScale": 1,
+      "nativeOverrides": {
+        "layer": 81
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "130": {
+      "root": 9,
+      "candidateSourceImage": "trak/trak6/light1.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/b1153cd74704ff68.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "scale": 1.25,
+        "rotation": 1,
+        "offset": [
+          0,
+          510
+        ],
+        "alpha": [
+          0.20000000298023224,
+          0.0
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "131": {
+      "root": 30,
+      "candidateSourceImage": "jojo/map.png",
+      "availableSourceAsset": null,
+      "cfgBaseScale": 0.25,
+      "nativeOverrides": {
+        "scale": 0.5,
+        "offset": [
+          450,
+          0
+        ],
+        "scroll": [
+          0.0,
+          -0.00015999999595806003
+        ],
+        "alpha": [
+          0.699999988079071,
+          0.0
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "132": {
+      "root": 37,
+      "candidateSourceImage": "misc/agf81/concrete1w_diffuse.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/bd907b2904b90d12.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "layer": 81
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "133": {
+      "root": 5,
+      "candidateSourceImage": "trak/trak5/light3a.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/090183f6d0199fe3.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "offset": [
+          34,
+          0
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "134": {
+      "root": 15,
+      "candidateSourceImage": "philipk/pk02/light01b_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/af55446077b32bfd.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "scale": 1.0,
+        "offset": [
+          64,
+          0
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "135": {
+      "root": 56,
+      "candidateSourceImage": "dziq/metal_paint_old01",
+      "availableSourceAsset": null,
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "color": [
+          0.30000001192092896,
+          0.20999999344348907,
+          0.18000000715255737
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "136": {
+      "root": 15,
+      "candidateSourceImage": "philipk/pk02/light01b_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/af55446077b32bfd.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "scale": 1.0
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "137": {
+      "root": 37,
+      "candidateSourceImage": "misc/agf81/concrete1w_diffuse.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/bd907b2904b90d12.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "layer": 81,
+        "color": [
+          0.699999988079071,
+          0.699999988079071,
+          0.699999988079071
+        ],
+        "palette": [
+          1,
+          2
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "138": {
+      "root": 24,
+      "candidateSourceImage": "philipk/pk02/generic01b_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/d9549cb183da75bc.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "shaderParams": [
+          {
+            "name": "specscale",
+            "values": [
+              0.800000011920929,
+              0.75,
+              0.75,
+              0.0
+            ]
+          }
+        ],
+        "layer": 81,
+        "color": [
+          0.5,
+          0.5,
+          0.5
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "139": {
+      "root": 5,
+      "candidateSourceImage": "trak/trak5/light3a.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/090183f6d0199fe3.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "offset": [
+          32,
+          0
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "140": {
+      "root": 7,
+      "candidateSourceImage": "trak/trak5/tile1e.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/faf0c135569f4276.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "palette": [
+          2,
+          12
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "141": {
+      "root": 7,
+      "candidateSourceImage": "trak/trak5/tile1e.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/faf0c135569f4276.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "color": [
+          2.0,
+          2.0,
+          2.0
+        ],
+        "palette": [
+          2,
+          4
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "142": {
+      "root": 35,
+      "candidateSourceImage": "trak/trak6/trim1.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "scale": 1.0,
+        "rotation": 1,
+        "offset": [
+          0,
+          128
+        ],
+        "color": [
+          0.5,
+          0.5,
+          0.5
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "143": {
+      "root": 43,
+      "candidateSourceImage": "acerspyro/light1/light1.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/b6a21ae3c0164f1c.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "scale": 0.125,
+        "palette": [
+          2,
+          11
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "144": {
+      "root": 5,
+      "candidateSourceImage": "trak/trak5/light3a.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/090183f6d0199fe3.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "palette": [
+          2,
+          5
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "145": {
+      "root": 52,
+      "candidateSourceImage": "acerspyro/light1/light1.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/b6a21ae3c0164f1c.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "scale": 0.125,
+        "offset": [
+          128,
+          128
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "146": {
+      "root": 35,
+      "candidateSourceImage": "trak/trak6/trim1.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "rotation": 7,
+        "offset": [
+          256,
+          0
+        ],
+        "color": [
+          0.699999988079071,
+          0.699999988079071,
+          0.699999988079071
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "147": {
+      "root": 35,
+      "candidateSourceImage": "trak/trak6/trim1.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "rotation": 3,
+        "offset": [
+          128,
+          0
+        ],
+        "color": [
+          0.699999988079071,
+          0.699999988079071,
+          0.699999988079071
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "148": {
+      "root": 40,
+      "candidateSourceImage": "nieb/complex/wall01.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/617f939d226609c9.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "color": [
+          0.5,
+          0.5,
+          0.5
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "149": {
+      "root": 35,
+      "candidateSourceImage": "trak/trak6/trim1.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "scale": 0.25,
+        "rotation": 1,
+        "color": [
+          1.0,
+          0.6666669845581055,
+          0.5
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "150": {
+      "root": 28,
+      "candidateSourceImage": "philipk/pk02/wall_big01b_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/99d030dc4ac4f892.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "offset": [
+          1110704128,
+          1060439283
+        ],
+        "color": [
+          0.7071067690849304,
+          6.726232628759122e-43,
+          2.6904930515036488e-43
+        ],
+        "angle": [
+          2.0,
+          2.0,
+          2.0
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "151": {
+      "root": 35,
+      "candidateSourceImage": "trak/trak6/trim1.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "rotation": 7,
+        "offset": [
+          640,
+          0
+        ],
+        "color": [
+          0.699999988079071,
+          0.699999988079071,
+          0.699999988079071
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "152": {
+      "root": 35,
+      "candidateSourceImage": "trak/trak6/trim1.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "rotation": 7,
+        "offset": [
+          0,
+          0
+        ],
+        "color": [
+          0.699999988079071,
+          0.699999988079071,
+          0.699999988079071
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "153": {
+      "root": 65,
+      "candidateSourceImage": "<comp:100>cathode [tex = unixfreak/textures/planetsurvey.png]",
+      "availableSourceAsset": null,
+      "cfgBaseScale": 1,
+      "nativeOverrides": {
+        "scale": 1.0,
+        "offset": [
+          0,
+          36
+        ],
+        "scroll": [
+          0.00010000000474974513,
+          0.0
+        ],
+        "alpha": [
+          0.30000001192092896,
+          0.0
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "154": {
+      "root": 24,
+      "candidateSourceImage": "philipk/pk02/generic01b_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/d9549cb183da75bc.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "palette": [
+          2,
+          12
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "155": {
+      "root": 8,
+      "candidateSourceImage": "trak/trak5/trim3e.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/d03b52f2f4a54976.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "palette": [
+          2,
+          12
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "156": {
+      "root": 12,
+      "candidateSourceImage": "philipk/pk01/floor02b_d.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/8742f853adc21e03.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "offset": [
+          64,
+          0
+        ],
+        "palette": [
+          2,
+          12
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "157": {
+      "root": 5,
+      "candidateSourceImage": "trak/trak5/light3a.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/090183f6d0199fe3.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "offset": [
+          98,
+          0
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "158": {
+      "root": 65,
+      "candidateSourceImage": "<comp:100>cathode [tex = unixfreak/textures/planetsurvey.png]",
+      "availableSourceAsset": null,
+      "cfgBaseScale": 1,
+      "nativeOverrides": {
+        "scale": 1.0,
+        "offset": [
+          0,
+          226
+        ],
+        "scroll": [
+          0.00010000000474974513,
+          0.0
+        ],
+        "alpha": [
+          0.30000001192092896,
+          0.0
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "159": {
+      "root": 28,
+      "candidateSourceImage": "philipk/pk02/wall_big01b_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/99d030dc4ac4f892.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "offset": [
+          1110704128,
+          1060439283
+        ],
+        "color": [
+          0.7071067690849304,
+          4.035739577255473e-43,
+          1.3004049748934302e-42
+        ],
+        "angle": [
+          2.0,
+          2.0,
+          2.0
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "160": {
+      "root": 35,
+      "candidateSourceImage": "trak/trak6/trim1.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "rotation": 1,
+        "color": [
+          1.0,
+          0.6666669845581055,
+          0.5
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "161": {
+      "root": 43,
+      "candidateSourceImage": "acerspyro/light1/light1.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/b6a21ae3c0164f1c.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "scale": 0.125,
+        "palette": [
+          2,
+          7
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "162": {
+      "root": 34,
+      "candidateSourceImage": "appleflap/danger.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/b2e15684532b472a.webp",
+      "cfgBaseScale": 1,
+      "nativeOverrides": {
+        "color": [
+          0.5,
+          0.5,
+          0.5
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "163": {
+      "root": 11,
+      "candidateSourceImage": "philipk/pk01/floor01a_d.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/07717366c27b6ef9.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "layer": 31
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "164": {
+      "root": 43,
+      "candidateSourceImage": "acerspyro/light1/light1.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/b6a21ae3c0164f1c.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "scale": 0.125,
+        "palette": [
+          2,
+          8
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "165": {
+      "root": 23,
+      "candidateSourceImage": "philipk/pk02/floor07_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/e5ed5a491e9b66c0.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "layer": 81
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "166": {
+      "root": 43,
+      "candidateSourceImage": "acerspyro/light1/light1.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/b6a21ae3c0164f1c.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "scale": 0.125,
+        "offset": [
+          128,
+          128
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "167": {
+      "root": 28,
+      "candidateSourceImage": "philipk/pk02/wall_big01b_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/99d030dc4ac4f892.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "color": [
+          0.5,
+          0.5,
+          0.5
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "168": {
+      "root": 6,
+      "candidateSourceImage": "trak/trak5/ribs1a.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/33204ab2dd694caa.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "offset": [
+          32,
+          0
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "169": {
+      "root": 35,
+      "candidateSourceImage": "trak/trak6/trim1.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "offset": [
+          128,
+          0
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "170": {
+      "root": 12,
+      "candidateSourceImage": "philipk/pk01/floor02b_d.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/8742f853adc21e03.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "offset": [
+          64,
+          0
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "171": {
+      "root": 25,
+      "candidateSourceImage": "philipk/pk02/switches01a_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/41105fa041c4d4e8.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "offset": [
+          64,
+          0
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "172": {
+      "root": 9,
+      "candidateSourceImage": "trak/trak6/light1.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/b1153cd74704ff68.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "scale": 1.25,
+        "offset": [
+          0,
+          510
+        ],
+        "alpha": [
+          0.20000000298023224,
+          0.0
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "173": {
+      "root": 48,
+      "candidateSourceImage": "acerspyro/light2/light2.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/f78d6834fa64e58e.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "scale": 0.25
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "174": {
+      "root": 5,
+      "candidateSourceImage": "trak/trak5/light3a.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/090183f6d0199fe3.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "shaderParams": [
+          {
+            "name": "glowcolor",
+            "values": [
+              0.6666669845581055,
+              2.0,
+              0.0,
+              0.0
+            ]
+          }
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "175": {
+      "root": 40,
+      "candidateSourceImage": "nieb/complex/wall01.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/617f939d226609c9.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "layer": 70,
+        "color": [
+          0.20000000298023224,
+          0.20000000298023224,
+          0.20000000298023224
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "176": {
+      "root": 36,
+      "candidateSourceImage": "mikeplus64/plain.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/32bf0d230d8253dc.webp",
+      "cfgBaseScale": 1,
+      "nativeOverrides": {
+        "shaderParams": [
+          {
+            "name": "glowcolor",
+            "values": [
+              0.10000000149011612,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "color": [
+          0.5,
+          0.5,
+          0.5
+        ],
+        "palette": [
+          1,
+          2
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "177": {
+      "root": 12,
+      "candidateSourceImage": "philipk/pk01/floor02b_d.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/8742f853adc21e03.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "offset": [
+          192,
+          0
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "178": {
+      "root": 52,
+      "candidateSourceImage": "acerspyro/light1/light1.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/b6a21ae3c0164f1c.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "scale": 0.25,
+        "offset": [
+          128,
+          128
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "179": {
+      "root": 15,
+      "candidateSourceImage": "philipk/pk02/light01b_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/af55446077b32bfd.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "scale": 0.25
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "180": {
+      "root": 35,
+      "candidateSourceImage": "trak/trak6/trim1.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "scale": 0.25,
+        "rotation": 1,
+        "palette": [
+          1,
+          2
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "181": {
+      "root": 4,
+      "candidateSourceImage": "trak/trak6/tile3.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/31efdabf1d2afb45.webp",
+      "cfgBaseScale": 0.25,
+      "nativeOverrides": {
+        "scale": 0.125,
+        "palette": [
+          1,
+          2
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "182": {
+      "root": 25,
+      "candidateSourceImage": "philipk/pk02/switches01a_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/41105fa041c4d4e8.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "offset": [
+          64,
+          0
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "183": {
+      "root": 4,
+      "candidateSourceImage": "trak/trak6/tile3.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/31efdabf1d2afb45.webp",
+      "cfgBaseScale": 0.25,
+      "nativeOverrides": {
+        "offset": [
+          64,
+          0
+        ],
+        "palette": [
+          1,
+          2
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "184": {
+      "root": 54,
+      "candidateSourceImage": "jojo/sand01.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/880560c611c66ecc.webp",
+      "cfgBaseScale": 1,
+      "nativeOverrides": {
+        "color": [
+          0.8999999761581421,
+          0.8999999761581421,
+          0.8999999761581421
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "185": {
+      "root": 20,
+      "candidateSourceImage": "philipk/pk02/floor03_c.png",
+      "availableSourceAsset": null,
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "scale": 1.0
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "186": {
+      "root": 29,
+      "candidateSourceImage": "jojo/windowstile04_g.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/8df50b2f8a5569bd.webp",
+      "cfgBaseScale": 1,
+      "nativeOverrides": {
+        "scale": 8.0
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "187": {
+      "root": 43,
+      "candidateSourceImage": "acerspyro/light1/light1.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/b6a21ae3c0164f1c.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "shaderParams": [
+          {
+            "name": "glowcolor",
+            "values": [
+              2.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "scale": 0.25
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "188": {
+      "root": 4,
+      "candidateSourceImage": "trak/trak6/tile3.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/31efdabf1d2afb45.webp",
+      "cfgBaseScale": 0.25,
+      "nativeOverrides": {
+        "offset": [
+          64,
+          0
+        ],
+        "palette": [
+          1,
+          1
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "189": {
+      "root": 37,
+      "candidateSourceImage": "misc/agf81/concrete1w_diffuse.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/bd907b2904b90d12.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "color": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "palette": [
+          1,
+          1
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "190": {
+      "root": 4,
+      "candidateSourceImage": "trak/trak6/tile3.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/31efdabf1d2afb45.webp",
+      "cfgBaseScale": 0.25,
+      "nativeOverrides": {
+        "color": [
+          0.699999988079071,
+          0.699999988079071,
+          0.699999988079071
+        ],
+        "palette": [
+          1,
+          1
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "191": {
+      "root": 35,
+      "candidateSourceImage": "trak/trak6/trim1.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "scale": 0.25,
+        "rotation": 1,
+        "palette": [
+          1,
+          1
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "192": {
+      "root": 4,
+      "candidateSourceImage": "trak/trak6/tile3.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/31efdabf1d2afb45.webp",
+      "cfgBaseScale": 0.25,
+      "nativeOverrides": {
+        "scale": 0.125,
+        "palette": [
+          1,
+          1
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "193": {
+      "root": 36,
+      "candidateSourceImage": "mikeplus64/plain.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/32bf0d230d8253dc.webp",
+      "cfgBaseScale": 1,
+      "nativeOverrides": {
+        "shaderParams": [
+          {
+            "name": "glowcolor",
+            "values": [
+              0.10000000149011612,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "color": [
+          0.5,
+          0.5,
+          0.5
+        ],
+        "palette": [
+          1,
+          1
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "194": {
+      "root": 9,
+      "candidateSourceImage": "trak/trak6/light1.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/b1153cd74704ff68.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "rotation": 1,
+        "offset": [
+          502,
+          0
+        ],
+        "scroll": [
+          0.0,
+          0.0004000000189989805
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "195": {
+      "root": 9,
+      "candidateSourceImage": "trak/trak6/light1.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/b1153cd74704ff68.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "rotation": 1,
+        "offset": [
+          14,
+          0
+        ],
+        "scroll": [
+          0.0,
+          0.0004000000189989805
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "196": {
+      "root": 28,
+      "candidateSourceImage": "philipk/pk02/wall_big01b_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/99d030dc4ac4f892.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "offset": [
+          1110704128,
+          1060439283
+        ],
+        "color": [
+          0.7071067690849304,
+          0.0,
+          3.587324068671532e-43
+        ],
+        "angle": [
+          2.0,
+          2.0,
+          2.0
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "197": {
+      "root": 7,
+      "candidateSourceImage": "trak/trak5/tile1e.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/faf0c135569f4276.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "color": [
+          2.0,
+          2.0,
+          2.0
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "198": {
+      "root": 5,
+      "candidateSourceImage": "trak/trak5/light3a.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/090183f6d0199fe3.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "layer": 81
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "199": {
+      "root": 4,
+      "candidateSourceImage": "trak/trak6/tile3.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/31efdabf1d2afb45.webp",
+      "cfgBaseScale": 0.25,
+      "nativeOverrides": {
+        "offset": [
+          448,
+          0
+        ],
+        "palette": [
+          1,
+          1
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "200": {
+      "root": 35,
+      "candidateSourceImage": "trak/trak6/trim1.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "rotation": 1,
+        "offset": [
+          512,
+          0
+        ],
+        "color": [
+          0.699999988079071,
+          0.699999988079071,
+          0.699999988079071
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "201": {
+      "root": 37,
+      "candidateSourceImage": "misc/agf81/concrete1w_diffuse.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/bd907b2904b90d12.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "color": [
+          0.699999988079071,
+          0.699999988079071,
+          0.699999988079071
+        ],
+        "palette": [
+          1,
+          1
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "202": {
+      "root": 39,
+      "candidateSourceImage": "nieb/complex/step03.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/b90967e4bc5efb1d.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "rotation": 1
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "203": {
+      "root": 65,
+      "candidateSourceImage": "<comp:100>cathode [tex = unixfreak/textures/planetsurvey.png]",
+      "availableSourceAsset": null,
+      "cfgBaseScale": 1,
+      "nativeOverrides": {
+        "scale": 1.0,
+        "offset": [
+          0,
+          64
+        ],
+        "scroll": [
+          0.00010000000474974513,
+          0.0
+        ],
+        "alpha": [
+          0.30000001192092896,
+          0.0
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "204": {
+      "root": 65,
+      "candidateSourceImage": "<comp:100>cathode [tex = unixfreak/textures/planetsurvey.png]",
+      "availableSourceAsset": null,
+      "cfgBaseScale": 1,
+      "nativeOverrides": {
+        "scale": 1.0,
+        "offset": [
+          0,
+          0
+        ],
+        "scroll": [
+          0.00010000000474974513,
+          0.0
+        ],
+        "alpha": [
+          0.30000001192092896,
+          0.0
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "205": {
+      "root": 5,
+      "candidateSourceImage": "trak/trak5/light3a.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/090183f6d0199fe3.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "palette": [
+          2,
+          11
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "206": {
+      "root": 5,
+      "candidateSourceImage": "trak/trak5/light3a.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/090183f6d0199fe3.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "scale": 0.25,
+        "offset": [
+          64,
+          0
+        ],
+        "palette": [
+          1,
+          1
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "207": {
+      "root": 43,
+      "candidateSourceImage": "acerspyro/light1/light1.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/b6a21ae3c0164f1c.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "shaderParams": [
+          {
+            "name": "glowcolor",
+            "values": [
+              0.0,
+              0.16666600108146667,
+              2.0,
+              0.0
+            ]
+          }
+        ],
+        "scale": 0.25
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "208": {
+      "root": 4,
+      "candidateSourceImage": "trak/trak6/tile3.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/31efdabf1d2afb45.webp",
+      "cfgBaseScale": 0.25,
+      "nativeOverrides": {
+        "offset": [
+          128,
+          0
+        ],
+        "color": [
+          0.699999988079071,
+          0.699999988079071,
+          0.699999988079071
+        ],
+        "palette": [
+          1,
+          1
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "209": {
+      "root": 32,
+      "candidateSourceImage": "philipk/pk02/switches01c_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/397b450a7e4b8ed3.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "shaderParams": [
+          {
+            "name": "pulseglowspeed",
+            "values": [
+              0.75,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "name": "pulseglowoffset",
+            "values": [
+              0.20000000298023224,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "210": {
+      "root": 32,
+      "candidateSourceImage": "philipk/pk02/switches01c_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/397b450a7e4b8ed3.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "shaderParams": [
+          {
+            "name": "pulseglowoffset",
+            "values": [
+              0.4000000059604645,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "name": "pulseglowspeed",
+            "values": [
+              2.119999885559082,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "211": {
+      "root": 35,
+      "candidateSourceImage": "trak/trak6/trim1.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "rotation": 1,
+        "offset": [
+          0,
+          0
+        ],
+        "color": [
+          0.699999988079071,
+          0.699999988079071,
+          0.699999988079071
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "212": {
+      "root": 35,
+      "candidateSourceImage": "trak/trak6/trim1.jpg",
+      "availableSourceAsset": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "rotation": 1,
+        "offset": [
+          448,
+          0
+        ],
+        "color": [
+          0.699999988079071,
+          0.699999988079071,
+          0.699999988079071
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "213": {
+      "root": 19,
+      "candidateSourceImage": "philipk/pk02/floor01_c.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/4f5b7749a658e15d.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "shaderParams": [
+          {
+            "name": "normalscale",
+            "values": [
+              1.5,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "name": "envmin",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "name": "envscale",
+            "values": [
+              0.4000000059604645,
+              0.4000000059604645,
+              0.4000000059604645,
+              0.0
+            ]
+          },
+          {
+            "name": "gloss",
+            "values": [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "layer": 81,
+        "color": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "palette": [
+          0,
+          0
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "214": {
+      "root": 59,
+      "candidateSourceImage": "trak/trak6/crate1.jpg",
+      "availableSourceAsset": null,
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "scale": 0.125,
+        "color": [
+          0.949999988079071,
+          0.949999988079071,
+          0.949999988079071
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "215": {
+      "root": 59,
+      "candidateSourceImage": "trak/trak6/crate1.jpg",
+      "availableSourceAsset": null,
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "scale": 0.125,
+        "color": [
+          0.6499999761581421,
+          0.6499999761581421,
+          0.6499999761581421
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "216": {
+      "root": 59,
+      "candidateSourceImage": "trak/trak6/crate1.jpg",
+      "availableSourceAsset": null,
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "scale": 0.125,
+        "color": [
+          0.550000011920929,
+          0.550000011920929,
+          0.550000011920929
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "217": {
+      "root": 61,
+      "candidateSourceImage": "torley/desat/grittyblack2clear3.png",
+      "availableSourceAsset": null,
+      "cfgBaseScale": 1,
+      "nativeOverrides": {
+        "alpha": [
+          0.6000000238418579,
+          0.0
+        ],
+        "refract": [
+          0.20000000298023224,
+          0.3117380142211914,
+          0.4564589858055115,
+          0.5529400110244751
+        ],
+        "shadow": 1.0
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "218": {
+      "root": 1,
+      "candidateSourceImage": "mikeplus64/plain.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/32bf0d230d8253dc.webp",
+      "cfgBaseScale": 1,
+      "nativeOverrides": {
+        "alpha": [
+          0.6000000238418579,
+          0.0
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "219": {
+      "root": 60,
+      "candidateSourceImage": "torley/desat/clumpedverticalpaint.png",
+      "availableSourceAsset": null,
+      "cfgBaseScale": 1,
+      "nativeOverrides": {
+        "scale": 0.25
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "220": {
+      "root": 58,
+      "candidateSourceImage": "jojo/interface03.png",
+      "availableSourceAsset": null,
+      "cfgBaseScale": 0.25,
+      "nativeOverrides": {
+        "scale": 0.125,
+        "scroll": [
+          0.0,
+          0.0002500000118743628
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "221": {
+      "root": 10,
+      "candidateSourceImage": "philipk/pk01/panel_small01_d.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/9cf312cde81a1005.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "scale": 1.0
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    },
+    "222": {
+      "root": 10,
+      "candidateSourceImage": "philipk/pk01/panel_small01_d.png",
+      "availableSourceAsset": "/static/maps/octavus_assets/9cf312cde81a1005.webp",
+      "cfgBaseScale": 0.5,
+      "nativeOverrides": {
+        "scale": 1.0,
+        "rotation": 2,
+        "offset": [
+          0,
+          120
+        ]
+      },
+      "confidence": "candidate-registry-index-only",
+      "reason": "MPZ stores variants and predecessors, not the original external texture file path. CFG order must still be verified against source default slot registry."
+    }
+  },
+  "originalRendererTextureParity": false,
+  "liveMapModified": false
+}
