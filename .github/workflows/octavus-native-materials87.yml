@@ -1,0 +1,67 @@
+name: Octavus Phase 1.6 source-native material registry
+on:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/build_octavus_native_materials87.py"
+      - ".github/workflows/octavus-native-materials87.yml"
+      - "static/maps/octavus.native-vslot-audit86.json"
+      - "static/maps/octavus.native-optimized.json"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build-native-materials:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Resolve exact original VSlot root chains, source image paths and variant controls
+        run: python -m scripts.build_octavus_native_materials87
+      - name: Ensure source assets have strict provenance and untouched geometry
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("static/maps/octavus.native-materials87.json")
+          j=json.loads(p.read_text())
+          assert j["format"]=="OCTAVUS-NATIVE-MATERIALS87"
+          assert j["status"]=="staging-only-not-live"
+          assert j["nativeVSlots"]==223
+          assert j["originalCFGRoots"]==68
+          assert j["modifiedNativeVariants"]==155
+          assert j["sourceGeometryTriangles"]==863803
+          assert len(j["materials"])==223
+          assert j["usedSlotsWithSourceImage"]+j["usedSlotsWithoutSourceImage"]==j["usedNativeMaterialSlots"]
+          assert j["sourceImageSupportedTriangles"]+j["missingSourceImageTriangles"]==863803
+          assert j["textureCoordinateParity"] is False
+          assert j["liveMapModified"] is False
+          for idx,m in j["materials"].items():
+              assert int(idx)==m["vslot"]
+              assert m["chain"][0]==m["rootCfgSlot"]
+              assert m["chain"][-1]==m["vslot"]
+              if m["image"]:
+                  assert m["image"].startswith("/static/maps/octavus_assets/")
+                  assert Path("."+m["image"]).is_file(),m["image"]
+          print("PASS: all native source materials link to original documented paths or remain explicit fallbacks")
+          PY
+      - name: Publish reproducible source-native VSlot material manifest
+        run: |
+          cp static/maps/octavus.native-materials87.json /tmp/octavus.native-materials87.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3; do
+            git fetch origin main
+            git reset --hard origin/main
+            cp /tmp/octavus.native-materials87.json static/maps/
+            git add static/maps/octavus.native-materials87.json
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m "build(octavus phase1.6): publish attributed original texture variant registry"
+            if git push origin HEAD:main; then exit 0; fi
+          done
+          exit 1
