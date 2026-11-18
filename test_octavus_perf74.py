@@ -49,8 +49,28 @@ class OctavusPerformanceTests(unittest.TestCase):
                 nz = u[0]*v[1]-u[1]*v[0]
                 nlen = math.sqrt(nx*nx+ny*ny+nz*nz)
                 if nlen >= 1e-8 and abs(ny)/nlen <= .65:
-                    brute.add(tri)
+                    minx = min(p[0], q[0], r[0])
+                    maxx = max(p[0], q[0], r[0])
+                    minz = min(p[2], q[2], r[2])
+                    maxz = max(p[2], q[2], r[2])
+                    if minx <= c and maxx >= a and minz <= d and maxz >= b:
+                        brute.add(tri)
             self.assertEqual(set(w.wall_candidates(a, b, c, d)), brute)
+
+    def test_wall_bins_have_nearby_tris_only(self):
+        # The original 10m broadphase contained many distant wall triangles.
+        # The 2m index should return only intersecting ORIGINAL triangle AABBs.
+        w = self.world
+        self.assertEqual(w.wall_cell, 2.0)
+        for x, y, z in self.samples[::4]:
+            nearby = w.wall_candidates(x-.36, z-.36, x+.36, z+.36)
+            for tri in nearby:
+                k=tri*4
+                xy=w.ground_xz_bounds
+                self.assertLessEqual(xy[k],x+.36)
+                self.assertGreaterEqual(xy[k+1],x-.36)
+                self.assertLessEqual(xy[k+2],z+.36)
+                self.assertGreaterEqual(xy[k+3],z-.36)
 
     def test_reference_speed_profile(self):
         # No timing assertion; CI hosts vary. Report speedups for inspection.
