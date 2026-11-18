@@ -1,0 +1,60 @@
+name: Octavus Phase 1.6 native MPZ texture variant audit
+on:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/audit_octavus_native_vslots86.py"
+      - ".github/workflows/octavus-native-vslots86.yml"
+      - "static/maps/octavus.source-materials.json"
+      - "static/maps/octavus.texture-manifest.json"
+      - "sources/octavus.original.mpz"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  decode-native-vslots:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Parse all native changed VSlots, predecessor links and original source candidates
+        run: python -m scripts.audit_octavus_native_vslots86
+      - name: Assert native source VSlot completeness and original MPZ traceability
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          j=json.loads(Path("static/maps/octavus.native-vslot-audit86.json").read_text())
+          assert j["sourceRevision"]==829
+          assert j["nativeVSlotCount"]==223
+          assert j["modifiedNativeSlots"]==155
+          assert len(j["sourceNativeSlots"])==223
+          assert j["cfgTextureDefinitions"]==68
+          assert j["originalRendererTextureParity"] is False
+          assert j["liveMapModified"] is False
+          for i,slot in enumerate(j["sourceNativeSlots"]):
+              assert slot["index"]==i
+              assert slot["prev"]<i
+              assert 0<=slot["rootVSlot"]<=i
+          print("PASS: native MPZ texture inheritance decoded, provenance intact")
+          PY
+      - name: Publish deterministic MPZ slot inheritance audit
+        run: |
+          cp static/maps/octavus.native-vslot-audit86.json /tmp/octavus.native-vslot-audit86.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3; do
+            git fetch origin main
+            git reset --hard origin/main
+            cp /tmp/octavus.native-vslot-audit86.json static/maps/
+            git add static/maps/octavus.native-vslot-audit86.json
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m "build(octavus phase1.6): publish source-native texture variant inheritance audit"
+            if git push origin HEAD:main; then exit 0; fi
+          done
+          exit 1
