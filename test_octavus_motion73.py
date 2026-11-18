@@ -6,7 +6,8 @@ from unittest.mock import patch
 
 from map_registry import Arena
 from dust_world64 import DustWorld64
-from dust_motion65 import DT, dust_step65
+from dust_motion65 import dust_step65
+OCT_DT=1/30
 from bot57 import visible
 
 
@@ -59,9 +60,9 @@ class OctavusStage31Tests(unittest.TestCase):
                 world=fixture(height)
                 p=make_player()
                 for i in range(55):
-                    now=100+i*DT
+                    now=100+i*OCT_DT
                     p['last_input']=now
-                    dust_step65(p,DT,now,{'speed':1},world)
+                    dust_step65(p,OCT_DT,now,{'speed':1},world)
                 if expected:
                     self.assertGreater(p['x'],.5,p)
                     self.assertAlmostEqual(p['y'],height,delta=.06)
@@ -75,7 +76,7 @@ class OctavusStage31Tests(unittest.TestCase):
         p.update(x=-2,y=0,z=0,input={'crouch':False})
         self.assertTrue(world.capsule_clear((p['x'],p['y'],p['z']),1.12))
         self.assertFalse(world.capsule_clear((p['x'],p['y'],p['z']),1.8))
-        dust_step65(p,DT,100,{'speed':1},world)
+        dust_step65(p,OCT_DT,100,{'speed':1},world)
         self.assertTrue(p['crouch'])
 
     def test_original_triangles_block_bot_visibility(self):
