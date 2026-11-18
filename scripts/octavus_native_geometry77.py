@@ -428,12 +428,13 @@ def export():
             "UV generation, texture reconciliation, scene preview are pending.",
             "Staging mesh is not used by current server or clients."
         ],
-        "parseSeconds":parse_seconds,
-        "buildSeconds":build_seconds,
+        # Wall-clock durations are intentionally omitted from the JSON:
+        # generated manifests must be byte-identical across CI reruns.
         "liveMapModified":False
     }
     MANIFEST.write_text(json.dumps(report,indent=2)+"\n")
     print(json.dumps(report,indent=2))
+    print(f"Native geometry parse={parse_seconds}s, geometry build={build_seconds}s")
     return report
 
 
