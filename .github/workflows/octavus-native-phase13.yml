@@ -13,6 +13,8 @@ on:
       - "static/octavus_native_material_preview87.js"
       - "static/octavus_native_scenery88.js"
       - "static/octavus_native_transform89.js"
+      - "static/octavus_native_props89.js"
+      - "static/octavus_native_decals89.js"
       - "static/octavus_props.js"
       - "static/octavus_decals.js"
       - "static/octavus_environment.js"
