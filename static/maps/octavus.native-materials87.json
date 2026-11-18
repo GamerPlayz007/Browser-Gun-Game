@@ -42,6 +42,7 @@
       "rootCfgSlot": 0,
       "sourceDiffuse": "textures/sky.png",
       "image": null,
+      "sourceImageSize": null,
       "triangleCount": 65,
       "scale": 1.0,
       "rotation": 0,
@@ -68,6 +69,10 @@
       "rootCfgSlot": 1,
       "sourceDiffuse": "mikeplus64/plain.png",
       "image": "/static/maps/octavus_assets/32bf0d230d8253dc.webp",
+      "sourceImageSize": [
+        4,
+        4
+      ],
       "triangleCount": 765874,
       "scale": 1.0,
       "rotation": 0,
@@ -94,6 +99,10 @@
       "rootCfgSlot": 2,
       "sourceDiffuse": "trak/trak6/tile3.jpg",
       "image": "/static/maps/octavus_assets/31efdabf1d2afb45.webp",
+      "sourceImageSize": [
+        1024,
+        1024
+      ],
       "triangleCount": 0,
       "scale": 0.25,
       "rotation": 0,
@@ -120,6 +129,10 @@
       "rootCfgSlot": 3,
       "sourceDiffuse": "trak/trak6/tile3.jpg",
       "image": "/static/maps/octavus_assets/31efdabf1d2afb45.webp",
+      "sourceImageSize": [
+        1024,
+        1024
+      ],
       "triangleCount": 36,
       "scale": 0.25,
       "rotation": 0,
@@ -146,6 +159,10 @@
       "rootCfgSlot": 4,
       "sourceDiffuse": "trak/trak6/tile3.jpg",
       "image": "/static/maps/octavus_assets/31efdabf1d2afb45.webp",
+      "sourceImageSize": [
+        1024,
+        1024
+      ],
       "triangleCount": 0,
       "scale": 0.25,
       "rotation": 0,
@@ -172,6 +189,10 @@
       "rootCfgSlot": 5,
       "sourceDiffuse": "trak/trak5/light3a.jpg",
       "image": "/static/maps/octavus_assets/090183f6d0199fe3.webp",
+      "sourceImageSize": [
+        128,
+        64
+      ],
       "triangleCount": 500,
       "scale": 0.5,
       "rotation": 0,
@@ -198,6 +219,10 @@
       "rootCfgSlot": 6,
       "sourceDiffuse": "trak/trak5/ribs1a.jpg",
       "image": "/static/maps/octavus_assets/33204ab2dd694caa.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 648,
       "scale": 0.5,
       "rotation": 0,
@@ -224,6 +249,10 @@
       "rootCfgSlot": 7,
       "sourceDiffuse": "trak/trak5/tile1e.jpg",
       "image": "/static/maps/octavus_assets/faf0c135569f4276.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 240,
       "scale": 0.5,
       "rotation": 0,
@@ -250,6 +279,10 @@
       "rootCfgSlot": 8,
       "sourceDiffuse": "trak/trak5/trim3e.jpg",
       "image": "/static/maps/octavus_assets/d03b52f2f4a54976.webp",
+      "sourceImageSize": [
+        128,
+        512
+      ],
       "triangleCount": 32,
       "scale": 0.5,
       "rotation": 0,
@@ -276,6 +309,10 @@
       "rootCfgSlot": 9,
       "sourceDiffuse": "trak/trak6/light1.jpg",
       "image": "/static/maps/octavus_assets/b1153cd74704ff68.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 0,
       "scale": 0.5,
       "rotation": 0,
@@ -302,6 +339,10 @@
       "rootCfgSlot": 10,
       "sourceDiffuse": "philipk/pk01/panel_small01_d.png",
       "image": "/static/maps/octavus_assets/9cf312cde81a1005.webp",
+      "sourceImageSize": [
+        256,
+        256
+      ],
       "triangleCount": 42,
       "scale": 0.5,
       "rotation": 0,
@@ -328,6 +369,10 @@
       "rootCfgSlot": 11,
       "sourceDiffuse": "philipk/pk01/floor01a_d.png",
       "image": "/static/maps/octavus_assets/07717366c27b6ef9.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 0,
       "scale": 0.5,
       "rotation": 0,
@@ -354,6 +399,10 @@
       "rootCfgSlot": 12,
       "sourceDiffuse": "philipk/pk01/floor02b_d.png",
       "image": "/static/maps/octavus_assets/8742f853adc21e03.webp",
+      "sourceImageSize": [
+        256,
+        256
+      ],
       "triangleCount": 58,
       "scale": 0.5,
       "rotation": 0,
@@ -380,6 +429,10 @@
       "rootCfgSlot": 13,
       "sourceDiffuse": "philipk/pk01/gra_floor02_d.png",
       "image": "/static/maps/octavus_assets/2c29b4160b750c70.webp",
+      "sourceImageSize": [
+        256,
+        256
+      ],
       "triangleCount": 28,
       "scale": 0.5,
       "rotation": 0,
@@ -406,6 +459,10 @@
       "rootCfgSlot": 14,
       "sourceDiffuse": "philipk/pk01/vent_wall01a_d.png",
       "image": "/static/maps/octavus_assets/b952d69713f2778e.webp",
+      "sourceImageSize": [
+        256,
+        512
+      ],
       "triangleCount": 84,
       "scale": 0.5,
       "rotation": 0,
@@ -432,6 +489,10 @@
       "rootCfgSlot": 15,
       "sourceDiffuse": "philipk/pk02/light01b_c.png",
       "image": "/static/maps/octavus_assets/af55446077b32bfd.webp",
+      "sourceImageSize": [
+        128,
+        64
+      ],
       "triangleCount": 84,
       "scale": 0.5,
       "rotation": 0,
@@ -458,6 +519,10 @@
       "rootCfgSlot": 16,
       "sourceDiffuse": "philipk/pk02/pipes01_c.png",
       "image": "/static/maps/octavus_assets/1a35f3b3b1f77934.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 42,
       "scale": 0.5,
       "rotation": 0,
@@ -484,6 +549,10 @@
       "rootCfgSlot": 17,
       "sourceDiffuse": "philipk/pk02/switches01b_c.png",
       "image": "/static/maps/octavus_assets/117c16d6fb1e484f.webp",
+      "sourceImageSize": [
+        128,
+        256
+      ],
       "triangleCount": 16,
       "scale": 0.5,
       "rotation": 0,
@@ -510,6 +579,10 @@
       "rootCfgSlot": 18,
       "sourceDiffuse": "philipk/pk02/switches01c_c.png",
       "image": "/static/maps/octavus_assets/397b450a7e4b8ed3.webp",
+      "sourceImageSize": [
+        128,
+        256
+      ],
       "triangleCount": 76,
       "scale": 0.5,
       "rotation": 0,
@@ -536,6 +609,10 @@
       "rootCfgSlot": 19,
       "sourceDiffuse": "philipk/pk02/floor01_c.png",
       "image": "/static/maps/octavus_assets/4f5b7749a658e15d.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 0,
       "scale": 0.5,
       "rotation": 0,
@@ -562,6 +639,7 @@
       "rootCfgSlot": 20,
       "sourceDiffuse": "philipk/pk02/floor03_c.png",
       "image": null,
+      "sourceImageSize": null,
       "triangleCount": 202,
       "scale": 0.5,
       "rotation": 0,
@@ -588,6 +666,10 @@
       "rootCfgSlot": 21,
       "sourceDiffuse": "philipk/pk02/floor05_c.png",
       "image": "/static/maps/octavus_assets/f818fe290b84be9a.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 108,
       "scale": 0.5,
       "rotation": 0,
@@ -614,6 +696,10 @@
       "rootCfgSlot": 22,
       "sourceDiffuse": "philipk/pk02/floor06a_c.png",
       "image": "/static/maps/octavus_assets/7e6e530f55a1bca3.webp",
+      "sourceImageSize": [
+        256,
+        256
+      ],
       "triangleCount": 316,
       "scale": 0.5,
       "rotation": 0,
@@ -640,6 +726,10 @@
       "rootCfgSlot": 23,
       "sourceDiffuse": "philipk/pk02/floor07_c.png",
       "image": "/static/maps/octavus_assets/e5ed5a491e9b66c0.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 650,
       "scale": 0.5,
       "rotation": 0,
@@ -666,6 +756,10 @@
       "rootCfgSlot": 24,
       "sourceDiffuse": "philipk/pk02/generic01b_c.png",
       "image": "/static/maps/octavus_assets/d9549cb183da75bc.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 488,
       "scale": 0.5,
       "rotation": 0,
@@ -692,6 +786,10 @@
       "rootCfgSlot": 25,
       "sourceDiffuse": "philipk/pk02/switches01a_c.png",
       "image": "/static/maps/octavus_assets/41105fa041c4d4e8.webp",
+      "sourceImageSize": [
+        128,
+        256
+      ],
       "triangleCount": 30,
       "scale": 0.5,
       "rotation": 0,
@@ -718,6 +816,10 @@
       "rootCfgSlot": 26,
       "sourceDiffuse": "philipk/pk02/trim04a_c.png",
       "image": "/static/maps/octavus_assets/31bd5b5848488a12.webp",
+      "sourceImageSize": [
+        256,
+        32
+      ],
       "triangleCount": 896,
       "scale": 0.5,
       "rotation": 0,
@@ -744,6 +846,10 @@
       "rootCfgSlot": 27,
       "sourceDiffuse": "philipk/pk02/wall_big01a_c.png",
       "image": "/static/maps/octavus_assets/fbcddfee55f7a4f4.webp",
+      "sourceImageSize": [
+        1024,
+        1024
+      ],
       "triangleCount": 794,
       "scale": 0.5,
       "rotation": 0,
@@ -770,6 +876,10 @@
       "rootCfgSlot": 28,
       "sourceDiffuse": "philipk/pk02/wall_big01b_c.png",
       "image": "/static/maps/octavus_assets/99d030dc4ac4f892.webp",
+      "sourceImageSize": [
+        1024,
+        1024
+      ],
       "triangleCount": 8501,
       "scale": 0.5,
       "rotation": 0,
@@ -796,6 +906,10 @@
       "rootCfgSlot": 29,
       "sourceDiffuse": "jojo/windowstile04_g.png",
       "image": "/static/maps/octavus_assets/8df50b2f8a5569bd.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 0,
       "scale": 1.0,
       "rotation": 0,
@@ -822,6 +936,7 @@
       "rootCfgSlot": 30,
       "sourceDiffuse": "jojo/map.png",
       "image": null,
+      "sourceImageSize": null,
       "triangleCount": 0,
       "scale": 0.25,
       "rotation": 0,
@@ -848,6 +963,10 @@
       "rootCfgSlot": 31,
       "sourceDiffuse": "jojo/sand01.png",
       "image": "/static/maps/octavus_assets/880560c611c66ecc.webp",
+      "sourceImageSize": [
+        1024,
+        1024
+      ],
       "triangleCount": 0,
       "scale": 1.0,
       "rotation": 0,
@@ -874,6 +993,10 @@
       "rootCfgSlot": 32,
       "sourceDiffuse": "philipk/pk02/switches01c_c.png",
       "image": "/static/maps/octavus_assets/397b450a7e4b8ed3.webp",
+      "sourceImageSize": [
+        128,
+        256
+      ],
       "triangleCount": 30,
       "scale": 0.5,
       "rotation": 0,
@@ -900,6 +1023,10 @@
       "rootCfgSlot": 33,
       "sourceDiffuse": "philipk/pk02/switches01c_c.png",
       "image": "/static/maps/octavus_assets/397b450a7e4b8ed3.webp",
+      "sourceImageSize": [
+        128,
+        256
+      ],
       "triangleCount": 20,
       "scale": 0.5,
       "rotation": 0,
@@ -926,6 +1053,10 @@
       "rootCfgSlot": 34,
       "sourceDiffuse": "appleflap/danger.jpg",
       "image": "/static/maps/octavus_assets/b2e15684532b472a.webp",
+      "sourceImageSize": [
+        64,
+        64
+      ],
       "triangleCount": 532,
       "scale": 1.0,
       "rotation": 0,
@@ -952,6 +1083,10 @@
       "rootCfgSlot": 35,
       "sourceDiffuse": "trak/trak6/trim1.jpg",
       "image": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "sourceImageSize": [
+        256,
+        1024
+      ],
       "triangleCount": 32,
       "scale": 0.5,
       "rotation": 0,
@@ -978,6 +1113,10 @@
       "rootCfgSlot": 36,
       "sourceDiffuse": "mikeplus64/plain.png",
       "image": "/static/maps/octavus_assets/32bf0d230d8253dc.webp",
+      "sourceImageSize": [
+        4,
+        4
+      ],
       "triangleCount": 0,
       "scale": 1.0,
       "rotation": 0,
@@ -1004,6 +1143,10 @@
       "rootCfgSlot": 37,
       "sourceDiffuse": "misc/agf81/concrete1w_diffuse.png",
       "image": "/static/maps/octavus_assets/bd907b2904b90d12.webp",
+      "sourceImageSize": [
+        1024,
+        1024
+      ],
       "triangleCount": 13987,
       "scale": 0.5,
       "rotation": 0,
@@ -1030,6 +1173,10 @@
       "rootCfgSlot": 38,
       "sourceDiffuse": "nieb/complex/step02.png",
       "image": "/static/maps/octavus_assets/b71b5999c0cf8cee.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 444,
       "scale": 0.5,
       "rotation": 0,
@@ -1056,6 +1203,10 @@
       "rootCfgSlot": 39,
       "sourceDiffuse": "nieb/complex/step03.png",
       "image": "/static/maps/octavus_assets/b90967e4bc5efb1d.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 3886,
       "scale": 0.5,
       "rotation": 0,
@@ -1082,6 +1233,10 @@
       "rootCfgSlot": 40,
       "sourceDiffuse": "nieb/complex/wall01.png",
       "image": "/static/maps/octavus_assets/617f939d226609c9.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 0,
       "scale": 0.5,
       "rotation": 0,
@@ -1108,6 +1263,10 @@
       "rootCfgSlot": 41,
       "sourceDiffuse": "philipk/pk02/floor12a_c.png",
       "image": "/static/maps/octavus_assets/2fec6613f4a2daed.webp",
+      "sourceImageSize": [
+        256,
+        256
+      ],
       "triangleCount": 0,
       "scale": 0.5,
       "rotation": 0,
@@ -1134,6 +1293,10 @@
       "rootCfgSlot": 42,
       "sourceDiffuse": "philipk/pk02/generic01b_c.png",
       "image": "/static/maps/octavus_assets/d9549cb183da75bc.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 4530,
       "scale": 0.5,
       "rotation": 0,
@@ -1160,6 +1323,10 @@
       "rootCfgSlot": 43,
       "sourceDiffuse": "acerspyro/light1/light1.png",
       "image": "/static/maps/octavus_assets/b6a21ae3c0164f1c.webp",
+      "sourceImageSize": [
+        256,
+        256
+      ],
       "triangleCount": 0,
       "scale": 0.5,
       "rotation": 0,
@@ -1186,6 +1353,10 @@
       "rootCfgSlot": 44,
       "sourceDiffuse": "trak/trak5/tile3d.jpg",
       "image": "/static/maps/octavus_assets/8a4ba5d6580d2cb3.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 50,
       "scale": 0.5,
       "rotation": 0,
@@ -1212,6 +1383,10 @@
       "rootCfgSlot": 45,
       "sourceDiffuse": "trak/trak5/tile5c.jpg",
       "image": "/static/maps/octavus_assets/721154c3befae156.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 88,
       "scale": 0.5,
       "rotation": 0,
@@ -1238,6 +1413,10 @@
       "rootCfgSlot": 46,
       "sourceDiffuse": "trak/trak5/wall1e.jpg",
       "image": "/static/maps/octavus_assets/c1bac841dedb5009.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 0,
       "scale": 0.5,
       "rotation": 0,
@@ -1264,6 +1443,10 @@
       "rootCfgSlot": 47,
       "sourceDiffuse": "nieb/complex/step03.png",
       "image": "/static/maps/octavus_assets/b90967e4bc5efb1d.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 0,
       "scale": 0.5,
       "rotation": 0,
@@ -1290,6 +1473,10 @@
       "rootCfgSlot": 48,
       "sourceDiffuse": "acerspyro/light2/light2.png",
       "image": "/static/maps/octavus_assets/f78d6834fa64e58e.webp",
+      "sourceImageSize": [
+        512,
+        256
+      ],
       "triangleCount": 12,
       "scale": 0.5,
       "rotation": 0,
@@ -1316,6 +1503,10 @@
       "rootCfgSlot": 49,
       "sourceDiffuse": "nieb/complex/step01.png",
       "image": "/static/maps/octavus_assets/e54b6147a2ac3baf.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 320,
       "scale": 0.5,
       "rotation": 0,
@@ -1342,6 +1533,10 @@
       "rootCfgSlot": 50,
       "sourceDiffuse": "philipk/pk02/light02a_c.png",
       "image": "/static/maps/octavus_assets/7f3f474233b3f147.webp",
+      "sourceImageSize": [
+        256,
+        256
+      ],
       "triangleCount": 42,
       "scale": 0.5,
       "rotation": 0,
@@ -1368,6 +1563,10 @@
       "rootCfgSlot": 51,
       "sourceDiffuse": "philipk/pk02/floor05_c.png",
       "image": "/static/maps/octavus_assets/f818fe290b84be9a.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 0,
       "scale": 0.5,
       "rotation": 0,
@@ -1394,6 +1593,10 @@
       "rootCfgSlot": 52,
       "sourceDiffuse": "acerspyro/light1/light1.png",
       "image": "/static/maps/octavus_assets/b6a21ae3c0164f1c.webp",
+      "sourceImageSize": [
+        256,
+        256
+      ],
       "triangleCount": 0,
       "scale": 0.5,
       "rotation": 0,
@@ -1420,6 +1623,10 @@
       "rootCfgSlot": 53,
       "sourceDiffuse": "jojo/sand01.png",
       "image": "/static/maps/octavus_assets/880560c611c66ecc.webp",
+      "sourceImageSize": [
+        1024,
+        1024
+      ],
       "triangleCount": 0,
       "scale": 1.0,
       "rotation": 0,
@@ -1446,6 +1653,10 @@
       "rootCfgSlot": 54,
       "sourceDiffuse": "jojo/sand01.png",
       "image": "/static/maps/octavus_assets/880560c611c66ecc.webp",
+      "sourceImageSize": [
+        1024,
+        1024
+      ],
       "triangleCount": 0,
       "scale": 1.0,
       "rotation": 0,
@@ -1472,6 +1683,10 @@
       "rootCfgSlot": 55,
       "sourceDiffuse": "misc/agf81/concrete1w_diffuse.png",
       "image": "/static/maps/octavus_assets/bd907b2904b90d12.webp",
+      "sourceImageSize": [
+        1024,
+        1024
+      ],
       "triangleCount": 4,
       "scale": 0.5,
       "rotation": 0,
@@ -1498,6 +1713,7 @@
       "rootCfgSlot": 56,
       "sourceDiffuse": "dziq/metal_paint_old01",
       "image": null,
+      "sourceImageSize": null,
       "triangleCount": 16,
       "scale": 0.5,
       "rotation": 0,
@@ -1524,6 +1740,7 @@
       "rootCfgSlot": 57,
       "sourceDiffuse": "<comp:1>ticker",
       "image": null,
+      "sourceImageSize": null,
       "triangleCount": 12,
       "scale": 1.0,
       "rotation": 0,
@@ -1550,6 +1767,7 @@
       "rootCfgSlot": 58,
       "sourceDiffuse": "jojo/interface03.png",
       "image": null,
+      "sourceImageSize": null,
       "triangleCount": 0,
       "scale": 0.25,
       "rotation": 0,
@@ -1576,6 +1794,7 @@
       "rootCfgSlot": 59,
       "sourceDiffuse": "trak/trak6/crate1.jpg",
       "image": null,
+      "sourceImageSize": null,
       "triangleCount": 0,
       "scale": 0.5,
       "rotation": 0,
@@ -1602,6 +1821,7 @@
       "rootCfgSlot": 60,
       "sourceDiffuse": "torley/desat/clumpedverticalpaint.png",
       "image": null,
+      "sourceImageSize": null,
       "triangleCount": 0,
       "scale": 1.0,
       "rotation": 0,
@@ -1628,6 +1848,7 @@
       "rootCfgSlot": 61,
       "sourceDiffuse": "torley/desat/grittyblack2clear3.png",
       "image": null,
+      "sourceImageSize": null,
       "triangleCount": 144,
       "scale": 1.0,
       "rotation": 0,
@@ -1654,6 +1875,7 @@
       "rootCfgSlot": 62,
       "sourceDiffuse": "torley/desat/sketchstorm.png",
       "image": null,
+      "sourceImageSize": null,
       "triangleCount": 16,
       "scale": 1.0,
       "rotation": 0,
@@ -1680,6 +1902,7 @@
       "rootCfgSlot": 63,
       "sourceDiffuse": "luckystrike/barlight.jpg",
       "image": null,
+      "sourceImageSize": null,
       "triangleCount": 256,
       "scale": 0.25,
       "rotation": 0,
@@ -1706,6 +1929,7 @@
       "rootCfgSlot": 64,
       "sourceDiffuse": "philipk/pk01/pan_floor01b_d.png",
       "image": null,
+      "sourceImageSize": null,
       "triangleCount": 320,
       "scale": 0.5,
       "rotation": 0,
@@ -1732,6 +1956,7 @@
       "rootCfgSlot": 65,
       "sourceDiffuse": "<comp:100>cathode [tex = unixfreak/textures/planetsurvey.png]",
       "image": null,
+      "sourceImageSize": null,
       "triangleCount": 0,
       "scale": 1.0,
       "rotation": 0,
@@ -1758,6 +1983,7 @@
       "rootCfgSlot": 66,
       "sourceDiffuse": "jojo/redrock02.png",
       "image": null,
+      "sourceImageSize": null,
       "triangleCount": 0,
       "scale": 1.0,
       "rotation": 0,
@@ -1784,6 +2010,7 @@
       "rootCfgSlot": 67,
       "sourceDiffuse": "unnamed/solar_cell02.png",
       "image": null,
+      "sourceImageSize": null,
       "triangleCount": 24,
       "scale": 0.5,
       "rotation": 0,
@@ -1810,6 +2037,10 @@
       "rootCfgSlot": 31,
       "sourceDiffuse": "jojo/sand01.png",
       "image": "/static/maps/octavus_assets/880560c611c66ecc.webp",
+      "sourceImageSize": [
+        1024,
+        1024
+      ],
       "triangleCount": 16,
       "scale": 6.0,
       "rotation": 0,
@@ -1837,6 +2068,10 @@
       "rootCfgSlot": 31,
       "sourceDiffuse": "jojo/sand01.png",
       "image": "/static/maps/octavus_assets/880560c611c66ecc.webp",
+      "sourceImageSize": [
+        1024,
+        1024
+      ],
       "triangleCount": 2110,
       "scale": 3.0,
       "rotation": 0,
@@ -1871,6 +2106,10 @@
       "rootCfgSlot": 31,
       "sourceDiffuse": "jojo/sand01.png",
       "image": "/static/maps/octavus_assets/880560c611c66ecc.webp",
+      "sourceImageSize": [
+        1024,
+        1024
+      ],
       "triangleCount": 5055,
       "scale": 0.25,
       "rotation": 0,
@@ -1904,6 +2143,7 @@
       "rootCfgSlot": 66,
       "sourceDiffuse": "jojo/redrock02.png",
       "image": null,
+      "sourceImageSize": null,
       "triangleCount": 0,
       "scale": 1.0,
       "rotation": 0,
@@ -1931,6 +2171,7 @@
       "rootCfgSlot": 56,
       "sourceDiffuse": "dziq/metal_paint_old01",
       "image": null,
+      "sourceImageSize": null,
       "triangleCount": 5548,
       "scale": 0.5,
       "rotation": 0,
@@ -1960,6 +2201,10 @@
       "rootCfgSlot": 1,
       "sourceDiffuse": "mikeplus64/plain.png",
       "image": "/static/maps/octavus_assets/32bf0d230d8253dc.webp",
+      "sourceImageSize": [
+        4,
+        4
+      ],
       "triangleCount": 816,
       "scale": 1.0,
       "rotation": 0,
@@ -1987,6 +2232,10 @@
       "rootCfgSlot": 5,
       "sourceDiffuse": "trak/trak5/light3a.jpg",
       "image": "/static/maps/octavus_assets/090183f6d0199fe3.webp",
+      "sourceImageSize": [
+        128,
+        64
+      ],
       "triangleCount": 96,
       "scale": 0.25,
       "rotation": 0,
@@ -2024,6 +2273,10 @@
       "rootCfgSlot": 24,
       "sourceDiffuse": "philipk/pk02/generic01b_c.png",
       "image": "/static/maps/octavus_assets/d9549cb183da75bc.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 741,
       "scale": 0.5,
       "rotation": 0,
@@ -2052,6 +2305,10 @@
       "rootCfgSlot": 40,
       "sourceDiffuse": "nieb/complex/wall01.png",
       "image": "/static/maps/octavus_assets/617f939d226609c9.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 2598,
       "scale": 0.5,
       "rotation": 0,
@@ -2079,6 +2336,10 @@
       "rootCfgSlot": 24,
       "sourceDiffuse": "philipk/pk02/generic01b_c.png",
       "image": "/static/maps/octavus_assets/d9549cb183da75bc.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 5340,
       "scale": 0.5,
       "rotation": 0,
@@ -2108,6 +2369,10 @@
       "rootCfgSlot": 2,
       "sourceDiffuse": "trak/trak6/tile3.jpg",
       "image": "/static/maps/octavus_assets/31efdabf1d2afb45.webp",
+      "sourceImageSize": [
+        1024,
+        1024
+      ],
       "triangleCount": 256,
       "scale": 0.25,
       "rotation": 0,
@@ -2135,6 +2400,7 @@
       "rootCfgSlot": 56,
       "sourceDiffuse": "dziq/metal_paint_old01",
       "image": null,
+      "sourceImageSize": null,
       "triangleCount": 8824,
       "scale": 0.5,
       "rotation": 0,
@@ -2165,6 +2431,10 @@
       "rootCfgSlot": 19,
       "sourceDiffuse": "philipk/pk02/floor01_c.png",
       "image": "/static/maps/octavus_assets/4f5b7749a658e15d.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 3039,
       "scale": 0.5,
       "rotation": 0,
@@ -2192,6 +2462,10 @@
       "rootCfgSlot": 31,
       "sourceDiffuse": "jojo/sand01.png",
       "image": "/static/maps/octavus_assets/880560c611c66ecc.webp",
+      "sourceImageSize": [
+        1024,
+        1024
+      ],
       "triangleCount": 0,
       "scale": 6.0,
       "rotation": 0,
@@ -2221,6 +2495,10 @@
       "rootCfgSlot": 53,
       "sourceDiffuse": "jojo/sand01.png",
       "image": "/static/maps/octavus_assets/880560c611c66ecc.webp",
+      "sourceImageSize": [
+        1024,
+        1024
+      ],
       "triangleCount": 0,
       "scale": 0.5,
       "rotation": 0,
@@ -2248,6 +2526,10 @@
       "rootCfgSlot": 38,
       "sourceDiffuse": "nieb/complex/step02.png",
       "image": "/static/maps/octavus_assets/b71b5999c0cf8cee.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 660,
       "scale": 1.0,
       "rotation": 0,
@@ -2275,6 +2557,7 @@
       "rootCfgSlot": 56,
       "sourceDiffuse": "dziq/metal_paint_old01",
       "image": null,
+      "sourceImageSize": null,
       "triangleCount": 1252,
       "scale": 0.5,
       "rotation": 0,
@@ -2302,6 +2585,10 @@
       "rootCfgSlot": 11,
       "sourceDiffuse": "philipk/pk01/floor01a_d.png",
       "image": "/static/maps/octavus_assets/07717366c27b6ef9.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 842,
       "scale": 0.5,
       "rotation": 0,
@@ -2330,6 +2617,10 @@
       "rootCfgSlot": 37,
       "sourceDiffuse": "misc/agf81/concrete1w_diffuse.png",
       "image": "/static/maps/octavus_assets/bd907b2904b90d12.webp",
+      "sourceImageSize": [
+        1024,
+        1024
+      ],
       "triangleCount": 116,
       "scale": 0.5,
       "rotation": 0,
@@ -2357,6 +2648,10 @@
       "rootCfgSlot": 31,
       "sourceDiffuse": "jojo/sand01.png",
       "image": "/static/maps/octavus_assets/880560c611c66ecc.webp",
+      "sourceImageSize": [
+        1024,
+        1024
+      ],
       "triangleCount": 12,
       "scale": 0.25,
       "rotation": 0,
@@ -2387,6 +2682,7 @@
       "rootCfgSlot": 61,
       "sourceDiffuse": "torley/desat/grittyblack2clear3.png",
       "image": null,
+      "sourceImageSize": null,
       "triangleCount": 874,
       "scale": 1.0,
       "rotation": 0,
@@ -2414,6 +2710,10 @@
       "rootCfgSlot": 37,
       "sourceDiffuse": "misc/agf81/concrete1w_diffuse.png",
       "image": "/static/maps/octavus_assets/bd907b2904b90d12.webp",
+      "sourceImageSize": [
+        1024,
+        1024
+      ],
       "triangleCount": 1522,
       "scale": 0.5,
       "rotation": 0,
@@ -2442,6 +2742,10 @@
       "rootCfgSlot": 4,
       "sourceDiffuse": "trak/trak6/tile3.jpg",
       "image": "/static/maps/octavus_assets/31efdabf1d2afb45.webp",
+      "sourceImageSize": [
+        1024,
+        1024
+      ],
       "triangleCount": 470,
       "scale": 0.125,
       "rotation": 0,
@@ -2474,6 +2778,10 @@
       "rootCfgSlot": 46,
       "sourceDiffuse": "trak/trak5/wall1e.jpg",
       "image": "/static/maps/octavus_assets/c1bac841dedb5009.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 8,
       "scale": 0.25,
       "rotation": 0,
@@ -2501,6 +2809,10 @@
       "rootCfgSlot": 35,
       "sourceDiffuse": "trak/trak6/trim1.jpg",
       "image": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "sourceImageSize": [
+        256,
+        1024
+      ],
       "triangleCount": 2378,
       "scale": 0.25,
       "rotation": 1,
@@ -2539,6 +2851,10 @@
       "rootCfgSlot": 6,
       "sourceDiffuse": "trak/trak5/ribs1a.jpg",
       "image": "/static/maps/octavus_assets/33204ab2dd694caa.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 782,
       "scale": 0.5,
       "rotation": 1,
@@ -2566,6 +2882,10 @@
       "rootCfgSlot": 51,
       "sourceDiffuse": "philipk/pk02/floor05_c.png",
       "image": "/static/maps/octavus_assets/f818fe290b84be9a.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 64,
       "scale": 0.5,
       "rotation": 0,
@@ -2593,6 +2913,10 @@
       "rootCfgSlot": 42,
       "sourceDiffuse": "philipk/pk02/generic01b_c.png",
       "image": "/static/maps/octavus_assets/d9549cb183da75bc.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 448,
       "scale": 0.5,
       "rotation": 0,
@@ -2620,6 +2944,10 @@
       "rootCfgSlot": 7,
       "sourceDiffuse": "trak/trak5/tile1e.jpg",
       "image": "/static/maps/octavus_assets/faf0c135569f4276.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 4,
       "scale": 1.0,
       "rotation": 0,
@@ -2650,6 +2978,10 @@
       "rootCfgSlot": 24,
       "sourceDiffuse": "philipk/pk02/generic01b_c.png",
       "image": "/static/maps/octavus_assets/d9549cb183da75bc.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 3468,
       "scale": 0.5,
       "rotation": 0,
@@ -2677,6 +3009,10 @@
       "rootCfgSlot": 7,
       "sourceDiffuse": "trak/trak5/tile1e.jpg",
       "image": "/static/maps/octavus_assets/faf0c135569f4276.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 16,
       "scale": 0.25,
       "rotation": 0,
@@ -2704,6 +3040,10 @@
       "rootCfgSlot": 5,
       "sourceDiffuse": "trak/trak5/light3a.jpg",
       "image": "/static/maps/octavus_assets/090183f6d0199fe3.webp",
+      "sourceImageSize": [
+        128,
+        64
+      ],
       "triangleCount": 48,
       "scale": 0.5,
       "rotation": 0,
@@ -2737,6 +3077,10 @@
       "rootCfgSlot": 35,
       "sourceDiffuse": "trak/trak6/trim1.jpg",
       "image": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "sourceImageSize": [
+        256,
+        1024
+      ],
       "triangleCount": 86,
       "scale": 1.0,
       "rotation": 1,
@@ -2778,6 +3122,10 @@
       "rootCfgSlot": 42,
       "sourceDiffuse": "philipk/pk02/generic01b_c.png",
       "image": "/static/maps/octavus_assets/d9549cb183da75bc.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 8,
       "scale": 0.5,
       "rotation": 0,
@@ -2806,6 +3154,10 @@
       "rootCfgSlot": 31,
       "sourceDiffuse": "jojo/sand01.png",
       "image": "/static/maps/octavus_assets/880560c611c66ecc.webp",
+      "sourceImageSize": [
+        1024,
+        1024
+      ],
       "triangleCount": 2,
       "scale": 6.0,
       "rotation": 0,
@@ -2834,6 +3186,10 @@
       "rootCfgSlot": 31,
       "sourceDiffuse": "jojo/sand01.png",
       "image": "/static/maps/octavus_assets/880560c611c66ecc.webp",
+      "sourceImageSize": [
+        1024,
+        1024
+      ],
       "triangleCount": 4,
       "scale": 0.25,
       "rotation": 0,
@@ -2865,6 +3221,7 @@
       "rootCfgSlot": 59,
       "sourceDiffuse": "trak/trak6/crate1.jpg",
       "image": null,
+      "sourceImageSize": null,
       "triangleCount": 4,
       "scale": 0.25,
       "rotation": 0,
@@ -2893,6 +3250,7 @@
       "rootCfgSlot": 59,
       "sourceDiffuse": "trak/trak6/crate1.jpg",
       "image": null,
+      "sourceImageSize": null,
       "triangleCount": 40,
       "scale": 0.25,
       "rotation": 0,
@@ -2920,6 +3278,10 @@
       "rootCfgSlot": 34,
       "sourceDiffuse": "appleflap/danger.jpg",
       "image": "/static/maps/octavus_assets/b2e15684532b472a.webp",
+      "sourceImageSize": [
+        64,
+        64
+      ],
       "triangleCount": 44,
       "scale": 0.5,
       "rotation": 0,
@@ -2947,6 +3309,10 @@
       "rootCfgSlot": 41,
       "sourceDiffuse": "philipk/pk02/floor12a_c.png",
       "image": "/static/maps/octavus_assets/2fec6613f4a2daed.webp",
+      "sourceImageSize": [
+        256,
+        256
+      ],
       "triangleCount": 32,
       "scale": 0.5,
       "rotation": 0,
@@ -2974,6 +3340,10 @@
       "rootCfgSlot": 9,
       "sourceDiffuse": "trak/trak6/light1.jpg",
       "image": "/static/maps/octavus_assets/b1153cd74704ff68.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 16,
       "scale": 1.25,
       "rotation": 0,
@@ -3002,6 +3372,10 @@
       "rootCfgSlot": 35,
       "sourceDiffuse": "trak/trak6/trim1.jpg",
       "image": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "sourceImageSize": [
+        256,
+        1024
+      ],
       "triangleCount": 1626,
       "scale": 0.25,
       "rotation": 1,
@@ -3041,6 +3415,10 @@
       "rootCfgSlot": 40,
       "sourceDiffuse": "nieb/complex/wall01.png",
       "image": "/static/maps/octavus_assets/617f939d226609c9.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 394,
       "scale": 0.5,
       "rotation": 0,
@@ -3070,6 +3448,10 @@
       "rootCfgSlot": 24,
       "sourceDiffuse": "philipk/pk02/generic01b_c.png",
       "image": "/static/maps/octavus_assets/d9549cb183da75bc.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 105,
       "scale": 0.5,
       "rotation": 0,
@@ -3101,6 +3483,10 @@
       "rootCfgSlot": 5,
       "sourceDiffuse": "trak/trak5/light3a.jpg",
       "image": "/static/maps/octavus_assets/090183f6d0199fe3.webp",
+      "sourceImageSize": [
+        128,
+        64
+      ],
       "triangleCount": 8,
       "scale": 0.5,
       "rotation": 0,
@@ -3129,6 +3515,10 @@
       "rootCfgSlot": 19,
       "sourceDiffuse": "philipk/pk02/floor01_c.png",
       "image": "/static/maps/octavus_assets/4f5b7749a658e15d.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 1248,
       "scale": 0.5,
       "rotation": 0,
@@ -3157,6 +3547,10 @@
       "rootCfgSlot": 31,
       "sourceDiffuse": "jojo/sand01.png",
       "image": "/static/maps/octavus_assets/880560c611c66ecc.webp",
+      "sourceImageSize": [
+        1024,
+        1024
+      ],
       "triangleCount": 73,
       "scale": 0.25,
       "rotation": 0,
@@ -3189,6 +3583,10 @@
       "rootCfgSlot": 47,
       "sourceDiffuse": "nieb/complex/step03.png",
       "image": "/static/maps/octavus_assets/b90967e4bc5efb1d.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 758,
       "scale": 0.5,
       "rotation": 1,
@@ -3216,6 +3614,7 @@
       "rootCfgSlot": 59,
       "sourceDiffuse": "trak/trak6/crate1.jpg",
       "image": null,
+      "sourceImageSize": null,
       "triangleCount": 38,
       "scale": 0.125,
       "rotation": 0,
@@ -3245,6 +3644,10 @@
       "rootCfgSlot": 4,
       "sourceDiffuse": "trak/trak6/tile3.jpg",
       "image": "/static/maps/octavus_assets/31efdabf1d2afb45.webp",
+      "sourceImageSize": [
+        1024,
+        1024
+      ],
       "triangleCount": 20,
       "scale": 0.125,
       "rotation": 0,
@@ -3278,6 +3681,10 @@
       "rootCfgSlot": 26,
       "sourceDiffuse": "philipk/pk02/trim04a_c.png",
       "image": "/static/maps/octavus_assets/31bd5b5848488a12.webp",
+      "sourceImageSize": [
+        256,
+        32
+      ],
       "triangleCount": 68,
       "scale": 0.5,
       "rotation": 1,
@@ -3305,6 +3712,7 @@
       "rootCfgSlot": 65,
       "sourceDiffuse": "<comp:100>cathode [tex = unixfreak/textures/planetsurvey.png]",
       "image": null,
+      "sourceImageSize": null,
       "triangleCount": 16,
       "scale": 2.0,
       "rotation": 1,
@@ -3334,6 +3742,7 @@
       "rootCfgSlot": 65,
       "sourceDiffuse": "<comp:100>cathode [tex = unixfreak/textures/planetsurvey.png]",
       "image": null,
+      "sourceImageSize": null,
       "triangleCount": 16,
       "scale": 2.0,
       "rotation": 1,
@@ -3364,6 +3773,10 @@
       "rootCfgSlot": 4,
       "sourceDiffuse": "trak/trak6/tile3.jpg",
       "image": "/static/maps/octavus_assets/31efdabf1d2afb45.webp",
+      "sourceImageSize": [
+        1024,
+        1024
+      ],
       "triangleCount": 156,
       "scale": 0.25,
       "rotation": 0,
@@ -3391,6 +3804,10 @@
       "rootCfgSlot": 34,
       "sourceDiffuse": "appleflap/danger.jpg",
       "image": "/static/maps/octavus_assets/b2e15684532b472a.webp",
+      "sourceImageSize": [
+        64,
+        64
+      ],
       "triangleCount": 44,
       "scale": 0.5,
       "rotation": 0,
@@ -3419,6 +3836,10 @@
       "rootCfgSlot": 35,
       "sourceDiffuse": "trak/trak6/trim1.jpg",
       "image": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "sourceImageSize": [
+        256,
+        1024
+      ],
       "triangleCount": 790,
       "scale": 0.5,
       "rotation": 1,
@@ -3447,6 +3868,10 @@
       "rootCfgSlot": 43,
       "sourceDiffuse": "acerspyro/light1/light1.png",
       "image": "/static/maps/octavus_assets/b6a21ae3c0164f1c.webp",
+      "sourceImageSize": [
+        256,
+        256
+      ],
       "triangleCount": 8,
       "scale": 0.125,
       "rotation": 0,
@@ -3476,6 +3901,10 @@
       "rootCfgSlot": 43,
       "sourceDiffuse": "acerspyro/light1/light1.png",
       "image": "/static/maps/octavus_assets/b6a21ae3c0164f1c.webp",
+      "sourceImageSize": [
+        256,
+        256
+      ],
       "triangleCount": 24,
       "scale": 0.25,
       "rotation": 0,
@@ -3508,6 +3937,10 @@
       "rootCfgSlot": 34,
       "sourceDiffuse": "appleflap/danger.jpg",
       "image": "/static/maps/octavus_assets/b2e15684532b472a.webp",
+      "sourceImageSize": [
+        64,
+        64
+      ],
       "triangleCount": 16,
       "scale": 0.5,
       "rotation": 0,
@@ -3538,6 +3971,10 @@
       "rootCfgSlot": 41,
       "sourceDiffuse": "philipk/pk02/floor12a_c.png",
       "image": "/static/maps/octavus_assets/2fec6613f4a2daed.webp",
+      "sourceImageSize": [
+        256,
+        256
+      ],
       "triangleCount": 24,
       "scale": 0.5,
       "rotation": 0,
@@ -3566,6 +4003,10 @@
       "rootCfgSlot": 22,
       "sourceDiffuse": "philipk/pk02/floor06a_c.png",
       "image": "/static/maps/octavus_assets/7e6e530f55a1bca3.webp",
+      "sourceImageSize": [
+        256,
+        256
+      ],
       "triangleCount": 32,
       "scale": 0.5,
       "rotation": 0,
@@ -3593,6 +4034,10 @@
       "rootCfgSlot": 34,
       "sourceDiffuse": "appleflap/danger.jpg",
       "image": "/static/maps/octavus_assets/b2e15684532b472a.webp",
+      "sourceImageSize": [
+        64,
+        64
+      ],
       "triangleCount": 144,
       "scale": 0.5,
       "rotation": 0,
@@ -3624,6 +4069,10 @@
       "rootCfgSlot": 9,
       "sourceDiffuse": "trak/trak6/light1.jpg",
       "image": "/static/maps/octavus_assets/b1153cd74704ff68.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 16,
       "scale": 1.25,
       "rotation": 1,
@@ -3653,6 +4102,7 @@
       "rootCfgSlot": 30,
       "sourceDiffuse": "jojo/map.png",
       "image": null,
+      "sourceImageSize": null,
       "triangleCount": 16,
       "scale": 0.5,
       "rotation": 0,
@@ -3680,6 +4130,10 @@
       "rootCfgSlot": 37,
       "sourceDiffuse": "misc/agf81/concrete1w_diffuse.png",
       "image": "/static/maps/octavus_assets/bd907b2904b90d12.webp",
+      "sourceImageSize": [
+        1024,
+        1024
+      ],
       "triangleCount": 32,
       "scale": 0.5,
       "rotation": 0,
@@ -3711,6 +4165,10 @@
       "rootCfgSlot": 5,
       "sourceDiffuse": "trak/trak5/light3a.jpg",
       "image": "/static/maps/octavus_assets/090183f6d0199fe3.webp",
+      "sourceImageSize": [
+        128,
+        64
+      ],
       "triangleCount": 24,
       "scale": 0.5,
       "rotation": 0,
@@ -3742,6 +4200,10 @@
       "rootCfgSlot": 15,
       "sourceDiffuse": "philipk/pk02/light01b_c.png",
       "image": "/static/maps/octavus_assets/af55446077b32bfd.webp",
+      "sourceImageSize": [
+        128,
+        64
+      ],
       "triangleCount": 32,
       "scale": 1.0,
       "rotation": 0,
@@ -3770,6 +4232,7 @@
       "rootCfgSlot": 56,
       "sourceDiffuse": "dziq/metal_paint_old01",
       "image": null,
+      "sourceImageSize": null,
       "triangleCount": 4,
       "scale": 0.5,
       "rotation": 0,
@@ -3798,6 +4261,10 @@
       "rootCfgSlot": 15,
       "sourceDiffuse": "philipk/pk02/light01b_c.png",
       "image": "/static/maps/octavus_assets/af55446077b32bfd.webp",
+      "sourceImageSize": [
+        128,
+        64
+      ],
       "triangleCount": 8,
       "scale": 1.0,
       "rotation": 0,
@@ -3825,6 +4292,10 @@
       "rootCfgSlot": 37,
       "sourceDiffuse": "misc/agf81/concrete1w_diffuse.png",
       "image": "/static/maps/octavus_assets/bd907b2904b90d12.webp",
+      "sourceImageSize": [
+        1024,
+        1024
+      ],
       "triangleCount": 4,
       "scale": 0.5,
       "rotation": 0,
@@ -3857,6 +4328,10 @@
       "rootCfgSlot": 24,
       "sourceDiffuse": "philipk/pk02/generic01b_c.png",
       "image": "/static/maps/octavus_assets/d9549cb183da75bc.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 8,
       "scale": 0.5,
       "rotation": 0,
@@ -3889,6 +4364,10 @@
       "rootCfgSlot": 5,
       "sourceDiffuse": "trak/trak5/light3a.jpg",
       "image": "/static/maps/octavus_assets/090183f6d0199fe3.webp",
+      "sourceImageSize": [
+        128,
+        64
+      ],
       "triangleCount": 26,
       "scale": 0.5,
       "rotation": 0,
@@ -3919,6 +4398,10 @@
       "rootCfgSlot": 7,
       "sourceDiffuse": "trak/trak5/tile1e.jpg",
       "image": "/static/maps/octavus_assets/faf0c135569f4276.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 16,
       "scale": 0.25,
       "rotation": 0,
@@ -3948,6 +4431,10 @@
       "rootCfgSlot": 7,
       "sourceDiffuse": "trak/trak5/tile1e.jpg",
       "image": "/static/maps/octavus_assets/faf0c135569f4276.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 20,
       "scale": 0.25,
       "rotation": 0,
@@ -3976,6 +4463,10 @@
       "rootCfgSlot": 35,
       "sourceDiffuse": "trak/trak6/trim1.jpg",
       "image": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "sourceImageSize": [
+        256,
+        1024
+      ],
       "triangleCount": 416,
       "scale": 1.0,
       "rotation": 1,
@@ -4019,6 +4510,10 @@
       "rootCfgSlot": 43,
       "sourceDiffuse": "acerspyro/light1/light1.png",
       "image": "/static/maps/octavus_assets/b6a21ae3c0164f1c.webp",
+      "sourceImageSize": [
+        256,
+        256
+      ],
       "triangleCount": 20,
       "scale": 0.125,
       "rotation": 0,
@@ -4046,6 +4541,10 @@
       "rootCfgSlot": 5,
       "sourceDiffuse": "trak/trak5/light3a.jpg",
       "image": "/static/maps/octavus_assets/090183f6d0199fe3.webp",
+      "sourceImageSize": [
+        128,
+        64
+      ],
       "triangleCount": 12,
       "scale": 0.5,
       "rotation": 0,
@@ -4073,6 +4572,10 @@
       "rootCfgSlot": 52,
       "sourceDiffuse": "acerspyro/light1/light1.png",
       "image": "/static/maps/octavus_assets/b6a21ae3c0164f1c.webp",
+      "sourceImageSize": [
+        256,
+        256
+      ],
       "triangleCount": 4,
       "scale": 0.125,
       "rotation": 0,
@@ -4101,6 +4604,10 @@
       "rootCfgSlot": 35,
       "sourceDiffuse": "trak/trak6/trim1.jpg",
       "image": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "sourceImageSize": [
+        256,
+        1024
+      ],
       "triangleCount": 2,
       "scale": 0.5,
       "rotation": 7,
@@ -4131,6 +4638,10 @@
       "rootCfgSlot": 35,
       "sourceDiffuse": "trak/trak6/trim1.jpg",
       "image": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "sourceImageSize": [
+        256,
+        1024
+      ],
       "triangleCount": 10,
       "scale": 0.5,
       "rotation": 3,
@@ -4160,6 +4671,10 @@
       "rootCfgSlot": 40,
       "sourceDiffuse": "nieb/complex/wall01.png",
       "image": "/static/maps/octavus_assets/617f939d226609c9.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 72,
       "scale": 0.5,
       "rotation": 0,
@@ -4188,6 +4703,10 @@
       "rootCfgSlot": 35,
       "sourceDiffuse": "trak/trak6/trim1.jpg",
       "image": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "sourceImageSize": [
+        256,
+        1024
+      ],
       "triangleCount": 64,
       "scale": 0.25,
       "rotation": 1,
@@ -4230,6 +4749,10 @@
       "rootCfgSlot": 28,
       "sourceDiffuse": "philipk/pk02/wall_big01b_c.png",
       "image": "/static/maps/octavus_assets/99d030dc4ac4f892.webp",
+      "sourceImageSize": [
+        1024,
+        1024
+      ],
       "triangleCount": 44,
       "scale": 0.5,
       "rotation": 0,
@@ -4259,6 +4782,10 @@
       "rootCfgSlot": 35,
       "sourceDiffuse": "trak/trak6/trim1.jpg",
       "image": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "sourceImageSize": [
+        256,
+        1024
+      ],
       "triangleCount": 2,
       "scale": 0.5,
       "rotation": 7,
@@ -4291,6 +4818,10 @@
       "rootCfgSlot": 35,
       "sourceDiffuse": "trak/trak6/trim1.jpg",
       "image": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "sourceImageSize": [
+        256,
+        1024
+      ],
       "triangleCount": 16,
       "scale": 0.5,
       "rotation": 7,
@@ -4322,6 +4853,7 @@
       "rootCfgSlot": 65,
       "sourceDiffuse": "<comp:100>cathode [tex = unixfreak/textures/planetsurvey.png]",
       "image": null,
+      "sourceImageSize": null,
       "triangleCount": 4,
       "scale": 1.0,
       "rotation": 1,
@@ -4354,6 +4886,10 @@
       "rootCfgSlot": 24,
       "sourceDiffuse": "philipk/pk02/generic01b_c.png",
       "image": "/static/maps/octavus_assets/d9549cb183da75bc.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 8,
       "scale": 0.5,
       "rotation": 0,
@@ -4384,6 +4920,10 @@
       "rootCfgSlot": 8,
       "sourceDiffuse": "trak/trak5/trim3e.jpg",
       "image": "/static/maps/octavus_assets/d03b52f2f4a54976.webp",
+      "sourceImageSize": [
+        128,
+        512
+      ],
       "triangleCount": 16,
       "scale": 0.5,
       "rotation": 0,
@@ -4411,6 +4951,10 @@
       "rootCfgSlot": 12,
       "sourceDiffuse": "philipk/pk01/floor02b_d.png",
       "image": "/static/maps/octavus_assets/8742f853adc21e03.webp",
+      "sourceImageSize": [
+        256,
+        256
+      ],
       "triangleCount": 8,
       "scale": 0.5,
       "rotation": 0,
@@ -4440,6 +4984,10 @@
       "rootCfgSlot": 5,
       "sourceDiffuse": "trak/trak5/light3a.jpg",
       "image": "/static/maps/octavus_assets/090183f6d0199fe3.webp",
+      "sourceImageSize": [
+        128,
+        64
+      ],
       "triangleCount": 14,
       "scale": 0.5,
       "rotation": 0,
@@ -4472,6 +5020,7 @@
       "rootCfgSlot": 65,
       "sourceDiffuse": "<comp:100>cathode [tex = unixfreak/textures/planetsurvey.png]",
       "image": null,
+      "sourceImageSize": null,
       "triangleCount": 4,
       "scale": 1.0,
       "rotation": 1,
@@ -4503,6 +5052,10 @@
       "rootCfgSlot": 28,
       "sourceDiffuse": "philipk/pk02/wall_big01b_c.png",
       "image": "/static/maps/octavus_assets/99d030dc4ac4f892.webp",
+      "sourceImageSize": [
+        1024,
+        1024
+      ],
       "triangleCount": 57,
       "scale": 0.5,
       "rotation": 0,
@@ -4533,6 +5086,10 @@
       "rootCfgSlot": 35,
       "sourceDiffuse": "trak/trak6/trim1.jpg",
       "image": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "sourceImageSize": [
+        256,
+        1024
+      ],
       "triangleCount": 416,
       "scale": 0.25,
       "rotation": 1,
@@ -4573,6 +5130,10 @@
       "rootCfgSlot": 43,
       "sourceDiffuse": "acerspyro/light1/light1.png",
       "image": "/static/maps/octavus_assets/b6a21ae3c0164f1c.webp",
+      "sourceImageSize": [
+        256,
+        256
+      ],
       "triangleCount": 24,
       "scale": 0.125,
       "rotation": 0,
@@ -4601,6 +5162,10 @@
       "rootCfgSlot": 34,
       "sourceDiffuse": "appleflap/danger.jpg",
       "image": "/static/maps/octavus_assets/b2e15684532b472a.webp",
+      "sourceImageSize": [
+        64,
+        64
+      ],
       "triangleCount": 20,
       "scale": 0.5,
       "rotation": 0,
@@ -4630,6 +5195,10 @@
       "rootCfgSlot": 11,
       "sourceDiffuse": "philipk/pk01/floor01a_d.png",
       "image": "/static/maps/octavus_assets/07717366c27b6ef9.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 46,
       "scale": 0.5,
       "rotation": 0,
@@ -4657,6 +5226,10 @@
       "rootCfgSlot": 43,
       "sourceDiffuse": "acerspyro/light1/light1.png",
       "image": "/static/maps/octavus_assets/b6a21ae3c0164f1c.webp",
+      "sourceImageSize": [
+        256,
+        256
+      ],
       "triangleCount": 16,
       "scale": 0.125,
       "rotation": 0,
@@ -4687,6 +5260,10 @@
       "rootCfgSlot": 23,
       "sourceDiffuse": "philipk/pk02/floor07_c.png",
       "image": "/static/maps/octavus_assets/e5ed5a491e9b66c0.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 8,
       "scale": 0.5,
       "rotation": 0,
@@ -4714,6 +5291,10 @@
       "rootCfgSlot": 43,
       "sourceDiffuse": "acerspyro/light1/light1.png",
       "image": "/static/maps/octavus_assets/b6a21ae3c0164f1c.webp",
+      "sourceImageSize": [
+        256,
+        256
+      ],
       "triangleCount": 40,
       "scale": 0.125,
       "rotation": 0,
@@ -4745,6 +5326,10 @@
       "rootCfgSlot": 28,
       "sourceDiffuse": "philipk/pk02/wall_big01b_c.png",
       "image": "/static/maps/octavus_assets/99d030dc4ac4f892.webp",
+      "sourceImageSize": [
+        1024,
+        1024
+      ],
       "triangleCount": 16,
       "scale": 0.5,
       "rotation": 0,
@@ -4772,6 +5357,10 @@
       "rootCfgSlot": 6,
       "sourceDiffuse": "trak/trak5/ribs1a.jpg",
       "image": "/static/maps/octavus_assets/33204ab2dd694caa.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 170,
       "scale": 0.5,
       "rotation": 1,
@@ -4800,6 +5389,10 @@
       "rootCfgSlot": 35,
       "sourceDiffuse": "trak/trak6/trim1.jpg",
       "image": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "sourceImageSize": [
+        256,
+        1024
+      ],
       "triangleCount": 320,
       "scale": 0.5,
       "rotation": 0,
@@ -4827,6 +5420,10 @@
       "rootCfgSlot": 12,
       "sourceDiffuse": "philipk/pk01/floor02b_d.png",
       "image": "/static/maps/octavus_assets/8742f853adc21e03.webp",
+      "sourceImageSize": [
+        256,
+        256
+      ],
       "triangleCount": 8,
       "scale": 0.5,
       "rotation": 0,
@@ -4854,6 +5451,10 @@
       "rootCfgSlot": 25,
       "sourceDiffuse": "philipk/pk02/switches01a_c.png",
       "image": "/static/maps/octavus_assets/41105fa041c4d4e8.webp",
+      "sourceImageSize": [
+        128,
+        256
+      ],
       "triangleCount": 36,
       "scale": 0.5,
       "rotation": 0,
@@ -4882,6 +5483,10 @@
       "rootCfgSlot": 9,
       "sourceDiffuse": "trak/trak6/light1.jpg",
       "image": "/static/maps/octavus_assets/b1153cd74704ff68.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 32,
       "scale": 1.25,
       "rotation": 0,
@@ -4909,6 +5514,10 @@
       "rootCfgSlot": 48,
       "sourceDiffuse": "acerspyro/light2/light2.png",
       "image": "/static/maps/octavus_assets/f78d6834fa64e58e.webp",
+      "sourceImageSize": [
+        512,
+        256
+      ],
       "triangleCount": 8,
       "scale": 0.25,
       "rotation": 0,
@@ -4936,6 +5545,10 @@
       "rootCfgSlot": 5,
       "sourceDiffuse": "trak/trak5/light3a.jpg",
       "image": "/static/maps/octavus_assets/090183f6d0199fe3.webp",
+      "sourceImageSize": [
+        128,
+        64
+      ],
       "triangleCount": 64,
       "scale": 0.5,
       "rotation": 0,
@@ -4970,6 +5583,10 @@
       "rootCfgSlot": 40,
       "sourceDiffuse": "nieb/complex/wall01.png",
       "image": "/static/maps/octavus_assets/617f939d226609c9.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 29,
       "scale": 0.5,
       "rotation": 0,
@@ -5000,6 +5617,10 @@
       "rootCfgSlot": 36,
       "sourceDiffuse": "mikeplus64/plain.png",
       "image": "/static/maps/octavus_assets/32bf0d230d8253dc.webp",
+      "sourceImageSize": [
+        4,
+        4
+      ],
       "triangleCount": 58,
       "scale": 1.0,
       "rotation": 0,
@@ -5027,6 +5648,10 @@
       "rootCfgSlot": 12,
       "sourceDiffuse": "philipk/pk01/floor02b_d.png",
       "image": "/static/maps/octavus_assets/8742f853adc21e03.webp",
+      "sourceImageSize": [
+        256,
+        256
+      ],
       "triangleCount": 8,
       "scale": 0.5,
       "rotation": 0,
@@ -5055,6 +5680,10 @@
       "rootCfgSlot": 52,
       "sourceDiffuse": "acerspyro/light1/light1.png",
       "image": "/static/maps/octavus_assets/b6a21ae3c0164f1c.webp",
+      "sourceImageSize": [
+        256,
+        256
+      ],
       "triangleCount": 8,
       "scale": 0.25,
       "rotation": 0,
@@ -5082,6 +5711,10 @@
       "rootCfgSlot": 15,
       "sourceDiffuse": "philipk/pk02/light01b_c.png",
       "image": "/static/maps/octavus_assets/af55446077b32bfd.webp",
+      "sourceImageSize": [
+        128,
+        64
+      ],
       "triangleCount": 48,
       "scale": 0.25,
       "rotation": 0,
@@ -5111,6 +5744,10 @@
       "rootCfgSlot": 35,
       "sourceDiffuse": "trak/trak6/trim1.jpg",
       "image": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "sourceImageSize": [
+        256,
+        1024
+      ],
       "triangleCount": 66,
       "scale": 0.25,
       "rotation": 1,
@@ -5147,6 +5784,10 @@
       "rootCfgSlot": 4,
       "sourceDiffuse": "trak/trak6/tile3.jpg",
       "image": "/static/maps/octavus_assets/31efdabf1d2afb45.webp",
+      "sourceImageSize": [
+        1024,
+        1024
+      ],
       "triangleCount": 104,
       "scale": 0.125,
       "rotation": 0,
@@ -5178,6 +5819,10 @@
       "rootCfgSlot": 25,
       "sourceDiffuse": "philipk/pk02/switches01a_c.png",
       "image": "/static/maps/octavus_assets/41105fa041c4d4e8.webp",
+      "sourceImageSize": [
+        128,
+        256
+      ],
       "triangleCount": 12,
       "scale": 0.5,
       "rotation": 0,
@@ -5205,6 +5850,10 @@
       "rootCfgSlot": 4,
       "sourceDiffuse": "trak/trak6/tile3.jpg",
       "image": "/static/maps/octavus_assets/31efdabf1d2afb45.webp",
+      "sourceImageSize": [
+        1024,
+        1024
+      ],
       "triangleCount": 18,
       "scale": 0.25,
       "rotation": 0,
@@ -5235,6 +5884,10 @@
       "rootCfgSlot": 54,
       "sourceDiffuse": "jojo/sand01.png",
       "image": "/static/maps/octavus_assets/880560c611c66ecc.webp",
+      "sourceImageSize": [
+        1024,
+        1024
+      ],
       "triangleCount": 7,
       "scale": 1.0,
       "rotation": 0,
@@ -5262,6 +5915,7 @@
       "rootCfgSlot": 20,
       "sourceDiffuse": "philipk/pk02/floor03_c.png",
       "image": null,
+      "sourceImageSize": null,
       "triangleCount": 12,
       "scale": 1.0,
       "rotation": 0,
@@ -5289,6 +5943,10 @@
       "rootCfgSlot": 29,
       "sourceDiffuse": "jojo/windowstile04_g.png",
       "image": "/static/maps/octavus_assets/8df50b2f8a5569bd.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 1,
       "scale": 8.0,
       "rotation": 0,
@@ -5316,6 +5974,10 @@
       "rootCfgSlot": 43,
       "sourceDiffuse": "acerspyro/light1/light1.png",
       "image": "/static/maps/octavus_assets/b6a21ae3c0164f1c.webp",
+      "sourceImageSize": [
+        256,
+        256
+      ],
       "triangleCount": 32,
       "scale": 0.25,
       "rotation": 0,
@@ -5349,6 +6011,10 @@
       "rootCfgSlot": 4,
       "sourceDiffuse": "trak/trak6/tile3.jpg",
       "image": "/static/maps/octavus_assets/31efdabf1d2afb45.webp",
+      "sourceImageSize": [
+        1024,
+        1024
+      ],
       "triangleCount": 90,
       "scale": 0.25,
       "rotation": 0,
@@ -5378,6 +6044,10 @@
       "rootCfgSlot": 37,
       "sourceDiffuse": "misc/agf81/concrete1w_diffuse.png",
       "image": "/static/maps/octavus_assets/bd907b2904b90d12.webp",
+      "sourceImageSize": [
+        1024,
+        1024
+      ],
       "triangleCount": 1388,
       "scale": 0.5,
       "rotation": 0,
@@ -5407,6 +6077,10 @@
       "rootCfgSlot": 4,
       "sourceDiffuse": "trak/trak6/tile3.jpg",
       "image": "/static/maps/octavus_assets/31efdabf1d2afb45.webp",
+      "sourceImageSize": [
+        1024,
+        1024
+      ],
       "triangleCount": 389,
       "scale": 0.125,
       "rotation": 0,
@@ -5441,6 +6115,10 @@
       "rootCfgSlot": 35,
       "sourceDiffuse": "trak/trak6/trim1.jpg",
       "image": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "sourceImageSize": [
+        256,
+        1024
+      ],
       "triangleCount": 68,
       "scale": 0.25,
       "rotation": 1,
@@ -5478,6 +6156,10 @@
       "rootCfgSlot": 4,
       "sourceDiffuse": "trak/trak6/tile3.jpg",
       "image": "/static/maps/octavus_assets/31efdabf1d2afb45.webp",
+      "sourceImageSize": [
+        1024,
+        1024
+      ],
       "triangleCount": 104,
       "scale": 0.125,
       "rotation": 0,
@@ -5514,6 +6196,10 @@
       "rootCfgSlot": 36,
       "sourceDiffuse": "mikeplus64/plain.png",
       "image": "/static/maps/octavus_assets/32bf0d230d8253dc.webp",
+      "sourceImageSize": [
+        4,
+        4
+      ],
       "triangleCount": 12,
       "scale": 1.0,
       "rotation": 0,
@@ -5542,6 +6228,10 @@
       "rootCfgSlot": 9,
       "sourceDiffuse": "trak/trak6/light1.jpg",
       "image": "/static/maps/octavus_assets/b1153cd74704ff68.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 8,
       "scale": 1.25,
       "rotation": 1,
@@ -5572,6 +6262,10 @@
       "rootCfgSlot": 9,
       "sourceDiffuse": "trak/trak6/light1.jpg",
       "image": "/static/maps/octavus_assets/b1153cd74704ff68.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 8,
       "scale": 1.25,
       "rotation": 1,
@@ -5603,6 +6297,10 @@
       "rootCfgSlot": 28,
       "sourceDiffuse": "philipk/pk02/wall_big01b_c.png",
       "image": "/static/maps/octavus_assets/99d030dc4ac4f892.webp",
+      "sourceImageSize": [
+        1024,
+        1024
+      ],
       "triangleCount": 98,
       "scale": 0.5,
       "rotation": 0,
@@ -5631,6 +6329,10 @@
       "rootCfgSlot": 7,
       "sourceDiffuse": "trak/trak5/tile1e.jpg",
       "image": "/static/maps/octavus_assets/faf0c135569f4276.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 24,
       "scale": 1.0,
       "rotation": 0,
@@ -5662,6 +6364,10 @@
       "rootCfgSlot": 5,
       "sourceDiffuse": "trak/trak5/light3a.jpg",
       "image": "/static/maps/octavus_assets/090183f6d0199fe3.webp",
+      "sourceImageSize": [
+        128,
+        64
+      ],
       "triangleCount": 2,
       "scale": 0.5,
       "rotation": 0,
@@ -5697,6 +6403,10 @@
       "rootCfgSlot": 4,
       "sourceDiffuse": "trak/trak6/tile3.jpg",
       "image": "/static/maps/octavus_assets/31efdabf1d2afb45.webp",
+      "sourceImageSize": [
+        1024,
+        1024
+      ],
       "triangleCount": 84,
       "scale": 0.25,
       "rotation": 0,
@@ -5725,6 +6435,10 @@
       "rootCfgSlot": 35,
       "sourceDiffuse": "trak/trak6/trim1.jpg",
       "image": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "sourceImageSize": [
+        256,
+        1024
+      ],
       "triangleCount": 46,
       "scale": 0.5,
       "rotation": 1,
@@ -5759,6 +6473,10 @@
       "rootCfgSlot": 37,
       "sourceDiffuse": "misc/agf81/concrete1w_diffuse.png",
       "image": "/static/maps/octavus_assets/bd907b2904b90d12.webp",
+      "sourceImageSize": [
+        1024,
+        1024
+      ],
       "triangleCount": 144,
       "scale": 0.5,
       "rotation": 0,
@@ -5789,6 +6507,10 @@
       "rootCfgSlot": 39,
       "sourceDiffuse": "nieb/complex/step03.png",
       "image": "/static/maps/octavus_assets/b90967e4bc5efb1d.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 52,
       "scale": 0.5,
       "rotation": 1,
@@ -5816,6 +6538,7 @@
       "rootCfgSlot": 65,
       "sourceDiffuse": "<comp:100>cathode [tex = unixfreak/textures/planetsurvey.png]",
       "image": null,
+      "sourceImageSize": null,
       "triangleCount": 4,
       "scale": 1.0,
       "rotation": 0,
@@ -5843,6 +6566,7 @@
       "rootCfgSlot": 65,
       "sourceDiffuse": "<comp:100>cathode [tex = unixfreak/textures/planetsurvey.png]",
       "image": null,
+      "sourceImageSize": null,
       "triangleCount": 4,
       "scale": 1.0,
       "rotation": 0,
@@ -5871,6 +6595,10 @@
       "rootCfgSlot": 5,
       "sourceDiffuse": "trak/trak5/light3a.jpg",
       "image": "/static/maps/octavus_assets/090183f6d0199fe3.webp",
+      "sourceImageSize": [
+        128,
+        64
+      ],
       "triangleCount": 4,
       "scale": 0.5,
       "rotation": 0,
@@ -5900,6 +6628,10 @@
       "rootCfgSlot": 5,
       "sourceDiffuse": "trak/trak5/light3a.jpg",
       "image": "/static/maps/octavus_assets/090183f6d0199fe3.webp",
+      "sourceImageSize": [
+        128,
+        64
+      ],
       "triangleCount": 96,
       "scale": 0.25,
       "rotation": 0,
@@ -5936,6 +6668,10 @@
       "rootCfgSlot": 43,
       "sourceDiffuse": "acerspyro/light1/light1.png",
       "image": "/static/maps/octavus_assets/b6a21ae3c0164f1c.webp",
+      "sourceImageSize": [
+        256,
+        256
+      ],
       "triangleCount": 32,
       "scale": 0.25,
       "rotation": 0,
@@ -5970,6 +6706,10 @@
       "rootCfgSlot": 4,
       "sourceDiffuse": "trak/trak6/tile3.jpg",
       "image": "/static/maps/octavus_assets/31efdabf1d2afb45.webp",
+      "sourceImageSize": [
+        1024,
+        1024
+      ],
       "triangleCount": 20,
       "scale": 0.125,
       "rotation": 0,
@@ -6005,6 +6745,10 @@
       "rootCfgSlot": 32,
       "sourceDiffuse": "philipk/pk02/switches01c_c.png",
       "image": "/static/maps/octavus_assets/397b450a7e4b8ed3.webp",
+      "sourceImageSize": [
+        128,
+        256
+      ],
       "triangleCount": 2,
       "scale": 0.5,
       "rotation": 0,
@@ -6033,6 +6777,10 @@
       "rootCfgSlot": 32,
       "sourceDiffuse": "philipk/pk02/switches01c_c.png",
       "image": "/static/maps/octavus_assets/397b450a7e4b8ed3.webp",
+      "sourceImageSize": [
+        128,
+        256
+      ],
       "triangleCount": 2,
       "scale": 0.5,
       "rotation": 0,
@@ -6060,6 +6808,10 @@
       "rootCfgSlot": 35,
       "sourceDiffuse": "trak/trak6/trim1.jpg",
       "image": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "sourceImageSize": [
+        256,
+        1024
+      ],
       "triangleCount": 12,
       "scale": 0.5,
       "rotation": 1,
@@ -6093,6 +6845,10 @@
       "rootCfgSlot": 35,
       "sourceDiffuse": "trak/trak6/trim1.jpg",
       "image": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "sourceImageSize": [
+        256,
+        1024
+      ],
       "triangleCount": 2,
       "scale": 0.5,
       "rotation": 1,
@@ -6128,6 +6884,10 @@
       "rootCfgSlot": 19,
       "sourceDiffuse": "philipk/pk02/floor01_c.png",
       "image": "/static/maps/octavus_assets/4f5b7749a658e15d.webp",
+      "sourceImageSize": [
+        512,
+        512
+      ],
       "triangleCount": 459,
       "scale": 0.5,
       "rotation": 0,
@@ -6157,6 +6917,7 @@
       "rootCfgSlot": 59,
       "sourceDiffuse": "trak/trak6/crate1.jpg",
       "image": null,
+      "sourceImageSize": null,
       "triangleCount": 15,
       "scale": 0.125,
       "rotation": 0,
@@ -6188,6 +6949,7 @@
       "rootCfgSlot": 59,
       "sourceDiffuse": "trak/trak6/crate1.jpg",
       "image": null,
+      "sourceImageSize": null,
       "triangleCount": 6,
       "scale": 0.125,
       "rotation": 0,
@@ -6218,6 +6980,7 @@
       "rootCfgSlot": 59,
       "sourceDiffuse": "trak/trak6/crate1.jpg",
       "image": null,
+      "sourceImageSize": null,
       "triangleCount": 2,
       "scale": 0.125,
       "rotation": 0,
@@ -6250,6 +7013,7 @@
       "rootCfgSlot": 61,
       "sourceDiffuse": "torley/desat/grittyblack2clear3.png",
       "image": null,
+      "sourceImageSize": null,
       "triangleCount": 8,
       "scale": 1.0,
       "rotation": 0,
@@ -6278,6 +7042,10 @@
       "rootCfgSlot": 1,
       "sourceDiffuse": "mikeplus64/plain.png",
       "image": "/static/maps/octavus_assets/32bf0d230d8253dc.webp",
+      "sourceImageSize": [
+        4,
+        4
+      ],
       "triangleCount": 0,
       "scale": 1.0,
       "rotation": 0,
@@ -6306,6 +7074,7 @@
       "rootCfgSlot": 60,
       "sourceDiffuse": "torley/desat/clumpedverticalpaint.png",
       "image": null,
+      "sourceImageSize": null,
       "triangleCount": 144,
       "scale": 0.25,
       "rotation": 0,
@@ -6333,6 +7102,7 @@
       "rootCfgSlot": 58,
       "sourceDiffuse": "jojo/interface03.png",
       "image": null,
+      "sourceImageSize": null,
       "triangleCount": 24,
       "scale": 0.125,
       "rotation": 0,
@@ -6360,6 +7130,10 @@
       "rootCfgSlot": 10,
       "sourceDiffuse": "philipk/pk01/panel_small01_d.png",
       "image": "/static/maps/octavus_assets/9cf312cde81a1005.webp",
+      "sourceImageSize": [
+        256,
+        256
+      ],
       "triangleCount": 16,
       "scale": 1.0,
       "rotation": 0,
@@ -6387,6 +7161,10 @@
       "rootCfgSlot": 10,
       "sourceDiffuse": "philipk/pk01/panel_small01_d.png",
       "image": "/static/maps/octavus_assets/9cf312cde81a1005.webp",
+      "sourceImageSize": [
+        256,
+        256
+      ],
       "triangleCount": 6,
       "scale": 1.0,
       "rotation": 2,
