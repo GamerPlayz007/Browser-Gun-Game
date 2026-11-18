@@ -29,15 +29,25 @@ def resolve_walls(world,x,y,z,h,old_x,old_z,vx,vz):
     r=RADIUS
     for _ in range(2):
         moved=False
-        candidates=world.candidates(x-r-.02,z-r-.02,x+r+.02,z+r+.02)
+        accelerated=hasattr(world,'wall_cells')
+        candidates=(world.wall_candidates(x-r-.02,z-r-.02,x+r+.02,z+r+.02)
+                    if accelerated else world.candidates(x-r-.02,z-r-.02,x+r+.02,z+r+.02))
         samples=(y+r,y+h/2,y+h-r)
         for tri in candidates:
-            a,b,c=world.triangle(tri)
-            lo=min(a[1],b[1],c[1]);hi=max(a[1],b[1],c[1])
-            if lo>y+h or hi<y:continue
-            n=cross(tuple(b[i]-a[i] for i in range(3)),tuple(c[i]-a[i] for i in range(3)))
-            nlen=math.sqrt(dot(n,n))
-            if nlen<1e-8 or abs(n[1])/nlen>.65:continue
+            if accelerated:
+                k=tri*2
+                lo=world.wall_y_bounds[k];hi=world.wall_y_bounds[k+1]
+                if lo>y+h or hi<y:continue
+                a,b,c=world.triangle(tri)
+                k=tri*3
+                n=(world.wall_normals[k],world.wall_normals[k+1],world.wall_normals[k+2])
+            else:
+                a,b,c=world.triangle(tri)
+                lo=min(a[1],b[1],c[1]);hi=max(a[1],b[1],c[1])
+                if lo>y+h or hi<y:continue
+                n=cross(tuple(b[i]-a[i] for i in range(3)),tuple(c[i]-a[i] for i in range(3)))
+                nlen=math.sqrt(dot(n,n))
+                if nlen<1e-8 or abs(n[1])/nlen>.65:continue
             for sy in samples:
                 if sy+r<lo or sy-r>hi:continue
                 closest=closest_on_triangle((x,sy,z),a,b,c)
