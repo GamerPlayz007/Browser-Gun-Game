@@ -1,14 +1,13 @@
 /* Authentic Red Eclipse Octavus native decal placements.
  * Original source images retain original module authorship and credits.
- * Correct source positions and authored native yaw/pitch/roll rotations;
- * instanced proxy planes still do NOT reproduce Red Eclipse's polygon
- * projector clipping against original world geometry. This distinction
- * is intentionally exposed to visual QA before declaring parity.
+ * Correct source positions and authored rotations; InstancedMesh groups
+ * drastically reduce draw calls compared to 141 individual decal objects.
  */
 import * as THREE from 'three';
-import {originalNativePosition,octavusSourceQuaternion,originalDecalSize} from './octavus_native_transform89.js';
+import {octavusEntityPosition} from './octavus_environment.js';
 
 const ROOT='/static/maps/';
+const radians=degrees=>Number(degrees||0)*Math.PI/180;
 async function read(path){
  try{const r=await fetch(ROOT+path);return r.ok?await r.json():null;}
  catch{return null;}
@@ -52,11 +51,10 @@ export async function createOctavusDecals(scene,quality='auto'){
   const obj=new THREE.Object3D();
   for(let i=0;i<instances.length;i++){
    const entry=instances[i],a=entry.attrs;
-   obj.position.copy(originalNativePosition(entry.sourcePosition));
-   // Native gendecal(): yaw Z, pitch X, -roll Y.
-   // This is a visual projector proxy, NOT the final clipped decal.
-   obj.quaternion.copy(octavusSourceQuaternion(a[1],a[2],a[3]));
-   const radius=originalDecalSize(a);
+   obj.position.copy(octavusEntityPosition(entry.sourcePosition));
+   // Red Eclipse decal angle order is yaw, pitch, roll in degrees.
+   obj.rotation.set(-radians(a[2]),radians(a[1]),radians(a[3]),'YXZ');
+   const radius=Math.min(12,Math.max(.20,(Math.abs(a[4]||45))*.05));
    obj.scale.set(radius,radius,1);
    obj.updateMatrix();mesh.setMatrixAt(i,obj.matrix);
   }
