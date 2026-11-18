@@ -83,11 +83,39 @@ jobs:
           PY
       - name: Publish reproducible staging-only mesh and audit report
         run: |
+          # A concurrent decoder workflow may have updated main. Rebase the
+          # generated artifacts onto latest main *before* committing, rather
+          # than rebasing a commit containing overlapping generated JSON.
+          mkdir -p /tmp/octavus-native-artifacts
+          for item in \
+            octavus.native-stage1.bin.gz \
+            octavus.native-stage1.json \
+            octavus.native-core.bin.gz \
+            octavus.native-core.json \
+            octavus.native-spawn-audit.json; do
+            cp "static/maps/$item" "/tmp/octavus-native-artifacts/$item"
+          done
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add static/maps/octavus.native-stage1.bin.gz static/maps/octavus.native-stage1.json static/maps/octavus.native-core.bin.gz static/maps/octavus.native-core.json static/maps/octavus.native-spawn-audit.json
-          if ! git diff --cached --quiet; then
-            git commit -m "build(octavus phase1.2): publish native core geometry and full preserved source mesh"
-            git pull --rebase origin main
-            git push origin HEAD:main
-          fi
+          for attempt in 1 2 3 4; do
+            git fetch origin main
+            git reset --hard origin/main
+            cp /tmp/octavus-native-artifacts/* static/maps/
+            git add \
+              static/maps/octavus.native-stage1.bin.gz \
+              static/maps/octavus.native-stage1.json \
+              static/maps/octavus.native-core.bin.gz \
+              static/maps/octavus.native-core.json \
+              static/maps/octavus.native-spawn-audit.json
+            if git diff --cached --quiet; then
+              echo "Native mesh artifacts are already up to date"
+              exit 0
+            fi
+            git commit -m "build(octavus phase1.2): publish native core geometry and playerstart audit"
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            echo "Concurrent main update; safely retrying $attempt/4"
+          done
+          echo "Could not publish after four attempts" >&2
+          exit 1
