@@ -1,6 +1,6 @@
 {
   "status": "passed",
-  "verifiedAt": "2026-11-18T13:50:58.699553+00:00",
+  "verifiedAt": "2026-11-18T13:52:05.999696+00:00",
   "steps": {
     "octavusServerMotion": "success",
     "browserImportClosure": "success",
@@ -19,12 +19,13 @@
       "test_fast_ground_matches_original_triangle_raycast (test_octavus_perf74.OctavusPerformanceTests.test_fast_ground_matches_original_triangle_raycast) ... ok",
       "test_reference_speed_profile (test_octavus_perf74.OctavusPerformanceTests.test_reference_speed_profile) ... ok",
       "test_wall_index_matches_original_filter (test_octavus_perf74.OctavusPerformanceTests.test_wall_index_matches_original_filter) ... ok",
+      "test_30hz_commands_do_not_build_a_queue (test_octavus_network75.OctavusInputCadenceTests.test_30hz_commands_do_not_build_a_queue) ... ok",
       "",
       "----------------------------------------------------------------------",
-      "Ran 10 tests in 0.395s",
+      "Ran 11 tests in 0.933s",
       "",
       "OK",
-      "Octavus exact ground probes: reference=0.0026s accelerated=0.0003s speedup=8.4x"
+      "Octavus exact ground probes: reference=0.0046s accelerated=0.0005s speedup=9.4x"
     ],
     "javascript": [
       "Octavus 3.4: 30 Hz exact client mesh stairs, tall walls and roof clearance passed."
@@ -34,7 +35,7 @@
       "https://docs.aiohttp.org/en/stable/web_advanced.html#application-s-config",
       "  app=web.Application(client_max_size=4096,middlewares=[cache_policy]);app['perf36']=ServerMetrics();app.router.add_get('/',index);app.router.add_get('/health',health)",
       "----------------------------------------------------------------------",
-      "Ran 28 tests in 1.576s",
+      "Ran 28 tests in 1.737s",
       "",
       "OK"
     ]
