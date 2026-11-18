@@ -9,6 +9,8 @@ on:
       - "static/maps/octavus.native-stage1.*"
       - "static/maps/octavus.native-merged.*"
       - "static/maps/octavus.native-optimized.*"
+      - "static/maps/octavus.native-materials87.json"
+      - "static/octavus_native_material_preview87.js"
       - "static/maps/octavus.native-entities.json"
       - "static/maps/octavus.native-spawn-audit.json"
       - "static/maps/octavus.reference-source.png"
@@ -72,5 +74,6 @@ jobs:
             /tmp/octavus-native-core-preview.png
             /tmp/octavus-native-side-by-side.png
             /tmp/octavus-native-optimized-preview.png
+            /tmp/octavus-native-source-textures-preview.png
           if-no-files-found: ignore
           retention-days: 14
