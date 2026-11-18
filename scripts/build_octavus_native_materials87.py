@@ -33,6 +33,13 @@ def build():
     assert source["nativeRootCount"]==68
     assert geom["sourceTriangles"]==1072281
     assert geom["triangles"]==863803
+    old_pack=json.loads((MAPS/"octavus.texture-manifest.json").read_text())["materials"]
+    pack_by_image={}
+    for material in old_pack.values():
+        diffuse=material.get("channels",{}).get("color",{})
+        url=diffuse.get("url")
+        if url and "width" in diffuse and "height" in diffuse:
+            pack_by_image[url]=(int(diffuse["width"]),int(diffuse["height"]))
     record={int(k):v for k,v in source["candidatesBySlot"].items()}
     slots={x["index"]:x for x in source["sourceNativeSlots"]}
     uses={int(k):v for k,v in geom["newMaterialTriangleCounts"].items()}
@@ -74,6 +81,9 @@ def build():
             if "alpha" in override:alpha=list(override["alpha"])
             if "layer" in override:layer=int(override["layer"])
         image=data["availableSourceAsset"]
+        texture_width,texture_height=pack_by_image.get(image,(0,0))
+        if image and (texture_width<=0 or texture_height<=0):
+            raise FormatError("Source image missing size in original texture manifest")
         if not (0.005<=scale<=1000):
             raise FormatError(f"Invalid resolved native material scale {scale}")
         count=uses.get(i,0)
@@ -89,6 +99,7 @@ def build():
             "rootCfgSlot":root,
             "sourceDiffuse":data["candidateSourceImage"],
             "image":image,
+            "sourceImageSize":[texture_width,texture_height] if image else None,
             "triangleCount":count,
             "scale":round(scale,7),
             "rotation":rotation,
