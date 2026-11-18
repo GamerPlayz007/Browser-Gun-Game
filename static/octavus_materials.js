@@ -95,7 +95,11 @@ export function createOctavusPBRMaterial(slot,library,fallback,quality='auto'){
   emissiveMap:source.emissiveMap,
   emissive:source.emissiveMap?new THREE.Color('#d6d5ce'):new THREE.Color('#000000'),
   emissiveIntensity:isGlow?.50:0,
-  side:THREE.DoubleSide
+  // Slot 62 is the native desert terrain: its exported triangles face up.
+  // Rendering their reverse faces creates a false sand ceiling over lower
+  // architecture, making large parts of Octavus look buried. Keep the
+  // original mesh and its authoritative collision exactly as imported.
+  side:slot===62?THREE.FrontSide:THREE.DoubleSide
  });
  return {material:m,original:true,width:source.width,height:source.height,
          normalMap:source.normalMap,roughnessMap:source.roughnessMap};
