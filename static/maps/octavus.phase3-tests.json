@@ -1,6 +1,6 @@
 {
   "status": "passed",
-  "verifiedAt": "2026-11-18T18:17:11.367500+00:00",
+  "verifiedAt": "2026-11-18T18:24:56.341441+00:00",
   "steps": {
     "octavusServerMotion": "success",
     "browserImportClosure": "success",
@@ -24,11 +24,11 @@
       "test_30hz_commands_do_not_build_a_queue (test_octavus_network75.OctavusInputCadenceTests.test_30hz_commands_do_not_build_a_queue) ... ok",
       "",
       "----------------------------------------------------------------------",
-      "Ran 13 tests in 1.051s",
+      "Ran 13 tests in 0.583s",
       "",
       "OK",
-      "Octavus 120 wall resolves: coarse=80.17ms 2m=0.33ms speedup=245.5x",
-      "Octavus exact ground probes: reference=0.0046s accelerated=0.0005s speedup=8.7x"
+      "Octavus 120 wall resolves: coarse=45.28ms 2m=0.22ms speedup=205.8x",
+      "Octavus exact ground probes: reference=0.0026s accelerated=0.0003s speedup=8.7x"
     ],
     "javascript": [
       "Octavus 3.4: 30 Hz exact client mesh stairs, tall walls and roof clearance passed."
@@ -38,7 +38,7 @@
       "https://docs.aiohttp.org/en/stable/web_advanced.html#application-s-config",
       "  app=web.Application(client_max_size=4096,middlewares=[cache_policy]);app['perf36']=ServerMetrics();app.router.add_get('/',index);app.router.add_get('/health',health)",
       "----------------------------------------------------------------------",
-      "Ran 28 tests in 1.838s",
+      "Ran 28 tests in 1.657s",
       "",
       "OK"
     ]
