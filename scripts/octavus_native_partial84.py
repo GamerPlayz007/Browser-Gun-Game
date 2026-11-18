@@ -139,6 +139,16 @@ def triangle_covered_by_octree(world:NativeWorld, cube:Cube, orient:int, tri,
     if nearby is None or nearby.kind==OCT_EMPTY or nearby.material:
         return False
     opposite=orient^1
+    # Fast exact proof for a same-sized/larger neighboring leaf. Most
+    # planar inner faces can be settled in O(1) without polygon clipping.
+    if not nearby.children:
+        x0=nearby.origin[ca]*SCALE;x1=x0+nearby.size*SCALE
+        y0=nearby.origin[cb]*SCALE;y1=y0+nearby.size*SCALE
+        if all(x0<=p[0]<=x1 and y0<=p[1]<=y1 for p in poly):
+            hit=opaque_neighbor_cover(nearby,opposite,plane,poly)
+            if stats is not None:
+                stats["fastNeighborCovered" if hit else "fastNeighborOpenKept"]+=1
+            return hit
     visited=0
     def cover(node):
         nonlocal visited
