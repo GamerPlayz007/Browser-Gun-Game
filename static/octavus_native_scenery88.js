@@ -52,6 +52,7 @@ export class OctavusNativeScenery {
   if(typeof this.onCounts==='function'){
    this.onCounts({
     models:this.props?.instances??0,
+    anchors:this.anchorDebug?(this.props?.anchorCount??0):0,
     modelTypes:this.props?.modelTypes??0,
     missingModels:this.props?.missing??0,
     decals:this.decals?.count??0,
