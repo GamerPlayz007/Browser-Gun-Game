@@ -216,6 +216,60 @@ Its CI now runs the verified source-invariant tests only.
 **Phase 1.4 completes deterministic mesh compaction and visibility
 diagnosis, not the replacement of the live multiplayer map.**
 
+## Stage 1.5 — PARTIAL-FACE SOURCE OCCLUSION VERIFIED; NATIVE RENDERER PARITY OPEN
+
+**Implemented and passed automated CI:**
+- scripts/octavus_native_partial84.py: an independent source-native
+  triangle-visibility pass. This uses the verified Red Eclipse 2 revision
+  829 octree, verifies opaque adjoining *normal/deformed* faces, and
+  recursively clips triangles against smaller neighboring octree cubes.
+- test_octavus_native_partial84.py: verifies original-facing normals,
+  exact clipping area, subdivision openings, non-opaque material handling
+  and keeping recessed/sloped surfaces when visibility is uncertain.
+- .github/workflows/octavus-native-partial84.yml: decodes and validates
+  the resulting geometry and publishes an isolated OCN2 staging archive.
+- scripts/octavus_native_optimize85.py and
+  .github/workflows/octavus-native-optimize85.yml: apply the
+  lossless coplanar merge AFTER the new visibility pass, so the
+  independent improvements accumulate.
+
+**Verified output (original source: 1,661,200 candidate triangles):**
+
+| Candidate | Triangles | Unique vertices | Compressed |
+|---|---:|---:|---:|
+| Raw native source candidates | 1,661,200 | 822,787 | 8,963,100 B |
+| Source-native partial-face proof | 1,072,281 | 701,256 | 6,411,706 B |
+| **Partial visibility + exact planar merges** | **863,803** | **679,837** | **6,079,733 B** |
+
+The native clipping removes **588,919 fully occluded triangles**,
+including 588,490 from source plain-material slot 1. Unlike the
+previous naive material filter, this visibility pass keeps the
+genuinely exposed surfaces of slot 1 instead of deleting everything.
+
+The lossless merge pass reduces the corrected visibility candidate
+by a further **208,478 triangles**. Both phases preserve remaining
+source coordinates and native material indices. The final candidate
+has 97,929 non-plain triangles and 765,874 plain-material candidates.
+
+This is a **48.0% reduction from the raw source** but is *not* final
+engine visibility equivalence. In particular:
+- Only fully covered source triangles are removed; partially covered
+  triangles have not yet been split to hide the invisible fraction.
+- Some Red Eclipse 2 visibletris partial-mask and translucent/clip
+  volume semantics remain unimplemented.
+- Authored texture UVs, props, source lighting, fully matching
+  client/server collision and exact camera comparison are pending.
+- Fewer triangles do not on their own prove original visual parity.
+
+The isolated Octavus browser inspector now offers an optional
+**Visibility + merge** mode alongside the 98K core, 1.12M merge
+and 1.66M original raw candidate. The Chrome smoke test attempts
+to load and render the 864K combined staging mesh in actual WebGL.
+
+**The live CROSSFire Octavus map and all server/client physics are
+unchanged by this stage.** Replacing the active map requires full
+source-view visual checks and synchronized native collisions.
+
 **Guardrail:** Do not modify `static/maps/octavus.json`,
 `static/octavus_match.js`, `octavus_world.py`, or server gameplay
 collision until the native geometry replacement passes the visual
