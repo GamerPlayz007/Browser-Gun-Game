@@ -1,0 +1,66 @@
+name: Octavus Phase 1.5 native partial face visibility
+on:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/octavus_native_partial84.py"
+      - "test_octavus_native_partial84.py"
+      - ".github/workflows/octavus-native-partial84.yml"
+      - "sources/octavus.original.mpz"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  partial-triangle-visibility:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Verify exact native 2D clipping, subdivision openings and deformed source faces
+        run: |
+          python -m unittest -v test_octavus_native_partial84 test_octavus_octree76
+      - name: Build revised source-native partial visibility geometry (staging only)
+        run: |
+          python -m scripts.octavus_native_partial84
+      - name: Validate source triangle conservation and full archive integrity
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import gzip,hashlib,struct,json
+          m=json.loads(Path("static/maps/octavus.native-partial.json").read_text())
+          g=Path("static/maps/octavus.native-partial.bin.gz").read_bytes()
+          v=gzip.decompress(g)
+          nv,nt=struct.unpack_from("<II",v,4)
+          assert v[:4]==b"OCN2"
+          assert (nv,nt)==(m["vertices"],m["triangles"])
+          assert len(v)==12+12*nv+14*nt
+          assert 75000<=nt<=1661200
+          assert m["sourceRevision"]==829
+          assert m["oldStagingTriangles"]==1661200
+          assert m["removedTriangles"]==m["oldStagingTriangles"]-nt
+          assert m["liveMapModified"] is False
+          assert m["fullOriginalRendererParity"] is False
+          assert hashlib.sha256(g).hexdigest()==m["sha256"]
+          print("Valid OCN2 native partial visibility candidate:",nv,"vertices",nt,"triangles")
+          PY
+      - name: Publish independent source-native partial face candidate safely
+        run: |
+          cp static/maps/octavus.native-partial.bin.gz /tmp/octavus.native-partial.bin.gz
+          cp static/maps/octavus.native-partial.json /tmp/octavus.native-partial.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for i in 1 2 3; do
+            git fetch origin main
+            git reset --hard origin/main
+            cp /tmp/octavus.native-partial.* static/maps/
+            git add static/maps/octavus.native-partial.*
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m "build(octavus phase1.5): publish verified native partial-face staging candidate"
+            if git push origin HEAD:main; then exit 0; fi
+          done
+          exit 1
