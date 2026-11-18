@@ -41,6 +41,41 @@ try{
   const image=document.getElementById('original-mapshot');
   return image?.complete && image.naturalWidth>=128 && image.naturalHeight>=128;
  },{timeout:15000});
+ // Phase 1.8 checks original engine axis handedness directly rather
+ // than merely checking that a model loader returned 135 objects.
+ const transformProof=await page.evaluate(async()=>{
+  const THREE=await import('three');
+  const bridge=await import('/static/octavus_native_transform89.js');
+  const near=(a,b)=>a.distanceTo(b)<1e-6;
+  const sourceY=new THREE.Vector3(0,1,0);
+  const axisZ=new THREE.Vector3(0,0,1);
+  const axisX=new THREE.Vector3(1,0,0);
+  const yaw=axisX.clone().applyQuaternion(bridge.octavusSourceQuaternion(90,0,0));
+  const pitch=axisZ.clone().applyQuaternion(bridge.octavusSourceQuaternion(0,90,0));
+  const roll=new THREE.Vector3(0,1,0).applyQuaternion(bridge.octavusSourceQuaternion(0,0,90));
+  const object=new THREE.Group();
+  bridge.octavusModelNativeToViewer(object);object.updateMatrix();
+  const mappedNativeY=sourceY.clone().applyMatrix4(object.matrix);
+  const origin=bridge.originalNativePosition([4096,4096,2816]);
+  return {
+   nativeYaw90MapsXToPosZ:near(yaw,axisZ),
+   nativePitch90MapsYToPosVertical:near(pitch,sourceY),
+   nativeRoll90MapsZToNegX:near(roll,axisX.clone().negate()),
+   nativeObjYMapsViewerZ:near(mappedNativeY,axisZ),
+   originAtWorldZero:near(origin,new THREE.Vector3()),
+   originalDecal50to2p5:bridge.originalDecalSize([0,0,0,0,50])===2.5,
+   transformRevision:bridge.TRANSFORM_REVISION
+  };
+ });
+ assert.deepEqual(transformProof,{
+  nativeYaw90MapsXToPosZ:true,
+  nativePitch90MapsYToPosVertical:true,
+  nativeRoll90MapsZToNegX:true,
+  nativeObjYMapsViewerZ:true,
+  originAtWorldZero:true,
+  originalDecal50to2p5:true,
+  transformRevision:'MAPZ-v59-axis-bridge89'
+ },'Native world-model transforms must match Red Eclipse original Euler axes');
  const stats=await page.evaluate(()=>{
   const canvas=document.querySelector('#viewport canvas');
   return {
@@ -154,6 +189,17 @@ try{
   originalProps:'135',originalDecals:'135',sourceLights:'233',
   sky:'Loaded',url:'/static/octavus-native-preview.html'
  });
+ // Distinguish authentic entity anchors from decorative geometry: exact
+ // source MPZ positions must be inspectable and fully removable.
+ await page.click('#source-anchors');
+ await page.waitForFunction(()=>document.getElementById('metric-anchors')?.textContent==='135',{timeout:15000});
+ await page.click('#prop-focus-btn');
+ await page.waitForFunction(()=>document.getElementById('camera-label')?.textContent.includes('38 m'),{timeout:15000});
+ const anchoredImage=await canvas.screenshot();
+ assert.ok(anchoredImage.byteLength>12000);
+ writeFileSync('/tmp/octavus-native-geometry-anchors-preview.png',anchoredImage);
+ await page.click('#source-anchors');
+ await page.waitForFunction(()=>document.getElementById('metric-anchors')?.textContent==='0',{timeout:15000});
  const scenicImage=await canvas.screenshot();
  assert.ok(scenicImage.byteLength>12000,'Scenic WebGL canvas failed');
  writeFileSync('/tmp/octavus-native-source-scenery-preview.png',scenicImage);
@@ -177,7 +223,7 @@ try{
  assert.deepEqual(shaderErrors,[],'Native texture source projection must compile in Chrome WebGL');
  assert.deepEqual(errors,[],'No browser runtime errors permitted');
  console.log('Octavus native preview headless Chrome: PASS');
- console.log(JSON.stringify({...stats,previewPngBytes:image.byteLength,optimizedPngBytes:enhancedImage.byteLength,sourceTexturePngBytes:textureImage.byteLength,sourceSceneryPngBytes:scenicImage.byteLength},null,2));
+ console.log(JSON.stringify({...stats,previewPngBytes:image.byteLength,optimizedPngBytes:enhancedImage.byteLength,sourceTexturePngBytes:textureImage.byteLength,sourceSceneryPngBytes:scenicImage.byteLength,alignmentAnchorPngBytes:anchoredImage.byteLength},null,2));
 }finally{
  await browser.close();
 }
