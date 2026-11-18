@@ -85,7 +85,7 @@ def spawn(p,players,now,arena=DEFAULT,history=None):
              mags=[w['mag'] for w in WEAPONS],input={},last_shot=-999.,
              slide_until=0.,slide_ready=0.,jump_held=False,slide_held=False,
              crouch=False,motion_time=0.,move_credit=0.,commands=deque(),
-             spawn=p.get('spawn',0)+1)
+             spawn=p.get('spawn',0)+1,input_overruns=0)
     reset_health(p,now)
     seed_movement(p)
 
@@ -487,7 +487,7 @@ class Room:
             objective=({**self.control_point,'controller':self.control_owner,
                         'contested':self.control_contested,'presence':self.control_presence.copy()}
                        if self.mode=='control' else None),
-            winReason=self.win_reason,players=[{k:p[k] for k in fields}|dict(reload=max(0,p['reload_at']-now),respawn=max(0,p['respawn_at']-now),shield=max(0,p['shield']-now),slide=max(0,p['slide_until']-p['motion_time']),slideCooldown=max(0,p['slide_ready']-p['motion_time']),switch=0.,regenDelay=max(0.,p['regen_after']-now) if 0<p['hp']<MAX_HEALTH else 0.) for p in list(self.players.values())+list(self.bots.values())],targets=self.targets,events=self.events,remaining=max(0,ROUND_SECONDS-((self.ended_at if self.phase=='results' else now)-self.started)) if self.phase in ('playing','results') else ROUND_SECONDS,countdown=max(0,self.countdown_at-now),winner=self.winner)
+            winReason=self.win_reason,players=[{k:p[k] for k in fields}|dict(inputQueue=len(p['commands']),inputOverruns=p.get('input_overruns',0),reload=max(0,p['reload_at']-now),respawn=max(0,p['respawn_at']-now),shield=max(0,p['shield']-now),slide=max(0,p['slide_until']-p['motion_time']),slideCooldown=max(0,p['slide_ready']-p['motion_time']),switch=0.,regenDelay=max(0.,p['regen_after']-now) if 0<p['hp']<MAX_HEALTH else 0.) for p in list(self.players.values())+list(self.bots.values())],targets=self.targets,events=self.events,remaining=max(0,ROUND_SECONDS-((self.ended_at if self.phase=='results' else now)-self.started)) if self.phase in ('playing','results') else ROUND_SECONDS,countdown=max(0,self.countdown_at-now),winner=self.winner)
 
 rooms={}
 async def create_room(request):
@@ -540,7 +540,13 @@ async def socket(request):
                     seq=max(0,min(2**31,int(data.get('seq',0))))
                     generation=int(data.get('spawn',p['spawn']))
                     latest=p['commands'][-1]['seq'] if p['commands'] else p['seq']
-                    if generation==p['spawn'] and seq>latest and len(p['commands'])<30:
+                    if generation==p['spawn'] and seq>latest:
+                        # Prefer recent directions when a slow machine falls
+                        # behind. Silently dropping every NEW packet leaves the
+                        # player moving on old inputs for multiple seconds.
+                        if len(p['commands'])>=30:
+                            p['commands'].popleft()
+                            p['input_overruns']=p.get('input_overruns',0)+1
                         p['commands'].append(dict(seq=seq,spawn=generation,yaw=p['yaw'],pitch=p['pitch'],input={k:data.get(k) is True for k in ('w','a','s','d','jump','sprint','slide','crouch','leanLeft','leanRight','ads','interact')}))
                 elif action=='shoot':
                     # A duplicate/replayed client shot sequence must never spend ammo
