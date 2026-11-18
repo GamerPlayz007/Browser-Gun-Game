@@ -1,0 +1,6415 @@
+{
+  "format": "OCTAVUS-NATIVE-MATERIALS87",
+  "status": "staging-only-not-live",
+  "originalSourceRevision": 829,
+  "nativeVSlots": 223,
+  "originalCFGRoots": 68,
+  "modifiedNativeVariants": 155,
+  "sourceGeometryTriangles": 863803,
+  "usedNativeMaterialSlots": 196,
+  "usedSlotsWithSourceImage": 165,
+  "usedSlotsWithoutSourceImage": 31,
+  "sourceImageSupportedTriangles": 845889,
+  "missingSourceImageTriangles": 17914,
+  "differentSourceImageFiles": 41,
+  "missingSourcePathTriangleCounts": {
+    "dziq/metal_paint_old01": 15644,
+    "torley/desat/grittyblack2clear3.png": 1026,
+    "philipk/pk01/pan_floor01b_d.png": 320,
+    "luckystrike/barlight.jpg": 256,
+    "philipk/pk02/floor03_c.png": 214,
+    "torley/desat/clumpedverticalpaint.png": 144,
+    "trak/trak6/crate1.jpg": 105,
+    "textures/sky.png": 65,
+    "<comp:100>cathode [tex = unixfreak/textures/planetsurvey.png]": 48,
+    "unnamed/solar_cell02.png": 24,
+    "jojo/interface03.png": 24,
+    "torley/desat/sketchstorm.png": 16,
+    "jojo/map.png": 16,
+    "<comp:1>ticker": 12
+  },
+  "textureCoordinateParity": false,
+  "texturePathLinkage": "Candidate mapping: original 68 CFG slots align with the 68 MAPZ texture root indices. Image selection uses exact source file path from the existing attributed OBJ-based asset pack.",
+  "limitations": [
+    "Native MPZ references 223 VSlots but does not embed original source image paths; CFG root alignment is supported by source ordering, not verified against running Red Eclipse.",
+    "Source packed WebP images are optimized adaptations with existing attribution, not newly fetched assets.",
+    "Texture projection in browser inspection is approximate until native per-face TEX_SCALE, rotation and offset are reproduced exactly.",
+    "Transparent, glow, specular, layer blends and missing upstream images remain staged."
+  ],
+  "materials": {
+    "0": {
+      "vslot": 0,
+      "rootCfgSlot": 0,
+      "sourceDiffuse": "textures/sky.png",
+      "image": null,
+      "triangleCount": 65,
+      "scale": 1.0,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        0
+      ]
+    },
+    "1": {
+      "vslot": 1,
+      "rootCfgSlot": 1,
+      "sourceDiffuse": "mikeplus64/plain.png",
+      "image": "/static/maps/octavus_assets/32bf0d230d8253dc.webp",
+      "triangleCount": 765874,
+      "scale": 1.0,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        1
+      ]
+    },
+    "2": {
+      "vslot": 2,
+      "rootCfgSlot": 2,
+      "sourceDiffuse": "trak/trak6/tile3.jpg",
+      "image": "/static/maps/octavus_assets/31efdabf1d2afb45.webp",
+      "triangleCount": 0,
+      "scale": 0.25,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        2
+      ]
+    },
+    "3": {
+      "vslot": 3,
+      "rootCfgSlot": 3,
+      "sourceDiffuse": "trak/trak6/tile3.jpg",
+      "image": "/static/maps/octavus_assets/31efdabf1d2afb45.webp",
+      "triangleCount": 36,
+      "scale": 0.25,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        3
+      ]
+    },
+    "4": {
+      "vslot": 4,
+      "rootCfgSlot": 4,
+      "sourceDiffuse": "trak/trak6/tile3.jpg",
+      "image": "/static/maps/octavus_assets/31efdabf1d2afb45.webp",
+      "triangleCount": 0,
+      "scale": 0.25,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        4
+      ]
+    },
+    "5": {
+      "vslot": 5,
+      "rootCfgSlot": 5,
+      "sourceDiffuse": "trak/trak5/light3a.jpg",
+      "image": "/static/maps/octavus_assets/090183f6d0199fe3.webp",
+      "triangleCount": 500,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        5
+      ]
+    },
+    "6": {
+      "vslot": 6,
+      "rootCfgSlot": 6,
+      "sourceDiffuse": "trak/trak5/ribs1a.jpg",
+      "image": "/static/maps/octavus_assets/33204ab2dd694caa.webp",
+      "triangleCount": 648,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        6
+      ]
+    },
+    "7": {
+      "vslot": 7,
+      "rootCfgSlot": 7,
+      "sourceDiffuse": "trak/trak5/tile1e.jpg",
+      "image": "/static/maps/octavus_assets/faf0c135569f4276.webp",
+      "triangleCount": 240,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        7
+      ]
+    },
+    "8": {
+      "vslot": 8,
+      "rootCfgSlot": 8,
+      "sourceDiffuse": "trak/trak5/trim3e.jpg",
+      "image": "/static/maps/octavus_assets/d03b52f2f4a54976.webp",
+      "triangleCount": 32,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        8
+      ]
+    },
+    "9": {
+      "vslot": 9,
+      "rootCfgSlot": 9,
+      "sourceDiffuse": "trak/trak6/light1.jpg",
+      "image": "/static/maps/octavus_assets/b1153cd74704ff68.webp",
+      "triangleCount": 0,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        9
+      ]
+    },
+    "10": {
+      "vslot": 10,
+      "rootCfgSlot": 10,
+      "sourceDiffuse": "philipk/pk01/panel_small01_d.png",
+      "image": "/static/maps/octavus_assets/9cf312cde81a1005.webp",
+      "triangleCount": 42,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        10
+      ]
+    },
+    "11": {
+      "vslot": 11,
+      "rootCfgSlot": 11,
+      "sourceDiffuse": "philipk/pk01/floor01a_d.png",
+      "image": "/static/maps/octavus_assets/07717366c27b6ef9.webp",
+      "triangleCount": 0,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        11
+      ]
+    },
+    "12": {
+      "vslot": 12,
+      "rootCfgSlot": 12,
+      "sourceDiffuse": "philipk/pk01/floor02b_d.png",
+      "image": "/static/maps/octavus_assets/8742f853adc21e03.webp",
+      "triangleCount": 58,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        12
+      ]
+    },
+    "13": {
+      "vslot": 13,
+      "rootCfgSlot": 13,
+      "sourceDiffuse": "philipk/pk01/gra_floor02_d.png",
+      "image": "/static/maps/octavus_assets/2c29b4160b750c70.webp",
+      "triangleCount": 28,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        13
+      ]
+    },
+    "14": {
+      "vslot": 14,
+      "rootCfgSlot": 14,
+      "sourceDiffuse": "philipk/pk01/vent_wall01a_d.png",
+      "image": "/static/maps/octavus_assets/b952d69713f2778e.webp",
+      "triangleCount": 84,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        14
+      ]
+    },
+    "15": {
+      "vslot": 15,
+      "rootCfgSlot": 15,
+      "sourceDiffuse": "philipk/pk02/light01b_c.png",
+      "image": "/static/maps/octavus_assets/af55446077b32bfd.webp",
+      "triangleCount": 84,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        15
+      ]
+    },
+    "16": {
+      "vslot": 16,
+      "rootCfgSlot": 16,
+      "sourceDiffuse": "philipk/pk02/pipes01_c.png",
+      "image": "/static/maps/octavus_assets/1a35f3b3b1f77934.webp",
+      "triangleCount": 42,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        16
+      ]
+    },
+    "17": {
+      "vslot": 17,
+      "rootCfgSlot": 17,
+      "sourceDiffuse": "philipk/pk02/switches01b_c.png",
+      "image": "/static/maps/octavus_assets/117c16d6fb1e484f.webp",
+      "triangleCount": 16,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        17
+      ]
+    },
+    "18": {
+      "vslot": 18,
+      "rootCfgSlot": 18,
+      "sourceDiffuse": "philipk/pk02/switches01c_c.png",
+      "image": "/static/maps/octavus_assets/397b450a7e4b8ed3.webp",
+      "triangleCount": 76,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        18
+      ]
+    },
+    "19": {
+      "vslot": 19,
+      "rootCfgSlot": 19,
+      "sourceDiffuse": "philipk/pk02/floor01_c.png",
+      "image": "/static/maps/octavus_assets/4f5b7749a658e15d.webp",
+      "triangleCount": 0,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        19
+      ]
+    },
+    "20": {
+      "vslot": 20,
+      "rootCfgSlot": 20,
+      "sourceDiffuse": "philipk/pk02/floor03_c.png",
+      "image": null,
+      "triangleCount": 202,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        20
+      ]
+    },
+    "21": {
+      "vslot": 21,
+      "rootCfgSlot": 21,
+      "sourceDiffuse": "philipk/pk02/floor05_c.png",
+      "image": "/static/maps/octavus_assets/f818fe290b84be9a.webp",
+      "triangleCount": 108,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        21
+      ]
+    },
+    "22": {
+      "vslot": 22,
+      "rootCfgSlot": 22,
+      "sourceDiffuse": "philipk/pk02/floor06a_c.png",
+      "image": "/static/maps/octavus_assets/7e6e530f55a1bca3.webp",
+      "triangleCount": 316,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        22
+      ]
+    },
+    "23": {
+      "vslot": 23,
+      "rootCfgSlot": 23,
+      "sourceDiffuse": "philipk/pk02/floor07_c.png",
+      "image": "/static/maps/octavus_assets/e5ed5a491e9b66c0.webp",
+      "triangleCount": 650,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        23
+      ]
+    },
+    "24": {
+      "vslot": 24,
+      "rootCfgSlot": 24,
+      "sourceDiffuse": "philipk/pk02/generic01b_c.png",
+      "image": "/static/maps/octavus_assets/d9549cb183da75bc.webp",
+      "triangleCount": 488,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        24
+      ]
+    },
+    "25": {
+      "vslot": 25,
+      "rootCfgSlot": 25,
+      "sourceDiffuse": "philipk/pk02/switches01a_c.png",
+      "image": "/static/maps/octavus_assets/41105fa041c4d4e8.webp",
+      "triangleCount": 30,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        25
+      ]
+    },
+    "26": {
+      "vslot": 26,
+      "rootCfgSlot": 26,
+      "sourceDiffuse": "philipk/pk02/trim04a_c.png",
+      "image": "/static/maps/octavus_assets/31bd5b5848488a12.webp",
+      "triangleCount": 896,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        26
+      ]
+    },
+    "27": {
+      "vslot": 27,
+      "rootCfgSlot": 27,
+      "sourceDiffuse": "philipk/pk02/wall_big01a_c.png",
+      "image": "/static/maps/octavus_assets/fbcddfee55f7a4f4.webp",
+      "triangleCount": 794,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        27
+      ]
+    },
+    "28": {
+      "vslot": 28,
+      "rootCfgSlot": 28,
+      "sourceDiffuse": "philipk/pk02/wall_big01b_c.png",
+      "image": "/static/maps/octavus_assets/99d030dc4ac4f892.webp",
+      "triangleCount": 8501,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        28
+      ]
+    },
+    "29": {
+      "vslot": 29,
+      "rootCfgSlot": 29,
+      "sourceDiffuse": "jojo/windowstile04_g.png",
+      "image": "/static/maps/octavus_assets/8df50b2f8a5569bd.webp",
+      "triangleCount": 0,
+      "scale": 1.0,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        29
+      ]
+    },
+    "30": {
+      "vslot": 30,
+      "rootCfgSlot": 30,
+      "sourceDiffuse": "jojo/map.png",
+      "image": null,
+      "triangleCount": 0,
+      "scale": 0.25,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        30
+      ]
+    },
+    "31": {
+      "vslot": 31,
+      "rootCfgSlot": 31,
+      "sourceDiffuse": "jojo/sand01.png",
+      "image": "/static/maps/octavus_assets/880560c611c66ecc.webp",
+      "triangleCount": 0,
+      "scale": 1.0,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        31
+      ]
+    },
+    "32": {
+      "vslot": 32,
+      "rootCfgSlot": 32,
+      "sourceDiffuse": "philipk/pk02/switches01c_c.png",
+      "image": "/static/maps/octavus_assets/397b450a7e4b8ed3.webp",
+      "triangleCount": 30,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        32
+      ]
+    },
+    "33": {
+      "vslot": 33,
+      "rootCfgSlot": 33,
+      "sourceDiffuse": "philipk/pk02/switches01c_c.png",
+      "image": "/static/maps/octavus_assets/397b450a7e4b8ed3.webp",
+      "triangleCount": 20,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        33
+      ]
+    },
+    "34": {
+      "vslot": 34,
+      "rootCfgSlot": 34,
+      "sourceDiffuse": "appleflap/danger.jpg",
+      "image": "/static/maps/octavus_assets/b2e15684532b472a.webp",
+      "triangleCount": 532,
+      "scale": 1.0,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        34
+      ]
+    },
+    "35": {
+      "vslot": 35,
+      "rootCfgSlot": 35,
+      "sourceDiffuse": "trak/trak6/trim1.jpg",
+      "image": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "triangleCount": 32,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        35
+      ]
+    },
+    "36": {
+      "vslot": 36,
+      "rootCfgSlot": 36,
+      "sourceDiffuse": "mikeplus64/plain.png",
+      "image": "/static/maps/octavus_assets/32bf0d230d8253dc.webp",
+      "triangleCount": 0,
+      "scale": 1.0,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        36
+      ]
+    },
+    "37": {
+      "vslot": 37,
+      "rootCfgSlot": 37,
+      "sourceDiffuse": "misc/agf81/concrete1w_diffuse.png",
+      "image": "/static/maps/octavus_assets/bd907b2904b90d12.webp",
+      "triangleCount": 13987,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        37
+      ]
+    },
+    "38": {
+      "vslot": 38,
+      "rootCfgSlot": 38,
+      "sourceDiffuse": "nieb/complex/step02.png",
+      "image": "/static/maps/octavus_assets/b71b5999c0cf8cee.webp",
+      "triangleCount": 444,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        38
+      ]
+    },
+    "39": {
+      "vslot": 39,
+      "rootCfgSlot": 39,
+      "sourceDiffuse": "nieb/complex/step03.png",
+      "image": "/static/maps/octavus_assets/b90967e4bc5efb1d.webp",
+      "triangleCount": 3886,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        39
+      ]
+    },
+    "40": {
+      "vslot": 40,
+      "rootCfgSlot": 40,
+      "sourceDiffuse": "nieb/complex/wall01.png",
+      "image": "/static/maps/octavus_assets/617f939d226609c9.webp",
+      "triangleCount": 0,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        40
+      ]
+    },
+    "41": {
+      "vslot": 41,
+      "rootCfgSlot": 41,
+      "sourceDiffuse": "philipk/pk02/floor12a_c.png",
+      "image": "/static/maps/octavus_assets/2fec6613f4a2daed.webp",
+      "triangleCount": 0,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        41
+      ]
+    },
+    "42": {
+      "vslot": 42,
+      "rootCfgSlot": 42,
+      "sourceDiffuse": "philipk/pk02/generic01b_c.png",
+      "image": "/static/maps/octavus_assets/d9549cb183da75bc.webp",
+      "triangleCount": 4530,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        42
+      ]
+    },
+    "43": {
+      "vslot": 43,
+      "rootCfgSlot": 43,
+      "sourceDiffuse": "acerspyro/light1/light1.png",
+      "image": "/static/maps/octavus_assets/b6a21ae3c0164f1c.webp",
+      "triangleCount": 0,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        43
+      ]
+    },
+    "44": {
+      "vslot": 44,
+      "rootCfgSlot": 44,
+      "sourceDiffuse": "trak/trak5/tile3d.jpg",
+      "image": "/static/maps/octavus_assets/8a4ba5d6580d2cb3.webp",
+      "triangleCount": 50,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        44
+      ]
+    },
+    "45": {
+      "vslot": 45,
+      "rootCfgSlot": 45,
+      "sourceDiffuse": "trak/trak5/tile5c.jpg",
+      "image": "/static/maps/octavus_assets/721154c3befae156.webp",
+      "triangleCount": 88,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        45
+      ]
+    },
+    "46": {
+      "vslot": 46,
+      "rootCfgSlot": 46,
+      "sourceDiffuse": "trak/trak5/wall1e.jpg",
+      "image": "/static/maps/octavus_assets/c1bac841dedb5009.webp",
+      "triangleCount": 0,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        46
+      ]
+    },
+    "47": {
+      "vslot": 47,
+      "rootCfgSlot": 47,
+      "sourceDiffuse": "nieb/complex/step03.png",
+      "image": "/static/maps/octavus_assets/b90967e4bc5efb1d.webp",
+      "triangleCount": 0,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        47
+      ]
+    },
+    "48": {
+      "vslot": 48,
+      "rootCfgSlot": 48,
+      "sourceDiffuse": "acerspyro/light2/light2.png",
+      "image": "/static/maps/octavus_assets/f78d6834fa64e58e.webp",
+      "triangleCount": 12,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        48
+      ]
+    },
+    "49": {
+      "vslot": 49,
+      "rootCfgSlot": 49,
+      "sourceDiffuse": "nieb/complex/step01.png",
+      "image": "/static/maps/octavus_assets/e54b6147a2ac3baf.webp",
+      "triangleCount": 320,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        49
+      ]
+    },
+    "50": {
+      "vslot": 50,
+      "rootCfgSlot": 50,
+      "sourceDiffuse": "philipk/pk02/light02a_c.png",
+      "image": "/static/maps/octavus_assets/7f3f474233b3f147.webp",
+      "triangleCount": 42,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        50
+      ]
+    },
+    "51": {
+      "vslot": 51,
+      "rootCfgSlot": 51,
+      "sourceDiffuse": "philipk/pk02/floor05_c.png",
+      "image": "/static/maps/octavus_assets/f818fe290b84be9a.webp",
+      "triangleCount": 0,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        51
+      ]
+    },
+    "52": {
+      "vslot": 52,
+      "rootCfgSlot": 52,
+      "sourceDiffuse": "acerspyro/light1/light1.png",
+      "image": "/static/maps/octavus_assets/b6a21ae3c0164f1c.webp",
+      "triangleCount": 0,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        52
+      ]
+    },
+    "53": {
+      "vslot": 53,
+      "rootCfgSlot": 53,
+      "sourceDiffuse": "jojo/sand01.png",
+      "image": "/static/maps/octavus_assets/880560c611c66ecc.webp",
+      "triangleCount": 0,
+      "scale": 1.0,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        53
+      ]
+    },
+    "54": {
+      "vslot": 54,
+      "rootCfgSlot": 54,
+      "sourceDiffuse": "jojo/sand01.png",
+      "image": "/static/maps/octavus_assets/880560c611c66ecc.webp",
+      "triangleCount": 0,
+      "scale": 1.0,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        54
+      ]
+    },
+    "55": {
+      "vslot": 55,
+      "rootCfgSlot": 55,
+      "sourceDiffuse": "misc/agf81/concrete1w_diffuse.png",
+      "image": "/static/maps/octavus_assets/bd907b2904b90d12.webp",
+      "triangleCount": 4,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        55
+      ]
+    },
+    "56": {
+      "vslot": 56,
+      "rootCfgSlot": 56,
+      "sourceDiffuse": "dziq/metal_paint_old01",
+      "image": null,
+      "triangleCount": 16,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        56
+      ]
+    },
+    "57": {
+      "vslot": 57,
+      "rootCfgSlot": 57,
+      "sourceDiffuse": "<comp:1>ticker",
+      "image": null,
+      "triangleCount": 12,
+      "scale": 1.0,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        57
+      ]
+    },
+    "58": {
+      "vslot": 58,
+      "rootCfgSlot": 58,
+      "sourceDiffuse": "jojo/interface03.png",
+      "image": null,
+      "triangleCount": 0,
+      "scale": 0.25,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        58
+      ]
+    },
+    "59": {
+      "vslot": 59,
+      "rootCfgSlot": 59,
+      "sourceDiffuse": "trak/trak6/crate1.jpg",
+      "image": null,
+      "triangleCount": 0,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        59
+      ]
+    },
+    "60": {
+      "vslot": 60,
+      "rootCfgSlot": 60,
+      "sourceDiffuse": "torley/desat/clumpedverticalpaint.png",
+      "image": null,
+      "triangleCount": 0,
+      "scale": 1.0,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        60
+      ]
+    },
+    "61": {
+      "vslot": 61,
+      "rootCfgSlot": 61,
+      "sourceDiffuse": "torley/desat/grittyblack2clear3.png",
+      "image": null,
+      "triangleCount": 144,
+      "scale": 1.0,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        61
+      ]
+    },
+    "62": {
+      "vslot": 62,
+      "rootCfgSlot": 62,
+      "sourceDiffuse": "torley/desat/sketchstorm.png",
+      "image": null,
+      "triangleCount": 16,
+      "scale": 1.0,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        62
+      ]
+    },
+    "63": {
+      "vslot": 63,
+      "rootCfgSlot": 63,
+      "sourceDiffuse": "luckystrike/barlight.jpg",
+      "image": null,
+      "triangleCount": 256,
+      "scale": 0.25,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        63
+      ]
+    },
+    "64": {
+      "vslot": 64,
+      "rootCfgSlot": 64,
+      "sourceDiffuse": "philipk/pk01/pan_floor01b_d.png",
+      "image": null,
+      "triangleCount": 320,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        64
+      ]
+    },
+    "65": {
+      "vslot": 65,
+      "rootCfgSlot": 65,
+      "sourceDiffuse": "<comp:100>cathode [tex = unixfreak/textures/planetsurvey.png]",
+      "image": null,
+      "triangleCount": 0,
+      "scale": 1.0,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        65
+      ]
+    },
+    "66": {
+      "vslot": 66,
+      "rootCfgSlot": 66,
+      "sourceDiffuse": "jojo/redrock02.png",
+      "image": null,
+      "triangleCount": 0,
+      "scale": 1.0,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        66
+      ]
+    },
+    "67": {
+      "vslot": 67,
+      "rootCfgSlot": 67,
+      "sourceDiffuse": "unnamed/solar_cell02.png",
+      "image": null,
+      "triangleCount": 24,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        67
+      ]
+    },
+    "68": {
+      "vslot": 68,
+      "rootCfgSlot": 31,
+      "sourceDiffuse": "jojo/sand01.png",
+      "image": "/static/maps/octavus_assets/880560c611c66ecc.webp",
+      "triangleCount": 16,
+      "scale": 6.0,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        31,
+        68
+      ]
+    },
+    "69": {
+      "vslot": 69,
+      "rootCfgSlot": 31,
+      "sourceDiffuse": "jojo/sand01.png",
+      "image": "/static/maps/octavus_assets/880560c611c66ecc.webp",
+      "triangleCount": 2110,
+      "scale": 3.0,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        0.9,
+        0.9,
+        0.9
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 71,
+      "chain": [
+        31,
+        68,
+        102,
+        81,
+        87,
+        103,
+        114,
+        70,
+        69
+      ]
+    },
+    "70": {
+      "vslot": 70,
+      "rootCfgSlot": 31,
+      "sourceDiffuse": "jojo/sand01.png",
+      "image": "/static/maps/octavus_assets/880560c611c66ecc.webp",
+      "triangleCount": 5055,
+      "scale": 0.25,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        0.9,
+        0.9,
+        0.9
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 71,
+      "chain": [
+        31,
+        68,
+        102,
+        81,
+        87,
+        103,
+        114,
+        70
+      ]
+    },
+    "71": {
+      "vslot": 71,
+      "rootCfgSlot": 66,
+      "sourceDiffuse": "jojo/redrock02.png",
+      "image": null,
+      "triangleCount": 0,
+      "scale": 1.0,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        0.8,
+        0.704,
+        0.64
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        66,
+        71
+      ]
+    },
+    "72": {
+      "vslot": 72,
+      "rootCfgSlot": 56,
+      "sourceDiffuse": "dziq/metal_paint_old01",
+      "image": null,
+      "triangleCount": 5548,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        0.4,
+        0.213333,
+        0.12
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 81,
+      "chain": [
+        56,
+        84,
+        135,
+        72
+      ]
+    },
+    "73": {
+      "vslot": 73,
+      "rootCfgSlot": 1,
+      "sourceDiffuse": "mikeplus64/plain.png",
+      "image": "/static/maps/octavus_assets/32bf0d230d8253dc.webp",
+      "triangleCount": 816,
+      "scale": 1.0,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        0.7,
+        0.7,
+        0.7
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        1,
+        73
+      ]
+    },
+    "74": {
+      "vslot": 74,
+      "rootCfgSlot": 5,
+      "sourceDiffuse": "trak/trak5/light3a.jpg",
+      "image": "/static/maps/octavus_assets/090183f6d0199fe3.webp",
+      "triangleCount": 96,
+      "scale": 0.25,
+      "rotation": 0,
+      "offset": [
+        64,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 81,
+      "chain": [
+        5,
+        144,
+        112,
+        205,
+        139,
+        133,
+        157,
+        99,
+        174,
+        198,
+        206,
+        74
+      ]
+    },
+    "75": {
+      "vslot": 75,
+      "rootCfgSlot": 24,
+      "sourceDiffuse": "philipk/pk02/generic01b_c.png",
+      "image": "/static/maps/octavus_assets/d9549cb183da75bc.webp",
+      "triangleCount": 741,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        24,
+        97,
+        75
+      ]
+    },
+    "76": {
+      "vslot": 76,
+      "rootCfgSlot": 40,
+      "sourceDiffuse": "nieb/complex/wall01.png",
+      "image": "/static/maps/octavus_assets/617f939d226609c9.webp",
+      "triangleCount": 2598,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        0.2,
+        0.2,
+        0.2
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        40,
+        76
+      ]
+    },
+    "77": {
+      "vslot": 77,
+      "rootCfgSlot": 24,
+      "sourceDiffuse": "philipk/pk02/generic01b_c.png",
+      "image": "/static/maps/octavus_assets/d9549cb183da75bc.webp",
+      "triangleCount": 5340,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        24,
+        97,
+        75,
+        77
+      ]
+    },
+    "78": {
+      "vslot": 78,
+      "rootCfgSlot": 2,
+      "sourceDiffuse": "trak/trak6/tile3.jpg",
+      "image": "/static/maps/octavus_assets/31efdabf1d2afb45.webp",
+      "triangleCount": 256,
+      "scale": 0.25,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        2,
+        78
+      ]
+    },
+    "79": {
+      "vslot": 79,
+      "rootCfgSlot": 56,
+      "sourceDiffuse": "dziq/metal_paint_old01",
+      "image": null,
+      "triangleCount": 8824,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        0.6,
+        0.36,
+        0.24
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 81,
+      "chain": [
+        56,
+        84,
+        135,
+        72,
+        79
+      ]
+    },
+    "80": {
+      "vslot": 80,
+      "rootCfgSlot": 19,
+      "sourceDiffuse": "philipk/pk02/floor01_c.png",
+      "image": "/static/maps/octavus_assets/4f5b7749a658e15d.webp",
+      "triangleCount": 3039,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 81,
+      "chain": [
+        19,
+        80
+      ]
+    },
+    "81": {
+      "vslot": 81,
+      "rootCfgSlot": 31,
+      "sourceDiffuse": "jojo/sand01.png",
+      "image": "/static/maps/octavus_assets/880560c611c66ecc.webp",
+      "triangleCount": 0,
+      "scale": 6.0,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        0.9,
+        0.9,
+        0.9
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 82,
+      "chain": [
+        31,
+        68,
+        102,
+        81
+      ]
+    },
+    "82": {
+      "vslot": 82,
+      "rootCfgSlot": 53,
+      "sourceDiffuse": "jojo/sand01.png",
+      "image": "/static/maps/octavus_assets/880560c611c66ecc.webp",
+      "triangleCount": 0,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        0.7,
+        0.7,
+        0.7
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        53,
+        82
+      ]
+    },
+    "83": {
+      "vslot": 83,
+      "rootCfgSlot": 38,
+      "sourceDiffuse": "nieb/complex/step02.png",
+      "image": "/static/maps/octavus_assets/b71b5999c0cf8cee.webp",
+      "triangleCount": 660,
+      "scale": 1.0,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        38,
+        83
+      ]
+    },
+    "84": {
+      "vslot": 84,
+      "rootCfgSlot": 56,
+      "sourceDiffuse": "dziq/metal_paint_old01",
+      "image": null,
+      "triangleCount": 1252,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        0.5,
+        0.2375,
+        0.15
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 81,
+      "chain": [
+        56,
+        84
+      ]
+    },
+    "85": {
+      "vslot": 85,
+      "rootCfgSlot": 11,
+      "sourceDiffuse": "philipk/pk01/floor01a_d.png",
+      "image": "/static/maps/octavus_assets/07717366c27b6ef9.webp",
+      "triangleCount": 842,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 81,
+      "chain": [
+        11,
+        163,
+        85
+      ]
+    },
+    "86": {
+      "vslot": 86,
+      "rootCfgSlot": 37,
+      "sourceDiffuse": "misc/agf81/concrete1w_diffuse.png",
+      "image": "/static/maps/octavus_assets/bd907b2904b90d12.webp",
+      "triangleCount": 116,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        0.7,
+        0.7,
+        0.7
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        37,
+        86
+      ]
+    },
+    "87": {
+      "vslot": 87,
+      "rootCfgSlot": 31,
+      "sourceDiffuse": "jojo/sand01.png",
+      "image": "/static/maps/octavus_assets/880560c611c66ecc.webp",
+      "triangleCount": 12,
+      "scale": 0.25,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        0.5,
+        0.2375,
+        0.15
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 82,
+      "chain": [
+        31,
+        68,
+        102,
+        81,
+        87
+      ]
+    },
+    "88": {
+      "vslot": 88,
+      "rootCfgSlot": 61,
+      "sourceDiffuse": "torley/desat/grittyblack2clear3.png",
+      "image": null,
+      "triangleCount": 874,
+      "scale": 1.0,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        0.2,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        61,
+        88
+      ]
+    },
+    "89": {
+      "vslot": 89,
+      "rootCfgSlot": 37,
+      "sourceDiffuse": "misc/agf81/concrete1w_diffuse.png",
+      "image": "/static/maps/octavus_assets/bd907b2904b90d12.webp",
+      "triangleCount": 1522,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        0.7,
+        0.7,
+        0.7
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        37,
+        86,
+        89
+      ]
+    },
+    "90": {
+      "vslot": 90,
+      "rootCfgSlot": 4,
+      "sourceDiffuse": "trak/trak6/tile3.jpg",
+      "image": "/static/maps/octavus_assets/31efdabf1d2afb45.webp",
+      "triangleCount": 470,
+      "scale": 0.125,
+      "rotation": 0,
+      "offset": [
+        64,
+        0
+      ],
+      "color": [
+        0.7,
+        0.7,
+        0.7
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        4,
+        121,
+        199,
+        188,
+        183,
+        181,
+        90
+      ]
+    },
+    "91": {
+      "vslot": 91,
+      "rootCfgSlot": 46,
+      "sourceDiffuse": "trak/trak5/wall1e.jpg",
+      "image": "/static/maps/octavus_assets/c1bac841dedb5009.webp",
+      "triangleCount": 8,
+      "scale": 0.25,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        46,
+        91
+      ]
+    },
+    "92": {
+      "vslot": 92,
+      "rootCfgSlot": 35,
+      "sourceDiffuse": "trak/trak6/trim1.jpg",
+      "image": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "triangleCount": 2378,
+      "scale": 0.25,
+      "rotation": 1,
+      "offset": [
+        448,
+        0
+      ],
+      "color": [
+        1.3,
+        1.3,
+        1.3
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        35,
+        169,
+        123,
+        147,
+        146,
+        152,
+        151,
+        211,
+        200,
+        212,
+        180,
+        191,
+        92
+      ]
+    },
+    "93": {
+      "vslot": 93,
+      "rootCfgSlot": 6,
+      "sourceDiffuse": "trak/trak5/ribs1a.jpg",
+      "image": "/static/maps/octavus_assets/33204ab2dd694caa.webp",
+      "triangleCount": 782,
+      "scale": 0.5,
+      "rotation": 1,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        6,
+        93
+      ]
+    },
+    "94": {
+      "vslot": 94,
+      "rootCfgSlot": 51,
+      "sourceDiffuse": "philipk/pk02/floor05_c.png",
+      "image": "/static/maps/octavus_assets/f818fe290b84be9a.webp",
+      "triangleCount": 64,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        256
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        51,
+        94
+      ]
+    },
+    "95": {
+      "vslot": 95,
+      "rootCfgSlot": 42,
+      "sourceDiffuse": "philipk/pk02/generic01b_c.png",
+      "image": "/static/maps/octavus_assets/d9549cb183da75bc.webp",
+      "triangleCount": 448,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 81,
+      "chain": [
+        42,
+        95
+      ]
+    },
+    "96": {
+      "vslot": 96,
+      "rootCfgSlot": 7,
+      "sourceDiffuse": "trak/trak5/tile1e.jpg",
+      "image": "/static/maps/octavus_assets/faf0c135569f4276.webp",
+      "triangleCount": 4,
+      "scale": 1.0,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        2.0,
+        2.0,
+        2.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 81,
+      "chain": [
+        7,
+        98,
+        141,
+        140,
+        96
+      ]
+    },
+    "97": {
+      "vslot": 97,
+      "rootCfgSlot": 24,
+      "sourceDiffuse": "philipk/pk02/generic01b_c.png",
+      "image": "/static/maps/octavus_assets/d9549cb183da75bc.webp",
+      "triangleCount": 3468,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        24,
+        97
+      ]
+    },
+    "98": {
+      "vslot": 98,
+      "rootCfgSlot": 7,
+      "sourceDiffuse": "trak/trak5/tile1e.jpg",
+      "image": "/static/maps/octavus_assets/faf0c135569f4276.webp",
+      "triangleCount": 16,
+      "scale": 0.25,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        7,
+        98
+      ]
+    },
+    "99": {
+      "vslot": 99,
+      "rootCfgSlot": 5,
+      "sourceDiffuse": "trak/trak5/light3a.jpg",
+      "image": "/static/maps/octavus_assets/090183f6d0199fe3.webp",
+      "triangleCount": 48,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        64,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        5,
+        144,
+        112,
+        205,
+        139,
+        133,
+        157,
+        99
+      ]
+    },
+    "100": {
+      "vslot": 100,
+      "rootCfgSlot": 35,
+      "sourceDiffuse": "trak/trak6/trim1.jpg",
+      "image": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "triangleCount": 86,
+      "scale": 1.0,
+      "rotation": 1,
+      "offset": [
+        0,
+        160
+      ],
+      "color": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        35,
+        169,
+        123,
+        147,
+        146,
+        152,
+        151,
+        211,
+        200,
+        212,
+        180,
+        191,
+        92,
+        109,
+        160,
+        100
+      ]
+    },
+    "101": {
+      "vslot": 101,
+      "rootCfgSlot": 42,
+      "sourceDiffuse": "philipk/pk02/generic01b_c.png",
+      "image": "/static/maps/octavus_assets/d9549cb183da75bc.webp",
+      "triangleCount": 8,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 102,
+      "chain": [
+        42,
+        95,
+        101
+      ]
+    },
+    "102": {
+      "vslot": 102,
+      "rootCfgSlot": 31,
+      "sourceDiffuse": "jojo/sand01.png",
+      "image": "/static/maps/octavus_assets/880560c611c66ecc.webp",
+      "triangleCount": 2,
+      "scale": 6.0,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        31,
+        68,
+        102
+      ]
+    },
+    "103": {
+      "vslot": 103,
+      "rootCfgSlot": 31,
+      "sourceDiffuse": "jojo/sand01.png",
+      "image": "/static/maps/octavus_assets/880560c611c66ecc.webp",
+      "triangleCount": 4,
+      "scale": 0.25,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        0.9,
+        0.9,
+        0.9
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 82,
+      "chain": [
+        31,
+        68,
+        102,
+        81,
+        87,
+        103
+      ]
+    },
+    "104": {
+      "vslot": 104,
+      "rootCfgSlot": 59,
+      "sourceDiffuse": "trak/trak6/crate1.jpg",
+      "image": null,
+      "triangleCount": 4,
+      "scale": 0.25,
+      "rotation": 0,
+      "offset": [
+        512,
+        0
+      ],
+      "color": [
+        0.75,
+        0.75,
+        0.75
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        59,
+        105,
+        104
+      ]
+    },
+    "105": {
+      "vslot": 105,
+      "rootCfgSlot": 59,
+      "sourceDiffuse": "trak/trak6/crate1.jpg",
+      "image": null,
+      "triangleCount": 40,
+      "scale": 0.25,
+      "rotation": 0,
+      "offset": [
+        512,
+        0
+      ],
+      "color": [
+        0.75,
+        0.75,
+        0.75
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        59,
+        105
+      ]
+    },
+    "106": {
+      "vslot": 106,
+      "rootCfgSlot": 34,
+      "sourceDiffuse": "appleflap/danger.jpg",
+      "image": "/static/maps/octavus_assets/b2e15684532b472a.webp",
+      "triangleCount": 44,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        34,
+        106
+      ]
+    },
+    "107": {
+      "vslot": 107,
+      "rootCfgSlot": 41,
+      "sourceDiffuse": "philipk/pk02/floor12a_c.png",
+      "image": "/static/maps/octavus_assets/2fec6613f4a2daed.webp",
+      "triangleCount": 32,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        0.3,
+        0.3,
+        0.3
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        41,
+        107
+      ]
+    },
+    "108": {
+      "vslot": 108,
+      "rootCfgSlot": 9,
+      "sourceDiffuse": "trak/trak6/light1.jpg",
+      "image": "/static/maps/octavus_assets/b1153cd74704ff68.webp",
+      "triangleCount": 16,
+      "scale": 1.25,
+      "rotation": 0,
+      "offset": [
+        0,
+        256
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        0.2,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        9,
+        172,
+        108
+      ]
+    },
+    "109": {
+      "vslot": 109,
+      "rootCfgSlot": 35,
+      "sourceDiffuse": "trak/trak6/trim1.jpg",
+      "image": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "triangleCount": 1626,
+      "scale": 0.25,
+      "rotation": 1,
+      "offset": [
+        448,
+        0
+      ],
+      "color": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        35,
+        169,
+        123,
+        147,
+        146,
+        152,
+        151,
+        211,
+        200,
+        212,
+        180,
+        191,
+        92,
+        109
+      ]
+    },
+    "110": {
+      "vslot": 110,
+      "rootCfgSlot": 40,
+      "sourceDiffuse": "nieb/complex/wall01.png",
+      "image": "/static/maps/octavus_assets/617f939d226609c9.webp",
+      "triangleCount": 394,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        0.2,
+        0.2,
+        0.2
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 81,
+      "chain": [
+        40,
+        76,
+        148,
+        110
+      ]
+    },
+    "111": {
+      "vslot": 111,
+      "rootCfgSlot": 24,
+      "sourceDiffuse": "philipk/pk02/generic01b_c.png",
+      "image": "/static/maps/octavus_assets/d9549cb183da75bc.webp",
+      "triangleCount": 105,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 81,
+      "chain": [
+        24,
+        97,
+        75,
+        77,
+        154,
+        111
+      ]
+    },
+    "112": {
+      "vslot": 112,
+      "rootCfgSlot": 5,
+      "sourceDiffuse": "trak/trak5/light3a.jpg",
+      "image": "/static/maps/octavus_assets/090183f6d0199fe3.webp",
+      "triangleCount": 8,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        5,
+        144,
+        112
+      ]
+    },
+    "113": {
+      "vslot": 113,
+      "rootCfgSlot": 19,
+      "sourceDiffuse": "philipk/pk02/floor01_c.png",
+      "image": "/static/maps/octavus_assets/4f5b7749a658e15d.webp",
+      "triangleCount": 1248,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 81,
+      "chain": [
+        19,
+        80,
+        113
+      ]
+    },
+    "114": {
+      "vslot": 114,
+      "rootCfgSlot": 31,
+      "sourceDiffuse": "jojo/sand01.png",
+      "image": "/static/maps/octavus_assets/880560c611c66ecc.webp",
+      "triangleCount": 73,
+      "scale": 0.25,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        0.9,
+        0.9,
+        0.9
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 81,
+      "chain": [
+        31,
+        68,
+        102,
+        81,
+        87,
+        103,
+        114
+      ]
+    },
+    "115": {
+      "vslot": 115,
+      "rootCfgSlot": 47,
+      "sourceDiffuse": "nieb/complex/step03.png",
+      "image": "/static/maps/octavus_assets/b90967e4bc5efb1d.webp",
+      "triangleCount": 758,
+      "scale": 0.5,
+      "rotation": 1,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        47,
+        115
+      ]
+    },
+    "116": {
+      "vslot": 116,
+      "rootCfgSlot": 59,
+      "sourceDiffuse": "trak/trak6/crate1.jpg",
+      "image": null,
+      "triangleCount": 38,
+      "scale": 0.125,
+      "rotation": 0,
+      "offset": [
+        512,
+        0
+      ],
+      "color": [
+        0.75,
+        0.75,
+        0.75
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        59,
+        105,
+        104,
+        116
+      ]
+    },
+    "117": {
+      "vslot": 117,
+      "rootCfgSlot": 4,
+      "sourceDiffuse": "trak/trak6/tile3.jpg",
+      "image": "/static/maps/octavus_assets/31efdabf1d2afb45.webp",
+      "triangleCount": 20,
+      "scale": 0.125,
+      "rotation": 0,
+      "offset": [
+        128,
+        0
+      ],
+      "color": [
+        0.7,
+        0.7,
+        0.7
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        4,
+        121,
+        199,
+        188,
+        183,
+        181,
+        90,
+        117
+      ]
+    },
+    "118": {
+      "vslot": 118,
+      "rootCfgSlot": 26,
+      "sourceDiffuse": "philipk/pk02/trim04a_c.png",
+      "image": "/static/maps/octavus_assets/31bd5b5848488a12.webp",
+      "triangleCount": 68,
+      "scale": 0.5,
+      "rotation": 1,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        26,
+        118
+      ]
+    },
+    "119": {
+      "vslot": 119,
+      "rootCfgSlot": 65,
+      "sourceDiffuse": "<comp:100>cathode [tex = unixfreak/textures/planetsurvey.png]",
+      "image": null,
+      "triangleCount": 16,
+      "scale": 2.0,
+      "rotation": 1,
+      "offset": [
+        164,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        0.3,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        65,
+        203,
+        204,
+        119
+      ]
+    },
+    "120": {
+      "vslot": 120,
+      "rootCfgSlot": 65,
+      "sourceDiffuse": "<comp:100>cathode [tex = unixfreak/textures/planetsurvey.png]",
+      "image": null,
+      "triangleCount": 16,
+      "scale": 2.0,
+      "rotation": 1,
+      "offset": [
+        220,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        0.3,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        65,
+        203,
+        204,
+        119,
+        120
+      ]
+    },
+    "121": {
+      "vslot": 121,
+      "rootCfgSlot": 4,
+      "sourceDiffuse": "trak/trak6/tile3.jpg",
+      "image": "/static/maps/octavus_assets/31efdabf1d2afb45.webp",
+      "triangleCount": 156,
+      "scale": 0.25,
+      "rotation": 0,
+      "offset": [
+        448,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        4,
+        121
+      ]
+    },
+    "122": {
+      "vslot": 122,
+      "rootCfgSlot": 34,
+      "sourceDiffuse": "appleflap/danger.jpg",
+      "image": "/static/maps/octavus_assets/b2e15684532b472a.webp",
+      "triangleCount": 44,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        32,
+        0
+      ],
+      "color": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        34,
+        106,
+        122
+      ]
+    },
+    "123": {
+      "vslot": 123,
+      "rootCfgSlot": 35,
+      "sourceDiffuse": "trak/trak6/trim1.jpg",
+      "image": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "triangleCount": 790,
+      "scale": 0.5,
+      "rotation": 1,
+      "offset": [
+        128,
+        0
+      ],
+      "color": [
+        0.7,
+        0.7,
+        0.7
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        35,
+        169,
+        123
+      ]
+    },
+    "124": {
+      "vslot": 124,
+      "rootCfgSlot": 43,
+      "sourceDiffuse": "acerspyro/light1/light1.png",
+      "image": "/static/maps/octavus_assets/b6a21ae3c0164f1c.webp",
+      "triangleCount": 8,
+      "scale": 0.125,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        43,
+        143,
+        161,
+        124
+      ]
+    },
+    "125": {
+      "vslot": 125,
+      "rootCfgSlot": 43,
+      "sourceDiffuse": "acerspyro/light1/light1.png",
+      "image": "/static/maps/octavus_assets/b6a21ae3c0164f1c.webp",
+      "triangleCount": 24,
+      "scale": 0.25,
+      "rotation": 0,
+      "offset": [
+        128,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        43,
+        143,
+        161,
+        124,
+        164,
+        166,
+        125
+      ]
+    },
+    "126": {
+      "vslot": 126,
+      "rootCfgSlot": 34,
+      "sourceDiffuse": "appleflap/danger.jpg",
+      "image": "/static/maps/octavus_assets/b2e15684532b472a.webp",
+      "triangleCount": 16,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        32,
+        0
+      ],
+      "color": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 81,
+      "chain": [
+        34,
+        106,
+        122,
+        162,
+        126
+      ]
+    },
+    "127": {
+      "vslot": 127,
+      "rootCfgSlot": 41,
+      "sourceDiffuse": "philipk/pk02/floor12a_c.png",
+      "image": "/static/maps/octavus_assets/2fec6613f4a2daed.webp",
+      "triangleCount": 24,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        0.7,
+        0.3,
+        0.15
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 81,
+      "chain": [
+        41,
+        107,
+        127
+      ]
+    },
+    "128": {
+      "vslot": 128,
+      "rootCfgSlot": 22,
+      "sourceDiffuse": "philipk/pk02/floor06a_c.png",
+      "image": "/static/maps/octavus_assets/7e6e530f55a1bca3.webp",
+      "triangleCount": 32,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 81,
+      "chain": [
+        22,
+        128
+      ]
+    },
+    "129": {
+      "vslot": 129,
+      "rootCfgSlot": 34,
+      "sourceDiffuse": "appleflap/danger.jpg",
+      "image": "/static/maps/octavus_assets/b2e15684532b472a.webp",
+      "triangleCount": 144,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        32,
+        0
+      ],
+      "color": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 81,
+      "chain": [
+        34,
+        106,
+        122,
+        162,
+        126,
+        129
+      ]
+    },
+    "130": {
+      "vslot": 130,
+      "rootCfgSlot": 9,
+      "sourceDiffuse": "trak/trak6/light1.jpg",
+      "image": "/static/maps/octavus_assets/b1153cd74704ff68.webp",
+      "triangleCount": 16,
+      "scale": 1.25,
+      "rotation": 1,
+      "offset": [
+        0,
+        510
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        0.2,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        9,
+        172,
+        108,
+        130
+      ]
+    },
+    "131": {
+      "vslot": 131,
+      "rootCfgSlot": 30,
+      "sourceDiffuse": "jojo/map.png",
+      "image": null,
+      "triangleCount": 16,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        450,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        0.7,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        30,
+        131
+      ]
+    },
+    "132": {
+      "vslot": 132,
+      "rootCfgSlot": 37,
+      "sourceDiffuse": "misc/agf81/concrete1w_diffuse.png",
+      "image": "/static/maps/octavus_assets/bd907b2904b90d12.webp",
+      "triangleCount": 32,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        0.7,
+        0.7,
+        0.7
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 81,
+      "chain": [
+        37,
+        86,
+        89,
+        189,
+        201,
+        132
+      ]
+    },
+    "133": {
+      "vslot": 133,
+      "rootCfgSlot": 5,
+      "sourceDiffuse": "trak/trak5/light3a.jpg",
+      "image": "/static/maps/octavus_assets/090183f6d0199fe3.webp",
+      "triangleCount": 24,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        34,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        5,
+        144,
+        112,
+        205,
+        139,
+        133
+      ]
+    },
+    "134": {
+      "vslot": 134,
+      "rootCfgSlot": 15,
+      "sourceDiffuse": "philipk/pk02/light01b_c.png",
+      "image": "/static/maps/octavus_assets/af55446077b32bfd.webp",
+      "triangleCount": 32,
+      "scale": 1.0,
+      "rotation": 0,
+      "offset": [
+        64,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        15,
+        136,
+        134
+      ]
+    },
+    "135": {
+      "vslot": 135,
+      "rootCfgSlot": 56,
+      "sourceDiffuse": "dziq/metal_paint_old01",
+      "image": null,
+      "triangleCount": 4,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        0.3,
+        0.21,
+        0.18
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 81,
+      "chain": [
+        56,
+        84,
+        135
+      ]
+    },
+    "136": {
+      "vslot": 136,
+      "rootCfgSlot": 15,
+      "sourceDiffuse": "philipk/pk02/light01b_c.png",
+      "image": "/static/maps/octavus_assets/af55446077b32bfd.webp",
+      "triangleCount": 8,
+      "scale": 1.0,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        15,
+        136
+      ]
+    },
+    "137": {
+      "vslot": 137,
+      "rootCfgSlot": 37,
+      "sourceDiffuse": "misc/agf81/concrete1w_diffuse.png",
+      "image": "/static/maps/octavus_assets/bd907b2904b90d12.webp",
+      "triangleCount": 4,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        0.7,
+        0.7,
+        0.7
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 81,
+      "chain": [
+        37,
+        86,
+        89,
+        189,
+        201,
+        132,
+        137
+      ]
+    },
+    "138": {
+      "vslot": 138,
+      "rootCfgSlot": 24,
+      "sourceDiffuse": "philipk/pk02/generic01b_c.png",
+      "image": "/static/maps/octavus_assets/d9549cb183da75bc.webp",
+      "triangleCount": 8,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 81,
+      "chain": [
+        24,
+        97,
+        75,
+        77,
+        154,
+        111,
+        138
+      ]
+    },
+    "139": {
+      "vslot": 139,
+      "rootCfgSlot": 5,
+      "sourceDiffuse": "trak/trak5/light3a.jpg",
+      "image": "/static/maps/octavus_assets/090183f6d0199fe3.webp",
+      "triangleCount": 26,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        32,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        5,
+        144,
+        112,
+        205,
+        139
+      ]
+    },
+    "140": {
+      "vslot": 140,
+      "rootCfgSlot": 7,
+      "sourceDiffuse": "trak/trak5/tile1e.jpg",
+      "image": "/static/maps/octavus_assets/faf0c135569f4276.webp",
+      "triangleCount": 16,
+      "scale": 0.25,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        2.0,
+        2.0,
+        2.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        7,
+        98,
+        141,
+        140
+      ]
+    },
+    "141": {
+      "vslot": 141,
+      "rootCfgSlot": 7,
+      "sourceDiffuse": "trak/trak5/tile1e.jpg",
+      "image": "/static/maps/octavus_assets/faf0c135569f4276.webp",
+      "triangleCount": 20,
+      "scale": 0.25,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        2.0,
+        2.0,
+        2.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        7,
+        98,
+        141
+      ]
+    },
+    "142": {
+      "vslot": 142,
+      "rootCfgSlot": 35,
+      "sourceDiffuse": "trak/trak6/trim1.jpg",
+      "image": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "triangleCount": 416,
+      "scale": 1.0,
+      "rotation": 1,
+      "offset": [
+        0,
+        128
+      ],
+      "color": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        35,
+        169,
+        123,
+        147,
+        146,
+        152,
+        151,
+        211,
+        200,
+        212,
+        180,
+        191,
+        92,
+        109,
+        160,
+        100,
+        149,
+        142
+      ]
+    },
+    "143": {
+      "vslot": 143,
+      "rootCfgSlot": 43,
+      "sourceDiffuse": "acerspyro/light1/light1.png",
+      "image": "/static/maps/octavus_assets/b6a21ae3c0164f1c.webp",
+      "triangleCount": 20,
+      "scale": 0.125,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        43,
+        143
+      ]
+    },
+    "144": {
+      "vslot": 144,
+      "rootCfgSlot": 5,
+      "sourceDiffuse": "trak/trak5/light3a.jpg",
+      "image": "/static/maps/octavus_assets/090183f6d0199fe3.webp",
+      "triangleCount": 12,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        5,
+        144
+      ]
+    },
+    "145": {
+      "vslot": 145,
+      "rootCfgSlot": 52,
+      "sourceDiffuse": "acerspyro/light1/light1.png",
+      "image": "/static/maps/octavus_assets/b6a21ae3c0164f1c.webp",
+      "triangleCount": 4,
+      "scale": 0.125,
+      "rotation": 0,
+      "offset": [
+        128,
+        128
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        52,
+        178,
+        145
+      ]
+    },
+    "146": {
+      "vslot": 146,
+      "rootCfgSlot": 35,
+      "sourceDiffuse": "trak/trak6/trim1.jpg",
+      "image": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "triangleCount": 2,
+      "scale": 0.5,
+      "rotation": 7,
+      "offset": [
+        256,
+        0
+      ],
+      "color": [
+        0.7,
+        0.7,
+        0.7
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        35,
+        169,
+        123,
+        147,
+        146
+      ]
+    },
+    "147": {
+      "vslot": 147,
+      "rootCfgSlot": 35,
+      "sourceDiffuse": "trak/trak6/trim1.jpg",
+      "image": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "triangleCount": 10,
+      "scale": 0.5,
+      "rotation": 3,
+      "offset": [
+        128,
+        0
+      ],
+      "color": [
+        0.7,
+        0.7,
+        0.7
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        35,
+        169,
+        123,
+        147
+      ]
+    },
+    "148": {
+      "vslot": 148,
+      "rootCfgSlot": 40,
+      "sourceDiffuse": "nieb/complex/wall01.png",
+      "image": "/static/maps/octavus_assets/617f939d226609c9.webp",
+      "triangleCount": 72,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        40,
+        76,
+        148
+      ]
+    },
+    "149": {
+      "vslot": 149,
+      "rootCfgSlot": 35,
+      "sourceDiffuse": "trak/trak6/trim1.jpg",
+      "image": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "triangleCount": 64,
+      "scale": 0.25,
+      "rotation": 1,
+      "offset": [
+        0,
+        160
+      ],
+      "color": [
+        1.0,
+        0.666667,
+        0.5
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        35,
+        169,
+        123,
+        147,
+        146,
+        152,
+        151,
+        211,
+        200,
+        212,
+        180,
+        191,
+        92,
+        109,
+        160,
+        100,
+        149
+      ]
+    },
+    "150": {
+      "vslot": 150,
+      "rootCfgSlot": 28,
+      "sourceDiffuse": "philipk/pk02/wall_big01b_c.png",
+      "image": "/static/maps/octavus_assets/99d030dc4ac4f892.webp",
+      "triangleCount": 44,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        1110704128,
+        1060439283
+      ],
+      "color": [
+        0.7071068,
+        0.0,
+        0.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        28,
+        167,
+        196,
+        150
+      ]
+    },
+    "151": {
+      "vslot": 151,
+      "rootCfgSlot": 35,
+      "sourceDiffuse": "trak/trak6/trim1.jpg",
+      "image": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "triangleCount": 2,
+      "scale": 0.5,
+      "rotation": 7,
+      "offset": [
+        640,
+        0
+      ],
+      "color": [
+        0.7,
+        0.7,
+        0.7
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        35,
+        169,
+        123,
+        147,
+        146,
+        152,
+        151
+      ]
+    },
+    "152": {
+      "vslot": 152,
+      "rootCfgSlot": 35,
+      "sourceDiffuse": "trak/trak6/trim1.jpg",
+      "image": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "triangleCount": 16,
+      "scale": 0.5,
+      "rotation": 7,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        0.7,
+        0.7,
+        0.7
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        35,
+        169,
+        123,
+        147,
+        146,
+        152
+      ]
+    },
+    "153": {
+      "vslot": 153,
+      "rootCfgSlot": 65,
+      "sourceDiffuse": "<comp:100>cathode [tex = unixfreak/textures/planetsurvey.png]",
+      "image": null,
+      "triangleCount": 4,
+      "scale": 1.0,
+      "rotation": 1,
+      "offset": [
+        0,
+        36
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        0.3,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        65,
+        203,
+        204,
+        119,
+        120,
+        158,
+        153
+      ]
+    },
+    "154": {
+      "vslot": 154,
+      "rootCfgSlot": 24,
+      "sourceDiffuse": "philipk/pk02/generic01b_c.png",
+      "image": "/static/maps/octavus_assets/d9549cb183da75bc.webp",
+      "triangleCount": 8,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        24,
+        97,
+        75,
+        77,
+        154
+      ]
+    },
+    "155": {
+      "vslot": 155,
+      "rootCfgSlot": 8,
+      "sourceDiffuse": "trak/trak5/trim3e.jpg",
+      "image": "/static/maps/octavus_assets/d03b52f2f4a54976.webp",
+      "triangleCount": 16,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        8,
+        155
+      ]
+    },
+    "156": {
+      "vslot": 156,
+      "rootCfgSlot": 12,
+      "sourceDiffuse": "philipk/pk01/floor02b_d.png",
+      "image": "/static/maps/octavus_assets/8742f853adc21e03.webp",
+      "triangleCount": 8,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        64,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        12,
+        170,
+        177,
+        156
+      ]
+    },
+    "157": {
+      "vslot": 157,
+      "rootCfgSlot": 5,
+      "sourceDiffuse": "trak/trak5/light3a.jpg",
+      "image": "/static/maps/octavus_assets/090183f6d0199fe3.webp",
+      "triangleCount": 14,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        98,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        5,
+        144,
+        112,
+        205,
+        139,
+        133,
+        157
+      ]
+    },
+    "158": {
+      "vslot": 158,
+      "rootCfgSlot": 65,
+      "sourceDiffuse": "<comp:100>cathode [tex = unixfreak/textures/planetsurvey.png]",
+      "image": null,
+      "triangleCount": 4,
+      "scale": 1.0,
+      "rotation": 1,
+      "offset": [
+        0,
+        226
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        0.3,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        65,
+        203,
+        204,
+        119,
+        120,
+        158
+      ]
+    },
+    "159": {
+      "vslot": 159,
+      "rootCfgSlot": 28,
+      "sourceDiffuse": "philipk/pk02/wall_big01b_c.png",
+      "image": "/static/maps/octavus_assets/99d030dc4ac4f892.webp",
+      "triangleCount": 57,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        1110704128,
+        1060439283
+      ],
+      "color": [
+        0.7071068,
+        0.0,
+        0.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        28,
+        167,
+        196,
+        150,
+        159
+      ]
+    },
+    "160": {
+      "vslot": 160,
+      "rootCfgSlot": 35,
+      "sourceDiffuse": "trak/trak6/trim1.jpg",
+      "image": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "triangleCount": 416,
+      "scale": 0.25,
+      "rotation": 1,
+      "offset": [
+        448,
+        0
+      ],
+      "color": [
+        1.0,
+        0.666667,
+        0.5
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        35,
+        169,
+        123,
+        147,
+        146,
+        152,
+        151,
+        211,
+        200,
+        212,
+        180,
+        191,
+        92,
+        109,
+        160
+      ]
+    },
+    "161": {
+      "vslot": 161,
+      "rootCfgSlot": 43,
+      "sourceDiffuse": "acerspyro/light1/light1.png",
+      "image": "/static/maps/octavus_assets/b6a21ae3c0164f1c.webp",
+      "triangleCount": 24,
+      "scale": 0.125,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        43,
+        143,
+        161
+      ]
+    },
+    "162": {
+      "vslot": 162,
+      "rootCfgSlot": 34,
+      "sourceDiffuse": "appleflap/danger.jpg",
+      "image": "/static/maps/octavus_assets/b2e15684532b472a.webp",
+      "triangleCount": 20,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        32,
+        0
+      ],
+      "color": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        34,
+        106,
+        122,
+        162
+      ]
+    },
+    "163": {
+      "vslot": 163,
+      "rootCfgSlot": 11,
+      "sourceDiffuse": "philipk/pk01/floor01a_d.png",
+      "image": "/static/maps/octavus_assets/07717366c27b6ef9.webp",
+      "triangleCount": 46,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 31,
+      "chain": [
+        11,
+        163
+      ]
+    },
+    "164": {
+      "vslot": 164,
+      "rootCfgSlot": 43,
+      "sourceDiffuse": "acerspyro/light1/light1.png",
+      "image": "/static/maps/octavus_assets/b6a21ae3c0164f1c.webp",
+      "triangleCount": 16,
+      "scale": 0.125,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        43,
+        143,
+        161,
+        124,
+        164
+      ]
+    },
+    "165": {
+      "vslot": 165,
+      "rootCfgSlot": 23,
+      "sourceDiffuse": "philipk/pk02/floor07_c.png",
+      "image": "/static/maps/octavus_assets/e5ed5a491e9b66c0.webp",
+      "triangleCount": 8,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 81,
+      "chain": [
+        23,
+        165
+      ]
+    },
+    "166": {
+      "vslot": 166,
+      "rootCfgSlot": 43,
+      "sourceDiffuse": "acerspyro/light1/light1.png",
+      "image": "/static/maps/octavus_assets/b6a21ae3c0164f1c.webp",
+      "triangleCount": 40,
+      "scale": 0.125,
+      "rotation": 0,
+      "offset": [
+        128,
+        128
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        43,
+        143,
+        161,
+        124,
+        164,
+        166
+      ]
+    },
+    "167": {
+      "vslot": 167,
+      "rootCfgSlot": 28,
+      "sourceDiffuse": "philipk/pk02/wall_big01b_c.png",
+      "image": "/static/maps/octavus_assets/99d030dc4ac4f892.webp",
+      "triangleCount": 16,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        28,
+        167
+      ]
+    },
+    "168": {
+      "vslot": 168,
+      "rootCfgSlot": 6,
+      "sourceDiffuse": "trak/trak5/ribs1a.jpg",
+      "image": "/static/maps/octavus_assets/33204ab2dd694caa.webp",
+      "triangleCount": 170,
+      "scale": 0.5,
+      "rotation": 1,
+      "offset": [
+        32,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        6,
+        93,
+        168
+      ]
+    },
+    "169": {
+      "vslot": 169,
+      "rootCfgSlot": 35,
+      "sourceDiffuse": "trak/trak6/trim1.jpg",
+      "image": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "triangleCount": 320,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        128,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        35,
+        169
+      ]
+    },
+    "170": {
+      "vslot": 170,
+      "rootCfgSlot": 12,
+      "sourceDiffuse": "philipk/pk01/floor02b_d.png",
+      "image": "/static/maps/octavus_assets/8742f853adc21e03.webp",
+      "triangleCount": 8,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        64,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        12,
+        170
+      ]
+    },
+    "171": {
+      "vslot": 171,
+      "rootCfgSlot": 25,
+      "sourceDiffuse": "philipk/pk02/switches01a_c.png",
+      "image": "/static/maps/octavus_assets/41105fa041c4d4e8.webp",
+      "triangleCount": 36,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        64,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        25,
+        182,
+        171
+      ]
+    },
+    "172": {
+      "vslot": 172,
+      "rootCfgSlot": 9,
+      "sourceDiffuse": "trak/trak6/light1.jpg",
+      "image": "/static/maps/octavus_assets/b1153cd74704ff68.webp",
+      "triangleCount": 32,
+      "scale": 1.25,
+      "rotation": 0,
+      "offset": [
+        0,
+        510
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        0.2,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        9,
+        172
+      ]
+    },
+    "173": {
+      "vslot": 173,
+      "rootCfgSlot": 48,
+      "sourceDiffuse": "acerspyro/light2/light2.png",
+      "image": "/static/maps/octavus_assets/f78d6834fa64e58e.webp",
+      "triangleCount": 8,
+      "scale": 0.25,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        48,
+        173
+      ]
+    },
+    "174": {
+      "vslot": 174,
+      "rootCfgSlot": 5,
+      "sourceDiffuse": "trak/trak5/light3a.jpg",
+      "image": "/static/maps/octavus_assets/090183f6d0199fe3.webp",
+      "triangleCount": 64,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        64,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        5,
+        144,
+        112,
+        205,
+        139,
+        133,
+        157,
+        99,
+        174
+      ]
+    },
+    "175": {
+      "vslot": 175,
+      "rootCfgSlot": 40,
+      "sourceDiffuse": "nieb/complex/wall01.png",
+      "image": "/static/maps/octavus_assets/617f939d226609c9.webp",
+      "triangleCount": 29,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        0.2,
+        0.2,
+        0.2
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 70,
+      "chain": [
+        40,
+        76,
+        148,
+        110,
+        175
+      ]
+    },
+    "176": {
+      "vslot": 176,
+      "rootCfgSlot": 36,
+      "sourceDiffuse": "mikeplus64/plain.png",
+      "image": "/static/maps/octavus_assets/32bf0d230d8253dc.webp",
+      "triangleCount": 58,
+      "scale": 1.0,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        36,
+        176
+      ]
+    },
+    "177": {
+      "vslot": 177,
+      "rootCfgSlot": 12,
+      "sourceDiffuse": "philipk/pk01/floor02b_d.png",
+      "image": "/static/maps/octavus_assets/8742f853adc21e03.webp",
+      "triangleCount": 8,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        192,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        12,
+        170,
+        177
+      ]
+    },
+    "178": {
+      "vslot": 178,
+      "rootCfgSlot": 52,
+      "sourceDiffuse": "acerspyro/light1/light1.png",
+      "image": "/static/maps/octavus_assets/b6a21ae3c0164f1c.webp",
+      "triangleCount": 8,
+      "scale": 0.25,
+      "rotation": 0,
+      "offset": [
+        128,
+        128
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        52,
+        178
+      ]
+    },
+    "179": {
+      "vslot": 179,
+      "rootCfgSlot": 15,
+      "sourceDiffuse": "philipk/pk02/light01b_c.png",
+      "image": "/static/maps/octavus_assets/af55446077b32bfd.webp",
+      "triangleCount": 48,
+      "scale": 0.25,
+      "rotation": 0,
+      "offset": [
+        64,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        15,
+        136,
+        134,
+        179
+      ]
+    },
+    "180": {
+      "vslot": 180,
+      "rootCfgSlot": 35,
+      "sourceDiffuse": "trak/trak6/trim1.jpg",
+      "image": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "triangleCount": 66,
+      "scale": 0.25,
+      "rotation": 1,
+      "offset": [
+        448,
+        0
+      ],
+      "color": [
+        0.7,
+        0.7,
+        0.7
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        35,
+        169,
+        123,
+        147,
+        146,
+        152,
+        151,
+        211,
+        200,
+        212,
+        180
+      ]
+    },
+    "181": {
+      "vslot": 181,
+      "rootCfgSlot": 4,
+      "sourceDiffuse": "trak/trak6/tile3.jpg",
+      "image": "/static/maps/octavus_assets/31efdabf1d2afb45.webp",
+      "triangleCount": 104,
+      "scale": 0.125,
+      "rotation": 0,
+      "offset": [
+        64,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        4,
+        121,
+        199,
+        188,
+        183,
+        181
+      ]
+    },
+    "182": {
+      "vslot": 182,
+      "rootCfgSlot": 25,
+      "sourceDiffuse": "philipk/pk02/switches01a_c.png",
+      "image": "/static/maps/octavus_assets/41105fa041c4d4e8.webp",
+      "triangleCount": 12,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        64,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        25,
+        182
+      ]
+    },
+    "183": {
+      "vslot": 183,
+      "rootCfgSlot": 4,
+      "sourceDiffuse": "trak/trak6/tile3.jpg",
+      "image": "/static/maps/octavus_assets/31efdabf1d2afb45.webp",
+      "triangleCount": 18,
+      "scale": 0.25,
+      "rotation": 0,
+      "offset": [
+        64,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        4,
+        121,
+        199,
+        188,
+        183
+      ]
+    },
+    "184": {
+      "vslot": 184,
+      "rootCfgSlot": 54,
+      "sourceDiffuse": "jojo/sand01.png",
+      "image": "/static/maps/octavus_assets/880560c611c66ecc.webp",
+      "triangleCount": 7,
+      "scale": 1.0,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        0.9,
+        0.9,
+        0.9
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        54,
+        184
+      ]
+    },
+    "185": {
+      "vslot": 185,
+      "rootCfgSlot": 20,
+      "sourceDiffuse": "philipk/pk02/floor03_c.png",
+      "image": null,
+      "triangleCount": 12,
+      "scale": 1.0,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        20,
+        185
+      ]
+    },
+    "186": {
+      "vslot": 186,
+      "rootCfgSlot": 29,
+      "sourceDiffuse": "jojo/windowstile04_g.png",
+      "image": "/static/maps/octavus_assets/8df50b2f8a5569bd.webp",
+      "triangleCount": 1,
+      "scale": 8.0,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        29,
+        186
+      ]
+    },
+    "187": {
+      "vslot": 187,
+      "rootCfgSlot": 43,
+      "sourceDiffuse": "acerspyro/light1/light1.png",
+      "image": "/static/maps/octavus_assets/b6a21ae3c0164f1c.webp",
+      "triangleCount": 32,
+      "scale": 0.25,
+      "rotation": 0,
+      "offset": [
+        128,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        43,
+        143,
+        161,
+        124,
+        164,
+        166,
+        125,
+        187
+      ]
+    },
+    "188": {
+      "vslot": 188,
+      "rootCfgSlot": 4,
+      "sourceDiffuse": "trak/trak6/tile3.jpg",
+      "image": "/static/maps/octavus_assets/31efdabf1d2afb45.webp",
+      "triangleCount": 90,
+      "scale": 0.25,
+      "rotation": 0,
+      "offset": [
+        64,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        4,
+        121,
+        199,
+        188
+      ]
+    },
+    "189": {
+      "vslot": 189,
+      "rootCfgSlot": 37,
+      "sourceDiffuse": "misc/agf81/concrete1w_diffuse.png",
+      "image": "/static/maps/octavus_assets/bd907b2904b90d12.webp",
+      "triangleCount": 1388,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        37,
+        86,
+        89,
+        189
+      ]
+    },
+    "190": {
+      "vslot": 190,
+      "rootCfgSlot": 4,
+      "sourceDiffuse": "trak/trak6/tile3.jpg",
+      "image": "/static/maps/octavus_assets/31efdabf1d2afb45.webp",
+      "triangleCount": 389,
+      "scale": 0.125,
+      "rotation": 0,
+      "offset": [
+        128,
+        0
+      ],
+      "color": [
+        0.7,
+        0.7,
+        0.7
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        4,
+        121,
+        199,
+        188,
+        183,
+        181,
+        90,
+        117,
+        190
+      ]
+    },
+    "191": {
+      "vslot": 191,
+      "rootCfgSlot": 35,
+      "sourceDiffuse": "trak/trak6/trim1.jpg",
+      "image": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "triangleCount": 68,
+      "scale": 0.25,
+      "rotation": 1,
+      "offset": [
+        448,
+        0
+      ],
+      "color": [
+        0.7,
+        0.7,
+        0.7
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        35,
+        169,
+        123,
+        147,
+        146,
+        152,
+        151,
+        211,
+        200,
+        212,
+        180,
+        191
+      ]
+    },
+    "192": {
+      "vslot": 192,
+      "rootCfgSlot": 4,
+      "sourceDiffuse": "trak/trak6/tile3.jpg",
+      "image": "/static/maps/octavus_assets/31efdabf1d2afb45.webp",
+      "triangleCount": 104,
+      "scale": 0.125,
+      "rotation": 0,
+      "offset": [
+        128,
+        0
+      ],
+      "color": [
+        0.7,
+        0.7,
+        0.7
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        4,
+        121,
+        199,
+        188,
+        183,
+        181,
+        90,
+        117,
+        190,
+        208,
+        192
+      ]
+    },
+    "193": {
+      "vslot": 193,
+      "rootCfgSlot": 36,
+      "sourceDiffuse": "mikeplus64/plain.png",
+      "image": "/static/maps/octavus_assets/32bf0d230d8253dc.webp",
+      "triangleCount": 12,
+      "scale": 1.0,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        36,
+        176,
+        193
+      ]
+    },
+    "194": {
+      "vslot": 194,
+      "rootCfgSlot": 9,
+      "sourceDiffuse": "trak/trak6/light1.jpg",
+      "image": "/static/maps/octavus_assets/b1153cd74704ff68.webp",
+      "triangleCount": 8,
+      "scale": 1.25,
+      "rotation": 1,
+      "offset": [
+        502,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        0.2,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        9,
+        172,
+        108,
+        130,
+        194
+      ]
+    },
+    "195": {
+      "vslot": 195,
+      "rootCfgSlot": 9,
+      "sourceDiffuse": "trak/trak6/light1.jpg",
+      "image": "/static/maps/octavus_assets/b1153cd74704ff68.webp",
+      "triangleCount": 8,
+      "scale": 1.25,
+      "rotation": 1,
+      "offset": [
+        14,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        0.2,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        9,
+        172,
+        108,
+        130,
+        194,
+        195
+      ]
+    },
+    "196": {
+      "vslot": 196,
+      "rootCfgSlot": 28,
+      "sourceDiffuse": "philipk/pk02/wall_big01b_c.png",
+      "image": "/static/maps/octavus_assets/99d030dc4ac4f892.webp",
+      "triangleCount": 98,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        1110704128,
+        1060439283
+      ],
+      "color": [
+        0.7071068,
+        0.0,
+        0.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        28,
+        167,
+        196
+      ]
+    },
+    "197": {
+      "vslot": 197,
+      "rootCfgSlot": 7,
+      "sourceDiffuse": "trak/trak5/tile1e.jpg",
+      "image": "/static/maps/octavus_assets/faf0c135569f4276.webp",
+      "triangleCount": 24,
+      "scale": 1.0,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        2.0,
+        2.0,
+        2.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 81,
+      "chain": [
+        7,
+        98,
+        141,
+        140,
+        96,
+        197
+      ]
+    },
+    "198": {
+      "vslot": 198,
+      "rootCfgSlot": 5,
+      "sourceDiffuse": "trak/trak5/light3a.jpg",
+      "image": "/static/maps/octavus_assets/090183f6d0199fe3.webp",
+      "triangleCount": 2,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        64,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 81,
+      "chain": [
+        5,
+        144,
+        112,
+        205,
+        139,
+        133,
+        157,
+        99,
+        174,
+        198
+      ]
+    },
+    "199": {
+      "vslot": 199,
+      "rootCfgSlot": 4,
+      "sourceDiffuse": "trak/trak6/tile3.jpg",
+      "image": "/static/maps/octavus_assets/31efdabf1d2afb45.webp",
+      "triangleCount": 84,
+      "scale": 0.25,
+      "rotation": 0,
+      "offset": [
+        448,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        4,
+        121,
+        199
+      ]
+    },
+    "200": {
+      "vslot": 200,
+      "rootCfgSlot": 35,
+      "sourceDiffuse": "trak/trak6/trim1.jpg",
+      "image": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "triangleCount": 46,
+      "scale": 0.5,
+      "rotation": 1,
+      "offset": [
+        512,
+        0
+      ],
+      "color": [
+        0.7,
+        0.7,
+        0.7
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        35,
+        169,
+        123,
+        147,
+        146,
+        152,
+        151,
+        211,
+        200
+      ]
+    },
+    "201": {
+      "vslot": 201,
+      "rootCfgSlot": 37,
+      "sourceDiffuse": "misc/agf81/concrete1w_diffuse.png",
+      "image": "/static/maps/octavus_assets/bd907b2904b90d12.webp",
+      "triangleCount": 144,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        0.7,
+        0.7,
+        0.7
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        37,
+        86,
+        89,
+        189,
+        201
+      ]
+    },
+    "202": {
+      "vslot": 202,
+      "rootCfgSlot": 39,
+      "sourceDiffuse": "nieb/complex/step03.png",
+      "image": "/static/maps/octavus_assets/b90967e4bc5efb1d.webp",
+      "triangleCount": 52,
+      "scale": 0.5,
+      "rotation": 1,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        39,
+        202
+      ]
+    },
+    "203": {
+      "vslot": 203,
+      "rootCfgSlot": 65,
+      "sourceDiffuse": "<comp:100>cathode [tex = unixfreak/textures/planetsurvey.png]",
+      "image": null,
+      "triangleCount": 4,
+      "scale": 1.0,
+      "rotation": 0,
+      "offset": [
+        0,
+        64
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        0.3,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        65,
+        203
+      ]
+    },
+    "204": {
+      "vslot": 204,
+      "rootCfgSlot": 65,
+      "sourceDiffuse": "<comp:100>cathode [tex = unixfreak/textures/planetsurvey.png]",
+      "image": null,
+      "triangleCount": 4,
+      "scale": 1.0,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        0.3,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        65,
+        203,
+        204
+      ]
+    },
+    "205": {
+      "vslot": 205,
+      "rootCfgSlot": 5,
+      "sourceDiffuse": "trak/trak5/light3a.jpg",
+      "image": "/static/maps/octavus_assets/090183f6d0199fe3.webp",
+      "triangleCount": 4,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        5,
+        144,
+        112,
+        205
+      ]
+    },
+    "206": {
+      "vslot": 206,
+      "rootCfgSlot": 5,
+      "sourceDiffuse": "trak/trak5/light3a.jpg",
+      "image": "/static/maps/octavus_assets/090183f6d0199fe3.webp",
+      "triangleCount": 96,
+      "scale": 0.25,
+      "rotation": 0,
+      "offset": [
+        64,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 81,
+      "chain": [
+        5,
+        144,
+        112,
+        205,
+        139,
+        133,
+        157,
+        99,
+        174,
+        198,
+        206
+      ]
+    },
+    "207": {
+      "vslot": 207,
+      "rootCfgSlot": 43,
+      "sourceDiffuse": "acerspyro/light1/light1.png",
+      "image": "/static/maps/octavus_assets/b6a21ae3c0164f1c.webp",
+      "triangleCount": 32,
+      "scale": 0.25,
+      "rotation": 0,
+      "offset": [
+        128,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        43,
+        143,
+        161,
+        124,
+        164,
+        166,
+        125,
+        187,
+        207
+      ]
+    },
+    "208": {
+      "vslot": 208,
+      "rootCfgSlot": 4,
+      "sourceDiffuse": "trak/trak6/tile3.jpg",
+      "image": "/static/maps/octavus_assets/31efdabf1d2afb45.webp",
+      "triangleCount": 20,
+      "scale": 0.125,
+      "rotation": 0,
+      "offset": [
+        128,
+        0
+      ],
+      "color": [
+        0.7,
+        0.7,
+        0.7
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        4,
+        121,
+        199,
+        188,
+        183,
+        181,
+        90,
+        117,
+        190,
+        208
+      ]
+    },
+    "209": {
+      "vslot": 209,
+      "rootCfgSlot": 32,
+      "sourceDiffuse": "philipk/pk02/switches01c_c.png",
+      "image": "/static/maps/octavus_assets/397b450a7e4b8ed3.webp",
+      "triangleCount": 2,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        32,
+        210,
+        209
+      ]
+    },
+    "210": {
+      "vslot": 210,
+      "rootCfgSlot": 32,
+      "sourceDiffuse": "philipk/pk02/switches01c_c.png",
+      "image": "/static/maps/octavus_assets/397b450a7e4b8ed3.webp",
+      "triangleCount": 2,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        32,
+        210
+      ]
+    },
+    "211": {
+      "vslot": 211,
+      "rootCfgSlot": 35,
+      "sourceDiffuse": "trak/trak6/trim1.jpg",
+      "image": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "triangleCount": 12,
+      "scale": 0.5,
+      "rotation": 1,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        0.7,
+        0.7,
+        0.7
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        35,
+        169,
+        123,
+        147,
+        146,
+        152,
+        151,
+        211
+      ]
+    },
+    "212": {
+      "vslot": 212,
+      "rootCfgSlot": 35,
+      "sourceDiffuse": "trak/trak6/trim1.jpg",
+      "image": "/static/maps/octavus_assets/1b74f9920c0903db.webp",
+      "triangleCount": 2,
+      "scale": 0.5,
+      "rotation": 1,
+      "offset": [
+        448,
+        0
+      ],
+      "color": [
+        0.7,
+        0.7,
+        0.7
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        35,
+        169,
+        123,
+        147,
+        146,
+        152,
+        151,
+        211,
+        200,
+        212
+      ]
+    },
+    "213": {
+      "vslot": 213,
+      "rootCfgSlot": 19,
+      "sourceDiffuse": "philipk/pk02/floor01_c.png",
+      "image": "/static/maps/octavus_assets/4f5b7749a658e15d.webp",
+      "triangleCount": 459,
+      "scale": 0.5,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 81,
+      "chain": [
+        19,
+        80,
+        113,
+        213
+      ]
+    },
+    "214": {
+      "vslot": 214,
+      "rootCfgSlot": 59,
+      "sourceDiffuse": "trak/trak6/crate1.jpg",
+      "image": null,
+      "triangleCount": 15,
+      "scale": 0.125,
+      "rotation": 0,
+      "offset": [
+        512,
+        0
+      ],
+      "color": [
+        0.95,
+        0.95,
+        0.95
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        59,
+        105,
+        104,
+        116,
+        215,
+        214
+      ]
+    },
+    "215": {
+      "vslot": 215,
+      "rootCfgSlot": 59,
+      "sourceDiffuse": "trak/trak6/crate1.jpg",
+      "image": null,
+      "triangleCount": 6,
+      "scale": 0.125,
+      "rotation": 0,
+      "offset": [
+        512,
+        0
+      ],
+      "color": [
+        0.65,
+        0.65,
+        0.65
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        59,
+        105,
+        104,
+        116,
+        215
+      ]
+    },
+    "216": {
+      "vslot": 216,
+      "rootCfgSlot": 59,
+      "sourceDiffuse": "trak/trak6/crate1.jpg",
+      "image": null,
+      "triangleCount": 2,
+      "scale": 0.125,
+      "rotation": 0,
+      "offset": [
+        512,
+        0
+      ],
+      "color": [
+        0.55,
+        0.55,
+        0.55
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        59,
+        105,
+        104,
+        116,
+        215,
+        214,
+        216
+      ]
+    },
+    "217": {
+      "vslot": 217,
+      "rootCfgSlot": 61,
+      "sourceDiffuse": "torley/desat/grittyblack2clear3.png",
+      "image": null,
+      "triangleCount": 8,
+      "scale": 1.0,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        0.6,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        61,
+        88,
+        217
+      ]
+    },
+    "218": {
+      "vslot": 218,
+      "rootCfgSlot": 1,
+      "sourceDiffuse": "mikeplus64/plain.png",
+      "image": "/static/maps/octavus_assets/32bf0d230d8253dc.webp",
+      "triangleCount": 0,
+      "scale": 1.0,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        0.7,
+        0.7,
+        0.7
+      ],
+      "alpha": [
+        0.6,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        1,
+        73,
+        218
+      ]
+    },
+    "219": {
+      "vslot": 219,
+      "rootCfgSlot": 60,
+      "sourceDiffuse": "torley/desat/clumpedverticalpaint.png",
+      "image": null,
+      "triangleCount": 144,
+      "scale": 0.25,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        60,
+        219
+      ]
+    },
+    "220": {
+      "vslot": 220,
+      "rootCfgSlot": 58,
+      "sourceDiffuse": "jojo/interface03.png",
+      "image": null,
+      "triangleCount": 24,
+      "scale": 0.125,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        58,
+        220
+      ]
+    },
+    "221": {
+      "vslot": 221,
+      "rootCfgSlot": 10,
+      "sourceDiffuse": "philipk/pk01/panel_small01_d.png",
+      "image": "/static/maps/octavus_assets/9cf312cde81a1005.webp",
+      "triangleCount": 16,
+      "scale": 1.0,
+      "rotation": 0,
+      "offset": [
+        0,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        10,
+        221
+      ]
+    },
+    "222": {
+      "vslot": 222,
+      "rootCfgSlot": 10,
+      "sourceDiffuse": "philipk/pk01/panel_small01_d.png",
+      "image": "/static/maps/octavus_assets/9cf312cde81a1005.webp",
+      "triangleCount": 6,
+      "scale": 1.0,
+      "rotation": 2,
+      "offset": [
+        0,
+        120
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha": [
+        1.0,
+        0.0
+      ],
+      "layer": 0,
+      "chain": [
+        10,
+        221,
+        222
+      ]
+    }
+  },
+  "liveMapModified": false
+}
