@@ -1,6 +1,6 @@
 {
   "status": "failed",
-  "verifiedAt": "2026-11-18T13:49:13.451139+00:00",
+  "verifiedAt": "2026-11-18T13:49:44.504816+00:00",
   "steps": {
     "octavusServerMotion": "failure",
     "browserImportClosure": "skipped",
@@ -33,10 +33,10 @@
       "ValueError: Native mesh movement timestep does not match the arena",
       "",
       "----------------------------------------------------------------------",
-      "Ran 10 tests in 0.437s",
+      "Ran 10 tests in 0.487s",
       "",
       "FAILED (errors=3)",
-      "Octavus exact ground probes: reference=0.0030s accelerated=0.0003s speedup=9.3x"
+      "Octavus exact ground probes: reference=0.0032s accelerated=0.0003s speedup=10.5x"
     ]
   },
   "scope": "Automated tests; interactive browser gameplay still requires playtesting"
