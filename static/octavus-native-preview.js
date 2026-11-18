@@ -91,7 +91,7 @@ async function json(path){
 }
 function hex(buffer){return [...new Uint8Array(buffer)].map(b=>b.toString(16).padStart(2,'0')).join('')}
 async function download(which){
- const base=which==='core'?'octavus.native-core':which==='neighbors'?'octavus.native-neighbors':'octavus.native-stage1';
+ const base=which==='core'?'octavus.native-core':which==='merged'?'octavus.native-merged':'octavus.native-stage1';
  const manifestPath=ROOT+base+'.json',binaryPath=ROOT+base+'.bin.gz';
  const [meta,response]=await Promise.all([json(manifestPath),fetch(binaryPath,{cache:'no-cache'})]);
  if(!response.ok)throw Error('Native geometry is unavailable (HTTP '+response.status+')');
@@ -169,10 +169,10 @@ function recolor(){
   }
   m.needsUpdate=true;
  });
- $('view-label').textContent=current.which==='core'?'NATIVE ARCHITECTURE CORE':current.which==='neighbors'?'NATIVE EDGE-AWARE CANDIDATE':'HEAVY UNCULLED CANDIDATE';
+ $('view-label').textContent=current.which==='core'?'NATIVE ARCHITECTURE CORE':current.which==='merged'?'SOURCE PLANE-MERGED CANDIDATE':'HEAVY UNCULLED CANDIDATE';
  $('render-label').textContent=current.which==='core'
   ?fmt(current.slots.length)+' native material slots; plain slot 1 deliberately omitted'
-  :current.which==='neighbors'?'Native edge-covered faces removed; remaining slot 1 is still unverified':'Source slot 1 marked pink; most raw faces are not proven visible';
+  :current.which==='merged'?'Exact source rectangle tessellation merged; plain slot 1 is still unverified':'Source slot 1 marked pink; most raw faces are not proven visible';
 }
 function disposeOld(){
  if(!current)return;
@@ -182,12 +182,12 @@ function disposeOld(){
 async function activate(which){
  const id=++requestID;active=which;
  state.hidden=false;
- $('load-title').textContent=which==='core'?'Loading native Octavus architecture':which==='neighbors'?'Loading edge-aware Octavus candidate':'Loading raw candidate (heavy)';
+ $('load-title').textContent=which==='core'?'Loading native Octavus architecture':which==='merged'?'Loading plane-merged Octavus candidate':'Loading raw candidate (heavy)';
  $('load-detail').textContent=which==='core'
   ?'Validating compressed source geometry and rebuilding 98,358 triangles.'
-  :which==='neighbors'?'Testing original source edge-nibble visibility; some internal faces remain unverified.':'This diagnostic loads 1,661,200 unverified candidate triangles; it may be slow.';
+  :which==='merged'?'Loading 1.12m source triangles with exact coplanar merging; some interior faces remain unverified.':'This diagnostic loads 1,661,200 unverified candidate triangles; it may be slow.';
  $('raw-btn').setAttribute('aria-pressed',String(which==='raw'));
- $('neighbor-btn').setAttribute('aria-pressed',String(which==='neighbors'));
+ $('merged-btn').setAttribute('aria-pressed',String(which==='merged'));
  $('core-btn').setAttribute('aria-pressed',String(which==='core'));
  try{
   const asset=await download(which);if(id!==requestID)return;
@@ -211,10 +211,10 @@ $('mode').addEventListener('change',recolor);
 $('wire').addEventListener('change',recolor);
 $('spawns').addEventListener('change',()=>{markers.visible=$('spawns').checked});
 $('core-btn').addEventListener('click',()=>{if(active!=='core')activate('core')});
-$('neighbor-btn').addEventListener('click',()=>{
- if(active==='neighbors')return;
- if(!window.confirm('The edge-aware MPZ candidate is NOT the finished original renderer and may have a large polygon count. Display it for geometry inspection?'))return;
- activate('neighbors');
+$('merged-btn').addEventListener('click',()=>{
+ if(active==='merged')return;
+ if(!window.confirm('The source plane-merged MPZ candidate contains 1.12 million triangles. It is NOT a finished original renderer and may be slow. Display it for inspection?'))return;
+ activate('merged');
 });
 $('raw-btn').addEventListener('click',()=>{
  if(active==='raw')return;
