@@ -65,7 +65,7 @@ def polygon_bbox(poly,axis):
                              for k in transverse)
 
 
-def area_covers_box(node, axis:int, axis_pos:int, transverse, bounds) -> bool:
+def area_covers_box(node, axis:int, axis_pos:int, transverse, bounds, facing:int) -> bool:
     """Proof that *every* leaf intersecting the AABB behind a planar
     triangle has a completely solid face on the shared plane.
 
@@ -81,12 +81,11 @@ def area_covers_box(node, axis:int, axis_pos:int, transverse, bounds) -> bool:
         if o[k]*SCALE>=hi or (o[k]+side)*SCALE<=lo:
             return True  # rectangle does not overlap this child
     if node.children:
-        return all(area_covers_box(child,axis,axis_pos,transverse,bounds)
+        return all(area_covers_box(child,axis,axis_pos,transverse,bounds,facing)
                    for child in node.children)
     # If the rectangle has a non-solid neighbor, it may contain a visible
     # opening; keep the original source polygon intact.
-    orient=axis*2+(0 if axis_pos>=((o[axis]+side)*SCALE-1) else 1)
-    return covers_entire_native_face(node,orient)
+    return covers_entire_native_face(node,facing)
 
 
 def definitely_covered(world:NativeWorld,cube:Cube,orient:int,poly,
@@ -122,7 +121,7 @@ def definitely_covered(world:NativeWorld,cube:Cube,orient:int,poly,
 
     # Check all overlapping quadtree leaves, rather than assuming that
     # one center sample represents the whole polygon.
-    blocked=all(area_covers_box(root,axis,neighbor_plane,trans,bounds)
+    blocked=all(area_covers_box(root,axis,neighbor_plane,trans,bounds,orient^1)
                 for root in world.roots)
     if metrics is not None:metrics["fullyCoveredCulled" if blocked else "partialCoverageKept"]+=1
     return blocked
