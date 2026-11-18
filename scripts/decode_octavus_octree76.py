@@ -261,9 +261,13 @@ def decode_octavus():
     expected = json.loads(SOURCE_INFO.read_text())
     if len(compressed) != expected["compressedBytes"]:
         raise FormatError("Unexpected native map compressed size")
+    # fetch_octavus_native.py stores the SHA-256 of the *compressed* MPZ
+    # under rawSha256. Confirm the exact archived bytes before inflation.
+    if hashlib.sha256(compressed).hexdigest() != expected["rawSha256"]:
+        raise FormatError("Native MAPZ compressed-source checksum mismatch")
     expanded = gzip.decompress(compressed)
-    if hashlib.sha256(expanded).hexdigest() != expected["rawSha256"]:
-        raise FormatError("Native MAPZ checksum mismatch")
+    if len(expanded) != expected["unpackedBytes"]:
+        raise FormatError("Native MAPZ uncompressed size mismatch")
     metadata = json.loads(ENTITY_INFO.read_text())["header"]
     version, worldsize, nslots = (metadata["version"],
                                   metadata["worldSize"],
