@@ -127,9 +127,15 @@ class OctavusWorld(DustWorld64):
 
     def wall_candidates(self, x0, z0, x1, z1):
         import math
-        return self._wall_candidates_cells(
+        near = self._wall_candidates_cells(
             math.floor(x0 / self.wall_cell), math.floor(z0 / self.wall_cell),
             math.floor(x1 / self.wall_cell), math.floor(z1 / self.wall_cell))
+        # A cell may touch a triangle dozens of metres away. Cull against
+        # each ORIGINAL triangle's exact horizontal bounding box first.
+        bounds = self.ground_xz_bounds
+        return (tri for tri in near
+                if (bounds[tri*4] <= x1 and bounds[tri*4+1] >= x0 and
+                    bounds[tri*4+2] <= z1 and bounds[tri*4+3] >= z0))
 
     def ground_at(self, x, z, feet_y=0.0):
         """Same highest two-sided vertical ray hit as DustWorld64.ground_at.
