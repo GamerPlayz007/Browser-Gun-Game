@@ -9,6 +9,7 @@ on:
       - "static/maps/octavus.native-stage1.*"
       - "static/maps/octavus.native-entities.json"
       - "static/maps/octavus.native-spawn-audit.json"
+      - "static/maps/octavus.reference-source.png"
       - "test_octavus_native_preview79.mjs"
       - "test_octavus_native_browser80.mjs"
       - ".github/workflows/octavus-native-phase13.yml"
@@ -65,6 +66,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: octavus-native-core-chrome-preview
-          path: /tmp/octavus-native-core-preview.png
+          path: |
+            /tmp/octavus-native-core-preview.png
+            /tmp/octavus-native-side-by-side.png
           if-no-files-found: ignore
           retention-days: 14
