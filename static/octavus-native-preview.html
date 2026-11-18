@@ -66,7 +66,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
  <a href="/">Back to CROSSFire</a>
 </header>
 <main>
- <div class="banner"><strong>PHASE 1.3 — INSPECTION BUILD, NOT GAMEPLAY.</strong> This is a source-native geometry prototype from the original Red Eclipse 2 Octavus MPZ (revision 829). The compact core omits plain-material slot 1. The new visibility, merged and raw diagnostics retain it but still lack complete native visibility, authored UVs and props. They are <em>not</em> finished original geometry. It is deliberately isolated from multiplayer and collision.</div>
+ <div class="banner"><strong>PHASE 1.3 — INSPECTION BUILD, NOT GAMEPLAY.</strong> This is a source-native geometry prototype from the original Red Eclipse 2 Octavus MPZ (revision 829). Original source textures are now available as an opt-in preview, with approximate coordinate alignment pending full renderer parity. The compact core omits plain-material slot 1. The new visibility, merged and raw diagnostics retain it but still lack complete native visibility, authored UVs and props. They are <em>not</em> finished original geometry. It is deliberately isolated from multiplayer and collision.</div>
  <section class="stage" aria-label="Native geometry inspection">
   <div class="panel">
    <div class="viewport" id="viewport">
@@ -78,7 +78,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
     <button type="button" id="top-btn">Top-down</button>
     <button type="button" id="spawn-btn">First native spawn</button>
     <span class="group-separator"></span>
-    <label for="mode">Visual mode <select id="mode"><option value="neutral">Architectural</option><option value="slot">Material slots</option><option value="height">Elevation</option></select></label>
+    <label for="mode">Visual mode <select id="mode"><option value="neutral">Architectural</option><option value="slot">Material slots</option><option value="height">Elevation</option><option value="source">Original textures (approx)</option></select></label>
     <label><input type="checkbox" id="wire"> Wireframe</label>
     <label><input type="checkbox" id="spawns"> Native spawns</label>
     <span class="group-separator"></span>
