@@ -52,14 +52,54 @@ performance regression. Drawing only the 49,794 explicitly stored surfaces
 would omit the source engine's implicit faces. Neither is an acceptable
 replacement.
 
-## Stage 1.2 — INCOMPLETE: surface generation
+## Stage 1.2 — SOURCE GEOMETRY EXPORTED; renderer-exact parity pending
 
-Implement exact native `genfaceverts`, `visibletris`, merged-face and
-material handling from `redeclipse/base/src/engine/octa.cpp` and
-`src/engine/octarender.cpp`. Export a *deterministic* optimized world mesh
-using world positions derived directly from the decoded source octree.
-Compare known source bases/courtyard/viewpoints to native geometry. Preserve
-source licensing and surface/material indices.
+**Implemented:**
+- `scripts/octavus_native_geometry77.py`: reconstructs the original
+  Cube2 nibble-based deformed face vertices, implicit and explicitly stored
+  polygon vertices, and merged-face origins. It uses native octree neighbors
+  to cull faces completely buried behind solid cubes. All source texture
+  VSlot indices and eighth-native-unit vertex precision are retained in
+  the `OCN2` binary format.
+- `test_octavus_native_geometry77.py`: tests native coordinates, face
+  winding, solid neighbor occlusion, source vertex counts, and merged polygons.
+- `.github/workflows/octavus-native-phase12.yml`: independently exports,
+  checks and publishes the binary and corresponding provenance/metrics reports.
+
+**Exported from verified Red Eclipse 2 revision 829:**
+
+| Source-native staging artifact | Triangles | Unique vertices | Compressed |
+|---|---:|---:|---:|
+| All candidate faces `octavus.native-stage1.bin.gz` | 1,661,200 | 822,787 | 8,963,100 bytes |
+| Architectural preview core `octavus.native-core.bin.gz` | 98,358 | 123,915 | 822,182 bytes |
+
+The first-pass conservative culling exposes **1,562,842** triangles under
+native texture VSlot **1** (`mikeplus64/plain.png`). The older original
+engine's OBJ export draws only ~607 visible triangles with that texture.
+This is strong evidence that the source renderer performs more aggressive
+visibility and merging on that material. Blindly showing these source
+candidates would cover much of the arena with wrongly exposed interior
+faces. **The core omits only VSlot 1**, while retaining the full candidate
+export for eventual exact reconstruction. The omitted material may contain
+legitimate world surfaces, so this core is diagnostic, not the finished map.
+
+All packed coordinates are native XYZ in exact eighths of a world unit,
+with no mixing of older OBJ origins and later MPZ entity positions.
+The source `OCN2` triangle records contain the exact native texture VSlot
+number. Native XY is horizontal and native Z is up.
+
+**Still required for fidelity:** Red Eclipse's full `visibletris`
+partial-face occlusion handling; renderer-accurate surface merging and
+concave polygon tessellation; texture/blend/UV mapping; a real visual
+comparison of the game bases, roads and courtyard. The current 98,358
+triangles have **not** been asserted as an exact copy of the original
+renderer output.
+
+Additional spawn-surface audit:
+`scripts/audit_octavus_native_spawns78.py` writes
+`octavus.native-spawn-audit.json`, comparing the native core against all
+33 source MPZ player-start locations. This is a validation diagnostic,
+not a replacement of server collision.
 
 ## Stage 1.3 — INCOMPLETE: verified browser preview
 
