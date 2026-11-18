@@ -4,6 +4,7 @@
  */
 import * as THREE from 'three';
 import {OctavusNativeMaterialPreview} from './octavus_native_material_preview87.js';
+import {OctavusNativeScenery} from './octavus_native_scenery88.js';
 const ROOT='/static/maps/';
 const $=id=>document.getElementById(id);
 const fmt=n=>Number(n).toLocaleString('en-US');
@@ -17,7 +18,8 @@ viewport.insertBefore(canvasRenderer.domElement,viewport.firstChild);
 const scene=new THREE.Scene();
 scene.background=new THREE.Color('#101b29');
 const camera=new THREE.PerspectiveCamera(60,1,.1,1300);
-scene.add(new THREE.HemisphereLight('#f3e7d3','#41556b',1.65));
+const originalHemi=new THREE.HemisphereLight('#f3e7d3','#41556b',1.65);
+scene.add(originalHemi);
 const sun=new THREE.DirectionalLight('#ffdfb4',2.15);
 sun.position.set(-40,95,75);scene.add(sun);
 const grid=new THREE.GridHelper(420,42,0x57687a,0x233449);
@@ -25,6 +27,14 @@ grid.position.y=-15.2;
 grid.material.opacity=.38;grid.material.transparent=true;
 scene.add(grid);
 const nativeMaterialPreview=new OctavusNativeMaterialPreview();
+const originalScenery=new OctavusNativeScenery(scene,{sourceHemisphere:originalHemi,sourceSun:sun});
+originalScenery.onNotice=message=>note(message);
+originalScenery.onCounts=counts=>{
+ $('metric-props').textContent=fmt(counts.models);
+ $('metric-decals').textContent=fmt(counts.decals);
+ $('metric-lights').textContent=fmt(counts.lightEntities);
+ $('metric-skybox').textContent=counts.skybox?'Loaded':'Off';
+};
 const markers=new THREE.Group();markers.name='33 original MPZ player starts';markers.visible=false;scene.add(markers);
 const markerGeom=new THREE.SphereGeometry(.7,8,6);
 const markerMat=new THREE.MeshBasicMaterial({color:0x8ee1b7});
@@ -228,6 +238,9 @@ async function activate(which){
 $('mode').addEventListener('change',recolor);
 $('wire').addEventListener('change',recolor);
 $('spawns').addEventListener('change',()=>{markers.visible=$('spawns').checked});
+for(const [control,layer] of [['source-env','environment'],['source-props','props'],['source-decals','decals']]){
+ $(control).addEventListener('change',()=>{void originalScenery.switch(layer,$(control).checked)});
+}
 $('core-btn').addEventListener('click',()=>{if(active!=='core')activate('core')});
 $('optimized-btn').addEventListener('click',()=>{
  if(active==='optimized')return;
@@ -269,6 +282,7 @@ function frame(now){
   $('fps-label').textContent=Math.round(frames*1000/(now-fpsBegin))+' FPS';
   fpsBegin=now;frames=0;
  }
+ originalScenery.animate(now/1000,target);
  canvasRenderer.render(scene,camera);
 }
 requestAnimationFrame(frame);
