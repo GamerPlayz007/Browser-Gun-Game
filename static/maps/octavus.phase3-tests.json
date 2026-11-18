@@ -1,6 +1,6 @@
 {
   "status": "passed",
-  "verifiedAt": "2026-11-18T13:36:24.820703+00:00",
+  "verifiedAt": "2026-11-18T13:37:21.522833+00:00",
   "steps": {
     "octavusServerMotion": "success",
     "browserImportClosure": "success",
@@ -16,11 +16,15 @@
       "test_native_stairs_are_walkable_but_tall_walls_are_not (test_octavus_motion73.OctavusStage31Tests.test_native_stairs_are_walkable_but_tall_walls_are_not) ... ok",
       "test_original_triangles_block_bot_visibility (test_octavus_motion73.OctavusStage31Tests.test_original_triangles_block_bot_visibility) ... ok",
       "test_uncontrolled_standing_is_blocked_by_original_roof (test_octavus_motion73.OctavusStage31Tests.test_uncontrolled_standing_is_blocked_by_original_roof) ... ok",
+      "test_fast_ground_matches_original_triangle_raycast (test_octavus_perf74.OctavusPerformanceTests.test_fast_ground_matches_original_triangle_raycast) ... ok",
+      "test_reference_speed_profile (test_octavus_perf74.OctavusPerformanceTests.test_reference_speed_profile) ... ok",
+      "test_wall_index_matches_original_filter (test_octavus_perf74.OctavusPerformanceTests.test_wall_index_matches_original_filter) ... ok",
       "",
       "----------------------------------------------------------------------",
-      "Ran 7 tests in 0.445s",
+      "Ran 10 tests in 0.689s",
       "",
-      "OK"
+      "OK",
+      "Octavus exact ground probes: reference=0.0046s accelerated=0.0005s speedup=8.7x"
     ],
     "javascript": [
       "Octavus 3.1: exact client mesh stairs, tall walls and roof clearance passed."
@@ -30,7 +34,7 @@
       "https://docs.aiohttp.org/en/stable/web_advanced.html#application-s-config",
       "  app=web.Application(client_max_size=4096,middlewares=[cache_policy]);app['perf36']=ServerMetrics();app.router.add_get('/',index);app.router.add_get('/health',health)",
       "----------------------------------------------------------------------",
-      "Ran 28 tests in 1.524s",
+      "Ran 28 tests in 1.688s",
       "",
       "OK"
     ]
