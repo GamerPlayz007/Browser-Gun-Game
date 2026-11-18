@@ -75,9 +75,35 @@ try{
   materialMode:document.getElementById('mode').value
  }));
  assert.deepEqual(overlays,{spawnChecked:true,wireChecked:true,materialMode:'slot'});
+ // Verify the stronger phase1.5 source stage actually loads as WebGL,
+ // rather than trusting binary and syntax checks alone.
+ await page.click('#wire'); // turn wireframe off for performance
+ await page.select('#mode','neutral');
+ await page.click('#home-btn');
+ page.on('dialog',dialog=>dialog.accept());
+ await page.click('#optimized-btn');
+ await page.waitForFunction(()=>{
+  return document.getElementById('metric-tris')?.textContent==='863,803'
+      && document.getElementById('load-state')?.hidden===true;
+ },{timeout:90000});
+ const corrected=await page.evaluate(()=>({
+  triangles:document.getElementById('metric-tris').textContent,
+  vertices:document.getElementById('metric-verts').textContent,
+  slots:Number(document.getElementById('metric-slots').textContent),
+  mode:document.getElementById('view-label').textContent,
+  diagnostic:document.getElementById('diagnostic').textContent.slice(0,220)
+ }));
+ assert.equal(corrected.triangles,'863,803');
+ assert.equal(corrected.vertices,'679,837');
+ assert.ok(corrected.slots>=195);
+ assert.ok(corrected.mode.includes('PARTIAL-VISIBILITY'));
+ assert.ok(corrected.diagnostic.includes('PASS: optimized source mesh checksum'));
+ const enhancedImage=await canvas.screenshot();
+ assert.ok(enhancedImage.byteLength>12000);
+ writeFileSync('/tmp/octavus-native-optimized-preview.png',enhancedImage);
  assert.deepEqual(errors,[],'No browser runtime errors permitted');
  console.log('Octavus native preview headless Chrome: PASS');
- console.log(JSON.stringify({...stats,previewPngBytes:image.byteLength},null,2));
+ console.log(JSON.stringify({...stats,previewPngBytes:image.byteLength,optimizedPngBytes:enhancedImage.byteLength},null,2));
 }finally{
  await browser.close();
 }
