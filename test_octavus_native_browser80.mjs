@@ -120,6 +120,10 @@ try{
  assert.equal(sourceMode.mode,'source');
  assert.ok(sourceMode.diagnostic.includes('SOURCE TEXTURES:'));
  assert.ok(sourceMode.status.includes('original image files'));
+ const matched=sourceMode.status.match(/^(\d+) material slots using (\d+) original image files/);
+ assert.ok(matched,'Source texture preview must report an actual count');
+ assert.ok(Number(matched[1])>=150,'Too few source-native material slots resolved');
+ assert.ok(Number(matched[2])>=30,'Too few distinct original images loaded');
  await page.waitForFunction(()=>{
    return document.getElementById('fps-label')?.textContent.includes('FPS');
  },{timeout:15000});
