@@ -158,7 +158,9 @@ function createScene(packed,types,scene=new THREE.Scene(),sourceUV=null,nativeSc
   const variation=.91+(slot%13)*.012;
   const mat=original.material||new THREE.MeshLambertMaterial({
    map:textures.get(kind),color:new THREE.Color(variation,variation,variation),
-   side:THREE.DoubleSide
+   // The authored desert ground is a one-sided top surface. Showing its
+   // backside makes the lower architecture appear submerged in sand.
+   side:slot===62?THREE.FrontSide:THREE.DoubleSide
   });
   if(original.original){originalMaterials++;materialInstances.push({mat,normal:original.normalMap,roughness:original.roughnessMap});}
   const mesh=new THREE.Mesh(geo,mat);mesh.name='Octavus material slot '+slot;
