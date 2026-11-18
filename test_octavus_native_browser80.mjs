@@ -2,7 +2,7 @@
  * Runs in GitHub Actions against an HTTP server from repo root.
  */
 import assert from 'node:assert/strict';
-import {existsSync,statSync,writeFileSync} from 'node:fs';
+import {existsSync,statSync,writeFileSync,readFileSync} from 'node:fs';
 import puppeteer from 'puppeteer-core';
 
 const chrome=[
@@ -12,6 +12,21 @@ const chrome=[
  '/opt/google/chrome/chrome'
 ].filter(Boolean).find(p=>existsSync(p));
 assert.ok(chrome,'Chromium/Google Chrome executable missing on runner');
+// Source-native alignment fixes must NEVER change the deployed game's
+// existing prop/decal loaders until the new world and collision are ready.
+const liveProps=readFileSync('static/octavus_props.js','utf8');
+const liveDecals=readFileSync('static/octavus_decals.js','utf8');
+const nativeProps=readFileSync('static/octavus_native_props89.js','utf8');
+const nativeDecals=readFileSync('static/octavus_native_decals89.js','utf8');
+const previewScenery=readFileSync('static/octavus_native_scenery88.js','utf8');
+assert.ok(!liveProps.includes('octavus_native_transform89.js'));
+assert.ok(!liveDecals.includes('octavus_native_transform89.js'));
+assert.ok(nativeProps.includes('octavus_native_transform89.js'));
+assert.ok(nativeDecals.includes('octavus_native_transform89.js'));
+assert.ok(previewScenery.includes('octavus_native_props89.js'));
+assert.ok(previewScenery.includes('octavus_native_decals89.js'));
+assert.ok(!previewScenery.includes("from './octavus_props.js'"));
+assert.ok(!previewScenery.includes("from './octavus_decals.js'"));
 const browser=await puppeteer.launch({
  executablePath:chrome,
  headless:true,
