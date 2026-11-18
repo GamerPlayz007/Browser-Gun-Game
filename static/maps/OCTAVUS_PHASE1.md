@@ -270,6 +270,77 @@ to load and render the 864K combined staging mesh in actual WebGL.
 unchanged by this stage.** Replacing the active map requires full
 source-view visual checks and synchronized native collisions.
 
+## Stage 1.6 — ORIGINAL SOURCE TEXTURE REGISTRY AND VISUAL PREVIEW
+
+**This stage is about Octavus's appearance, not further triangle-count work.**
+
+The original Red Eclipse 2 MAPZ v59 stores an ordered texture-variant
+chain; it does NOT embed each material's external image filename. We
+decoded its original VSlot predecessor graph directly from the pinned
+r829 MPZ and reconciled the roots with the original Octavus CFG.
+
+| Source material statistic | Verified result |
+|---|---:|
+| Original CFG base materials | **68** |
+| Native VSlot roots | **68** |
+| Changed native texture variants | **155** |
+| All native texture slots | **223** |
+| Slots used by the optimized mesh | **196** |
+| Used slots with reusable attributed source diffuse image | **165** |
+| Used slots missing source diffuse | **31** |
+| Source-image candidate coverage of the optimized mesh | **845,889 / 863,803 triangles (97.9%)** |
+| Unique attributed source files represented | **41** |
+
+The large plain-material slot 1 contributes 765,874 candidates to the
+coverage figure. As a result, 97.9% source-image coverage should not be
+read as 97.9% accurate appearance or proof that the map is playable.
+Missing upstream files are listed in the registry and are NOT silently
+substituted with unrelated images. Some original texture sources have
+non-image procedural/composite definitions.
+
+New reproducible source-stage files:
+
+- scripts/audit_octavus_native_vslots86.py: reads **all 223 native**
+  VSlots and validates the 68-root graph, including reverse-indexed
+  predecessor links. The generated audit is
+  static/maps/octavus.native-vslot-audit86.json.
+- scripts/build_octavus_native_materials87.py: resolves native VSlot
+  overrides (scale, rotation, offset, color, alpha, layer), inherited
+  from original CFG root declarations. It links source-image candidates
+  by **original file path**, not older OBJ material indices, to
+  already-downloaded attributed WebP assets. Result:
+  static/maps/octavus.native-materials87.json.
+- static/octavus_native_material_preview87.js: independent browser
+  source-image preview, reusing the 41 original images and a shader
+  mapping based on the engine's TEX_SCALE=8, six axis projections and
+  original eight texture orientations. Native source coordinates are
+  preserved. Original image pixel dimensions are used for repeat scale.
+- static/octavus-native-preview.html: **Original textures (approx)**
+  is now an opt-in visual mode. Shader compiling, missing-image
+  fallback, preview modes and screenshot capture are checked in
+  test_octavus_native_browser80.mjs under real headless Chrome.
+- Workflows .github/workflows/octavus-native-vslots86.yml and
+  .github/workflows/octavus-native-materials87.yml validate the
+  original binary, VSlot lineage, expected registry/asset coverage,
+  and ensure no external image path was invented.
+
+**Known remaining visual gaps, before replacing the live map:**
+
+- OCN2 currently records vertex position and source texture slot but
+  not exact per-face orientation, authored normals, multi-layer UVs,
+  shader blending or lightmaps. The browser mode infers the dominant
+  axis from each triangle and is therefore an **approximation** on
+  deformed, diagonal and merged surfaces. A pixel-perfect source
+  texture comparison is still pending.
+- Full source sprite/model placements, light sources and atmosphere
+  must be checked against original r829 in the new coordinate frame.
+- The source-derived 864K candidate remains unfit for the low-end
+  school-laptop target without exact original visibility and
+  spatial batching, and client/server collision still uses the
+  older OBJ export.
+
+**The live game map and all collision/multiplayer logic remain unchanged.**
+
 **Guardrail:** Do not modify `static/maps/octavus.json`,
 `static/octavus_match.js`, `octavus_world.py`, or server gameplay
 collision until the native geometry replacement passes the visual
