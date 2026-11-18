@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>CROSSFIRE | Octavus Native Geometry Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@500;700;800;900&display=swap" rel="stylesheet">
+<script type="importmap">{"imports":{"three":"/static/vendor/three.module.js"}}</script>
+<style>
+:root{color-scheme:dark;--bg:#080e16;--panel:#141e2a;--border:#2c3b4b;--text:#f1f4f7;--muted:#97a8b7;--hot:#ebaf65;--good:#8bccb9}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Barlow,system-ui,sans-serif}
+button,select{font:inherit}button{cursor:pointer}button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(--hot);outline-offset:2px}
+header{padding:18px clamp(16px,3vw,35px);display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;border-bottom:1px solid var(--border)}
+.eyebrow{font-size:11px;letter-spacing:2px;font-weight:800;color:var(--hot);text-transform:uppercase}
+h1{font-family:"Barlow Condensed",Barlow,sans-serif;letter-spacing:.04em;font-size:clamp(25px,3vw,42px);line-height:1;margin:4px 0 2px;text-transform:uppercase}
+header a{color:#dceafa;text-decoration:none;border:1px solid var(--border);border-radius:9px;padding:9px 12px;font-weight:700}
+header a:hover{border-color:var(--hot)}
+main{max-width:1740px;margin:0 auto;padding:20px clamp(12px,2vw,32px) 55px}
+.banner{font-size:13px;line-height:1.55;color:#d2dae5;padding:12px 15px;border:1px solid #725d36;background:rgba(235,175,101,.08);border-radius:10px;margin-bottom:16px}
+.stage{display:grid;grid-template-columns:minmax(0,2.1fr) minmax(280px,.78fr);gap:16px;align-items:start}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:13px;overflow:hidden}
+.viewport{position:relative;height:min(67vh,750px);min-height:425px;background:#101722}
+canvas{display:block;width:100%;height:100%;touch-action:none}
+.viewport .overlay{position:absolute;top:15px;left:15px;right:15px;z-index:3;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;pointer-events:none}
+.overlay>div{background:rgba(6,12,19,.84);padding:10px 13px;border:1px solid rgba(145,167,188,.25);border-radius:8px;backdrop-filter:blur(7px)}
+.overlay strong{font-weight:800;letter-spacing:.07em;font-size:12px}
+.overlay small{font-size:12px;color:#a7bbcc;display:block;margin-top:3px}
+#load-state{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;background:#101923f5;text-align:center;padding:30px}
+#load-state .box{max-width:460px}
+#load-state strong{font-size:24px;font-family:"Barlow Condensed";letter-spacing:.04em;text-transform:uppercase}
+#load-state p{color:var(--muted);font-size:14px;line-height:1.6}
+#load-state[hidden]{display:none}
+.toolbar{padding:12px 14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;border-top:1px solid var(--border)}
+.toolbar button,.toolbar select,.toolbar label{border:1px solid #3c4d5d;background:#1b2938;color:var(--text);border-radius:8px;padding:9px 11px;font-size:12px;font-weight:700}
+.toolbar button[aria-pressed="true"]{background:#4d3c28;border-color:var(--hot)}
+.toolbar select{max-width:180px}
+.toolbar label{display:inline-flex;gap:7px;align-items:center;cursor:pointer}
+.toolbar input{accent-color:#e9ad62}
+.toolbar .group-separator{height:26px;width:1px;background:#40505d;margin:0 2px}
+.sidebar{display:flex;flex-direction:column;gap:16px}
+.sidebar .body{padding:15px}
+.sidebar h2{font-family:"Barlow Condensed",Barlow,sans-serif;text-transform:uppercase;letter-spacing:.06em;font-size:18px;margin:0 0 10px}
+.sidebar p{font-size:13px;color:#b2c2cf;line-height:1.55;margin:7px 0}
+.figure{background:#0d1520;border-radius:8px;overflow:hidden;border:1px solid var(--border)}
+.figure img{display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover}
+.figure figcaption{font-size:11px;color:var(--muted);padding:10px 11px;line-height:1.5}
+.figure a,.sidebar a{color:#e4c698}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.stat{padding:10px 12px;background:#0b1420;border-radius:8px}
+.stat span{display:block;font-size:10px;letter-spacing:.06em;color:var(--muted);text-transform:uppercase;font-weight:700}
+.stat b{display:block;font-size:18px;font-variant-numeric:tabular-nums;margin-top:4px}
+#diagnostic{max-height:110px;overflow:auto;line-height:1.5;font-size:11px;color:#b0c5d0;white-space:pre-wrap;word-break:break-word}
+.controls{margin-top:14px;color:#9fb1bf;font-size:12px;line-height:1.7}
+.corner-note{font-size:12px;color:var(--muted);padding:0 2px 15px}
+@media(max-width:1040px){.stage{grid-template-columns:1fr}.sidebar{display:grid;grid-template-columns:1fr 1fr}.viewport{height:60vh}.banner{margin-bottom:12px}}
+@media(max-width:640px){.sidebar{display:flex}.viewport{height:54vh;min-height:375px}.overlay>div{padding:8px 9px}header{padding:14px 16px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<header>
+ <div><span class="eyebrow">CROSSFIRE • Native Map Reconstruction</span><h1>Octavus / Geometry Lab</h1></div>
+ <a href="/">Back to CROSSFire</a>
+</header>
+<main>
+ <div class="banner"><strong>PHASE 1.3 — INSPECTION BUILD, NOT GAMEPLAY.</strong> This is a source-native geometry prototype from the original Red Eclipse 2 Octavus MPZ (revision 829). The current preview omits plain-material slot 1, is missing authored UVs and props, and does <em>not</em> reproduce the original engine's complete visibility rules. It is deliberately isolated from multiplayer and collision.</div>
+ <section class="stage" aria-label="Native geometry inspection">
+  <div class="panel">
+   <div class="viewport" id="viewport">
+    <div class="overlay"><div><strong id="view-label">NATIVE ARCHITECTURE CORE</strong><small id="render-label">Source geometry, not source lighting</small></div><div><strong id="fps-label">— FPS</strong><small id="camera-label">Orbit to inspect</small></div></div>
+    <div id="load-state" role="status"><div class="box"><strong id="load-title">Loading native Octavus</strong><p id="load-detail">Decoding the verified source-derived staging mesh…</p></div></div>
+   </div>
+   <div class="toolbar">
+    <button type="button" id="home-btn">Overview</button>
+    <button type="button" id="top-btn">Top-down</button>
+    <button type="button" id="spawn-btn">First native spawn</button>
+    <span class="group-separator"></span>
+    <label for="mode">Visual mode <select id="mode"><option value="neutral">Architectural</option><option value="slot">Material slots</option><option value="height">Elevation</option></select></label>
+    <label><input type="checkbox" id="wire"> Wireframe</label>
+    <label><input type="checkbox" id="spawns"> Native spawns</label>
+    <span class="group-separator"></span>
+    <button type="button" id="core-btn" aria-pressed="true">Core / 98k</button>
+    <button type="button" id="raw-btn" aria-pressed="false" title="Heavy raw staging: unculled surfaces; not an accurate playable world">Raw candidate / 1.66m</button>
+   </div>
+  </div>
+  <aside class="sidebar">
+   <div class="panel">
+    <div class="body">
+     <h2>Original creator mapshot</h2>
+     <figure class="figure" style="margin:0">
+      <img src="https://raw.githubusercontent.com/redeclipse/maps/20ae7bc0a4e89e5662712b65fd5aa857e7dbeaa8/octavus.png" alt="Original Red Eclipse 2 Octavus mapshot, for visual reference" loading="lazy" referrerpolicy="no-referrer" id="original-mapshot">
+      <figcaption>Official Red Eclipse mapshot, not the same camera angle as the 3D inspection view. Source: <a href="https://github.com/redeclipse/maps/blob/master/octavus.png" target="_blank" rel="noopener noreferrer">redeclipse/maps/octavus.png</a>. Map by Ricky Thomson (unixfreak), adapted for Red Eclipse 2; CC BY-SA 3.0.</figcaption>
+     </figure>
+     <p id="image-fallback" hidden>The reference image could not be loaded. <a href="https://github.com/redeclipse/maps/blob/master/octavus.png" target="_blank" rel="noopener noreferrer">View it at the source</a>.</p>
+    </div>
+   </div>
+   <div class="panel"><div class="body">
+     <h2>Source geometry telemetry</h2>
+     <div class="stats">
+      <div class="stat"><span>Triangles rendered</span><b id="metric-tris">—</b></div>
+      <div class="stat"><span>Source vertices</span><b id="metric-verts">—</b></div>
+      <div class="stat"><span>Material slots</span><b id="metric-slots">—</b></div>
+      <div class="stat"><span>Native starts</span><b id="metric-starts">—</b></div>
+     </div>
+     <div class="controls">Drag to orbit • Scroll to zoom • Shift + drag to pan • Top-down for footprint checks. Green pins mark original MPZ player-start coordinates. The raw candidate mode is a heavy diagnostic and can show <strong>unwanted internal faces</strong>.</div>
+    </div></div>
+   <div class="panel"><div class="body"><h2>Validation and errors</h2>
+    <div id="diagnostic" aria-live="polite">Checking native asset header and source metadata…</div>
+    <p>Metadata and files: <a href="https://github.com/GamerPlayz007/Browser-Gun-Game/blob/main/static/maps/OCTAVUS_PHASE1.md" target="_blank" rel="noopener noreferrer">Phase 1 audit</a>.</p>
+   </div></div>
+  </aside>
+ </section>
+ <p class="corner-note">Diagnostic only: not linked from the game UI. Collision, weapons, movement and gameplay remain on the previous live map until native visual and physics parity are confirmed.</p>
+</main>
+<script type="module" src="/static/octavus-native-preview.js"></script>
+</body>
+</html>
