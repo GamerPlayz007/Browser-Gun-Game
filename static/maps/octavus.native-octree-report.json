@@ -1,0 +1,312 @@
+{
+  "format": "OCTAVUS-NATIVE-OCTREE76",
+  "source": "sources/octavus.original.mpz",
+  "sourceRevision": 829,
+  "sourceSHA256": "31f07750a7610d069609a35ac6eb070e8ea3dc52571da9f529d3d643a212dde5",
+  "worldSize": 8192,
+  "vslots": {
+    "count": 223,
+    "variations": 155,
+    "bytes": 6764,
+    "endOffset": 107595
+  },
+  "octree": {
+    "startOffset": 107595,
+    "endOffset": 12982777,
+    "storedBytes": 12875182,
+    "branches": 100593,
+    "leaves": 704159,
+    "empty": 180887,
+    "solid": 335303,
+    "deformed": 187969,
+    "maxDepth": 12,
+    "explicitFaces": 49794,
+    "explicitVertices": 200878,
+    "mergedFaces": 56211,
+    "materializedLeaves": 130852,
+    "solidBoundsNative": {
+      "min": [
+        0,
+        0,
+        0
+      ],
+      "max": [
+        8192,
+        8192,
+        3192
+      ]
+    },
+    "leafSizeHistogram": {
+      "1": 168832,
+      "2": 276040,
+      "4": 151337,
+      "8": 60800,
+      "16": 30383,
+      "32": 11052,
+      "64": 2595,
+      "128": 871,
+      "256": 1787,
+      "512": 394,
+      "1024": 48,
+      "2048": 16,
+      "4096": 4
+    },
+    "textureSlots": 197,
+    "mostReferencedTextures": [
+      [
+        1,
+        3836007
+      ],
+      [
+        37,
+        50974
+      ],
+      [
+        39,
+        43612
+      ],
+      [
+        97,
+        42853
+      ],
+      [
+        79,
+        39908
+      ],
+      [
+        72,
+        28206
+      ],
+      [
+        28,
+        20874
+      ],
+      [
+        76,
+        16021
+      ],
+      [
+        77,
+        16010
+      ],
+      [
+        42,
+        14286
+      ],
+      [
+        84,
+        7034
+      ],
+      [
+        80,
+        6614
+      ],
+      [
+        89,
+        5846
+      ],
+      [
+        189,
+        5706
+      ],
+      [
+        92,
+        5481
+      ],
+      [
+        20,
+        3966
+      ],
+      [
+        38,
+        3784
+      ],
+      [
+        109,
+        3684
+      ],
+      [
+        73,
+        3648
+      ],
+      [
+        70,
+        3410
+      ],
+      [
+        85,
+        2829
+      ],
+      [
+        93,
+        2766
+      ],
+      [
+        88,
+        2732
+      ],
+      [
+        113,
+        2701
+      ],
+      [
+        95,
+        2688
+      ]
+    ],
+    "explicitFaceTextureSlots": 196,
+    "explicitFaceTopTextures": [
+      [
+        37,
+        6535
+      ],
+      [
+        79,
+        4342
+      ],
+      [
+        28,
+        4269
+      ],
+      [
+        72,
+        2727
+      ],
+      [
+        70,
+        2685
+      ],
+      [
+        77,
+        2579
+      ],
+      [
+        42,
+        2169
+      ],
+      [
+        39,
+        1943
+      ],
+      [
+        97,
+        1734
+      ],
+      [
+        80,
+        1613
+      ],
+      [
+        76,
+        1327
+      ],
+      [
+        92,
+        1189
+      ],
+      [
+        1,
+        1167
+      ],
+      [
+        69,
+        1098
+      ],
+      [
+        109,
+        813
+      ],
+      [
+        89,
+        737
+      ],
+      [
+        113,
+        729
+      ],
+      [
+        189,
+        670
+      ],
+      [
+        84,
+        554
+      ],
+      [
+        26,
+        448
+      ],
+      [
+        85,
+        429
+      ],
+      [
+        88,
+        413
+      ],
+      [
+        73,
+        408
+      ],
+      [
+        27,
+        398
+      ],
+      [
+        123,
+        395
+      ]
+    ],
+    "volumeMaterials": [
+      [
+        64,
+        107032
+      ],
+      [
+        1024,
+        13336
+      ],
+      [
+        32,
+        5839
+      ],
+      [
+        260,
+        1767
+      ],
+      [
+        256,
+        1181
+      ],
+      [
+        1088,
+        1016
+      ],
+      [
+        288,
+        377
+      ],
+      [
+        544,
+        126
+      ],
+      [
+        512,
+        96
+      ],
+      [
+        320,
+        80
+      ],
+      [
+        4,
+        2
+      ]
+    ],
+    "warning": "Stored octree, not a visible surface mesh. Adjacent hidden faces and merged faces still need renderer-accurate reconstruction."
+  },
+  "bytesAfterOctree": 2004276,
+  "sourceEngine": "redeclipse/base src/engine/worldio.cpp MAPZ v59",
+  "integration": "offline-audit-only",
+  "liveMapModified": false
+}
