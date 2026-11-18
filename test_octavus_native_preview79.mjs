@@ -8,6 +8,7 @@ const root='static/maps/';
 const cases=[
  {prefix:'octavus.native-core',triangles:98358,vertices:123915,slot1:0},
  {prefix:'octavus.native-stage1',triangles:1661200,vertices:822787,slot1:1562842},
+ {prefix:'octavus.native-merged',triangles:1115718,vertices:767090,slot1:1017360},
 ];
 for(const item of cases){
  const path=root+item.prefix;
@@ -52,6 +53,8 @@ assert.ok(html.includes('REVISION 829')||html.includes('revision 829'));
 assert.ok(html.includes('id="load-state"'));
 assert.ok(html.includes('id="metric-tris"'));
 assert.ok(html.includes('id="raw-btn"'));
+assert.ok(html.includes('id="merged-btn"'));
+assert.ok(js.includes("'octavus.native-merged'"));
 assert.ok(js.includes('DecompressionStream'));
 assert.ok(js.includes("crypto.subtle.digest('SHA-256'"));
 assert.ok(js.includes("void activate('core')"));
