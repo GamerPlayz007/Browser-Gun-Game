@@ -21,6 +21,18 @@ class OctavusSourceOctreeTests(unittest.TestCase):
         )
         self.assertLess(d["octree"]["endOffset"], 14_987_053)
         self.assertGreater(d["octree"]["explicitFaces"], 0)
+        self.assertEqual(d["vslots"]["count"], 223)
+        self.assertEqual(d["vslots"]["variations"], 155)
+        self.assertEqual(d["vslots"]["endOffset"], 107595)
+        self.assertEqual(d["octree"]["leaves"], 704159)
+        self.assertEqual(d["octree"]["branches"], 100593)
+        self.assertEqual(d["octree"]["empty"], 180887)
+        self.assertEqual(d["octree"]["solid"], 335303)
+        self.assertEqual(d["octree"]["deformed"], 187969)
+        self.assertEqual(d["octree"]["explicitFaces"], 49794)
+        self.assertEqual(d["octree"]["explicitVertices"], 200878)
+        self.assertEqual(d["octree"]["endOffset"], 12982777)
+        self.assertEqual(d["octree"]["solidBoundsNative"]["max"][2], 3192)
 
     def test_empty_synthetic_octree_has_eight_roots(self):
         # 8 empty root leaves; 12 source texture bytes per leaf.
