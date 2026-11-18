@@ -19,6 +19,7 @@ on:
       - "static/minimap.js"
       - "static/maps/octavus.json"
       - "test_octavus_motion73.py"
+      - "test_octavus_perf74.py"
       - "test_octavus_motion73.mjs"
       - "scripts/check_browser_imports.py"
   workflow_dispatch:
@@ -37,7 +38,7 @@ jobs:
       - id: pytests
         name: Verify Octavus source, server motion and collision
         run: |
-          python -m unittest test_octavus_phase1 test_octavus_motion73 -v > octavus-py.log 2>&1
+          python -m unittest test_octavus_phase1 test_octavus_motion73 test_octavus_perf74 -v > octavus-py.log 2>&1
           code=$?
           cat octavus-py.log
           exit $code
