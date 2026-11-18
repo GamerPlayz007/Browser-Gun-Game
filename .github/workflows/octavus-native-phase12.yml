@@ -1,0 +1,58 @@
+name: Octavus Phase 1.2 native geometry staging
+on:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/octavus_native_geometry77.py"
+      - "scripts/decode_octavus_octree76.py"
+      - "test_octavus_native_geometry77.py"
+      - "sources/octavus.original.mpz"
+      - "sources/octavus.original.json"
+      - "sources/octavus.native-variables.json"
+      - ".github/workflows/octavus-native-phase12.yml"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build-native-stage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Assert original cube face and source visibility tests
+        run: python -m unittest -v test_octavus_native_geometry77 test_octavus_octree76
+      - name: Export source-native geometry to independent staging-only asset
+        run: python -m scripts.octavus_native_geometry77
+      - name: Verify compressed staging geometry header and payload length
+        run: |
+          python - <<'PY'
+          import gzip,json,hashlib,struct
+          from pathlib import Path
+          p=Path("static/maps/octavus.native-stage1.bin.gz")
+          manifest=json.loads(Path("static/maps/octavus.native-stage1.json").read_text())
+          raw=gzip.decompress(p.read_bytes())
+          magic,verts,triangles=struct.unpack_from("<4sII",raw)
+          assert magic==b"OCN2"
+          assert (verts,triangles)==(manifest["vertices"],manifest["triangles"])
+          assert len(raw)==12+12*verts+14*triangles
+          assert hashlib.sha256(p.read_bytes()).hexdigest()==manifest["stagingSHA256"]
+          assert triangles>80000 and verts>20000, (verts,triangles)
+          assert manifest["sourceExplicitPolygons"]==49794
+          assert manifest["status"]=="staging-only-not-live"
+          print("Verified binary OCN2 geometry, triangle provenance and safe staging")
+          PY
+      - name: Publish reproducible staging-only mesh and audit report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add static/maps/octavus.native-stage1.bin.gz static/maps/octavus.native-stage1.json
+          if ! git diff --cached --quiet; then
+            git commit -m "build(octavus phase1.2): publish source-native isolated staging mesh"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
