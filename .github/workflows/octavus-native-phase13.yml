@@ -11,6 +11,14 @@ on:
       - "static/maps/octavus.native-optimized.*"
       - "static/maps/octavus.native-materials87.json"
       - "static/octavus_native_material_preview87.js"
+      - "static/octavus_native_scenery88.js"
+      - "static/octavus_props.js"
+      - "static/octavus_decals.js"
+      - "static/octavus_environment.js"
+      - "static/maps/octavus.props.json"
+      - "static/maps/octavus.decals.json"
+      - "static/maps/octavus.skybox.json"
+      - "static/maps/octavus.native-entities.json"
       - "static/maps/octavus.native-entities.json"
       - "static/maps/octavus.native-spawn-audit.json"
       - "static/maps/octavus.reference-source.png"
@@ -75,5 +83,7 @@ jobs:
             /tmp/octavus-native-side-by-side.png
             /tmp/octavus-native-optimized-preview.png
             /tmp/octavus-native-source-textures-preview.png
+            /tmp/octavus-native-source-scenery-preview.png
+            /tmp/octavus-native-source-scenery-full.png
           if-no-files-found: ignore
           retention-days: 14
