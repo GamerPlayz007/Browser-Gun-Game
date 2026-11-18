@@ -41,7 +41,7 @@ const markerMat=new THREE.MeshBasicMaterial({color:0x8ee1b7});
 const stemGeom=new THREE.CylinderGeometry(.12,.12,2,6);
 const stemMat=new THREE.MeshBasicMaterial({color:0x64ae97});
 const target=new THREE.Vector3(0,2,0);
-let yaw=.7,pitch=.55,distance=142,drag=null,current=null,active='core',requestID=0,starts=[];
+let yaw=.7,pitch=.55,distance=142,drag=null,current=null,active='core',requestID=0,starts=[],propFocus=null;
 let lastFrame=performance.now(),frames=0,fpsBegin=lastFrame;
 function note(msg){diag.textContent=msg+'\n'+diag.textContent.slice(0,1250)}
 function updateCamera(){
@@ -237,7 +237,17 @@ async function activate(which){
 }
 $('mode').addEventListener('change',recolor);
 $('wire').addEventListener('change',recolor);
+function focusOriginalProps(){
+ if(!propFocus){note('Original source model placements have not loaded.');return}
+ target.set(...toWorld(propFocus.sourcePosition));
+ distance=38;yaw=.75;pitch=.47;updateCamera();
+ note('SOURCE PROP CLOSE-UP: moved inspection camera to native mapmodel entity #'+propFocus.id+' inside the densest original prop sector (no source geometry moved).');
+}
+$('prop-focus-btn').addEventListener('click',focusOriginalProps);
 $('spawns').addEventListener('change',()=>{markers.visible=$('spawns').checked});
+$('source-anchors').addEventListener('change',()=>{
+ originalScenery.setAnchorDebug($('source-anchors').checked);
+});
 $('restored-btn').addEventListener('click',async()=>{
  const button=$('restored-btn');
  if(button.disabled)return;
@@ -255,7 +265,8 @@ $('restored-btn').addEventListener('click',async()=>{
    $(control).checked=true;
    await originalScenery.switch(name,true);
   }));
-  if(starts.length){
+  if(propFocus)focusOriginalProps();
+  else if(starts.length){
    target.set(...toWorld(starts[0].sourcePosition));
    distance=42;yaw=.72;pitch=.42;updateCamera();
   }
@@ -291,6 +302,18 @@ async function spawnMarkers(){
   const source=await json(ROOT+'octavus.native-entities.json');
   if(source.format!=='MAPZ'||source.playerStarts?.length!==33)throw Error('Original MPZ player-start metadata invalid');
   starts=source.playerStarts;
+  // The most populated model sector is a meaningful camera target for
+  // users to visually validate the original authored placements.
+  const models=(source.visualEntities||[]).filter(e=>e.type==='mapmodel'&&Array.isArray(e.sourcePosition));
+  let most=-1;
+  for(const e of models){
+   const a=toWorld(e.sourcePosition);
+   const count=models.filter(other=>{
+    const b=toWorld(other.sourcePosition);
+    return (a[0]-b[0])**2+(a[2]-b[2])**2<=35*35;
+   }).length;
+   if(count>most){most=count;propFocus=e;}
+  }
   for(const e of starts){
    const p=toWorld(e.sourcePosition);
    const orb=new THREE.Mesh(markerGeom,markerMat);
