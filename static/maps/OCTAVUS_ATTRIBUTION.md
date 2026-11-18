@@ -21,8 +21,16 @@ by Red Eclipse.
   - Native MPZ v59 metadata parsed from its source encoding:
     892 entities including 233 lights, 149 mapmodels, and 33 playerstarts.
     `static/maps/octavus.native-entities.json` stores the original
-    positions/attributes/links (reference only, not yet rendered), while
+    positions/attributes/links, while
     `sources/octavus.native-variables.json` stores source map variables.
+- Phase 1 structural decoder `scripts/decode_octavus_octree76.py` now
+    verifies the original 223 texture vslots and reads all 704,159 octree
+    leaves, 49,794 explicitly stored polygon faces and native face texture
+    IDs. The resulting authoritative inventory is
+    `static/maps/octavus.native-octree-report.json`.
+    **This is NOT yet a visible native mesh export**: renderer visibility,
+    implicitly generated faces, merged geometry and native collision still
+    require reconstruction. See `static/maps/OCTAVUS_PHASE1.md`.
 - Source OBJ mesh: https://github.com/Calinou/game-maps-obj
   - `redeclipse/octavus.obj`, SHA
     `ad408f0c35ffb98aa1c19d4fb01943decac3b8de`
