@@ -1,6 +1,6 @@
 {
   "status": "passed",
-  "verifiedAt": "2026-11-18T13:37:21.522833+00:00",
+  "verifiedAt": "2026-11-18T13:40:55.872880+00:00",
   "steps": {
     "octavusServerMotion": "success",
     "browserImportClosure": "success",
@@ -21,20 +21,20 @@
       "test_wall_index_matches_original_filter (test_octavus_perf74.OctavusPerformanceTests.test_wall_index_matches_original_filter) ... ok",
       "",
       "----------------------------------------------------------------------",
-      "Ran 10 tests in 0.689s",
+      "Ran 10 tests in 0.434s",
       "",
       "OK",
-      "Octavus exact ground probes: reference=0.0046s accelerated=0.0005s speedup=8.7x"
+      "Octavus exact ground probes: reference=0.0030s accelerated=0.0003s speedup=10.2x"
     ],
     "javascript": [
       "Octavus 3.1: exact client mesh stairs, tall walls and roof clearance passed."
     ],
     "server": [
-      "/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/server.py:637: NotAppKeyWarning: It is recommended to use web.AppKey instances for keys.",
+      "/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/server.py:643: NotAppKeyWarning: It is recommended to use web.AppKey instances for keys.",
       "https://docs.aiohttp.org/en/stable/web_advanced.html#application-s-config",
       "  app=web.Application(client_max_size=4096,middlewares=[cache_policy]);app['perf36']=ServerMetrics();app.router.add_get('/',index);app.router.add_get('/health',health)",
       "----------------------------------------------------------------------",
-      "Ran 28 tests in 1.688s",
+      "Ran 28 tests in 1.584s",
       "",
       "OK"
     ]
