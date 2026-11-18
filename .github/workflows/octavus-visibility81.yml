@@ -1,0 +1,52 @@
+name: Octavus Phase 1.4 native face visibility audit
+on:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/audit_octavus_visibility81.py"
+      - "static/maps/octavus.native-stage1.bin.gz"
+      - "static/maps/octavus.native-stage1.json"
+      - ".github/workflows/octavus-visibility81.yml"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  profile-hidden-faces:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Audit native raw geometry material distribution
+        run: |
+          python -m scripts.audit_octavus_visibility81
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          j=json.loads(Path("static/maps/octavus.native-visibility-audit81.json").read_text())
+          assert j["materialOneTriangleCount"]==1562842
+          assert j["detailedTriangleCount"]==98358
+          assert sum(j["materialOneNativeZBins"].values())==1562842
+          assert sum(j["materialOneLocation"].values())==1562842
+          assert j["liveMapModified"] is False
+          print("Audited all plain candidate surfaces: PASS")
+          PY
+      - name: Publish deterministic geometry-audit report
+        run: |
+          cp static/maps/octavus.native-visibility-audit81.json /tmp/octavus-visibility81.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+GamerPlayz007@users.noreply.github.com"
+          for i in 1 2 3; do
+            git fetch origin main
+            git reset --hard origin/main
+            cp /tmp/octavus-visibility81.json static/maps/octavus.native-visibility-audit81.json
+            git add static/maps/octavus.native-visibility-audit81.json
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m "build(octavus phase1.4): publish native plane visibility evidence"
+            if git push origin HEAD:main; then exit 0; fi
+          done
+          exit 1
