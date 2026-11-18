@@ -1,7 +1,7 @@
 /* Octavus Phase 3.1: matched browser-side capsule, stair and roof tests. */
 import assert from 'node:assert/strict';
 import {createDustPhysics65} from './static/dust_motion65.js';
-const DT=1/60;
+const DT=1/30;
 function quad(a,b,c,d){return [a,b,c,a,c,d];}
 function fixture(stepHeight,ceiling=false){
  const tris=[
@@ -37,4 +37,4 @@ for(const [height,shouldClimb] of [[.24,true],[2.2,false]]){
  physics.simulate(player,{crouch:false},DT,100,{speed:1});
  assert.equal(player.crouch,true,'Player must not uncrouch into a source roof');
 }
-console.log('Octavus 3.1: exact client mesh stairs, tall walls and roof clearance passed.');
+console.log('Octavus 3.4: 30 Hz exact client mesh stairs, tall walls and roof clearance passed.');
