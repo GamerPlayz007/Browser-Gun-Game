@@ -341,6 +341,73 @@ New reproducible source-stage files:
 
 **The live game map and all collision/multiplayer logic remain unchanged.**
 
+## Stage 1.7 — NATIVE SCENE MODELS, DECALS AND LIGHTING IN SOURCE INSPECTOR
+
+Unlike the geometry stages, this stage adds **visible authored source
+content** to the reconstructed native Octavus preview. It reuses the
+existing previously attributed Red Eclipse 2 r829 source archives and
+entity transforms rather than fabricating new decorative blocks.
+
+- Source original MAPZ: **149** mapmodel instances, **233** source light
+  entities, **141** native decal entities and **33** player starts.
+- Independently recovered original OBJ files: **135 of 149** model
+  placements from **16 of the 19** original model types. The remaining
+  14 models are not silently replaced or guessed.
+- Native decal package: **135 enabled source placements**, with
+  original authored coordinates and rotations and instancing by
+  material.
+- Original jojo/redcliff **six-sided skybox** is applied from the
+  attributed source archive, with sunlight, fog and ambient settings
+  adapted from the MPZ world variables. The 233 light coordinates
+  remain in world space but a quality-dependent nearby subset is
+  active at once to avoid hundreds of dynamic draw-call lights.
+
+### What the viewer actually loads
+
+- static/octavus_native_scenery88.js links existing source-derived
+  static/octavus_environment.js, static/octavus_props.js, and
+  static/octavus_decals.js to the newer source-native OCN2 viewer.
+- The native map geometry and entities share the same coordinate
+  transform; this avoids mixing old OBJ geometry origin coordinates
+  with the r829 source-native map.
+- The viewer has **three independent switches** (source environment,
+  original OBJ props and original decals) and a one-click
+  **Show restored scene** button. The preset loads the 863,803-triangle
+  optimized native map, turns on source texture preview, original
+  model placements, decals, and Redcliff lighting, then focuses an
+  authored native player spawn.
+- Turning a layer off disposes its temporary Three.js resources;
+  switching geometry does not touch live gameplay. Source lighting
+  substitutes for diagnostic test lighting while enabled.
+- The source layer count metrics display 135 props, 135 decals,
+  233 source lights and whether the Redcliff skybox loaded.
+
+### Verification and remaining limits
+
+test_octavus_native_browser80.mjs validates in actual headless Chrome:
+1. The isolated page, original sky, compact source geometry and
+   optimized 864K geometry load as functioning WebGL.
+2. Source texture shader material mode loads authenticated prior assets.
+3. Clicking **Show restored scene** actually imports and displays
+   all 135 recovered original model instances, 135 original decals,
+   indexes all 233 authored source light entities and loads Redcliff.
+4. Turning layers back off cleans up the source content and restores
+   preview lighting, without browser errors.
+
+Screenshots of the scene with and without source scenery are uploaded
+as CI run artifacts by the Octavus preview workflow.
+
+This remains an **inspection stage, NOT a finished game map**.
+Original lightmaps, per-face UVs, physical collisions for props and
+server-authoritative world data are not yet shared with this preview.
+Missing source models are explicitly excluded; performance has
+NOT been benchmarked on actual school laptops.
+
+**Next visual gate:** source-screen camera comparisons, correcting
+material orientation and prop alignment where needed, then compact
+spatial batches and matching server/client collision before replacing
+the old live arena.
+
 **Guardrail:** Do not modify `static/maps/octavus.json`,
 `static/octavus_match.js`, `octavus_world.py`, or server gameplay
 collision until the native geometry replacement passes the visual
