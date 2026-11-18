@@ -1,0 +1,52 @@
+name: Octavus Phase 1.3 native geometry preview
+on:
+  push:
+    branches: [main]
+    paths:
+      - "static/octavus-native-preview.js"
+      - "static/octavus-native-preview.html"
+      - "static/maps/octavus.native-core.*"
+      - "static/maps/octavus.native-stage1.*"
+      - "static/maps/octavus.native-entities.json"
+      - "static/maps/octavus.native-spawn-audit.json"
+      - "test_octavus_native_preview79.mjs"
+      - ".github/workflows/octavus-native-phase13.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+jobs:
+  preview-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Parse browser preview module as ES module
+        run: node --input-type=module --check < static/octavus-native-preview.js
+      - name: Verify full/core OCN2 assets and standalone preview contract
+        run: node test_octavus_native_preview79.mjs
+      - name: Verify standalone preview is served as a static asset
+        run: |
+          python3 -m http.server 8765 --directory static >/tmp/octavus-phase13-http.log 2>&1 &
+          HTTP_PID=$!
+          trap 'kill $HTTP_PID || true' EXIT
+          python3 - <<'PY'
+          from urllib.request import urlopen
+          import time
+          for _ in range(30):
+              try:
+                  with urlopen("http://127.0.0.1:8765/octavus-native-preview.html", timeout=3) as r:
+                      body=r.read().decode()
+                  assert "octavus-native-preview.js" in body
+                  break
+              except (OSError,TimeoutError):
+                  time.sleep(.2)
+          else:
+              raise RuntimeError("Native standalone preview not served by static host")
+          with urlopen("http://127.0.0.1:8765/maps/octavus.native-core.bin.gz") as r:
+              assert r.read(2)==bytes([0x1f,0x8b])
+          print("Octavus native preview + compressed native geometry HTTP: PASS")
+          PY
