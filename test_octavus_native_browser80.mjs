@@ -37,6 +37,10 @@ try{
  await page.waitForFunction(()=>{
   return document.getElementById('metric-starts')?.textContent==='33';
  },{timeout:15000});
+ await page.waitForFunction(()=>{
+  const image=document.getElementById('original-mapshot');
+  return image?.complete && image.naturalWidth>=128 && image.naturalHeight>=128;
+ },{timeout:15000});
  const stats=await page.evaluate(()=>{
   const canvas=document.querySelector('#viewport canvas');
   return {
@@ -60,6 +64,7 @@ try{
  assert.ok(image.byteLength>12000,
   'Rendered WebGL image appears unexpectedly empty: '+image.byteLength+' bytes');
  writeFileSync('/tmp/octavus-native-core-preview.png',image);
+ await page.screenshot({path:'/tmp/octavus-native-side-by-side.png',fullPage:true});
  await page.click('#top-btn');
  await page.click('#spawns');
  await page.select('#mode','slot');
