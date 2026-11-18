@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@500;700;800;900&display=swap" rel="stylesheet">
-<script type="importmap">{"imports":{"three":"/static/vendor/three.module.js"}}</script>
+<script type="importmap">{"imports":{"three":"/static/vendor/three.module.js","three/addons/":"/static/vendor/addons/"}}</script>
 <style>
 :root{color-scheme:dark;--bg:#080e16;--panel:#141e2a;--border:#2c3b4b;--text:#f1f4f7;--muted:#97a8b7;--hot:#ebaf65;--good:#8bccb9}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Barlow,system-ui,sans-serif}
@@ -66,7 +66,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
  <a href="/">Back to CROSSFire</a>
 </header>
 <main>
- <div class="banner"><strong>PHASE 1.3 — INSPECTION BUILD, NOT GAMEPLAY.</strong> This is a source-native geometry prototype from the original Red Eclipse 2 Octavus MPZ (revision 829). Original source textures are now available as an opt-in preview, with approximate coordinate alignment pending full renderer parity. The compact core omits plain-material slot 1. The new visibility, merged and raw diagnostics retain it but still lack complete native visibility, authored UVs and props. They are <em>not</em> finished original geometry. It is deliberately isolated from multiplayer and collision.</div>
+ <div class="banner"><strong>PHASE 1.3 — INSPECTION BUILD, NOT GAMEPLAY.</strong> This is a source-native geometry prototype from the original Red Eclipse 2 Octavus MPZ (revision 829). Original source textures are now available as an opt-in preview, with approximate coordinate alignment pending full renderer parity. Phase 1.7 can now add the original model placements, native decals, Redcliff skybox and source lights using the original MPZ entity data. The compact core omits plain-material slot 1. The new visibility, merged and raw diagnostics retain it but still lack complete native visibility, authored UVs and props. They are <em>not</em> finished original geometry. It is deliberately isolated from multiplayer and collision.</div>
  <section class="stage" aria-label="Native geometry inspection">
   <div class="panel">
    <div class="viewport" id="viewport">
@@ -81,6 +81,9 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
     <label for="mode">Visual mode <select id="mode"><option value="neutral">Architectural</option><option value="slot">Material slots</option><option value="height">Elevation</option><option value="source">Original textures (approx)</option></select></label>
     <label><input type="checkbox" id="wire"> Wireframe</label>
     <label><input type="checkbox" id="spawns"> Native spawns</label>
+    <label title="Source Redcliff skybox, sunlight and up to sixteen nearby original Red Eclipse light entities"><input type="checkbox" id="source-env"> Redcliff sky + source lights</label>
+    <label title="Only available original OBJ models at their authored positions; no replacement shapes"><input type="checkbox" id="source-props"> Original map models</label>
+    <label title="Native original decals with source texture and authored position"><input type="checkbox" id="source-decals"> Native decals</label>
     <span class="group-separator"></span>
     <button type="button" id="core-btn" aria-pressed="true">Core / 98k</button>
     <button type="button" id="optimized-btn" aria-pressed="false" title="New source-native triangle occlusion plus lossless coplanar plane merging; still not original renderer parity">Visibility + merge / 864k</button>
@@ -106,8 +109,12 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
       <div class="stat"><span>Source vertices</span><b id="metric-verts">—</b></div>
       <div class="stat"><span>Material slots</span><b id="metric-slots">—</b></div>
       <div class="stat"><span>Native starts</span><b id="metric-starts">—</b></div>
+      <div class="stat"><span>Original props placed</span><b id="metric-props">0</b></div>
+      <div class="stat"><span>Original decals</span><b id="metric-decals">0</b></div>
+      <div class="stat"><span>Source lights indexed</span><b id="metric-lights">0</b></div>
+      <div class="stat"><span>Redcliff skybox</span><b id="metric-skybox">Off</b></div>
      </div>
-     <div class="controls">Drag to orbit • Scroll to zoom • Shift + drag to pan • Top-down for footprint checks. Green pins mark original MPZ player-start coordinates. The visibility, merged and raw modes are diagnostics; they can still show <strong>unwanted internal faces</strong> and run slowly.</div>
+     <div class="controls">Drag to orbit • Scroll to zoom • Shift + drag to pan • Top-down for footprint checks. Green pins mark original MPZ player-start coordinates. The visibility, merged and raw modes are diagnostics; they can still show <strong>unwanted internal faces</strong> and run slowly. Enable scenic layers separately to compare source props and lighting; they are independent from collision.</div>
     </div></div>
    <div class="panel"><div class="body"><h2>Validation and errors</h2>
     <div id="diagnostic" aria-live="polite">Checking native asset header and source metadata…</div>
