@@ -29,7 +29,7 @@ class NativePartialFaceTests(unittest.TestCase):
     def test_exact_rectangle_clip_leaves_only_existing_area(self):
         poly=[(0,0),(20,0),(0,20)]
         cut=clip_rect(poly,0,10,0,10)
-        self.assertEqual(abs(polygon_area_twice(cut)),150) # area=75
+        self.assertEqual(abs(polygon_area_twice(cut)),200) # 10x10 square, area=100
         self.assertTrue(all(0<=p[0]<=10 and 0<=p[1]<=10 for p in cut))
 
     def test_touching_boundary_only_is_not_occlusion_area(self):
