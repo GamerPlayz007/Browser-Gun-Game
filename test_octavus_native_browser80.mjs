@@ -130,10 +130,56 @@ try{
  const textureImage=await canvas.screenshot();
  assert.ok(textureImage.byteLength>12000);
  writeFileSync('/tmp/octavus-native-source-textures-preview.png',textureImage);
+ // Source-native Phase 1.7 entity layers are optional, but must render
+ // in the exact reconstructed-world coordinates without runtime errors.
+ await page.click('#source-props');
+ await page.waitForFunction(()=>{
+  return document.getElementById('metric-props')?.textContent==='135';
+ },{timeout:90000});
+ await page.click('#source-env');
+ await page.waitForFunction(()=>{
+  return document.getElementById('metric-lights')?.textContent==='233'
+      && document.getElementById('metric-skybox')?.textContent==='Loaded';
+ },{timeout:60000});
+ await page.click('#source-decals');
+ await page.waitForFunction(()=>{
+  return document.getElementById('metric-decals')?.textContent==='135';
+ },{timeout:60000});
+ const sceneryStats=await page.evaluate(()=>({
+  originalProps:document.getElementById('metric-props').textContent,
+  originalDecals:document.getElementById('metric-decals').textContent,
+  sourceLights:document.getElementById('metric-lights').textContent,
+  sky:document.getElementById('metric-skybox').textContent,
+  url:location.pathname
+ }));
+ assert.deepEqual(sceneryStats,{
+  originalProps:'135',originalDecals:'135',sourceLights:'233',
+  sky:'Loaded',url:'/static/octavus-native-preview.html'
+ });
+ const scenicImage=await canvas.screenshot();
+ assert.ok(scenicImage.byteLength>12000,'Scenic WebGL canvas failed');
+ writeFileSync('/tmp/octavus-native-source-scenery-preview.png',scenicImage);
+ await page.screenshot({path:'/tmp/octavus-native-source-scenery-full.png',fullPage:true});
+ assert.deepEqual(shaderErrors,[],'Source props, decals, and Redcliff sky must not break WebGL shaders');
+ assert.deepEqual(errors,[],'Native scenery must not create browser page errors');
+ await page.click('#source-decals');
+ await page.waitForFunction(()=>{
+  return document.getElementById('metric-decals').textContent==='0';
+ },{timeout:15000});
+ await page.click('#source-props');
+ await page.waitForFunction(()=>{
+  return document.getElementById('metric-props').textContent==='0';
+ },{timeout:15000});
+ await page.click('#source-env');
+ await page.waitForFunction(()=>{
+  return document.getElementById('metric-lights').textContent==='0'
+      && document.getElementById('metric-skybox').textContent==='Off';
+ },{timeout:15000});
+ assert.deepEqual(shaderErrors,[],'Native scenery disposal must not break WebGL');
  assert.deepEqual(shaderErrors,[],'Native texture source projection must compile in Chrome WebGL');
  assert.deepEqual(errors,[],'No browser runtime errors permitted');
  console.log('Octavus native preview headless Chrome: PASS');
- console.log(JSON.stringify({...stats,previewPngBytes:image.byteLength,optimizedPngBytes:enhancedImage.byteLength,sourceTexturePngBytes:textureImage.byteLength},null,2));
+ console.log(JSON.stringify({...stats,previewPngBytes:image.byteLength,optimizedPngBytes:enhancedImage.byteLength,sourceTexturePngBytes:textureImage.byteLength,sourceSceneryPngBytes:scenicImage.byteLength},null,2));
 }finally{
  await browser.close();
 }
