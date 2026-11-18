@@ -10,6 +10,7 @@ on:
       - "static/maps/octavus.native-entities.json"
       - "static/maps/octavus.native-spawn-audit.json"
       - "test_octavus_native_preview79.mjs"
+      - "test_octavus_native_browser80.mjs"
       - ".github/workflows/octavus-native-phase13.yml"
   workflow_dispatch:
 
@@ -30,7 +31,7 @@ jobs:
         run: node test_octavus_native_preview79.mjs
       - name: Verify standalone preview is served as a static asset
         run: |
-          python3 -m http.server 8765 --directory static >/tmp/octavus-phase13-http.log 2>&1 &
+          python3 -m http.server 8765 --directory . >/tmp/octavus-phase13-http.log 2>&1 &
           HTTP_PID=$!
           trap 'kill $HTTP_PID || true' EXIT
           python3 - <<'PY'
@@ -38,7 +39,7 @@ jobs:
           import time
           for _ in range(30):
               try:
-                  with urlopen("http://127.0.0.1:8765/octavus-native-preview.html", timeout=3) as r:
+                  with urlopen("http://127.0.0.1:8765/static/octavus-native-preview.html", timeout=3) as r:
                       body=r.read().decode()
                   assert "octavus-native-preview.js" in body
                   break
@@ -46,7 +47,24 @@ jobs:
                   time.sleep(.2)
           else:
               raise RuntimeError("Native standalone preview not served by static host")
-          with urlopen("http://127.0.0.1:8765/maps/octavus.native-core.bin.gz") as r:
+          with urlopen("http://127.0.0.1:8765/static/maps/octavus.native-core.bin.gz") as r:
               assert r.read(2)==bytes([0x1f,0x8b])
           print("Octavus native preview + compressed native geometry HTTP: PASS")
           PY
+
+      - name: Install headless Chrome driver library (no app dependency)
+        run: npm install --no-save --no-package-lock --ignore-scripts puppeteer-core@24.20.0
+      - name: Render reconstructed geometry in actual headless Chrome
+        run: |
+          python3 -m http.server 8765 --directory . >/tmp/octavus-phase13-browser.log 2>&1 &
+          HTTP_PID=$!
+          trap 'kill $HTTP_PID || true' EXIT
+          node test_octavus_native_browser80.mjs
+      - name: Save inspection screenshot for side-by-side review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: octavus-native-core-chrome-preview
+          path: /tmp/octavus-native-core-preview.png
+          if-no-files-found: ignore
+          retention-days: 14
