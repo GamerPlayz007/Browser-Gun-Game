@@ -1,0 +1,77 @@
+name: Octavus Phase 1.5 optimized partial visibility mesh
+on:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/octavus_native_merge83.py"
+      - "scripts/octavus_native_optimize85.py"
+      - "static/maps/octavus.native-partial.bin.gz"
+      - "static/maps/octavus.native-partial.json"
+      - ".github/workflows/octavus-native-optimize85.yml"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  optimize-partial-native:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Prove source native merger never fills openings, alters surfaces or reverses normals
+        run: python -m unittest -v test_octavus_native_merge83 test_octavus_native_partial84
+      - name: Merge only exact original-coplanar source rectangles after partial-face culling
+        run: python -m scripts.octavus_native_optimize85
+      - name: Check every OCN2 index and partial-visibility material count conservation
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from collections import Counter
+          import gzip,hashlib,json,struct
+          root=Path("static/maps")
+          p=json.loads((root/"octavus.native-partial.json").read_text())
+          m=json.loads((root/"octavus.native-optimized.json").read_text())
+          compressed=(root/"octavus.native-optimized.bin.gz").read_bytes()
+          raw=gzip.decompress(compressed)
+          nv,nt=struct.unpack_from("<II",raw,4)
+          assert raw[:4]==b"OCN2"
+          assert len(raw)==12+12*nv+14*nt
+          assert (nv,nt)==(m["vertices"],m["triangles"])
+          assert m["sourceSHA256"]==p["sha256"]
+          assert m["sourceTriangles"]==p["triangles"]==1072281
+          assert m["originalPlainTriangles"]==p["remainingPlainSlotOneTriangles"]==974352
+          assert 75000<=nt<p["triangles"]
+          assert m["finalPlainTriangles"]<m["originalPlainTriangles"]
+          assert m["liveMapModified"] is False
+          assert m["exactSourceSurfaceVisibility"] is False
+          counts=Counter()
+          for i in range(nt):
+              a,b,c,slot=struct.unpack_from("<IIIH",raw,12+12*nv+i*14)
+              assert max(a,b,c)<nv
+              counts[slot]+=1
+          assert counts[1]==m["finalPlainTriangles"]
+          assert sum(n for slot,n in counts.items() if slot!=1)==97929
+          assert dict(sorted(counts.items()))=={int(k):v for k,v in m["newMaterialTriangleCounts"].items()}
+          assert hashlib.sha256(compressed).hexdigest()==m["sha256"]
+          print("Optimized source visibility preserved all non-plain authored geometry:",nt,"triangles")
+          PY
+      - name: Publish independently verified native-optimized stage safely
+        run: |
+          cp static/maps/octavus.native-optimized.bin.gz /tmp/octavus.native-optimized.bin.gz
+          cp static/maps/octavus.native-optimized.json /tmp/octavus.native-optimized.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for i in 1 2 3; do
+            git fetch origin main
+            git reset --hard origin/main
+            cp /tmp/octavus.native-optimized.* static/maps/
+            git add static/maps/octavus.native-optimized.*
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m "build(octavus phase1.5): publish source-native occlusion and exact merge candidate"
+            if git push origin HEAD:main; then exit 0; fi
+          done
+          exit 1
