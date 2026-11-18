@@ -77,6 +77,40 @@ class OctavusPerformanceTests(unittest.TestCase):
                 self.assertLessEqual(xy[k+2],z+.36)
                 self.assertGreaterEqual(xy[k+3],z-.36)
 
+    def test_live_wall_resolve_parity_and_profile(self):
+        from dust_motion65 import resolve_walls
+        w = self.world
+
+        class CoarseIndexedWorld:
+            wall_cells = w.wall_cells
+            wall_y_bounds = w.wall_y_bounds
+            wall_normals = w.wall_normals
+            triangle = staticmethod(w.triangle)
+
+            @staticmethod
+            def wall_candidates(x0, z0, x1, z1):
+                return (tri for tri in w.candidates(x0, z0, x1, z1)
+                        if w.wall_normals[tri*3+1] ** 2 <=
+                        .65**2 * sum(v*v for v in w.wall_normals[tri*3:tri*3+3])
+                        and sum(v*v for v in w.wall_normals[tri*3:tri*3+3]) >= 1e-16)
+
+        cases = []
+        for x,y,z in self.samples[:40]:
+            for dx,dz in ((.05,.02),(.18,.13),(-.08,-.07)):
+                cases.append((x+dx,y,z+dz,1.8,x,z,3.0,-2.0))
+        coarse = CoarseIndexedWorld()
+        t = time.perf_counter()
+        old = [resolve_walls(coarse,*case) for case in cases]
+        old_ms = (time.perf_counter()-t)*1000
+        t = time.perf_counter()
+        new = [resolve_walls(w,*case) for case in cases]
+        new_ms = (time.perf_counter()-t)*1000
+        for original,optimized in zip(old,new):
+            for a,b in zip(original,optimized):
+                self.assertAlmostEqual(a,b,delta=.0001)
+        print(f'Octavus 120 wall resolves: coarse={old_ms:.2f}ms '
+              f'2m={new_ms:.2f}ms speedup={old_ms/max(new_ms,1e-9):.1f}x')
+
     def test_reference_speed_profile(self):
         # No timing assertion; CI hosts vary. Report speedups for inspection.
         pts = self.samples[:24]
