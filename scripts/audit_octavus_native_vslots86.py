@@ -51,7 +51,7 @@ def decode_native_vslots():
         parent=r.i32()
         if mask>>(VSLOT_NUM):
             raise FormatError("Unexpected original VSlot changed bits")
-        if parent>=len(slots) or parent<-1:
+        if parent>=count or parent<-1:
             raise FormatError("Native VSlot predecessor not prior to slot")
         overrides={}
         # For every changed field, capture meaningful native texture
@@ -105,16 +105,18 @@ def decode_native_vslots():
         tally["changed"]+=1
     if r.pos!=EXPECTED_END or len(slots)!=count:
         raise FormatError("Source texture slot block size or count mismatch")
+    # savevslot records the previous entry in a linked variant chain;
+    # variants need not have lower numeric indices than their successor.
     for slot in slots:
-        trail=[]
+        seen=set()
         idx=slot["index"]
         while slots[idx]["prev"]!=-1:
             parent=slots[idx]["prev"]
-            if parent>=idx or parent in trail:
-                raise FormatError("Native texture predecessor loop or invalid order")
-            trail.append(parent);idx=parent
+            if parent<0 or parent>=count or parent in seen or parent==idx:
+                raise FormatError("Native texture predecessor cycle or invalid index")
+            seen.add(idx);idx=parent
         slot["rootVSlot"]=idx
-        if trail:slot["depth"]=len(trail)
+        if seen:slot["depth"]=len(seen)
     return slots,tally,changed_sets
 
 def audit():
