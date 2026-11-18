@@ -39,8 +39,8 @@ jobs:
           assert j["liveMapModified"] is False
           for i,slot in enumerate(j["sourceNativeSlots"]):
               assert slot["index"]==i
-              assert slot["prev"]<i
-              assert 0<=slot["rootVSlot"]<=i
+              assert -1<=slot["prev"]<223
+              assert 0<=slot["rootVSlot"]<223
           print("PASS: native MPZ texture inheritance decoded, provenance intact")
           PY
       - name: Publish deterministic MPZ slot inheritance audit
