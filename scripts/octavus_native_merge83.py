@@ -133,16 +133,17 @@ def triangles_from_rectangle(axis,plane,sign,u0,u1,v0,v1):
     return (points[0],points[1],points[2]),(points[0],points[2],points[3])
 
 
-def compact():
+def compact(source=INPUT, source_manifest=MANIFEST, output=OUTPUT, report_path=REPORT):
     started=perf_counter()
-    manifest=json.loads(MANIFEST.read_text())
-    compressed=INPUT.read_bytes()
-    if hashlib.sha256(compressed).hexdigest()!=manifest["stagingSHA256"]:
+    manifest=json.loads(source_manifest.read_text())
+    compressed=source.read_bytes()
+    source_hash=manifest["stagingSHA256"] if "stagingSHA256" in manifest else manifest["sha256"]
+    if hashlib.sha256(compressed).hexdigest()!=source_hash:
         raise ValueError("Source staging mesh SHA mismatch")
     raw=gzip.decompress(compressed)
     if raw[:4]!=b"OCN2":raise ValueError("Invalid OCN2 asset")
     nv,nt=struct.unpack_from("<II",raw,4)
-    if nt!=1661200 or nv!=822787:raise ValueError("Unknown original source geometry")
+    if (nt,nv)!=(manifest["triangles"],manifest["vertices"]):raise ValueError("Unexpected source geometry header vs manifest")
     vertex_data=raw[12:12+12*nv]
     verts=list(struct.iter_unpack("<III",vertex_data))
     triangle_data=raw[12+12*nv:]
@@ -207,17 +208,17 @@ def compact():
     packed=gzip.compress(out.getvalue(),compresslevel=6,mtime=0)
     if len(packed)>len(compressed):
         raise ValueError("Source face compaction did not improve compressed size")
-    OUTPUT.write_bytes(packed)
+    output.write_bytes(packed)
     report={
         "format":"OCN2",
         "status":"staging-only-not-live",
         "sourceRevision":829,
-        "sourceSHA256":manifest["stagingSHA256"],
+        "sourceSHA256":source_hash,
         "sourceTriangles":nt,
         "sourceVertices":nv,
         "vertices":len(output_verts),
         "triangles":len(output_tris),
-        "originalPlainTriangles":1562842,
+        "originalPlainTriangles":manifest.get("remainingPlainSlotOneTriangles",1562842),
         "finalPlainTriangles":mats[SOURCE_MAT],
         "pairedOriginalPlainQuads":counters["pairedQuads"],
         "mergedPlainRectangles":merged_rect_count,
@@ -235,7 +236,7 @@ def compact():
         "sha256":hashlib.sha256(packed).hexdigest(),
         "liveMapModified":False,
     }
-    REPORT.write_text(json.dumps(report,indent=2)+"\n")
+    report_path.write_text(json.dumps(report,indent=2)+"\n")
     print(json.dumps({k:v for k,v in report.items() if k!="newMaterialTriangleCounts"},indent=2))
     print("Compaction duration (s):",round(perf_counter()-started,2))
     return report
