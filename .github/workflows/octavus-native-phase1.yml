@@ -1,0 +1,41 @@
+name: Octavus Phase 1 native MPZ source decode
+on:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/decode_octavus_octree76.py"
+      - "test_octavus_octree76.py"
+      - "sources/octavus.original.mpz"
+      - "sources/octavus.original.json"
+      - "sources/octavus.native-variables.json"
+      - ".github/workflows/octavus-native-phase1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  decode-native:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Decode original source MPZ octree and validate sample structures
+        run: |
+          python -m unittest -v test_octavus_octree76
+          python scripts/decode_octavus_octree76.py
+      - name: Publish independent source inventory (never live map geometry)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add static/maps/octavus.native-octree-report.json
+          if ! git diff --cached --quiet; then
+            git commit -m "build(octavus phase1): store validated original native octree inventory"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
