@@ -23,7 +23,7 @@ from match35 import (DEATHMATCH_GOAL,KILLS_PER_TIER,MATCH_DURATION,COUNTDOWN_DUR
                      timed_winner,rules)
 MAP=DEFAULT.data;BOXES=DEFAULT.boxes;SPAWNS=DEFAULT.spawns
 RELEASE='3.1.0'; PHASE='06.8'; API_VERSION=5
-TICK=1/60; LIMIT=DEATHMATCH_GOAL; ROUND_SECONDS=MATCH_DURATION; MAX_PLAYERS=8; MAX_REWIND=.30
+TICK=1/60; OCTAVUS_TICK=1/30; LIMIT=DEATHMATCH_GOAL; ROUND_SECONDS=MATCH_DURATION; MAX_PLAYERS=8; MAX_REWIND=.30
 # Fixed memorable lobby names, never player-entered or randomly generated codes.
 ROOM_CODES65=('MAX','ACE','FOX','RED','SKY','NEO','ZEN','PRO','WOLF','NOVA','ECHO','LIME')
 MANUAL_RESPAWN_COOLDOWN65=20.
@@ -448,13 +448,17 @@ class Room:
                 regenerate(p,now)
             if p['reload_at'] and now>=p['reload_at']:p['ammo']=WEAPONS[p['weapon']]['mag'];p['reload_at']=0
             if self.phase in ('lobby','playing'):
+                # Imported Octavus mesh collision is CPU-heavy on 0.1-CPU
+                # Render instances. A shared 30Hz native simulation halves
+                # collision work without changing other arenas' 60Hz physics.
+                step_dt=OCTAVUS_TICK if self.arena.id=='octavus' else TICK
                 p['move_credit']=min(.2,p['move_credit']+dt)
-                while p['commands'] and p['move_credit']>=TICK-1e-8:
+                while p['commands'] and p['move_credit']>=step_dt-1e-8:
                     cmd=p['commands'].popleft()
                     if cmd['spawn']!=p['spawn']:continue
                     p['input']=cmd['input'];p['yaw']=cmd['yaw'];p['pitch']=cmd['pitch']
-                    p['motion_time']+=TICK;p['last_input']=p['motion_time']
-                    move(p,TICK,p['motion_time'],self.arena);p['seq']=cmd['seq'];p['move_credit']-=TICK
+                    p['motion_time']+=step_dt;p['last_input']=p['motion_time']
+                    move(p,step_dt,p['motion_time'],self.arena);p['seq']=cmd['seq'];p['move_credit']-=step_dt
             else:
                 p['commands'].clear();p['move_credit']=0.
         self.step_bots(now)
@@ -481,7 +485,7 @@ class Room:
     def snapshot(self,now):
         self.snapshot_sequence+=1
         fields=('id','name','team','bot','ready','skin','x','y','z','vx','vy','vz','grounded','yaw','pitch','hp','ammo','kills','deaths','headshots','streak','best_streak','weapon','crouch','lean','spawn','seq','shot_seq','ack_shot','jump_held','slide_held','motion_time','slide_until','slide_ready','jump_buffer_until','coyote_until','jump_consumed','jump_cut','wall_kick_used','interact_held','mantle')
-        return dict(type='state',snapshotSeq=self.snapshot_sequence,serverTime=round(now,6),tickRate=60,snapshotHz=20,maxHp=MAX_HEALTH,mapId=self.arena.id,phase=self.phase,mode=self.mode,host=self.host,round=self.round_number,nextMode=self.next_mode,rules=rules(self.mode,len(WEAPONS)),standings=standings(self.players,self.mode),leaderId=(None if is_team_mode(self.mode) or self.mode==BOT_MODE else leading_player(self.players)),winnerId=self.winner_id,winnerTeam=self.winner_team,
+        return dict(type='state',snapshotSeq=self.snapshot_sequence,serverTime=round(now,6),tickRate=(30 if self.arena.id=='octavus' else 60),snapshotHz=20,maxHp=MAX_HEALTH,mapId=self.arena.id,phase=self.phase,mode=self.mode,host=self.host,round=self.round_number,nextMode=self.next_mode,rules=rules(self.mode,len(WEAPONS)),standings=standings(self.players,self.mode),leaderId=(None if is_team_mode(self.mode) or self.mode==BOT_MODE else leading_player(self.players)),winnerId=self.winner_id,winnerTeam=self.winner_team,
             teamScores=self.team_scores.copy(),readyStatus=ready_summary(self.players),
             aiScore=self.ai_score,botScore=self.bot_score,botsAlive=sum(b['hp']>0 for b in self.bots.values()),
             objective=({**self.control_point,'controller':self.control_owner,
