@@ -1,0 +1,72 @@
+name: Octavus Phase 1.4 exact planar source merge
+on:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/octavus_native_merge83.py"
+      - "test_octavus_native_merge83.py"
+      - ".github/workflows/octavus-native-merge83.yml"
+      - "static/maps/octavus.native-stage1.bin.gz"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  native-coplanar-merges:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Prove source merge area, polygon shapes and original winding invariants
+        run: python -m unittest -v test_octavus_native_merge83
+      - name: Reduce only exact coplanar source plain rectangle tessellation
+        run: python -m scripts.octavus_native_merge83
+      - name: Validate optimized source archive, slot counts, mesh indices and provenance
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from collections import Counter
+          import gzip,json,hashlib,struct
+          meta=json.loads(Path("static/maps/octavus.native-merged.json").read_text())
+          path=Path("static/maps/octavus.native-merged.bin.gz")
+          payload=path.read_bytes()
+          raw=gzip.decompress(payload)
+          assert raw[:4]==b"OCN2"
+          verts,triangles=struct.unpack_from("<II",raw,4)
+          assert len(raw)==12+verts*12+triangles*14
+          assert (verts,triangles)==(meta["vertices"],meta["triangles"])
+          assert triangles<meta["sourceTriangles"]
+          assert meta["pairedOriginalPlainQuads"]>100
+          assert meta["finalPlainTriangles"]<meta["originalPlainTriangles"]
+          assert not meta["exactSourceSurfaceVisibility"]
+          assert meta["liveMapModified"] is False
+          counts=Counter()
+          for i in range(triangles):
+              a,b,c,slot=struct.unpack_from("<IIIH",raw,12+12*verts+i*14)
+              assert a<verts and b<verts and c<verts
+              counts[slot]+=1
+          assert dict(sorted(counts.items()))=={int(k):v for k,v in meta["newMaterialTriangleCounts"].items()}
+          assert sum(x for k,x in counts.items() if k!=1)==98358
+          assert hashlib.sha256(payload).hexdigest()==meta["sha256"]
+          print("Exact-plane source geometry reduction VERIFIED:",meta["sourceTriangles"],"=>",triangles)
+          PY
+      - name: Publish standalone improved source-stage mesh safely
+        run: |
+          cp static/maps/octavus.native-merged.bin.gz /tmp/octavus.native-merged.bin.gz
+          cp static/maps/octavus.native-merged.json /tmp/octavus.native-merged.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for i in 1 2 3; do
+            git fetch origin main
+            git reset --hard origin/main
+            cp /tmp/octavus.native-merged.* static/maps/
+            git add static/maps/octavus.native-merged.*
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m "build(octavus phase1.4): publish exact source plane-merged candidate"
+            if git push origin HEAD:main; then exit 0; fi
+          done
+          exit 1
