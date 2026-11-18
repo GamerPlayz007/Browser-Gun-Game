@@ -101,9 +101,35 @@ try{
  const enhancedImage=await canvas.screenshot();
  assert.ok(enhancedImage.byteLength>12000);
  writeFileSync('/tmp/octavus-native-optimized-preview.png',enhancedImage);
+ // Verify the original, attributed source images are really usable by
+ // the renderer, not just linked in a JSON manifest.
+ const shaderErrors=[];
+ page.on('console',msg=>{
+  if(msg.type()==='error'&&/Shader Error|WebGLProgram|GL_INVALID_OPERATION|ERROR: 0:/.test(msg.text()))
+   shaderErrors.push(msg.text().slice(0,1000));
+ });
+ await page.select('#mode','source');
+ await page.waitForFunction(()=>{
+  return document.getElementById('diagnostic')?.textContent.includes('SOURCE TEXTURES:');
+ },{timeout:60000});
+ const sourceMode=await page.evaluate(()=>({
+  mode:document.getElementById('mode').value,
+  status:document.getElementById('render-label').textContent,
+  diagnostic:document.getElementById('diagnostic').textContent.slice(0,500)
+ }));
+ assert.equal(sourceMode.mode,'source');
+ assert.ok(sourceMode.diagnostic.includes('SOURCE TEXTURES:'));
+ assert.ok(sourceMode.status.includes('original image files'));
+ await page.waitForFunction(()=>{
+   return document.getElementById('fps-label')?.textContent.includes('FPS');
+ },{timeout:15000});
+ const textureImage=await canvas.screenshot();
+ assert.ok(textureImage.byteLength>12000);
+ writeFileSync('/tmp/octavus-native-source-textures-preview.png',textureImage);
+ assert.deepEqual(shaderErrors,[],'Native texture source projection must compile in Chrome WebGL');
  assert.deepEqual(errors,[],'No browser runtime errors permitted');
  console.log('Octavus native preview headless Chrome: PASS');
- console.log(JSON.stringify({...stats,previewPngBytes:image.byteLength,optimizedPngBytes:enhancedImage.byteLength},null,2));
+ console.log(JSON.stringify({...stats,previewPngBytes:image.byteLength,optimizedPngBytes:enhancedImage.byteLength,sourceTexturePngBytes:textureImage.byteLength},null,2));
 }finally{
  await browser.close();
 }
