@@ -1,6 +1,6 @@
 {
   "status": "failed",
-  "verifiedAt": "2026-11-18T13:58:14.290982+00:00",
+  "verifiedAt": "2026-11-18T13:58:28.000974+00:00",
   "steps": {
     "octavusServerMotion": "failure",
     "browserImportClosure": "skipped",
@@ -33,10 +33,10 @@
       "35839",
       "",
       "----------------------------------------------------------------------",
-      "Ran 11 tests in 0.947s",
+      "Ran 11 tests in 0.548s",
       "",
       "FAILED (failures=1)",
-      "Octavus exact ground probes: reference=0.0043s accelerated=0.0004s speedup=10.4x"
+      "Octavus exact ground probes: reference=0.0027s accelerated=0.0003s speedup=9.3x"
     ]
   },
   "scope": "Automated tests; interactive browser gameplay still requires playtesting"
