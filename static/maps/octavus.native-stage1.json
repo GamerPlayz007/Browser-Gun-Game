@@ -1,0 +1,153 @@
+{
+  "format": "OCN2",
+  "status": "staging-only-not-live",
+  "sourceRevision": 829,
+  "nativeSourceHash": "31f07750a7610d069609a35ac6eb070e8ea3dc52571da9f529d3d643a212dde5",
+  "nativeWorldScale": 0.05,
+  "coordinateSpace": "source native XYZ, eighths of world unit; game Y is native Z",
+  "vertices": 822787,
+  "triangles": 1661200,
+  "nativeBoundsEighths": {
+    "min": [
+      0,
+      0,
+      0
+    ],
+    "max": [
+      65536,
+      65536,
+      25536
+    ]
+  },
+  "sourceTextureSlots": 196,
+  "largestTextureSlots": [
+    [
+      1,
+      1562842
+    ],
+    [
+      37,
+      14007
+    ],
+    [
+      79,
+      8886
+    ],
+    [
+      28,
+      8594
+    ],
+    [
+      72,
+      5590
+    ],
+    [
+      77,
+      5368
+    ],
+    [
+      70,
+      5112
+    ],
+    [
+      42,
+      4542
+    ],
+    [
+      39,
+      3886
+    ],
+    [
+      97,
+      3468
+    ],
+    [
+      80,
+      3091
+    ],
+    [
+      76,
+      2598
+    ],
+    [
+      92,
+      2378
+    ],
+    [
+      69,
+      2111
+    ],
+    [
+      109,
+      1626
+    ],
+    [
+      89,
+      1522
+    ],
+    [
+      189,
+      1388
+    ],
+    [
+      113,
+      1279
+    ],
+    [
+      84,
+      1255
+    ],
+    [
+      26,
+      896
+    ],
+    [
+      88,
+      874
+    ],
+    [
+      85,
+      850
+    ],
+    [
+      73,
+      816
+    ],
+    [
+      27,
+      796
+    ],
+    [
+      123,
+      790
+    ]
+  ],
+  "surfaceCounts": {
+    "explicit": 10681,
+    "occludedBySolidNeighbor": 1860608,
+    "implicit": 826681,
+    "explicitMerged": 38644,
+    "suppressedMergedParts": 345549
+  },
+  "warnings": {
+    "degenerateTriangles": 92690,
+    "collapsedFaces": 57469
+  },
+  "sourceLeaves": 704159,
+  "sourceExplicitPolygons": 49794,
+  "sourceStoredBytes": 12875182,
+  "stagingRawBytes": 33130256,
+  "stagingGzipBytes": 8963100,
+  "stagingSHA256": "fe3f9df17732f258683a6a69a13e89a43ab1ba4020fffe3e357de369c981e1cd",
+  "authoritativeNativeSurfaceData": true,
+  "exactRendererParity": false,
+  "knownGaps": [
+    "Partial occlusion against deformed neighbor surfaces is conservative.",
+    "Native polygon merging and layer blending are not renderer-exact.",
+    "UV generation, texture reconciliation, scene preview are pending.",
+    "Staging mesh is not used by current server or clients."
+  ],
+  "parseSeconds": 6.25,
+  "buildSeconds": 60.29,
+  "liveMapModified": false
+}
