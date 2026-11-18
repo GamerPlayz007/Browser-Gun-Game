@@ -1,0 +1,425 @@
+{
+  "format": "OCTAVUS-NATIVE-SPAWN-AUDIT78",
+  "sourceRevision": 829,
+  "originalPlayerStartCount": 33,
+  "withProjectedNativeMeshSurfaceWithin8Units": 32,
+  "withNoXYProjectedSurface": 0,
+  "outliers": [
+    {
+      "entityID": 428,
+      "sourcePosition": [
+        4272.0,
+        3848.0,
+        2816.0
+      ],
+      "hits": 5,
+      "nearestSurfaceZ": 2800.0,
+      "heightDifferenceNativeUnits": -16.0,
+      "textureSlot": 80
+    }
+  ],
+  "spawns": [
+    {
+      "entityID": 424,
+      "sourcePosition": [
+        4408.0,
+        4768.0,
+        2752.0
+      ],
+      "hits": 6,
+      "nearestSurfaceZ": 2752.0,
+      "heightDifferenceNativeUnits": 0.0,
+      "textureSlot": 70
+    },
+    {
+      "entityID": 425,
+      "sourcePosition": [
+        4032.0,
+        4880.0,
+        2848.0
+      ],
+      "hits": 2,
+      "nearestSurfaceZ": 2848.0,
+      "heightDifferenceNativeUnits": 0.0,
+      "textureSlot": 80
+    },
+    {
+      "entityID": 426,
+      "sourcePosition": [
+        3504.0,
+        4672.0,
+        2816.0
+      ],
+      "hits": 2,
+      "nearestSurfaceZ": 2816.0,
+      "heightDifferenceNativeUnits": 0.0,
+      "textureSlot": 70
+    },
+    {
+      "entityID": 427,
+      "sourcePosition": [
+        4480.0,
+        3328.0,
+        2816.0
+      ],
+      "hits": 20,
+      "nearestSurfaceZ": 2816.0,
+      "heightDifferenceNativeUnits": 0.0,
+      "textureSlot": 80
+    },
+    {
+      "entityID": 428,
+      "sourcePosition": [
+        4272.0,
+        3848.0,
+        2816.0
+      ],
+      "hits": 5,
+      "nearestSurfaceZ": 2800.0,
+      "heightDifferenceNativeUnits": -16.0,
+      "textureSlot": 80
+    },
+    {
+      "entityID": 429,
+      "sourcePosition": [
+        4688.0,
+        3664.0,
+        2816.0
+      ],
+      "hits": 6,
+      "nearestSurfaceZ": 2816.0,
+      "heightDifferenceNativeUnits": 0.0,
+      "textureSlot": 80
+    },
+    {
+      "entityID": 430,
+      "sourcePosition": [
+        4928.0,
+        4232.0,
+        2848.0
+      ],
+      "hits": 2,
+      "nearestSurfaceZ": 2848.0,
+      "heightDifferenceNativeUnits": 0.0,
+      "textureSlot": 213
+    },
+    {
+      "entityID": 431,
+      "sourcePosition": [
+        4352.0,
+        3712.0,
+        2816.0
+      ],
+      "hits": 9,
+      "nearestSurfaceZ": 2816.0,
+      "heightDifferenceNativeUnits": 0.0,
+      "textureSlot": 85
+    },
+    {
+      "entityID": 432,
+      "sourcePosition": [
+        4080.0,
+        3264.0,
+        2848.0
+      ],
+      "hits": 2,
+      "nearestSurfaceZ": 2848.0,
+      "heightDifferenceNativeUnits": 0.0,
+      "textureSlot": 85
+    },
+    {
+      "entityID": 433,
+      "sourcePosition": [
+        3264.0,
+        4000.0,
+        2848.0
+      ],
+      "hits": 2,
+      "nearestSurfaceZ": 2848.0,
+      "heightDifferenceNativeUnits": 0.0,
+      "textureSlot": 80
+    },
+    {
+      "entityID": 434,
+      "sourcePosition": [
+        4108.0,
+        4928.0,
+        2848.0
+      ],
+      "hits": 2,
+      "nearestSurfaceZ": 2848.0,
+      "heightDifferenceNativeUnits": 0.0,
+      "textureSlot": 85
+    },
+    {
+      "entityID": 435,
+      "sourcePosition": [
+        3820.0,
+        4480.0,
+        2816.0
+      ],
+      "hits": 3,
+      "nearestSurfaceZ": 2816.0,
+      "heightDifferenceNativeUnits": 0.0,
+      "textureSlot": 85
+    },
+    {
+      "entityID": 436,
+      "sourcePosition": [
+        3712.0,
+        4864.0,
+        2816.0
+      ],
+      "hits": 19,
+      "nearestSurfaceZ": 2816.0,
+      "heightDifferenceNativeUnits": 0.0,
+      "textureSlot": 34
+    },
+    {
+      "entityID": 437,
+      "sourcePosition": [
+        3512.0,
+        4536.0,
+        2816.0
+      ],
+      "hits": 6,
+      "nearestSurfaceZ": 2816.0,
+      "heightDifferenceNativeUnits": 0.0,
+      "textureSlot": 80
+    },
+    {
+      "entityID": 438,
+      "sourcePosition": [
+        3240.0,
+        4444.0,
+        2832.0
+      ],
+      "hits": 5,
+      "nearestSurfaceZ": 2832.0,
+      "heightDifferenceNativeUnits": 0.0,
+      "textureSlot": 113
+    },
+    {
+      "entityID": 439,
+      "sourcePosition": [
+        3632.0,
+        4856.0,
+        2816.0
+      ],
+      "hits": 5,
+      "nearestSurfaceZ": 2816.0,
+      "heightDifferenceNativeUnits": 0.0,
+      "textureSlot": 80
+    },
+    {
+      "entityID": 440,
+      "sourcePosition": [
+        3904.0,
+        4384.0,
+        2816.0
+      ],
+      "hits": 11,
+      "nearestSurfaceZ": 2816.0,
+      "heightDifferenceNativeUnits": 0.0,
+      "textureSlot": 80
+    },
+    {
+      "entityID": 441,
+      "sourcePosition": [
+        4356.0,
+        5088.0,
+        2816.0
+      ],
+      "hits": 3,
+      "nearestSurfaceZ": 2816.0,
+      "heightDifferenceNativeUnits": 0.0,
+      "textureSlot": 70
+    },
+    {
+      "entityID": 442,
+      "sourcePosition": [
+        4652.0,
+        4896.0,
+        2792.0
+      ],
+      "hits": 1,
+      "nearestSurfaceZ": 2795.0,
+      "heightDifferenceNativeUnits": 3.0,
+      "textureSlot": 70
+    },
+    {
+      "entityID": 443,
+      "sourcePosition": [
+        4624.0,
+        4336.0,
+        2848.0
+      ],
+      "hits": 1,
+      "nearestSurfaceZ": 2848.0,
+      "heightDifferenceNativeUnits": 0.0,
+      "textureSlot": 213
+    },
+    {
+      "entityID": 444,
+      "sourcePosition": [
+        3548.0,
+        4352.0,
+        2784.0
+      ],
+      "hits": 2,
+      "nearestSurfaceZ": 2784.0,
+      "heightDifferenceNativeUnits": 0.0,
+      "textureSlot": 70
+    },
+    {
+      "entityID": 445,
+      "sourcePosition": [
+        4272.0,
+        4416.0,
+        2784.0
+      ],
+      "hits": 10,
+      "nearestSurfaceZ": 2784.0,
+      "heightDifferenceNativeUnits": 0.0,
+      "textureSlot": 80
+    },
+    {
+      "entityID": 446,
+      "sourcePosition": [
+        3784.0,
+        3424.0,
+        2752.0
+      ],
+      "hits": 4,
+      "nearestSurfaceZ": 2752.0,
+      "heightDifferenceNativeUnits": 0.0,
+      "textureSlot": 70
+    },
+    {
+      "entityID": 447,
+      "sourcePosition": [
+        4160.0,
+        3312.0,
+        2848.0
+      ],
+      "hits": 6,
+      "nearestSurfaceZ": 2848.0,
+      "heightDifferenceNativeUnits": 0.0,
+      "textureSlot": 80
+    },
+    {
+      "entityID": 448,
+      "sourcePosition": [
+        4688.0,
+        3520.0,
+        2816.0
+      ],
+      "hits": 2,
+      "nearestSurfaceZ": 2816.0,
+      "heightDifferenceNativeUnits": 0.0,
+      "textureSlot": 70
+    },
+    {
+      "entityID": 449,
+      "sourcePosition": [
+        4952.0,
+        3748.0,
+        2832.0
+      ],
+      "hits": 5,
+      "nearestSurfaceZ": 2832.0,
+      "heightDifferenceNativeUnits": 0.0,
+      "textureSlot": 113
+    },
+    {
+      "entityID": 450,
+      "sourcePosition": [
+        4560.0,
+        3336.0,
+        2816.0
+      ],
+      "hits": 7,
+      "nearestSurfaceZ": 2816.0,
+      "heightDifferenceNativeUnits": 0.0,
+      "textureSlot": 80
+    },
+    {
+      "entityID": 451,
+      "sourcePosition": [
+        4288.0,
+        3808.0,
+        2816.0
+      ],
+      "hits": 11,
+      "nearestSurfaceZ": 2816.0,
+      "heightDifferenceNativeUnits": 0.0,
+      "textureSlot": 80
+    },
+    {
+      "entityID": 452,
+      "sourcePosition": [
+        3836.0,
+        3104.0,
+        2816.0
+      ],
+      "hits": 3,
+      "nearestSurfaceZ": 2816.0,
+      "heightDifferenceNativeUnits": 0.0,
+      "textureSlot": 70
+    },
+    {
+      "entityID": 453,
+      "sourcePosition": [
+        3540.0,
+        3296.0,
+        2792.0
+      ],
+      "hits": 1,
+      "nearestSurfaceZ": 2787.0,
+      "heightDifferenceNativeUnits": -5.0,
+      "textureSlot": 70
+    },
+    {
+      "entityID": 454,
+      "sourcePosition": [
+        3568.0,
+        3856.0,
+        2848.0
+      ],
+      "hits": 1,
+      "nearestSurfaceZ": 2848.0,
+      "heightDifferenceNativeUnits": 0.0,
+      "textureSlot": 80
+    },
+    {
+      "entityID": 455,
+      "sourcePosition": [
+        4644.0,
+        3840.0,
+        2784.0
+      ],
+      "hits": 2,
+      "nearestSurfaceZ": 2784.0,
+      "heightDifferenceNativeUnits": 0.0,
+      "textureSlot": 70
+    },
+    {
+      "entityID": 456,
+      "sourcePosition": [
+        3920.0,
+        3776.0,
+        2784.0
+      ],
+      "hits": 10,
+      "nearestSurfaceZ": 2784.0,
+      "heightDifferenceNativeUnits": 0.0,
+      "textureSlot": 80
+    }
+  ],
+  "limitations": [
+    "Prototype native mesh is not renderer-exact and excludes plain slot 1.",
+    "Vertical ray projection is a diagnostic, not a capsule collision test.",
+    "Original game spawn points may be intentionally suspended above floors."
+  ],
+  "liveMapModified": false
+}

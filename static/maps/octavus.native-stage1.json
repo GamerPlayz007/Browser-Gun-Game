@@ -147,7 +147,5 @@
     "UV generation, texture reconciliation, scene preview are pending.",
     "Staging mesh is not used by current server or clients."
   ],
-  "parseSeconds": 6.6,
-  "buildSeconds": 61.82,
   "liveMapModified": false
 }
