@@ -66,7 +66,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
  <a href="/">Back to CROSSFire</a>
 </header>
 <main>
- <div class="banner"><strong>PHASE 1.3 — INSPECTION BUILD, NOT GAMEPLAY.</strong> This is a source-native geometry prototype from the original Red Eclipse 2 Octavus MPZ (revision 829). The current preview omits plain-material slot 1, is missing authored UVs and props, and does <em>not</em> reproduce the original engine's complete visibility rules. It is deliberately isolated from multiplayer and collision.</div>
+ <div class="banner"><strong>PHASE 1.3 — INSPECTION BUILD, NOT GAMEPLAY.</strong> This is a source-native geometry prototype from the original Red Eclipse 2 Octavus MPZ (revision 829). The compact core omits plain-material slot 1. Edge-aware and raw diagnostics retain it but still lack complete native visibility, authored UVs and props. They are <em>not</em> finished original geometry. It is deliberately isolated from multiplayer and collision.</div>
  <section class="stage" aria-label="Native geometry inspection">
   <div class="panel">
    <div class="viewport" id="viewport">
@@ -83,6 +83,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
     <label><input type="checkbox" id="spawns"> Native spawns</label>
     <span class="group-separator"></span>
     <button type="button" id="core-btn" aria-pressed="true">Core / 98k</button>
+    <button type="button" id="neighbor-btn" aria-pressed="false" title="Native-edge-aware neighbor visibility; still not an exact native engine renderer">Edge-aware geometry</button>
     <button type="button" id="raw-btn" aria-pressed="false" title="Heavy raw staging: unculled surfaces; not an accurate playable world">Raw candidate / 1.66m</button>
    </div>
   </div>
@@ -105,7 +106,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
       <div class="stat"><span>Material slots</span><b id="metric-slots">—</b></div>
       <div class="stat"><span>Native starts</span><b id="metric-starts">—</b></div>
      </div>
-     <div class="controls">Drag to orbit • Scroll to zoom • Shift + drag to pan • Top-down for footprint checks. Green pins mark original MPZ player-start coordinates. The raw candidate mode is a heavy diagnostic and can show <strong>unwanted internal faces</strong>.</div>
+     <div class="controls">Drag to orbit • Scroll to zoom • Shift + drag to pan • Top-down for footprint checks. Green pins mark original MPZ player-start coordinates. The edge-aware and raw modes are diagnostics; they can still show <strong>unwanted internal faces</strong> and run slowly.</div>
     </div></div>
    <div class="panel"><div class="body"><h2>Validation and errors</h2>
     <div id="diagnostic" aria-live="polite">Checking native asset header and source metadata…</div>
