@@ -130,21 +130,19 @@ try{
  const textureImage=await canvas.screenshot();
  assert.ok(textureImage.byteLength>12000);
  writeFileSync('/tmp/octavus-native-source-textures-preview.png',textureImage);
- // Source-native Phase 1.7 entity layers are optional, but must render
- // in the exact reconstructed-world coordinates without runtime errors.
- await page.click('#source-props');
+ // One-click player-friendly preview must load all source scenery onto
+ // the native reconstructed map, without modifying the live game.
+ await page.click('#restored-btn');
  await page.waitForFunction(()=>{
-  return document.getElementById('metric-props')?.textContent==='135';
- },{timeout:90000});
- await page.click('#source-env');
- await page.waitForFunction(()=>{
-  return document.getElementById('metric-lights')?.textContent==='233'
-      && document.getElementById('metric-skybox')?.textContent==='Loaded';
- },{timeout:60000});
- await page.click('#source-decals');
- await page.waitForFunction(()=>{
-  return document.getElementById('metric-decals')?.textContent==='135';
- },{timeout:60000});
+  return document.getElementById('metric-props')?.textContent==='135'
+    && document.getElementById('metric-lights')?.textContent==='233'
+    && document.getElementById('metric-skybox')?.textContent==='Loaded'
+    && document.getElementById('metric-decals')?.textContent==='135'
+    && document.getElementById('metric-tris')?.textContent==='863,803'
+    && document.getElementById('mode')?.value==='source'
+    && !document.getElementById('restored-btn')?.disabled;
+ },{timeout:120000});
+ assert.ok(await page.evaluate(()=>document.getElementById('diagnostic').textContent.includes('RESTORED SOURCE SCENE')));
  const sceneryStats=await page.evaluate(()=>({
   originalProps:document.getElementById('metric-props').textContent,
   originalDecals:document.getElementById('metric-decals').textContent,
