@@ -31,6 +31,7 @@ const originalScenery=new OctavusNativeScenery(scene,{sourceHemisphere:originalH
 originalScenery.onNotice=message=>note(message);
 originalScenery.onCounts=counts=>{
  $('metric-props').textContent=fmt(counts.models);
+ $('metric-anchors').textContent=fmt(counts.anchors);
  $('metric-decals').textContent=fmt(counts.decals);
  $('metric-lights').textContent=fmt(counts.lightEntities);
  $('metric-skybox').textContent=counts.skybox?'Loaded':'Off';
