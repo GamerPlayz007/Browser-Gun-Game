@@ -45,7 +45,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 .sidebar h2{font-family:"Barlow Condensed",Barlow,sans-serif;text-transform:uppercase;letter-spacing:.06em;font-size:18px;margin:0 0 10px}
 .sidebar p{font-size:13px;color:#b2c2cf;line-height:1.55;margin:7px 0}
 .figure{background:#0d1520;border-radius:8px;overflow:hidden;border:1px solid var(--border)}
-.figure img{display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover}
+.figure img{display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:contain;background:#0b1520}
 .figure figcaption{font-size:11px;color:var(--muted);padding:10px 11px;line-height:1.5}
 .figure a,.sidebar a{color:#e4c698}
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:7px}
@@ -91,7 +91,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
     <div class="body">
      <h2>Original creator mapshot</h2>
      <figure class="figure" style="margin:0">
-      <img src="https://raw.githubusercontent.com/redeclipse/maps/20ae7bc0a4e89e5662712b65fd5aa857e7dbeaa8/octavus.png" alt="Original Red Eclipse 2 Octavus mapshot, for visual reference" loading="lazy" referrerpolicy="no-referrer" id="original-mapshot">
+      <img src="/static/maps/octavus.reference-source.png" alt="Original Red Eclipse 2 Octavus mapshot, for visual reference" loading="lazy" referrerpolicy="no-referrer" id="original-mapshot">
       <figcaption>Official Red Eclipse mapshot, not the same camera angle as the 3D inspection view. Source: <a href="https://github.com/redeclipse/maps/blob/master/octavus.png" target="_blank" rel="noopener noreferrer">redeclipse/maps/octavus.png</a>. Map by Ricky Thomson (unixfreak), adapted for Red Eclipse 2; CC BY-SA 3.0.</figcaption>
      </figure>
      <p id="image-fallback" hidden>The reference image could not be loaded. <a href="https://github.com/redeclipse/maps/blob/master/octavus.png" target="_blank" rel="noopener noreferrer">View it at the source</a>.</p>
