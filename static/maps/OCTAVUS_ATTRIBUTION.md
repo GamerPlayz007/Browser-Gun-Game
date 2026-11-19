@@ -56,14 +56,14 @@ The initial prototype exported only the OBJ mesh and shrunk its source
   unit visual footprint. The central courtyard at source Y=2816 is
   translated to gameplay Y=0. The exact same transform is applied to
   server collision, client collision, and player spawn data.
-- Preserves authored UVs for future use. Native **map entity metadata**
-  has been imported and indexed, but **entity models, visual effects,
-  original texture images, and native lightmaps are not yet rendered**.
-  Current procedural materials are temporary replacements. A source
-  material manifest with 111 OBJ slots, 68 native CFG definitions,
+- Preserves authored UVs and imports the native **map entity metadata**.
+  The current renderer loads original diffuse/PBR material packages, available
+  native light and decal metadata, and locally hosted authentic map models.
+  Some fallback procedural materials remain where original media is missing.
+  A source material manifest with 111 OBJ slots, 68 native CFG definitions,
   shader names, scaling/tint and texture filenames is available in
-  `static/maps/octavus.source-materials.json`. This does not grant
-  permission to redistribute assets under separate media licenses.
+  `static/maps/octavus.source-materials.json`. Individual media copyright
+  and attribution requirements still apply.
 - Stores upstream map configuration as `octavus.original.cfg` and
   original license as `octavus.source-license.txt`. Its revision may
   differ from the older pinned OBJ geometry; it is a reference for the
@@ -74,6 +74,43 @@ The initial prototype exported only the OBJ mesh and shrunk its source
 
 The derived map files, source UV pack, and geometric adaptations
 remain CC BY-SA 3.0; retain this notice and mark further changes.
-Other original media (textures, models, music, sounds) can carry their
-own licenses and **have not been copied**. The engine integration is
-original CROSSFire code. Please respect Red Eclipse's mark policy.
+Models and textures from other Red Eclipse modules have distinct licenses,
+as specified below. The engine integration is original CROSSFire code.
+Please respect Red Eclipse's mark policy.
+
+## Stage 2.7 — original source models and media
+
+The native Octavus MPZ places 149 mapmodel entities; the current compact arena
+contains 147 of them. The 13 placements missing in Stage 2.6 are now
+represented by **original source-derived geometry**, not substitute blocks:
+
+- `misc/lowpoly_eagle` (8 instances): original IQM v2 mesh from
+  https://github.com/redeclipse/misc/tree/master/lowpoly_eagle,
+  converted into a static OBJ mesh retaining its 1,805 vertices, 1,532
+  authored triangles and UVs. Original `diff.png` is included as a local
+  base64 PNG package. The source defines animations; CROSSFire currently
+  presents the original static bind pose rather than recreating animations.
+- `luckystrike/door1` (4 instances): original MD5Mesh source from
+  https://github.com/redeclipse/luckystrike/tree/master/door1,
+  converted into a 36-vertex / 12-triangle static OBJ using the source's
+  one-joint weighted bind pose. Original `mdlyaw 90` is preserved.
+  **The original diffuse texture is not yet packaged**; its geometry is
+  displayed with a non-source fallback material. Native door animations are
+  not implemented, and there is no claim that the door can be opened.
+- `misc/radio_dish` (1 instance): original IQM v2 mesh from
+  https://github.com/redeclipse/misc/tree/master/radio_dish,
+  converted into a static OBJ retaining its 5,370 vertices, 3,786
+  authored triangles, three source submeshes and UVs.
+  Original source `diff.png` is included as a local base64 PNG package and
+  loaded only on High/Ultra quality to protect low-spec laptops.
+  Original mapmodel pitch and animation are not currently simulated.
+
+**Licenses:** `misc/radio_dish` is credited to **David W CG** and licensed
+**CC BY-SA 4.0**, as stated by the source
+`radio_dish/readme.txt` (originally sourced from
+https://opengameart.org/content/sci-fi-radio-dish-antenna).
+The Red Eclipse `misc` and `luckystrike` module content follows its
+documented CC BY-SA 4.0 default license unless individual files specify
+otherwise. These models and locally bundled skins retain their original
+attribution and ShareAlike obligations; they do not change the Octavus
+map-geometry attribution above.
