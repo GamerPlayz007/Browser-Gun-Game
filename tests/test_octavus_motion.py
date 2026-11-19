@@ -88,6 +88,22 @@ class OctavusMovementTests(unittest.TestCase):
         self.assertFalse(p['grounded'])
         self.assertGreater(p['y'], 0)
 
+    def test_holding_space_rejumps_on_landing(self):
+        world = _FloorWorld(floor=0, clearance=True)
+        p = _player(input={'jump': True}, jump_held=True, grounded=True)
+        dust_step65(p, 1 / 30, 1.0, {'speed': 1}, world)
+        self.assertFalse(p['grounded'])
+        self.assertGreater(p['y'], 0)
+        self.assertTrue(p['jump_held'])
+
+    def test_held_jump_respects_low_ceiling(self):
+        world = _FloorWorld(floor=0, clearance=False)
+        p = _player(input={'jump': True}, jump_held=True, grounded=True, crouch=True)
+        dust_step65(p, 1 / 30, 1.0, {'speed': 1}, world)
+        self.assertTrue(p['grounded'])
+        self.assertTrue(p['crouch'])
+        self.assertAlmostEqual(p['y'], 0)
+
     def test_original_dust_uses_legacy_three_argument_probe(self):
         class _LegacyFloor(_FloorWorld):
             class collision:
