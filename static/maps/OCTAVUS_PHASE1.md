@@ -564,6 +564,96 @@ gaps should not be disguised with invented geometry.
 and school-laptop performance profile are unchanged.** This stage
 improves the original-map reconstruction preview only.
 
+## Phase 2.0 — SHARED NATIVE COLLISION PILOT (NOT PLAYABLE)
+
+This stage changes focus from reconstructing the visual map to proving
+that the **same native map geometry can be interpreted by Python and
+JavaScript without coordinate, index or material disagreements**.
+
+The existing live multiplayer Octavus still uses an unrelated older
+OCT1 OBJ export with 86,500 collision triangles. Replacing its visuals
+with the reconstructed 863,803-triangle native map while leaving the
+old collision in place would make the visible floors/walls disagree
+with the movement and hit-detection geometry. Phase 2.0 starts solving
+that problem *outside live multiplayer*.
+
+### What is implemented
+
+- octavus_native_collision91.py: SHA-verified source-native OCN2
+  decoder, original source vertex coordinate conversion into the
+  target Three.js Y-up world frame, deterministic IEEE754 float32
+  triangle soup, compact spatial broadphase (8m cells) and original
+  spawn floor/capsule preflight. No server.py import or live map change.
+- static/octavus_native_collision91.js: the browser reads the **exact
+  same preexisting compressed 98,358-triangle original source core**,
+  validates the OCN2 manifest and SHA-256, decompresses it, then
+  compares the SHA of the transformed Float32Array to the independent
+  Python-generated report.
+- static/maps/octavus.native-collision-preflight91.json: auditable
+  original r829 source spawn floor/capsule results. Generated only
+  after parity and provenance verification in GitHub Actions.
+- test_octavus_native_collision91.py and
+  test_octavus_native_collision91.mjs: verify exact native coordinate
+  transform, original archive integrity, byte-for-byte identical
+  client/server Float32 triangle positions, deterministic 33-start
+  source positions, indexed collision queries and unchanged live
+  OCT1 game code.
+- The isolated Octavus Lab gets **Check original spawn collision**.
+  It loads the shared browser collision pilot and renders all 33
+  AUTHORED native starts, not the older live OBJ substitutes:
+  green means *initial floor+capsule preflight passed*;
+  orange means *needs review*. These are not gameplay spawns yet.
+
+### Measured source collision pilot
+
+| Property | Measured |
+|---|---:|
+| Original source architectural collision triangles | 98,358 |
+| Original native shared vertices | 123,915 |
+| Deterministic binary Float32 triangle data | 3,540,888 bytes |
+| Sparse broadphase cells | 2,700 |
+| Indexed triangle references | 122,994 |
+| Oversized unindexed source triangles | 0 |
+| Original MPZ player starts checked | **33** |
+| Starts with nearby walkable floor | **33** |
+| Starts with plausible original-footing height | **30** |
+| Starts with capsule clearance | **25** |
+| Original starts passing both checks | **23** |
+| Starts flagged for review | **10** |
+
+The 10 original starts presently flagged are source entity IDs:
+**424, 425, 428, 431, 439, 441, 442, 450, 452, 453**.
+Some are height mismatches (for example source entity 428 is
+approximately 0.8m above the native architectural-core ground); others
+are conservative capsule overlaps. We intentionally do not move any
+of these original authored positions.
+
+The Python/JavaScript source parser and numeric geometry match exactly;
+**this does not imply the two gameplay movement solvers match**. We
+have not yet run synchronized jumping, stairs, sprinting, crouch, or
+multiplayer collision parity tests against this new source.
+
+### Why the native core is still only a pilot
+
+- The 98,358-triangle source architecture explicitly omits original
+  material slot 1. The full 863,803-triangle visual candidate still
+  has 765,874 potentially visible slot-1 triangles. Some may be
+  legitimate floors or walls. Therefore current collision is
+  *provably incomplete relative to the visual reconstruction*.
+- There are 135 recovered decorative native prop placements; their
+  authoritative solid collision geometry is not included yet.
+- 23 passing spawn preflights are **not** a guarantee that they are
+  connected to usable routes or can support the complete player
+  controller without slipping/sticking.
+- The Python live server uses the 86,500-triangle OCT1 mesh. To
+  integrate the replacement safely, the future source collision
+  must first be source-surface complete, stable on 512MB server
+  hosting and byte-parity tested in client/server movement.
+
+**The live CROSSFire Octavus map, network state, lobby selection,
+player spawns and collision remain completely unchanged.**
+The source-derived collision pilot is staging-only.
+
 **Guardrail:** Do not modify `static/maps/octavus.json`,
 `static/octavus_match.js`, `octavus_world.py`, or server gameplay
 collision until the native geometry replacement passes the visual
