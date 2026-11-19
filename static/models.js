@@ -35,18 +35,34 @@ export function makeWeapon(id,arms=true){
  box(model,.085,.19,.1,black,0,-.15,.12).rotation.x=-.3;
  const magazine=new T.Group();magazine.position.set(0,-.1,-.035);model.add(magazine);box(magazine,.09,id===2?.08:.24,.105,black,0,-.1,0).rotation.x=id===1?-.14:.12;box(magazine,.102,.035,.12,metal,0,-.23,0);
  for(let i=0;i<5;i++)box(model,.145,.016,.025,black,0,.105,.1-i*.045,.004);
- // Lightweight open reflex sight on all four weapon models. The HUD's red dot
- // remains aligned with the camera ray instead of drifting with weapon bob.
- const sightY=id===3?.17:.145;
- box(model,.095,.018,.15,black,0,sightY-.074,-.075,.007);
- box(model,.014,.065,.024,metal,-.041,sightY-.038,-.075,.004);
- box(model,.014,.065,.024,metal,.041,sightY-.038,-.075,.004);
- const sightRim=new T.Mesh(new T.TorusGeometry(.047,.007,6,32),
-   new T.MeshStandardMaterial({color:0x1c3038,roughness:.28,metalness:.65}));
- sightRim.position.set(0,sightY,-.09);model.add(sightRim);
- const sightGlass=new T.Mesh(new T.CircleGeometry(.04,24),
-   new T.MeshBasicMaterial({color:0x8ee3f0,transparent:true,opacity:.07,side:T.DoubleSide,depthWrite:false}));
- sightGlass.position.set(0,sightY,-.091);model.add(sightGlass);
+ // Distinct sights by weapon: rifle/SMG reflex, shotgun irons, sniper optic.
+ if(id===3){
+  // Original long-range sniper scope tube and colored lens.
+  barrel(model,.062,.25,black,0,.17,-.01);
+  barrel(model,.05,.008,0x5abbb9,0,.17,.12);
+  box(model,.045,.08,.09,metal,0,.1,0);
+ }else if(id===2){
+  // Open shotgun iron sights: rear notch and a visible front post / bead.
+  // No glass, torus reticle or red-dot emitter on this weapon.
+  box(model,.11,.015,.033,metal,0,.12,.11,.004);
+  box(model,.016,.066,.025,black,-.048,.151,.11,.004);
+  box(model,.016,.066,.025,black,.048,.151,.11,.004);
+  box(model,.021,.06,.025,black,0,.123,-length/2,.004);
+  const bead=new T.Mesh(new T.SphereGeometry(.011,8,6),
+    new T.MeshBasicMaterial({color:0xf5e8c9}));
+  bead.position.set(0,.156,-length/2);model.add(bead);
+ }else{
+  const sightY=.145;
+  box(model,.095,.018,.15,black,0,sightY-.074,-.075,.007);
+  box(model,.014,.065,.024,metal,-.041,sightY-.038,-.075,.004);
+  box(model,.014,.065,.024,metal,.041,sightY-.038,-.075,.004);
+  const sightRim=new T.Mesh(new T.TorusGeometry(.047,.007,6,32),
+    new T.MeshStandardMaterial({color:0x1c3038,roughness:.28,metalness:.65}));
+  sightRim.position.set(0,sightY,-.09);model.add(sightRim);
+  const sightGlass=new T.Mesh(new T.CircleGeometry(.04,24),
+    new T.MeshBasicMaterial({color:0x8ee3f0,transparent:true,opacity:.07,side:T.DoubleSide,depthWrite:false}));
+  sightGlass.position.set(0,sightY,-.091);model.add(sightGlass);
+ }
  if(id===2){box(model,.15,.1,.23,0x9d5e4e,0,-.06,-.24);barrel(model,.03,.46,metal,0,-.07,-.16);}
  if(id===1)box(model,.06,.055,.045,metal,.09,.005,.06);
  // Side engraving, aligned receiver ribbing and minimal optic details.
