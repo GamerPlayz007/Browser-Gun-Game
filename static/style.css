@@ -226,3 +226,16 @@
 #manual-respawn65{border:1px solid #f8a5a588;background:#4b283a;color:#ffe6e6}
 #manual-respawn65:hover{background:#633044}
 @media(max-width:680px){.personal-stats65{gap:7px}.personal-stats65 b{font-size:12px}}
+
+
+/* CROSSFIRE 3.1 — calibrated reflex / red-dot ADS.
+   The center pixel matches the server's yaw/pitch shooting direction.
+   Remove the old sniper blackout, crosslines and oversized scope. */
+#scope{background:none;pointer-events:none;z-index:2}
+#scope::before,#scope::after{content:none;display:none}
+#scope>div{
+  position:absolute;left:50%;top:50%;width:4px;height:4px;
+  transform:translate(-50%,-50%);border-radius:50%;
+  background:#ff354c;border:1px solid #ffacb6;
+  box-shadow:0 0 2px #ffdae0,0 0 6px #ff354c99;
+}
