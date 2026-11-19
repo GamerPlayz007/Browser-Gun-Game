@@ -1,8 +1,8 @@
 {
   "id": "octavus",
   "name": "Octavus",
-  "revision": "03.2-P3",
-  "size": 409.6,
+  "revision": "03.2-P4",
+  "size": 225.28,
   "center": {
     "x": 0,
     "z": 0
@@ -387,34 +387,34 @@
   "zones": [
     {
       "name": "WEST SECTOR",
-      "x": -126.293,
+      "x": -68.27,
       "z": 0,
-      "w": 146.773,
-      "d": 375.467,
+      "w": 68.27,
+      "d": 204.8,
       "color": "#969b8a"
     },
     {
       "name": "CENTRAL ARENA",
       "x": 0,
       "z": 0,
-      "w": 119.467,
-      "d": 375.467,
+      "w": 68.27,
+      "d": 204.8,
       "color": "#c2baa3"
     },
     {
       "name": "EAST SECTOR",
-      "x": 126.293,
+      "x": 68.27,
       "z": 0,
-      "w": 146.773,
-      "d": 375.467,
+      "w": 68.27,
+      "d": 204.8,
       "color": "#939f9f"
     }
   ],
   "playBounds": {
-    "x0": -194.56,
-    "x1": 194.56,
-    "z0": -194.56,
-    "z1": 194.56
+    "x0": -102.4,
+    "x1": 102.4,
+    "z0": -102.4,
+    "z1": 102.4
   },
   "controlPoint": {
     "id": "octavus-center",
@@ -435,7 +435,7 @@
     "origin": "Cube 2 OBJ octavus.obj",
     "objScale": 0.05,
     "objGroundY": 2816,
-    "playableSpan": 389.12,
+    "playableSpan": 204.8,
     "visualSpan": 409.6,
     "uvFormat": "OCU1",
     "sourceTriangles": 86500,
@@ -448,5 +448,12 @@
     442,
     452,
     453
-  ]
+  ],
+  "arenaBoundary": {
+    "type": "stone-rampart",
+    "bottomY": -24,
+    "topY": 40,
+    "thickness": 1.8,
+    "serverCollision": "playBounds"
+  }
 }
