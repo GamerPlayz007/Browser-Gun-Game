@@ -63,6 +63,52 @@ try{
   const image=document.getElementById('original-mapshot');
   return image?.complete && image.naturalWidth>=128 && image.naturalHeight>=128;
  },{timeout:15000});
+ // Stage 2.1: the SOURCE SCREENSHOT playable island must draw as a
+ // sealed 58-segment, 60m sandstone wall on the ACTUAL OCN2 scene.
+ await page.waitForFunction(()=>{
+  return document.getElementById('metric-wall-segments')?.textContent==='58'
+   && document.getElementById('metric-wall-height')?.textContent==='60 m'
+   && document.getElementById('metric-wall-spawns')?.textContent==='33 / 33'
+   && document.getElementById('arena-wall')?.checked===true;
+ },{timeout:25000});
+ const arenaWallData=await page.evaluate(async()=>{
+  const {loadNativeArenaBoundary92,makeNativeArenaWall92}
+    =await import('/static/octavus_native_boundary92.js');
+  const island=await loadNativeArenaBoundary92();
+  const segment=makeNativeArenaWall92(island);
+  const result={
+   segments:segment.wallSegments,
+   triangles:segment.triangles,
+   wallHeight:island.wallTopY-island.wallBaseY,
+   centerAllowed:island.allowed(0,0),
+   outerBlocked:!island.allowed(100,0),
+   stoppedCrossing:island.clipHorizontal([0,0],[140,140]).blocked,
+   playableArea:Math.round(Math.abs(island.area)),
+  };
+  segment.dispose();return result;
+ });
+ assert.equal(arenaWallData.segments,58);
+ assert.equal(arenaWallData.triangles,464);
+ assert.equal(arenaWallData.wallHeight,60);
+ assert.equal(arenaWallData.centerAllowed,true);
+ assert.equal(arenaWallData.outerBlocked,true);
+ assert.equal(arenaWallData.stoppedCrossing,true);
+ assert.ok(arenaWallData.playableArea>=8000&&arenaWallData.playableArea<=9000);
+ await page.click('#top-btn');
+ const arenaWallCanvas=await page.$('#viewport canvas');
+ const wallScreenshot=await arenaWallCanvas.screenshot();
+ assert.ok(wallScreenshot.byteLength>12000);
+ writeFileSync('/tmp/octavus-native-island-boundary-wall.png',wallScreenshot);
+ await page.click('#arena-wall');
+ await page.waitForFunction(()=>document.getElementById('arena-wall')?.checked===false);
+ const unboundedScreenshot=await arenaWallCanvas.screenshot();
+ assert.ok(unboundedScreenshot.byteLength>12000);
+ writeFileSync('/tmp/octavus-native-island-unbounded-comparison.png',unboundedScreenshot);
+ assert.notDeepEqual(wallScreenshot,unboundedScreenshot,
+  'Visible island perimeter must actually render different from no wall');
+ await page.click('#arena-wall');
+ assert.equal(await page.evaluate(()=>document.getElementById('arena-wall').checked),true);
+ await page.click('#home-btn');
  // Phase 2.0: the original-native collision pilot must LOAD through
  // the actual browser fetch+gzip+SHA256 path and expose source spawn
  // clearance marks while leaving the existing gameplay map untouched.
@@ -354,7 +400,7 @@ try{
  assert.deepEqual(shaderErrors,[],'Native texture source projection must compile in Chrome WebGL');
  assert.deepEqual(errors,[],'No browser runtime errors permitted');
  console.log('Octavus native preview headless Chrome: PASS');
- console.log(JSON.stringify({...stats,previewPngBytes:image.byteLength,optimizedPngBytes:enhancedImage.byteLength,sourceTexturePngBytes:textureImage.byteLength,sourceSceneryPngBytes:scenicImage.byteLength,alignmentAnchorPngBytes:anchoredImage.byteLength,decalProjection:decalCoverage,collisionPilot:pilotVisible,collisionPilotPngBytes:collisionScreenshot.byteLength},null,2));
+ console.log(JSON.stringify({...stats,previewPngBytes:image.byteLength,optimizedPngBytes:enhancedImage.byteLength,sourceTexturePngBytes:textureImage.byteLength,sourceSceneryPngBytes:scenicImage.byteLength,alignmentAnchorPngBytes:anchoredImage.byteLength,decalProjection:decalCoverage,collisionPilot:pilotVisible,collisionPilotPngBytes:collisionScreenshot.byteLength,nativeArenaWall:arenaWallData,arenaWallScreenshotBytes:wallScreenshot.byteLength},null,2));
 }finally{
  await browser.close();
 }
