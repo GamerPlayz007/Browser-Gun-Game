@@ -66,7 +66,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
  <a href="/">Back to CROSSFire</a>
 </header>
 <main>
- <div class="banner"><strong>PHASE 1.3 — INSPECTION BUILD, NOT GAMEPLAY.</strong> This is a source-native geometry prototype from the original Red Eclipse 2 Octavus MPZ (revision 829). Original source textures are now available as an opt-in preview, with approximate coordinate alignment pending full renderer parity. Phase 1.7 can now add the original model placements, native decals, Redcliff skybox and source lights using the original MPZ entity data. Use <strong>Show restored scene</strong> for a one-click combined preview (heavy), or toggle each environmental layer individually. Phase 1.8 corrects native prop and decal rotations; use <strong>Model anchor markers</strong> to inspect placement without inventing terrain offsets. The compact core omits plain-material slot 1. The new visibility, merged and raw diagnostics retain it but still lack complete native visibility, authored UVs and props. They are <em>not</em> finished original geometry. It is deliberately isolated from multiplayer and collision.</div>
+ <div class="banner"><strong>PHASE 1.3 — INSPECTION BUILD, NOT GAMEPLAY.</strong> This is a source-native geometry prototype from the original Red Eclipse 2 Octavus MPZ (revision 829). Original source textures are now available as an opt-in preview, with approximate coordinate alignment pending full renderer parity. Phase 1.7 can now add the original model placements, native decals, Redcliff skybox and source lights using the original MPZ entity data. Use <strong>Show restored scene</strong> for a one-click combined preview (heavy), or toggle each environmental layer individually. Phase 1.8 corrects native prop and decal rotations; use <strong>Model anchor markers</strong> to inspect placement without inventing terrain offsets. Phase 1.9 projects original decals directly onto clipped source mesh triangles, rather than floating billboard planes. The compact core omits plain-material slot 1. The new visibility, merged and raw diagnostics retain it but still lack complete native visibility, authored UVs and props. They are <em>not</em> finished original geometry. It is deliberately isolated from multiplayer and collision.</div>
  <section class="stage" aria-label="Native geometry inspection">
   <div class="panel">
    <div class="viewport" id="viewport">
@@ -86,7 +86,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
     <label title="Source Redcliff skybox, sunlight and up to sixteen nearby original Red Eclipse light entities"><input type="checkbox" id="source-env"> Redcliff sky + source lights</label>
     <label title="Only available original OBJ models at their authored positions; no replacement shapes"><input type="checkbox" id="source-props"> Original map models</label>
     <label title="Show markers at the exact original source model locations to inspect height and rotation alignment"><input type="checkbox" id="source-anchors"> Model anchor markers</label>
-    <label title="Native original decals with source texture and authored position"><input type="checkbox" id="source-decals"> Native decals</label>
+    <label title="Native original decals with source texture and authored position"><input type="checkbox" id="source-decals"> Surface-projected decals</label>
     <span class="group-separator"></span>
     <button type="button" id="core-btn" aria-pressed="true">Core / 98k</button>
     <button type="button" id="optimized-btn" aria-pressed="false" title="New source-native triangle occlusion plus lossless coplanar plane merging; still not original renderer parity">Visibility + merge / 864k</button>
@@ -115,6 +115,8 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
       <div class="stat"><span>Original props placed</span><b id="metric-props">0</b></div>
       <div class="stat"><span>Source placement anchors</span><b id="metric-anchors">0</b></div>
       <div class="stat"><span>Original decals</span><b id="metric-decals">0</b></div>
+      <div class="stat"><span>Projected onto real geometry</span><b id="metric-projected">0</b></div>
+      <div class="stat"><span>Clipped decal triangles</span><b id="metric-decal-tris">0</b></div>
       <div class="stat"><span>Source lights indexed</span><b id="metric-lights">0</b></div>
       <div class="stat"><span>Redcliff skybox</span><b id="metric-skybox">Off</b></div>
      </div>
