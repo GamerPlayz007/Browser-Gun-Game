@@ -5,6 +5,7 @@
  */
 import * as THREE from 'three';
 import {createOctavusPBRMaterial} from './octavus_materials.js';
+import {octavusRenderBounds,octavusTriangleVisible} from './octavus_culling.js';
 
 const PARTS=8, SCALE=120/8192;
 // Calinou's original Cube 2 OBJ export recommends an import scale around 0.05.
@@ -89,7 +90,7 @@ function texture(type){
  const tex=new THREE.CanvasTexture(c);tex.wrapS=tex.wrapT=THREE.RepeatWrapping;
  tex.colorSpace=THREE.SRGBColorSpace;tex.anisotropy=2;return tex;
 }
-function createScene(packed,types,scene=new THREE.Scene(),sourceUV=null,nativeScale=false,media=null){
+function createScene(packed,types,scene=new THREE.Scene(),sourceUV=null,nativeScale=false,media=null,playBounds=null){
  scene.background=new THREE.Color('#cdd7d7');
  scene.fog=new THREE.Fog('#cdd7d7',nativeScale?240:100,nativeScale?680:250);
  // Native multiplayer mode owns its authentic original MPZ environment.
@@ -107,16 +108,29 @@ function createScene(packed,types,scene=new THREE.Scene(),sourceUV=null,nativeSc
  }
  const textures=new Map();
  for(const kind of Object.keys(PALETTES))textures.set(kind,texture(kind));
- let meshCount=0,faceOffset=0,originalMaterials=0,disposed=false,mediaState=media;
+ let meshCount=0,renderedTriangleCount=0,faceOffset=0,originalMaterials=0,disposed=false,mediaState=media;
+ // Only prune rendering beyond the playable map; keep the unmodified
+ // original triangle soup for server/client collision and minimap sampling.
+ const renderBounds=nativeScale?octavusRenderBounds(playBounds,10):null;
  const materialInstances=[],renderedSlots=new Map();
  if(sourceUV?.triangleCount!==undefined&&sourceUV.triangleCount!==packed.triangles)
   throw Error('Octavus original UV triangle count mismatch');
  for(const [slot,indices] of packed.groups){
-  const path=types.get(slot)||'',kind=surfaceKind(path,slot);
-  const positions=new Float32Array(indices.length*3),uvs=new Float32Array(indices.length*2);
-  const preservedUV=sourceUV?new Float32Array(indices.length*2):null;
   const all=packed.points;
+  const selected=[];
   for(let i=0;i<indices.length;i+=3){
+   if(octavusTriangleVisible(all,indices[i],indices[i+1],indices[i+2],
+       OCTAVUS_LOCAL_RATIO,renderBounds))selected.push(i);
+  }
+  // Every face retains its ORIGINAL group-relative UV index even when an
+  // earlier face is skipped. This prevents texture scrambling at the cutoff.
+  if(!selected.length){faceOffset+=indices.length;continue;}
+  renderedTriangleCount+=selected.length;
+  const path=types.get(slot)||'',kind=surfaceKind(path,slot);
+  const positions=new Float32Array(selected.length*9),uvs=new Float32Array(selected.length*6);
+  const preservedUV=sourceUV?new Float32Array(selected.length*6):null;
+  for(let outFace=0;outFace<selected.length;outFace++){
+   const i=selected[outFace];
    const a=indices[i]*3,b=indices[i+1]*3,c=indices[i+2]*3;
    const abx=all[b]-all[a],aby=all[b+1]-all[a+1],abz=all[b+2]-all[a+2];
    const acx=all[c]-all[a],acy=all[c+1]-all[a+1],acz=all[c+2]-all[a+2];
@@ -124,7 +138,7 @@ function createScene(packed,types,scene=new THREE.Scene(),sourceUV=null,nativeSc
    const axis=Math.abs(ny)>=Math.abs(nx)&&Math.abs(ny)>=Math.abs(nz)?'y':
     Math.abs(nx)>=Math.abs(nz)?'x':'z';
    for(let t=0;t<3;t++){
-    const src=indices[i+t]*3,dst=(i+t)*3,uv=(i+t)*2;
+    const src=indices[i+t]*3,dst=(outFace*3+t)*3,uv=(outFace*3+t)*2;
     const x=all[src],y=all[src+1],z=all[src+2];
     positions[dst]=x;positions[dst+1]=y;positions[dst+2]=z;
     if(preservedUV){
@@ -167,7 +181,7 @@ function createScene(packed,types,scene=new THREE.Scene(),sourceUV=null,nativeSc
   ground.add(mesh);renderedSlots.set(slot,mesh);meshCount++;faceOffset+=indices.length;
  }
  if(sourceUV&&faceOffset!==sourceUV.indices.length)throw Error('Octavus UV face count does not match geometry');
- return {scene,meshCount,textures,
+ return {scene,meshCount,renderedTriangleCount,textures,
   get originalMaterials(){return originalMaterials;},
   geometryRoot:ground,preservedTextureCoordinates:!!sourceUV,
   // The original media package is optional. Apply source PBR materials
