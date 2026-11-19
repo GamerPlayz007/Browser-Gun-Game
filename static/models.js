@@ -132,7 +132,8 @@ export function makePlayer(name,color=0xd38165){
  const legs=[],knees=[],arms=[],elbows=[],skinMeshes56=[chestSkin56,helmet];
  for(const side of [-1,1]){
   const leg=new T.Group();leg.position.set(side*.16,.79,0);body.add(leg);
-  box(leg,.21,.38,.23,0x68807a,0,-.18,0,.05);
+  // Matching color on the thighs makes players identifiable at a distance.
+  skinMeshes56.push(box(leg,.21,.38,.23,color,0,-.18,0,.05));
   const knee=new T.Group();knee.position.y=-.37;leg.add(knee);
   box(knee,.18,.3,.2,0x3b5559,0,-.12,.015,.04);
   box(knee,.22,.13,.32,0x263b40,0,-.36,-.055);
