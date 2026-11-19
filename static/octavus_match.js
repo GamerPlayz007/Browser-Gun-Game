@@ -80,7 +80,26 @@ export async function buildOctavusMatch(scene,map,{quality='auto'}={}){
  // The original source mesh and its 86,500 triangles are NOT changed.
  const boundary=createOctavusBoundary(scene,map);
  let detail=true,mode=quality,disposed=false;
- let media=null;
+ let media=null,mediaProfile=null,mediaRequest=0;
+ // The lean profile downloads only source diffuse/glow textures; High/Ultra
+ // upgrades to authentic normal/roughness channels without a map reload.
+ function requestMedia(tier){
+  const profile=tier==='high'||tier==='ultra'?'detailed':'lean';
+  if(profile===mediaProfile)return;
+  mediaProfile=profile;
+  const ticket=++mediaRequest;
+  loadOctavusMaterialLibrary(tier,packed.groups.keys()).then(value=>{
+   if(disposed||ticket!==mediaRequest){value?.dispose?.();return;}
+   if(!value?.usable||!value.statistics?.sourceImages){
+    value?.dispose?.();mediaProfile=null;return;
+   }
+   visual.applyOriginalMaterials(value,mode);
+   media=value;
+  }).catch(error=>{
+   if(ticket===mediaRequest)mediaProfile=null;
+   console.warn('Octavus optional source materials unavailable:',error);
+  });
+ }
  const noop={count:0,materials:0,instances:0,modelTypes:0,sourceLightCount:0,
   skybox:false,setQuality(){},animate(){},dispose(){}};
  let environment=noop,decals=noop,props=noop;
@@ -89,16 +108,13 @@ export async function buildOctavusMatch(scene,map,{quality='auto'}={}){
  function attach(promise,kind){
   promise.then(value=>{
    if(disposed){value?.dispose?.();return;}
-   if(kind==='media'){
-    media=value;
-    visual.applyOriginalMaterials(value,mode);
-   }else if(kind==='environment')environment=value;
+   if(kind==='environment')environment=value;
    else if(kind==='decals')decals=value;
    else if(kind==='props')props=value;
    if(kind!=='media')value?.setQuality?.(mode);
   }).catch(error=>console.warn('Octavus optional '+kind+' unavailable:',error));
  }
- attach(loadOctavusMaterialLibrary(quality),'media');
+ requestMedia(quality);
  attach(createOctavusEnvironment(scene,quality),'environment');
  attach(createOctavusDecals(scene,quality),'decals');
  attach(createOctavusProps(scene,quality),'props');
@@ -115,6 +131,9 @@ export async function buildOctavusMatch(scene,map,{quality='auto'}={}){
   originalUV:visual.preservedTextureCoordinates,
   get originalMaterialSlots(){return visual.originalMaterials;},
   get originalTextureImages(){return media?.statistics?.sourceImages||0;},
+  get sourceImagesSkipped(){return media?.statistics?.skippedSourceImages||0;},
+  get sourceImagesRequested(){return media?.statistics?.requestedSourceImages||0;},
+  get sourceTextureProfile(){return media?.statistics?.imageProfile||'pending';},
   get originalSkybox(){return environment.skybox;},
   get sourceLights(){return environment.sourceLightCount;},
   get nativeDecals(){return decals.count;},
@@ -136,12 +155,12 @@ export async function buildOctavusMatch(scene,map,{quality='auto'}={}){
    drawnSourceTriangles:visual.renderedTriangleCount,
    streamedAssets:true
   };},
-  setQuality(value){mode=value;visual.setQuality(value);
+  setQuality(value){mode=value;visual.setQuality(value);requestMedia(value);
    environment.setQuality(value);decals.setQuality(value);props.setQuality(value);},
   setDetail(value){detail=Boolean(value);},
   animate(time,player){environment.animate(time,player);props.animate(time,player);
    void mode;void detail;},
-  dispose(){if(disposed)return;disposed=true;
+  dispose(){if(disposed)return;disposed=true;mediaRequest++;
    props.dispose();decals.dispose();environment.dispose();boundary.dispose();visual.dispose();
    scene.background=null;scene.fog=null;}
  };
