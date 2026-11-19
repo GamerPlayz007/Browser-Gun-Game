@@ -707,6 +707,106 @@ enforces this new wall. A future stage must pair the compact
 boundary with complete interior native-world collision, then
 test synchronized movement before activating it for players.
 
+## Stage 2.2 — ORIGINAL ISLAND INTERIOR COLLISION SURVEY AND OCTREE
+
+This stage addresses the gap between the older 98K architectural
+prototype collision and the much more detailed 863K native rendering
+candidate, inside the user's chosen compact island.
+
+**Key finding:** simply making every visual surface collide is not
+safe. After limiting source triangles to the island, **831,557**
+triangles remain, including **738,627** from native plain-material
+slot 1. Among the plain candidate faces, source-octree point probes
+classify 699,490 as adjacent to unresolved deformed cubes, 38,446
+as bordering sampled open space, and only 57 as demonstrably buried
+solid-on-both-sides at four sample points. This is deliberately not
+a complete native source visibility proof.
+
+### Original floor and player-start survey
+
+The staging collision candidate is
+static/maps/octavus.native-interior93.bin.gz. Source-grounded
+inspection output: static/maps/octavus.native-interior-preflight94.json.
+
+| Original source measurement | Result |
+|---|---:|
+| Original starts evaluated | **33** |
+| Original starts with a floor | **33** |
+| Original starts passing height + capsule pilot | **23** |
+| Starts still requiring review | **10** |
+| Additional near-spawn area floor samples inside island | **775** |
+| Samples with any candidate floor within the query window | **700** |
+| Samples with a floor near reference spawn elevation | **597** |
+| Newly found floor support vs previous 98K prototype | **14** |
+| Survey samples supported by native source slot 1 | **24** |
+
+The 10 earlier questionable starts were not auto-corrected or moved:
+424, 425, 428, 431, 439, 441, 442, 450, 452, 453.
+The results remain preliminary because sample hits may still include
+unverified internal source triangles.
+
+### More suitable physics foundation: native original octree cells
+
+Red Eclipse 2 uses the original voxel/octree solid structure
+rather than a raw rendering triangle soup as its collision
+authority. To preserve that information, the new independent
+occupancy files are:
+
+- scripts/build_octavus_occupancy96.py
+- static/maps/octavus.native-occupancy96.bin.gz
+- static/maps/octavus.native-occupancy96.json
+- static/octavus_native_occupancy96.js
+- test_octavus_native_occupancy96.py
+- test_octavus_native_occupancy96.mjs
+- .github/workflows/octavus-native-occupancy96.yml
+
+The original island bounding prism includes **690,939** source
+octree leaf cubes: **331,527 solid**, **173,522 empty** and
+**185,890 deformed**. The compressed OCO1 archive is ~1.96MB.
+Each cube keeps the original 12 source edge bytes, cube
+location, size, and kind; no rectangles or collision proxies
+are invented. Python/JS results match **2,589 independently
+cross-checked original octree cell queries**, including the
+authored 33 starts and the additional interior surface sample
+locations.
+
+A deformed cube cannot be treated as uniformly solid/empty.
+The returned NORMAL kind is explicitly **unresolved** until
+the exact cube-face collision/inside checks are implemented.
+The intact source edge encoding allows further physics work
+without going back to the Red Eclipse file each frame.
+
+### Visual inspection
+
+The Octavus standalone Reconstruction Lab now offers
+**Show interior floor survey**. It plots all 775 original
+near-spawn floor samples, using:
+- Green: candidate floor near the source spawn elevation
+- Cyan: floor newly recovered relative to the old 98K core
+- Purple: original source slot-1 plain-material candidate floor
+- Red: no source candidate floor found at that query location
+- Gold: surface elevation differs from reference source start
+
+The browser loads and SHA-verifies the original-octree index
+before displaying the color-coded survey and cell-kind totals.
+Headless-Chrome screenshots are uploaded to the Octavus preview
+CI artifacts on a successful run.
+
+### Not yet completed
+
+This stage provides an **original-source island collision
+candidate and exact source occupancy lookup**, not a fully
+authoritative interior movement engine. Deformed cube shape
+tests, stair clearance, moving capsule sweeps, source props
+and synchronized client/server movement remain unresolved.
+The 23 preliminary clear starts are not guarantees of fully
+walkable routes. Neither new archive is imported into live
+server.py, game.js, physics.js, or octavus_match.js.
+
+**The live Octavus map and collision are still unchanged.**
+Do not mark Stage 2.2 movement/physics complete until source
+deformed geometry is handled and original route tests pass.
+
 **Guardrail:** Do not modify `static/maps/octavus.json`,
 `static/octavus_match.js`, `octavus_world.py`, or server gameplay
 collision until the native geometry replacement passes the visual
