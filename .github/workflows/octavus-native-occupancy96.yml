@@ -1,0 +1,82 @@
+name: Octavus Stage 2.2 original native octree occupancy parity
+on:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/build_octavus_occupancy96.py"
+      - "static/octavus_native_occupancy96.js"
+      - "test_octavus_native_occupancy96.py"
+      - "test_octavus_native_occupancy96.mjs"
+      - ".github/workflows/octavus-native-occupancy96.yml"
+      - "static/maps/octavus.native-interior-preflight94.json"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  original-octree-island:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Extract exact source r829 octree leaves intersecting compact screenshot island and nearby vertical world
+        run: python -m scripts.build_octavus_occupancy96
+      - name: Confirm every sampled source cube matches independently decoded original octree in Python
+        run: python -m unittest -v test_octavus_native_occupancy96
+      - name: Confirm browser original solid, empty, deformed query matches Python source geometry
+        run: |
+          node --input-type=module --check < static/octavus_native_occupancy96.js
+          node test_octavus_native_occupancy96.mjs
+      - name: Source/staging guard — preserve 33 starts, avoid false solidity on deformed leaves
+        run: |
+          python - <<'PY'
+          import json,gzip,hashlib
+          from pathlib import Path
+          root=Path("static/maps")
+          m=json.loads((root/"octavus.native-occupancy96.json").read_text())
+          raw=(root/"octavus.native-occupancy96.bin.gz").read_bytes()
+          assert m["sourceRevision"]==829
+          assert m["sourceOctreeLeaves"]==704159
+          assert m["binaryMagic"]=="OCO1"
+          assert m["cellRecordBytes"]==21
+          assert 1000<m["occupancyCells"]<704159
+          assert sum(m["cellCounts"].values())==m["occupancyCells"]
+          assert m["cellCounts"]["empty"]>0
+          assert m["cellCounts"]["solid"]>0
+          assert m["cellCounts"]["deformed"]>0
+          assert m["sourceQuerySampleCount"]>=2200
+          assert m["allSampledKindsMatchOriginalOctree"] is True
+          assert m["normalCubeCollisionProven"] is False
+          assert m["fullSourceSolidCollisionReady"] is False
+          assert m["clientServerControllerParity"] is False
+          assert m["liveMapModified"] is False
+          assert len(gzip.decompress(raw))==m["binaryUncompressedBytes"]
+          assert hashlib.sha256(raw).hexdigest()==m["compressedSha256"]
+          live=json.loads((root/"octavus.json").read_text())
+          assert live["collisionFormat"]=="OCT1"
+          assert live["collisionTriangles"]==86500
+          print("Verified exact source-native octree original occupancy; live game unchanged")
+          PY
+      - name: Publish validated compact original source cube index for shared collision development
+        run: |
+          cp static/maps/octavus.native-occupancy96.bin.gz /tmp/octavus.native-occupancy96.bin.gz
+          cp static/maps/octavus.native-occupancy96.json /tmp/octavus.native-occupancy96.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3; do
+            git fetch origin main
+            git reset --hard origin/main
+            cp /tmp/octavus.native-occupancy96.* static/maps/
+            git add static/maps/octavus.native-occupancy96.*
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m "build(octavus stage2.2): publish exact source-empty-solid-deformed compact island octree with verified Python/JS probes"
+            if git push origin HEAD:main; then exit 0; fi
+          done
+          exit 1
