@@ -654,6 +654,59 @@ multiplayer collision parity tests against this new source.
 player spawns and collision remain completely unchanged.**
 The source-derived collision pilot is staging-only.
 
+## Stage 2.1 — COMPACT SOURCE ISLAND WITH CONTINUOUS NON-JUMPABLE PERIMETER
+
+The user selected the detailed built island shown in their 548-by-469
+overhead screenshot as the **only intended playable region**.
+Everything beyond the outer silhouette is non-playable scenery.
+The boundary is not a square, circle, or broad original-world limit.
+
+The wall's single source of truth is
+static/maps/octavus.native-boundary92.json. The manifest records
+67 manually traced screenshot-edge points and a conservative seven
+image-pixel outward buffer, mapped to 58 closed native-world
+perimeter vertices using the original r829 source player starts.
+This registration is approximate, not falsely claimed pixel-perfect.
+
+In the independent native inspection scene:
+- **58 continuously joined sandstone wall segments**
+- **60m wall height** from world Y=-22 to Y=38
+- Wall top over 19m above the highest known source terrain vertex
+- **8,563.92 m2 enclosed playable area**
+- **339.07m total original-island wall perimeter**
+- **All 33 original native starts contained**, including player radius
+- Minimum native spawn clearance from the perimeter: **0.5917m**
+- 464 triangles in the wall geometry (not the terrain)
+- The wall is enabled by default in the Octavus reconstruction lab.
+  The checkbox can hide the visual wall for before/after comparison.
+
+Source-native Python and browser modules (octavus_native_boundary92.py
+and static/octavus_native_boundary92.js) independently enforce the
+same X/Z silhouette. Both implement continuous movement intersection
+against the wall segments with rounded player-radius clearance,
+independent of player altitude. Thus jumping above the *visual*
+wall would still not evade the planned boundary collision.
+
+The source boundary audit is
+static/maps/octavus.native-boundary-audit92.json. Exactly 117
+deterministic Python movement fixtures are verified in JavaScript;
+100 intentional escape trajectories are stopped. The automated
+checks verify the full seam-free ring, wall top/bottom, screenshot
+tracing metadata, and all 33 source starts.
+
+The HTML Octavus Lab now shows original-island boundary metrics
+and allows comparing scene renders with and without the wall.
+The native browser smoke test captures both screenshots in Chrome.
+
+IMPORTANT: The new ring is **STAGING ONLY**. The existing live
+Octavus multiplayer arena still uses the unrelated OCT1
+86,500-triangle OBJ collision. Game server.py, client game.js,
+octavus_match.js, octavus_world.py, and active octavus.json remain
+unchanged, so do not claim the already-deployed multiplayer map
+enforces this new wall. A future stage must pair the compact
+boundary with complete interior native-world collision, then
+test synchronized movement before activating it for players.
+
 **Guardrail:** Do not modify `static/maps/octavus.json`,
 `static/octavus_match.js`, `octavus_world.py`, or server gameplay
 collision until the native geometry replacement passes the visual
