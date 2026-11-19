@@ -18,7 +18,7 @@ const all=entities.visualEntities.filter(e=>e.type==='mapmodel'&&
 const inside=all.filter(e=>octavusPropInside(e.sourcePosition,map.playBounds));
 const converted=inside.filter(e=>{
  const info=manifest.models[aliases[e.attrs[0]]];
- return info&&!info.missing&&info.codec==='gzip-obj'&&
+ return info&&!info.missing&&['gzip-obj','obj'].includes(info.codec)&&
         info.url.startsWith('/static/maps/octavus_props/');
 });
 const groups=new Map();
@@ -50,10 +50,31 @@ test('the compact playable area keeps 147 of 149 MPZ model placements',()=>{
  assert.equal(all.length-inside.length,2);
 });
 
-test('original model availability is explicit, not replaced with boxes',()=>{
- assert.equal(converted.length,134);
- assert.equal(inside.length-converted.length,13);
- assert.equal(groups.size,15);
+test('all 13 previously missing native placements now have original geometry',()=>{
+ assert.equal(converted.length,147);
+ assert.equal(inside.length-converted.length,0);
+ assert.equal(groups.size,18);
+});
+
+test('recovered native geometry is paired with authoritative source metadata',()=>{
+ const expected=[
+  ['misc/lowpoly_eagle',8,1532,1805],
+  ['luckystrike/door1',4,12,36],
+  ['misc/radio_dish',1,3786,5370]
+ ];
+ for(const [alias,count,triangles,vertices] of expected){
+  const info=manifest.models[alias];
+  assert.equal(groups.get(alias).length,count);
+  assert.equal(info.codec,'obj');
+  assert.equal(info.triangles,triangles);
+  assert.equal(info.vertices,vertices);
+  assert.ok(info.source.includes('github.com/redeclipse/'));
+  assert.ok(readFileSync(new URL(info.url.slice(1),root)).length>200);
+ }
+ assert.ok(readFileSync(new URL(manifest.models['misc/lowpoly_eagle'].skinB64Url.slice(1),root),'utf8').startsWith('iVBORw0KGgo'));
+ assert.ok(readFileSync(new URL(manifest.models['misc/radio_dish'].skinB64Url.slice(1),root),'utf8').startsWith('iVBORw0KGgo'));
+ assert.equal(manifest.models['misc/radio_dish'].skinHighOnly,true);
+ assert.equal(manifest.models['luckystrike/door1'].yaw,90);
 });
 
 test('quality distance logic preserves original near models and low-end weed LOD',()=>{
@@ -69,7 +90,8 @@ test('all converted original OBJ files parse, and instanced transforms match leg
  let triangles=0;
  for(const [alias,placements] of groups){
   const def=manifest.models[alias],filename=def.url.replace(/^\//,'');
-  const text=gunzipSync(readFileSync(new URL(filename,root))).toString('utf8');
+  const bytes=readFileSync(new URL(filename,root));
+  const text=def.codec==='gzip-obj'?gunzipSync(bytes).toString('utf8'):bytes.toString('utf8');
   const prototype=loader.parse(text);
   prototype.rotation.x=-Math.PI/2;
   const parts=[];
