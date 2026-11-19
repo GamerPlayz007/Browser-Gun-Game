@@ -1,46 +1,42 @@
 {
-  "status": "passed",
-  "verifiedAt": "2026-11-19T14:09:52.166056+00:00",
+  "status": "failed",
+  "verifiedAt": "2026-11-19T14:18:48.277505+00:00",
   "steps": {
-    "octavusServerMotion": "success",
-    "browserImportClosure": "success",
-    "octavusClientMotion": "success",
-    "existingMultiplayer": "success"
+    "octavusServerMotion": "failure",
+    "browserImportClosure": "skipped",
+    "octavusClientMotion": "skipped",
+    "existingMultiplayer": "skipped"
   },
   "logTail": {
     "python": [
-      "test_map_and_world_dimensions (test_octavus_phase1.OctavusPhase1Tests.test_map_and_world_dimensions) ... ok",
-      "test_registry_preserves_octavus (test_octavus_phase1.OctavusPhase1Tests.test_registry_preserves_octavus) ... ok",
-      "test_source_clearance_for_all_respawn_candidates (test_octavus_phase1.OctavusPhase1Tests.test_source_clearance_for_all_respawn_candidates) ... ok",
-      "test_uv_package_keeps_all_authored_coordinates (test_octavus_phase1.OctavusPhase1Tests.test_uv_package_keeps_all_authored_coordinates) ... ok",
-      "test_native_stairs_are_walkable_but_tall_walls_are_not (test_octavus_motion73.OctavusStage31Tests.test_native_stairs_are_walkable_but_tall_walls_are_not) ... ok",
-      "test_original_triangles_block_bot_visibility (test_octavus_motion73.OctavusStage31Tests.test_original_triangles_block_bot_visibility) ... ok",
-      "test_uncontrolled_standing_is_blocked_by_original_roof (test_octavus_motion73.OctavusStage31Tests.test_uncontrolled_standing_is_blocked_by_original_roof) ... ok",
-      "test_fast_ground_matches_original_triangle_raycast (test_octavus_perf74.OctavusPerformanceTests.test_fast_ground_matches_original_triangle_raycast) ... ok",
-      "test_live_wall_resolve_parity_and_profile (test_octavus_perf74.OctavusPerformanceTests.test_live_wall_resolve_parity_and_profile) ... ok",
-      "test_reference_speed_profile (test_octavus_perf74.OctavusPerformanceTests.test_reference_speed_profile) ... ok",
-      "test_wall_bins_have_nearby_tris_only (test_octavus_perf74.OctavusPerformanceTests.test_wall_bins_have_nearby_tris_only) ... ok",
-      "test_wall_index_matches_original_filter (test_octavus_perf74.OctavusPerformanceTests.test_wall_index_matches_original_filter) ... ok",
-      "test_30hz_commands_do_not_build_a_queue (test_octavus_network75.OctavusInputCadenceTests.test_30hz_commands_do_not_build_a_queue) ... ok",
+      "----------------------------------------------------------------------",
+      "Traceback (most recent call last):",
+      "  File \"/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/test_octavus_motion73.py\", line 65, in test_native_stairs_are_walkable_but_tall_walls_are_not",
+      "    dust_step65(p,OCT_DT,now,{'speed':1},world)",
+      "    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+      "  File \"/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/dust_motion65.py\", line 182, in dust_step65",
+      "    ground=(world.ground_at(x,z,step_feet,fall_drop) if native_octavus",
+      "            ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^",
+      "TypeError: DustWorld64.ground_at() takes from 3 to 4 positional arguments but 5 were given",
+      "",
+      "======================================================================",
+      "ERROR: test_uncontrolled_standing_is_blocked_by_original_roof (test_octavus_motion73.OctavusStage31Tests.test_uncontrolled_standing_is_blocked_by_original_roof)",
+      "----------------------------------------------------------------------",
+      "Traceback (most recent call last):",
+      "  File \"/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/test_octavus_motion73.py\", line 79, in test_uncontrolled_standing_is_blocked_by_original_roof",
+      "    dust_step65(p,OCT_DT,100,{'speed':1},world)",
+      "    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+      "  File \"/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/dust_motion65.py\", line 182, in dust_step65",
+      "    ground=(world.ground_at(x,z,step_feet,fall_drop) if native_octavus",
+      "            ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^",
+      "TypeError: DustWorld64.ground_at() takes from 3 to 4 positional arguments but 5 were given",
       "",
       "----------------------------------------------------------------------",
-      "Ran 13 tests in 0.781s",
+      "Ran 13 tests in 0.591s",
       "",
-      "OK",
-      "Octavus 120 wall resolves: coarse=59.95ms 2m=0.25ms speedup=241.1x",
-      "Octavus exact ground probes: reference=0.0035s accelerated=0.0004s speedup=8.1x"
-    ],
-    "javascript": [
-      "Octavus 3.4: 30 Hz exact client mesh stairs, tall walls and roof clearance passed."
-    ],
-    "server": [
-      "/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/server.py:656: NotAppKeyWarning: It is recommended to use web.AppKey instances for keys.",
-      "https://docs.aiohttp.org/en/stable/web_advanced.html#application-s-config",
-      "  app=web.Application(client_max_size=4096,middlewares=[cache_policy]);app['perf36']=ServerMetrics();app.router.add_get('/',index);app.router.add_get('/health',health)",
-      "----------------------------------------------------------------------",
-      "Ran 28 tests in 1.635s",
-      "",
-      "OK"
+      "FAILED (errors=3)",
+      "Octavus 120 wall resolves: coarse=44.69ms 2m=0.20ms speedup=223.0x",
+      "Octavus exact ground probes: reference=0.0026s accelerated=0.0003s speedup=8.9x"
     ]
   },
   "scope": "Automated tests; interactive browser gameplay still requires playtesting"
