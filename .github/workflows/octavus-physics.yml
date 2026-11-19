@@ -7,7 +7,10 @@ on:
       - 'dust_world64.py'
       - 'octavus_world.py'
       - 'static/dust_motion65.js'
-      - 'tests/test_octavus_motion.py'
+      - 'tests/test_octavus_*.py'
+      - 'static/octavus_match.js'
+      - 'static/octavus_boundary.js'
+      - 'static/maps/octavus.json'
       - '.github/workflows/octavus-physics.yml'
   workflow_dispatch:
 
@@ -22,9 +25,12 @@ jobs:
       - name: Compile Python movement modules
         run: python -m py_compile dust_motion65.py dust_world64.py octavus_world.py
       - name: Run Octavus movement regressions
-        run: python -m unittest discover -s tests -p test_octavus_motion.py -v
+        run: python -m unittest discover -s tests -p 'test_octavus_*.py' -v
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
       - name: Parse matching client physics
-        run: node --check static/dust_motion65.js
+        run: |
+          node --check static/dust_motion65.js
+          node --check static/octavus_match.js
+          node --check static/octavus_boundary.js
