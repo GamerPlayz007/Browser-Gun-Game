@@ -185,6 +185,37 @@ def audit():
         })
     if not all(item["capsuleInside"] for item in records):
         raise ValueError("New visible footprint clips original source player starts")
+    # Deterministic movement fixtures form a cross-language regression gate.
+    # A long horizontal movement must hit the wall even if its Y coordinate
+    # would be high above the visible wall (height-independent fallback).
+    motions=[]
+    for row in records[::4]:
+        start=row["worldXZ"]
+        for direction in range(12):
+            angle=direction*math.tau/12
+            target=(start[0]+math.cos(angle)*85,
+                    start[1]+math.sin(angle)*85)
+            px,pz,blocked=boundary.clip_horizontal(start,target)
+            motions.append({
+                "start":start,
+                "end":[round(target[0],6),round(target[1],6)],
+                "clippedEnd":[round(px,6),round(pz,6)],
+                "blocked":blocked,
+                "endAllowed":boundary.allowed(*target),
+            })
+    for row in records[::4]:
+        start=row["worldXZ"]
+        tx=start[0]+.04
+        tz=start[1]+.02
+        px,pz,blocked=boundary.clip_horizontal(start,(tx,tz))
+        motions.append({
+            "start":start,"end":[round(tx,6),round(tz,6)],
+            "clippedEnd":[round(px,6),round(pz,6)],
+            "blocked":blocked,
+            "endAllowed":boundary.allowed(tx,tz),
+        })
+    if not all(boundary.allowed(*m["clippedEnd"]) for m in motions):
+        raise ValueError("Analytic motion clipping returned an outside point")
     return {
         "format":"OCTAVUS-NATIVE-BOUNDARY-AUDIT92",
         "sourceRevision":829,
@@ -202,6 +233,8 @@ def audit():
         "originalStartsTotal":len(records),
         "minOriginalSpawnWallClearance":min(r["wallDistance"] for r in records),
         "spawns":records,
+        "motionFixtures":motions,
+        "blockedMotionFixtures":sum(m["blocked"] for m in motions),
         "islandOutsideDisabled":True,
         "wallCollisionIsHeightIndependent":True,
         "clientMovementHookedIntoLiveGame":False,
