@@ -5,7 +5,7 @@
  */
 import * as THREE from 'three';
 import {createOctavusPBRMaterial} from './octavus_materials.js';
-import {octavusRenderBounds,octavusTriangleVisible} from './octavus_culling.js';
+import {octavusRenderBounds,octavusVisibleFaceOffsets} from './octavus_culling.js';
 
 const PARTS=8, SCALE=120/8192;
 // Calinou's original Cube 2 OBJ export recommends an import scale around 0.05.
@@ -117,11 +117,7 @@ function createScene(packed,types,scene=new THREE.Scene(),sourceUV=null,nativeSc
   throw Error('Octavus original UV triangle count mismatch');
  for(const [slot,indices] of packed.groups){
   const all=packed.points;
-  const selected=[];
-  for(let i=0;i<indices.length;i+=3){
-   if(octavusTriangleVisible(all,indices[i],indices[i+1],indices[i+2],
-       OCTAVUS_LOCAL_RATIO,renderBounds))selected.push(i);
-  }
+  const selected=octavusVisibleFaceOffsets(all,indices,OCTAVUS_LOCAL_RATIO,renderBounds);
   // Every face retains its ORIGINAL group-relative UV index even when an
   // earlier face is skipped. This prevents texture scrambling at the cutoff.
   if(!selected.length){faceOffset+=indices.length;continue;}
@@ -184,7 +180,7 @@ function createScene(packed,types,scene=new THREE.Scene(),sourceUV=null,nativeSc
   ground.add(mesh);renderedSlots.set(slot,mesh);meshCount++;faceOffset+=indices.length;
  }
  if(sourceUV&&faceOffset!==sourceUV.indices.length)throw Error('Octavus UV face count does not match geometry');
- return {scene,meshCount,renderedTriangleCount,textures,
+ return {scene,meshCount,renderedTriangleCount,visibleSlots:[...renderedSlots.keys()],textures,
   get originalMaterials(){return originalMaterials;},
   geometryRoot:ground,preservedTextureCoordinates:!!sourceUV,
   // The original media package is optional. Apply source PBR materials
