@@ -125,7 +125,7 @@ def dust_step65(p,dt,now,weapon,world=None):
         if dist>change:
             p['vx']+=ex*change/dist;p['vz']+=ez*change/dist
         else:p['vx'],p['vz']=tx,tz
-    if jump_edge and grounded:
+    if jump_edge and grounded and (not native_octavus or world.capsule_clear((p['x'],p['y'],p['z']),HEIGHT)):
         p['vy']=7.95 if sliding else 7.5
         p['grounded']=False;grounded=False
         p['slide_until']=0;p['crouch']=False;h=HEIGHT
