@@ -109,6 +109,42 @@ try{
  await page.click('#arena-wall');
  assert.equal(await page.evaluate(()=>document.getElementById('arena-wall').checked),true);
  await page.click('#home-btn');
+ // Stage 2.2: expose real interior-floor gaps, not a generic
+ // debug-grid animation. Verify the exact compact native octree loads
+ // with original solid/empty/deformed cell identity in actual Chrome.
+ await page.click('#interior-survey-btn');
+ await page.waitForFunction(()=>{
+  return document.getElementById('metric-interior-samples')?.textContent==='775'
+    && document.getElementById('metric-interior-supported')?.textContent==='597 / 775'
+    && document.getElementById('metric-interior-new')?.textContent==='14'
+    && document.getElementById('metric-interior-cubes')?.textContent==='690,939'
+    && document.getElementById('interior-survey-btn')?.textContent==='Hide interior floor survey'
+    && !document.getElementById('interior-survey-btn')?.disabled;
+ },{timeout:90000});
+ const nativeOccupancy=await page.evaluate(async()=>{
+  const {loadNativeOccupancy96}=await import('/static/octavus_native_occupancy96.js');
+  const {index,manifest,validatedSha256}=await loadNativeOccupancy96();
+  const start=manifest.actualSourceOccupancyFixtures[0];
+  const leaf=index.lookup(start.native);
+  return {
+   cells:index.count,
+   kinds:index.cellsByKind,
+   verified:validatedSha256===manifest.compressedSha256,
+   sampleParity:(leaf?.kind??null)===start.kind,
+   unresolvedDeformedCollision:!index.deformedCollisionProven,
+   sourceFirstPlayerStart:document.getElementById('metric-starts').textContent,
+  };
+ });
+ assert.equal(nativeOccupancy.cells,690939);
+ assert.equal(nativeOccupancy.verified,true);
+ assert.equal(nativeOccupancy.sampleParity,true);
+ assert.equal(nativeOccupancy.unresolvedDeformedCollision,true);
+ assert.ok(nativeOccupancy.kinds.solid>0&&nativeOccupancy.kinds.deformed>0);
+ const floorOverlayImage=await (await page.$('#viewport canvas')).screenshot();
+ assert.ok(floorOverlayImage.byteLength>12000);
+ writeFileSync('/tmp/octavus-native-interior-floor-survey.png',floorOverlayImage);
+ await page.click('#interior-survey-btn');
+ await page.waitForFunction(()=>document.getElementById('interior-survey-btn')?.textContent==='Show interior floor survey');
  // Phase 2.0: the original-native collision pilot must LOAD through
  // the actual browser fetch+gzip+SHA256 path and expose source spawn
  // clearance marks while leaving the existing gameplay map untouched.
@@ -400,7 +436,7 @@ try{
  assert.deepEqual(shaderErrors,[],'Native texture source projection must compile in Chrome WebGL');
  assert.deepEqual(errors,[],'No browser runtime errors permitted');
  console.log('Octavus native preview headless Chrome: PASS');
- console.log(JSON.stringify({...stats,previewPngBytes:image.byteLength,optimizedPngBytes:enhancedImage.byteLength,sourceTexturePngBytes:textureImage.byteLength,sourceSceneryPngBytes:scenicImage.byteLength,alignmentAnchorPngBytes:anchoredImage.byteLength,decalProjection:decalCoverage,collisionPilot:pilotVisible,collisionPilotPngBytes:collisionScreenshot.byteLength,nativeArenaWall:arenaWallData,arenaWallScreenshotBytes:wallScreenshot.byteLength},null,2));
+ console.log(JSON.stringify({...stats,previewPngBytes:image.byteLength,optimizedPngBytes:enhancedImage.byteLength,sourceTexturePngBytes:textureImage.byteLength,sourceSceneryPngBytes:scenicImage.byteLength,alignmentAnchorPngBytes:anchoredImage.byteLength,decalProjection:decalCoverage,collisionPilot:pilotVisible,collisionPilotPngBytes:collisionScreenshot.byteLength,nativeArenaWall:arenaWallData,arenaWallScreenshotBytes:wallScreenshot.byteLength,nativeOctreeOccupancy:nativeOccupancy,interiorSurveyImageBytes:floorOverlayImage.byteLength},null,2));
 }finally{
  await browser.close();
 }
