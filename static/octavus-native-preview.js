@@ -160,6 +160,10 @@ function construct(asset){
   offset+=arr.length;
  }
  geometry.setIndex(new THREE.BufferAttribute(index,1));
+ // Preserve original texture-slot ids so the staging decal projector
+ // can distinguish still-unverified plain source faces from the
+ // original detailed architecture, without touching map rendering.
+ geometry.userData.octavusNativeSlotByMaterial=slots;
  geometry.computeVertexNormals();geometry.computeBoundingSphere();
  const mesh=new THREE.Mesh(geometry,materials);
  mesh.name='Octavus source-native '+which;
