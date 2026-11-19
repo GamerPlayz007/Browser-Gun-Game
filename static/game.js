@@ -564,8 +564,8 @@ function frame(ms){try{const now=ms/1000,rawMs=ms-clock,dt=Math.min(rawMs/1000,.
    local.y+viewError.y+(local.grounded?groundVelocity:local.vy)*movementAccumulator+eye+bob
    -(settings.motion?landingPulse*.24:0)+flow53.vaultDip,
    local.z+viewError.z+local.vz*movementAccumulator+peek63.z);
-  camera.rotation.set(pitch+visualRecoil,yaw,flow53.roll-visualLean63*.15,'YXZ');
-  const targetFov53=T.MathUtils.lerp(input.sprint?88:82,selected===3?26:57,ads)+flow53.fovBoost;
+  camera.rotation.set(pitch+visualRecoil*(1-ads),yaw,flow53.roll-visualLean63*.15,'YXZ');
+  const targetFov53=T.MathUtils.lerp(input.sprint?88:82,selected===3?35:54,ads)+flow53.fovBoost;
   camera.fov=T.MathUtils.lerp(camera.fov,targetFov53,Math.min(1,dt*13));
   camera.updateProjectionMatrix();
   for(const [id,g] of opponents){const shown=sampleRemote(netSync,id,ms);const p=shown?{...g.userData.target,...shown}:g.userData.target;if(!p)continue;
@@ -590,15 +590,16 @@ function frame(ms){try{const now=ms/1000,rawMs=ms-clock,dt=Math.min(rawMs/1000,.
     camera.updateProjectionMatrix();
    }
   }
-  for(let i=0;i<4;i++)weaponModels[i].visible=i===selected&&locked()&&me.hp>0&&state.phase!=='results'&&!(selected===3&&ads>.95);
+  for(let i=0;i<4;i++)weaponModels[i].visible=i===selected&&locked()&&me.hp>0&&state.phase!=='results';
   const gun=weaponModels[selected];animateWeapon(gun,{time:now,ads,reload:selected===me.weapon&&me.reload>0?me.reload/weapons[selected].reload:0,kick,moving:locked()&&moving,slide:sliding,motion:settings.motion,switched:switchVisual});gun.userData.flash.visible=now<flashUntil;gun.userData.flash.rotation.z=now*21;
   gun.userData.flash.scale.set(flashPower52,flashPower52,flashPower52*2);
   kick=Math.max(0,kick-dt*.7);visualRecoil*=Math.exp(-dt*18);switchVisual=Math.max(0,switchVisual-dt*5);
-  $('scope').hidden=!(selected===3&&ads>.95&&locked()&&me.hp>0);
+  $('scope').hidden=!(ads>.35&&locked()&&me.hp>0&&state.phase!=='results');
+   $('scope').style.opacity=String(Math.min(1,Math.max(0,(ads-.35)/.4)));
   const spread52=crosshairSpread52({speed:localSpeed,grounded:local.grounded,
     crouch:local.crouch,aim:ads,recoil:kick,sprint:input.sprint,weapon:selected});
   crosshairSize52+=(spread52-crosshairSize52)*Math.min(1,dt*15);
-  $('crosshair').style.opacity=me.hp<=0||ads>.75?'0':'1';
+  $('crosshair').style.opacity=me.hp<=0?'0':String(1-Math.min(1,Math.max(0,(ads-.28)/.47)));
   $('crosshair').style.width=$('crosshair').style.height=crosshairSize52.toFixed(1)+'px';
   if(moving&&local.grounded&&locked()&&now-lastStep>(input.sprint?.28:.4)){audio.step(input.sprint?.07:.045);lastStep=now;}
  }else{const anchor=map.center||{x:0,z:0};camera.position.set(anchor.x+7+Math.sin(now*.045)*2,map.octavusOriginal?16:9,anchor.z+30+Math.cos(now*.045)*2);camera.lookAt(anchor.x-5,map.octavusOriginal?2:3,anchor.z+14);camera.fov=65;camera.updateProjectionMatrix();for(const g of weaponModels)g.visible=false;}
