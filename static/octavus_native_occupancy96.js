@@ -32,7 +32,7 @@ export function decodeNativeOccupancy96(input,manifest){
     bytes.byteLength!==12+count*RECORD_BYTES)
    throw Error('Source native occupancy cube count/stride invalid');
  const maps=new Map(),byKind={empty:0,solid:0,deformed:0};
- const names={0:'empty',1:'solid',2:'deformed'};
+ const names={1:'empty',2:'solid',3:'deformed'};
  const kinds=new Uint8Array(count),origins=new Uint16Array(count*4);
  // The exact original kind numbering is read from manifest source
  // rather than guessed in the game. Empty/solid/normal flags originate
@@ -73,7 +73,7 @@ export function decodeNativeOccupancy96(input,manifest){
     origin:[origins[cell*4],origins[cell*4+1],origins[cell*4+2]],
     size,
     edgeBytes:bytes.slice(row+9,row+21),
-    deformedUnresolved:kinds[cell]===2
+    deformedUnresolved:kinds[cell]===3
    };
   }
   return null; // outside original-island export bounds
