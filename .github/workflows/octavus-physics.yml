@@ -10,6 +10,11 @@ on:
       - 'tests/test_octavus_*.py'
       - 'static/octavus_match.js'
       - 'static/octavus_boundary.js'
+      - 'static/octavus_culling.js'
+      - 'static/octavus_texture_budget.js'
+      - 'static/octavus_preview.js'
+      - 'static/octavus_materials.js'
+      - 'tests/test_octavus_render.mjs'
       - 'static/maps/octavus.json'
       - '.github/workflows/octavus-physics.yml'
   workflow_dispatch:
@@ -34,3 +39,9 @@ jobs:
           node --check static/dust_motion65.js
           node --check static/octavus_match.js
           node --check static/octavus_boundary.js
+          node --check static/octavus_culling.js
+          node --check static/octavus_texture_budget.js
+          node --check static/octavus_materials.js
+          node --check static/octavus_preview.js
+      - name: Test Octavus visual crop and texture budget
+        run: node --test tests/test_octavus_render.mjs
