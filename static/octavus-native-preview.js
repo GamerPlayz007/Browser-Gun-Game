@@ -33,6 +33,8 @@ originalScenery.onCounts=counts=>{
  $('metric-props').textContent=fmt(counts.models);
  $('metric-anchors').textContent=fmt(counts.anchors);
  $('metric-decals').textContent=fmt(counts.decals);
+ $('metric-projected').textContent=fmt(counts.projectedDecals);
+ $('metric-decal-tris').textContent=fmt(counts.projectedTriangles);
  $('metric-lights').textContent=fmt(counts.lightEntities);
  $('metric-skybox').textContent=counts.skybox?'Loaded':'Off';
 };
@@ -223,6 +225,7 @@ async function activate(which){
   const next=construct(asset);
   if(id!==requestID){next.geometry.dispose();next.materials.forEach(m=>m.dispose());return}
   disposeOld();current=next;scene.add(next.mesh);
+  originalScenery.setNativeGeometry(next.geometry);
   recolor();
   $('metric-tris').textContent=fmt(asset.nt);
   $('metric-verts').textContent=fmt(asset.nv);
