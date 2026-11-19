@@ -111,7 +111,7 @@ export class OctavusNativeScenery {
    if(type==='props')
     this.report('SOURCE MAP MODELS: '+next.instances+' placed from MPZ positions, '+next.modelTypes+' original OBJ types. Missing '+next.missing+' unavailable source models. No synthetic substitutes.');
    if(type==='decals')
-    this.report('SOURCE DECALS: '+next.projected+' of '+next.count+' original MPZ decals successfully projected onto '+next.triangles+' clipped world polygons; '+next.materials+' source textures, '+next.spatialCells+' spatial bins. Remaining unmatched source placements are not replaced by floating panels.');
+    this.report('SOURCE DECALS: '+next.projected+' of '+next.count+' original MPZ decals successfully projected onto '+next.triangles+' clipped world polygons; '+next.materials+' source textures, '+next.spatialCells+' spatial bins. '+next.ignoredUnverifiedPlainTriangles+' unverified plain-material source triangles excluded from decals ONLY; original map mesh untouched. Unmatched decals receive no floating substitute.');
   }catch(error){
    if(id!==this.requestIds[type])return;
    this.active[type]=false;
