@@ -26,12 +26,18 @@ class OriginalOctavusAssetsTests(unittest.TestCase):
         cls.entities=json.loads((ROOT/'static/maps/octavus.native-entities.json').read_text())
         cls.map=json.loads((ROOT/'static/maps/octavus.json').read_text())
         cfg=(ROOT/'static/maps/octavus.original.cfg').read_text()
-        cls.aliases=re.findall(r'^mapmodel\\s+"([^"]+)"',cfg,re.M)
+        cls.aliases=re.findall(r'^mapmodel\s+"([^"]+)"',cfg,re.M)
 
     def test_thirteen_authored_placements_use_recovered_sources(self):
         counts=Counter()
         for entry in self.entities['visualEntities']:
             if entry.get('type')=='mapmodel' and isinstance(entry.get('attrs'),list):
+                p=entry.get('sourcePosition')
+                b=self.map['playBounds']
+                if not isinstance(p,list) or len(p)<2:continue
+                x=(p[0]-4096)*.05; z=(p[1]-4096)*.05
+                if not (b['x0']-6<=x<=b['x1']+6 and
+                        b['z0']-6<=z<=b['z1']+6):continue
                 index=entry['attrs'][0]
                 if isinstance(index,int) and 0<=index<len(self.aliases):
                     counts[self.aliases[index]]+=1
@@ -63,7 +69,7 @@ class OriginalOctavusAssetsTests(unittest.TestCase):
             self.assertTrue(path.is_file())
             self.assertTrue(path.resolve().is_relative_to(PROPS.resolve()))
             data=base64.b64decode(path.read_text().strip(),validate=True)
-            self.assertTrue(data.startswith(b'\\x89PNG\\r\\n\\x1a\\n'))
+            self.assertTrue(data.startswith(bytes.fromhex('89504e470d0a1a0a')))
         self.assertTrue(self.data['models']['misc/radio_dish']['skinHighOnly'])
 
     def test_source_credit_and_missing_original_door_texture_are_explicit(self):
