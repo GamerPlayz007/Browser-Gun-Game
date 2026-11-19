@@ -667,7 +667,7 @@ if __name__=='__main__':
             top_level_dir=str(ROOT / 'tests'),
         )
         checks = suite.countTestCases()
-        if checks < 16:
+        if checks < 18:
             raise RuntimeError(f'Octavus physics smoke suite unexpectedly has {checks} tests')
         result = unittest.TextTestRunner(verbosity=2).run(suite)
         if not result.wasSuccessful():
