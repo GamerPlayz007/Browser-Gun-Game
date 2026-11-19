@@ -31,8 +31,8 @@ export function createDustPhysics65(source){
   const hit=bvh.raycast(rayOrigin,rayDirection.divideScalar(max),max);
   return hit.hit?{point:hit.point.clone(),normal:hit.normal.clone(),t:hit.t,surface:hit.surface}:null;
  }
- function groundAt(x,z,y){
-  const hit=raycast([x,y+.48,z],[x,y-1,z]);
+ function groundAt(x,z,y,drop=1){
+  const hit=raycast([x,y+.48,z],[x,y-Math.max(1,drop),z]);
   return hit&&Math.abs(hit.normal.y)>=.67?hit.point.y:null;
  }
  function capsuleClear(x,y,z,height=HEIGHT){
@@ -171,12 +171,14 @@ export function createDustPhysics65(source){
    }
    x=xx;z=zz;
   }
-  let ground=groundAt(x,z,stepFeet);
+  // Match the server's full falling-displacement probe at 30Hz.
+  p.vy=Math.max(-35,p.vy-GRAVITY*dt);
+  const fallDrop=Math.max(1,-p.vy*dt+.08);
+  let ground=groundAt(x,z,stepFeet,source.nativeOctavus?fallDrop:1);
   if(grounded&&ground!==null&&ground>oldY+STEP+.02){
    x=oldX;z=oldZ;vx=vz=0;ground=groundAt(x,z,oldY);
   }
   Object.assign(p,{x,z,vx,vz});
-  p.vy=Math.max(-35,p.vy-GRAVITY*dt);
   const proposedY=oldY+p.vy*dt;
   if(ground!==null&&p.vy<=0&&(proposedY<=ground+.03||(grounded&&Math.abs(proposedY-ground)<=STEP+.04))){
    p.y=ground;p.vy=0;p.grounded=true;
