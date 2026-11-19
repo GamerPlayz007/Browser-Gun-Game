@@ -66,7 +66,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
  <a href="/">Back to CROSSFire</a>
 </header>
 <main>
- <div class="banner"><strong>PHASE 1.3 — INSPECTION BUILD, NOT GAMEPLAY.</strong> This is a source-native geometry prototype from the original Red Eclipse 2 Octavus MPZ (revision 829). Original source textures are now available as an opt-in preview, with approximate coordinate alignment pending full renderer parity. Phase 1.7 can now add the original model placements, native decals, Redcliff skybox and source lights using the original MPZ entity data. Use <strong>Show restored scene</strong> for a one-click combined preview (heavy), or toggle each environmental layer individually. Phase 1.8 corrects native prop and decal rotations; use <strong>Model anchor markers</strong> to inspect placement without inventing terrain offsets. Phase 1.9 projects original decals directly onto clipped source mesh triangles, rather than floating billboard planes. The compact core omits plain-material slot 1. The new visibility, merged and raw diagnostics retain it but still lack complete native visibility, authored UVs and props. They are <em>not</em> finished original geometry. It is deliberately isolated from multiplayer and collision.</div>
+ <div class="banner"><strong>PHASE 1.3 — INSPECTION BUILD, NOT GAMEPLAY.</strong> This is a source-native geometry prototype from the original Red Eclipse 2 Octavus MPZ (revision 829). Original source textures are now available as an opt-in preview, with approximate coordinate alignment pending full renderer parity. Phase 1.7 can now add the original model placements, native decals, Redcliff skybox and source lights using the original MPZ entity data. Use <strong>Show restored scene</strong> for a one-click combined preview (heavy), or toggle each environmental layer individually. Phase 1.8 corrects native prop and decal rotations; use <strong>Model anchor markers</strong> to inspect placement without inventing terrain offsets. Phase 1.9 projects original decals directly onto clipped source mesh triangles, rather than floating billboard planes. Phase 2.0 adds an isolated **collision preflight** for the original map starts. Green markers are preliminarily clear; orange markers need collision review. This does not switch the live game to the new collider. The compact core omits plain-material slot 1. The new visibility, merged and raw diagnostics retain it but still lack complete native visibility, authored UVs and props. They are <em>not</em> finished original geometry. It is deliberately isolated from multiplayer and collision.</div>
  <section class="stage" aria-label="Native geometry inspection">
   <div class="panel">
    <div class="viewport" id="viewport">
@@ -79,6 +79,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
     <button type="button" id="top-btn">Top-down</button>
     <button type="button" id="spawn-btn">First native spawn</button>
     <button type="button" id="prop-focus-btn" title="Focus the most densely populated area of original Red Eclipse model placements">Source props close-up</button>
+    <button type="button" id="native-collision-btn" title="Validate the SHA256-matched source core on both JS and Python, then mark every original MPZ spawn according to server capsule and floor preflight">Check original spawn collision</button>
     <span class="group-separator"></span>
     <label for="mode">Visual mode <select id="mode"><option value="neutral">Architectural</option><option value="slot">Material slots</option><option value="height">Elevation</option><option value="source">Original textures (approx)</option></select></label>
     <label><input type="checkbox" id="wire"> Wireframe</label>
@@ -114,6 +115,9 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
       <div class="stat"><span>Native starts</span><b id="metric-starts">—</b></div>
       <div class="stat"><span>Original props placed</span><b id="metric-props">0</b></div>
       <div class="stat"><span>Source placement anchors</span><b id="metric-anchors">0</b></div>
+      <div class="stat"><span>Collision pilot triangles</span><b id="metric-collision-tris">—</b></div>
+      <div class="stat"><span>Spawn checks passed</span><b id="metric-collision-safe">—</b></div>
+      <div class="stat"><span>Spawns requiring review</span><b id="metric-collision-review">—</b></div>
       <div class="stat"><span>Original decals</span><b id="metric-decals">0</b></div>
       <div class="stat"><span>Projected onto real geometry</span><b id="metric-projected">0</b></div>
       <div class="stat"><span>Clipped decal triangles</span><b id="metric-decal-tris">0</b></div>
