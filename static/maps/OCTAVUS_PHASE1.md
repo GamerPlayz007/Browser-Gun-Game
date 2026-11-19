@@ -472,6 +472,98 @@ coordinates, source-renderer comparison views, batching, and
 client/server collision. Neither source-coordinate proof nor a Chrome
 screenshot alone verifies original visual parity.
 
+## Phase 1.9 — NATIVE POLYGON-CLIPPED DECAL RECONSTRUCTION
+
+This stage fixes the floating image panels used in the initial native
+Octavus source preview. Original Red Eclipse 2 decals are not simple
+planes: src/engine/octarender.cpp gendecal() projects images into
+an oriented 3D volume and clips world polygons against that volume.
+
+### Implemented in standalone source preview only
+
+- New static/octavus_native_decal_project90.js reconstructs original
+  authored decal projectors using MPZ r829 source positions and the
+  Phase 1.8 corrected native yaw/pitch/roll transforms.
+- Builds a spatial index of actual OCN2 source-world triangle
+  bounding boxes, rather than comparing each of 135 source decals
+  against all 863,803 triangles on every preview.
+- A source image's width-to-height ratio adjusts its projection
+  dimensions, matching the original engine. The projector depth
+  currently uses Red Eclipse DEFAULTDECALDEPTH=1.0.
+- Each candidate native triangle is clipped against six original
+  projector volume sides; surviving polygon pieces are triangulated
+  and assigned source-based UV coordinates.
+- No projected surface means no decal is rendered. No floating plane
+  fallback is generated.
+- Adjacent projected triangles sharing an original source texture
+  are batched into one mesh per texture, avoiding 135 standalone
+  billboard draw calls.
+- Decals are automatically recreated whenever the source-native map
+  candidate changes in the viewer. The older live Octavus decal
+  adapter stays byte-for-byte unchanged.
+
+### First full-map test and corrective performance measure
+
+The first full candidate projection included hundreds of thousands of
+native texture-slot-1 faces which are not yet proven visible in the
+original Red Eclipse renderer. It generated over 150,000 redundant
+decal triangles. The safety guard rejected it.
+
+The revised staging projector reads the original texture slot
+per native geometry group. It **excludes the unverified plain
+material slot 1 from decal projection ONLY**. Those original geometry
+faces remain in the displayed map; they are not deleted or replaced.
+This conservative restriction will need revisiting once the original
+engine's complete source visibility semantics are reproduced.
+
+### Verified Octavus r829 results — GitHub Chrome
+
+| Metric | Measured |
+|---|---:|
+| MPZ source decal entities | 141 |
+| Placements with recovered original decal images | 135 |
+| Original placements projected onto real native surfaces | **134** |
+| Source placements with no eligible surface | **1** |
+| Original clipped source projected triangles | **20,559** |
+| Source map geometry (unchanged) | 863,803 triangles |
+| Projected geometry with model/source axis consistency | Yes |
+| Live game map or collision modified | No |
+
+Actual headless Chrome software-WebGL tests prove:
+- Synthetic native original plane intersections generate real
+  world-position geometry and UV coordinates; they do not place
+  a rectangle at the entity origin.
+- Projectors reject opposing normals and surfaces outside the
+  original projector's 3D depth.
+- Clipped vertices stay within the original projector's dimensions.
+- The full 864K candidate restores the source textures, 135
+  source model placements and Redcliff sky, and produces 134 native
+  projected decal placements and 20,559 triangles.
+- Source layers can be removed without browser runtime errors.
+- Regression checks guard against fewer than 130 matched source
+  placements or more than 50,000 redundant decal triangles.
+
+The standalone UI now shows three separate counters: source
+decal entities with images, projected decal placements, and
+actual clipped source decal triangles.
+
+### Important remaining gaps
+
+Native Red Eclipse uses original baked surface normals, alpha/layer
+flags, per-vertex texture parameters, projection fade, and lightmaps.
+This staging implementation is a source-based approximation until
+the final renderer's blending semantics and true native surface
+visibility are reconstructed.
+
+The 6 original decal instances without recovered original source
+images remain intentionally omitted. One of the 135 image-backed
+instances does not meet eligible source geometry at present. Those
+gaps should not be disguised with invented geometry.
+
+**The live CROSSFire map, server geometry, multiplayer collision,
+and school-laptop performance profile are unchanged.** This stage
+improves the original-map reconstruction preview only.
+
 **Guardrail:** Do not modify `static/maps/octavus.json`,
 `static/octavus_match.js`, `octavus_world.py`, or server gameplay
 collision until the native geometry replacement passes the visual
