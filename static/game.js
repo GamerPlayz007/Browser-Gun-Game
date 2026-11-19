@@ -119,7 +119,8 @@ async function loadArena(id){
  if(next.octavusOriginal){
   window.__crossfireOctavus={
    ready:true,usingMainRenderer:true,collisionTriangles:world.physics.source.soup.count,
-   visualTriangles:world.originalVisualTriangles,renderSections:world.staticBatches,
+   visualTriangles:world.originalVisualTriangles,
+   drawnSourceTriangles:world.renderedVisualTriangles,renderSections:world.staticBatches,
    loadMs:Math.round(loadMs),
    perimeterWalls:world.perimeterWallCount,
    perimeterPosts:world.perimeterPostCount,
