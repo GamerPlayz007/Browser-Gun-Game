@@ -133,7 +133,7 @@ export function createDustPhysics65(source){
    const ex=tx-p.vx,ez=tz-p.vz,d=Math.hypot(ex,ez),change=accel*dt;
    if(d>change){p.vx+=ex*change/d;p.vz+=ez*change/d;}else{p.vx=tx;p.vz=tz;}
   }
-  if(jumpEdge&&grounded){
+  if(jumpEdge&&grounded&&(!nativeOctavus||capsuleClear(p.x,p.y,p.z,HEIGHT))){
    p.vy=sliding?7.95:7.5;p.grounded=false;grounded=false;
    p.slide_until=0;p.crouch=false;height=HEIGHT;
    p.jump_consumed=true;p.jump_cut=false;
