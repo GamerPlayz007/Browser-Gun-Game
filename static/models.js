@@ -1,6 +1,7 @@
 import * as T from 'three';
 import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
 import {makeAvatarAnim,trackAvatar,markAvatar,avatarPose} from './animation34.js';
+import {buildWeaponVisuals21} from './weapon_visuals21.js';
 const materials=new Map();const material=c=>{if(!materials.has(c))materials.set(c,new T.MeshStandardMaterial({color:c,roughness:.48,metalness:.25}));return materials.get(c);};
 function box(parent,w,h,d,c,x,y,z,r=.018){const m=new T.Mesh(new RoundedBoxGeometry(w,h,d,1,Math.min(r,w/3,h/3,d/3)),material(c));m.position.set(x,y,z);parent.add(m);return m;}
 function cylinder(parent,r1,r2,h,c,x,y,z){const m=new T.Mesh(new T.CylinderGeometry(r1,r2,h,12),material(c));m.position.set(x,y,z);parent.add(m);return m;}
@@ -27,62 +28,19 @@ export function setModelQuality67(root,mode='high'){
  return tier;
 }
 export function makeWeapon(id,arms=true){
- const root=new T.Group(),model=new T.Group();root.add(model);const dark=0x233941,black=0x17252b,metal=0x667b7e,acc=[0xe7b258,0x60d4be,0xef8a79,0xb1b4ee][id];
- const length=[.45,.31,.56,.65][id];box(model,.13,.15,length,dark,0,0,0);box(model,.145,.05,length*.65,acc,0,.072,-.02);
- barrel(model,id===2?.043:.026,id===3?.43:.25,black,0,.016,-length/2-.1);
- barrel(model,.041,.07,metal,0,.016,-length/2-(id===3?.32:.23));
- box(model,.09,.13,.25,dark,0,-.005,length/2+.14);box(model,.115,.17,.055,black,0,-.008,length/2+.28);
- box(model,.085,.19,.1,black,0,-.15,.12).rotation.x=-.3;
- const magazine=new T.Group();magazine.position.set(0,-.1,-.035);model.add(magazine);box(magazine,.09,id===2?.08:.24,.105,black,0,-.1,0).rotation.x=id===1?-.14:.12;box(magazine,.102,.035,.12,metal,0,-.23,0);
- for(let i=0;i<5;i++)box(model,.145,.016,.025,black,0,.105,.1-i*.045,.004);
- // Distinct sights by weapon: rifle/SMG reflex, shotgun irons, sniper optic.
- if(id===3){
-  // Original long-range sniper scope tube and colored lens.
-  barrel(model,.062,.25,black,0,.17,-.01);
-  barrel(model,.05,.008,0x5abbb9,0,.17,.12);
-  box(model,.045,.08,.09,metal,0,.1,0);
- }else if(id===2){
-  // Open shotgun iron sights: rear notch and a visible front post / bead.
-  // No glass, torus reticle or red-dot emitter on this weapon.
-  box(model,.11,.015,.033,metal,0,.12,.11,.004);
-  box(model,.016,.066,.025,black,-.048,.151,.11,.004);
-  box(model,.016,.066,.025,black,.048,.151,.11,.004);
-  box(model,.021,.06,.025,black,0,.123,-length/2,.004);
-  const bead=new T.Mesh(new T.SphereGeometry(.011,8,6),
-    new T.MeshBasicMaterial({color:0xf5e8c9}));
-  bead.position.set(0,.156,-length/2);model.add(bead);
- }else{
-  const sightY=.145;
-  box(model,.095,.018,.15,black,0,sightY-.074,-.075,.007);
-  box(model,.014,.065,.024,metal,-.041,sightY-.038,-.075,.004);
-  box(model,.014,.065,.024,metal,.041,sightY-.038,-.075,.004);
-  const sightRim=new T.Mesh(new T.TorusGeometry(.047,.007,6,32),
-    new T.MeshStandardMaterial({color:0x1c3038,roughness:.28,metalness:.65}));
-  sightRim.position.set(0,sightY,-.09);model.add(sightRim);
-  const sightGlass=new T.Mesh(new T.CircleGeometry(.04,24),
-    new T.MeshBasicMaterial({color:0x8ee3f0,transparent:true,opacity:.07,side:T.DoubleSide,depthWrite:false}));
-  sightGlass.position.set(0,sightY,-.091);model.add(sightGlass);
+ const root=new T.Group(),model=new T.Group(),magazine=new T.Group(),left=new T.Group();
+ root.add(model,left);model.add(magazine);magazine.position.set(0,-.1,-.035);
+ const {flash,action}=buildWeaponVisuals21(model,magazine,id);
+ // Arm poses remain compatible with Stage 2.2's upcoming movement/animation pass.
+ if(arms){
+  const sleeve=0x536d68,glove=0x283941;
+  box(root,.13,.13,.35,sleeve,.035,-.16,.40).rotation.x=.17;
+  box(root,.117,.106,.15,glove,.015,-.11,.20);
+  box(left,.13,.13,.37,sleeve,-.13,-.18,-.08).rotation.z=-.22;
+  box(left,.12,.10,.15,glove,-.065,-.09,-.23);
  }
- if(id===2){box(model,.15,.1,.23,0x9d5e4e,0,-.06,-.24);barrel(model,.03,.46,metal,0,-.07,-.16);}
- if(id===1)box(model,.06,.055,.045,metal,.09,.005,.06);
- // Side engraving, aligned receiver ribbing and minimal optic details.
- // Purely cosmetic and independently hidden on weaker school GPUs.
- details67(model,0x778990,1,[
-  [-.077,.04,-.12,.014,.032,.09],[.077,.04,-.12,.014,.032,.09],
-  [-.075,-.027,.025,.014,.055,.15],[.075,-.027,.025,.014,.055,.15],
-  [0,.117,-.07,.065,.014,.17],[0,.117,.105,.065,.015,.07],
-  [0,-.05,-length*.42,.08,.03,.085],
-  [0,.078,length*.35,.078,.016,.05]]);
- details67(model,acc,2,[
-  [-.083,.065,-.16,.013,.011,.035],[.083,.065,-.16,.013,.011,.035],
-  [-.080,-.022,-.11,.013,.012,.07],[.080,-.022,-.11,.013,.012,.07],
-  [-.080,-.022,-.01,.013,.012,.06],[.080,-.022,-.01,.013,.012,.06],
-  [0,.127,-.03,.03,.014,.04],
-  [0,.127,.065,.03,.014,.04]]);
- const flash=new T.Mesh(new T.OctahedronGeometry(.085),new T.MeshBasicMaterial({color:0xffe1a0}));flash.position.set(0,.016,-length/2-(id===3?.38:.28));flash.scale.z=2;model.add(flash);flash.visible=false;
- const left=new T.Group();root.add(left);
- if(arms){box(root,.13,.13,.35,0x536d68,.035,-.16,.40).rotation.x=.17;box(root,.115,.11,.14,0x2f4547,.015,-.11,.20);box(left,.13,.13,.37,0x536d68,-.13,-.18,-.08).rotation.z=-.22;box(left,.12,.10,.15,0x2f4547,-.065,-.09,-.23);}
- root.userData={model,magazine,left,flash,id};return root;
+ root.userData={model,magazine,left,flash,action,id};
+ return root;
 }
 export function animateWeapon(root,{time,ads,reload,kick,moving,slide,motion,switched}){
  const d=root.userData,id=d.id;root.position.set(T.MathUtils.lerp(.28,0,ads),T.MathUtils.lerp(-.29,id===3?-.17:-.145,ads),T.MathUtils.lerp(-.50,-.39,ads)+kick*.65);
