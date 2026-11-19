@@ -21,7 +21,7 @@ import {createUrbanAmbience45} from './living45.js';
 import {matchPresentation,finishPresentation,matchNotice} from './match35.js';
 import {createControlBeacon54} from './control54.js';
 import {readyView55,spectatorCandidates55,cycleSpectator55,teamStandings55} from './competitive55.js';
-import {safeRead56,safeWrite56,safeName56,safeQuality56,skinId56,skinColor56} from './preferences56.js';
+import {safeRead56,safeWrite56,safeName56,safeQuality56,skinColor56} from './preferences56.js';
 import {createNetSync,observePong,ingestSnapshot,sampleRemote,cameraCorrection,syncStats} from './netcode33.js';
 import {fireMode, makeTrigger, pressTrigger, releaseTrigger, takeTriggerPulse,
  predictedAmmo, reloadFraction, ammoState, damageBearing} from './combat32.js';
@@ -31,11 +31,9 @@ const settings={sens:clamp(Number(safeRead56('cf-sens','1'))||1,.4,2.5),
  motion:safeRead56('cf-motion','true')!=='false',
  quality:safeQuality56(safeRead56('cf-quality-25','auto'))};
 const qualityTier61=(detail=false)=>settings.quality==='auto'?(detail?'auto':'performance'):settings.quality;
-let preferredSkin56=skinId56(safeRead56('cf-skin56','0'));
 const storedVolume56=clamp(Number(safeRead56('cf-volume','0.5'))||0,.0,1);
 $('sensitivity').value=settings.sens;
 $('motion').checked=settings.motion;$('quality').value=settings.quality;
-$('skin56-home').value=$('skin56-room').value=String(preferredSkin56);
 $('volume').value=storedVolume56;audio.volume=storedVolume56;
 let map,registry,renderer,world,scene,camera,viewScene,viewCamera,display,minimap,postfx,ambience45,controlBeacon54;
 try{
@@ -257,7 +255,7 @@ async function refreshRooms65(prefer){
  }catch{ /* The room can still be entered with a known premade code. */ }
 }
 async function enter(create){$('create').disabled=$('join').disabled=true;$('rejoin56').hidden=true;$('status').textContent='Connecting to arena…';try{let code=$('code').value.trim().toUpperCase();const response=await fetch(create?'/api/rooms':'/api/rooms/'+code,create?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mapId:$('map-select').value})}:{});const data=await response.json();if(!response.ok)throw Error(data.error||'Connection failed.');if(create){code=data.room;$('code').value=code;}else if(data.players>=data.max)throw Error('This room is full.');
-await loadArena(data.mapId);const name=safeName56($('name').value);safeWrite56('cf-name',name);const conn=new WebSocket(`${location.protocol==='https:'?'wss':'ws'}://${location.host}/ws/${code}?name=${encodeURIComponent(name)}&weapon=${selected}&skin=${preferredSkin56}`);ws=conn;const timeout=setTimeout(()=>{if(conn.readyState!==1)conn.close();},12000);conn.onopen=()=>clearTimeout(timeout);conn.onmessage=e=>{if(ws===conn)handle(JSON.parse(e.data));};conn.onclose=()=>{clearTimeout(timeout);if(ws===conn)disconnect('Connection closed. Rejoining creates a new player identity.',code);};conn.onerror=()=>{$('status').textContent='Could not connect. Check the server is awake.';};}catch(e){$('status').textContent=e.message;$('create').disabled=$('join').disabled=false;refreshRooms65();}}
+await loadArena(data.mapId);const name=safeName56($('name').value);safeWrite56('cf-name',name);const conn=new WebSocket(`${location.protocol==='https:'?'wss':'ws'}://${location.host}/ws/${code}?name=${encodeURIComponent(name)}&weapon=${selected}`);ws=conn;const timeout=setTimeout(()=>{if(conn.readyState!==1)conn.close();},12000);conn.onopen=()=>clearTimeout(timeout);conn.onmessage=e=>{if(ws===conn)handle(JSON.parse(e.data));};conn.onclose=()=>{clearTimeout(timeout);if(ws===conn)disconnect('Connection closed. Rejoining creates a new player identity.',code);};conn.onerror=()=>{$('status').textContent='Could not connect. Check the server is awake.';};}catch(e){$('status').textContent=e.message;$('create').disabled=$('join').disabled=false;refreshRooms65();}}
 function disconnect(message,rejoinCode56=null){
  const code56=validRoom65(rejoinCode56)?rejoinCode56.toUpperCase():null;
  $('rejoin56').hidden=!code56;if(code56)$('code').value=code56;
@@ -313,6 +311,9 @@ function renderRoster(){
   row.className='roster-row'+(p.team?' team-'+p.team:'')+(p.ready?' is-ready55':'');
   const avatar=document.createElement('span');avatar.className='avatar';
   avatar.textContent=p.name.slice(0,1).toUpperCase();
+  // The colored roster square matches the server-assigned in-world outfit.
+  avatar.style.backgroundColor='#'+skinColor56(p.skin).toString(16).padStart(6,'0');
+  avatar.style.color='#10212b';
   const name=document.createElement('span');name.textContent=p.name;
   const badge=document.createElement('small');
   badge.textContent=[p.team?.toUpperCase(),p.id===state.host?'HOST':p.id===myId?'YOU':'CONNECTED',p.ready?'READY':null]
@@ -725,14 +726,6 @@ $('quality').onchange=e=>{
  safeWrite56('cf-quality-25',settings.quality);
  postfx.setMode(settings.quality);display.setMode(settings.quality);
 };
-function pickSkin56(raw){
- preferredSkin56=skinId56(raw);
- $('skin56-home').value=$('skin56-room').value=String(preferredSkin56);
- safeWrite56('cf-skin56',preferredSkin56);
- if(joined)send({type:'skin',skin:preferredSkin56});
-}
-$('skin56-home').onchange=e=>pickSkin56(e.target.value);
-$('skin56-room').onchange=e=>pickSkin56(e.target.value);
 window.addEventListener('resize',()=>display.resize());
 document.addEventListener('visibilitychange',()=>{clock=performance.now();frameMeter.reset();movementAccumulator=0;display.quality.warmup=120;resetInput();});
 $('create').disabled=$('join').disabled=false;$('create').textContent='CREATE A ROOM →';$('status').textContent='Create a room and send your friends the invite.';
