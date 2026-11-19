@@ -14,7 +14,7 @@ from dust_motion65 import dust_step65
 from modes54 import (TEAM_MODES,TEAM_IDS,TEAM_NAMES,CONTROL_POINT,
     is_team_mode,next_team,balance_teams,winner_team,controller,presence)
 from competitive55 import spawn_score,balanced_draft,ready_summary
-from cosmetics56 import normalize_skin56
+from cosmetics56 import random_skin56
 from bot57 import (MODE as BOT_MODE,BOT_COUNT,BOT_GOAL,BOT_WIN_GOAL,BOT_NAMES,
                    BOT_FIRE_SECONDS,decide as bot_decide,can_attack as bot_can_attack,
                    miss_offset,is_bot_mode)
@@ -89,9 +89,11 @@ def spawn(p,players,now,arena=DEFAULT,history=None):
     reset_health(p,now)
     seed_movement(p)
 
-def new_player(room,pid,name,now,weapon=0,skin=0):
+def new_player(room,pid,name,now,weapon=0):
     team=next_team(room.players) if is_team_mode(room.mode) else None
-    p=dict(id=pid,name=name,team=team,bot=False,ready=False,skin=normalize_skin56(skin),kills=0,deaths=0,headshots=0,streak=0,best_streak=0,weapon=weapon,yaw=0.,pitch=0.,last_input=now,switch_at=0.,seq=0,shot_seq=0,ack_shot=0,last_manual_respawn=-1e9)
+    # The server chooses an unused color; clients cannot request a skin.
+    skin=random_skin56(p['skin'] for p in room.players.values())
+    p=dict(id=pid,name=name,team=team,bot=False,ready=False,skin=skin,kills=0,deaths=0,headshots=0,streak=0,best_streak=0,weapon=weapon,yaw=0.,pitch=0.,last_input=now,switch_at=0.,seq=0,shot_seq=0,ack_shot=0,last_manual_respawn=-1e9)
     spawn(p,{**room.players,**room.bots},now,room.arena,room.spawn_history);room.players[pid]=p
     if room.host is None:room.host=pid
     room.last_active=now
@@ -234,11 +236,6 @@ class Room:
         balanced_draft(self.players)
         for player in self.players.values():player['ready']=False
         self.event('teams_balanced')
-        return True
-    def set_skin56(self,pid,skin):
-        if pid not in self.players or type(skin) is not int or not 0<=skin<4:
-            return False
-        self.players[pid]['skin']=normalize_skin56(skin)
         return True
     def start(self,pid,now):
         if pid!=self.host or self.phase not in ('lobby','results'):return False
@@ -531,9 +528,7 @@ async def socket(request):
     try:weapon=max(0,min(3,int(request.query.get('weapon','0'))))
     except ValueError:weapon=0
     if room.mode=='gungame' and room.phase!='lobby':weapon=0
-    try:skin=int(request.query.get('skin','0'))
-    except (ValueError,TypeError,OverflowError):skin=0
-    p=new_player(room,pid,name,time.monotonic(),weapon,skin);room.sockets[pid]=ws
+    p=new_player(room,pid,name,time.monotonic(),weapon);room.sockets[pid]=ws
     await ws.send_json(dict(type='welcome',id=pid,room=code,mapId=room.arena.id));room.event('notice',text=f'{name} joined')
     bucket=0;bucket_time=time.monotonic()
     try:
@@ -580,7 +575,6 @@ async def socket(request):
                 elif action=='mode':room.set_mode(pid,data.get('mode'))
                 elif action=='ready':room.set_ready(pid,data.get('ready') is True)
                 elif action=='balance':room.balance(pid)
-                elif action=='skin':room.set_skin56(pid,data.get('skin'))
             except (ValueError,TypeError,OverflowError):continue
     finally:
         room.players.pop(pid,None);room.sockets.pop(pid,None);room.last_active=time.monotonic()
