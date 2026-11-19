@@ -63,7 +63,16 @@ class NativeCollisionPilot91:
             raise ValueError("Native collision pilot input is not complete OCN2")
         if (nv,nt)!=(metadata["vertices"],metadata["triangles"]):
             raise ValueError("Original native collision counts do not match manifest")
-        if metadata.get("excludedMaterial")!=1:
+        # Stage 2.0 architecture remains strictly pinned to slot-1
+        # omission. Stage 2.2 may inspect its separately verified
+        # island-only candidate that retains source floor/wall slot 1.
+        stage22=metadata.get("collisionScope")=="island-interior-candidate"
+        if stage22:
+            if (metadata.get("sourceRevision")!=829 or
+                    metadata.get("nativeAuthoritativeCollisionReady") is not False or
+                    metadata.get("status")!="staging-only-not-live"):
+                raise ValueError("Interior source candidate is not verified staging-only")
+        elif metadata.get("excludedMaterial")!=1:
             raise ValueError("Native pilot requires known explicit source slot-1 omission")
         self.meta=metadata
         self.source_archive_sha256=metadata["sha256"]
