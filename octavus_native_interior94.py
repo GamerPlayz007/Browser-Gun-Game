@@ -113,6 +113,8 @@ def preflight():
       "status":"staging-only-not-live",
       "sourceRevision":829,
       "sourceCollisionSHA256":report["sha256"],
+      "float32TriangleSoupSHA256":new.float_sha256,
+      "float32ByteLength":len(new.triangle_float_bytes),
       "sourceCollisionTriangles":new.count,
       "sourceVisualTriangles":report["sourceTriangles"],
       "previousArchitectureTriangles":old.count,
