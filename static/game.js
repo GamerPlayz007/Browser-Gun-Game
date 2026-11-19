@@ -124,7 +124,20 @@ async function loadArena(id){
    loadMs:Math.round(loadMs),
    perimeterWalls:world.perimeterWallCount,
    perimeterPosts:world.perimeterPostCount,
-   playableBounds:{...next.playBounds}
+   playableBounds:{...next.playBounds},
+   // Live counters update when the optional original props/textures finish.
+   get propDrawObjectsUnbatched(){return world?.nativePropDrawUnits||0;},
+   get propInstancedDrawBatches(){return world?.nativePropDrawBatches||0;},
+   get propInstancesVisible(){return world?.nativePropRendered||0;},
+   get propInstancesTotal(){return world?.nativeProps||0;},
+   get originalTextureImages(){return world?.originalTextureImages||0;},
+   get sourceImagesRequested(){return world?.sourceImagesRequested||0;},
+   get sourceImagesSkipped(){return world?.sourceImagesSkipped||0;},
+   get qualityProfile(){return world?.sourceTextureProfile||'pending';},
+   get gpuFrameDrawCalls(){return renderer.info.render.calls;},
+   get gpuFrameTriangles(){return renderer.info.render.triangles;},
+   get gpuTextures(){return renderer.info.memory.textures;},
+   get currentFps(){return fps;}
   };
  }else delete window.__crossfireOctavus;
  postfx=createPostProcessing(renderer,scene,camera,settings.quality);map=next;
@@ -642,6 +655,21 @@ function createDebugReport51(){
    'Unacknowledged movement inputs: '+pendingMoves.length,
    'Server input queue: '+(me?.inputQueue??'unknown'),
    'Dropped stale inputs (server): '+(me?.inputOverruns??'unknown'),
+   ...(world?.isOctavusMatch?[
+    'Octavus source triangles: '+world.originalVisualTriangles,
+    'Octavus rendered source triangles: '+world.renderedVisualTriangles,
+    'Octavus source mesh render sections: '+world.staticBatches,
+    'Octavus authentic mapmodel placements: '+world.nativeProps,
+    'Octavus original prop draw objects (before instancing): '+world.nativePropDrawUnits,
+    'Octavus instanced prop draw batches: '+world.nativePropDrawBatches,
+    'Octavus visible model instances: '+world.nativePropRendered,
+    'Octavus source texture profile: '+world.sourceTextureProfile,
+    'Octavus original textures loaded: '+world.originalTextureImages,
+    'Octavus source textures requested/skipped: '+world.sourceImagesRequested+'/'+world.sourceImagesSkipped,
+    'Actual WebGL draw calls (last frame): '+renderer.info.render.calls,
+    'Actual WebGL triangles (last frame): '+renderer.info.render.triangles,
+    'Allocated WebGL texture objects: '+renderer.info.memory.textures
+   ]:[]),
    ...(world?.isDustCorridor65?[
     'Dust visual triangles: '+world.originalVisualTriangles,
     'Dust render sections: '+world.staticBatches,
