@@ -160,6 +160,10 @@ def dust_step65(p,dt,now,weapon,world=None):
                     if (rise is not None and
                             step_feet+.025<=rise<=step_feet+STEP+.012 and
                             rise<=old_y+STEP+.012 and
+                            # A stair riser is low; a full-height wall must
+                            # block the step probe at standing chest level.
+                            world.raycast((x,step_feet+STEP+.20,z),
+                                          (probe_x,step_feet+STEP+.20,probe_z)) is None and
                             world.capsule_clear((probe_x,rise,probe_z),h)):
                         nxt_x,nxt_z=probe_x,probe_z
                         step_feet=rise
