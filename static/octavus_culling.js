@@ -9,6 +9,14 @@ export function octavusRenderBounds(playBounds,margin=10){
   throw Error('Invalid Octavus render bounds');
  return {x0:x0-margin,x1:x1+margin,z0:z0-margin,z1:z1+margin};
 }
+export function octavusVisibleFaceOffsets(points,indices,scale,bounds){
+ const result=[];
+ for(let i=0;i<indices.length;i+=3){
+  if(octavusTriangleVisible(points,indices[i],indices[i+1],indices[i+2],scale,bounds))
+   result.push(i);
+ }
+ return result;
+}
 export function octavusTriangleVisible(points,i0,i1,i2,scale,bounds){
  if(!bounds)return true;
  const ax=points[i0*3]*scale,az=points[i0*3+2]*scale;
