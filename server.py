@@ -656,5 +656,25 @@ def make_app():
     app=web.Application(client_max_size=4096,middlewares=[cache_policy]);app['perf36']=ServerMetrics();app.router.add_get('/',index);app.router.add_get('/health',health)
     app.router.add_get('/api/maps',list_maps);app.router.add_get('/api/dust-corridor/preview64',dust_preview_status64);app.router.add_post('/api/rooms',create_room);app.router.add_get('/api/rooms',list_rooms65);app.router.add_get('/api/rooms/{code}',room_info);app.router.add_get('/ws/{code}',socket);app.router.add_static('/static/',ROOT/'static');app.cleanup_ctx.append(lifecycle);return app
 if __name__=='__main__':
+    # Small synthetic Octavus regressions run before accepting players.
+    # On a failure Render retains the last healthy deployment instead of
+    # silently rolling out broken movement to every multiplayer room.
+    if os.environ.get('CROSSFIRE_SKIP_PHYSICS_SMOKE') != '1':
+        import unittest
+        suite = unittest.defaultTestLoader.discover(
+            start_dir=str(ROOT / 'tests'),
+            pattern='test_octavus_motion.py',
+            top_level_dir=str(ROOT / 'tests'),
+        )
+        checks = suite.countTestCases()
+        if checks < 10:
+            raise RuntimeError(f'Octavus physics smoke suite unexpectedly has {checks} tests')
+        result = unittest.TextTestRunner(verbosity=2).run(suite)
+        if not result.wasSuccessful():
+            raise RuntimeError(
+                f'OCTAVUS_PHYSICS_SMOKE: FAILED '
+                f'({len(result.failures)} failures, {len(result.errors)} errors)'
+            )
+        print(f'OCTAVUS_PHYSICS_SMOKE: PASS ({checks} checks)', flush=True)
     import argparse
     parser=argparse.ArgumentParser();parser.add_argument('--host',default='0.0.0.0');parser.add_argument('--port',type=int,default=int(os.environ.get('PORT','3000')));parser.add_argument('--strictPort',action='store_true');args=parser.parse_args();web.run_app(make_app(),host=args.host,port=args.port)
