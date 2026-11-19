@@ -153,6 +153,9 @@ function createScene(packed,types,scene=new THREE.Scene(),sourceUV=null,nativeSc
   }
   const geo=new THREE.BufferGeometry();
   geo.setAttribute('position',new THREE.BufferAttribute(positions,3));
+  // Preserve procedural UVs for safe fallback if a later quality switch
+  // loses a source image or returns a smaller texture budget.
+  geo.setAttribute('fallbackUv',new THREE.BufferAttribute(uvs.slice(),2));
   const sourceMat=media?.channels?.get(slot);
   if(sourceMat?.map&&preservedUV){
    // OBJ's original UV numbers are texel-space offsets, not normalized.
@@ -188,27 +191,50 @@ function createScene(packed,types,scene=new THREE.Scene(),sourceUV=null,nativeSc
   // when its images arrive without blocking collision or first gameplay.
   applyOriginalMaterials(library,mode='auto'){
    if(disposed){library?.dispose?.();return 0;}
-   if(!library?.usable)return 0;
+   if(!library?.usable||!library?.statistics?.sourceImages){
+    library?.dispose?.();
+    return originalMaterials;
+   }
+   const previous=mediaState;
    mediaState=library;
-   const low=mode==='performance';
+   originalMaterials=0;
+   materialInstances.length=0;
    for(const [slot,mesh] of renderedSlots){
     const def=library.channels?.get(slot);
     const raw=mesh.geometry.getAttribute('originalUv');
-    if(!def?.map||!raw)continue;
     const uv=mesh.geometry.getAttribute('uv');
-    const iw=1/Math.max(1,def.width),ih=1/Math.max(1,def.height);
-    for(let i=0;i<raw.count;i++){
-     uv.array[i*2]=raw.array[i*2]*iw;
-     uv.array[i*2+1]=raw.array[i*2+1]*ih;
+    let replacement=null;
+    if(def?.map&&raw){
+     const iw=1/Math.max(1,def.width),ih=1/Math.max(1,def.height);
+     for(let i=0;i<raw.count;i++){
+      uv.array[i*2]=raw.array[i*2]*iw;
+      uv.array[i*2+1]=raw.array[i*2+1]*ih;
+     }
+     const result=createOctavusPBRMaterial(slot,library,null,mode);
+     replacement=result.material;
+     if(replacement){
+      originalMaterials++;
+      materialInstances.push({mat:replacement,normal:result.normalMap,roughness:result.roughnessMap});
+     }
+    }
+    if(!replacement){
+     // Never keep a material pointing at textures from the old library:
+     // that library is released after the replacement finishes.
+     const fallback=mesh.geometry.getAttribute('fallbackUv');
+     if(fallback)uv.array.set(fallback.array);
+     const path=types.get(slot)||'',kind=surfaceKind(path,slot);
+     const variation=.91+(slot%13)*.012;
+     replacement=new THREE.MeshLambertMaterial({
+      map:textures.get(kind),color:new THREE.Color(variation,variation,variation),
+      side:slot===62?THREE.FrontSide:THREE.DoubleSide
+     });
     }
     uv.needsUpdate=true;
-    const result=createOctavusPBRMaterial(slot,library,null,mode);
-    if(!result.material)continue;
-    mesh.material.dispose();
-    mesh.material=result.material;
-    originalMaterials++;
-    materialInstances.push({mat:result.material,normal:result.normalMap,roughness:result.roughnessMap});
+    const old=mesh.material;
+    mesh.material=replacement;
+    old?.dispose?.();
    }
+   if(previous&&previous!==library)previous.dispose?.();
    this.setQuality(mode);
    return originalMaterials;
   },
