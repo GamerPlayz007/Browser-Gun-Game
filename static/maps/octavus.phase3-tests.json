@@ -1,6 +1,6 @@
 {
   "status": "failed",
-  "verifiedAt": "2026-11-19T16:30:22.859688+00:00",
+  "verifiedAt": "2026-11-19T16:30:58.204505+00:00",
   "steps": {
     "octavusServerMotion": "failure",
     "browserImportClosure": "skipped",
@@ -32,11 +32,11 @@
       "AssertionError: 225.28 != 409.6",
       "",
       "----------------------------------------------------------------------",
-      "Ran 13 tests in 0.815s",
+      "Ran 13 tests in 0.568s",
       "",
       "FAILED (failures=1, errors=3)",
-      "Octavus 120 wall resolves: coarse=65.29ms 2m=0.28ms speedup=237.2x",
-      "Octavus exact ground probes: reference=0.0036s accelerated=0.0004s speedup=8.0x"
+      "Octavus 120 wall resolves: coarse=46.42ms 2m=0.20ms speedup=234.8x",
+      "Octavus exact ground probes: reference=0.0024s accelerated=0.0003s speedup=9.7x"
     ]
   },
   "scope": "Automated tests; interactive browser gameplay still requires playtesting"
