@@ -175,12 +175,16 @@ def dust_step65(p,dt,now,weapon,world=None):
             vx=vz=0.
         x,z=nxt_x,nxt_z
     # Don't climb props higher than the authored step threshold.
-    ground=world.ground_at(x,z,step_feet)
+    # Probe at least the entire falling displacement this tick; a fixed 1m
+    # ray misses thin landings at Octavus's 30Hz terminal velocity (35m/s).
+    p['vy']=max(-35.,p['vy']-GRAVITY*dt)
+    fall_drop=max(1.,-p['vy']*dt+.08)
+    ground=(world.ground_at(x,z,step_feet,fall_drop) if native_octavus
+            else world.ground_at(x,z,step_feet))
     if grounded and ground is not None and ground>old_y+STEP+.02:
         x,z=old_x,old_z;vx=vz=0.
         ground=world.ground_at(x,z,old_y)
     p['x'],p['z'],p['vx'],p['vz']=x,z,vx,vz
-    p['vy']=max(-35.,p['vy']-GRAVITY*dt)
     proposed_y=old_y+p['vy']*dt
     # With the feet near the floor, snap the exact triangle ground.
     if ground is not None and p['vy']<=0 and (
