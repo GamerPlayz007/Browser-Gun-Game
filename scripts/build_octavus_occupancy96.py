@@ -54,7 +54,7 @@ class NativeOccupancy96:
                 raise ValueError("Invalid original native cube kind or extent")
             if any(coord>=8192 or coord%size for coord in (x,y,z)):
                 raise ValueError("Misaligned native cube")
-            if (size,x,y,z) in self.by_size.get(size,{}):
+            if (x,y,z) in self.by_size.get(size,{}):
                 raise ValueError("Duplicate original native cube")
             self.by_size.setdefault(size,{})[x,y,z]=(kind,edges)
             self.kinds[kind]+=1
