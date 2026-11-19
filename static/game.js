@@ -120,7 +120,10 @@ async function loadArena(id){
   window.__crossfireOctavus={
    ready:true,usingMainRenderer:true,collisionTriangles:world.physics.source.soup.count,
    visualTriangles:world.originalVisualTriangles,renderSections:world.staticBatches,
-   loadMs:Math.round(loadMs)
+   loadMs:Math.round(loadMs),
+   perimeterWalls:world.perimeterWallCount,
+   perimeterPosts:world.perimeterPostCount,
+   playableBounds:{...next.playBounds}
   };
  }else delete window.__crossfireOctavus;
  postfx=createPostProcessing(renderer,scene,camera,settings.quality);map=next;
