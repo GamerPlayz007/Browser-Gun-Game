@@ -5,6 +5,7 @@
 import * as THREE from 'three';
 import {OctavusNativeMaterialPreview} from './octavus_native_material_preview87.js';
 import {OctavusNativeScenery} from './octavus_native_scenery88.js';
+import {loadNativeCollision91} from './octavus_native_collision91.js';
 const ROOT='/static/maps/';
 const $=id=>document.getElementById(id);
 const fmt=n=>Number(n).toLocaleString('en-US');
@@ -39,6 +40,14 @@ originalScenery.onCounts=counts=>{
  $('metric-skybox').textContent=counts.skybox?'Loaded':'Off';
 };
 const markers=new THREE.Group();markers.name='33 original MPZ player starts';markers.visible=false;scene.add(markers);
+const collisionMarkers=new THREE.Group();
+collisionMarkers.name='Source-native collision pilot clearance markers, not live spawn locations';
+collisionMarkers.visible=false;
+scene.add(collisionMarkers);
+const clearSpawnMaterial=new THREE.MeshBasicMaterial({color:0x4ee2ac,depthTest:false});
+const reviewSpawnMaterial=new THREE.MeshBasicMaterial({color:0xffad57,depthTest:false});
+const collisionMarkerGeometry=new THREE.IcosahedronGeometry(.85,1);
+let collisionPilotLoaded=false;
 const markerGeom=new THREE.SphereGeometry(.7,8,6);
 const markerMat=new THREE.MeshBasicMaterial({color:0x8ee1b7});
 const stemGeom=new THREE.CylinderGeometry(.12,.12,2,6);
@@ -71,6 +80,48 @@ $('spawn-btn').addEventListener('click',()=>{
  const p=toWorld(starts[0].sourcePosition);
  target.set(...p);distance=36;yaw=.9;pitch=.38;
  $('spawns').checked=true;markers.visible=true;updateCamera();
+});
+$('native-collision-btn').addEventListener('click',async()=>{
+ const button=$('native-collision-btn');
+ if(button.disabled)return;
+ if(collisionPilotLoaded){
+  collisionMarkers.visible=!collisionMarkers.visible;
+  button.textContent=collisionMarkers.visible?'Hide spawn checks':'Show spawn checks';
+  return;
+ }
+ button.disabled=true;button.textContent='Verifying source collision…';
+ try{
+  const pilot=await loadNativeCollision91();
+  const rows=pilot.originalStarts;
+  if(pilot.soup.count!==98358||rows?.length!==33||!pilot.validatedFloat32Checksum)
+   throw Error('Native collision pilot is not verified against server data');
+  let clearCount=0;
+  for(const row of rows){
+   const safe=!!row.potentiallyUsable;
+   const sphere=new THREE.Mesh(collisionMarkerGeometry,safe?clearSpawnMaterial:reviewSpawnMaterial);
+   sphere.position.set(...row.worldPosition);
+   sphere.position.y+=1.7;
+   sphere.renderOrder=100;
+   sphere.userData.sourceEntityID=row.entityID;
+   sphere.userData.capsuleClear=row.capsuleClear;
+   sphere.userData.floorSupported=row.supportedAtOriginalHeight;
+   sphere.userData.potentiallyUsable=safe;
+   collisionMarkers.add(sphere);
+   if(safe)clearCount++;
+  }
+  $('metric-collision-tris').textContent=fmt(pilot.soup.count);
+  $('metric-collision-safe').textContent=fmt(clearCount);
+  $('metric-collision-review').textContent=fmt(rows.length-clearCount);
+  collisionMarkers.visible=true;
+  collisionPilotLoaded=true;
+  button.textContent='Hide spawn checks';
+  note('NATIVE COLLISION PILOT: Python and JavaScript produced byte-identical collision vertex coordinates from the same SHA256 source archive. '+clearCount+' of '+rows.length+' original MPZ spawn positions passed initial floor and capsule checks; '+(rows.length-clearCount)+' orange markers require investigation. The 98K architecture-only prototype still excludes material slot 1 and is NOT yet safe to use as authoritative multiplayer collision.');
+ }catch(e){
+  button.textContent='Check original spawn collision';
+  note('NATIVE COLLISION PILOT UNAVAILABLE: '+(e.message||String(e)));
+ }finally{
+  button.disabled=false;
+ }
 });
 viewport.addEventListener('pointerdown',e=>{
  if(e.target!==canvasRenderer.domElement)return;
