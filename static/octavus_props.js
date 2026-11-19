@@ -38,7 +38,7 @@ export async function createOctavusProps(scene,quality='auto',playBounds=null){
  const placements=new Map();
  for(const entry of inside){
   const alias=aliases[entry.attrs[0]],info=manifest.models?.[alias];
-  if(info?.missing||info?.codec!=='gzip-obj'||
+  if(info?.missing||!['gzip-obj','obj'].includes(info?.codec)||
      !info.url?.startsWith('/static/maps/octavus_props/'))continue;
   if(!placements.has(alias))placements.set(alias,[]);
   placements.get(alias).push(entry);
@@ -50,6 +50,26 @@ export async function createOctavusProps(scene,quality='auto',playBounds=null){
  const loader=new OBJLoader();
  const geometries=new Set(),materials=new Set(),originalTextures=new Set();
  const groups=[];
+ let disposed=false;
+ async function loadSkin(info){
+  // Source artwork ships locally so multiplayer never depends on GitHub or
+  // the upstream asset server. The large radio dish image is High/Ultra only.
+  let url=info.skinUrl;
+  if(typeof info.skinB64Url==='string'&&
+     info.skinB64Url.startsWith('/static/maps/octavus_props/')){
+   const r=await fetch(info.skinB64Url);
+   if(!r.ok)throw Error('Octavus original skin bundle not found');
+   const encoded=(await r.text()).replace(/\s+/g,'');
+   if(!encoded.startsWith('iVBORw0KGgo'))throw Error('Invalid source PNG');
+   url='data:image/png;base64,'+encoded;
+  }
+  if(typeof url!=='string'||!(url.startsWith('/static/maps/octavus_props/')||
+    url.startsWith('data:image/png;base64,')))return null;
+  const texture=await new THREE.TextureLoader().loadAsync(url);
+  texture.colorSpace=THREE.SRGBColorSpace;
+  texture.anisotropy=quality==='performance'?1:4;
+  return texture;
+ }
  let modelTypes=0,loadedInstances=0,originalDrawUnits=0,instancedDrawBatches=0;
 
  for(const [alias,list]of placements){
@@ -58,11 +78,20 @@ export async function createOctavusProps(scene,quality='auto',playBounds=null){
   try{
    const response=await fetch(info.url);
    if(!response.ok||typeof DecompressionStream==='undefined')continue;
-   const compressed=await response.arrayBuffer();
-   const stream=new Blob([compressed]).stream().pipeThrough(new DecompressionStream('gzip'));
-   prototype=loader.parse(await new Response(stream).text());
+   let sourceText;
+   if(info.codec==='gzip-obj'){
+    if(typeof DecompressionStream==='undefined')continue;
+    const compressed=await response.arrayBuffer();
+    const stream=new Blob([compressed]).stream().pipeThrough(new DecompressionStream('gzip'));
+    sourceText=await new Response(stream).text();
+   }else sourceText=await response.text();
+   prototype=loader.parse(sourceText);
    if(!prototype)continue;
    prototype.rotation.x=-Math.PI/2; // Preserve native Z-up -> Three Y-up.
+   // Some source models (the original Luckystrike door) specify mdlyaw.
+   // Apply it in original Z-up coordinates before the Three.js conversion.
+   if(Number.isFinite(Number(info.yaw))&&Number(info.yaw)!==0)
+    prototype.rotateZ(Number(info.yaw)*RAD);
   }catch(error){
    console.warn('Octavus source OBJ unavailable:',alias,error);
    continue;
@@ -71,17 +100,15 @@ export async function createOctavusProps(scene,quality='auto',playBounds=null){
   if(!Number.isFinite(baseScale)||baseScale<=0||baseScale>35)continue;
 
   let skin=null;
-  if(typeof info.skinUrl==='string'&&
-     info.skinUrl.startsWith('/static/maps/octavus_props/')){
+  const hasDeferredSkin=!!info.skinHighOnly;
+  if(!hasDeferredSkin||quality==='high'||quality==='ultra'){
    try{
-    skin=await new THREE.TextureLoader().loadAsync(info.skinUrl);
-    skin.colorSpace=THREE.SRGBColorSpace;
-    skin.anisotropy=quality==='performance'?1:4;
-    originalTextures.add(skin);
-   }catch(error){console.warn('Octavus source skin unavailable:',alias);}
+    skin=await loadSkin(info);
+    if(skin)originalTextures.add(skin);
+   }catch(error){console.warn('Octavus source skin unavailable:',alias,error);}
   }
 
-  const parts=[];
+  const parts=[],skinMaterials=[];
   prototype.traverse(child=>{
    if(!child.isMesh)return;
    geometries.add(child.geometry);
@@ -101,6 +128,7 @@ export async function createOctavusProps(scene,quality='auto',playBounds=null){
      side:THREE.DoubleSide
     });
     child.material=mat;materials.add(mat);
+    if(!skin)skinMaterials.push(mat);
    }
    parts.push(child);
   });
@@ -144,14 +172,35 @@ export async function createOctavusProps(scene,quality='auto',playBounds=null){
   }
   originalDrawUnits+=list.length*parts.length;
   loadedInstances+=list.length;modelTypes++;
-  groups.push({alias,locations,batches});
+  groups.push({alias,locations,batches,skinMaterials,skin,info,skinLoading:false});
  }
 
  let tier=quality,rendered=0,last=-1e9;
+ async function loadDeferredSourceSkin(group){
+  if(disposed||group.skinLoading||group.skin||!group.info.skinB64Url)return;
+  group.skinLoading=true;
+  try{
+   const tex=await loadSkin(group.info);
+   if(disposed){tex?.dispose();return;}
+   if(tex){
+    group.skin=tex;originalTextures.add(tex);
+    for(const mat of group.skinMaterials){
+     mat.map=tex;
+     mat.color.set(0xffffff);
+     mat.needsUpdate=true;
+    }
+    tex.anisotropy=tier==='performance'?1:4;
+   }
+  }catch(error){console.warn('Octavus original detail skin unavailable:',group.alias,error);}
+  finally{group.skinLoading=false;}
+ }
  function setQuality(next){
   tier=next;last=-1e9;
-  for(const group of groups)for(const batch of group.batches)
-   batch.mesh.castShadow=next==='ultra';
+  for(const group of groups){
+   for(const batch of group.batches)batch.mesh.castShadow=next==='ultra';
+   if((next==='high'||next==='ultra')&&group.info.skinHighOnly)
+    void loadDeferredSourceSkin(group);
+  }
   for(const texture of originalTextures)
    texture.anisotropy=next==='performance'?1:4;
  }
@@ -189,6 +238,7 @@ export async function createOctavusProps(scene,quality='auto',playBounds=null){
   originalDrawUnits,instancedDrawBatches,
   get renderedInstances(){return rendered;},setQuality,animate,
   dispose(){
+   disposed=true;
    root.removeFromParent();
    // Geometry/material ownership is per imported type, not per placement.
    for(const geometry of geometries)geometry.dispose();
