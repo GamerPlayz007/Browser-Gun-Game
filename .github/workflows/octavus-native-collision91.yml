@@ -1,0 +1,79 @@
+name: Octavus Phase 2.0 source-native collision pilot parity
+on:
+  push:
+    branches: [main]
+    paths:
+      - "octavus_native_collision91.py"
+      - "static/octavus_native_collision91.js"
+      - "test_octavus_native_collision91.py"
+      - "test_octavus_native_collision91.mjs"
+      - ".github/workflows/octavus-native-collision91.yml"
+      - "static/maps/octavus.native-core.bin.gz"
+      - "static/maps/octavus.native-core.json"
+      - "static/maps/octavus.native-entities.json"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  native-source-collision:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Decode original 98k native architecture and preflight ALL 33 authored player starts
+        run: |
+          python octavus_native_collision91.py
+      - name: Test source-native floor support, capsule clearance, indexed candidate search and provenance
+        run: |
+          python -m unittest -v test_octavus_native_collision91
+      - name: Compile browser loader and prove binary-identical Python/JavaScript float32 collision geometry
+        run: |
+          node --input-type=module --check < static/octavus_native_collision91.js
+          node test_octavus_native_collision91.mjs
+      - name: Verify staging gate, no multiplayer map changes, and reasonable memory
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("static/maps/octavus.native-collision-preflight91.json")
+          j=json.loads(p.read_text())
+          assert j["format"]=="OCTAVUS-NATIVE-COLLISION-PILOT91"
+          assert j["sourceRevision"]==829
+          assert j["collisionTriangles"]==98358
+          assert j["nativeVertices"]==123915
+          assert j["sourceSpawnCount"]==33
+          assert len(j["sourceSpawns"])==33
+          assert j["spawnPreflightCounts"].get("walkableFloorWithin2m",0)>=20
+          assert j["liveMapModified"] is False
+          assert j["clientServerParityVerified"] is False
+          assert j["gameplayMotionParityVerified"] is False
+          assert j["collisionCandidateHasOriginalSlot1Floor"] is False
+          assert len(j["float32TriangleSoupSHA256"])==64
+          live=json.loads(Path("static/maps/octavus.json").read_text())
+          assert live["collisionFormat"]=="OCT1"
+          assert live["collisionTriangles"]==86500
+          print("PASS: native source collision pilot remains isolated from active OCT1 gameplay")
+          PY
+      - name: Publish verified collision pilot audit, never the live world
+        run: |
+          cp static/maps/octavus.native-collision-preflight91.json /tmp/octavus.native-collision-preflight91.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for i in 1 2 3; do
+            git fetch origin main
+            git reset --hard origin/main
+            cp /tmp/octavus.native-collision-preflight91.json static/maps/
+            git add static/maps/octavus.native-collision-preflight91.json
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m "build(octavus phase2.0): publish original source-native collision pilot and authored spawn preflight"
+            if git push origin HEAD:main; then exit 0; fi
+          done
+          exit 1
