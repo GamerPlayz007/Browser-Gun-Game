@@ -663,11 +663,11 @@ if __name__=='__main__':
         import unittest
         suite = unittest.defaultTestLoader.discover(
             start_dir=str(ROOT / 'tests'),
-            pattern='test_octavus_motion.py',
+            pattern='test_octavus_*.py',
             top_level_dir=str(ROOT / 'tests'),
         )
         checks = suite.countTestCases()
-        if checks < 10:
+        if checks < 16:
             raise RuntimeError(f'Octavus physics smoke suite unexpectedly has {checks} tests')
         result = unittest.TextTestRunner(verbosity=2).run(suite)
         if not result.wasSuccessful():
