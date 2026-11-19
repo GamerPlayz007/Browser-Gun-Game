@@ -22,7 +22,7 @@ const previewScenery=readFileSync('static/octavus_native_scenery88.js','utf8');
 assert.ok(!liveProps.includes('octavus_native_transform89.js'));
 assert.ok(!liveDecals.includes('octavus_native_transform89.js'));
 assert.ok(nativeProps.includes('octavus_native_transform89.js'));
-assert.ok(nativeDecals.includes('octavus_native_transform89.js'));
+assert.ok(nativeDecals.includes('octavus_native_decal_project90.js'));
 assert.ok(previewScenery.includes('octavus_native_props89.js'));
 assert.ok(previewScenery.includes('octavus_native_decals89.js'));
 assert.ok(!previewScenery.includes("from './octavus_props.js'"));
