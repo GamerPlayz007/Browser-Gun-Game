@@ -276,8 +276,11 @@ try{
   projected:Number(document.getElementById('metric-projected').textContent),
   triangles:Number(document.getElementById('metric-decal-tris').textContent.replace(/,/g,''))
  }));
- assert.ok(decalCoverage.projected>0&&decalCoverage.projected<=135);
+ assert.ok(decalCoverage.projected>=130&&decalCoverage.projected<=135,
+  'Almost all available source decal placements must find actual reconstructed surfaces');
  assert.ok(decalCoverage.triangles>=decalCoverage.projected);
+ assert.ok(decalCoverage.triangles<50000,
+  'Projected decals must not recreate huge stacks of hidden interior geometry');
  const sceneryStats=await page.evaluate(()=>({
   originalProps:document.getElementById('metric-props').textContent,
   originalDecals:document.getElementById('metric-decals').textContent,
