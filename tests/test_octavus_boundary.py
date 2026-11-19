@@ -1,0 +1,68 @@
+"""Stage 2.4: the Octavus rendered wall matches authoritative play bounds.
+
+Run: python -m unittest discover -s tests -p 'test_octavus_*.py' -v
+These checks are intentionally cheap; startup should not decode the full map.
+"""
+import json
+import unittest
+from pathlib import Path
+from types import SimpleNamespace
+
+from dust_world64 import DustWorld64
+from octavus_world import configured_play_bounds
+
+ROOT=Path(__file__).resolve().parents[1]
+
+
+def arena():
+    return json.loads((ROOT/'static/maps/octavus.json').read_text(encoding='utf-8'))
+
+
+class OctavusBoundaryTests(unittest.TestCase):
+    def test_same_bounds_for_client_and_authoritative_server(self):
+        self.assertEqual(configured_play_bounds(), arena()['playBounds'])
+
+    def test_compact_arena_is_strictly_smaller_than_source_map(self):
+        data=arena()
+        b=data['playBounds']
+        self.assertAlmostEqual(b['x1']-b['x0'],204.8)
+        self.assertAlmostEqual(b['z1']-b['z0'],204.8)
+        self.assertLess(b['x1']-b['x0'],data['sourceTransform']['visualSpan'])
+        self.assertEqual(data['collisionTriangles'],86500)
+        self.assertEqual(data['sourceTransform']['sourceTriangles'],86500)
+
+    def test_every_spawn_inside_compact_perimeter_with_capsule_margin(self):
+        data=arena()
+        world=SimpleNamespace(bounds=data['playBounds'])
+        self.assertEqual(len(data['spawns']),data['spawnValidation']['safeCount'])
+        for x,y,z in data['spawns']:
+            with self.subTest(spawn=(x,y,z)):
+                self.assertTrue(DustWorld64.inside(world,x,z,.34))
+
+    def test_outside_and_boundary_edge_cannot_be_played(self):
+        b=arena()['playBounds']
+        world=SimpleNamespace(bounds=b)
+        self.assertTrue(DustWorld64.inside(world,0,0,.34))
+        self.assertFalse(DustWorld64.inside(world,b['x1'],0,.34))
+        self.assertFalse(DustWorld64.inside(world,b['x0'],0,.34))
+        self.assertFalse(DustWorld64.inside(world,0,b['z1'],.34))
+        self.assertFalse(DustWorld64.inside(world,0,b['z0'],.34))
+
+    def test_wall_reaches_beyond_possible_jump_height(self):
+        b=arena()['arenaBoundary']
+        self.assertEqual(b['serverCollision'],'playBounds')
+        self.assertGreaterEqual(b['topY']-b['bottomY'],32)
+        self.assertGreaterEqual(b['topY'],24)
+        self.assertLessEqual(b['bottomY'],-12)
+        self.assertGreaterEqual(b['thickness'],1)
+
+    def test_visual_scene_wires_perimeter_lifecycle(self):
+        code=(ROOT/'static/octavus_match.js').read_text(encoding='utf-8')
+        boundary=(ROOT/'static/octavus_boundary.js').read_text(encoding='utf-8')
+        self.assertIn('createOctavusBoundary(scene,map)',code)
+        self.assertIn('boundary.dispose()',code)
+        self.assertIn('wallCount:4',boundary)
+
+
+if __name__=='__main__':
+    unittest.main()
