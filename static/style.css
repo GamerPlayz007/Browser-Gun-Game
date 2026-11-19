@@ -187,10 +187,7 @@
 }
 
 /* CROSSFIRE V3 RC1 — unobtrusive cosmetic preferences and recovery UI. */
-#skin56-home{border-color:#7db8bc88;background:#123d45;color:#f8ead3;
- font-weight:600;cursor:pointer}
-#skin56-room{min-width:125px;width:47%;max-width:200px;cursor:pointer;
- border:1px solid #7adbd788;background:#113e46;color:#e8f7ef;padding:6px}
+.skin-auto-note{display:block;font-size:10px;line-height:1.45;letter-spacing:.04em;color:#9be9df;margin:8px 0 13px}
 #rejoin56[hidden]{display:none!important}
 #rejoin56{margin:11px 0 2px;width:100%;padding:11px 12px;
  border:1px solid #99e4b4a0;background:#163e43;color:#c5f8d8;
