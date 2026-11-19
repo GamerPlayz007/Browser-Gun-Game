@@ -2,10 +2,14 @@
  * purely cosmetic avatar colors. No advantage, scores, or gameplay effects.
  */
 export const SKINS56=Object.freeze([
- Object.freeze({id:0,name:'EMBER',hex:0xd38165}),
- Object.freeze({id:1,name:'GLACIER',hex:0x54b2ba}),
- Object.freeze({id:2,name:'GOLDEN',hex:0xc5a65f}),
- Object.freeze({id:3,name:'NOVA',hex:0x9f8cd4})
+ Object.freeze({id:0,name:'EMBER',hex:0xff963c}),
+ Object.freeze({id:1,name:'GLACIER',hex:0x31d7e3}),
+ Object.freeze({id:2,name:'GOLDEN',hex:0xf3d94e}),
+ Object.freeze({id:3,name:'NOVA',hex:0xb179f6}),
+ Object.freeze({id:4,name:'LIME',hex:0x86e84e}),
+ Object.freeze({id:5,name:'ROSE',hex:0xee78c2}),
+ Object.freeze({id:6,name:'COBALT',hex:0x5a88f4}),
+ Object.freeze({id:7,name:'SCARLET',hex:0xed4e5c})
 ]);
 export function skinId56(raw){
  const n=Number(raw);
