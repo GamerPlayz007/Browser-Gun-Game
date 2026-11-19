@@ -1,6 +1,6 @@
 {
   "status": "failed",
-  "verifiedAt": "2026-11-19T15:47:32.412594+00:00",
+  "verifiedAt": "2026-11-19T15:48:52.305827+00:00",
   "steps": {
     "octavusServerMotion": "failure",
     "browserImportClosure": "skipped",
@@ -32,11 +32,11 @@
       "TypeError: DustWorld64.ground_at() takes from 3 to 4 positional arguments but 5 were given",
       "",
       "----------------------------------------------------------------------",
-      "Ran 13 tests in 0.595s",
+      "Ran 13 tests in 0.785s",
       "",
       "FAILED (errors=3)",
-      "Octavus 120 wall resolves: coarse=47.11ms 2m=0.20ms speedup=236.8x",
-      "Octavus exact ground probes: reference=0.0026s accelerated=0.0003s speedup=9.1x"
+      "Octavus 120 wall resolves: coarse=60.75ms 2m=0.25ms speedup=241.7x",
+      "Octavus exact ground probes: reference=0.0035s accelerated=0.0004s speedup=8.0x"
     ]
   },
   "scope": "Automated tests; interactive browser gameplay still requires playtesting"
