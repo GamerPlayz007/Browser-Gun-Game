@@ -34,6 +34,7 @@ export class OctavusNativeScenery {
   this.environment=null;
   this.props=null;
   this.decals=null;
+  this.nativeGeometry=null;
   this.requestIds={environment:0,props:0,decals:0};
   this.onNotice=null;
   this.onCounts=null;
@@ -56,6 +57,8 @@ export class OctavusNativeScenery {
     modelTypes:this.props?.modelTypes??0,
     missingModels:this.props?.missing??0,
     decals:this.decals?.count??0,
+    projectedDecals:this.decals?.projected??0,
+    projectedTriangles:this.decals?.triangles??0,
     decalMaterials:this.decals?.materials??0,
     lightEntities:this.environment?.sourceLightCount??0,
     lights:this.environment?.activeLightCount??0,
@@ -93,7 +96,7 @@ export class OctavusNativeScenery {
    let next;
    if(type==='environment')next=await createOctavusEnvironment(this.scene,this.tier);
    if(type==='props')next=await createOctavusProps(this.scene,this.tier);
-   if(type==='decals')next=await createOctavusDecals(this.scene,this.tier);
+   if(type==='decals')next=await createOctavusDecals(this.scene,this.tier,this.nativeGeometry);
    // Toggle may be switched off while async asset requests are pending.
    if(id!==this.requestIds[type]||!this.active[type]||this.disposed){
     next?.dispose();
@@ -108,7 +111,7 @@ export class OctavusNativeScenery {
    if(type==='props')
     this.report('SOURCE MAP MODELS: '+next.instances+' placed from MPZ positions, '+next.modelTypes+' original OBJ types. Missing '+next.missing+' unavailable source models. No synthetic substitutes.');
    if(type==='decals')
-    this.report('SOURCE DECALS: '+next.count+' original MPZ decal placements using '+next.materials+' original material files (staging only).');
+    this.report('SOURCE DECALS: '+next.projected+' of '+next.count+' original MPZ decals successfully projected onto '+next.triangles+' clipped world polygons; '+next.materials+' source textures, '+next.spatialCells+' spatial bins. Remaining unmatched source placements are not replaced by floating panels.');
   }catch(error){
    if(id!==this.requestIds[type])return;
    this.active[type]=false;
@@ -127,6 +130,15 @@ export class OctavusNativeScenery {
   this.environment?.animate(now,center);
   this.props?.animate(now,center);
   this.metrics();
+ }
+ setNativeGeometry(geometry){
+  if(geometry===this.nativeGeometry)return;
+  this.nativeGeometry=geometry;
+  if(this.active.decals){
+   // Rebuild projectors against the NEW world, never leave decal faces
+   // floating on geometry that has since been removed from scene.
+   void this.switch('decals',false).then(()=>this.switch('decals',true));
+  }
  }
  setAnchorDebug(enabled){
   this.anchorDebug=!!enabled;
