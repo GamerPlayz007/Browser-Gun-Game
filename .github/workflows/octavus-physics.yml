@@ -14,6 +14,12 @@ on:
       - 'static/octavus_texture_budget.js'
       - 'static/octavus_preview.js'
       - 'static/octavus_materials.js'
+      - 'static/octavus_props.js'
+      - 'static/octavus_prop_lod.js'
+      - 'static/maps/octavus.props.json'
+      - 'static/maps/octavus.native-entities.json'
+      - 'static/maps/octavus.original.cfg'
+      - 'tests/test_octavus_prop_models.mjs'
       - 'tests/test_octavus_render.mjs'
       - 'static/maps/octavus.json'
       - '.github/workflows/octavus-physics.yml'
@@ -43,5 +49,9 @@ jobs:
           node --check static/octavus_texture_budget.js
           node --check static/octavus_materials.js
           node --check static/octavus_preview.js
-      - name: Test Octavus visual crop and texture budget
-        run: node --test tests/test_octavus_render.mjs
+          node --check static/octavus_props.js
+          node --check static/octavus_prop_lod.js
+      - name: Install real Three.js for source model checks
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Test Octavus visual crop and original model instancing
+        run: node --test tests/test_octavus_render.mjs tests/test_octavus_prop_models.mjs
