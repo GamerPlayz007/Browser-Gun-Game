@@ -17,6 +17,9 @@ on:
       - "static/octavus_native_decals89.js"
       - "static/octavus_native_decal_project90.js"
       - "static/octavus_native_collision91.js"
+      - "static/octavus_native_boundary92.js"
+      - "static/maps/octavus.native-boundary92.json"
+      - "static/maps/octavus.native-boundary-audit92.json"
       - "static/maps/octavus.native-collision-preflight91.json"
       - "static/octavus_props.js"
       - "static/octavus_decals.js"
@@ -52,6 +55,7 @@ jobs:
           node --input-type=module --check < static/octavus_native_decals89.js
           node --input-type=module --check < static/octavus_native_scenery88.js
           node --input-type=module --check < static/octavus_native_collision91.js
+          node --input-type=module --check < static/octavus_native_boundary92.js
       - name: Verify full/core OCN2 assets and standalone preview contract
         run: node test_octavus_native_preview79.mjs
       - name: Verify standalone preview is served as a static asset
@@ -99,5 +103,7 @@ jobs:
             /tmp/octavus-native-source-scenery-full.png
             /tmp/octavus-native-geometry-anchors-preview.png
             /tmp/octavus-native-collision-spawn-review.png
+            /tmp/octavus-native-island-boundary-wall.png
+            /tmp/octavus-native-island-unbounded-comparison.png
           if-no-files-found: ignore
           retention-days: 14
