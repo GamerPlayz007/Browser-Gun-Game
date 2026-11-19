@@ -75,7 +75,7 @@ export async function buildOctavusMatch(scene,map,{quality='auto'}={}){
  }
  // Critical path: original terrain, reliable server-matched collision,
  // and source UV coordinates. Decorative resources must never block join.
- const visual=createOctavusScene(packed,materials,scene,authoredUV,true,null);
+ const visual=createOctavusScene(packed,materials,scene,authoredUV,true,null,map.playBounds);
  // Stage 2.4: one visible perimeter aligned exactly with client/server bounds.
  // The original source mesh and its 86,500 triangles are NOT changed.
  const boundary=createOctavusBoundary(scene,map);
@@ -109,6 +109,7 @@ export async function buildOctavusMatch(scene,map,{quality='auto'}={}){
   targets:new Map(),
   staticBatches:visual.meshCount,
   originalVisualTriangles:packed.triangles,
+  renderedVisualTriangles:visual.renderedTriangleCount,
   originalTextureVertices:authoredUV.textureVertexCount,
   sourceScaleRatio:OCTAVUS_LOCAL_RATIO,
   originalUV:visual.preservedTextureCoordinates,
@@ -131,6 +132,8 @@ export async function buildOctavusMatch(scene,map,{quality='auto'}={}){
    fullArchitecture:true,hasEnvironment:true,atlasSize:1024,atlases:media?.statistics?.sourceImages||0,
    atlasRebuilds:0,stage5Meshes:visual.meshCount,
    stage6Meshes:props.instances+decals.materials,
+   originalSourceTriangles:packed.triangles,
+   drawnSourceTriangles:visual.renderedTriangleCount,
    streamedAssets:true
   };},
   setQuality(value){mode=value;visual.setQuality(value);
