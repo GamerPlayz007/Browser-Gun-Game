@@ -27,6 +27,13 @@ assert.ok(previewScenery.includes('octavus_native_props89.js'));
 assert.ok(previewScenery.includes('octavus_native_decals89.js'));
 assert.ok(!previewScenery.includes("from './octavus_props.js'"));
 assert.ok(!previewScenery.includes("from './octavus_decals.js'"));
+const projectorSource=readFileSync('static/octavus_native_decal_project90.js','utf8');
+const nativeDecalSource=readFileSync('static/octavus_native_decals89.js','utf8');
+assert.ok(projectorSource.includes('clipNativeDecalPolygon'));
+assert.ok(nativeDecalSource.includes('projectNativeDecal'));
+assert.ok(nativeDecalSource.includes('nativeGeometry'));
+assert.ok(!nativeDecalSource.includes('new THREE.PlaneGeometry'));
+assert.ok(!liveDecals.includes('octavus_native_decal_project90.js'));
 const browser=await puppeteer.launch({
  executablePath:chrome,
  headless:true,
@@ -91,6 +98,55 @@ try{
   originalDecal50to2p5:true,
   transformRevision:'MAPZ-v59-axis-bridge89'
  },'Native world-model transforms must match Red Eclipse original Euler axes');
+ // Phase 1.9: prove physical clipping instead of floating billboard
+ // proxies on small synthetic geometry before importing the full native map.
+ const projectionProof=await page.evaluate(async()=>{
+  const THREE=await import('three');
+  const {buildOctavusTriangleIndex,projectNativeDecal,clipNativeDecalPolygon}
+       =await import('/static/octavus_native_decal_project90.js');
+  function square(z,reverse=false){
+   const g=new THREE.BufferGeometry();
+   g.setAttribute('position',new THREE.Float32BufferAttribute([
+    -2,-2,z,2,-2,z,2,2,z,-2,2,z
+   ],3));
+   g.setIndex(reverse?[0,2,1,0,3,2]:[0,1,2,0,2,3]);
+   return g;
+  }
+  const entry={id:9999,sourcePosition:[4096,4096,2816],
+               attrs:[30,0,0,0,50]};
+  const wall=square(.5),back=square(.5,true),outside=square(3);
+  const face=projectNativeDecal(wall,buildOctavusTriangleIndex(wall),entry,100,100);
+  const wrongSide=projectNativeDecal(back,buildOctavusTriangleIndex(back),entry,100,100);
+  const outsideVolume=projectNativeDecal(outside,buildOctavusTriangleIndex(outside),entry,100,100);
+  const p=face.geometry.getAttribute('position');
+  const uv=face.geometry.getAttribute('uv');
+  let b={xmin:1e6,xmax:-1e6,ymin:1e6,ymax:-1e6,zmin:1e6,zmax:-1e6,uMin:1e6,uMax:-1e6,vMin:1e6,vMax:-1e6};
+  for(let i=0;i<p.count;i++){
+   b.xmin=Math.min(b.xmin,p.getX(i));b.xmax=Math.max(b.xmax,p.getX(i));
+   b.ymin=Math.min(b.ymin,p.getY(i));b.ymax=Math.max(b.ymax,p.getY(i));
+   b.zmin=Math.min(b.zmin,p.getZ(i));b.zmax=Math.max(b.zmax,p.getZ(i));
+   b.uMin=Math.min(b.uMin,uv.getX(i));b.uMax=Math.max(b.uMax,uv.getX(i));
+   b.vMin=Math.min(b.vMin,uv.getY(i));b.vMax=Math.max(b.vMax,uv.getY(i));
+  }
+  const result={
+   clipped:face.triangles>=2,
+   backFacingRejected:wrongSide.triangles===0,
+   projectorDepthRejected:outsideVolume.triangles===0,
+   staysOnActualSourceSurface:Math.abs(b.zmin-.503)<.0005&&Math.abs(b.zmax-.503)<.0005,
+   uClamped:b.uMin>=-.0001&&b.uMax<=1.0001,
+   vClamped:b.vMin>=-.0001&&b.vMax<=1.0001,
+   boundsClipped:b.xmin>=-1.2501&&b.xmax<=1.2501&&
+                 b.ymin>=-1.2501&&b.ymax<=1.2501,
+   noOutsidePolygon:clipNativeDecalPolygon([[4,4,4],[5,4,4],[4,5,4]],2.5,2.5,2.5).length===0
+  };
+  for(const g of [wall,back,outside,face.geometry,wrongSide.geometry,outsideVolume.geometry])g.dispose();
+  return result;
+ });
+ assert.deepEqual(projectionProof,{
+  clipped:true,backFacingRejected:true,projectorDepthRejected:true,
+  staysOnActualSourceSurface:true,uClamped:true,vClamped:true,
+  boundsClipped:true,noOutsidePolygon:true
+ },'Native decal must clip original world triangles, never float across open space');
  const stats=await page.evaluate(()=>{
   const canvas=document.querySelector('#viewport canvas');
   return {
@@ -193,6 +249,17 @@ try{
     && !document.getElementById('restored-btn')?.disabled;
  },{timeout:120000});
  assert.ok(await page.evaluate(()=>document.getElementById('diagnostic').textContent.includes('RESTORED SOURCE SCENE')));
+ await page.waitForFunction(()=>{
+  const count=Number(document.getElementById('metric-projected')?.textContent);
+  const tris=Number(document.getElementById('metric-decal-tris')?.textContent.replace(/,/g,''));
+  return count>0&&tris>0;
+ },{timeout:60000});
+ const decalCoverage=await page.evaluate(()=>({
+  projected:Number(document.getElementById('metric-projected').textContent),
+  triangles:Number(document.getElementById('metric-decal-tris').textContent.replace(/,/g,''))
+ }));
+ assert.ok(decalCoverage.projected>0&&decalCoverage.projected<=135);
+ assert.ok(decalCoverage.triangles>=decalCoverage.projected);
  const sceneryStats=await page.evaluate(()=>({
   originalProps:document.getElementById('metric-props').textContent,
   originalDecals:document.getElementById('metric-decals').textContent,
@@ -223,7 +290,9 @@ try{
  assert.deepEqual(errors,[],'Native scenery must not create browser page errors');
  await page.click('#source-decals');
  await page.waitForFunction(()=>{
-  return document.getElementById('metric-decals').textContent==='0';
+  return document.getElementById('metric-decals').textContent==='0'
+     && document.getElementById('metric-projected').textContent==='0'
+     && document.getElementById('metric-decal-tris').textContent==='0';
  },{timeout:15000});
  await page.click('#source-props');
  await page.waitForFunction(()=>{
@@ -238,7 +307,7 @@ try{
  assert.deepEqual(shaderErrors,[],'Native texture source projection must compile in Chrome WebGL');
  assert.deepEqual(errors,[],'No browser runtime errors permitted');
  console.log('Octavus native preview headless Chrome: PASS');
- console.log(JSON.stringify({...stats,previewPngBytes:image.byteLength,optimizedPngBytes:enhancedImage.byteLength,sourceTexturePngBytes:textureImage.byteLength,sourceSceneryPngBytes:scenicImage.byteLength,alignmentAnchorPngBytes:anchoredImage.byteLength},null,2));
+ console.log(JSON.stringify({...stats,previewPngBytes:image.byteLength,optimizedPngBytes:enhancedImage.byteLength,sourceTexturePngBytes:textureImage.byteLength,sourceSceneryPngBytes:scenicImage.byteLength,alignmentAnchorPngBytes:anchoredImage.byteLength,decalProjection:decalCoverage},null,2));
 }finally{
  await browser.close();
 }
