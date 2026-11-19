@@ -106,7 +106,8 @@ export function createDustPhysics65(source){
   const f=f0/length,r=r0/length;
   const yaw=p.yaw||0,ix=r*Math.cos(yaw)-f*Math.sin(yaw),iz=-r*Math.sin(yaw)-f*Math.cos(yaw);
   const jump=!!input.jump,slide=!!input.slide;
-  const jumpEdge=jump&&!p.jump_held,slideEdge=slide&&!p.slide_held;
+  // Match the server: holding Space repeats the jump after every landing.
+  const jumpEdge=jump&&(!p.jump_held||p.grounded),slideEdge=slide&&!p.slide_held;
   let grounded=!!p.grounded;
   const velocity=Math.hypot(p.vx,p.vz);
   if(slideEdge&&grounded&&velocity>=5){
