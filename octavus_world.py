@@ -137,7 +137,7 @@ class OctavusWorld(DustWorld64):
                 if (bounds[tri*4] <= x1 and bounds[tri*4+1] >= x0 and
                     bounds[tri*4+2] <= z1 and bounds[tri*4+3] >= z0))
 
-    def ground_at(self, x, z, feet_y=0.0):
+    def ground_at(self, x, z, feet_y=0.0, drop=1.0):
         """Same highest two-sided vertical ray hit as DustWorld64.ground_at.
 
         Direct XZ barycentric interpolation avoids rebuilding hundreds of
@@ -151,7 +151,9 @@ class OctavusWorld(DustWorld64):
         xy = self.ground_xz_bounds
         heights = self.wall_y_bounds
         normals = self.wall_normals
-        low, high = feet_y - 1.0, feet_y + .48
+        # At 30 Hz a terminal-speed fall crosses >1m per tick. Extend the
+        # downward ground sweep so thin platforms do not get skipped.
+        low, high = feet_y - max(1.0, drop), feet_y + .48
         best = low
         chosen = -1
         for tri in candidates:
