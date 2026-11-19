@@ -9,6 +9,7 @@ import {loadOctavusMaterialLibrary} from './octavus_materials.js';
 import {createOctavusEnvironment} from './octavus_environment.js';
 import {createOctavusDecals} from './octavus_decals.js';
 import {createOctavusProps} from './octavus_props.js';
+import {createOctavusBoundary} from './octavus_boundary.js';
 import {loadOctavusPacked,loadOctavusMaterials,createOctavusScene,
  OCTAVUS_LOCAL_RATIO,OCTAVUS_GROUND_Y} from './octavus_preview.js';
 
@@ -75,6 +76,9 @@ export async function buildOctavusMatch(scene,map,{quality='auto'}={}){
  // Critical path: original terrain, reliable server-matched collision,
  // and source UV coordinates. Decorative resources must never block join.
  const visual=createOctavusScene(packed,materials,scene,authoredUV,true,null);
+ // Stage 2.4: one visible perimeter aligned exactly with client/server bounds.
+ // The original source mesh and its 86,500 triangles are NOT changed.
+ const boundary=createOctavusBoundary(scene,map);
  let detail=true,mode=quality,disposed=false;
  let media=null;
  const noop={count:0,materials:0,instances:0,modelTypes:0,sourceLightCount:0,
@@ -116,6 +120,8 @@ export async function buildOctavusMatch(scene,map,{quality='auto'}={}){
   get nativeProps(){return props.instances;},
   get nativePropTypes(){return props.modelTypes;},
   featureCount:packed.triangles,
+  perimeterWallCount:boundary.wallCount,
+  perimeterPostCount:boundary.postCount,
   get environmentCount(){return props.instances+decals.count;},
   get environmentSigns(){return decals.count;},
   packedScene66:true,
@@ -133,7 +139,7 @@ export async function buildOctavusMatch(scene,map,{quality='auto'}={}){
   animate(time,player){environment.animate(time,player);props.animate(time,player);
    void mode;void detail;},
   dispose(){if(disposed)return;disposed=true;
-   props.dispose();decals.dispose();environment.dispose();visual.dispose();
+   props.dispose();decals.dispose();environment.dispose();boundary.dispose();visual.dispose();
    scene.background=null;scene.fog=null;}
  };
 }
