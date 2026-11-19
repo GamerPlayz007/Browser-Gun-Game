@@ -18,6 +18,11 @@ on:
       - "static/octavus_native_decal_project90.js"
       - "static/octavus_native_collision91.js"
       - "static/octavus_native_boundary92.js"
+      - "static/octavus_native_occupancy96.js"
+      - "static/octavus_native_interior_overlay97.js"
+      - "static/maps/octavus.native-occupancy96.json"
+      - "static/maps/octavus.native-occupancy96.bin.gz"
+      - "static/maps/octavus.native-interior-preflight94.json"
       - "static/maps/octavus.native-boundary92.json"
       - "static/maps/octavus.native-boundary-audit92.json"
       - "static/maps/octavus.native-collision-preflight91.json"
@@ -56,6 +61,8 @@ jobs:
           node --input-type=module --check < static/octavus_native_scenery88.js
           node --input-type=module --check < static/octavus_native_collision91.js
           node --input-type=module --check < static/octavus_native_boundary92.js
+          node --input-type=module --check < static/octavus_native_occupancy96.js
+          node --input-type=module --check < static/octavus_native_interior_overlay97.js
       - name: Verify full/core OCN2 assets and standalone preview contract
         run: node test_octavus_native_preview79.mjs
       - name: Verify standalone preview is served as a static asset
@@ -105,5 +112,6 @@ jobs:
             /tmp/octavus-native-collision-spawn-review.png
             /tmp/octavus-native-island-boundary-wall.png
             /tmp/octavus-native-island-unbounded-comparison.png
+            /tmp/octavus-native-interior-floor-survey.png
           if-no-files-found: ignore
           retention-days: 14
