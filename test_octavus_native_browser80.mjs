@@ -63,6 +63,32 @@ try{
   const image=document.getElementById('original-mapshot');
   return image?.complete && image.naturalWidth>=128 && image.naturalHeight>=128;
  },{timeout:15000});
+ // Phase 2.0: the original-native collision pilot must LOAD through
+ // the actual browser fetch+gzip+SHA256 path and expose source spawn
+ // clearance marks while leaving the existing gameplay map untouched.
+ await page.click('#native-collision-btn');
+ await page.waitForFunction(()=>{
+  return document.getElementById('metric-collision-tris')?.textContent==='98,358'
+    && Number(document.getElementById('metric-collision-safe')?.textContent)>=20
+    && Number(document.getElementById('metric-collision-review')?.textContent)>=1
+    && !document.getElementById('native-collision-btn')?.disabled;
+ },{timeout:60000});
+ const pilotVisible=await page.evaluate(()=>({
+  sourceTriangles:document.getElementById('metric-collision-tris').textContent,
+  safe:Number(document.getElementById('metric-collision-safe').textContent),
+  review:Number(document.getElementById('metric-collision-review').textContent),
+  button:document.getElementById('native-collision-btn').textContent,
+  shaMessage:document.getElementById('diagnostic').textContent.includes('byte-identical collision vertex coordinates'),
+ }));
+ assert.equal(pilotVisible.safe+pilotVisible.review,33);
+ assert.equal(pilotVisible.sourceTriangles,'98,358');
+ assert.equal(pilotVisible.button,'Hide spawn checks');
+ assert.equal(pilotVisible.shaMessage,true);
+ const collisionScreenshot=await (await page.$('#viewport canvas')).screenshot();
+ assert.ok(collisionScreenshot.byteLength>12000);
+ writeFileSync('/tmp/octavus-native-collision-spawn-review.png',collisionScreenshot);
+ await page.click('#native-collision-btn');
+ assert.equal(await page.evaluate(()=>document.getElementById('native-collision-btn').textContent),'Show spawn checks');
  // Phase 1.8 checks original engine axis handedness directly rather
  // than merely checking that a model loader returned 135 objects.
  const transformProof=await page.evaluate(async()=>{
@@ -328,7 +354,7 @@ try{
  assert.deepEqual(shaderErrors,[],'Native texture source projection must compile in Chrome WebGL');
  assert.deepEqual(errors,[],'No browser runtime errors permitted');
  console.log('Octavus native preview headless Chrome: PASS');
- console.log(JSON.stringify({...stats,previewPngBytes:image.byteLength,optimizedPngBytes:enhancedImage.byteLength,sourceTexturePngBytes:textureImage.byteLength,sourceSceneryPngBytes:scenicImage.byteLength,alignmentAnchorPngBytes:anchoredImage.byteLength,decalProjection:decalCoverage},null,2));
+ console.log(JSON.stringify({...stats,previewPngBytes:image.byteLength,optimizedPngBytes:enhancedImage.byteLength,sourceTexturePngBytes:textureImage.byteLength,sourceSceneryPngBytes:scenicImage.byteLength,alignmentAnchorPngBytes:anchoredImage.byteLength,decalProjection:decalCoverage,collisionPilot:pilotVisible,collisionPilotPngBytes:collisionScreenshot.byteLength},null,2));
 }finally{
  await browser.close();
 }
