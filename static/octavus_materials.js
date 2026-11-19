@@ -4,13 +4,14 @@
  * No original model, sound or weapon assets are used here.
  */
 import * as THREE from 'three';
+import {planOctavusTextureTasks} from './octavus_texture_budget.js';
 
 const MANIFEST='/static/maps/octavus.texture-manifest.json';
 const MAX_PENDING=8;
 const mapCache=new Map();
 const clamp=(n,min,max)=>Math.max(min,Math.min(max,n));
 
-export async function loadOctavusMaterialLibrary(quality='auto'){
+export async function loadOctavusMaterialLibrary(quality='auto',usedSlots=null){
  let manifest=null;
  try{
   const response=await fetch(MANIFEST);
@@ -21,14 +22,9 @@ export async function loadOctavusMaterialLibrary(quality='auto'){
   statistics:{originalDiffuseSlots:0,sourceImages:0}
  };
  const materials=manifest.materials||{};
- const unique=new Map();
- for(const def of Object.values(materials)){
-  for(const [role,asset] of Object.entries(def.channels||{})){
-   if(asset?.url?.startsWith('/static/maps/octavus_assets/'))
-    unique.set(asset.url,{role,url:asset.url});
-  }
- }
- const loader=new THREE.TextureLoader(),pending=[...unique.values()];
+ const plan=planOctavusTextureTasks(manifest,quality,usedSlots);
+ const chosen=new Set(plan.slots);
+ const loader=new THREE.TextureLoader(),pending=plan.tasks;
  const images=new Map(),textures=[];
  let cursor=0;
  async function worker(){
@@ -54,6 +50,7 @@ export async function loadOctavusMaterialLibrary(quality='auto'){
  const channels=new Map();
  let sourceDiffuseSlots=0;
  for(const [key,definition] of Object.entries(materials)){
+  if(!chosen.has(key))continue;
   const slot=Number(key),info=definition.channels||{};
   const look=role=>info[role]&&images.has(info[role].url)?images.get(info[role].url):null;
   const diffuse=look('color'),normal=look('normal');
@@ -70,7 +67,9 @@ export async function loadOctavusMaterialLibrary(quality='auto'){
  return {
   usable:true,manifest,channels,textures,dispose(){for(const t of textures)t.dispose();},
   statistics:{originalDiffuseSlots:sourceDiffuseSlots,sourceImages:images.size,
-              sourceSlots:channels.size,missingSources:manifest.missingSources?.length||0}
+              sourceSlots:channels.size,missingSources:manifest.missingSources?.length||0,
+              requestedSourceImages:pending.length,skippedSourceImages:plan.skippedImages,
+              imageProfile:plan.profile}
  };
 }
 
