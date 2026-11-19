@@ -565,7 +565,7 @@ function frame(ms){try{const now=ms/1000,rawMs=ms-clock,dt=Math.min(rawMs/1000,.
    -(settings.motion?landingPulse*.24:0)+flow53.vaultDip,
    local.z+viewError.z+local.vz*movementAccumulator+peek63.z);
   camera.rotation.set(pitch+visualRecoil*(1-ads),yaw,flow53.roll-visualLean63*.15,'YXZ');
-  const targetFov53=T.MathUtils.lerp(input.sprint?88:82,selected===3?35:54,ads)+flow53.fovBoost;
+  const targetFov53=T.MathUtils.lerp(input.sprint?88:82,selected===3?26:54,ads)+flow53.fovBoost;
   camera.fov=T.MathUtils.lerp(camera.fov,targetFov53,Math.min(1,dt*13));
   camera.updateProjectionMatrix();
   for(const [id,g] of opponents){const shown=sampleRemote(netSync,id,ms);const p=shown?{...g.userData.target,...shown}:g.userData.target;if(!p)continue;
@@ -590,10 +590,11 @@ function frame(ms){try{const now=ms/1000,rawMs=ms-clock,dt=Math.min(rawMs/1000,.
     camera.updateProjectionMatrix();
    }
   }
-  for(let i=0;i<4;i++)weaponModels[i].visible=i===selected&&locked()&&me.hp>0&&state.phase!=='results';
+  for(let i=0;i<4;i++)weaponModels[i].visible=i===selected&&locked()&&me.hp>0&&state.phase!=='results'&&!(selected===3&&ads>.95);
   const gun=weaponModels[selected];animateWeapon(gun,{time:now,ads,reload:selected===me.weapon&&me.reload>0?me.reload/weapons[selected].reload:0,kick,moving:locked()&&moving,slide:sliding,motion:settings.motion,switched:switchVisual});gun.userData.flash.visible=now<flashUntil;gun.userData.flash.rotation.z=now*21;
   gun.userData.flash.scale.set(flashPower52,flashPower52,flashPower52*2);
   kick=Math.max(0,kick-dt*.7);visualRecoil*=Math.exp(-dt*18);switchVisual=Math.max(0,switchVisual-dt*5);
+  $('scope').className=selected===3?'ads-sniper':selected===2?'ads-shotgun':'ads-reflex';
   $('scope').hidden=!(ads>.35&&locked()&&me.hp>0&&state.phase!=='results');
    $('scope').style.opacity=String(Math.min(1,Math.max(0,(ads-.35)/.4)));
   const spread52=crosshairSpread52({speed:localSpeed,grounded:local.grounded,
