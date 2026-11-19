@@ -5,6 +5,7 @@
 import * as THREE from 'three';
 import {OctavusNativeMaterialPreview} from './octavus_native_material_preview87.js';
 import {OctavusNativeScenery} from './octavus_native_scenery88.js';
+import {loadNativeArenaBoundary92,makeNativeArenaWall92} from './octavus_native_boundary92.js';
 import {loadNativeCollision91} from './octavus_native_collision91.js';
 const ROOT='/static/maps/';
 const $=id=>document.getElementById(id);
@@ -29,6 +30,7 @@ grid.material.opacity=.38;grid.material.transparent=true;
 scene.add(grid);
 const nativeMaterialPreview=new OctavusNativeMaterialPreview();
 const originalScenery=new OctavusNativeScenery(scene,{sourceHemisphere:originalHemi,sourceSun:sun});
+let arenaLimit92=null,arenaWall92=null;
 originalScenery.onNotice=message=>note(message);
 originalScenery.onCounts=counts=>{
  $('metric-props').textContent=fmt(counts.models);
@@ -71,6 +73,36 @@ function sizeCanvas(){
  canvasRenderer.setSize(w,h,false);
 }
 function home(){target.set(0,2,0);yaw=.7;pitch=.55;distance=142;updateCamera()}
+async function initializeIslandWall(){
+ try{
+  const ring=await loadNativeArenaBoundary92();
+  if(arenaWall92)return;
+  arenaLimit92=ring;
+  arenaWall92=makeNativeArenaWall92(ring);
+  scene.add(arenaWall92.mesh);
+  arenaWall92.show($('arena-wall').checked);
+  $('metric-wall-segments').textContent=fmt(arenaWall92.wallSegments);
+  $('metric-wall-height').textContent=fmt(ring.wallTopY-ring.wallBaseY)+' m';
+  $('metric-playable-area').textContent=fmt(Math.round(Math.abs(ring.area)))+' m²';
+  updateIslandStarts();
+  note('STAGE 2.1 NATIVE ARENA: '+arenaWall92.wallSegments+' connected sandstone wall segments enclose the island in your reference image, '+fmt(ring.wallTopY-ring.wallBaseY)+'m tall. Outside world is non-playable in the planned multiplayer replacement. The 58-segment source polygon is shared with Python server prototype; LIVE GAME STILL UNCHANGED.');
+ }catch(e){
+  $('metric-wall-segments').textContent='Error';
+  note('NATIVE ISLAND WALL UNAVAILABLE: '+(e.message||String(e)));
+ }
+}
+function updateIslandStarts(){
+ if(!arenaLimit92||!starts.length)return;
+ const inside=starts.filter(e=>{
+  const [x,,z]=toWorld(e.sourcePosition);
+  return arenaLimit92.allowed(x,z);
+ }).length;
+ $('metric-wall-spawns').textContent=inside+' / '+starts.length;
+}
+$('arena-wall').addEventListener('change',()=>{
+ if(arenaWall92)arenaWall92.show($('arena-wall').checked);
+ note($('arena-wall').checked?'Island perimeter wall visible (stage 2.1 staging-only).':'Island perimeter wall hidden for geometry comparison; gameplay mask data remains unchanged.');
+});
 $('home-btn').addEventListener('click',home);
 $('top-btn').addEventListener('click',()=>{
  target.set(0,2,0);yaw=0;pitch=Math.PI/2-.015;distance=230;updateCamera();
@@ -361,6 +393,7 @@ async function spawnMarkers(){
   const source=await json(ROOT+'octavus.native-entities.json');
   if(source.format!=='MAPZ'||source.playerStarts?.length!==33)throw Error('Original MPZ player-start metadata invalid');
   starts=source.playerStarts;
+  updateIslandStarts();
   // The most populated model sector is a meaningful camera target for
   // users to visually validate the original authored placements.
   const models=(source.visualEntities||[]).filter(e=>e.type==='mapmodel'&&Array.isArray(e.sourcePosition));
@@ -399,3 +432,4 @@ function frame(now){
 requestAnimationFrame(frame);
 void activate('core');
 void spawnMarkers();
+void initializeIslandWall();
