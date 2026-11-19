@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import base64
 import hashlib
+import json
 import struct
 from array import array
 from functools import lru_cache
@@ -21,6 +22,28 @@ GROUND_SOURCE_Y = 2816.0  # Center courtyard ground in source Cube 2 units
 VERTICES = 52061
 TRIANGLES = 86500
 PARTS = 8
+
+
+def configured_play_bounds():
+    """Read the same playable Octavus boundary used by the browser.
+
+    The source mesh remains unchanged, but the server must not independently
+    maintain old, larger bounds that would allow multiplayer escape.
+    """
+    arena=json.loads((ROOT/'static'/'maps'/'octavus.json').read_text(encoding='utf-8'))
+    if arena.get('id')!='octavus' or arena.get('collisionTriangles')!=TRIANGLES:
+        raise ValueError('Octavus registry and source mesh do not agree')
+    b=arena['playBounds']
+    if not all(isinstance(b.get(k),(int,float)) for k in ('x0','x1','z0','z1')):
+        raise ValueError('Octavus playBounds must be numeric')
+    if not (-194.56 <= b['x0'] < 0 < b['x1'] <= 194.56 and
+            -194.56 <= b['z0'] < 0 < b['z1'] <= 194.56):
+        raise ValueError('Octavus playBounds extend outside the source mesh')
+    for spawn in arena['spawns']:
+        if not (b['x0']+.34 <= spawn[0] <= b['x1']-.34 and
+                b['z0']+.34 <= spawn[2] <= b['z1']-.34):
+            raise ValueError('Octavus spawn outside the compact arena')
+    return dict(b)
 
 
 class OctavusCollision:
@@ -58,8 +81,7 @@ class OctavusCollision:
         self._surfaces = surfaces
         self.count = TRIANGLES
         self.metadata = {
-            'playBounds': {'x0': -194.56, 'x1': 194.56,
-                           'z0': -194.56, 'z1': 194.56},
+            'playBounds': configured_play_bounds(),
             'spawns': {},
             'rawSha256': hashlib.sha256(raw).hexdigest(),
         }
