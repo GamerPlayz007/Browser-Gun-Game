@@ -28,7 +28,7 @@ from time import perf_counter
 from octavus_native_boundary92 import NativeArenaBoundary92
 from scripts.octavus_native_geometry77 import source_tree, OCT_EMPTY, OCT_SOLID, OCT_NORMAL
 
-ROOT=Path(__file__).resolve().parent
+ROOT=Path(__file__).resolve().parents[1]
 MAPS=ROOT/"static/maps"
 SOURCE=MAPS/"octavus.native-optimized.bin.gz"
 SOURCE_META=MAPS/"octavus.native-optimized.json"
