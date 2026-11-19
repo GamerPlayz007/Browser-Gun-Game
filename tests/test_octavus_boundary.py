@@ -82,6 +82,24 @@ class OctavusBoundaryTests(unittest.TestCase):
         self.assertIn('fallbackUv',preview)
         self.assertIn('previous.dispose?.()',preview)
 
+    def test_26_original_mapmodels_use_gpu_instancing_not_clone_draws(self):
+        props=(ROOT/'static/octavus_props.js').read_text(encoding='utf-8')
+        match=(ROOT/'static/octavus_match.js').read_text(encoding='utf-8')
+        self.assertIn('new THREE.InstancedMesh(',props)
+        self.assertIn('mesh.count=visible.length',props)
+        self.assertIn('mesh.computeBoundingSphere()',props)
+        self.assertIn('octavusPropInside(e.sourcePosition,playBounds)',props)
+        self.assertNotIn('prototype.clone(true)',props)
+        self.assertIn('createOctavusProps(scene,quality,map.playBounds)',match)
+        self.assertIn('get nativePropDrawBatches()',match)
+
+    def test_26_f8_playtest_report_includes_real_gpu_budget(self):
+        game=(ROOT/'static/game.js').read_text(encoding='utf-8')
+        self.assertIn('Actual WebGL draw calls (last frame)',game)
+        self.assertIn('Octavus original prop draw objects (before instancing)',game)
+        self.assertIn('Octavus instanced prop draw batches',game)
+        self.assertIn('get gpuFrameDrawCalls()',game)
+
 
 if __name__=='__main__':
     unittest.main()
