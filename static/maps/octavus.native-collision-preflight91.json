@@ -1,0 +1,806 @@
+{
+  "format": "OCTAVUS-NATIVE-COLLISION-PILOT91",
+  "status": "staging-only-not-live",
+  "sourceRevision": 829,
+  "sourceFormat": "OCN2",
+  "sourceSHA256": "888e721ca5c5ea7fd8ec7d58837391b2479cba63dc1e82a2362cc33c85b4daf0",
+  "nativeVertices": 123915,
+  "collisionTriangles": 98358,
+  "excludedNativeMaterialSlot": 1,
+  "sourceCoreHasRendererParity": false,
+  "worldAxis": "(native X,Z,Y) -> Three (X,Y,Z), native units scaled 0.05",
+  "coordinateScale": 0.05,
+  "nativeWorldCenter": [
+    4096,
+    4096,
+    2816
+  ],
+  "float32TriangleSoupSHA256": "02ab24ba55650267d18e365a2091b1099007dee8a3f448b0419c4f7b141673bc",
+  "float32ByteLength": 3540888,
+  "playerCapsuleRadius": 0.34,
+  "playerCapsuleHeight": 1.8,
+  "sourceSpawnCount": 33,
+  "spawnPreflightCounts": {
+    "walkableFloorWithin2m": 33,
+    "supportedAtOriginalHeight": 30,
+    "capsuleClear": 25,
+    "potentiallyUsable": 23
+  },
+  "sourceSpawns": [
+    {
+      "entityID": 424,
+      "sourcePosition": [
+        4408.0,
+        4768.0,
+        2752.0
+      ],
+      "worldPosition": [
+        15.6,
+        -3.2,
+        33.6
+      ],
+      "groundDelta": -0.0,
+      "floorMaterial": 70,
+      "hasNearbyWalkableFloor": true,
+      "supportedAtOriginalHeight": true,
+      "capsuleClear": false,
+      "potentiallyUsable": false,
+      "blockingTriangle": 92771,
+      "floorCandidatesChecked": 4,
+      "capsuleCandidatesChecked": 5,
+      "sourceGeometryIncomplete": true
+    },
+    {
+      "entityID": 425,
+      "sourcePosition": [
+        4032.0,
+        4880.0,
+        2848.0
+      ],
+      "worldPosition": [
+        -3.2,
+        1.6,
+        39.2
+      ],
+      "groundDelta": 0.2,
+      "floorMaterial": 80,
+      "hasNearbyWalkableFloor": true,
+      "supportedAtOriginalHeight": true,
+      "capsuleClear": false,
+      "potentiallyUsable": false,
+      "blockingTriangle": 74973,
+      "floorCandidatesChecked": 2,
+      "capsuleCandidatesChecked": 4,
+      "sourceGeometryIncomplete": true
+    },
+    {
+      "entityID": 426,
+      "sourcePosition": [
+        3504.0,
+        4672.0,
+        2816.0
+      ],
+      "worldPosition": [
+        -29.6,
+        0.0,
+        28.8
+      ],
+      "groundDelta": 0.0,
+      "floorMaterial": 70,
+      "hasNearbyWalkableFloor": true,
+      "supportedAtOriginalHeight": true,
+      "capsuleClear": true,
+      "potentiallyUsable": true,
+      "blockingTriangle": null,
+      "floorCandidatesChecked": 2,
+      "capsuleCandidatesChecked": 4,
+      "sourceGeometryIncomplete": true
+    },
+    {
+      "entityID": 427,
+      "sourcePosition": [
+        4480.0,
+        3328.0,
+        2816.0
+      ],
+      "worldPosition": [
+        19.2,
+        0.0,
+        -38.4
+      ],
+      "groundDelta": 0.0,
+      "floorMaterial": 34,
+      "hasNearbyWalkableFloor": true,
+      "supportedAtOriginalHeight": true,
+      "capsuleClear": true,
+      "potentiallyUsable": true,
+      "blockingTriangle": null,
+      "floorCandidatesChecked": 2,
+      "capsuleCandidatesChecked": 16,
+      "sourceGeometryIncomplete": true
+    },
+    {
+      "entityID": 428,
+      "sourcePosition": [
+        4272.0,
+        3848.0,
+        2816.0
+      ],
+      "worldPosition": [
+        8.8,
+        0.0,
+        -12.4
+      ],
+      "groundDelta": -0.8,
+      "floorMaterial": 80,
+      "hasNearbyWalkableFloor": true,
+      "supportedAtOriginalHeight": false,
+      "capsuleClear": true,
+      "potentiallyUsable": false,
+      "blockingTriangle": null,
+      "floorCandidatesChecked": 3,
+      "capsuleCandidatesChecked": 2,
+      "sourceGeometryIncomplete": true
+    },
+    {
+      "entityID": 429,
+      "sourcePosition": [
+        4688.0,
+        3664.0,
+        2816.0
+      ],
+      "worldPosition": [
+        29.6,
+        0.0,
+        -21.6
+      ],
+      "groundDelta": 0.0,
+      "floorMaterial": 80,
+      "hasNearbyWalkableFloor": true,
+      "supportedAtOriginalHeight": true,
+      "capsuleClear": true,
+      "potentiallyUsable": true,
+      "blockingTriangle": null,
+      "floorCandidatesChecked": 2,
+      "capsuleCandidatesChecked": 2,
+      "sourceGeometryIncomplete": true
+    },
+    {
+      "entityID": 430,
+      "sourcePosition": [
+        4928.0,
+        4232.0,
+        2848.0
+      ],
+      "worldPosition": [
+        41.6,
+        1.6,
+        6.8
+      ],
+      "groundDelta": 0.0,
+      "floorMaterial": 213,
+      "hasNearbyWalkableFloor": true,
+      "supportedAtOriginalHeight": true,
+      "capsuleClear": true,
+      "potentiallyUsable": true,
+      "blockingTriangle": null,
+      "floorCandidatesChecked": 2,
+      "capsuleCandidatesChecked": 4,
+      "sourceGeometryIncomplete": true
+    },
+    {
+      "entityID": 431,
+      "sourcePosition": [
+        4352.0,
+        3712.0,
+        2816.0
+      ],
+      "worldPosition": [
+        12.8,
+        0.0,
+        -19.2
+      ],
+      "groundDelta": 0.0,
+      "floorMaterial": 85,
+      "hasNearbyWalkableFloor": true,
+      "supportedAtOriginalHeight": true,
+      "capsuleClear": false,
+      "potentiallyUsable": false,
+      "blockingTriangle": 34423,
+      "floorCandidatesChecked": 2,
+      "capsuleCandidatesChecked": 11,
+      "sourceGeometryIncomplete": true
+    },
+    {
+      "entityID": 432,
+      "sourcePosition": [
+        4080.0,
+        3264.0,
+        2848.0
+      ],
+      "worldPosition": [
+        -0.8,
+        1.6,
+        -41.6
+      ],
+      "groundDelta": 0.0,
+      "floorMaterial": 85,
+      "hasNearbyWalkableFloor": true,
+      "supportedAtOriginalHeight": true,
+      "capsuleClear": true,
+      "potentiallyUsable": true,
+      "blockingTriangle": null,
+      "floorCandidatesChecked": 2,
+      "capsuleCandidatesChecked": 4,
+      "sourceGeometryIncomplete": true
+    },
+    {
+      "entityID": 433,
+      "sourcePosition": [
+        3264.0,
+        4000.0,
+        2848.0
+      ],
+      "worldPosition": [
+        -41.6,
+        1.6,
+        -4.8
+      ],
+      "groundDelta": 0.0,
+      "floorMaterial": 80,
+      "hasNearbyWalkableFloor": true,
+      "supportedAtOriginalHeight": true,
+      "capsuleClear": true,
+      "potentiallyUsable": true,
+      "blockingTriangle": null,
+      "floorCandidatesChecked": 2,
+      "capsuleCandidatesChecked": 4,
+      "sourceGeometryIncomplete": true
+    },
+    {
+      "entityID": 434,
+      "sourcePosition": [
+        4108.0,
+        4928.0,
+        2848.0
+      ],
+      "worldPosition": [
+        0.6,
+        1.6,
+        41.6
+      ],
+      "groundDelta": 0.0,
+      "floorMaterial": 85,
+      "hasNearbyWalkableFloor": true,
+      "supportedAtOriginalHeight": true,
+      "capsuleClear": true,
+      "potentiallyUsable": true,
+      "blockingTriangle": null,
+      "floorCandidatesChecked": 2,
+      "capsuleCandidatesChecked": 4,
+      "sourceGeometryIncomplete": true
+    },
+    {
+      "entityID": 435,
+      "sourcePosition": [
+        3820.0,
+        4480.0,
+        2816.0
+      ],
+      "worldPosition": [
+        -13.8,
+        0.0,
+        19.2
+      ],
+      "groundDelta": 0.0,
+      "floorMaterial": 85,
+      "hasNearbyWalkableFloor": true,
+      "supportedAtOriginalHeight": true,
+      "capsuleClear": true,
+      "potentiallyUsable": true,
+      "blockingTriangle": null,
+      "floorCandidatesChecked": 2,
+      "capsuleCandidatesChecked": 6,
+      "sourceGeometryIncomplete": true
+    },
+    {
+      "entityID": 436,
+      "sourcePosition": [
+        3712.0,
+        4864.0,
+        2816.0
+      ],
+      "worldPosition": [
+        -19.2,
+        0.0,
+        38.4
+      ],
+      "groundDelta": 0.0,
+      "floorMaterial": 34,
+      "hasNearbyWalkableFloor": true,
+      "supportedAtOriginalHeight": true,
+      "capsuleClear": true,
+      "potentiallyUsable": true,
+      "blockingTriangle": null,
+      "floorCandidatesChecked": 2,
+      "capsuleCandidatesChecked": 16,
+      "sourceGeometryIncomplete": true
+    },
+    {
+      "entityID": 437,
+      "sourcePosition": [
+        3512.0,
+        4536.0,
+        2816.0
+      ],
+      "worldPosition": [
+        -29.2,
+        0.0,
+        22.0
+      ],
+      "groundDelta": 0.0,
+      "floorMaterial": 80,
+      "hasNearbyWalkableFloor": true,
+      "supportedAtOriginalHeight": true,
+      "capsuleClear": true,
+      "potentiallyUsable": true,
+      "blockingTriangle": null,
+      "floorCandidatesChecked": 2,
+      "capsuleCandidatesChecked": 2,
+      "sourceGeometryIncomplete": true
+    },
+    {
+      "entityID": 438,
+      "sourcePosition": [
+        3240.0,
+        4444.0,
+        2832.0
+      ],
+      "worldPosition": [
+        -42.8,
+        0.8,
+        17.4
+      ],
+      "groundDelta": 0.0,
+      "floorMaterial": 113,
+      "hasNearbyWalkableFloor": true,
+      "supportedAtOriginalHeight": true,
+      "capsuleClear": true,
+      "potentiallyUsable": true,
+      "blockingTriangle": null,
+      "floorCandidatesChecked": 2,
+      "capsuleCandidatesChecked": 3,
+      "sourceGeometryIncomplete": true
+    },
+    {
+      "entityID": 439,
+      "sourcePosition": [
+        3632.0,
+        4856.0,
+        2816.0
+      ],
+      "worldPosition": [
+        -23.2,
+        0.0,
+        38.0
+      ],
+      "groundDelta": 0.0,
+      "floorMaterial": 80,
+      "hasNearbyWalkableFloor": true,
+      "supportedAtOriginalHeight": true,
+      "capsuleClear": false,
+      "potentiallyUsable": false,
+      "blockingTriangle": 69861,
+      "floorCandidatesChecked": 4,
+      "capsuleCandidatesChecked": 3,
+      "sourceGeometryIncomplete": true
+    },
+    {
+      "entityID": 440,
+      "sourcePosition": [
+        3904.0,
+        4384.0,
+        2816.0
+      ],
+      "worldPosition": [
+        -9.6,
+        0.0,
+        14.4
+      ],
+      "groundDelta": 0.0,
+      "floorMaterial": 80,
+      "hasNearbyWalkableFloor": true,
+      "supportedAtOriginalHeight": true,
+      "capsuleClear": true,
+      "potentiallyUsable": true,
+      "blockingTriangle": null,
+      "floorCandidatesChecked": 2,
+      "capsuleCandidatesChecked": 8,
+      "sourceGeometryIncomplete": true
+    },
+    {
+      "entityID": 441,
+      "sourcePosition": [
+        4356.0,
+        5088.0,
+        2816.0
+      ],
+      "worldPosition": [
+        13.0,
+        0.0,
+        49.6
+      ],
+      "groundDelta": -0.175,
+      "floorMaterial": 70,
+      "hasNearbyWalkableFloor": true,
+      "supportedAtOriginalHeight": false,
+      "capsuleClear": false,
+      "potentiallyUsable": false,
+      "blockingTriangle": 96031,
+      "floorCandidatesChecked": 4,
+      "capsuleCandidatesChecked": 7,
+      "sourceGeometryIncomplete": true
+    },
+    {
+      "entityID": 442,
+      "sourcePosition": [
+        4652.0,
+        4896.0,
+        2792.0
+      ],
+      "worldPosition": [
+        27.8,
+        -1.2,
+        40.0
+      ],
+      "groundDelta": 0.15,
+      "floorMaterial": 70,
+      "hasNearbyWalkableFloor": true,
+      "supportedAtOriginalHeight": true,
+      "capsuleClear": false,
+      "potentiallyUsable": false,
+      "blockingTriangle": 96338,
+      "floorCandidatesChecked": 2,
+      "capsuleCandidatesChecked": 1,
+      "sourceGeometryIncomplete": true
+    },
+    {
+      "entityID": 443,
+      "sourcePosition": [
+        4624.0,
+        4336.0,
+        2848.0
+      ],
+      "worldPosition": [
+        26.4,
+        1.6,
+        12.0
+      ],
+      "groundDelta": 0.0,
+      "floorMaterial": 213,
+      "hasNearbyWalkableFloor": true,
+      "supportedAtOriginalHeight": true,
+      "capsuleClear": true,
+      "potentiallyUsable": true,
+      "blockingTriangle": null,
+      "floorCandidatesChecked": 2,
+      "capsuleCandidatesChecked": 2,
+      "sourceGeometryIncomplete": true
+    },
+    {
+      "entityID": 444,
+      "sourcePosition": [
+        3548.0,
+        4352.0,
+        2784.0
+      ],
+      "worldPosition": [
+        -27.4,
+        -1.6,
+        12.8
+      ],
+      "groundDelta": -0.025,
+      "floorMaterial": 70,
+      "hasNearbyWalkableFloor": true,
+      "supportedAtOriginalHeight": true,
+      "capsuleClear": true,
+      "potentiallyUsable": true,
+      "blockingTriangle": null,
+      "floorCandidatesChecked": 2,
+      "capsuleCandidatesChecked": 6,
+      "sourceGeometryIncomplete": true
+    },
+    {
+      "entityID": 445,
+      "sourcePosition": [
+        4272.0,
+        4416.0,
+        2784.0
+      ],
+      "worldPosition": [
+        8.8,
+        -1.6,
+        16.0
+      ],
+      "groundDelta": -0.0,
+      "floorMaterial": 80,
+      "hasNearbyWalkableFloor": true,
+      "supportedAtOriginalHeight": true,
+      "capsuleClear": true,
+      "potentiallyUsable": true,
+      "blockingTriangle": null,
+      "floorCandidatesChecked": 4,
+      "capsuleCandidatesChecked": 4,
+      "sourceGeometryIncomplete": true
+    },
+    {
+      "entityID": 446,
+      "sourcePosition": [
+        3784.0,
+        3424.0,
+        2752.0
+      ],
+      "worldPosition": [
+        -15.6,
+        -3.2,
+        -33.6
+      ],
+      "groundDelta": -0.0,
+      "floorMaterial": 70,
+      "hasNearbyWalkableFloor": true,
+      "supportedAtOriginalHeight": true,
+      "capsuleClear": true,
+      "potentiallyUsable": true,
+      "blockingTriangle": null,
+      "floorCandidatesChecked": 2,
+      "capsuleCandidatesChecked": 2,
+      "sourceGeometryIncomplete": true
+    },
+    {
+      "entityID": 447,
+      "sourcePosition": [
+        4160.0,
+        3312.0,
+        2848.0
+      ],
+      "worldPosition": [
+        3.2,
+        1.6,
+        -39.2
+      ],
+      "groundDelta": 0.0,
+      "floorMaterial": 34,
+      "hasNearbyWalkableFloor": true,
+      "supportedAtOriginalHeight": true,
+      "capsuleClear": true,
+      "potentiallyUsable": true,
+      "blockingTriangle": null,
+      "floorCandidatesChecked": 2,
+      "capsuleCandidatesChecked": 16,
+      "sourceGeometryIncomplete": true
+    },
+    {
+      "entityID": 448,
+      "sourcePosition": [
+        4688.0,
+        3520.0,
+        2816.0
+      ],
+      "worldPosition": [
+        29.6,
+        0.0,
+        -28.8
+      ],
+      "groundDelta": 0.0,
+      "floorMaterial": 70,
+      "hasNearbyWalkableFloor": true,
+      "supportedAtOriginalHeight": true,
+      "capsuleClear": true,
+      "potentiallyUsable": true,
+      "blockingTriangle": null,
+      "floorCandidatesChecked": 2,
+      "capsuleCandidatesChecked": 4,
+      "sourceGeometryIncomplete": true
+    },
+    {
+      "entityID": 449,
+      "sourcePosition": [
+        4952.0,
+        3748.0,
+        2832.0
+      ],
+      "worldPosition": [
+        42.8,
+        0.8,
+        -17.4
+      ],
+      "groundDelta": 0.0,
+      "floorMaterial": 113,
+      "hasNearbyWalkableFloor": true,
+      "supportedAtOriginalHeight": true,
+      "capsuleClear": true,
+      "potentiallyUsable": true,
+      "blockingTriangle": null,
+      "floorCandidatesChecked": 3,
+      "capsuleCandidatesChecked": 3,
+      "sourceGeometryIncomplete": true
+    },
+    {
+      "entityID": 450,
+      "sourcePosition": [
+        4560.0,
+        3336.0,
+        2816.0
+      ],
+      "worldPosition": [
+        23.2,
+        0.0,
+        -38.0
+      ],
+      "groundDelta": 0.0,
+      "floorMaterial": 80,
+      "hasNearbyWalkableFloor": true,
+      "supportedAtOriginalHeight": true,
+      "capsuleClear": false,
+      "potentiallyUsable": false,
+      "blockingTriangle": 28092,
+      "floorCandidatesChecked": 4,
+      "capsuleCandidatesChecked": 7,
+      "sourceGeometryIncomplete": true
+    },
+    {
+      "entityID": 451,
+      "sourcePosition": [
+        4288.0,
+        3808.0,
+        2816.0
+      ],
+      "worldPosition": [
+        9.6,
+        0.0,
+        -14.4
+      ],
+      "groundDelta": 0.0,
+      "floorMaterial": 80,
+      "hasNearbyWalkableFloor": true,
+      "supportedAtOriginalHeight": true,
+      "capsuleClear": true,
+      "potentiallyUsable": true,
+      "blockingTriangle": null,
+      "floorCandidatesChecked": 2,
+      "capsuleCandidatesChecked": 8,
+      "sourceGeometryIncomplete": true
+    },
+    {
+      "entityID": 452,
+      "sourcePosition": [
+        3836.0,
+        3104.0,
+        2816.0
+      ],
+      "worldPosition": [
+        -13.0,
+        0.0,
+        -49.6
+      ],
+      "groundDelta": 0.025,
+      "floorMaterial": 34,
+      "hasNearbyWalkableFloor": true,
+      "supportedAtOriginalHeight": true,
+      "capsuleClear": false,
+      "potentiallyUsable": false,
+      "blockingTriangle": 3475,
+      "floorCandidatesChecked": 3,
+      "capsuleCandidatesChecked": 7,
+      "sourceGeometryIncomplete": true
+    },
+    {
+      "entityID": 453,
+      "sourcePosition": [
+        3540.0,
+        3296.0,
+        2792.0
+      ],
+      "worldPosition": [
+        -27.8,
+        -1.2,
+        -40.0
+      ],
+      "groundDelta": -0.25,
+      "floorMaterial": 70,
+      "hasNearbyWalkableFloor": true,
+      "supportedAtOriginalHeight": false,
+      "capsuleClear": true,
+      "potentiallyUsable": false,
+      "blockingTriangle": null,
+      "floorCandidatesChecked": 2,
+      "capsuleCandidatesChecked": 2,
+      "sourceGeometryIncomplete": true
+    },
+    {
+      "entityID": 454,
+      "sourcePosition": [
+        3568.0,
+        3856.0,
+        2848.0
+      ],
+      "worldPosition": [
+        -26.4,
+        1.6,
+        -12.0
+      ],
+      "groundDelta": 0.0,
+      "floorMaterial": 80,
+      "hasNearbyWalkableFloor": true,
+      "supportedAtOriginalHeight": true,
+      "capsuleClear": true,
+      "potentiallyUsable": true,
+      "blockingTriangle": null,
+      "floorCandidatesChecked": 2,
+      "capsuleCandidatesChecked": 2,
+      "sourceGeometryIncomplete": true
+    },
+    {
+      "entityID": 455,
+      "sourcePosition": [
+        4644.0,
+        3840.0,
+        2784.0
+      ],
+      "worldPosition": [
+        27.4,
+        -1.6,
+        -12.8
+      ],
+      "groundDelta": -0.025,
+      "floorMaterial": 70,
+      "hasNearbyWalkableFloor": true,
+      "supportedAtOriginalHeight": true,
+      "capsuleClear": true,
+      "potentiallyUsable": true,
+      "blockingTriangle": null,
+      "floorCandidatesChecked": 2,
+      "capsuleCandidatesChecked": 6,
+      "sourceGeometryIncomplete": true
+    },
+    {
+      "entityID": 456,
+      "sourcePosition": [
+        3920.0,
+        3776.0,
+        2784.0
+      ],
+      "worldPosition": [
+        -8.8,
+        -1.6,
+        -16.0
+      ],
+      "groundDelta": -0.0,
+      "floorMaterial": 80,
+      "hasNearbyWalkableFloor": true,
+      "supportedAtOriginalHeight": true,
+      "capsuleClear": true,
+      "potentiallyUsable": true,
+      "blockingTriangle": null,
+      "floorCandidatesChecked": 4,
+      "capsuleCandidatesChecked": 4,
+      "sourceGeometryIncomplete": true
+    }
+  ],
+  "indexMetrics": {
+    "cellSize": 8.0,
+    "gridCells": 2700,
+    "indexedReferences": 122994,
+    "oversizedTriangles": 0
+  },
+  "collisionCandidateHasOriginalSlot1Floor": false,
+  "clientServerParityVerified": false,
+  "gameplayMotionParityVerified": false,
+  "liveMapModified": false,
+  "limitations": [
+    "Original 98,358-triangle architectural core excludes slot 1 and could leave legitimate source floors and walls missing.",
+    "Closest point capsule preflight is not full continuous collision or live controller movement.",
+    "Original source 33 starts have different native positions from the active old OBJ spawns.",
+    "This pilot must never replace server/client physics without support and movement parity validation."
+  ]
+}
