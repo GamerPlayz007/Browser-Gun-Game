@@ -156,7 +156,10 @@ export function createDustPhysics65(source){
      if(inside(probeX,probeZ,R)){
       const rise=groundAt(probeX,probeZ,stepFeet+STEP);
       if(rise!==null&&rise>=stepFeet+.025&&rise<=stepFeet+STEP+.012&&
-         rise<=oldY+STEP+.012&&capsuleClear(probeX,rise,probeZ,height)){
+         rise<=oldY+STEP+.012&&
+         // Prevent stair assistance from crossing a full-height wall.
+         !raycast([x,stepFeet+STEP+.20,z],[probeX,stepFeet+STEP+.20,probeZ])&&
+         capsuleClear(probeX,rise,probeZ,height)){
        xx=probeX;zz=probeZ;stepFeet=rise;vx=p.vx;vz=p.vz;
       }
      }
