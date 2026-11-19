@@ -17,7 +17,8 @@ class NativeCollisionPilotTests(unittest.TestCase):
 
     def test_source_native_coordinate_basis(self):
         self.assertEqual(native_point((4096*8,4096*8,2816*8)),(0.,0.,0.))
-        self.assertEqual(native_point((4104*8,4108*8,2820*8)),(.4,.2,.6))
+        for measured,expected in zip(native_point((4104*8,4108*8,2820*8)),(.4,.2,.6)):
+            self.assertAlmostEqual(measured,expected,places=7)
         self.assertAlmostEqual(RADIUS,.34)
         self.assertAlmostEqual(HEIGHT,1.8)
 
