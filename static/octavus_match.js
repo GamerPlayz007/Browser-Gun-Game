@@ -143,6 +143,8 @@ export async function buildOctavusMatch(scene,map,{quality='auto'}={}){
   get nativePropDrawBatches(){return props.instancedDrawBatches||0;},
   get nativePropRendered(){return props.renderedInstances||0;},
   get nativePropExcluded(){return props.excluded||0;},
+  get nativePropMissing(){return props.missing||0;},
+  get nativePropTextureBundleMode(){return mode==='high'||mode==='ultra'?'original-dish-enabled':'lean';},
   featureCount:packed.triangles,
   perimeterWallCount:boundary.wallCount,
   perimeterPostCount:boundary.postCount,
