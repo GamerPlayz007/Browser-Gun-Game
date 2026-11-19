@@ -1,10 +1,10 @@
 {
   "format": "OCTAVUS-PROPS3",
-  "source": "Red Eclipse original map-model Wavefront sources",
+  "source": "Red Eclipse original map models; OBJ plus faithful IQM/MD5 bind-pose conversions",
   "mapModelEntities": 149,
   "originalTypes": 19,
-  "convertedTypes": 16,
-  "convertedInstances": 135,
+  "convertedTypes": 19,
+  "convertedInstances": 149,
   "models": {
     "dziq/glow_plate": {
       "url": "/static/maps/octavus_props/5f13cb9a67f579.obj.gz",
@@ -15,7 +15,7 @@
       "triangles": 615,
       "vertices": 1090,
       "compressedBytes": 23446,
-      "sourceScale": 1600.0,
+      "sourceScale": 1600,
       "yaw": 0,
       "pitch": 0,
       "roll": 0,
@@ -33,7 +33,7 @@
       "triangles": 288,
       "vertices": 336,
       "compressedBytes": 7165,
-      "sourceScale": 750.0,
+      "sourceScale": 750,
       "yaw": 0,
       "pitch": 0,
       "roll": 0,
@@ -51,7 +51,7 @@
       "triangles": 68,
       "vertices": 81,
       "compressedBytes": 2567,
-      "sourceScale": 25.0,
+      "sourceScale": 25,
       "yaw": 0,
       "pitch": 0,
       "roll": 0,
@@ -69,7 +69,7 @@
       "triangles": 568,
       "vertices": 1048,
       "compressedBytes": 21162,
-      "sourceScale": 15.0,
+      "sourceScale": 15,
       "yaw": 0,
       "pitch": 0,
       "roll": 0,
@@ -94,9 +94,18 @@
       "cfgPath": "pipe/curved_short/obj.cfg"
     },
     "misc/lowpoly_eagle": {
-      "missing": true,
       "count": 8,
-      "reason": "Original source OBJ not found"
+      "codec": "obj",
+      "url": "/static/maps/octavus_props/original_lowpoly_eagle.obj",
+      "source": "https://github.com/redeclipse/misc/blob/master/lowpoly_eagle/mesh.iqm",
+      "sourceFormat": "IQM v2",
+      "sourceSha": "4b2761ce60fbf49fe9caa86325f13a369f62ea62",
+      "sourceScale": 300,
+      "skinB64Url": "/static/maps/octavus_props/original_lowpoly_eagle.png.b64",
+      "sourceSkinSha": "1cc77ed58da5c6a0d8a05ba848c5ecaf0acea744",
+      "triangles": 1532,
+      "vertices": 1805,
+      "credit": "Red Eclipse misc module; original eagle static mesh and diffuse, CC BY-SA 4.0"
     },
     "dziq/pipe/straight_long": {
       "url": "/static/maps/octavus_props/6dda1e5baa496f.obj.gz",
@@ -123,7 +132,7 @@
       "vertices": 1159,
       "compressedBytes": 14292,
       "sourceScale": 718.75,
-      "yaw": 90.0,
+      "yaw": 90,
       "pitch": 0,
       "roll": 0,
       "cfgPath": "crate/obj.cfg",
@@ -141,7 +150,7 @@
       "vertices": 408,
       "compressedBytes": 15616,
       "sourceScale": 7.5,
-      "yaw": 90.0,
+      "yaw": 90,
       "pitch": 0,
       "roll": 0,
       "cfgPath": "gaz_tank/obj.cfg",
@@ -158,7 +167,7 @@
       "triangles": 568,
       "vertices": 1048,
       "compressedBytes": 21162,
-      "sourceScale": 15.0,
+      "sourceScale": 15,
       "yaw": 0,
       "pitch": 0,
       "roll": 0,
@@ -186,9 +195,18 @@
       "skinSHA256": "46c2a0704249af0e23f7cf0f8cb128e71b19d18bc964a146186b19001d02d851"
     },
     "luckystrike/door1": {
-      "missing": true,
       "count": 4,
-      "reason": "Original source OBJ not found"
+      "codec": "obj",
+      "url": "/static/maps/octavus_props/original_luckystrike_door1.obj",
+      "source": "https://github.com/redeclipse/luckystrike/blob/master/door1/mesh.md5mesh",
+      "sourceFormat": "MD5Mesh bind pose",
+      "sourceSha": "0df86c51fb04dc3366e8a60ca6e37ef0fb5549ca",
+      "sourceScale": 25,
+      "yaw": 90,
+      "triangles": 12,
+      "vertices": 36,
+      "credit": "Red Eclipse luckystrike module; original door geometry, CC BY-SA 4.0",
+      "textureStatus": "Original diffuse not yet packaged; uses an untextured fallback material"
     },
     "dziq/pipe/straight_normal": {
       "url": "/static/maps/octavus_props/0c24c8b6264f68.obj.gz",
@@ -214,7 +232,7 @@
       "triangles": 192,
       "vertices": 162,
       "compressedBytes": 4416,
-      "sourceScale": 1600.0,
+      "sourceScale": 1600,
       "yaw": 0,
       "pitch": 0,
       "roll": 0,
@@ -242,9 +260,19 @@
       "skinSHA256": "46c2a0704249af0e23f7cf0f8cb128e71b19d18bc964a146186b19001d02d851"
     },
     "misc/radio_dish": {
-      "missing": true,
       "count": 2,
-      "reason": "Original source OBJ not found"
+      "codec": "obj",
+      "url": "/static/maps/octavus_props/original_radio_dish.obj",
+      "source": "https://github.com/redeclipse/misc/blob/master/radio_dish/mesh.iqm",
+      "sourceFormat": "IQM v2",
+      "sourceSha": "53cd30ad7d7824aeff6b90c71e8553ade548d442",
+      "sourceScale": 100,
+      "skinB64Url": "/static/maps/octavus_props/original_radio_dish.png.b64",
+      "sourceSkinSha": "e0b25f90c3755d8888affa4905a5d642d7a86435",
+      "triangles": 3786,
+      "vertices": 5370,
+      "skinHighOnly": true,
+      "credit": "David W CG; original radio dish model and diffuse, CC BY-SA 4.0"
     },
     "dziq/pipe/straight_short": {
       "url": "/static/maps/octavus_props/ca793f692dec93.obj.gz",
@@ -270,8 +298,8 @@
       "triangles": 1688,
       "vertices": 876,
       "compressedBytes": 31989,
-      "sourceScale": 25.0,
-      "yaw": 90.0,
+      "sourceScale": 25,
+      "yaw": 90,
       "pitch": 0,
       "roll": 0,
       "cfgPath": "forklift/obj.cfg",
@@ -288,8 +316,8 @@
       "triangles": 1233,
       "vertices": 1309,
       "compressedBytes": 44334,
-      "sourceScale": 2000.0,
-      "yaw": 90.0,
+      "sourceScale": 2000,
+      "yaw": 90,
       "pitch": 0,
       "roll": 0,
       "cfgPath": "scifi_plane/obj.cfg",
@@ -298,5 +326,5 @@
       "skinSHA256": "c1521a81c093a8f8ca49ed834e36531a4526fcaf1a4b65eabc1e930bbc4413a7"
     }
   },
-  "license": "Original environment meshes retain Red Eclipse individual module licenses; see ATTRIBUTION.md"
+  "license": "Imported model geometry and texture artwork retain their original Red Eclipse per-module CC BY-SA licenses; see OCTAVUS_ATTRIBUTION.md"
 }
