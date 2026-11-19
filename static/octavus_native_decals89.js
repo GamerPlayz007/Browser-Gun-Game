@@ -115,6 +115,8 @@ export async function createOctavusDecals(scene,quality='auto',nativeGeometry=nu
   worldCandidateTests,
   materials:loadedMaterials,
   spatialCells:spatial.cellCount,
+  eligibleSourceTriangles:spatial.eligibleTriangles,
+  ignoredUnverifiedPlainTriangles:spatial.excludedUnverifiedTriangles,
   spatialOverflowTriangles:spatial.overflowCount,
   geometryMode:'native-polygon-clipped',
   setQuality(next){
