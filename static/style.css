@@ -228,14 +228,25 @@
 @media(max-width:680px){.personal-stats65{gap:7px}.personal-stats65 b{font-size:12px}}
 
 
-/* CROSSFIRE 3.1 — calibrated reflex / red-dot ADS.
-   The center pixel matches the server's yaw/pitch shooting direction.
-   Remove the old sniper blackout, crosslines and oversized scope. */
-#scope{background:none;pointer-events:none;z-index:2}
-#scope::before,#scope::after{content:none;display:none}
-#scope>div{
-  position:absolute;left:50%;top:50%;width:4px;height:4px;
-  transform:translate(-50%,-50%);border-radius:50%;
-  background:#ff354c;border:1px solid #ffacb6;
-  box-shadow:0 0 2px #ffdae0,0 0 6px #ff354c99;
+/* Weapon-specific ADS, retaining the original magnified sniper scope.
+   The shotgun has non-illuminated iron posts, while rifle/SMG keep red dots. */
+#scope.ads-reflex,#scope.ads-shotgun{background:none;pointer-events:none;z-index:2}
+#scope.ads-reflex::before,#scope.ads-reflex::after{content:none;display:none}
+#scope.ads-reflex>div{
+ position:absolute;left:50%;top:50%;width:4px;height:4px;
+ transform:translate(-50%,-50%);border-radius:50%;
+ background:#ff354c;border:1px solid #ffacb6;
+ box-shadow:0 0 2px #ffdae0,0 0 6px #ff354c99;
 }
+#scope.ads-shotgun>div{
+ position:absolute;left:50%;top:50%;width:3px;height:9px;
+ transform:translate(-50%,-50%);border-radius:1px;
+ background:#f2e7d2;box-shadow:0 0 0 1px #122229d9;
+}
+#scope.ads-shotgun::before,#scope.ads-shotgun::after{
+ content:'';display:block;position:absolute;top:calc(50% + 4px);
+ height:12px;width:3px;background:#1c2f33;border-radius:1px;
+ transform:translate(-50%,-50%);
+}
+#scope.ads-shotgun::before{left:calc(50% - 16px)}
+#scope.ads-shotgun::after{left:calc(50% + 16px)}
