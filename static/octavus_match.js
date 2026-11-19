@@ -88,7 +88,7 @@ export async function buildOctavusMatch(scene,map,{quality='auto'}={}){
   if(profile===mediaProfile)return;
   mediaProfile=profile;
   const ticket=++mediaRequest;
-  loadOctavusMaterialLibrary(tier,packed.groups.keys()).then(value=>{
+  loadOctavusMaterialLibrary(tier,visual.visibleSlots).then(value=>{
    if(disposed||ticket!==mediaRequest){value?.dispose?.();return;}
    if(!value?.usable||!value.statistics?.sourceImages){
     value?.dispose?.();mediaProfile=null;return;
