@@ -15,6 +15,7 @@ on:
       - "static/octavus_native_transform89.js"
       - "static/octavus_native_props89.js"
       - "static/octavus_native_decals89.js"
+      - "static/octavus_native_decal_project90.js"
       - "static/octavus_props.js"
       - "static/octavus_decals.js"
       - "static/octavus_environment.js"
@@ -43,6 +44,11 @@ jobs:
           node-version: "22"
       - name: Parse browser preview module as ES module
         run: node --input-type=module --check < static/octavus-native-preview.js
+      - name: Parse world-surface decal projector and native decal adapters
+        run: |
+          node --input-type=module --check < static/octavus_native_decal_project90.js
+          node --input-type=module --check < static/octavus_native_decals89.js
+          node --input-type=module --check < static/octavus_native_scenery88.js
       - name: Verify full/core OCN2 assets and standalone preview contract
         run: node test_octavus_native_preview79.mjs
       - name: Verify standalone preview is served as a static asset
