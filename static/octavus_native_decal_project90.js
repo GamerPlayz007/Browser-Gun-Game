@@ -92,8 +92,29 @@ export function buildOctavusTriangleIndex(geometry){
  if(!Number.isInteger(count)||count>1700000||count<1)
   throw Error('Unexpected original Octavus source triangle count');
  const table=new Map(),overflow=[],aabbs=new Float32Array(count*6);
- let indexedReferences=0;
+ // Source native slot 1 still includes hundreds of thousands of
+ // unverified interior faces. The original gendecal renderer only
+ // projects onto actually visible source faces. Until exact source
+ // visibility parity is recovered, use authored non-plain material
+ // surfaces for decals so we never paint duplicate internal shells.
+ // Important: this does NOT remove slot 1 from the actual map mesh.
+ const materialSlots=geometry.userData?.octavusNativeSlotByMaterial;
+ const allowed=new Uint8Array(count);
+ allowed.fill(1);
+ let excludedUnverifiedTriangles=0;
+ if(Array.isArray(materialSlots)){
+  for(const group of geometry.groups){
+   if(materialSlots[group.materialIndex]!==1)continue;
+   const first=Math.floor(group.start/3);
+   const last=Math.ceil((group.start+group.count)/3);
+   for(let i=first;i<last;i++)allowed[i]=0;
+  }
+  excludedUnverifiedTriangles=count-allowed.reduce((n,b)=>n+b,0);
+ }
+ let indexedReferences=0,eligibleTriangles=0;
  for(let t=0;t<count;t++){
+  if(!allowed[t])continue;
+  eligibleTriangles++;
   const a=idx[3*t]*3,b=idx[3*t+1]*3,c=idx[3*t+2]*3;
   const x0=Math.min(p[a],p[b],p[c]),x1=Math.max(p[a],p[b],p[c]);
   const y0=Math.min(p[a+1],p[b+1],p[c+1]),y1=Math.max(p[a+1],p[b+1],p[c+1]);
@@ -118,6 +139,8 @@ export function buildOctavusTriangleIndex(geometry){
  let stamp=0;
  const indexer={
   triangleCount:count,
+  eligibleTriangles,
+  excludedUnverifiedTriangles,
   referenceCount:indexedReferences,
   overflowCount:overflow.length,
   cellCount:table.size,
