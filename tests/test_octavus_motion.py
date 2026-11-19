@@ -118,5 +118,72 @@ class OctavusMovementTests(unittest.TestCase):
         self.assertAlmostEqual(world.ground_at(0, 0, 1.4, 1.26), .25)
 
 
+
+class OctavusStairTests(unittest.TestCase):
+    @staticmethod
+    def _stair_world(wall_height):
+        from dust_world64 import DustWorld64, cross, dot
+        import math
+
+        def floor(x0, x1, y):
+            return [
+                ((x0, y, -2), (x1, y, -2), (x1, y, 2)),
+                ((x0, y, -2), (x1, y, 2), (x0, y, 2)),
+            ]
+
+        tris = floor(-3, 0, 0) + floor(0, 3, .25) + [
+            ((0, 0, -2), (0, wall_height, -2), (0, wall_height, 2)),
+            ((0, 0, -2), (0, wall_height, 2), (0, 0, 2)),
+        ]
+
+        class Mesh:
+            count = len(tris)
+            cell_size = 2.
+            native_step_assist = True
+            metadata = {
+                'playBounds': {'x0': -4, 'x1': 4, 'z0': -4, 'z1': 4},
+                'spawns': {}, 'rawSha256': 'synthetic',
+            }
+            vertices = array('f', [
+                value for tri in tris for corner in tri for value in corner
+            ]).tobytes()
+
+            def surface(self, tri):
+                return 0
+
+        class World(DustWorld64):
+            def ground_at(self, x, z, feet_y=0., drop=1.):
+                hit = self.raycast(
+                    (x, feet_y + .48, z), (x, feet_y - max(1., drop), z)
+                )
+                if hit is None:
+                    return None
+                a, b, c = self.triangle(hit['triangle'])
+                normal = cross(
+                    tuple(b[k] - a[k] for k in range(3)),
+                    tuple(c[k] - a[k] for k in range(3)),
+                )
+                magnitude = math.sqrt(dot(normal, normal))
+                if magnitude < 1e-8 or abs(normal[1]) / magnitude < .67:
+                    return None
+                return hit['point'][1]
+
+        return World(Mesh())
+
+    def test_low_step_can_be_climbed(self):
+        world = self._stair_world(.25)
+        p = _player(x=-.42, vx=5.35, input={'d': True})
+        dust_step65(p, 1 / 30, 1.0, {'speed': 1}, world)
+        self.assertGreater(p['x'], .1, 'Low stair must not behave as a wall')
+        self.assertTrue(p['grounded'])
+        self.assertAlmostEqual(p['y'], .25, places=3)
+
+    def test_full_height_wall_cannot_be_step_assisted_through(self):
+        world = self._stair_world(2.)
+        p = _player(x=-.42, vx=5.35, input={'d': True})
+        dust_step65(p, 1 / 30, 1.0, {'speed': 1}, world)
+        self.assertLess(p['x'], 0, 'High wall must remain impassable')
+        self.assertAlmostEqual(p['y'], 0, places=3)
+
 if __name__ == '__main__':
     unittest.main()
