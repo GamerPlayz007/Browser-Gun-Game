@@ -1,0 +1,30 @@
+name: Octavus physics regression tests
+
+on:
+  push:
+    paths:
+      - 'dust_motion65.py'
+      - 'dust_world64.py'
+      - 'octavus_world.py'
+      - 'static/dust_motion65.js'
+      - 'tests/test_octavus_motion.py'
+      - '.github/workflows/octavus-physics.yml'
+  workflow_dispatch:
+
+jobs:
+  verify-octavus:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compile Python movement modules
+        run: python -m py_compile dust_motion65.py dust_world64.py octavus_world.py
+      - name: Run Octavus movement regressions
+        run: python -m unittest discover -s tests -p test_octavus_motion.py -v
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Parse matching client physics
+        run: node --check static/dust_motion65.js
