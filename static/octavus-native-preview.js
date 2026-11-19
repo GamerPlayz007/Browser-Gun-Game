@@ -7,6 +7,7 @@ import {OctavusNativeMaterialPreview} from './octavus_native_material_preview87.
 import {OctavusNativeScenery} from './octavus_native_scenery88.js';
 import {loadNativeArenaBoundary92,makeNativeArenaWall92} from './octavus_native_boundary92.js';
 import {loadNativeCollision91} from './octavus_native_collision91.js';
+import {OctavusInteriorSurvey97} from './octavus_native_interior_overlay97.js';
 const ROOT='/static/maps/';
 const $=id=>document.getElementById(id);
 const fmt=n=>Number(n).toLocaleString('en-US');
@@ -30,6 +31,7 @@ grid.material.opacity=.38;grid.material.transparent=true;
 scene.add(grid);
 const nativeMaterialPreview=new OctavusNativeMaterialPreview();
 const originalScenery=new OctavusNativeScenery(scene,{sourceHemisphere:originalHemi,sourceSun:sun});
+const interiorSurvey=new OctavusInteriorSurvey97(scene);
 let arenaLimit92=null,arenaWall92=null;
 originalScenery.onNotice=message=>note(message);
 originalScenery.onCounts=counts=>{
@@ -151,6 +153,31 @@ $('native-collision-btn').addEventListener('click',async()=>{
  }catch(e){
   button.textContent='Check original spawn collision';
   note('NATIVE COLLISION PILOT UNAVAILABLE: '+(e.message||String(e)));
+ }finally{
+  button.disabled=false;
+ }
+});
+$('interior-survey-btn').addEventListener('click',async()=>{
+ const button=$('interior-survey-btn');
+ if(button.disabled)return;
+ if(interiorSurvey.visible){
+  interiorSurvey.disable();
+  button.textContent='Show interior floor survey';
+  note('Native Stage 2.2 floor-survey markers hidden. The underlying source occupancy evidence and collision staging data remain unchanged.');
+  return;
+ }
+ button.disabled=true;button.textContent='Loading source interior…';
+ try{
+  const stats=await interiorSurvey.enable();
+  $('metric-interior-samples').textContent=fmt(stats.samples);
+  $('metric-interior-supported').textContent=fmt(stats.nearGround)+' / '+fmt(stats.samples);
+  $('metric-interior-new').textContent=fmt(stats.extra);
+  $('metric-interior-cubes').textContent=fmt(stats.nativeCells);
+  button.textContent='Hide interior floor survey';
+  note('SOURCE INTERIOR FLOOR QA: '+fmt(stats.samples)+' actual MPZ-authored floor probes across '+fmt(stats.originalStarts)+' original spawn sectors; '+fmt(stats.nearGround)+' nearby walkable-height floor hits, '+fmt(stats.extra)+' additional floor hits vs prior 98K mesh. Original octree loaded/verified: '+fmt(stats.solidCells)+' solid, '+fmt(stats.emptyCells)+' empty, '+fmt(stats.deformedCells)+' deformed cube leaves. Green = nearby floor; cyan = additional recovery; purple = uncertain source slot-1 floor; red = missing floor; gold = elevation mismatch. All are survey indications, not final playable collision.');
+ }catch(e){
+  button.textContent='Show interior floor survey';
+  note('SOURCE INTERIOR FLOOR QA UNAVAILABLE: '+(e.message||String(e)));
  }finally{
   button.disabled=false;
  }
