@@ -1,0 +1,73 @@
+name: Octavus Stage 2.1 source-island boundary and wall parity
+on:
+  push:
+    branches: [main]
+    paths:
+      - "octavus_native_boundary92.py"
+      - "static/octavus_native_boundary92.js"
+      - "static/maps/octavus.native-boundary92.json"
+      - "test_octavus_native_boundary92.py"
+      - "test_octavus_native_boundary92.mjs"
+      - ".github/workflows/octavus-native-boundary92.yml"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  native-arena-wall:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Validate original screenshot outline, full 58-segment enclosure and all 33 source spawns
+        run: python octavus_native_boundary92.py
+      - name: Exercise source-native server boundary and continuous movement blocking
+        run: python -m unittest -v test_octavus_native_boundary92
+      - name: Verify boundary browser module compiles and install only required Three.js renderer
+        run: |
+          node --input-type=module --check < static/octavus_native_boundary92.js
+          npm install --no-save --no-package-lock --ignore-scripts three@0.180.0
+      - name: Enforce Python/JavaScript wall movement parity and gap-free visual geometry
+        run: node test_octavus_native_boundary92.mjs
+      - name: Assert no unsafe early migration into live multiplayer
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report=json.loads(Path("static/maps/octavus.native-boundary-audit92.json").read_text())
+          assert report["wallSegments"]==58
+          assert report["wallHeight"]==60
+          assert report["originalStartsInside"]==33
+          assert report["blockedMotionFixtures"]>=90
+          assert len(report["motionFixtures"])>=100
+          assert all(s["capsuleInside"] for s in report["spawns"])
+          assert report["clientMovementHookedIntoLiveGame"] is False
+          assert report["serverMovementHookedIntoLiveGame"] is False
+          assert report["liveMapModified"] is False
+          live=json.loads(Path("static/maps/octavus.json").read_text())
+          assert live["collisionFormat"]=="OCT1"
+          assert live["collisionTriangles"]==86500
+          print("PASS: Stage 2.1 is screenshot-grounded and server/client physics staging-only")
+          PY
+      - name: Publish checked wall measurements and deterministic movement fixtures
+        run: |
+          cp static/maps/octavus.native-boundary-audit92.json /tmp/octavus.native-boundary-audit92.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for i in 1 2 3; do
+            git fetch origin main
+            git reset --hard origin/main
+            cp /tmp/octavus.native-boundary-audit92.json static/maps/
+            git add static/maps/octavus.native-boundary-audit92.json
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m "build(octavus stage2.1): publish verified original-island perimeter wall and Python/JS movement fixtures"
+            if git push origin HEAD:main; then exit 0; fi
+          done
+          exit 1
