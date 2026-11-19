@@ -63,6 +63,25 @@ class OctavusBoundaryTests(unittest.TestCase):
         self.assertIn('boundary.dispose()',code)
         self.assertIn('wallCount:4',boundary)
 
+    def test_25_visual_crop_does_not_change_authoritative_source_collision(self):
+        match=(ROOT/'static/octavus_match.js').read_text(encoding='utf-8')
+        preview=(ROOT/'static/octavus_preview.js').read_text(encoding='utf-8')
+        self.assertIn('const source=collisionSource(packed,map)',match)
+        self.assertIn('soup:{count:triangle,positions,surfaces}',match)
+        self.assertIn('createOctavusScene(packed,materials,scene,authoredUV,true,null,map.playBounds)',match)
+        self.assertIn('sourceUV.indices[faceOffset+i+t]',preview)
+        self.assertIn('renderedTriangleCount',preview)
+        self.assertIn('visibleSlots:[...renderedSlots.keys()]',preview)
+
+    def test_25_quality_profiles_can_reload_without_rejoining(self):
+        match=(ROOT/'static/octavus_match.js').read_text(encoding='utf-8')
+        preview=(ROOT/'static/octavus_preview.js').read_text(encoding='utf-8')
+        self.assertIn('requestMedia(value)',match)
+        self.assertIn('loadOctavusMaterialLibrary(tier,visual.visibleSlots)',match)
+        self.assertIn('materialInstances.length=0',preview)
+        self.assertIn('fallbackUv',preview)
+        self.assertIn('previous.dispose?.()',preview)
+
 
 if __name__=='__main__':
     unittest.main()
