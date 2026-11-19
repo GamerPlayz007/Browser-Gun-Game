@@ -239,15 +239,33 @@ try{
  // One-click player-friendly preview must load all source scenery onto
  // the native reconstructed map, without modifying the live game.
  await page.click('#restored-btn');
- await page.waitForFunction(()=>{
-  return document.getElementById('metric-props')?.textContent==='135'
-    && document.getElementById('metric-lights')?.textContent==='233'
-    && document.getElementById('metric-skybox')?.textContent==='Loaded'
-    && document.getElementById('metric-decals')?.textContent==='135'
-    && document.getElementById('metric-tris')?.textContent==='863,803'
-    && document.getElementById('mode')?.value==='source'
-    && !document.getElementById('restored-btn')?.disabled;
- },{timeout:120000});
+ try{
+  await page.waitForFunction(()=>{
+   return document.getElementById('metric-props')?.textContent==='135'
+     && document.getElementById('metric-lights')?.textContent==='233'
+     && document.getElementById('metric-skybox')?.textContent==='Loaded'
+     && document.getElementById('metric-decals')?.textContent==='135'
+     && document.getElementById('metric-tris')?.textContent==='863,803'
+     && document.getElementById('mode')?.value==='source'
+     && !document.getElementById('restored-btn')?.disabled;
+  },{timeout:45000});
+ }catch(error){
+  const state=await Promise.race([
+   page.evaluate(()=>({
+     props:document.getElementById('metric-props')?.textContent,
+     decals:document.getElementById('metric-decals')?.textContent,
+     projected:document.getElementById('metric-projected')?.textContent,
+     projectedTriangles:document.getElementById('metric-decal-tris')?.textContent,
+     lights:document.getElementById('metric-lights')?.textContent,
+     sky:document.getElementById('metric-skybox')?.textContent,
+     button:document.getElementById('restored-btn')?.disabled,
+     diagnostic:document.getElementById('diagnostic')?.textContent.slice(0,3500)
+   })),
+   new Promise(resolve=>setTimeout(()=>resolve({unresponsiveBrowser:true}),6500))
+  ]);
+  console.error('Octavus decal browser diagnostic:',JSON.stringify(state,null,2),'PAGE ERRORS',errors);
+  throw error;
+ }
  assert.ok(await page.evaluate(()=>document.getElementById('diagnostic').textContent.includes('RESTORED SOURCE SCENE')));
  await page.waitForFunction(()=>{
   const count=Number(document.getElementById('metric-projected')?.textContent);
