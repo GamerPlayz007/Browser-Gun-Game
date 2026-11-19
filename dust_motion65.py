@@ -91,7 +91,9 @@ def dust_step65(p,dt,now,weapon,world=None):
     ix=r*math.cos(yaw)-f*math.sin(yaw)
     iz=-r*math.sin(yaw)-f*math.cos(yaw)
     jump=bool(inp.get('jump'));slide=bool(inp.get('slide'))
-    jump_edge=jump and not p.get('jump_held',False)
+    # Holding Space should jump again on landing (player-requested control).
+    # The grounded check also respects headroom at the jump branch below.
+    jump_edge=jump and (not p.get('jump_held',False) or p['grounded'])
     slide_edge=slide and not p.get('slide_held',False)
     grounded=bool(p['grounded'])
     velocity=math.hypot(p['vx'],p['vz'])
