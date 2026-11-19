@@ -117,7 +117,7 @@ export async function buildOctavusMatch(scene,map,{quality='auto'}={}){
  requestMedia(quality);
  attach(createOctavusEnvironment(scene,quality),'environment');
  attach(createOctavusDecals(scene,quality),'decals');
- attach(createOctavusProps(scene,quality),'props');
+ attach(createOctavusProps(scene,quality,map.playBounds),'props');
  visual.setQuality(quality);
  return {
   isOctavusMatch:true,
@@ -139,6 +139,10 @@ export async function buildOctavusMatch(scene,map,{quality='auto'}={}){
   get nativeDecals(){return decals.count;},
   get nativeProps(){return props.instances;},
   get nativePropTypes(){return props.modelTypes;},
+  get nativePropDrawUnits(){return props.originalDrawUnits||0;},
+  get nativePropDrawBatches(){return props.instancedDrawBatches||0;},
+  get nativePropRendered(){return props.renderedInstances||0;},
+  get nativePropExcluded(){return props.excluded||0;},
   featureCount:packed.triangles,
   perimeterWallCount:boundary.wallCount,
   perimeterPostCount:boundary.postCount,
@@ -153,6 +157,8 @@ export async function buildOctavusMatch(scene,map,{quality='auto'}={}){
    stage6Meshes:props.instances+decals.materials,
    originalSourceTriangles:packed.triangles,
    drawnSourceTriangles:visual.renderedTriangleCount,
+   instancedPropDrawBatches:props.instancedDrawBatches||0,
+   originalPropDrawUnits:props.originalDrawUnits||0,
    streamedAssets:true
   };},
   setQuality(value){mode=value;visual.setQuality(value);requestMedia(value);
