@@ -42,20 +42,69 @@ export function makeWeapon(id,arms=true){
  root.userData={model,magazine,left,flash,action,id};
  return root;
 }
-export function animateWeapon(root,{time,ads,reload,kick,moving,slide,motion,switched}){
- const d=root.userData,id=d.id;root.position.set(T.MathUtils.lerp(.28,0,ads),T.MathUtils.lerp(-.29,id===3?-.17:-.145,ads),T.MathUtils.lerp(-.50,-.39,ads)+kick*.65);
- const pace=moving&&motion?Math.sin(time*12):0;
- const bob=pace*.008*(1-ads*.8);
- const breath=motion&&!moving?Math.sin(time*1.8)*.0028:0;
- root.position.y+=bob+breath-switched*.22;
- root.rotation.set(kick*.4,0,(moving&&motion?Math.cos(time*6)*.012:0)-slide*.22);
- // 05.2: a short mechanical receiver snap and hand follow-through.
- // Purely first-person visual motion; server recoil and hit logic unchanged.
- d.model.position.set(0,Math.min(.018,kick*.16),Math.min(.015,kick*.1));
- d.model.rotation.x=-kick*.21;
- d.magazine.position.set(0,-.1, -.035);d.left.position.set(0,0,0);
- d.left.rotation.x=-kick*.18;
- if(reload>0){const p=1-reload;const wave=Math.sin(p*Math.PI);root.rotation.z-=wave*.4;root.rotation.x+=wave*.18;root.position.y-=wave*.04;const drop=p<.48?Math.sin(p/.48*Math.PI/2):Math.cos((p-.48)/.52*Math.PI/2);d.magazine.position.y-=drop*.32;d.magazine.position.x-=drop*.12;d.left.position.y-=drop*.15;}
+// Stage 2.2: distinct visual handling, optimized for the school browser build.
+// This changes only rendered pose, not the server's shot direction or accuracy.
+const WEAPON_MOTION22=[
+ {bob:.010,sway:.010,recoil:.70,back:.24,roll:.11,sprintDrop:.100},
+ {bob:.014,sway:.016,recoil:.47,back:.17,roll:.18,sprintDrop:.120},
+ {bob:.008,sway:.008,recoil:1.12,back:.40,roll:.10,sprintDrop:.145},
+ {bob:.006,sway:.006,recoil:.97,back:.32,roll:.08,sprintDrop:.090}
+];
+const clamp22=v=>Math.max(0,Math.min(1,Number.isFinite(v)?v:0));
+const smooth22=v=>v*v*(3-2*v);
+function motionPose22(out,{id,time=0,ads=0,reload=0,kick=0,speed=0,
+ sprint=false,slide=0,motion=true,switched=0}){
+ const config=WEAPON_MOTION22[id]||WEAPON_MOTION22[0];
+ const aimed=smooth22(clamp22(ads)),open=1-aimed;
+ const moving=motion?clamp22(Math.max(0,speed)/6):0;
+ const gait=moving*(1-aimed*.95),run=sprint?moving*open:0;
+ const recoil=clamp22(kick/.20),swap=clamp22(switched),low=clamp22(slide);
+ const beat=time*(9+2*run);
+ const step=Math.sin(beat),sway=Math.cos(beat*.5),breath=motion?Math.sin(time*1.75):0;
+ const reloadPart=reload>0?1-clamp22(reload):0;
+ const reloadWave=reload>0?Math.sin(Math.PI*reloadPart):0;
+ // ADS reaches x=0 exactly, with idle movement nearly eliminated.
+ out.x=.28*open+config.sway*sway*gait*open+.038*run;
+ out.y=-.29*open+(id===3?-.17:-.145)*aimed
+   +Math.abs(step)*config.bob*gait+.0025*breath*open
+   -config.sprintDrop*run-.19*swap-.025*low-.035*reloadWave;
+ out.z=-.50*open-.39*aimed+.032*run+.042*swap
+   +config.back*recoil*.25;
+ out.rx=.19*config.recoil*recoil+.08*run+.11*reloadWave
+   +.012*step*gait*open;
+ out.ry=.011*sway*gait*open;
+ out.rz=.028*config.roll*recoil+.16*run-.17*swap
+   +.009*step*gait*open-.16*low-.20*reloadWave;
+ out.bodyY=Math.min(.026,.015*config.recoil*recoil);
+ out.bodyZ=Math.min(.04,.13*config.back*recoil);
+ out.bodyRx=-.10*config.recoil*recoil;
+ out.magDrop=reloadWave*.29;
+ out.magSide=reloadWave*.095;
+ out.handDrop=reloadWave*.14;
+ out.slideAction=id===2?recoil*.085:0;
+ out.boltAction=id!==2?Math.min(.04,recoil*(id===1?.034:.026)):0;
+ return out;
+}
+export function animateWeapon(root,{time=0,ads=0,reload=0,kick=0,moving=false,
+ slide=0,motion=true,switched=0,speed=0,sprint=false}){
+ const d=root.userData,id=d.id;
+ // Reuse the pose buffer; animations run every frame, even on weak GPUs.
+ const pose=d.motionPose22||(d.motionPose22={});
+ motionPose22(pose,{id,time,ads,reload,kick,slide,motion,switched,
+  speed:Math.max(speed,moving?.8:0),sprint});
+ root.position.set(pose.x,pose.y,pose.z);
+ root.rotation.set(pose.rx,pose.ry,pose.rz);
+ d.model.position.set(0,pose.bodyY,pose.bodyZ);
+ d.model.rotation.set(pose.bodyRx,0,0);
+ d.magazine.position.set(-pose.magSide,-.1-pose.magDrop,-.035);
+ d.left.position.set(0,-pose.handDrop,0);
+ d.left.rotation.x=-pose.bodyRx*.55;
+ const a=d.action;
+ if(a?.bolt){
+  if(!Number.isFinite(a.bolt.userData.homeZ22))a.bolt.userData.homeZ22=a.bolt.position.z;
+  a.bolt.position.z=a.bolt.userData.homeZ22+pose.boltAction;
+ }
+ if(a?.pump)a.pump.position.z=-pose.slideAction;
 }
 export function makePlayer(name,color=0xd38165){
  const root=new T.Group(),body=new T.Group();root.add(body);
