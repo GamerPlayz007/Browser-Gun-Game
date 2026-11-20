@@ -393,3 +393,134 @@
  .squad-slot{min-height:72px}
  .room-card:has(.squad-stage69) .room-title h2{margin:7px 0 8px}
 }
+
+
+/* CROSSFire 07.0: four original, weapon-specific arcade reticles.
+   All are centered on the existing server-authoritative aim point.
+   Inline spread dimensions still come from crosshairSpread52(). */
+#crosshair.crosshair-aether70{
+ position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+ width:28px;height:28px;pointer-events:none;z-index:3;
+ filter:drop-shadow(0 1px 2px #00131bea);
+ transition:opacity .09s ease-out;
+}
+#crosshair.crosshair-aether70 i{
+ display:block;position:absolute;left:auto;top:auto;right:auto;bottom:auto;
+ background:#e5fafd;opacity:1;border-radius:2px;
+ box-shadow:0 0 4px #1bdae888;
+ transform:none;
+}
+#crosshair.crosshair-aether70 i:nth-child(1){
+ width:2px;height:8px;left:calc(50% - 1px);top:0;
+}
+#crosshair.crosshair-aether70 i:nth-child(2){
+ width:2px;height:8px;left:calc(50% - 1px);bottom:0;
+}
+#crosshair.crosshair-aether70 i:nth-child(3){
+ width:8px;height:2px;top:calc(50% - 1px);left:0;
+}
+#crosshair.crosshair-aether70 i:nth-child(4){
+ width:8px;height:2px;top:calc(50% - 1px);right:0;
+}
+#crosshair.crosshair-aether70 i:nth-child(n+5){display:none}
+#crosshair.crosshair-aether70::before{
+ content:'';position:absolute;left:50%;top:50%;width:3px;height:3px;
+ transform:translate(-50%,-50%);border-radius:50%;
+ background:#aafcff;box-shadow:0 0 5px #52e9ffbb;
+}
+/* Rifle: disciplined four-arm reticle with a tiny central point. */
+#crosshair.crosshair-aether70.reticle-rifle70 i:nth-child(-n+4){
+ background:#e8ffff;
+}
+/* SMG: compact, illuminated 90-degree corner brackets. */
+#crosshair.crosshair-aether70.reticle-smg70 i:nth-child(-n+4){
+ background:#a8ffed;width:8px;height:3px;border-radius:1px;
+}
+#crosshair.crosshair-aether70.reticle-smg70 i:nth-child(1){
+ top:1px;left:1px;right:auto;width:11px;height:3px;
+}
+#crosshair.crosshair-aether70.reticle-smg70 i:nth-child(2){
+ top:1px;right:1px;left:auto;width:11px;height:3px;
+}
+#crosshair.crosshair-aether70.reticle-smg70 i:nth-child(3){
+ bottom:1px;left:1px;top:auto;width:11px;height:3px;
+}
+#crosshair.crosshair-aether70.reticle-smg70 i:nth-child(4){
+ bottom:1px;right:1px;left:auto;width:11px;height:3px;
+}
+#crosshair.crosshair-aether70.reticle-smg70 i:nth-child(5),
+#crosshair.crosshair-aether70.reticle-smg70 i:nth-child(6),
+#crosshair.crosshair-aether70.reticle-smg70 i:nth-child(7),
+#crosshair.crosshair-aether70.reticle-smg70 i:nth-child(8){
+ display:block;width:3px;height:9px;background:#a8ffed;
+}
+#crosshair.crosshair-aether70.reticle-smg70 i:nth-child(5){left:1px;top:1px}
+#crosshair.crosshair-aether70.reticle-smg70 i:nth-child(6){right:1px;top:1px}
+#crosshair.crosshair-aether70.reticle-smg70 i:nth-child(7){left:1px;bottom:1px}
+#crosshair.crosshair-aether70.reticle-smg70 i:nth-child(8){right:1px;bottom:1px}
+#crosshair.crosshair-aether70.reticle-smg70::before{background:#bbffee;width:2px;height:2px}
+/* Shotgun: a large spread-circle with eight short tick marks. */
+#crosshair.crosshair-aether70.reticle-shotgun70{
+ border:1px solid #fcdeaf;border-radius:50%;box-shadow:0 0 9px #f7c78544;
+}
+#crosshair.crosshair-aether70.reticle-shotgun70 i:nth-child(-n+4){
+ background:#ffe0b8;box-shadow:0 0 3px #ffb95a;
+}
+#crosshair.crosshair-aether70.reticle-shotgun70 i:nth-child(1){top:-4px}
+#crosshair.crosshair-aether70.reticle-shotgun70 i:nth-child(2){bottom:-4px}
+#crosshair.crosshair-aether70.reticle-shotgun70 i:nth-child(3){left:-4px}
+#crosshair.crosshair-aether70.reticle-shotgun70 i:nth-child(4){right:-4px}
+#crosshair.crosshair-aether70.reticle-shotgun70 i:nth-child(n+5){display:block;width:4px;height:4px;border-radius:50%;background:#f8d5a8}
+#crosshair.crosshair-aether70.reticle-shotgun70 i:nth-child(5){left:13%;top:13%}
+#crosshair.crosshair-aether70.reticle-shotgun70 i:nth-child(6){right:13%;top:13%}
+#crosshair.crosshair-aether70.reticle-shotgun70 i:nth-child(7){left:13%;bottom:13%}
+#crosshair.crosshair-aether70.reticle-shotgun70 i:nth-child(8){right:13%;bottom:13%}
+#crosshair.crosshair-aether70.reticle-shotgun70::before{
+ background:#fff1ce;width:3px;height:3px;
+}
+/* Sniper hipfire: minimal fine aim guides; full ADS retains original scope overlay. */
+#crosshair.crosshair-aether70.reticle-sniper70 i:nth-child(-n+4){
+ background:#bfe7ff;box-shadow:0 0 4px #9bd5ff88;
+}
+#crosshair.crosshair-aether70.reticle-sniper70 i:nth-child(1),
+#crosshair.crosshair-aether70.reticle-sniper70 i:nth-child(2){height:4px;width:1px;left:calc(50% - .5px)}
+#crosshair.crosshair-aether70.reticle-sniper70 i:nth-child(3),
+#crosshair.crosshair-aether70.reticle-sniper70 i:nth-child(4){width:4px;height:1px;top:calc(50% - .5px)}
+#crosshair.crosshair-aether70.reticle-sniper70::before{
+ width:3px;height:3px;border:1px solid #c9e9ff;background:transparent;
+}
+/* Compact, readable ammunition readout that stays outside the center dot. */
+#aim-ammo70.aim-ammo70{
+ position:absolute;left:calc(50% + 41px);top:calc(50% + 23px);
+ display:flex;align-items:baseline;gap:4px;flex-wrap:wrap;
+ width:94px;padding:6px 8px 7px;border-radius:6px;
+ border:1px solid #78dddc44;
+ background:#071e2be0;box-shadow:0 5px 20px #00152266;
+ color:#edffff;font:800 17px/1 'Barlow Condensed',Impact,sans-serif;
+ letter-spacing:.3px;text-shadow:0 1px 3px #071e2b;
+ pointer-events:none;z-index:4;
+}
+#aim-ammo70[hidden]{display:none!important}
+#aim-ammo70 .aim-ammo-max70{
+ color:#87afbb;font:700 12px/1 'Barlow Condensed',sans-serif;
+}
+#aim-ammo-state70{
+ flex-basis:100%;color:#8dd8e2;
+ font:800 8px/1.2 'Barlow',Arial,sans-serif;
+ letter-spacing:1px;
+}
+#aim-ammo70 .aim-ammo-progress70{
+ display:block;position:relative;height:2px;width:100%;
+ background:#45607370;overflow:hidden;border-radius:1px;
+}
+#aim-ammo-fill70{
+ display:block;height:100%;width:100%;background:#75f0e8;
+ transition:width .10s linear;
+}
+#aim-ammo70.ammo-low70 #aim-ammo-count70{color:#ffca80}
+#aim-ammo70.ammo-empty70 #aim-ammo-count70{color:#ff7774}
+#aim-ammo70.ammo-reload70{border-color:#7debc491;background:#0a3535ee}
+#aim-ammo70.ammo-reload70 #aim-ammo-state70{color:#92ffc6}
+@media(max-width:650px){
+ #aim-ammo70.aim-ammo70{left:calc(50% + 30px);top:calc(50% + 19px);width:79px;padding:5px 6px}
+}
