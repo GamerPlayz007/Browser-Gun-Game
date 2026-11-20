@@ -32,22 +32,21 @@ const annulus=new T.Mesh(new T.RingGeometry(2.05,2.09,80),
 annulus.rotation.x=-Math.PI/2;annulus.position.y=-.873;scene.add(annulus);
 const stage=new T.GridHelper(5,28,0x43646a,0x223941);stage.position.y=-.869;scene.add(stage);
 
-// Paintable finishes: no stock or real-world weapon specification.
+// Stage A low-poly matte finishes. Sand is reference-matched default.
 const finishes={
- onyx:{shell:0x293840,panels:0x455b5e,accent:0x5ed5c2,poly:0x1b292f,trim:0xb1bdba},
- arctic:{shell:0xb8c4c2,panels:0xd8dedd,accent:0x6bcbdc,poly:0x495961,trim:0x263c45},
- cobalt:{shell:0x263a57,panels:0x4c6491,accent:0x88aaf7,poly:0x202939,trim:0xb5c7e1}
+ sand:{shell:0xd5c2ae,panels:0xe1c9ae,accent:0x858b91,poly:0x464b50,trim:0x2d3136},
+ slate:{shell:0x858b8f,panels:0xa0a4a1,accent:0x606a70,poly:0x3d474c,trim:0x242b30},
+ charcoal:{shell:0x434c54,panels:0x68737b,accent:0x8c969a,poly:0x252c31,trim:0x171d21}
 };
 const materials={
- shell:new T.MeshStandardMaterial({color:0x293840,roughness:.46,metalness:.62}),
- panels:new T.MeshStandardMaterial({color:0x455b5e,roughness:.54,metalness:.42}),
- accent:new T.MeshStandardMaterial({color:0x5ed5c2,roughness:.3,metalness:.68,emissive:0x092623,emissiveIntensity:.35}),
- poly:new T.MeshStandardMaterial({color:0x1b292f,roughness:.84,metalness:.12}),
- trim:new T.MeshStandardMaterial({color:0xb1bdba,roughness:.29,metalness:.78}),
- steel:new T.MeshStandardMaterial({color:0x151c23,roughness:.32,metalness:.84}),
- recess:new T.MeshStandardMaterial({color:0x080e13,roughness:.89,metalness:.12}),
- rubber:new T.MeshStandardMaterial({color:0x10191d,roughness:.95,metalness:.02}),
- glass:new T.MeshBasicMaterial({color:0x6de0ea,transparent:true,opacity:.15,side:T.DoubleSide,depthWrite:false})
+ shell:new T.MeshStandardMaterial({color:0xd5c2ae,roughness:.74,metalness:.07,flatShading:true}),
+ panels:new T.MeshStandardMaterial({color:0xe1c9ae,roughness:.72,metalness:.09,flatShading:true}),
+ accent:new T.MeshStandardMaterial({color:0x858b91,roughness:.50,metalness:.40,flatShading:true}),
+ poly:new T.MeshStandardMaterial({color:0x464b50,roughness:.82,metalness:.10,flatShading:true}),
+ trim:new T.MeshStandardMaterial({color:0x2d3136,roughness:.48,metalness:.56,flatShading:true}),
+ steel:new T.MeshStandardMaterial({color:0x242a2f,roughness:.44,metalness:.68,flatShading:true}),
+ recess:new T.MeshStandardMaterial({color:0x10161a,roughness:.91,metalness:.04}),
+ rubber:new T.MeshStandardMaterial({color:0x171d20,roughness:.96,metalness:.03})
 };
 const prop=new T.Group();prop.rotation.y=-.16;scene.add(prop);
 const gun=new T.Group();gun.position.y=.12;prop.add(gun);
@@ -93,110 +92,120 @@ function plate(parent,points,thickness,mat,side=0){
  geo.translate(0,0,-thickness/2);geo.rotateY(Math.PI/2);
  return add(parent,new T.Mesh(geo,materials[mat]),side,0,0);
 }
-// Main mass: overlapping sculpted surfaces rather than a single cuboid.
-slab(gun,.245,.185,.435,'steel',0,.12,.055,.03);
-plate(gun,[[-.23,.16],[-.19,.27],[.12,.285],[.265,.205],[.245,.10],[.08,.07],[-.22,.09]],.275,'shell');
-slab(gun,.28,.05,.46,'trim',0,.264,.045,.009);
-for(const side of [-1,1]){
- plate(gun,[[-.175,.10],[-.145,.22],[.055,.23],[.185,.16],[.12,.07]],.018,'panels',side*.150);
- slab(gun,.02,.08,.19,'steel',side*.165,.18,.025,.005);
- slab(gun,.007,.034,.093,'accent',side*.179,.203,-.048,.003);
- slab(gun,.008,.026,.082,'trim',side*.182,.102,.088,.003);
- // A readable inset graphic on both sides and several tiny fasteners.
- for(const z of [-.12,.06,.19]){
-  const screw=cyl(gun,.012,.008,'steel',side*.18,.117,z,10);
-  screw.rotation.z=Math.PI/2;
+// Stage A: MRX-17 SANDLINE — low-poly tan rifle silhouette.
+// Geometry is artistic and nonfunctional. Add-ons and kit props follow in Stage B/C.
+const parts={};
+function part(name){const root=new T.Group();root.name='MRX17_'+name;gun.add(root);parts[name]=root;return root;}
+function buildLowerReceiver(){
+ const g=part('lower_receiver');
+ slab(g,.176,.154,.334,'shell',0,.141,.082,.005);
+ plate(g,[[-.17,.18],[-.16,.075],[-.065,.053],[.13,.066],[.19,.12],[.17,.211],[.08,.228],[-.1,.23]],.168,'shell');
+ slab(g,.175,.029,.29,'panels',0,.217,.06,.003);
+ for(const side of [-1,1]){
+  slab(g,.009,.065,.20,'panels',side*.093,.143,.06,.002);
+  slab(g,.01,.018,.108,'accent',side*.10,.117,.013,.002);
+  slab(g,.009,.043,.031,'poly',side*.101,.167,.165,.002);
  }
+ return g;
 }
-// Front silhouette / upper cover.
-plate(gun,[[-.68,.195],[-.65,.285],[-.23,.285],[-.20,.215],
- [-.245,.085],[-.64,.105]],.22,'shell');
-slab(gun,.246,.04,.43,'panels',0,.267,-.455,.009);
-for(const side of [-1,1]){
- slab(gun,.019,.105,.335,'poly',side*.129,.18,-.453,.012);
- for(let j=0;j<7;j++)slab(gun,.010,.048,.016,'recess',side*.143,.173,-.30-j*.046,.002);
- slab(gun,.014,.013,.18,'accent',side*.146,.118,-.47,.003);
- slab(gun,.018,.032,.075,'trim',side*.135,.229,-.565,.005);
+function buildUpperReceiver(){
+ const g=part('upper_receiver');
+ slab(g,.172,.070,.393,'panels',0,.263,.04,.005);
+ slab(g,.166,.022,.375,'accent',0,.305,.043,.003);
+ slab(g,.118,.014,.25,'trim',0,.327,.062,.003);
+ for(const s of [-1,1])slab(g,.009,.026,.108,'poly',s*.091,.271,.005,.002);
+ return g;
 }
-// Elegant long forward silhouette, stylized outer tube and face ring.
-cyl(gun,.037,.57,'steel',0,.184,-.75,20);
-cyl(gun,.049,.075,'shell',0,.184,-.972,20);
-torus(gun,.037,.011,'trim',0,.184,-1.018);
-cyl(gun,.021,.015,'recess',0,.184,-1.022,20);
-// Decorative spaced rail + vent lines on top.
-slab(gun,.13,.026,.70,'steel',0,.317,-.302,.008);
-const rail=[];
-for(let i=0;i<15;i++)rail.push([0,.334,-.610+i*.044,.126,.012,.019]);
-micro(gun,rail,'trim');
-// Rear structure with see-through negative space and panel geometry.
-plate(gun,[[.225,.17],[.36,.2],[.43,.26],[.71,.22],
- [.78,.145],[.69,.07],[.40,.09],[.275,.09]],.092,'steel');
-slab(gun,.17,.038,.34,'panels',0,.23,.55,.01);
-slab(gun,.17,.03,.30,'trim',0,.09,.56,.008);
-slab(gun,.12,.17,.074,'poly',0,.143,.792,.016);
-slab(gun,.205,.235,.062,'rubber',0,.139,.838,.022);
-for(const side of [-1,1]){
- slab(gun,.008,.047,.196,'accent',side*.091,.185,.55,.003);
- slab(gun,.014,.054,.13,'shell',side*.084,.13,.57,.007);
+function buildHandguard(){
+ const g=part('long_handguard');
+ // Slim, uninterrupted front mass with two tiers of dark inset vents.
+ slab(g,.162,.102,.633,'shell',0,.240,-.451,.003);
+ slab(g,.175,.021,.654,'panels',0,.291,-.458,.003);
+ slab(g,.149,.017,.604,'accent',0,.183,-.456,.003);
+ const vents=[];
+ for(const s of [-1,1]){
+  for(let i=0;i<6;i++)vents.push([s*.085,.259,-.691+i*.085,.009,.028,.054]);
+  for(let i=0;i<5;i++)vents.push([s*.085,.213,-.658+i*.095,.009,.009,.046]);
+  slab(g,.009,.015,.46,'trim',s*.091,.190,-.448,.002);
+ }
+ micro(g,vents,'recess');
+ // Continuous spine; teeth added as low-draw-call instances.
+ slab(g,.115,.027,.670,'trim',0,.323,-.425,.003);
+ const teeth=[];
+ for(let i=0;i<18;i++)teeth.push([0,.341,-.731+i*.034,.119,.011,.012]);
+ micro(g,teeth,'accent');
+ return g;
 }
-// Gripped silhouette with geometric surface texture (fictional prop).
-const grip=new T.Group();grip.position.set(0,.015,.20);grip.rotation.x=-.24;gun.add(grip);
-slab(grip,.12,.285,.135,'rubber',0,-.097,0,.019);
-for(const side of [-1,1]){
- for(let j=0;j<5;j++)slab(grip,.007,.012,.091,'panels',side*.064,-.18+j*.036,0,.002);
+function buildBarrelGroup(){
+ const g=part('barrel');
+ cyl(g,.020,.357,'steel',0,.242,-.823,10);
+ cyl(g,.026,.059,'accent',0,.242,-.986,8);
+ return g;
 }
-slab(grip,.138,.038,.148,'poly',0,-.239,.02,.007);
-// Stylized magazine-shaped block (display art only).
-const pack=new T.Group();pack.position.set(0,.002,-.094);pack.rotation.x=.13;gun.add(pack);
-plate(pack,[[.075,-.035],[-.062,-.043],[-.119,-.365],[.052,-.39],[.09,-.21]],.132,'poly');
-slab(pack,.15,.027,.162,'shell',0,-.369,-.025,.006);
-for(const side of [-1,1]){
- slab(pack,.009,.18,.017,'panels',side*.073,-.195,-.025,.004);
- slab(pack,.010,.037,.084,'accent',side*.075,-.29,-.019,.004);
+function buildMuzzle(){
+ const g=part('muzzle');
+ cyl(g,.032,.061,'trim',0,.242,-1.046,8);
+ cyl(g,.016,.010,'recess',0,.242,-1.078,8);
+ return g;
 }
-// Oversized fictional holographic display sight.
-const optic=new T.Group();optic.position.set(0,.347,-.084);gun.add(optic);
-slab(optic,.135,.04,.165,'steel',0,0,0,.01);
-slab(optic,.12,.052,.09,'panels',0,.025,.026,.01);
-for(const side of [-1,1]){
- slab(optic,.027,.16,.039,'steel',side*.075,.102,-.031,.013);
- slab(optic,.010,.095,.025,'trim',side*.091,.102,-.041,.004);
+function buildStock(){
+ const g=part('integrated_stock');
+ // Solid tan rear silhouette with a lower structural line; no sci-fi skeleton.
+ plate(g,[[.226,.134],[.319,.240],[.433,.272],[.720,.258],[.859,.214],
+  [.893,.152],[.875,.057],[.801,.043],[.697,.103],[.445,.102],[.361,.108]],.149,'shell');
+ plate(g,[[.430,.124],[.502,.183],[.741,.182],[.806,.139],[.783,.100],[.472,.100]],.159,'panels');
+ slab(g,.176,.173,.040,'poly',0,.139,.889,.007);
+ slab(g,.180,.026,.046,'rubber',0,.067,.902,.004);
+ slab(g,.158,.029,.085,'trim',0,.257,.315,.003);
+ for(const s of [-1,1]){
+  slab(g,.009,.028,.23,'accent',s*.083,.250,.605,.002);
+  slab(g,.008,.031,.153,'poly',s*.083,.135,.608,.002);
+ }
+ return g;
 }
-slab(optic,.178,.031,.05,'steel',0,.183,-.031,.01);
-slab(optic,.145,.016,.044,'panels',0,.200,-.031,.007);
-const lens=add(optic,new T.Mesh(new T.PlaneGeometry(.120,.128),materials.glass),0,.11,-.034);
-// Floating soft cyan HUD dot is a display cosmetic, not a live aiming aid.
-const dot=add(optic,new T.Mesh(new T.CircleGeometry(.007,16),
- new T.MeshBasicMaterial({color:0xc6fff0,transparent:true,opacity:.85,depthWrite:false,side:T.DoubleSide})),0,.113,-.038);
-// Side decal rendered from a canvas for crisp details under close orbit.
-function makeDecal(){
- const c=document.createElement('canvas');c.width=512;c.height=128;
- const context=c.getContext('2d');
- context.clearRect(0,0,512,128);
- context.textBaseline='middle';
- context.font='800 45px Arial';context.fillStyle='#d7e9e6';context.fillText('CF  /  07',22,55);
- context.font='500 19px Arial';context.fillStyle='#73ddd0';context.fillText('VANGUARD  •  MK II',26,94);
- const t=new T.CanvasTexture(c);t.colorSpace=T.SRGBColorSpace;return t;
+function buildGrip(){
+ const g=part('grip');
+ g.position.set(0,.055,.232);g.rotation.x=-.22;
+ plate(g,[[-.06,.03],[.069,.03],[.11,-.213],[.055,-.259],[-.095,-.035]],.106,'shell');
+ slab(g,.120,.023,.138,'panels',0,-.248,.028,.003);
+ for(const side of [-1,1]){
+  slab(g,.008,.150,.09,'poly',side*.059,-.116,.015,.003);
+  const ribs=[];
+  for(let i=0;i<5;i++)ribs.push([side*.065,-.185+i*.029,.014,.007,.008,.075]);
+  micro(g,ribs,'trim');
+ }
+ return g;
 }
-const decalMaterial=new T.MeshBasicMaterial({map:makeDecal(),side:T.DoubleSide,transparent:true,depthWrite:false});
-for(const side of [-1,1]){
- const decal=add(gun,new T.Mesh(new T.PlaneGeometry(.235,.061),decalMaterial),
-  side*.166,.188,.095);
- decal.rotation.y=side*Math.PI/2;
+function buildMagazine(){
+ const g=part('magazine');
+ g.position.set(0,.052,-.084);g.rotation.x=.065;
+ plate(g,[[-.078,.021],[.063,.021],[.103,-.323],[.055,-.386],[-.095,-.367]],.121,'panels');
+ for(const s of [-1,1]){
+  slab(g,.008,.220,.072,'shell',s*.066,-.165,-.02,.002);
+  const seams=[];
+  for(let i=0;i<4;i++)seams.push([s*.073,-.143-i*.056,-.012,.007,.009,.08]);
+  micro(g,seams,'accent');
+ }
+ slab(g,.147,.030,.160,'accent',0,-.376,-.006,.003);
+ return g;
 }
-// Showcase orientates the rifle long axis across the screen and exposes its right side.
-gun.rotation.y=.09;
-const orbit={azimuth:1.0,polar:1.28,distance:3.0,targetAzimuth:1.0,
- targetPolar:1.28,targetDistance:3.0,auto:true,dragging:false,x:0,y:0};
-const target=new T.Vector3(.04,.05,0);
-function resetView(){orbit.targetAzimuth=1.0;orbit.targetPolar=1.28;orbit.targetDistance=3.0;orbit.auto=false;setAuto(false);}
+function buildStageA(){
+ buildLowerReceiver();buildUpperReceiver();buildHandguard();
+ buildBarrelGroup();buildMuzzle();buildStock();buildGrip();buildMagazine();
+ gun.rotation.y=.05;
+}
+buildStageA();
+const orbit={azimuth:1.04,polar:1.23,distance:3.0,targetAzimuth:1.04,
+ targetPolar:1.23,targetDistance:3.0,auto:true,dragging:false,x:0,y:0};
+const target=new T.Vector3(.04,.09,-.02);
+function resetView(){orbit.targetAzimuth=1.04;orbit.targetPolar=1.23;orbit.targetDistance=3.0;orbit.auto=false;setAuto(false);}
 function setAuto(value){
  orbit.auto=!!value;
  const button=document.getElementById('auto');
  button.classList.toggle('active',orbit.auto);button.setAttribute('aria-pressed',String(orbit.auto));
 }
 function chooseFinish(name){
- const palette=finishes[name]||finishes.onyx;
+ const palette=finishes[name]||finishes.sand;
  for(const keyName of ['shell','panels','accent','poly','trim'])materials[keyName].color.setHex(palette[keyName]);
  materials.accent.emissive.setHex(palette.accent).multiplyScalar(.11);
  for(const button of document.querySelectorAll('[data-finish]')){
@@ -237,7 +246,7 @@ canvas.addEventListener('wheel',e=>{
 },{passive:false});
 function resize(){
  const w=innerWidth,h=innerHeight;
- renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.8));
+ renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.6));
  renderer.setSize(w,h,false);camera.aspect=w/h;
  camera.fov=w<720?49:43;camera.updateProjectionMatrix();
  const compact=w<760;
@@ -245,7 +254,7 @@ function resize(){
  target.x=prop.position.x;
  orbit.targetDistance=Math.max(orbit.targetDistance,compact?3.5:2.8);
 }
-window.addEventListener('resize',resize);resize();chooseFinish('onyx');
+window.addEventListener('resize',resize);resize();chooseFinish('sand');
 loading.hidden=true;
 let previous=performance.now(),raf=0;
 function animate(now){
