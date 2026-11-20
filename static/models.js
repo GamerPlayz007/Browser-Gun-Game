@@ -41,7 +41,7 @@ export function makeWeapon(id,arms=true,finish=Math.floor(Math.random()*3)){
   box(left,.13,.13,.37,sleeve,-.13,-.18,-.08).rotation.z=-.22;
   box(left,.12,.10,.15,glove,-.065,-.09,-.23);
  }
- root.userData={model,magazine,left,flash,action,id,
+ root.userData={model,magazine,left,flash,action,id,adsAnchor:visual.adsAnchor,
   aetherMaterials:visual.uniqueMaterials,aetherFinish:finish,
   aetherSetFinish:visual.setFinish,aetherBatchCount:visual.batchCount};
  return root;
@@ -142,6 +142,15 @@ export function animateWeapon(root,{time=0,ads=0,reload=0,kick=0,moving=false,
   a.bolt.position.z=a.bolt.userData.homeZ22+pose.boltAction+clip.actionZ;
  }
  if(a?.pump)a.pump.position.z=-pose.slideAction+clip.actionZ;
+ // ADS alignment: precisely center the actual 3D optic against the view
+ // camera's -Z line. Fade in with ADS to leave the hip-fire pose intact.
+ // Reuses one Vector3 buffer; visual only, never alters server hit direction.
+ const aim=smooth22(clamp22(ads));
+ if(aim>.0001&&d.adsAnchor){
+  const sight=d.adsAnchor.getWorldPosition(d.adsWorld22||(d.adsWorld22=new T.Vector3()));
+  root.position.x-=sight.x*aim;
+  root.position.y-=sight.y*aim;
+ }
 }
 export function makePlayer(name,color=0xd38165,weaponId=0,weaponFinish=0){
  const root=new T.Group(),body=new T.Group();root.add(body);
