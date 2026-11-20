@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101a20">
+<title>CROSSFire · AR Concept Studio</title>
+<script type="importmap">{"imports":{"three":"/static/vendor/three.module.js","three/addons/":"/static/vendor/addons/"}}</script>
+<style>
+:root{color-scheme:dark;--bg:#090e13;--panel:#101b23;--line:#33434a;--muted:#9eaeb4;--light:#f4f0e5;--accent:#74e2d6}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--light);font-family:Inter,"Segoe UI",Arial,sans-serif}button{font:inherit;cursor:pointer}
+#canvas{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}
+header{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:23px 35px;z-index:4;pointer-events:none}
+.brand{font-size:14px;letter-spacing:.28em;font-weight:900;color:#f2f5f1;text-decoration:none;pointer-events:auto}.brand span{color:var(--accent)}.tag{font-size:10px;letter-spacing:.22em;color:var(--accent);padding:9px 12px;border:1px solid #42605f;background:#152425dd}
+aside{position:fixed;left:35px;top:50%;transform:translateY(-42%);z-index:3;max-width:340px;pointer-events:none;text-shadow:0 2px 18px #0009}
+.over{font-size:11px;letter-spacing:.27em;color:var(--accent);margin:0 0 16px}h1{font-size:clamp(28px,4.2vw,62px);line-height:.98;letter-spacing:-.04em;margin:0;font-weight:900}h1 span{display:block;font-size:.35em;letter-spacing:.38em;color:var(--accent);margin:12px 0 0}p.description{font-size:13px;line-height:1.6;color:#b2c1c4;margin-top:22px;max-width:290px}
+.meta{margin-top:26px;border-left:2px solid var(--accent);padding-left:12px;color:#ccd8d8;font-size:11px;letter-spacing:.11em;line-height:1.9}
+.controls{position:fixed;right:27px;bottom:28px;z-index:5;width:min(320px,calc(100vw - 54px));padding:20px;background:#0d171de8;border:1px solid #35464b;box-shadow:0 18px 55px #0008;backdrop-filter:blur(20px);border-radius:12px}
+.controls h2{margin:0 0 14px;font-size:11px;letter-spacing:.22em;color:#f2f0e8}
+.options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.finish{padding:11px 5px;border:1px solid #415054;border-radius:6px;background:#18262c;color:#b5c4c5;font-size:10px;letter-spacing:.08em}.finish.active{border-color:var(--accent);color:var(--light);background:#1c3b40}
+.actions{display:flex;gap:7px;margin-top:11px}.actions button{flex:1;padding:10px 5px;background:transparent;color:#c3d4d6;border:1px solid #405056;border-radius:6px;font-size:11px}.actions button.active{background:#23453f;border-color:#79dcbd}
+.instructions{margin:14px 0 0;color:#8fabb3;font-size:10px;line-height:1.6}
+#status{position:fixed;left:35px;bottom:35px;font-size:10px;letter-spacing:.17em;color:#accac9;z-index:2}
+#loading{position:fixed;inset:0;display:grid;place-items:center;background:#0a1318;color:#a1dcd6;font-size:14px;letter-spacing:.25em;z-index:9}
+#loading[hidden]{display:none}
+@media(max-width:760px){
+ header{padding:17px}.brand{font-size:11px}.tag{font-size:8px;padding:7px}
+ aside{top:91px;left:19px;transform:none;max-width:245px}
+ h1{font-size:31px}p.description{font-size:11px;margin-top:11px}.meta{display:none}
+ .controls{left:12px;right:12px;bottom:12px;width:auto;padding:13px}
+ .controls h2{margin-bottom:10px}.instructions{margin-top:10px}#status{display:none}
+}
+</style>
+</head>
+<body>
+<canvas id="canvas" aria-label="Interactive three-dimensional AR concept preview"></canvas>
+<div id="loading">BUILDING CONCEPT MODEL…</div>
+<header><a class="brand" href="/">CROSS<span>FIRE</span></a><div class="tag">THREE.JS / 3D ARMORY LAB</div></header>
+<aside>
+ <p class="over">WEAPON CONCEPT / 001</p>
+ <h1>VANGUARD<span>AR · MK II</span></h1>
+ <p class="description">A standalone, fictional sci-fi assault-rifle game prop designed for CROSSFire. Explore the silhouette, surface details, materials and sight in full 3D before deciding whether to add it to the game.</p>
+ <div class="meta">REAL-TIME 3D PREVIEW<br>GAME-ART CONCEPT · NOT A FUNCTIONAL DESIGN</div>
+</aside>
+<section class="controls" aria-label="3D preview controls">
+ <h2>CHOOSE FINISH</h2>
+ <div class="options">
+ <button class="finish active" data-finish="onyx" aria-pressed="true">ONYX</button>
+ <button class="finish" data-finish="arctic" aria-pressed="false">ARCTIC</button>
+ <button class="finish" data-finish="cobalt" aria-pressed="false">COBALT</button>
+ </div>
+ <div class="actions"><button id="auto" class="active" aria-pressed="true">AUTO ROTATE</button><button id="reset">RESET VIEW</button></div>
+ <p class="instructions">Drag to orbit · Scroll / pinch to zoom · Double-click to reset</p>
+</section>
+<div id="status">STANDALONE MODEL VIEWER · NO MATCH REQUIRED</div>
+<script type="module" src="/static/ar-studio.js"></script>
+</body>
+</html>
