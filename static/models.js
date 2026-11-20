@@ -152,7 +152,7 @@ export function animateWeapon(root,{time=0,ads=0,reload=0,kick=0,moving=false,
   root.position.y-=sight.y*aim;
  }
 }
-export function makePlayer(name,color=0xd38165,weaponId=0,weaponFinish=0){
+export function makePlayer(name,color=0xd38165,weaponId=0,weaponFinish=0,lobbyOnly=false){
  const root=new T.Group(),body=new T.Group();root.add(body);
  box(body,.56,.64,.34,0x3b5559,0,1.13,0,.07);
  const chestSkin56=box(body,.60,.25,.38,color,0,1.36,0,.05);
@@ -203,7 +203,7 @@ export function makePlayer(name,color=0xd38165,weaponId=0,weaponFinish=0){
    [0,-.16,-.17,.14,.13,.04],[0,-.27,.09,.13,.08,.04]]);
   arms.push(arm);elbows.push(elbow);
  }
- const gun=makeWeapon(weaponId,false,weaponFinish);gun.scale.setScalar(.8);
+ const gun=lobbyOnly?new T.Group():makeWeapon(weaponId,false,weaponFinish);gun.scale.setScalar(.8);
  gun.position.set(.26,1.1,-.34);body.add(gun);
  const impact=new T.Mesh(new T.BoxGeometry(.61,.09,.40),
   new T.MeshBasicMaterial({color:0xffba78,transparent:true,opacity:0,depthWrite:false}));
@@ -229,6 +229,18 @@ export function makePlayer(name,color=0xd38165,weaponId=0,weaponFinish=0){
 }
 // Material references are shared; recoloring swaps references instead of mutating
 // the palette for every other player. Works for in-round cosmetic changes.
+// Reuses the exact match avatar body, helmet, and outfit colors without
+// constructing costly AETHER weapons for the pre-match lineup.
+export function makeLobbyAvatar(name,color){
+ const avatar=makePlayer(name,color,0,0,true);
+ avatar.userData.tag.visible=false;
+ avatar.userData.spawnRing.visible=false;
+ avatar.userData.impact.visible=false;
+ avatar.userData.gun.visible=false;
+ avatar.userData.lobbyOnly=true;
+ setModelQuality67(avatar,'performance');
+ return avatar;
+}
 export function setPlayerSkin56(root,color){
  if(!root?.userData?.skinMeshes56||root.userData.skinColor56===color)return false;
  for(const piece of root.userData.skinMeshes56)piece.material=material(color);
