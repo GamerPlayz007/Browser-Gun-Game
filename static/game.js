@@ -21,6 +21,7 @@ import {createUrbanAmbience45} from './living45.js';
 import {matchPresentation,finishPresentation,matchNotice} from './match35.js';
 import {createControlBeacon54} from './control54.js';
 import {readyView55,spectatorCandidates55,cycleSpectator55,teamStandings55} from './competitive55.js';
+import {createSquadLineup} from './squad_lineup69.js';
 import {safeRead56,safeWrite56,safeName56,safeQuality56,skinColor56} from './preferences56.js';
 import {createNetSync,observePong,ingestSnapshot,sampleRemote,cameraCorrection,syncStats} from './netcode33.js';
 import {fireMode, makeTrigger, pressTrigger, releaseTrigger, takeTriggerPulse,
@@ -164,6 +165,11 @@ const movementControls63=createMovementControls63();
 let netSync=createNetSync();
 const frameMeter=new FrameMeter();
 const opponents=new Map(),effects=[],hitGeometry=new T.IcosahedronGeometry(.035,0),hitMaterial=new T.MeshBasicMaterial({color:0xffc98a});
+ const squadLineup69=createSquadLineup($('squad-canvas69'),$('roster'));
+ function syncSquadVisibility69(){
+  squadLineup69.setVisible(joined&&!$('room-panel').hidden&&
+    ['lobby','results'].includes(state?.phase));
+ }
 let rigTier68=null,localWeaponFinishKey68='';
 updateRigQuality67=tier=>{
  if(tier===rigTier68)return;
@@ -261,6 +267,7 @@ async function refreshRooms65(prefer){
 async function enter(create){$('create').disabled=$('join').disabled=true;$('rejoin56').hidden=true;$('status').textContent='Connecting to arena…';try{let code=$('code').value.trim().toUpperCase();const response=await fetch(create?'/api/rooms':'/api/rooms/'+code,create?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mapId:$('map-select').value})}:{});const data=await response.json();if(!response.ok)throw Error(data.error||'Connection failed.');if(create){code=data.room;$('code').value=code;}else if(data.players>=data.max)throw Error('This room is full.');
 await loadArena(data.mapId);const name=safeName56($('name').value);safeWrite56('cf-name',name);const conn=new WebSocket(`${location.protocol==='https:'?'wss':'ws'}://${location.host}/ws/${code}?name=${encodeURIComponent(name)}&weapon=${selected}`);ws=conn;const timeout=setTimeout(()=>{if(conn.readyState!==1)conn.close();},12000);conn.onopen=()=>clearTimeout(timeout);conn.onmessage=e=>{if(ws===conn)handle(JSON.parse(e.data));};conn.onclose=()=>{clearTimeout(timeout);if(ws===conn)disconnect('Connection closed. Rejoining creates a new player identity.',code);};conn.onerror=()=>{$('status').textContent='Could not connect. Check the server is awake.';};}catch(e){$('status').textContent=e.message;$('create').disabled=$('join').disabled=false;refreshRooms65();}}
 function disconnect(message,rejoinCode56=null){
+ squadLineup69.setVisible(false);squadLineup69.update([],null,null,'deathmatch');
  localWeaponFinishKey68='';
  const code56=validRoom65(rejoinCode56)?rejoinCode56.toUpperCase():null;
  $('rejoin56').hidden=!code56;if(code56)$('code').value=code56;
@@ -303,44 +310,24 @@ function scoreboard(players,body){
  }
 }
 function renderRoster(){
- const el=$('roster');el.replaceChildren();
  const realPlayers=state.players.filter(p=>!p.bot);
- if(state.mode==='botmatch'){
-  const note=document.createElement('div');note.className='bot-roster-note';
-  note.textContent='BOT ASSAULT · '+(state.players.filter(p=>p.bot).length||4)+
-   ' SERVER-CONTROLLED OPPONENTS · NO EXTRA PLAYER SLOTS';
-  el.append(note);
- }
- for(const p of realPlayers){
-  const row=document.createElement('div');
-  row.className='roster-row'+(p.team?' team-'+p.team:'')+(p.ready?' is-ready55':'');
-  const avatar=document.createElement('span');avatar.className='avatar';
-  avatar.textContent=p.name.slice(0,1).toUpperCase();
-  // The colored roster square matches the server-assigned in-world outfit.
-  avatar.style.backgroundColor='#'+skinColor56(p.skin).toString(16).padStart(6,'0');
-  avatar.style.color='#10212b';
-  const name=document.createElement('span');name.textContent=p.name;
-  const badge=document.createElement('small');
-  badge.textContent=[p.team?.toUpperCase(),p.id===state.host?'HOST':p.id===myId?'YOU':'CONNECTED',p.ready?'READY':null]
-   .filter(Boolean).join(' · ');
-  row.append(avatar,name,badge);el.append(row);
- }
- for(let i=realPlayers.length;i<8;i++){
-  const row=document.createElement('div');row.className='roster-empty';
-  row.textContent='Open slot — invite a friend';el.append(row);
- }
+ squadLineup69.update(realPlayers,state.host,myId,state.nextMode||state.mode);
+ $('squad-size69').textContent=realPlayers.length+' / 8 OPERATORS';
+ // Every participant follows the server-assigned room arena.
+ $('room-map').textContent=map.name;
 }
 function uiRoom(){
  const host=state.host===myId,between=['lobby','results'].includes(state.phase);
  const ready55=readyView55(state,myId);
  $('ready-panel55').hidden=!between;
- $('ready-summary55').textContent=ready55.ready+' / '+ready55.total+' READY · OPTIONAL';
+ $('ready-summary55').textContent=ready55.ready+' / '+ready55.total+' READY · '+(state.phase==='lobby'?'ALL REQUIRED':'REMATCH');
  $('ready-toggle55').disabled=!ready55.canReady;
  $('ready-toggle55').textContent=ready55.mine?'CANCEL READY':'MARK READY';
  $('ready-toggle55').classList.toggle('is-ready',ready55.mine);
  $('balance-teams55').hidden=!ready55.canBalance;
- $('start').hidden=!between;$('start').disabled=!host;
- $('start').textContent=host?(state.phase==='results'?'START REMATCH →':'START MATCH →'):'WAITING FOR HOST';
+ const squadReady=ready55.total>0&&ready55.ready===ready55.total;
+ $('start').hidden=!between;$('start').disabled=!host||(state.phase==='lobby'&&!squadReady);
+ $('start').textContent=host?(state.phase==='results'?'START REMATCH →':squadReady?'START MATCH →':'WAITING FOR SQUAD READY'):'WAITING FOR HOST';
  $('resume').textContent=state.phase==='lobby'?'ENTER PRACTICE':state.phase==='results'?'VIEW RESULTS':'RESUME MATCH';
  $('room-title').textContent=state.phase==='lobby'?'Your squad.':state.phase==='results'?'Run it back.':'Stay in the fight.';
  $('room-hint').textContent=state.phase==='lobby'?
@@ -356,6 +343,7 @@ function uiRoom(){
   b.disabled=!host||!between;
  });
  document.querySelectorAll('#room-weapons button').forEach(b=>b.disabled=state.mode==='gungame'&&state.phase!=='lobby');
+ syncSquadVisibility69();
 }
 function clearVisualEffects52(){
  for(const e of effects.splice(0)){
@@ -517,7 +505,7 @@ function handle(data){if(data.type==='manual_respawn_result65'){toast(data.messa
    setWeaponFinish(g.userData.gun,p.weapon_finishes[p.weapon]);
   }}
  for(const [id,g] of opponents)if(!present.has(id)){disposePlayer(g);opponents.delete(id);}for(const t of data.targets)world.targets.get(t.id).visible=t.hp>0;
- const rosterKey=JSON.stringify([data.host,data.mode,data.nextMode,data.players.map(p=>[p.id,p.name,p.team,p.ready,p.bot])]);
+ const rosterKey=JSON.stringify([data.host,data.mode,data.nextMode,data.players.map(p=>[p.id,p.name,p.team,p.ready,p.bot,p.skin])]);
  if(rosterKey!==rosterSignature){renderRoster();rosterSignature=rosterKey;}
  const scoreKey=JSON.stringify([data.mode,data.round,data.standings,data.teamScores]);
  if(scoreKey!==scoreSignature){scoreboard(data.players,$('scores'));scoreSignature=scoreKey;}
@@ -639,7 +627,7 @@ function frame(ms){try{const now=ms/1000,rawMs=ms-clock,dt=Math.min(rawMs/1000,.
 renderer.setAnimationLoop(frame);
 async function capture(){audio.unlock();if(state?.phase==='results'){$('results').hidden=false;$('room-panel').hidden=true;return;}try{await renderer.domElement.requestPointerLock();}catch{toast('Open this game in its own browser tab to capture the mouse.');}}
 $('resume').onclick=capture;renderer.domElement.addEventListener('click',()=>{if(joined&&!locked()&&$('room-panel').hidden&&state.phase!=='results')capture();});
-document.addEventListener('pointerlockchange',()=>{if(!joined)return;resetInput();$('room-panel').hidden=locked()||state?.phase==='results';});
+document.addEventListener('pointerlockchange',()=>{if(!joined)return;resetInput();$('room-panel').hidden=locked()||state?.phase==='results';syncSquadVisibility69();});
 document.addEventListener('mousemove',e=>{if(!locked())return;const sens=.002*settings.sens*T.MathUtils.lerp(1,me?.weapon===3?.32:.65,ads);yaw-=e.movementX*sens;pitch=clamp(pitch-e.movementY*sens,-1.5,1.5);});
 document.addEventListener('mousedown',e=>{if(!locked())return;if(e.button===0){pressTrigger(combatTrigger);if(me&&ammo()<=0&&me.reload<=0)audio.dry();tryTriggerFire(performance.now()/1000);}if(e.button===2){aiming=true;sendInput();}});document.addEventListener('mouseup',e=>{if(e.button===0)releaseTrigger(combatTrigger);if(e.button===2){aiming=false;sendInput();}});document.addEventListener('contextmenu',e=>{if(joined)e.preventDefault();});
 // One notch selects the next slot; wheel events do not scroll the page in-game.
@@ -737,7 +725,14 @@ $('rejoin56').onclick=()=>{audio.unlock();enter(false);};
  $('code').onchange=()=>{$('status').textContent='Select a room and join your friends.';};
  $('name').value=safeRead56('cf-name','');
  refreshRooms65(new URLSearchParams(location.search).get('room'));
-$('start').onclick=()=>{send({type:'start'});capture();};$('rematch').onclick=()=>{send({type:'start'});audio.unlock();};$('result-room').onclick=()=>{$('results').hidden=true;$('room-panel').hidden=false;};$('menu-button').onclick=()=>{document.exitPointerLock?.();$('room-panel').hidden=false;};
+$('start').onclick=()=>{
+ if(!state||state.host!==myId)return;
+ const people=state.players.filter(p=>!p.bot);
+ if(state.phase==='lobby'&&(!people.length||people.some(p=>!p.ready))){
+  toast('Everyone must mark READY before the host starts.');return;
+ }
+ send({type:'start'});capture();
+};$('rematch').onclick=()=>{send({type:'start'});audio.unlock();};$('result-room').onclick=()=>{$('results').hidden=true;$('room-panel').hidden=false;syncSquadVisibility69();};$('menu-button').onclick=()=>{document.exitPointerLock?.();$('room-panel').hidden=false;syncSquadVisibility69();};
 $('copy-invite').onclick=async()=>{try{await navigator.clipboard.writeText(`${location.origin}/?room=${roomCode}`);toast('Invite copied. Send it to your friends.');}catch{toast('Room code '+roomCode+' — copy the address bar link.');}};
 $('leave').onclick=()=>{const conn=ws;ws=null;conn?.close();history.replaceState(null,'','/');disconnect('You left the room.');};document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>send({type:'mode',mode:b.dataset.mode}));
 $('sensitivity').oninput=e=>{settings.sens=clamp(Number(e.target.value)||1,.4,2.5);
