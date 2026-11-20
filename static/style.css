@@ -524,3 +524,42 @@
 @media(max-width:650px){
  #aim-ammo70.aim-ammo70{left:calc(50% + 30px);top:calc(50% + 19px);width:79px;padding:5px 6px}
 }
+
+
+/* CROSSFire 07.1 — weapon colors also inform the HUD identity.
+   Body geometry is colored separately in aether_game_models.js. */
+#crosshair.crosshair-aether70.reticle-rifle70 i:nth-child(-n+4){
+ background:#b0f2ff;box-shadow:0 0 5px #3cdbff77;
+}
+#crosshair.crosshair-aether70.reticle-rifle70::before{background:#72e7ff}
+#crosshair.crosshair-aether70.reticle-smg70 i:nth-child(-n+8){
+ background:#deacff;box-shadow:0 0 5px #c779ff8a;
+}
+#crosshair.crosshair-aether70.reticle-smg70::before{background:#edc8ff}
+#crosshair.crosshair-aether70.reticle-shotgun70{
+ border-color:#ffc089;box-shadow:0 0 10px #ff873e55;
+}
+#crosshair.crosshair-aether70.reticle-shotgun70 i:nth-child(-n+8){
+ background:#ffd1a5;box-shadow:0 0 4px #ff873e99;
+}
+#crosshair.crosshair-aether70.reticle-shotgun70::before{background:#ffe5c6}
+#crosshair.crosshair-aether70.reticle-sniper70 i:nth-child(-n+4){
+ background:#d7ffae;box-shadow:0 0 5px #b4ff6b88;
+}
+#crosshair.crosshair-aether70.reticle-sniper70::before{border-color:#d6ff9e}
+#aim-ammo70.ammo-gun071{border-color:#3cdbff78}
+#aim-ammo70.ammo-gun171{border-color:#c779ff78}
+#aim-ammo70.ammo-gun271{border-color:#ff873e78}
+#aim-ammo70.ammo-gun371{border-color:#b4ff6b78}
+#aim-ammo70.ammo-gun071 #aim-ammo-fill70{background:#3cdbff}
+#aim-ammo70.ammo-gun171 #aim-ammo-fill70{background:#c779ff}
+#aim-ammo70.ammo-gun271 #aim-ammo-fill70{background:#ff873e}
+#aim-ammo70.ammo-gun371 #aim-ammo-fill70{background:#b4ff6b}
+#aim-ammo70.ammo-gun071 #aim-ammo-state70{color:#8ae9ff}
+#aim-ammo70.ammo-gun171 #aim-ammo-state70{color:#dfaeff}
+#aim-ammo70.ammo-gun271 #aim-ammo-state70{color:#ffc18d}
+#aim-ammo70.ammo-gun371 #aim-ammo-state70{color:#d1ff9d}
+#room-weapons .weapon-card[data-weapon="0"].active{border-color:#3cdbff;box-shadow:inset 0 -2px #3cdbff}
+#room-weapons .weapon-card[data-weapon="1"].active{border-color:#c779ff;box-shadow:inset 0 -2px #c779ff}
+#room-weapons .weapon-card[data-weapon="2"].active{border-color:#ff873e;box-shadow:inset 0 -2px #ff873e}
+#room-weapons .weapon-card[data-weapon="3"].active{border-color:#b4ff6b;box-shadow:inset 0 -2px #b4ff6b}
