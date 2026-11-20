@@ -85,7 +85,8 @@ def spawn(p,players,now,arena=DEFAULT,history=None):
              mags=[w['mag'] for w in WEAPONS],input={},last_shot=-999.,
              slide_until=0.,slide_ready=0.,jump_held=False,slide_held=False,
              crouch=False,motion_time=0.,move_credit=0.,commands=deque(),
-             spawn=p.get('spawn',0)+1,input_overruns=0)
+             spawn=p.get('spawn',0)+1,input_overruns=0,
+             weapon_finishes=tuple(secrets.randbelow(3) for _ in WEAPONS))
     reset_health(p,now)
     seed_movement(p)
 
@@ -490,7 +491,7 @@ class Room:
         self.record_poses(now)
     def snapshot(self,now):
         self.snapshot_sequence+=1
-        fields=('id','name','team','bot','ready','skin','x','y','z','vx','vy','vz','grounded','yaw','pitch','hp','ammo','kills','deaths','headshots','streak','best_streak','weapon','crouch','lean','spawn','seq','shot_seq','ack_shot','jump_held','slide_held','motion_time','slide_until','slide_ready','jump_buffer_until','coyote_until','jump_consumed','jump_cut','wall_kick_used','interact_held','mantle')
+        fields=('id','name','team','bot','ready','skin','weapon_finishes','x','y','z','vx','vy','vz','grounded','yaw','pitch','hp','ammo','kills','deaths','headshots','streak','best_streak','weapon','crouch','lean','spawn','seq','shot_seq','ack_shot','jump_held','slide_held','motion_time','slide_until','slide_ready','jump_buffer_until','coyote_until','jump_consumed','jump_cut','wall_kick_used','interact_held','mantle')
         return dict(type='state',snapshotSeq=self.snapshot_sequence,serverTime=round(now,6),tickRate=(30 if self.arena.id=='octavus' else 60),snapshotHz=20,maxHp=MAX_HEALTH,mapId=self.arena.id,phase=self.phase,mode=self.mode,host=self.host,round=self.round_number,nextMode=self.next_mode,rules=rules(self.mode,len(WEAPONS)),standings=standings(self.players,self.mode),leaderId=(None if is_team_mode(self.mode) or self.mode==BOT_MODE else leading_player(self.players)),winnerId=self.winner_id,winnerTeam=self.winner_team,
             teamScores=self.team_scores.copy(),readyStatus=ready_summary(self.players),
             aiScore=self.ai_score,botScore=self.bot_score,botsAlive=sum(b['hp']>0 for b in self.bots.values()),
