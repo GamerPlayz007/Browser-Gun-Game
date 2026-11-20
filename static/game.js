@@ -145,7 +145,11 @@ async function loadArena(id){
  minimap=createMinimap($('minimap'),$('district-label'),map);$('map-select').value=id;
  display.quality.reset();display.resize(true);
 }
-const weapons=map.weapons,weaponModels=weapons.map(w=>makeWeapon(w.id));for(const g of weaponModels){g.visible=false;viewScene.add(g);}
+const AETHER_NAMES68=['AETHER-9','AETHER-S9','AETHER-12 WARDRUM','AETHER-L7 LONGWATCH'];
+ const AETHER_SHORT68=['A9','S9','W12','L7'];
+ const displayWeaponName68=id=>AETHER_NAMES68[id]||weapons[id]?.name||'WEAPON';
+ const displayWeaponShort68=id=>AETHER_SHORT68[id]||weapons[id]?.short||'W';
+ const weapons=map.weapons,weaponModels=weapons.map(w=>makeWeapon(w.id));for(const g of weaponModels){g.visible=false;viewScene.add(g);}
 let selected=0,desiredWeapon64=null,weaponMags64=weapons.map(w=>w.mag),ws=null,myId=null,roomCode='',state=null,me=null,local=null,joined=false,keys={},aiming=false,yaw=0,pitch=0,seq=0,shotId=0,pendingShots=[];let pendingMoves=[],movementAccumulator=0,viewError=new T.Vector3(),rosterSignature='',scoreSignature='';
 let groundVelocity=0,landingPulse=0,lastLocalGrounded=true,movementHint='',slideHopUntil53=0,visualLean63=0,lastReconcileAt=0;
 // Octavus only: lighter authoritative input cadence, unchanged render FPS.
@@ -169,8 +173,8 @@ updateRigQuality67=tier=>{
 };
 updateRigQuality67(qualityTier61());
 const silhouette=id=>`<svg viewBox="0 0 220 60" aria-hidden="true"><path d="M20 19h${[100,80,130,135][id]}v24H70l-8 16H47l4-17H20z"/><path d="M5 16h22v30H5zM100 26h${[92,65,98,105][id]}v6h-${[92,65,98,105][id]}z"/>${id===3?'<rect x="89" y="5" width="45" height="13" rx="5"/><rect x="100" y="16" width="7" height="7"/>':'<rect x="65" y="12" width="48" height="7"/>'}${id===1?'<rect x="75" y="38" width="10" height="20"/>':''}</svg>`;
-function makeCards(container){for(const w of weapons){const b=document.createElement('button');b.className='weapon-card'+(w.id===selected?' active':'');b.dataset.weapon=w.id;b.innerHTML=`<span class="number">0${w.id+1}</span>${silhouette(w.id)}<strong>${w.name}</strong><small>${w.type}</small>`;b.onclick=()=>selectWeapon(w.id);container.append(b);}}
-makeCards($('home-weapons'));makeCards($('room-weapons'));for(const w of weapons){const s=document.createElement('span');s.className='slot';s.textContent=`${w.id+1} ${w.short}`;$('weapon-slots').append(s);}
+function makeCards(container){for(const w of weapons){const b=document.createElement('button');b.className='weapon-card'+(w.id===selected?' active':'');b.dataset.weapon=w.id;b.innerHTML=`<span class="number">0${w.id+1}</span>${silhouette(w.id)}<strong>${displayWeaponName68(w.id)}</strong><small>${w.type}</small>`;b.onclick=()=>selectWeapon(w.id);container.append(b);}}
+makeCards($('home-weapons'));makeCards($('room-weapons'));for(const w of weapons){const s=document.createElement('span');s.className='slot';s.textContent=`${w.id+1} ${displayWeaponShort68(w.id)}`;$('weapon-slots').append(s);}
 function send(data){if(ws?.readyState===WebSocket.OPEN)ws.send(JSON.stringify(data));}
 function selectWeapon(id){
  if(!Number.isInteger(id)||id<0||id>=weapons.length)return;
@@ -407,7 +411,7 @@ function processEvent(e){
     audio.burst(.12,.16,500);
    }
   }
- if(e.type==='kill'){const div=document.createElement('div');div.className='feed-row';div.append(document.createTextNode(e.killer));const mid=document.createElement('span');mid.textContent=weapons[e.weapon].short+(e.head?' ◇':' →');div.append(mid,document.createTextNode(e.victim));$('feed').prepend(div);while($('feed').children.length>5)$('feed').lastChild.remove();setTimeout(()=>div.remove(),5000);if(e.killerId===myId){$('elimination').textContent=(e.head?'HEADSHOT / ':'ELIMINATED / ')+e.victim+(e.siphon>0?' · +'+e.siphon+' SIPHON':'');elimUntil=now+1.8;audio.kill();}if(e.victimId===myId)$('killed-by').textContent=`${e.killer} · ${weapons[e.weapon].name}`;}
+ if(e.type==='kill'){const div=document.createElement('div');div.className='feed-row';div.append(document.createTextNode(e.killer));const mid=document.createElement('span');mid.textContent=displayWeaponShort68(e.weapon)+(e.head?' ◇':' →');div.append(mid,document.createTextNode(e.victim));$('feed').prepend(div);while($('feed').children.length>5)$('feed').lastChild.remove();setTimeout(()=>div.remove(),5000);if(e.killerId===myId){$('elimination').textContent=(e.head?'HEADSHOT / ':'ELIMINATED / ')+e.victim+(e.siphon>0?' · +'+e.siphon+' SIPHON':'');elimUntil=now+1.8;audio.kill();}if(e.victimId===myId)$('killed-by').textContent=`${e.killer} · ${displayWeaponName68(e.weapon)}`;}
 }
 function handle(data){if(data.type==='manual_respawn_result65'){toast(data.message||'Respawn unavailable.');return;}if(data.type==='welcome'){netSync=createNetSync();seq=0;shotId=0;feedback52.reset();if(data.mapId!==map.id){ws?.close();disconnect('Map mismatch. Reload the page.');return;}$('room-map').textContent=map.name;$('score-map').textContent=map.name;myId=data.id;roomCode=data.room;joined=true;history.replaceState(null,'',`?room=${roomCode}`);$('room-code').textContent=roomCode;$('home').hidden=true;$('hud').hidden=false;$('room-panel').hidden=false;$('shade').style.opacity=0;return;}if(data.type==='pong'){if(observePong(netSync,data.t,performance.now(),data.serverTime))rtt=netSync.rttMs;return;}if(data.type!=='state'||data.mapId!==map.id)return;
  if(!ingestSnapshot(netSync,data,performance.now()))return;
@@ -459,7 +463,7 @@ function handle(data){if(data.type==='manual_respawn_result65'){toast(data.messa
  $('healthbar').style.width=healthPercent64(me.hp,data.maxHp||MAX_HEALTH64)+'%';
  $('protection').textContent=healthStatus64(me,data.maxHp||MAX_HEALTH64);
  $('ammo').textContent=ammo();$('mag').textContent=' / '+weapons[selected].mag;
- $('weapon-name').textContent=weapons[selected].name;
+ $('weapon-name').textContent=displayWeaponName68(selected);
  $('reload-label').textContent=me.reload>0&&selected===me.weapon?`RELOADING ${me.reload.toFixed(1)}s`:ammo()===0?'EMPTY — R TO RELOAD':'R / RELOAD';
   $('fire-mode-label').textContent=fireMode(weapons[selected])==='auto'?'AUTO':'SINGLE CLICK';
   $('ammo-panel').classList.toggle('low-ammo',ammoState(ammo(),weapons[selected].mag)==='low');
