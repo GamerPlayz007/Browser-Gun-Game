@@ -240,6 +240,10 @@ class Room:
         return True
     def start(self,pid,now):
         if pid!=self.host or self.phase not in ('lobby','results'):return False
+        # The first match is a genuine squad ready-up. Only human slots count:
+        # bots do not join this roster and never block starting the match.
+        if self.phase=='lobby' and (not self.players or
+                not all(p.get('ready',False) for p in self.players.values())):return False
         self.mode=self.next_mode
         self.bots.clear();self.ai_score=0;self.bot_score=0
         self.phase='countdown';self.round_number+=1
