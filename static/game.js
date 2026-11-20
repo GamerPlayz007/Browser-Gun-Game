@@ -745,5 +745,5 @@ $('quality').onchange=e=>{
  postfx.setMode(settings.quality);display.setMode(settings.quality);
 };
 window.addEventListener('resize',()=>display.resize());
-document.addEventListener('visibilitychange',()=>{clock=performance.now();frameMeter.reset();movementAccumulator=0;display.quality.warmup=120;resetInput();});
+document.addEventListener('visibilitychange',()=>{clock=performance.now();frameMeter.reset();movementAccumulator=0;display.quality.warmup=120;resetInput();syncSquadVisibility69();});
 $('create').disabled=$('join').disabled=false;$('create').textContent='CREATE A ROOM →';$('status').textContent='Create a room and send your friends the invite.';
