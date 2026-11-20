@@ -158,6 +158,7 @@ const movementDt=()=>map.octavusOriginal?1/30:FIXED_DT;
 let spectatorTarget55=null;
 let ads=0,kick=0,eye=1.55,visualRecoil=0,lastShot=-10,flashUntil=0,hitUntil=0,damageUntil=0,elimUntil=0,noticeTimer,toastTimer,lastPhase='',lastSpawn=-1,switchVisual=0,rtt=50;
 let clock=performance.now(),fpsFrames=0,fpsLast=performance.now(),fps=60,lastStep=0,shotRecovery=0,frameError=false,matchBannerUntil=0,crosshairSize52=24,flashPower52=1;
+ let weaponViewYaw71=0,weaponViewPitch71=0;
 const feedback52=makeCombatFeedback52();
 const combatTrigger=makeTrigger();
 const jumpLatch62=createJumpLatch62();
@@ -199,6 +200,7 @@ function updateSelection(id){
  [...$('weapon-slots').children].forEach((s,i)=>s.classList.toggle('active',i===id));
  $('crosshair').className='crosshair-aether70 '+(
   ['reticle-rifle70','reticle-smg70','reticle-shotgun70','reticle-sniper70'][id]||'reticle-rifle70');
+ $('aim-ammo70').className='aim-ammo70 ammo-gun'+id+'71';
 }
 function toast(text){$('toast').textContent=text;$('toast').style.opacity=1;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').style.opacity=0,3000);}
 function notice(text){$('notice').textContent=text;clearTimeout(noticeTimer);noticeTimer=setTimeout(()=>$('notice').textContent='',3000);}
@@ -229,7 +231,7 @@ function predictStep(input){
  pendingMoves.push(command);send(command);
  if(pendingMoves.length>150){pendingMoves=[];local={...me};viewError.set(0,0,0);}
 }
-function resetInput(){$('map-panel').classList.remove('expanded');keys={};jumpLatch62.clear();movementControls63.reset();visualLean63=0;aiming=false;releaseTrigger(combatTrigger);sendInput();}
+function resetInput(){$('map-panel').classList.remove('expanded');keys={};jumpLatch62.clear();movementControls63.reset();visualLean63=0;aiming=false;weaponViewYaw71=yaw;weaponViewPitch71=pitch;releaseTrigger(combatTrigger);sendInput();}
 setInterval(()=>send({type:'ping',t:performance.now()}),2000);
 function ammo(){
  if(!me)return 0;
@@ -609,7 +611,26 @@ function frame(ms){try{const now=ms/1000,rawMs=ms-clock,dt=Math.min(rawMs/1000,.
    }
   }
   for(let i=0;i<4;i++)weaponModels[i].visible=i===selected&&locked()&&me.hp>0&&state.phase!=='results'&&!(selected===3&&ads>.95);
-  const gun=weaponModels[selected];animateWeapon(gun,{time:now,ads,reload:selected===me.weapon&&me.reload>0?me.reload/weapons[selected].reload:0,kick,moving:locked()&&moving,speed:localSpeed,sprint:input.sprint&&moving,slide:sliding,crouch:crouched,motion:settings.motion,switched:switchVisual,firing:now-lastShot<.23});gun.userData.flash.visible=now<flashUntil;gun.userData.flash.rotation.z=now*21;
+  // Camera-space movement drives the viewmodel's distinct walking, sideways
+   // shifting, and slide sway. Mouse-turn lag is visually eased inside rig.
+   const rightSpeed71=local.vx*Math.cos(yaw)-local.vz*Math.sin(yaw);
+   const forwardSpeed71=-local.vx*Math.sin(yaw)-local.vz*Math.cos(yaw);
+   const deltaYaw71=Math.atan2(Math.sin(yaw-weaponViewYaw71),Math.cos(yaw-weaponViewYaw71));
+   const deltaPitch71=pitch-weaponViewPitch71;
+   weaponViewYaw71=yaw;weaponViewPitch71=pitch;
+   const gun=weaponModels[selected];
+   animateWeapon(gun,{time:now,ads,
+    reload:selected===me.weapon&&me.reload>0?me.reload/weapons[selected].reload:0,
+    kick,moving:locked()&&moving,speed:localSpeed,
+    sprint:input.sprint&&moving,slide:sliding,crouch:crouched,
+    motion:settings.motion,switched:switchVisual,firing:now-lastShot<.23,
+    strafe:T.MathUtils.clamp(rightSpeed71/7,-1,1),
+    forwardSpeed:T.MathUtils.clamp(forwardSpeed71/7,-1,1),
+    lookX:T.MathUtils.clamp(deltaYaw71/.025,-1,1),
+    lookY:T.MathUtils.clamp(deltaPitch71/.025,-1,1),
+    grounded:!!local.grounded,landing:settings.motion?landingPulse:0
+   });
+   gun.userData.flash.visible=now<flashUntil;gun.userData.flash.rotation.z=now*21;
   gun.userData.flash.scale.set(flashPower52,flashPower52,flashPower52*2);
   kick=Math.max(0,kick-dt*.7);visualRecoil*=Math.exp(-dt*18);switchVisual=Math.max(0,switchVisual-dt*5);
   $('scope').className=selected===3?'ads-sniper':selected===2?'ads-shotgun':'ads-reflex';
