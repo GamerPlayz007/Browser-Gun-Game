@@ -2,6 +2,7 @@ import * as T from 'three';
 import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
 import {makeAvatarAnim,trackAvatar,markAvatar,avatarPose} from './animation34.js';
 import {buildWeaponVisuals21} from './weapon_visuals21.js';
+import {sampleReloadPose23} from './reload_motion23.js';
 const materials=new Map();const material=c=>{if(!materials.has(c))materials.set(c,new T.MeshStandardMaterial({color:c,roughness:.48,metalness:.25}));return materials.get(c);};
 function box(parent,w,h,d,c,x,y,z,r=.018){const m=new T.Mesh(new RoundedBoxGeometry(w,h,d,1,Math.min(r,w/3,h/3,d/3)),material(c));m.position.set(x,y,z);parent.add(m);return m;}
 function cylinder(parent,r1,r2,h,c,x,y,z){const m=new T.Mesh(new T.CylinderGeometry(r1,r2,h,12),material(c));m.position.set(x,y,z);parent.add(m);return m;}
@@ -61,26 +62,21 @@ function motionPose22(out,{id,time=0,ads=0,reload=0,kick=0,speed=0,
  const recoil=clamp22(kick/.20),swap=clamp22(switched),low=clamp22(slide);
  const beat=time*(9+2*run);
  const step=Math.sin(beat),sway=Math.cos(beat*.5),breath=motion?Math.sin(time*1.75):0;
- const reloadPart=reload>0?1-clamp22(reload):0;
- const reloadWave=reload>0?Math.sin(Math.PI*reloadPart):0;
  // ADS reaches x=0 exactly, with idle movement nearly eliminated.
  out.x=.28*open+config.sway*sway*gait*open+.038*run;
  out.y=-.29*open+(id===3?-.17:-.145)*aimed
    +Math.abs(step)*config.bob*gait+.0025*breath*open
-   -config.sprintDrop*run-.19*swap-.025*low-.035*reloadWave;
+   -config.sprintDrop*run-.19*swap-.025*low;
  out.z=-.50*open-.39*aimed+.032*run+.042*swap
    +config.back*recoil*.25;
- out.rx=.19*config.recoil*recoil+.08*run+.11*reloadWave
+ out.rx=.19*config.recoil*recoil+.08*run
    +.012*step*gait*open;
  out.ry=.011*sway*gait*open;
  out.rz=.028*config.roll*recoil+.16*run-.17*swap
-   +.009*step*gait*open-.16*low-.20*reloadWave;
+   +.009*step*gait*open-.16*low;
  out.bodyY=Math.min(.026,.015*config.recoil*recoil);
  out.bodyZ=Math.min(.04,.13*config.back*recoil);
  out.bodyRx=-.10*config.recoil*recoil;
- out.magDrop=reloadWave*.29;
- out.magSide=reloadWave*.095;
- out.handDrop=reloadWave*.14;
  out.slideAction=id===2?recoil*.085:0;
  out.boltAction=id!==2?Math.min(.04,recoil*(id===1?.034:.026)):0;
  return out;
@@ -90,21 +86,26 @@ export function animateWeapon(root,{time=0,ads=0,reload=0,kick=0,moving=false,
  const d=root.userData,id=d.id;
  // Reuse the pose buffer; animations run every frame, even on weak GPUs.
  const pose=d.motionPose22||(d.motionPose22={});
+ const clip=d.reloadPose23||(d.reloadPose23={});
  motionPose22(pose,{id,time,ads,reload,kick,slide,motion,switched,
   speed:Math.max(speed,moving?.8:0),sprint});
- root.position.set(pose.x,pose.y,pose.z);
- root.rotation.set(pose.rx,pose.ry,pose.rz);
+ sampleReloadPose23(clip,id,reload);
+ // Compose the movement pose and normalized reload clip; visuals never change
+ // the server's weapon state, aim angles or reload duration.
+ root.position.set(pose.x+clip.x,pose.y+clip.y,pose.z+clip.z);
+ root.rotation.set(pose.rx+clip.rx,pose.ry+clip.ry,pose.rz+clip.rz);
  d.model.position.set(0,pose.bodyY,pose.bodyZ);
  d.model.rotation.set(pose.bodyRx,0,0);
- d.magazine.position.set(-pose.magSide,-.1-pose.magDrop,-.035);
- d.left.position.set(0,-pose.handDrop,0);
- d.left.rotation.x=-pose.bodyRx*.55;
+ d.magazine.position.set(clip.magX,-.1+clip.magY,-.035+clip.magZ);
+ d.magazine.rotation.set(clip.magRX,0,clip.magRZ);
+ d.left.position.set(clip.handX,clip.handY,clip.handZ);
+ d.left.rotation.set(-pose.bodyRx*.55+clip.handRX,0,clip.handRZ);
  const a=d.action;
  if(a?.bolt){
   if(!Number.isFinite(a.bolt.userData.homeZ22))a.bolt.userData.homeZ22=a.bolt.position.z;
-  a.bolt.position.z=a.bolt.userData.homeZ22+pose.boltAction;
+  a.bolt.position.z=a.bolt.userData.homeZ22+pose.boltAction+clip.actionZ;
  }
- if(a?.pump)a.pump.position.z=-pose.slideAction;
+ if(a?.pump)a.pump.position.z=-pose.slideAction+clip.actionZ;
 }
 export function makePlayer(name,color=0xd38165){
  const root=new T.Group(),body=new T.Group();root.add(body);
