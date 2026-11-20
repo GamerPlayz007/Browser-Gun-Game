@@ -144,7 +144,9 @@ function details(p,data,m){
   obj.position.set(x,y,z);obj.scale.set(w,h,d);obj.updateMatrix();
   im.setMatrixAt(i,obj.matrix);
  }
- im.instanceMatrix.needsUpdate=true;im.castShadow=true;p.add(im);geometryCount++;
+ im.instanceMatrix.needsUpdate=true;im.castShadow=true;
+ im.userData.detailTier67=1;im.userData.collidable=false;
+ p.add(im);geometryCount++;
 }
 // A bright line segment made from a thin 3D prism following a surface.
 function tracer(p,side,points,m,thickness=.012){
