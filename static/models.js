@@ -45,35 +45,43 @@ export function makeWeapon(id,arms=true){
 }
 // Stage 2.2: distinct visual handling, optimized for the school browser build.
 // This changes only rendered pose, not the server's shot direction or accuracy.
+// Angled carry keeps the model readable during all movement states.
 const WEAPON_MOTION22=[
- {bob:.010,sway:.010,recoil:.70,back:.24,roll:.11,sprintDrop:.100},
- {bob:.014,sway:.016,recoil:.47,back:.17,roll:.18,sprintDrop:.120},
- {bob:.008,sway:.008,recoil:1.12,back:.40,roll:.10,sprintDrop:.145},
- {bob:.006,sway:.006,recoil:.97,back:.32,roll:.08,sprintDrop:.090}
+ {bob:.010,sway:.010,recoil:.70,back:.24,roll:.11,sprintDrop:.100,showX:.070,showZ:.135,showYaw:-.13,showRoll:.22,showPitch:.045},
+ {bob:.014,sway:.016,recoil:.47,back:.17,roll:.18,sprintDrop:.120,showX:.080,showZ:.115,showYaw:-.17,showRoll:.27,showPitch:.055},
+ {bob:.008,sway:.008,recoil:1.12,back:.40,roll:.10,sprintDrop:.145,showX:.065,showZ:.145,showYaw:-.12,showRoll:.20,showPitch:.040},
+ {bob:.006,sway:.006,recoil:.97,back:.32,roll:.08,sprintDrop:.090,showX:.085,showZ:.195,showYaw:-.12,showRoll:.18,showPitch:.035}
 ];
 const clamp22=v=>Math.max(0,Math.min(1,Number.isFinite(v)?v:0));
 const smooth22=v=>v*v*(3-2*v);
 function motionPose22(out,{id,time=0,ads=0,reload=0,kick=0,speed=0,
- sprint=false,slide=0,motion=true,switched=0}){
+ sprint=0,crouch=0,slide=0,motion=true,switched=0}){
  const config=WEAPON_MOTION22[id]||WEAPON_MOTION22[0];
  const aimed=smooth22(clamp22(ads)),open=1-aimed;
  const moving=motion?clamp22(Math.max(0,speed)/6):0;
- const gait=moving*(1-aimed*.95),run=sprint?moving*open:0;
- const recoil=clamp22(kick/.20),swap=clamp22(switched),low=clamp22(slide);
+ const gait=moving*(1-aimed*.95),run=clamp22(sprint)*moving*open;
+ const recoil=clamp22(kick/.20),swap=clamp22(switched);
+ const sliding=clamp22(slide),crouching=clamp22(crouch)*(1-sliding);
  const beat=time*(9+2*run);
  const step=Math.sin(beat),sway=Math.cos(beat*.5),breath=motion?Math.sin(time*1.75):0;
- // ADS reaches x=0 exactly, with idle movement nearly eliminated.
- out.x=.28*open+config.sway*sway*gait*open+.038*run;
+ // Maintain a showcase angle while idle, moving, sprinting, crouching
+ // and sliding; easing out of it restores true centered ADS.
+ const carry=open*(1-.11*run-.07*crouching-.09*sliding)*
+  (1-.15*recoil)*(1-.22*clamp22(reload))*(1-.12*swap);
+ out.x=.28*open+config.sway*sway*gait*open+.038*run+
+   config.showX*carry+.01*sliding*open;
  out.y=-.29*open+(id===3?-.17:-.145)*aimed
    +Math.abs(step)*config.bob*gait+.0025*breath*open
-   -config.sprintDrop*run-.19*swap-.025*low;
- out.z=-.50*open-.39*aimed+.032*run+.042*swap
-   +config.back*recoil*.25;
+   -config.sprintDrop*run-.19*swap-.025*crouching*open-.077*sliding*open+
+   .008*carry;
+ out.z=-.50*open-.39*aimed+.032*run+.042*swap+
+   config.back*recoil*.25-config.showZ*carry+.02*sliding*open;
  out.rx=.19*config.recoil*recoil+.08*run
-   +.012*step*gait*open;
- out.ry=.011*sway*gait*open;
- out.rz=.028*config.roll*recoil+.16*run-.17*swap
-   +.009*step*gait*open-.16*low;
+   +.012*step*gait*open+config.showPitch*carry+.035*sliding*open;
+ out.ry=.011*sway*gait*open+config.showYaw*carry;
+ out.rz=.028*config.roll*recoil+.065*run-.17*swap
+   +.009*step*gait*open-.045*crouching*open+.06*sliding*open+
+   config.showRoll*carry;
  out.bodyY=Math.min(.026,.015*config.recoil*recoil);
  out.bodyZ=Math.min(.04,.13*config.back*recoil);
  out.bodyRx=-.10*config.recoil*recoil;
@@ -82,13 +90,20 @@ function motionPose22(out,{id,time=0,ads=0,reload=0,kick=0,speed=0,
  return out;
 }
 export function animateWeapon(root,{time=0,ads=0,reload=0,kick=0,moving=false,
- slide=0,motion=true,switched=0,speed=0,sprint=false}){
+ slide=0,crouch=0,motion=true,switched=0,speed=0,sprint=false}){
  const d=root.userData,id=d.id;
  // Reuse the pose buffer; animations run every frame, even on weak GPUs.
  const pose=d.motionPose22||(d.motionPose22={});
  const clip=d.reloadPose23||(d.reloadPose23={});
- motionPose22(pose,{id,time,ads,reload,kick,slide,motion,switched,
-  speed:Math.max(speed,moving?.8:0),sprint});
+ // Blend discrete locomotion flags without ever shifting the ADS reticle.
+ const state=d.carryState22||(d.carryState22={time,sprint:0,crouch:0,slide:0});
+ const dt=Math.max(0,Math.min(.10,time-state.time));state.time=time;
+ const blend=1-Math.exp(-dt*15);
+ state.sprint+=(Number(!!sprint)-state.sprint)*blend;
+ state.crouch+=(clamp22(crouch)-state.crouch)*blend;
+ state.slide+=(clamp22(slide)-state.slide)*blend;
+ motionPose22(pose,{id,time,ads,reload,kick,slide:state.slide,crouch:state.crouch,
+  motion,switched,speed:Math.max(speed,moving?.8:0),sprint:state.sprint});
  sampleReloadPose23(clip,id,reload);
  // Compose the movement pose and normalized reload clip; visuals never change
  // the server's weapon state, aim angles or reload duration.
