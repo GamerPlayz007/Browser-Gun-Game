@@ -45,12 +45,14 @@ export function makeWeapon(id,arms=true){
 }
 // Stage 2.2: distinct visual handling, optimized for the school browser build.
 // This changes only rendered pose, not the server's shot direction or accuracy.
-// Angled carry keeps the model readable during all movement states.
+// Outward side-profile carry: yaw, not barrel-roll, exposes the detailed
+// receiver sides. Shift closer to screen center to preserve the complete silhouette.
+// Kept cosmetic only; centered aiming, hit logic and reloading stay unchanged.
 const WEAPON_MOTION22=[
- {bob:.010,sway:.010,recoil:.70,back:.24,roll:.11,sprintDrop:.100,showX:.070,showZ:.135,showYaw:-.13,showRoll:.22,showPitch:.045},
- {bob:.014,sway:.016,recoil:.47,back:.17,roll:.18,sprintDrop:.120,showX:.080,showZ:.115,showYaw:-.17,showRoll:.27,showPitch:.055},
- {bob:.008,sway:.008,recoil:1.12,back:.40,roll:.10,sprintDrop:.145,showX:.065,showZ:.145,showYaw:-.12,showRoll:.20,showPitch:.040},
- {bob:.006,sway:.006,recoil:.97,back:.32,roll:.08,sprintDrop:.090,showX:.085,showZ:.195,showYaw:-.12,showRoll:.18,showPitch:.035}
+ {bob:.010,sway:.010,recoil:.70,back:.24,roll:.11,sprintDrop:.100,showX:-.040,showZ:.045,showYaw:.37,showRoll:-.11,showPitch:.025},
+ {bob:.014,sway:.016,recoil:.47,back:.17,roll:.18,sprintDrop:.120,showX:-.048,showZ:.035,showYaw:.43,showRoll:-.12,showPitch:.030},
+ {bob:.008,sway:.008,recoil:1.12,back:.40,roll:.10,sprintDrop:.145,showX:-.030,showZ:.060,showYaw:.35,showRoll:-.105,showPitch:.020},
+ {bob:.006,sway:.006,recoil:.97,back:.32,roll:.08,sprintDrop:.090,showX:-.040,showZ:.095,showYaw:.33,showRoll:-.105,showPitch:.018}
 ];
 const clamp22=v=>Math.max(0,Math.min(1,Number.isFinite(v)?v:0));
 const smooth22=v=>v*v*(3-2*v);
