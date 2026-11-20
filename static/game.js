@@ -194,7 +194,12 @@ function selectWeapon(id){
   selected=id;desiredWeapon64=id;updateSelection(id);switchVisual=.7;send({type:'weapon',weapon:id});
  }else{selected=id;updateSelection(id);}
 }
-function updateSelection(id){document.querySelectorAll('.weapon-card').forEach(b=>b.classList.toggle('active',Number(b.dataset.weapon)===id));[...$('weapon-slots').children].forEach((s,i)=>s.classList.toggle('active',i===id));}
+function updateSelection(id){
+ document.querySelectorAll('.weapon-card').forEach(b=>b.classList.toggle('active',Number(b.dataset.weapon)===id));
+ [...$('weapon-slots').children].forEach((s,i)=>s.classList.toggle('active',i===id));
+ $('crosshair').className='crosshair-aether70 '+(
+  ['reticle-rifle70','reticle-smg70','reticle-shotgun70','reticle-sniper70'][id]||'reticle-rifle70');
+}
 function toast(text){$('toast').textContent=text;$('toast').style.opacity=1;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').style.opacity=0,3000);}
 function notice(text){$('notice').textContent=text;clearTimeout(noticeTimer);noticeTimer=setTimeout(()=>$('notice').textContent='',3000);}
 function locked(){return document.pointerLockElement===renderer.domElement;}
@@ -267,6 +272,7 @@ async function refreshRooms65(prefer){
 async function enter(create){$('create').disabled=$('join').disabled=true;$('rejoin56').hidden=true;$('status').textContent='Connecting to arena…';try{let code=$('code').value.trim().toUpperCase();const response=await fetch(create?'/api/rooms':'/api/rooms/'+code,create?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mapId:$('map-select').value})}:{});const data=await response.json();if(!response.ok)throw Error(data.error||'Connection failed.');if(create){code=data.room;$('code').value=code;}else if(data.players>=data.max)throw Error('This room is full.');
 await loadArena(data.mapId);const name=safeName56($('name').value);safeWrite56('cf-name',name);const conn=new WebSocket(`${location.protocol==='https:'?'wss':'ws'}://${location.host}/ws/${code}?name=${encodeURIComponent(name)}&weapon=${selected}`);ws=conn;const timeout=setTimeout(()=>{if(conn.readyState!==1)conn.close();},12000);conn.onopen=()=>clearTimeout(timeout);conn.onmessage=e=>{if(ws===conn)handle(JSON.parse(e.data));};conn.onclose=()=>{clearTimeout(timeout);if(ws===conn)disconnect('Connection closed. Rejoining creates a new player identity.',code);};conn.onerror=()=>{$('status').textContent='Could not connect. Check the server is awake.';};}catch(e){$('status').textContent=e.message;$('create').disabled=$('join').disabled=false;refreshRooms65();}}
 function disconnect(message,rejoinCode56=null){
+ $('aim-ammo70').hidden=true;
  squadLineup69.setVisible(false);squadLineup69.update([],null,null,'deathmatch');
  localWeaponFinishKey68='';
  const code56=validRoom65(rejoinCode56)?rejoinCode56.toUpperCase():null;
@@ -603,7 +609,7 @@ function frame(ms){try{const now=ms/1000,rawMs=ms-clock,dt=Math.min(rawMs/1000,.
    }
   }
   for(let i=0;i<4;i++)weaponModels[i].visible=i===selected&&locked()&&me.hp>0&&state.phase!=='results'&&!(selected===3&&ads>.95);
-  const gun=weaponModels[selected];animateWeapon(gun,{time:now,ads,reload:selected===me.weapon&&me.reload>0?me.reload/weapons[selected].reload:0,kick,moving:locked()&&moving,speed:localSpeed,sprint:input.sprint&&moving,slide:sliding,crouch:crouched,motion:settings.motion,switched:switchVisual});gun.userData.flash.visible=now<flashUntil;gun.userData.flash.rotation.z=now*21;
+  const gun=weaponModels[selected];animateWeapon(gun,{time:now,ads,reload:selected===me.weapon&&me.reload>0?me.reload/weapons[selected].reload:0,kick,moving:locked()&&moving,speed:localSpeed,sprint:input.sprint&&moving,slide:sliding,crouch:crouched,motion:settings.motion,switched:switchVisual,firing:now-lastShot<.23});gun.userData.flash.visible=now<flashUntil;gun.userData.flash.rotation.z=now*21;
   gun.userData.flash.scale.set(flashPower52,flashPower52,flashPower52*2);
   kick=Math.max(0,kick-dt*.7);visualRecoil*=Math.exp(-dt*18);switchVisual=Math.max(0,switchVisual-dt*5);
   $('scope').className=selected===3?'ads-sniper':selected===2?'ads-shotgun':'ads-reflex';
@@ -614,8 +620,29 @@ function frame(ms){try{const now=ms/1000,rawMs=ms-clock,dt=Math.min(rawMs/1000,.
   crosshairSize52+=(spread52-crosshairSize52)*Math.min(1,dt*15);
   $('crosshair').style.opacity=me.hp<=0?'0':String(1-Math.min(1,Math.max(0,(ads-.28)/.47)));
   $('crosshair').style.width=$('crosshair').style.height=crosshairSize52.toFixed(1)+'px';
+  // Display predicted, server-confirmed ammo beside the aim indicator.
+  // Only the local HUD changes; the shooter and netcode stay untouched.
+  const aimAmmo=$('aim-ammo70');
+  aimAmmo.hidden=!(locked()&&me.hp>0&&state.phase!=='results');
+  if(!aimAmmo.hidden){
+   const remaining=Math.max(0,ammo()),capacity=weapons[selected].mag;
+   const recharging=selected===me.weapon&&me.reload>0;
+   const stateLabel=recharging?'RECHARGING':remaining===0?'EMPTY':displayWeaponShort68(selected);
+   if($('aim-ammo-count70').textContent!==String(remaining))
+    $('aim-ammo-count70').textContent=String(remaining);
+   if($('aim-ammo-max70').textContent!==String(capacity))
+    $('aim-ammo-max70').textContent=String(capacity);
+   if($('aim-ammo-state70').textContent!==stateLabel)
+    $('aim-ammo-state70').textContent=stateLabel;
+   aimAmmo.classList.toggle('ammo-low70',!recharging&&remaining>0&&remaining<=Math.ceil(capacity*.25));
+   aimAmmo.classList.toggle('ammo-empty70',!recharging&&remaining===0);
+   aimAmmo.classList.toggle('ammo-reload70',recharging);
+   $('aim-ammo-fill70').style.width=(recharging?
+    100*reloadFraction(me.reload,weapons[selected].reload):
+    100*remaining/Math.max(1,capacity)).toFixed(1)+'%';
+  }
   if(moving&&local.grounded&&locked()&&now-lastStep>(input.sprint?.28:.4)){audio.step(input.sprint?.07:.045);lastStep=now;}
- }else{const anchor=map.center||{x:0,z:0};camera.position.set(anchor.x+7+Math.sin(now*.045)*2,map.octavusOriginal?16:9,anchor.z+30+Math.cos(now*.045)*2);camera.lookAt(anchor.x-5,map.octavusOriginal?2:3,anchor.z+14);camera.fov=65;camera.updateProjectionMatrix();for(const g of weaponModels)g.visible=false;}
+ }else{$('aim-ammo70').hidden=true;const anchor=map.center||{x:0,z:0};camera.position.set(anchor.x+7+Math.sin(now*.045)*2,map.octavusOriginal?16:9,anchor.z+30+Math.cos(now*.045)*2);camera.lookAt(anchor.x-5,map.octavusOriginal?2:3,anchor.z+14);camera.fov=65;camera.updateProjectionMatrix();for(const g of weaponModels)g.visible=false;}
  for(let i=effects.length-1;i>=0;i--)if(now>effects[i].until){const e=effects.splice(i,1)[0];e.obj.removeFromParent();if(e.own){e.obj.geometry.dispose();e.obj.material.dispose();}}
  $('damage').style.opacity=now<damageUntil?.65:0;$('damage-direction').style.opacity=now<damageUntil?1:0;const sample52=feedback52.sample(now);
  $('hitmarker').style.opacity=$('damage-number').style.opacity=sample52.alpha;
