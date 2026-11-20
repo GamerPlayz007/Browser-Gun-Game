@@ -551,7 +551,9 @@ function frame(ms){try{const now=ms/1000,rawMs=ms-clock,dt=Math.min(rawMs/1000,.
   viewError.multiplyScalar(Math.exp(-dt*14));
   tryTriggerFire(now);
   if(now-lastShot>.12&&shotRecovery>0){const recovery=Math.min(shotRecovery,dt*.12);pitch-=recovery;shotRecovery-=recovery;}
-  ads+=(Number(aiming&&locked()&&me.reload<=0)-ads)*Math.min(1,dt*16);const sliding=local.crouch?1:0;eye+=((sliding?.9:1.55)-eye)*Math.min(1,dt*15);
+  ads+=(Number(aiming&&locked()&&me.reload<=0)-ads)*Math.min(1,dt*16);const crouched=local.crouch?1:0;
+   const sliding=local.grounded&&local.slide_until>local.motion_time?1:0;
+   eye+=((crouched?.9:1.55)-eye)*Math.min(1,dt*15);
   const localSpeed=Math.hypot(local.vx,local.vz),moving=localSpeed>.5;
    const bob=settings.motion&&moving&&local.grounded?Math.sin(now*12)*.018*(1-ads):0;
    const cue=movementCue53(local,input,now,slideHopUntil53);
@@ -592,7 +594,7 @@ function frame(ms){try{const now=ms/1000,rawMs=ms-clock,dt=Math.min(rawMs/1000,.
    }
   }
   for(let i=0;i<4;i++)weaponModels[i].visible=i===selected&&locked()&&me.hp>0&&state.phase!=='results'&&!(selected===3&&ads>.95);
-  const gun=weaponModels[selected];animateWeapon(gun,{time:now,ads,reload:selected===me.weapon&&me.reload>0?me.reload/weapons[selected].reload:0,kick,moving:locked()&&moving,speed:localSpeed,sprint:input.sprint&&moving,slide:sliding,motion:settings.motion,switched:switchVisual});gun.userData.flash.visible=now<flashUntil;gun.userData.flash.rotation.z=now*21;
+  const gun=weaponModels[selected];animateWeapon(gun,{time:now,ads,reload:selected===me.weapon&&me.reload>0?me.reload/weapons[selected].reload:0,kick,moving:locked()&&moving,speed:localSpeed,sprint:input.sprint&&moving,slide:sliding,crouch:crouched,motion:settings.motion,switched:switchVisual});gun.userData.flash.visible=now<flashUntil;gun.userData.flash.rotation.z=now*21;
   gun.userData.flash.scale.set(flashPower52,flashPower52,flashPower52*2);
   kick=Math.max(0,kick-dt*.7);visualRecoil*=Math.exp(-dt*18);switchVisual=Math.max(0,switchVisual-dt*5);
   $('scope').className=selected===3?'ads-sniper':selected===2?'ads-shotgun':'ads-reflex';
