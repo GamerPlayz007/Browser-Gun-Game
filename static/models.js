@@ -1,7 +1,7 @@
 import * as T from 'three';
 import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
 import {makeAvatarAnim,trackAvatar,markAvatar,avatarPose} from './animation34.js';
-import {buildWeaponVisuals21} from './weapon_visuals21.js';
+import {buildAetherGameVisuals,disposeAetherMaterials} from './aether_game_models.js';
 import {sampleReloadPose23} from './reload_motion23.js';
 const materials=new Map();const material=c=>{if(!materials.has(c))materials.set(c,new T.MeshStandardMaterial({color:c,roughness:.48,metalness:.25}));return materials.get(c);};
 function box(parent,w,h,d,c,x,y,z,r=.018){const m=new T.Mesh(new RoundedBoxGeometry(w,h,d,1,Math.min(r,w/3,h/3,d/3)),material(c));m.position.set(x,y,z);parent.add(m);return m;}
@@ -28,11 +28,12 @@ export function setModelQuality67(root,mode='high'){
   o.visible=o.userData.detailTier67<=tier;});
  return tier;
 }
-export function makeWeapon(id,arms=true){
+export function makeWeapon(id,arms=true,finish=Math.floor(Math.random()*3)){
  const root=new T.Group(),model=new T.Group(),magazine=new T.Group(),left=new T.Group();
- root.add(model,left);model.add(magazine);magazine.position.set(0,-.1,-.035);
- const {flash,action}=buildWeaponVisuals21(model,magazine,id);
- // Arm poses remain compatible with Stage 2.2's upcoming movement/animation pass.
+ root.add(model,left);model.add(magazine);
+ const visual=buildAetherGameVisuals(model,magazine,id,finish);
+ const {flash,action}=visual;
+ // Keep the existing independent arm/hand rig and movement clips.
  if(arms){
   const sleeve=0x536d68,glove=0x283941;
   box(root,.13,.13,.35,sleeve,.035,-.16,.40).rotation.x=.17;
@@ -40,8 +41,26 @@ export function makeWeapon(id,arms=true){
   box(left,.13,.13,.37,sleeve,-.13,-.18,-.08).rotation.z=-.22;
   box(left,.12,.10,.15,glove,-.065,-.09,-.23);
  }
- root.userData={model,magazine,left,flash,action,id};
+ root.userData={model,magazine,left,flash,action,id,
+  aetherMaterials:visual.uniqueMaterials,aetherFinish:finish,
+  aetherSetFinish:visual.setFinish,aetherBatchCount:visual.batchCount};
  return root;
+}
+// Material palettes are private to each rig: changing a player's finish
+// never repaints another player's weapon.
+export function setWeaponFinish(root,index){
+ const d=root?.userData;
+ if(!d?.aetherSetFinish)return false;
+ const normalized=Math.max(0,Math.min(2,Math.trunc(Number(index)||0)));
+ if(d.aetherFinish===normalized)return false;
+ d.aetherFinish=normalized;
+ return d.aetherSetFinish(normalized);
+}
+export function disposeWeaponRig(root){
+ if(!root)return;
+ disposeAetherMaterials(root);
+ root.traverse(o=>o.geometry?.dispose());
+ root.removeFromParent();
 }
 // Stage 2.2: distinct visual handling, optimized for the school browser build.
 // This changes only rendered pose, not the server's shot direction or accuracy.
@@ -124,7 +143,7 @@ export function animateWeapon(root,{time=0,ads=0,reload=0,kick=0,moving=false,
  }
  if(a?.pump)a.pump.position.z=-pose.slideAction+clip.actionZ;
 }
-export function makePlayer(name,color=0xd38165){
+export function makePlayer(name,color=0xd38165,weaponId=0,weaponFinish=0){
  const root=new T.Group(),body=new T.Group();root.add(body);
  box(body,.56,.64,.34,0x3b5559,0,1.13,0,.07);
  const chestSkin56=box(body,.60,.25,.38,color,0,1.36,0,.05);
@@ -175,7 +194,7 @@ export function makePlayer(name,color=0xd38165){
    [0,-.16,-.17,.14,.13,.04],[0,-.27,.09,.13,.08,.04]]);
   arms.push(arm);elbows.push(elbow);
  }
- const gun=makeWeapon(0,false);gun.scale.setScalar(.8);
+ const gun=makeWeapon(weaponId,false,weaponFinish);gun.scale.setScalar(.8);
  gun.position.set(.26,1.1,-.34);body.add(gun);
  const impact=new T.Mesh(new T.BoxGeometry(.61,.09,.40),
   new T.MeshBasicMaterial({color:0xffba78,transparent:true,opacity:0,depthWrite:false}));
@@ -245,6 +264,7 @@ export function animatePlayer(root,p,time){
  return pose;
 }
 export function disposePlayer(root){
+ disposeAetherMaterials(root?.userData?.gun);
  root.traverse(o=>{
   o.geometry?.dispose();
   if(o.isSprite){o.material.map?.dispose();o.material.dispose();}
