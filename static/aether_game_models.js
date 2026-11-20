@@ -7,10 +7,33 @@
 import * as T from 'three';
 import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
-const FINISHES=[
- {shell:0x303d47,plate:0x465961,poly:0x1e2a31,trim:0x9caeb4,glow:0x37dfff,accent:0xf5a65a},
- {shell:0x8a9ca3,plate:0xc0c8c9,poly:0x4f606b,trim:0xf1ece2,glow:0x5af3ed,accent:0xe9bc6c},
- {shell:0x24252d,plate:0x483d51,poly:0x171921,trim:0xaaa0ba,glow:0xb579ff,accent:0xff7468}
+// Each AETHER model has its own recognizable color family, plus randomized
+// Onyx / Titanium / Obsidian variants. Finish indices still come from server.
+const WEAPON_PALETTES71=[
+ // 0 — AETHER-9 / cyan-blue
+ [
+  {shell:0x235066,plate:0x287f98,poly:0x182b3b,trim:0x9bdceb,glow:0x3cdbff,accent:0x69bbdc},
+  {shell:0x719daa,plate:0xb2d6de,poly:0x3d6475,trim:0xe1f7fa,glow:0x5ce8ff,accent:0x8fdafa},
+  {shell:0x102a3c,plate:0x1f5674,poly:0x0c1a28,trim:0x5cabc5,glow:0x17bdfd,accent:0x43a8d9}
+ ],
+ // 1 — AETHER-S9 / violet
+ [
+  {shell:0x50305d,plate:0x8652a8,poly:0x2d2446,trim:0xd8a4ed,glow:0xc779ff,accent:0xe4a9fa},
+  {shell:0x9c83b4,plate:0xd1bbdc,poly:0x61547e,trim:0xf6d9ff,glow:0xd8a4ff,accent:0xb68ef5},
+  {shell:0x301e44,plate:0x624089,poly:0x1d1831,trim:0xab78ca,glow:0xa34cff,accent:0xd17cf6}
+ ],
+ // 2 — AETHER-12 / ember-orange
+ [
+  {shell:0x68392b,plate:0xb75836,poly:0x39221c,trim:0xffb17f,glow:0xff873e,accent:0xffc46b},
+  {shell:0xa4755e,plate:0xe0a07d,poly:0x624738,trim:0xffdfbc,glow:0xffab66,accent:0xffcf88},
+  {shell:0x43251d,plate:0x873923,poly:0x251918,trim:0xd87548,glow:0xff5b2e,accent:0xff9952}
+ ],
+ // 3 — AETHER-L7 / lime-green
+ [
+  {shell:0x465536,plate:0x7a9860,poly:0x293b2f,trim:0xe2e9aa,glow:0xb4ff6b,accent:0xdaf399},
+  {shell:0x8b9c6c,plate:0xc6d6a7,poly:0x5e7052,trim:0xf4f8d3,glow:0xd5ff9a,accent:0xefffb0},
+  {shell:0x293d27,plate:0x527b40,poly:0x172b21,trim:0xadc477,glow:0x92ef45,accent:0xbbe877}
+ ]
 ];
 export const AETHER_FINISH_NAMES=['ONYX','TITANIUM','OBSIDIAN'];
 const FINISH_KEYS=['shell','plate','poly','trim','glow','accent'];
@@ -761,7 +784,7 @@ function buildLongwatch(){
   const next=Math.max(0,Math.min(2,Math.trunc(Number(index)||0)));
   if(next===chosen)return false;
   chosen=next;
-  const palette=FINISHES[next];
+  const palette=WEAPON_PALETTES71[weaponId][next];
   for(const key of FINISH_KEYS)mat[key].color.setHex(palette[key]);
   mat.glow.emissive.setHex(palette.glow);
   mat.accent.emissive.setHex(palette.accent);
@@ -774,7 +797,8 @@ function buildLongwatch(){
   if(o.material)for(const m of (Array.isArray(o.material)?o.material:[o.material]))
    uniqueMaterials.add(m);
  });
- return {flash,action,adsAnchor,setFinish,uniqueMaterials:[...uniqueMaterials],batchCount,
+ const getGlowColor=()=>WEAPON_PALETTES71[weaponId][chosen<0?0:chosen].glow;
+ return {flash,action,adsAnchor,setFinish,getGlowColor,uniqueMaterials:[...uniqueMaterials],batchCount,
   geometryCount,gun};
 }
 export function disposeAetherMaterials(root){
