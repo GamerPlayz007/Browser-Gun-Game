@@ -338,7 +338,10 @@ function buildSMG(){
  const energy=buildEnergyPack();
  const optic=buildHoloOptic();
  const under=buildAccessoryPod();
- buildDetailPass();
+ const finishing=buildDetailPass();
+ // Decorative details follow the shortened body, rather than floating ahead.
+ finishing.scale.z=.76;
+ finishing.position.z=.080;
  // Scale entire art assemblies rather than distorting individual surfaces.
  // All positions are display-only scene coordinates, not physical dimensions.
  guard.scale.z=.76;
