@@ -713,6 +713,15 @@ function buildLongwatch(){
 
  const build=[buildAether,buildSMG,buildWardrum,buildLongwatch][weaponId];
  build();
+ // ADS calibration point lives at the optical center of the actual 3D sight.
+ // The sniper uses its rear lens; the other three use their holographic ring.
+ // This is scene-only artwork: the server controls shot direction independently.
+ const optic=elements[weaponId===3?'longwatch-precision-optic':'aether-holo-optic'];
+ if(!optic)throw new Error('AETHER optic missing for weapon '+weaponId);
+ const adsAnchor=new T.Object3D();
+ adsAnchor.name='aether-ads-center';
+ adsAnchor.position.set(0,weaponId===3?.083:.154,weaponId===3?.329:-.030);
+ optic.add(adsAnchor);
  // Detach only the pieces that must retain animation independence.
  // The visual group remains in the same muzzle-forward coordinates as the showroom.
  const magArt=elements[MAG_GROUPS[weaponId]];
@@ -765,7 +774,7 @@ function buildLongwatch(){
   if(o.material)for(const m of (Array.isArray(o.material)?o.material:[o.material]))
    uniqueMaterials.add(m);
  });
- return {flash,action,setFinish,uniqueMaterials:[...uniqueMaterials],batchCount,
+ return {flash,action,adsAnchor,setFinish,uniqueMaterials:[...uniqueMaterials],batchCount,
   geometryCount,gun};
 }
 export function disposeAetherMaterials(root){
