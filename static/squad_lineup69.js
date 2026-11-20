@@ -19,7 +19,7 @@ const OPEN_COLOR=0x365b70;
 export function createSquadLineup(canvas,roster){
  let renderer=null,scene=null,camera=null;
  const actors=new Map(),pedestals=[],slotCards=[];
- let active=false,raf=0,previous=0,time=0,disabled=false;
+ let active=false,raf=0,previous=0,time=0,disabled=false,lastWidth=0,lastHeight=0;
  let hostId=null,selfId=null,mode='deathmatch';
  let players=[];
  const reducedMotion=window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches||false;
@@ -83,6 +83,7 @@ export function createSquadLineup(canvas,roster){
   if(!renderer||!camera)return;
   const w=Math.max(1,Math.floor(canvas.clientWidth));
   const h=Math.max(1,Math.floor(canvas.clientHeight));
+  lastWidth=w;lastHeight=h;
   renderer.setSize(w,h,false);
   const hw=STAGE_HEIGHT*(w/h)/2;
   camera.left=-hw;camera.right=hw;
@@ -147,8 +148,8 @@ export function createSquadLineup(canvas,roster){
  }
  function renderOnce(){
   if(!renderer||!scene||!camera||!active||disabled)return;
-  if(canvas.clientWidth!==renderer.domElement.width/renderer.getPixelRatio()||
-     canvas.clientHeight!==renderer.domElement.height/renderer.getPixelRatio())resize();
+  if(Math.max(1,Math.floor(canvas.clientWidth))!==lastWidth||
+     Math.max(1,Math.floor(canvas.clientHeight))!==lastHeight)resize();
   renderer.render(scene,camera);
  }
  function tick(t){
