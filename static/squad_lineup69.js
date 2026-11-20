@@ -27,7 +27,10 @@ export function createSquadLineup(canvas,roster){
  function slotX(i){
   const aspect=Math.max(2,canvas.clientWidth/Math.max(1,canvas.clientHeight));
   const width=STAGE_HEIGHT*aspect;
-  return ((i+.5)/MAX_SLOTS-.5)*width;
+  // The lineup camera looks toward +Z from negative Z to show the avatars'
+  // faces. That reverses screen-right versus world +X. Negate the slot axis
+  // so stage position i lines up with the i-th card from LEFT to RIGHT.
+  return (.5-(i+.5)/MAX_SLOTS)*width;
  }
  function createScene(){
   if(renderer||disabled)return;
