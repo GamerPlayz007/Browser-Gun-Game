@@ -592,7 +592,7 @@ function frame(ms){try{const now=ms/1000,rawMs=ms-clock,dt=Math.min(rawMs/1000,.
    }
   }
   for(let i=0;i<4;i++)weaponModels[i].visible=i===selected&&locked()&&me.hp>0&&state.phase!=='results'&&!(selected===3&&ads>.95);
-  const gun=weaponModels[selected];animateWeapon(gun,{time:now,ads,reload:selected===me.weapon&&me.reload>0?me.reload/weapons[selected].reload:0,kick,moving:locked()&&moving,slide:sliding,motion:settings.motion,switched:switchVisual});gun.userData.flash.visible=now<flashUntil;gun.userData.flash.rotation.z=now*21;
+  const gun=weaponModels[selected];animateWeapon(gun,{time:now,ads,reload:selected===me.weapon&&me.reload>0?me.reload/weapons[selected].reload:0,kick,moving:locked()&&moving,speed:localSpeed,sprint:input.sprint&&moving,slide:sliding,motion:settings.motion,switched:switchVisual});gun.userData.flash.visible=now<flashUntil;gun.userData.flash.rotation.z=now*21;
   gun.userData.flash.scale.set(flashPower52,flashPower52,flashPower52*2);
   kick=Math.max(0,kick-dt*.7);visualRecoil*=Math.exp(-dt*18);switchVisual=Math.max(0,switchVisual-dt*5);
   $('scope').className=selected===3?'ads-sniper':selected===2?'ads-shotgun':'ads-reflex';
