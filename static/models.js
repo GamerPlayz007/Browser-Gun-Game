@@ -38,6 +38,7 @@ export function makeWeapon(id,arms=true,finish=Math.floor(Math.random()*3)){
   new T.MeshBasicMaterial({color:0x67f1eb,transparent:true,
    opacity:.68,depthWrite:false,side:T.DoubleSide}));
  reloadGlyph70.position.set(0,.065,-.14);
+ reloadGlyph70.material.color.setHex(visual.getGlowColor());
  reloadGlyph70.visible=false;
  visual.gun.add(reloadGlyph70);
  visual.uniqueMaterials.push(reloadGlyph70.material);
@@ -51,7 +52,9 @@ export function makeWeapon(id,arms=true,finish=Math.floor(Math.random()*3)){
  }
  root.userData={model,magazine,left,flash,action,id,adsAnchor:visual.adsAnchor,reloadGlyph70,
   aetherMaterials:visual.uniqueMaterials,aetherFinish:finish,
-  aetherSetFinish:visual.setFinish,aetherBatchCount:visual.batchCount};
+  aetherSetFinish:visual.setFinish,aetherGetGlowColor:visual.getGlowColor,
+  aetherArtGun71:visual.gun,aetherDefaultYaw71:visual.gun.rotation.y,
+  aetherBatchCount:visual.batchCount};
  return root;
 }
 // Material palettes are private to each rig: changing a player's finish
@@ -62,7 +65,9 @@ export function setWeaponFinish(root,index){
  const normalized=Math.max(0,Math.min(2,Math.trunc(Number(index)||0)));
  if(d.aetherFinish===normalized)return false;
  d.aetherFinish=normalized;
- return d.aetherSetFinish(normalized);
+ const changed=d.aetherSetFinish(normalized);
+ if(changed&&d.reloadGlyph70)d.reloadGlyph70.material.color.setHex(d.aetherGetGlowColor());
+ return changed;
 }
 export function disposeWeaponRig(root){
  if(!root)return;
@@ -70,50 +75,72 @@ export function disposeWeaponRig(root){
  root.traverse(o=>o.geometry?.dispose());
  root.removeFromParent();
 }
-// Stage 2.2: distinct visual handling, optimized for the school browser build.
-// This changes only rendered pose, not the server's shot direction or accuracy.
-// Outward side-profile carry: yaw, not barrel-roll, exposes the detailed
-// receiver sides. Shift closer to screen center to preserve the complete silhouette.
-// Kept cosmetic only; centered aiming, hit logic and reloading stay unchanged.
+// CROSSFire 07.1 — layered, movement-aware AETHER viewmodel animation.
+// All offsets below are decorative first-person rendering only.
+// Fire focus cancels side yaw and roll WITHOUT dragging the gun into ADS.
 const WEAPON_MOTION22=[
- {bob:.010,sway:.010,recoil:.70,back:.24,roll:.11,sprintDrop:.100,showX:-.040,showZ:.045,showYaw:.37,showRoll:-.11,showPitch:.025},
- {bob:.014,sway:.016,recoil:.47,back:.17,roll:.18,sprintDrop:.120,showX:-.048,showZ:.035,showYaw:.43,showRoll:-.12,showPitch:.030},
- {bob:.008,sway:.008,recoil:1.12,back:.40,roll:.10,sprintDrop:.145,showX:-.030,showZ:.060,showYaw:.35,showRoll:-.105,showPitch:.020},
- {bob:.006,sway:.006,recoil:.97,back:.32,roll:.08,sprintDrop:.090,showX:-.040,showZ:.095,showYaw:.33,showRoll:-.105,showPitch:.018}
+ {bob:.027,sway:.034,recoil:.70,back:.24,roll:.11,sprintDrop:.100,showX:-.040,showZ:.045,showYaw:.37,showRoll:-.11,showPitch:.025},
+ {bob:.038,sway:.046,recoil:.47,back:.17,roll:.18,sprintDrop:.120,showX:-.048,showZ:.035,showYaw:.43,showRoll:-.12,showPitch:.030},
+ {bob:.030,sway:.030,recoil:1.12,back:.40,roll:.10,sprintDrop:.145,showX:-.030,showZ:.060,showYaw:.35,showRoll:-.105,showPitch:.020},
+ {bob:.022,sway:.025,recoil:.97,back:.32,roll:.08,sprintDrop:.090,showX:-.040,showZ:.095,showYaw:.33,showRoll:-.105,showPitch:.018}
 ];
 const clamp22=v=>Math.max(0,Math.min(1,Number.isFinite(v)?v:0));
+const signed22=v=>Math.max(-1,Math.min(1,Number.isFinite(v)?v:0));
 const smooth22=v=>v*v*(3-2*v);
 function motionPose22(out,{id,time=0,ads=0,reload=0,kick=0,speed=0,
- sprint=0,crouch=0,slide=0,motion=true,switched=0,forward=0}){
+ sprint=0,crouch=0,slide=0,motion=true,switched=0,forward=0,
+ stepPhase=0,stepStrength=0,strafe=0,forwardSpeed=0,lookX=0,lookY=0,
+ grounded=true,landing=0}){
  const config=WEAPON_MOTION22[id]||WEAPON_MOTION22[0];
- const aimed=smooth22(clamp22(ads));
- // Fire/reload focus suppresses the idle side-on showcase orientation.
- const directed=Math.max(aimed,smooth22(clamp22(forward)));
- const open=1-directed;
- const moving=motion?clamp22(Math.max(0,speed)/6):0;
- const gait=moving*(1-aimed*.95),run=clamp22(sprint)*moving*open;
+ const aimed=smooth22(clamp22(ads)),placeOpen=1-aimed;
+ // Only the rotation is straightened when firing/reloading. The location
+ // remains the SAME hip-fire carry position rather than snapping to ADS.
+ const facing=Math.max(aimed,smooth22(clamp22(forward)));
+ const rotationOpen=1-facing;
+ const velocity=clamp22(Math.max(0,speed)/6);
+ const stepEnergy=motion?clamp22(stepStrength):0;
+ const slideEnergy=clamp22(slide);
+ const crouchEnergy=clamp22(crouch)*(1-slideEnergy);
+ const gait=stepEnergy*(1-aimed*.97)*(1-slideEnergy*.88)*
+  (1-crouchEnergy*.45);
+ const run=clamp22(sprint)*velocity*placeOpen;
+ const lateral=motion?signed22(strafe):0;
+ const longitudinal=motion?signed22(forwardSpeed):0;
+ const lookSide=motion?signed22(lookX):0;
+ const lookVertical=motion?signed22(lookY):0;
+ const step=Math.sin(stepPhase),otherStep=Math.cos(stepPhase);
+ const fall=Math.abs(step),breath=motion?Math.sin(time*1.65):0;
  const recoil=clamp22(kick/.20),swap=clamp22(switched);
- const sliding=clamp22(slide),crouching=clamp22(crouch)*(1-sliding);
- const beat=time*(9+2*run);
- const step=Math.sin(beat),sway=Math.cos(beat*.5),breath=motion?Math.sin(time*1.75):0;
- // Maintain a showcase angle while idle, moving, sprinting, crouching
- // and sliding; easing out of it restores true centered ADS.
- const carry=open*(1-.11*run-.07*crouching-.09*sliding)*
-  (1-.15*recoil)*(1-.22*clamp22(reload))*(1-.12*swap);
- out.x=.28*open+config.sway*sway*gait*open+.038*run+
-   config.showX*carry+.01*sliding*open;
- out.y=-.29*open+(id===3?-.17:-.145)*directed
-   +Math.abs(step)*config.bob*gait+.0025*breath*open
-   -config.sprintDrop*run-.19*swap-.025*crouching*open-.077*sliding*open+
-   .008*carry;
- out.z=-.50*open-.39*aimed+.032*run+.042*swap+
-   config.back*recoil*.25-config.showZ*carry+.02*sliding*open;
- out.rx=.19*config.recoil*recoil+.08*run
-   +.012*step*gait*open+config.showPitch*carry+.035*sliding*open;
- out.ry=.011*sway*gait*open+config.showYaw*carry;
- out.rz=.028*config.roll*recoil+.065*run-.17*swap
-   +.009*step*gait*open-.045*crouching*open+.06*sliding*open+
-   config.showRoll*carry;
+ const showcase=placeOpen*(1-.12*run)*(1-.10*slideEnergy)*(1-.10*swap);
+ const tilted=rotationOpen*(1-.10*run)*(1-.10*slideEnergy)*
+  (1-.13*swap);
+ const movementSide=config.sway*otherStep*gait+
+  .052*lateral*(1-aimed)+.023*lookSide*(1-aimed);
+ const movementBounce=config.bob*fall*gait+
+  .006*Math.max(0,Math.sin(stepPhase*2))*gait;
+ // Walking/sprinting bob, strafing displacement, crouch tuck, slide dip,
+ // landing compression and mouse-look lag are independent visible layers.
+ out.x=.28*placeOpen+config.showX*showcase+
+  movementSide*placeOpen+.026*run+.014*slideEnergy*placeOpen;
+ out.y=-.29*placeOpen+(id===3?-.17:-.145)*aimed+
+  movementBounce*placeOpen+.0030*breath*placeOpen-
+  config.sprintDrop*run-.19*swap-
+  .066*crouchEnergy*placeOpen-.132*slideEnergy*placeOpen-
+  .050*clamp22(landing)*placeOpen+.008*showcase;
+ out.z=-.50*placeOpen-.39*aimed+.023*run+.042*swap+
+  config.back*recoil*.25-config.showZ*showcase+
+  .033*slideEnergy*placeOpen-.026*crouchEnergy*placeOpen+
+  .019*longitudinal*placeOpen;
+ // No horizontal aim rotation or sideways tilt during shooting. Pitch
+ // remains available for purely cosmetic firing kick and footstep motion.
+ out.rx=.19*config.recoil*recoil+.052*run+
+  .023*step*gait*placeOpen+.012*lookVertical*placeOpen+
+  config.showPitch*tilted+.075*slideEnergy*placeOpen;
+ out.ry=(config.showYaw*tilted+
+  .014*otherStep*gait+.055*lookSide+.032*lateral)*rotationOpen;
+ out.rz=(config.showRoll*tilted+
+  .060*step*gait+.095*lateral+.042*lookSide+
+  .055*run-.038*crouchEnergy+.085*slideEnergy-.17*swap)*rotationOpen;
  out.bodyY=Math.min(.026,.015*config.recoil*recoil);
  out.bodyZ=Math.min(.04,.13*config.back*recoil);
  out.bodyRx=-.10*config.recoil*recoil;
@@ -122,13 +149,16 @@ function motionPose22(out,{id,time=0,ads=0,reload=0,kick=0,speed=0,
  return out;
 }
 export function animateWeapon(root,{time=0,ads=0,reload=0,kick=0,moving=false,
- slide=0,crouch=0,motion=true,switched=0,speed=0,sprint=false,firing=false}){
+ slide=0,crouch=0,motion=true,switched=0,speed=0,sprint=false,firing=false,
+ strafe=0,forwardSpeed=0,lookX=0,lookY=0,grounded=true,landing=0}){
  const d=root.userData,id=d.id;
  // Reuse the pose buffer; animations run every frame, even on weak GPUs.
  const pose=d.motionPose22||(d.motionPose22={});
  const clip=d.reloadPose23||(d.reloadPose23={});
  // Blend discrete locomotion flags without ever shifting the ADS reticle.
- const state=d.carryState22||(d.carryState22={time,sprint:0,crouch:0,slide:0,forward:0});
+ const state=d.carryState22||(d.carryState22={time,sprint:0,crouch:0,slide:0,
+  forward:0,stepPhase:0,stepStrength:0,strafe:0,forwardSpeed:0,
+  lookX:0,lookY:0});
  const dt=Math.max(0,Math.min(.10,time-state.time));state.time=time;
  const blend=1-Math.exp(-dt*15);
  state.sprint+=(Number(!!sprint)-state.sprint)*blend;
@@ -136,14 +166,34 @@ export function animateWeapon(root,{time=0,ads=0,reload=0,kick=0,moving=false,
  state.slide+=(clamp22(slide)-state.slide)*blend;
  const focusTarget=Math.max(Number(!!firing),reload>0?.97:0);
  state.forward+=(focusTarget-state.forward)*Math.min(1,dt*24);
+ // Movement state is smoothed independently of animation frame rate.
+ const mobility=motion&&grounded?clamp22(speed/5.0):0;
+ state.stepStrength+=(mobility-state.stepStrength)*Math.min(1,dt*11);
+ if(mobility>.04)state.stepPhase+=dt*(5.1+Math.min(13,speed)*1.14);
+ const sidestep=motion?signed22(strafe):0;
+ const advancing=motion?signed22(forwardSpeed):0;
+ state.strafe+=(sidestep-state.strafe)*Math.min(1,dt*12);
+ state.forwardSpeed+=(advancing-state.forwardSpeed)*Math.min(1,dt*10);
+ state.lookX+=(signed22(lookX)-state.lookX)*Math.min(1,dt*13);
+ state.lookY+=(signed22(lookY)-state.lookY)*Math.min(1,dt*13);
  motionPose22(pose,{id,time,ads,reload,kick,slide:state.slide,crouch:state.crouch,
-  motion,switched,speed:Math.max(speed,moving?.8:0),
-  sprint:state.sprint,forward:state.forward});
+  motion,switched,speed:Math.max(speed,moving?.8:0),sprint:state.sprint,
+  forward:state.forward,stepPhase:state.stepPhase,
+  stepStrength:state.stepStrength,strafe:state.strafe,
+  forwardSpeed:state.forwardSpeed,lookX:state.lookX,lookY:state.lookY,
+  grounded,landing});
  sampleReloadPose23(clip,id,reload);
  // Compose the movement pose and normalized reload clip; visuals never change
  // the server's weapon state, aim angles or reload duration.
  root.position.set(pose.x+clip.x,pose.y+clip.y,pose.z+clip.z);
  root.rotation.set(pose.rx+clip.rx,pose.ry+clip.ry,pose.rz+clip.rz);
+ // The display meshes have a small built-in showroom yaw. Cancel it during
+ // firing/aiming so the *whole model* faces forward; reload choreography
+ // may still move independently after this orientation correction.
+ if(d.aetherArtGun71){
+  const facing=Math.max(smooth22(clamp22(ads)),smooth22(state.forward));
+  d.aetherArtGun71.rotation.y=d.aetherDefaultYaw71*(1-facing);
+ }
  d.model.position.set(0,pose.bodyY,pose.bodyZ);
  d.model.rotation.set(pose.bodyRx,0,0);
  d.magazine.position.set(clip.magX,-.1+clip.magY,-.035+clip.magZ);
