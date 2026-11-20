@@ -33,6 +33,14 @@ export function makeWeapon(id,arms=true,finish=Math.floor(Math.random()*3)){
  root.add(model,left);model.add(magazine);
  const visual=buildAetherGameVisuals(model,magazine,id,finish);
  const {flash,action}=visual;
+ // Abstract glowing visual marker: the AETHER energy cycle is unmistakable.
+ const reloadGlyph70=new T.Mesh(new T.TorusGeometry(.105,.009,5,24),
+  new T.MeshBasicMaterial({color:0x67f1eb,transparent:true,
+   opacity:.68,depthWrite:false,side:T.DoubleSide}));
+ reloadGlyph70.position.set(0,.065,-.14);
+ reloadGlyph70.visible=false;
+ visual.gun.add(reloadGlyph70);
+ visual.uniqueMaterials.push(reloadGlyph70.material);
  // Keep the existing independent arm/hand rig and movement clips.
  if(arms){
   const sleeve=0x536d68,glove=0x283941;
@@ -41,7 +49,7 @@ export function makeWeapon(id,arms=true,finish=Math.floor(Math.random()*3)){
   box(left,.13,.13,.37,sleeve,-.13,-.18,-.08).rotation.z=-.22;
   box(left,.12,.10,.15,glove,-.065,-.09,-.23);
  }
- root.userData={model,magazine,left,flash,action,id,adsAnchor:visual.adsAnchor,
+ root.userData={model,magazine,left,flash,action,id,adsAnchor:visual.adsAnchor,reloadGlyph70,
   aetherMaterials:visual.uniqueMaterials,aetherFinish:finish,
   aetherSetFinish:visual.setFinish,aetherBatchCount:visual.batchCount};
  return root;
@@ -76,9 +84,12 @@ const WEAPON_MOTION22=[
 const clamp22=v=>Math.max(0,Math.min(1,Number.isFinite(v)?v:0));
 const smooth22=v=>v*v*(3-2*v);
 function motionPose22(out,{id,time=0,ads=0,reload=0,kick=0,speed=0,
- sprint=0,crouch=0,slide=0,motion=true,switched=0}){
+ sprint=0,crouch=0,slide=0,motion=true,switched=0,forward=0}){
  const config=WEAPON_MOTION22[id]||WEAPON_MOTION22[0];
- const aimed=smooth22(clamp22(ads)),open=1-aimed;
+ const aimed=smooth22(clamp22(ads));
+ // Fire/reload focus suppresses the idle side-on showcase orientation.
+ const directed=Math.max(aimed,smooth22(clamp22(forward)));
+ const open=1-directed;
  const moving=motion?clamp22(Math.max(0,speed)/6):0;
  const gait=moving*(1-aimed*.95),run=clamp22(sprint)*moving*open;
  const recoil=clamp22(kick/.20),swap=clamp22(switched);
@@ -91,7 +102,7 @@ function motionPose22(out,{id,time=0,ads=0,reload=0,kick=0,speed=0,
   (1-.15*recoil)*(1-.22*clamp22(reload))*(1-.12*swap);
  out.x=.28*open+config.sway*sway*gait*open+.038*run+
    config.showX*carry+.01*sliding*open;
- out.y=-.29*open+(id===3?-.17:-.145)*aimed
+ out.y=-.29*open+(id===3?-.17:-.145)*directed
    +Math.abs(step)*config.bob*gait+.0025*breath*open
    -config.sprintDrop*run-.19*swap-.025*crouching*open-.077*sliding*open+
    .008*carry;
@@ -111,20 +122,23 @@ function motionPose22(out,{id,time=0,ads=0,reload=0,kick=0,speed=0,
  return out;
 }
 export function animateWeapon(root,{time=0,ads=0,reload=0,kick=0,moving=false,
- slide=0,crouch=0,motion=true,switched=0,speed=0,sprint=false}){
+ slide=0,crouch=0,motion=true,switched=0,speed=0,sprint=false,firing=false}){
  const d=root.userData,id=d.id;
  // Reuse the pose buffer; animations run every frame, even on weak GPUs.
  const pose=d.motionPose22||(d.motionPose22={});
  const clip=d.reloadPose23||(d.reloadPose23={});
  // Blend discrete locomotion flags without ever shifting the ADS reticle.
- const state=d.carryState22||(d.carryState22={time,sprint:0,crouch:0,slide:0});
+ const state=d.carryState22||(d.carryState22={time,sprint:0,crouch:0,slide:0,forward:0});
  const dt=Math.max(0,Math.min(.10,time-state.time));state.time=time;
  const blend=1-Math.exp(-dt*15);
  state.sprint+=(Number(!!sprint)-state.sprint)*blend;
  state.crouch+=(clamp22(crouch)-state.crouch)*blend;
  state.slide+=(clamp22(slide)-state.slide)*blend;
+ const focusTarget=Math.max(Number(!!firing),reload>0?.97:0);
+ state.forward+=(focusTarget-state.forward)*Math.min(1,dt*24);
  motionPose22(pose,{id,time,ads,reload,kick,slide:state.slide,crouch:state.crouch,
-  motion,switched,speed:Math.max(speed,moving?.8:0),sprint:state.sprint});
+  motion,switched,speed:Math.max(speed,moving?.8:0),
+  sprint:state.sprint,forward:state.forward});
  sampleReloadPose23(clip,id,reload);
  // Compose the movement pose and normalized reload clip; visuals never change
  // the server's weapon state, aim angles or reload duration.
@@ -142,6 +156,16 @@ export function animateWeapon(root,{time=0,ads=0,reload=0,kick=0,moving=false,
   a.bolt.position.z=a.bolt.userData.homeZ22+pose.boltAction+clip.actionZ;
  }
  if(a?.pump)a.pump.position.z=-pose.slideAction+clip.actionZ;
+ // Light-up glyph tracks the visual animation only, without gameplay effects.
+ if(d.reloadGlyph70){
+  d.reloadGlyph70.visible=clip.signal>.02;
+  if(d.reloadGlyph70.visible){
+   const pulse=clip.signal;
+   d.reloadGlyph70.scale.setScalar(.87+.46*pulse);
+   d.reloadGlyph70.rotation.z=time*3.0;
+   d.reloadGlyph70.material.opacity=.20+.56*pulse;
+  }
+ }
  // ADS alignment: precisely center the actual 3D optic against the view
  // camera's -Z line. Fade in with ADS to leave the hip-fire pose intact.
  // Reuses one Vector3 buffer; visual only, never alters server hit direction.
