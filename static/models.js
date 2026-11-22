@@ -28,9 +28,32 @@ export function setModelQuality67(root,mode='high'){
   o.visible=o.userData.detailTier67<=tier;});
  return tier;
 }
+// CROSSFire v7.2 — inexpensive articulated sci-fi gloves for the local view.
+// Deliberately stylized energy-transfer gestures, not real-world mechanisms.
+// Built ONLY for first person (arms=true) to protect school laptop performance.
+function buildReloadGlove72(parent,gloveColor,accentMat,x,y,z){
+ const hand=new T.Group();hand.position.set(x,y,z);parent.add(hand);
+ box(hand,.108,.083,.143,gloveColor,0,0,0,.019);
+ box(hand,.114,.021,.102,0x748c91,0,.042,.011,.007);
+ const fingers=[];
+ for(let i=0;i<3;i++){
+  const finger=new T.Group();finger.position.set((i-1)*.035,-.021,-.065);
+  hand.add(finger);
+  box(finger,.028,.032,.079,gloveColor,0,0,-.037,.009);
+  box(finger,.029,.012,.045,0x64777d,0,.017,-.036,.005);
+  fingers.push(finger);
+ }
+ const thumb=new T.Group();thumb.position.set(.066,-.019,-.013);
+ box(thumb,.032,.035,.074,gloveColor,.016,-.005,-.027,.009);
+ thumb.rotation.y=-.40;hand.add(thumb);
+ const marker=new T.Mesh(new T.SphereGeometry(.018,8,6),accentMat);
+ marker.position.set(0,.049,-.011);marker.visible=false;hand.add(marker);
+ return {hand,fingers,thumb,marker,base:{x,y,z}};
+}
 export function makeWeapon(id,arms=true,finish=Math.floor(Math.random()*3)){
- const root=new T.Group(),model=new T.Group(),magazine=new T.Group(),left=new T.Group();
- root.add(model,left);model.add(magazine);
+ const root=new T.Group(),model=new T.Group(),magazine=new T.Group();
+ const left=new T.Group(),right=new T.Group();
+ root.add(model,left,right);model.add(magazine);
  const visual=buildAetherGameVisuals(model,magazine,id,finish);
  const {flash,action}=visual;
  // Abstract glowing visual marker: the AETHER energy cycle is unmistakable.
@@ -42,15 +65,21 @@ export function makeWeapon(id,arms=true,finish=Math.floor(Math.random()*3)){
  reloadGlyph70.visible=false;
  visual.gun.add(reloadGlyph70);
  visual.uniqueMaterials.push(reloadGlyph70.material);
- // Keep the existing independent arm/hand rig and movement clips.
+ // Two independent animated glove rigs; the animated geometry is used
+ // only in the first-person camera. Remote avatars retain their existing rigs.
+ let hands72=null;
  if(arms){
   const sleeve=0x536d68,glove=0x283941;
-  box(root,.13,.13,.35,sleeve,.035,-.16,.40).rotation.x=.17;
-  box(root,.117,.106,.15,glove,.015,-.11,.20);
+  box(right,.13,.13,.35,sleeve,.035,-.16,.40).rotation.x=.17;
   box(left,.13,.13,.37,sleeve,-.13,-.18,-.08).rotation.z=-.22;
-  box(left,.12,.10,.15,glove,-.065,-.09,-.23);
+  const palmGlow72=new T.MeshBasicMaterial({
+   color:visual.getGlowColor(),transparent:true,opacity:.76,depthWrite:false});
+  visual.uniqueMaterials.push(palmGlow72);
+  const leftGlove=buildReloadGlove72(left,glove,palmGlow72,-.065,-.09,-.235);
+  const rightGlove=buildReloadGlove72(right,glove,palmGlow72,.018,-.11,.18);
+  hands72={left:leftGlove,right:rightGlove,palmGlow:palmGlow72};
  }
- root.userData={model,magazine,left,flash,action,id,adsAnchor:visual.adsAnchor,reloadGlyph70,
+ root.userData={model,magazine,left,right,hands72,flash,action,id,adsAnchor:visual.adsAnchor,reloadGlyph70,
   aetherMaterials:visual.uniqueMaterials,aetherFinish:finish,
   aetherSetFinish:visual.setFinish,aetherGetGlowColor:visual.getGlowColor,
   aetherArtGun71:visual.gun,aetherDefaultYaw71:visual.gun.rotation.y,
@@ -67,6 +96,7 @@ export function setWeaponFinish(root,index){
  d.aetherFinish=normalized;
  const changed=d.aetherSetFinish(normalized);
  if(changed&&d.reloadGlyph70)d.reloadGlyph70.material.color.setHex(d.aetherGetGlowColor());
+ if(changed&&d.hands72)d.hands72.palmGlow.color.setHex(d.aetherGetGlowColor());
  return changed;
 }
 export function disposeWeaponRig(root){
@@ -200,6 +230,38 @@ export function animateWeapon(root,{time=0,ads=0,reload=0,kick=0,moving=false,
  d.magazine.rotation.set(clip.magRX,0,clip.magRZ);
  d.left.position.set(clip.handX,clip.handY,clip.handZ);
  d.left.rotation.set(-pose.bodyRx*.55+clip.handRX,0,clip.handRZ);
+ // The left hand visibly reaches, opens, holds and lets go of the abstract
+ // AETHER energy module. Right hand adds a separate complementary gesture.
+ if(d.hands72){
+  const {left:lh,right:rh,palmGlow}=d.hands72;
+  const open=clip.handOpen||0,curl=clip.fingerCurl||0;
+  lh.hand.position.set(lh.base.x+.024*(clip.handReach||0),
+   lh.base.y-.038*(clip.handReach||0),lh.base.z-.074*(clip.handReach||0));
+  lh.hand.rotation.set(-.12*open,(clip.handTwist||0)*.48,
+   (clip.handTwist||0)*.72);
+  for(let i=0;i<lh.fingers.length;i++)
+   lh.fingers[i].rotation.x=-.41*open+.75*curl+(i-1)*.07*curl;
+  lh.thumb.rotation.set(.17*open,.18*(clip.handTwist||0),
+   -.22*curl);
+  d.right.position.set(clip.rightReach||0,-(clip.rightDip||0),
+   -.032*(clip.armGesture||0));
+  d.right.rotation.set(-.14*(clip.rightReach||0),0,clip.rightTurn||0);
+  rh.hand.rotation.set(-.14*(clip.rightReach||0),-.22*(clip.rightTurn||0),
+   .34*(clip.rightTurn||0));
+  rh.fingers.forEach((finger,i)=>{
+   finger.rotation.x=-.19*(clip.handOpen||0)+
+    .50*(clip.fingerCurl||0)*(i===1?1:.83);
+  });
+  rh.thumb.rotation.z=-.12*(clip.fingerCurl||0);
+  const energy=clip.handGlow||0;
+  lh.marker.visible=energy>.04;rh.marker.visible=energy>.19;
+  if(energy>.04){
+   const brightness=.30+.68*energy;
+   palmGlow.opacity=brightness;
+   const scale=.80+.62*energy;
+   lh.marker.scale.setScalar(scale);rh.marker.scale.setScalar(scale*.8);
+  }
+ }
  const a=d.action;
  if(a?.bolt){
   if(!Number.isFinite(a.bolt.userData.homeZ22))a.bolt.userData.homeZ22=a.bolt.position.z;
