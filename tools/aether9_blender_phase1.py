@@ -17,6 +17,10 @@ from pathlib import Path
 import bpy
 from mathutils import Vector, Matrix
 
+# Import repeatable topology review helpers beside the source builder.
+sys.path.insert(0,str(Path(__file__).resolve().parent))
+from aether_topology21 import prepare_topology
+
 
 def main():
     cli = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
@@ -334,6 +338,15 @@ def main():
         # detached graphic details floating at their pre-rotation positions.
         asset_obj.matrix_world = axis_rotation @ asset_obj.matrix_world
 
+    # Phase 2.1: perform cosmetic geometry cleanup before scene organization.
+    # Lightguide curves remain editable in the .blend; GLB uses their meshes.
+    topology_report=prepare_topology(list(asset.objects))
+    if topology_report["stats"]["meshes"]<25:
+        raise RuntimeError("Too few mesh objects for the topology audit")
+    (out/"aether9-phase2-topology.json").write_text(
+        json.dumps(topology_report,indent=2),encoding="utf-8"
+    )
+
     # Phase 1.4 / deterministic scene organization for Blender editing and
     # portable scene exports. These are ART groups, never physical mechanisms.
     # Each mesh/curve retains its world transform after parenting.
@@ -381,7 +394,7 @@ def main():
     group_counts={}
     root=bpy.data.objects.new("A9.ROOT.SPECTER",None)
     root["aether_asset"]="AETHER9_SPECTER"
-    root["asset_version"]="1.4"
+    root["asset_version"]="2.1"
     root["asset_class"]="fictional-scifi-prop"
     asset.objects.link(root)
     for key,label in GROUP_SPECS:
@@ -422,6 +435,7 @@ def main():
         object_manifest.append({
             "id":obj.name,"group":group,"side":side,
             "source_label":old_name,"object_type":obj.type,
+            "topology":topology_report["objects"].get(old_name),
             "material_names":[m.name for m in obj.data.materials if m]
                 if hasattr(obj.data,"materials") else [],
         })
@@ -432,7 +446,7 @@ def main():
     manifest={
         "schema":"crossfire-aether-art-asset-v1",
         "asset_id":"AETHER9_SPECTER",
-        "phase":"1.4",
+        "phase":"2.1",
         "asset_kind":"original fictional sci-fi game prop",
         "asset_root":"A9.ROOT.SPECTER",
         "orientation":{"export_format":"glTF 2.0 binary",
@@ -440,7 +454,9 @@ def main():
                        "unit_scale":"Blender scene units"},
         "uv_status":"provisional / dedicated UVs in Phase 2",
         "baked_textures":"not yet (Phase 3)",
-        "topology_status":"visual sculpt / not yet final game LOD",
+        "topology_status":"BMesh cleanup, watertight surfaces, outward normals and hard-edge shading",
+        "topology_report":"aether9-phase2-topology.json",
+        "topology_summary":topology_report["stats"],
         "material_families":{k:v.name for k,v in M.items()},
         "groups":{k:{"blender_collection":label,"object_count":group_counts[k],
                       "anchor":"A9.GRP."+k}
@@ -578,13 +594,15 @@ def main():
         tri_count+=len(obj.data.loop_triangles)
 
     report={
-        "phase":"1.4","status":"Blender scene organization and asset export pass",
+        "phase":"2.1","status":"Topology cleanup and verified Blender scene export",
         "source":str(blend),"asset":str(glb),
         "preview":str(preview) if preview.exists() else None,
         "review_angles":review_paths,
         "render_engine":"BLENDER_WORKBENCH / MATERIAL COLOR",
         "native_objects":named,"mesh_objects":mesh_count,
         "art_groups":group_counts,
+        "topology_stats":topology_report["stats"],
+        "topology_report":"aether9-phase2-topology.json",
         "manifest":"aether9-phase1-manifest.json",
         "authoring_mesh_objects":len(authored_objects),
         "base_triangles_before_modifiers":tri_count,
