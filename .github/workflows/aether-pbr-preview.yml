@@ -55,10 +55,17 @@ jobs:
               im=Image.open(source).convert("RGB")
               assert im.size==(1152,720)
               imgs.append(im)
+          import numpy as np
           for i in range(3):
               for j in range(i+1,3):
-                  difference=ImageStat.Stat(ImageChops.difference(imgs[i],imgs[j]))
-                  assert sum(difference.mean)/3>2, (skins[i],skins[j],difference.mean)
+                  a=np.asarray(imgs[i],dtype=np.int16)
+                  b=np.asarray(imgs[j],dtype=np.int16)
+                  changed=int(np.count_nonzero(np.max(np.abs(a-b),axis=2)>=20))
+                  # The model covers ~7% of the image. Comparing averages
+                  # over the huge shared background rejected valid variants.
+                  # Require at least 20,000 significantly different pixels.
+                  assert changed>=20000, (skins[i],skins[j],changed)
+                  print("DISTINCT PBR VARIANTS",skins[i],skins[j],changed)
           print("AETHER PHASE 3 PREVIEW QA PASSED",stats)
           PY
 
