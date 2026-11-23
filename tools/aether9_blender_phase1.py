@@ -113,15 +113,15 @@ def main():
                 jn = (j+1)%sides
                 a=ri*sides+j; b=ri*sides+jn
                 c=(ri+1)*sides+jn; d=(ri+1)*sides+j
-                faces.append((a,b,c,d))
+                faces.append((a,d,c,b))
         start=len(verts)
         verts.append((rings[0][4],rings[0][1],rings[0][0]))
         verts.append((rings[-1][4],rings[-1][1],rings[-1][0]))
         uv.extend([(.5,.5),(.5,.5)])
         for j in range(sides):
-            faces.append((start,(j+1)%sides,j))
+            faces.append((start,j,(j+1)%sides))
             last=(len(rings)-1)*sides
-            faces.append((start+1,last+j,last+(j+1)%sides))
+            faces.append((start+1,last+(j+1)%sides,last+j))
         return make_mesh(name,verts,faces,mat,uv)
 
     def plate(name,outline,side,x,depth,mat,bevel=.008):
@@ -137,7 +137,8 @@ def main():
         if bevel:
             mod=obj.modifiers.new("Subtle machined edge bevel","BEVEL")
             mod.width=bevel;mod.segments=3
-            mod.affect="EDGES" if hasattr(mod,"affect") else None
+            if hasattr(mod,"affect"):
+                mod.affect="EDGES"
         return obj
 
     def cuboid(name, center, dims, mat, bevel=.012, collection=asset):
