@@ -15,7 +15,7 @@ import sys
 from pathlib import Path
 
 import bpy
-from mathutils import Vector
+from mathutils import Vector, Matrix
 
 
 def main():
@@ -327,14 +327,18 @@ def main():
     # resulting glTF returns to the intended horizontal game orientation.
     # We apply this before .blend is saved, so the native Blender scene
     # is also correctly oriented (Z-up, weapon longitudinal in XY plane).
+    axis_rotation=Matrix.Rotation(math.pi / 2, 4, "X")
     for asset_obj in asset.objects:
-        asset_obj.rotation_euler.x += math.pi / 2
+        # Matrix multiplication transforms both local orientation AND world
+        # location. Simply changing rotation_euler incorrectly leaves
+        # detached graphic details floating at their pre-rotation positions.
+        asset_obj.matrix_world = axis_rotation @ asset_obj.matrix_world
 
     # Scene setup: only models in ASSET collection are exported.
     ground = cuboid("STUDIO / Background", (0,0,-1.05),
                     (11,9,.16), material("STUDIO gray",(.018,.034,.051),.2,.75),
                     .02,studio)
-    ground.hide_render=False
+    ground.hide_render=True  # uncluttered art-review renders
 
     def area(name,location,power,scale,temperature_color):
         light=bpy.data.lights.new(name,"AREA")
@@ -358,7 +362,7 @@ def main():
     cam.location=(6.6,4.5,3.8)
     focus=Vector((0,-.35,.13))
     cam.rotation_euler=(focus-Vector(cam.location)).to_track_quat("-Z","Y").to_euler()
-    camera.type="ORTHO";camera.ortho_scale=5.8
+    camera.type="ORTHO";camera.ortho_scale=6.2
     scene=bpy.context.scene;scene.camera=cam
     scene.render.resolution_x=1360
     scene.render.resolution_y=820
@@ -406,7 +410,8 @@ def main():
     shade=scene.display.shading
     shade.light="STUDIO"
     shade.color_type="MATERIAL"
-    shade.background_type="WORLD"
+    shade.background_type="VIEWPORT"
+    shade.background_color=(.029,.043,.067)
     shade.show_cavity=True
     shade.cavity_type="BOTH"
     shade.curvature_ridge_factor=1.12
@@ -424,9 +429,9 @@ def main():
     scene.render.film_transparent=False
     scene.render.resolution_percentage=100
     review_views={
-        "hero": ((6.6,4.5,3.8),(0,-.35,.13),5.8),
-        "profile": ((9.8,-.32,2.5),(0,-.35,.13),5.1),
-        "rear": ((-5.0,7.2,3.8),(0,-.27,.13),5.9)
+        "hero": ((6.6,4.5,3.8),(0,.25,.12),6.5),
+        "profile": ((9.8,.4,2.5),(0,.30,.12),6.0),
+        "rear": ((-5.0,7.2,3.8),(0,.24,.12),6.6)
     }
     review_paths={}
     for label,(position,aim,scale) in review_views.items():
