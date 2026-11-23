@@ -20,6 +20,7 @@ from mathutils import Vector, Matrix
 # Import repeatable topology review helpers beside the source builder.
 sys.path.insert(0,str(Path(__file__).resolve().parent))
 from aether_topology21 import prepare_topology
+from aether_uv22 import prepare_uv_atlases, unwrap_export_curves
 
 
 def main():
@@ -346,6 +347,11 @@ def main():
     (out/"aether9-phase2-topology.json").write_text(
         json.dumps(topology_report,indent=2),encoding="utf-8"
     )
+    # Phase 2.2 / unwrapping and atlas allocation happen BEFORE the .blend
+    # source file is saved. Separate art material families use distinct UVs.
+    uv_report=prepare_uv_atlases(list(asset.objects),out)
+    if uv_report["source_mesh_count"]!=topology_report["stats"]["meshes"]:
+        raise RuntimeError("UV map does not cover all authored source meshes")
 
     # Phase 1.4 / deterministic scene organization for Blender editing and
     # portable scene exports. These are ART groups, never physical mechanisms.
@@ -394,7 +400,7 @@ def main():
     group_counts={}
     root=bpy.data.objects.new("A9.ROOT.SPECTER",None)
     root["aether_asset"]="AETHER9_SPECTER"
-    root["asset_version"]="2.1"
+    root["asset_version"]="2.2"
     root["asset_class"]="fictional-scifi-prop"
     asset.objects.link(root)
     for key,label in GROUP_SPECS:
@@ -425,7 +431,10 @@ def main():
         obj["aether_group"]=group
         obj["aether_source_label"]=old_name
         obj["aether_asset"]="AETHER9_SPECTER"
-        obj["aether_uv_state"]="provisional"
+        obj["aether_uv_state"]=(
+            "material-family-atlas / UVMap" if obj.type=="MESH"
+            else "editable-curve / generated UVs during export"
+        )
         side=("L" if old_name.startswith("LEFT") or " -1" in old_name
               else "R" if old_name.startswith("RIGHT") or " 1" in old_name
               else "C")
@@ -436,6 +445,7 @@ def main():
             "id":obj.name,"group":group,"side":side,
             "source_label":old_name,"object_type":obj.type,
             "topology":topology_report["objects"].get(old_name),
+            "uv":uv_report["objects"].get(old_name),
             "material_names":[m.name for m in obj.data.materials if m]
                 if hasattr(obj.data,"materials") else [],
         })
@@ -446,13 +456,17 @@ def main():
     manifest={
         "schema":"crossfire-aether-art-asset-v1",
         "asset_id":"AETHER9_SPECTER",
-        "phase":"2.1",
+        "phase":"2.2",
         "asset_kind":"original fictional sci-fi game prop",
         "asset_root":"A9.ROOT.SPECTER",
         "orientation":{"export_format":"glTF 2.0 binary",
                        "coordinate_system":"Y-up after Blender export",
                        "unit_scale":"Blender scene units"},
-        "uv_status":"provisional / dedicated UVs in Phase 2",
+        "uv_status":"packed smart-projected source mesh UVs / 10px planned gutters",
+        "uv_report":"aether9-phase2-uv.json",
+        "uv_atlas_layout":"aether9-phase2-uv-layout.svg",
+        "uv_material_family_count":uv_report["material_family_count"],
+        "uv_source_mesh_count":uv_report["source_mesh_count"],
         "baked_textures":"not yet (Phase 3)",
         "topology_status":"BMesh cleanup, watertight surfaces, outward normals and hard-edge shading",
         "topology_report":"aether9-phase2-topology.json",
@@ -513,11 +527,16 @@ def main():
     # Preserve truly editable curve objects inside .blend, then convert
     # the in-memory scene's luminous ribbons to exportable polygon meshes.
     # glTF cannot directly serialize Blender's bevel-curve primitives.
+    converted_ribbons=[]
     for source_curve in [o for o in list(asset.all_objects) if o.type=="CURVE"]:
         bpy.ops.object.select_all(action="DESELECT")
         source_curve.select_set(True)
         bpy.context.view_layer.objects.active=source_curve
         bpy.ops.object.convert(target="MESH")
+        converted_ribbons.append(bpy.context.view_layer.objects.active)
+    # Each unbaked photonic ribbon is UV-enabled for glTF portability,
+    # but reserved outside the material-family texture atlases.
+    ribbon_uv_count=unwrap_export_curves(converted_ribbons)
     bpy.ops.object.select_all(action="DESELECT")
     for obj in asset.all_objects:
         obj.select_set(True)
@@ -594,7 +613,7 @@ def main():
         tri_count+=len(obj.data.loop_triangles)
 
     report={
-        "phase":"2.1","status":"Topology cleanup and verified Blender scene export",
+        "phase":"2.2","status":"Material-aware UV atlas and validated Blender export",
         "source":str(blend),"asset":str(glb),
         "preview":str(preview) if preview.exists() else None,
         "review_angles":review_paths,
@@ -603,10 +622,18 @@ def main():
         "art_groups":group_counts,
         "topology_stats":topology_report["stats"],
         "topology_report":"aether9-phase2-topology.json",
+        "uv_report":"aether9-phase2-uv.json",
+        "uv_layout":"aether9-phase2-uv-layout.svg",
+        "uv_stats":{
+            "source_mesh_count":uv_report["source_mesh_count"],
+            "material_families":uv_report["material_family_count"],
+            "uv_loops":uv_report["total_uv_loops"],
+            "converted_ribbon_uv_meshes":ribbon_uv_count
+        },
         "manifest":"aether9-phase1-manifest.json",
         "authoring_mesh_objects":len(authored_objects),
         "base_triangles_before_modifiers":tri_count,
-        "uv_islands":"provisional / atlas pending Phase 2",
+        "uv_islands":"smart projection and per-material padded UV tiles; bake pending Phase 3",
         "texture_bakes":"pending Phase 3",
         "glb_bytes":glb.stat().st_size
     }
