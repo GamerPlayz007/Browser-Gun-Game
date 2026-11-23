@@ -21,7 +21,7 @@ SMART_PROJECT_MARGIN = 0.023
 SMALL_OBJECT_MIN_WEIGHT = 0.19
 
 
-def _smart_unwrap(obj):
+def _smart_unwrap(obj, margin=SMART_PROJECT_MARGIN):
     """Run Blender's seam-aware UV projection on one clean mesh, headlessly."""
     if obj.type != "MESH" or not obj.data.polygons:
         raise ValueError("Object must be a nonempty Blender mesh: " + obj.name)
@@ -40,7 +40,7 @@ def _smart_unwrap(obj):
     bpy.ops.mesh.select_all(action="SELECT")
     bpy.ops.uv.smart_project(
         angle_limit=math.radians(64),
-        island_margin=SMART_PROJECT_MARGIN,
+        island_margin=margin,
         area_weight=.20,
         correct_aspect=True,
         scale_to_bounds=True,
@@ -161,6 +161,7 @@ def prepare_uv_atlases(objects, output_dir):
         "atlas_resolution":ATLAS_RESOLUTION,
         "object_edge_gutter_pixels":EDGE_GUTTER_PIXELS,
         "blender_island_margin":SMART_PROJECT_MARGIN,
+        "adaptive_island_margin":"max(default, 0.12*300/tile_pixel_side), capped at 0.20",
         "source_mesh_count":len(entries),
         "families":{},"objects":{},
         "editable_curves":"UVs generated after conversion for GLB only",
@@ -173,6 +174,22 @@ def prepare_uv_atlases(objects, output_dir):
         for entry in group:
             name=entry["name"]
             x0,y0,x1,y1=atlas[name]
+            # The Phase 2.3 audit found that fixed Smart UV margins are
+            # insufficient on small mapped decorative objects. Allocate
+            # proportionally more island padding where the eventual tile
+            # is small; keep a lighter split on the large hero shell.
+            tile_side_px=min(x1-x0,y1-y0)*ATLAS_RESOLUTION
+            dynamic_margin=min(.20,max(SMART_PROJECT_MARGIN,
+                                        .12*300.0/max(tile_side_px,1.0)))
+            final_layer,final_coords=_smart_unwrap(
+                entry["obj"],margin=dynamic_margin
+            )
+            entry["layer"]=final_layer
+            entry["raw"]=final_coords
+            entry["bounds"]=(
+                (min(u for u,v in final_coords),min(v for u,v in final_coords)),
+                (max(u for u,v in final_coords),max(v for u,v in final_coords))
+            )
             (umin,vmin),(umax,vmax)=entry["bounds"]
             du=umax-umin;dv=vmax-vmin
             inner=min(x1-x0,y1-y0)
@@ -194,6 +211,8 @@ def prepare_uv_atlases(objects, output_dir):
                 slot=[round(x,6) for x in atlas[name]],
                 surface_area=round(entry["area"],7),
                 relative_weight=round(weights[name],5),
+                authored_island_margin=round(dynamic_margin,5),
+                target_tile_side_px=round(tile_side_px,2),
                 approx_density=round(density,3),
                 polygon_count=len(entry["obj"].data.polygons),
                 uv_loops=len(entry["layer"].data),
