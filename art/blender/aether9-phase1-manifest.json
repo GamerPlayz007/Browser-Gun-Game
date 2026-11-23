@@ -1,0 +1,820 @@
+{
+  "schema": "crossfire-aether-art-asset-v1",
+  "asset_id": "AETHER9_SPECTER",
+  "phase": "1.4",
+  "asset_kind": "original fictional sci-fi game prop",
+  "asset_root": "A9.ROOT.SPECTER",
+  "orientation": {
+    "export_format": "glTF 2.0 binary",
+    "coordinate_system": "Y-up after Blender export",
+    "unit_scale": "Blender scene units"
+  },
+  "uv_status": "provisional / dedicated UVs in Phase 2",
+  "baked_textures": "not yet (Phase 3)",
+  "topology_status": "visual sculpt / not yet final game LOD",
+  "material_families": {
+    "ceramic": "01 | Matte graphite ceramic",
+    "frame": "02 | Satin titanium alloy",
+    "mid": "03 | Gunmetal structural inlay",
+    "polymer": "04 | Carbon-black soft polymer",
+    "silver": "05 | Honed silver edges",
+    "cyan": "06 | Photonic cyan / artwork",
+    "glass": "07 | Blue translucent optical glass",
+    "copper": "08 | Warm alloy insignia",
+    "carbon": "09 | Recessed charcoal carbon"
+  },
+  "groups": {
+    "SHELL": {
+      "blender_collection": "01 | SHELL / primary sculpt",
+      "object_count": 1,
+      "anchor": "A9.GRP.SHELL"
+    },
+    "SPINE": {
+      "blender_collection": "02 | SPINE / crest and crown",
+      "object_count": 2,
+      "anchor": "A9.GRP.SPINE"
+    },
+    "PANELS": {
+      "blender_collection": "03 | PANELS / floating side sculpture",
+      "object_count": 16,
+      "anchor": "A9.GRP.PANELS"
+    },
+    "REAR": {
+      "blender_collection": "04 | REAR / open-frame silhouette",
+      "object_count": 10,
+      "anchor": "A9.GRP.REAR"
+    },
+    "VISOR": {
+      "blender_collection": "05 | VISOR / optical ornament",
+      "object_count": 5,
+      "anchor": "A9.GRP.VISOR"
+    },
+    "CORE": {
+      "blender_collection": "06 | CORE / fictional light artwork",
+      "object_count": 12,
+      "anchor": "A9.GRP.CORE"
+    },
+    "GRIP": {
+      "blender_collection": "07 | GRIP / lower support",
+      "object_count": 15,
+      "anchor": "A9.GRP.GRIP"
+    },
+    "ACCENTS": {
+      "blender_collection": "08 | ACCENTS / micro-details",
+      "object_count": 14,
+      "anchor": "A9.GRP.ACCENTS"
+    }
+  },
+  "objects": [
+    {
+      "id": "A9.SHELL.C.001.01_Ceramic_monocoque_visu",
+      "group": "SHELL",
+      "side": "C",
+      "source_label": "01 / Ceramic monocoque : visual silhouette",
+      "object_type": "MESH",
+      "material_names": [
+        "01 | Matte graphite ceramic"
+      ]
+    },
+    {
+      "id": "A9.SPINE.C.002.02_Raised_continuous_tita",
+      "group": "SPINE",
+      "side": "C",
+      "source_label": "02 / Raised continuous titanium spine",
+      "object_type": "MESH",
+      "material_names": [
+        "02 | Satin titanium alloy"
+      ]
+    },
+    {
+      "id": "A9.SPINE.C.003.03_Single_dorsal_light_li",
+      "group": "SPINE",
+      "side": "C",
+      "source_label": "03 / Single dorsal light line",
+      "object_type": "CURVE",
+      "material_names": [
+        "06 | Photonic cyan / artwork"
+      ]
+    },
+    {
+      "id": "A9.PANELS.L.004.LEFT_Swept_structural_che",
+      "group": "PANELS",
+      "side": "L",
+      "source_label": "LEFT / Swept structural cheek",
+      "object_type": "MESH",
+      "material_names": [
+        "02 | Satin titanium alloy"
+      ]
+    },
+    {
+      "id": "A9.PANELS.L.005.LEFT_Quiet_ceramic_insert",
+      "group": "PANELS",
+      "side": "L",
+      "source_label": "LEFT / Quiet ceramic insert",
+      "object_type": "MESH",
+      "material_names": [
+        "09 | Recessed charcoal carbon"
+      ]
+    },
+    {
+      "id": "A9.PANELS.L.006.LEFT_Satin_highlight",
+      "group": "PANELS",
+      "side": "L",
+      "source_label": "LEFT / Satin highlight",
+      "object_type": "MESH",
+      "material_names": [
+        "05 | Honed silver edges"
+      ]
+    },
+    {
+      "id": "A9.PANELS.L.007.LEFT_Vent_side_aero_fin",
+      "group": "PANELS",
+      "side": "L",
+      "source_label": "LEFT / Vent-side aero fin",
+      "object_type": "MESH",
+      "material_names": [
+        "01 | Matte graphite ceramic"
+      ]
+    },
+    {
+      "id": "A9.PANELS.L.008.LEFT_Cyan_side_trace",
+      "group": "PANELS",
+      "side": "L",
+      "source_label": "LEFT / Cyan side trace",
+      "object_type": "CURVE",
+      "material_names": [
+        "06 | Photonic cyan / artwork"
+      ]
+    },
+    {
+      "id": "A9.ACCENTS.L.009.LEFT_light_recess_1",
+      "group": "ACCENTS",
+      "side": "L",
+      "source_label": "LEFT / light recess 1",
+      "object_type": "MESH",
+      "material_names": [
+        "06 | Photonic cyan / artwork"
+      ]
+    },
+    {
+      "id": "A9.ACCENTS.L.010.LEFT_light_recess_2",
+      "group": "ACCENTS",
+      "side": "L",
+      "source_label": "LEFT / light recess 2",
+      "object_type": "MESH",
+      "material_names": [
+        "06 | Photonic cyan / artwork"
+      ]
+    },
+    {
+      "id": "A9.ACCENTS.L.011.LEFT_light_recess_3",
+      "group": "ACCENTS",
+      "side": "L",
+      "source_label": "LEFT / light recess 3",
+      "object_type": "MESH",
+      "material_names": [
+        "06 | Photonic cyan / artwork"
+      ]
+    },
+    {
+      "id": "A9.ACCENTS.L.012.LEFT_light_recess_4",
+      "group": "ACCENTS",
+      "side": "L",
+      "source_label": "LEFT / light recess 4",
+      "object_type": "MESH",
+      "material_names": [
+        "06 | Photonic cyan / artwork"
+      ]
+    },
+    {
+      "id": "A9.REAR.L.013.LEFT_Monolithic_stock_arc",
+      "group": "REAR",
+      "side": "L",
+      "source_label": "LEFT / Monolithic stock arch",
+      "object_type": "MESH",
+      "material_names": [
+        "01 | Matte graphite ceramic"
+      ]
+    },
+    {
+      "id": "A9.REAR.L.014.LEFT_Lower_open_cantileve",
+      "group": "REAR",
+      "side": "L",
+      "source_label": "LEFT / Lower open cantilever",
+      "object_type": "CURVE",
+      "material_names": [
+        "02 | Satin titanium alloy"
+      ]
+    },
+    {
+      "id": "A9.REAR.L.015.LEFT_Upper_fine_rim",
+      "group": "REAR",
+      "side": "L",
+      "source_label": "LEFT / Upper fine rim",
+      "object_type": "CURVE",
+      "material_names": [
+        "05 | Honed silver edges"
+      ]
+    },
+    {
+      "id": "A9.CORE.L.016.LEFT_Reactor_visual_cradl",
+      "group": "CORE",
+      "side": "L",
+      "source_label": "LEFT / Reactor visual cradle",
+      "object_type": "CURVE",
+      "material_names": [
+        "02 | Satin titanium alloy"
+      ]
+    },
+    {
+      "id": "A9.CORE.L.017.LEFT_Core_internal_light",
+      "group": "CORE",
+      "side": "L",
+      "source_label": "LEFT / Core internal light",
+      "object_type": "CURVE",
+      "material_names": [
+        "06 | Photonic cyan / artwork"
+      ]
+    },
+    {
+      "id": "A9.PANELS.R.018.RIGHT_Swept_structural_ch",
+      "group": "PANELS",
+      "side": "R",
+      "source_label": "RIGHT / Swept structural cheek",
+      "object_type": "MESH",
+      "material_names": [
+        "02 | Satin titanium alloy"
+      ]
+    },
+    {
+      "id": "A9.PANELS.R.019.RIGHT_Quiet_ceramic_inser",
+      "group": "PANELS",
+      "side": "R",
+      "source_label": "RIGHT / Quiet ceramic insert",
+      "object_type": "MESH",
+      "material_names": [
+        "09 | Recessed charcoal carbon"
+      ]
+    },
+    {
+      "id": "A9.PANELS.R.020.RIGHT_Satin_highlight",
+      "group": "PANELS",
+      "side": "R",
+      "source_label": "RIGHT / Satin highlight",
+      "object_type": "MESH",
+      "material_names": [
+        "05 | Honed silver edges"
+      ]
+    },
+    {
+      "id": "A9.PANELS.R.021.RIGHT_Vent_side_aero_fin",
+      "group": "PANELS",
+      "side": "R",
+      "source_label": "RIGHT / Vent-side aero fin",
+      "object_type": "MESH",
+      "material_names": [
+        "01 | Matte graphite ceramic"
+      ]
+    },
+    {
+      "id": "A9.PANELS.R.022.RIGHT_Cyan_side_trace",
+      "group": "PANELS",
+      "side": "R",
+      "source_label": "RIGHT / Cyan side trace",
+      "object_type": "CURVE",
+      "material_names": [
+        "06 | Photonic cyan / artwork"
+      ]
+    },
+    {
+      "id": "A9.ACCENTS.R.023.RIGHT_light_recess_1",
+      "group": "ACCENTS",
+      "side": "R",
+      "source_label": "RIGHT / light recess 1",
+      "object_type": "MESH",
+      "material_names": [
+        "06 | Photonic cyan / artwork"
+      ]
+    },
+    {
+      "id": "A9.ACCENTS.R.024.RIGHT_light_recess_2",
+      "group": "ACCENTS",
+      "side": "R",
+      "source_label": "RIGHT / light recess 2",
+      "object_type": "MESH",
+      "material_names": [
+        "06 | Photonic cyan / artwork"
+      ]
+    },
+    {
+      "id": "A9.ACCENTS.R.025.RIGHT_light_recess_3",
+      "group": "ACCENTS",
+      "side": "R",
+      "source_label": "RIGHT / light recess 3",
+      "object_type": "MESH",
+      "material_names": [
+        "06 | Photonic cyan / artwork"
+      ]
+    },
+    {
+      "id": "A9.ACCENTS.R.026.RIGHT_light_recess_4",
+      "group": "ACCENTS",
+      "side": "R",
+      "source_label": "RIGHT / light recess 4",
+      "object_type": "MESH",
+      "material_names": [
+        "06 | Photonic cyan / artwork"
+      ]
+    },
+    {
+      "id": "A9.REAR.R.027.RIGHT_Monolithic_stock_ar",
+      "group": "REAR",
+      "side": "R",
+      "source_label": "RIGHT / Monolithic stock arch",
+      "object_type": "MESH",
+      "material_names": [
+        "01 | Matte graphite ceramic"
+      ]
+    },
+    {
+      "id": "A9.REAR.R.028.RIGHT_Lower_open_cantilev",
+      "group": "REAR",
+      "side": "R",
+      "source_label": "RIGHT / Lower open cantilever",
+      "object_type": "CURVE",
+      "material_names": [
+        "02 | Satin titanium alloy"
+      ]
+    },
+    {
+      "id": "A9.REAR.R.029.RIGHT_Upper_fine_rim",
+      "group": "REAR",
+      "side": "R",
+      "source_label": "RIGHT / Upper fine rim",
+      "object_type": "CURVE",
+      "material_names": [
+        "05 | Honed silver edges"
+      ]
+    },
+    {
+      "id": "A9.CORE.R.030.RIGHT_Reactor_visual_crad",
+      "group": "CORE",
+      "side": "R",
+      "source_label": "RIGHT / Reactor visual cradle",
+      "object_type": "CURVE",
+      "material_names": [
+        "02 | Satin titanium alloy"
+      ]
+    },
+    {
+      "id": "A9.CORE.R.031.RIGHT_Core_internal_light",
+      "group": "CORE",
+      "side": "R",
+      "source_label": "RIGHT / Core internal light",
+      "object_type": "CURVE",
+      "material_names": [
+        "06 | Photonic cyan / artwork"
+      ]
+    },
+    {
+      "id": "A9.GRIP.C.032.04_Graphite_handguard_sup",
+      "group": "GRIP",
+      "side": "C",
+      "source_label": "04 / Graphite handguard support",
+      "object_type": "MESH",
+      "material_names": [
+        "04 | Carbon-black soft polymer"
+      ]
+    },
+    {
+      "id": "A9.GRIP.L.033.Grip_rib_1_0",
+      "group": "GRIP",
+      "side": "L",
+      "source_label": "Grip rib -1-0",
+      "object_type": "MESH",
+      "material_names": [
+        "03 | Gunmetal structural inlay"
+      ]
+    },
+    {
+      "id": "A9.GRIP.R.034.Grip_rib_1_0",
+      "group": "GRIP",
+      "side": "R",
+      "source_label": "Grip rib 1-0",
+      "object_type": "MESH",
+      "material_names": [
+        "03 | Gunmetal structural inlay"
+      ]
+    },
+    {
+      "id": "A9.GRIP.L.035.Grip_rib_1_1",
+      "group": "GRIP",
+      "side": "L",
+      "source_label": "Grip rib -1-1",
+      "object_type": "MESH",
+      "material_names": [
+        "03 | Gunmetal structural inlay"
+      ]
+    },
+    {
+      "id": "A9.GRIP.R.036.Grip_rib_1_1",
+      "group": "GRIP",
+      "side": "R",
+      "source_label": "Grip rib 1-1",
+      "object_type": "MESH",
+      "material_names": [
+        "03 | Gunmetal structural inlay"
+      ]
+    },
+    {
+      "id": "A9.GRIP.L.037.Grip_rib_1_2",
+      "group": "GRIP",
+      "side": "L",
+      "source_label": "Grip rib -1-2",
+      "object_type": "MESH",
+      "material_names": [
+        "03 | Gunmetal structural inlay"
+      ]
+    },
+    {
+      "id": "A9.GRIP.R.038.Grip_rib_1_2",
+      "group": "GRIP",
+      "side": "R",
+      "source_label": "Grip rib 1-2",
+      "object_type": "MESH",
+      "material_names": [
+        "03 | Gunmetal structural inlay"
+      ]
+    },
+    {
+      "id": "A9.GRIP.L.039.Grip_rib_1_3",
+      "group": "GRIP",
+      "side": "L",
+      "source_label": "Grip rib -1-3",
+      "object_type": "MESH",
+      "material_names": [
+        "03 | Gunmetal structural inlay"
+      ]
+    },
+    {
+      "id": "A9.GRIP.R.040.Grip_rib_1_3",
+      "group": "GRIP",
+      "side": "R",
+      "source_label": "Grip rib 1-3",
+      "object_type": "MESH",
+      "material_names": [
+        "03 | Gunmetal structural inlay"
+      ]
+    },
+    {
+      "id": "A9.GRIP.L.041.Grip_rib_1_4",
+      "group": "GRIP",
+      "side": "L",
+      "source_label": "Grip rib -1-4",
+      "object_type": "MESH",
+      "material_names": [
+        "03 | Gunmetal structural inlay"
+      ]
+    },
+    {
+      "id": "A9.GRIP.R.042.Grip_rib_1_4",
+      "group": "GRIP",
+      "side": "R",
+      "source_label": "Grip rib 1-4",
+      "object_type": "MESH",
+      "material_names": [
+        "03 | Gunmetal structural inlay"
+      ]
+    },
+    {
+      "id": "A9.GRIP.L.043.Grip_rib_1_5",
+      "group": "GRIP",
+      "side": "L",
+      "source_label": "Grip rib -1-5",
+      "object_type": "MESH",
+      "material_names": [
+        "03 | Gunmetal structural inlay"
+      ]
+    },
+    {
+      "id": "A9.GRIP.R.044.Grip_rib_1_5",
+      "group": "GRIP",
+      "side": "R",
+      "source_label": "Grip rib 1-5",
+      "object_type": "MESH",
+      "material_names": [
+        "03 | Gunmetal structural inlay"
+      ]
+    },
+    {
+      "id": "A9.GRIP.L.045.Grip_rib_1_6",
+      "group": "GRIP",
+      "side": "L",
+      "source_label": "Grip rib -1-6",
+      "object_type": "MESH",
+      "material_names": [
+        "03 | Gunmetal structural inlay"
+      ]
+    },
+    {
+      "id": "A9.GRIP.R.046.Grip_rib_1_6",
+      "group": "GRIP",
+      "side": "R",
+      "source_label": "Grip rib 1-6",
+      "object_type": "MESH",
+      "material_names": [
+        "03 | Gunmetal structural inlay"
+      ]
+    },
+    {
+      "id": "A9.REAR.C.047.05_Rear_ergonomic_polymer",
+      "group": "REAR",
+      "side": "C",
+      "source_label": "05 / Rear ergonomic polymer pad",
+      "object_type": "MESH",
+      "material_names": [
+        "04 | Carbon-black soft polymer"
+      ]
+    },
+    {
+      "id": "A9.REAR.C.048.06_Rear_satin_inset",
+      "group": "REAR",
+      "side": "C",
+      "source_label": "06 / Rear satin inset",
+      "object_type": "MESH",
+      "material_names": [
+        "05 | Honed silver edges"
+      ]
+    },
+    {
+      "id": "A9.CORE.C.049.07_Floating_cyan_energy_p",
+      "group": "CORE",
+      "side": "C",
+      "source_label": "07 / Floating cyan energy prism",
+      "object_type": "MESH",
+      "material_names": [
+        "06 | Photonic cyan / artwork"
+      ]
+    },
+    {
+      "id": "A9.CORE.L.050.08_Laminated_outer_core_g",
+      "group": "CORE",
+      "side": "L",
+      "source_label": "08 / Laminated outer core glass -1",
+      "object_type": "MESH",
+      "material_names": [
+        "07 | Blue translucent optical glass"
+      ]
+    },
+    {
+      "id": "A9.CORE.R.051.08_Laminated_outer_core_g",
+      "group": "CORE",
+      "side": "R",
+      "source_label": "08 / Laminated outer core glass 1",
+      "object_type": "MESH",
+      "material_names": [
+        "07 | Blue translucent optical glass"
+      ]
+    },
+    {
+      "id": "A9.CORE.C.052.Photonic_core_indicator_0",
+      "group": "CORE",
+      "side": "C",
+      "source_label": "Photonic core indicator 0",
+      "object_type": "MESH",
+      "material_names": [
+        "06 | Photonic cyan / artwork"
+      ]
+    },
+    {
+      "id": "A9.CORE.R.053.Photonic_core_indicator_1",
+      "group": "CORE",
+      "side": "R",
+      "source_label": "Photonic core indicator 1",
+      "object_type": "MESH",
+      "material_names": [
+        "06 | Photonic cyan / artwork"
+      ]
+    },
+    {
+      "id": "A9.CORE.C.054.Photonic_core_indicator_2",
+      "group": "CORE",
+      "side": "C",
+      "source_label": "Photonic core indicator 2",
+      "object_type": "MESH",
+      "material_names": [
+        "06 | Photonic cyan / artwork"
+      ]
+    },
+    {
+      "id": "A9.CORE.C.055.Photonic_core_indicator_3",
+      "group": "CORE",
+      "side": "C",
+      "source_label": "Photonic core indicator 3",
+      "object_type": "MESH",
+      "material_names": [
+        "06 | Photonic cyan / artwork"
+      ]
+    },
+    {
+      "id": "A9.CORE.C.056.Photonic_core_indicator_4",
+      "group": "CORE",
+      "side": "C",
+      "source_label": "Photonic core indicator 4",
+      "object_type": "MESH",
+      "material_names": [
+        "06 | Photonic cyan / artwork"
+      ]
+    },
+    {
+      "id": "A9.VISOR.C.057.09_Integrated_optical_cro",
+      "group": "VISOR",
+      "side": "C",
+      "source_label": "09 / Integrated optical crown",
+      "object_type": "MESH",
+      "material_names": [
+        "02 | Satin titanium alloy"
+      ]
+    },
+    {
+      "id": "A9.VISOR.L.058.10_Visor_sculpted_cheek_1",
+      "group": "VISOR",
+      "side": "L",
+      "source_label": "10 / Visor sculpted cheek -1",
+      "object_type": "MESH",
+      "material_names": [
+        "01 | Matte graphite ceramic"
+      ]
+    },
+    {
+      "id": "A9.VISOR.R.059.10_Visor_sculpted_cheek_1",
+      "group": "VISOR",
+      "side": "R",
+      "source_label": "10 / Visor sculpted cheek 1",
+      "object_type": "MESH",
+      "material_names": [
+        "01 | Matte graphite ceramic"
+      ]
+    },
+    {
+      "id": "A9.VISOR.C.060.11_Cyan_holographic_viewi",
+      "group": "VISOR",
+      "side": "C",
+      "source_label": "11 / Cyan holographic viewing panel",
+      "object_type": "MESH",
+      "material_names": [
+        "07 | Blue translucent optical glass"
+      ]
+    },
+    {
+      "id": "A9.VISOR.C.061.12_Translucent_visor_halo",
+      "group": "VISOR",
+      "side": "C",
+      "source_label": "12 / Translucent visor halo",
+      "object_type": "MESH",
+      "material_names": [
+        "06 | Photonic cyan / artwork"
+      ]
+    },
+    {
+      "id": "A9.ACCENTS.L.062.13_Copper_ID_mark_1_0",
+      "group": "ACCENTS",
+      "side": "L",
+      "source_label": "13 / Copper ID mark -1-0",
+      "object_type": "MESH",
+      "material_names": [
+        "08 | Warm alloy insignia"
+      ]
+    },
+    {
+      "id": "A9.ACCENTS.L.063.13_Copper_ID_mark_1_1",
+      "group": "ACCENTS",
+      "side": "L",
+      "source_label": "13 / Copper ID mark -1-1",
+      "object_type": "MESH",
+      "material_names": [
+        "08 | Warm alloy insignia"
+      ]
+    },
+    {
+      "id": "A9.ACCENTS.L.064.13_Copper_ID_mark_1_2",
+      "group": "ACCENTS",
+      "side": "L",
+      "source_label": "13 / Copper ID mark -1-2",
+      "object_type": "MESH",
+      "material_names": [
+        "08 | Warm alloy insignia"
+      ]
+    },
+    {
+      "id": "A9.ACCENTS.R.065.13_Copper_ID_mark_1_0",
+      "group": "ACCENTS",
+      "side": "R",
+      "source_label": "13 / Copper ID mark 1-0",
+      "object_type": "MESH",
+      "material_names": [
+        "08 | Warm alloy insignia"
+      ]
+    },
+    {
+      "id": "A9.ACCENTS.R.066.13_Copper_ID_mark_1_1",
+      "group": "ACCENTS",
+      "side": "R",
+      "source_label": "13 / Copper ID mark 1-1",
+      "object_type": "MESH",
+      "material_names": [
+        "08 | Warm alloy insignia"
+      ]
+    },
+    {
+      "id": "A9.ACCENTS.R.067.13_Copper_ID_mark_1_2",
+      "group": "ACCENTS",
+      "side": "R",
+      "source_label": "13 / Copper ID mark 1-2",
+      "object_type": "MESH",
+      "material_names": [
+        "08 | Warm alloy insignia"
+      ]
+    },
+    {
+      "id": "A9.PANELS.L.068.LEFT_Faceted_floating_pro",
+      "group": "PANELS",
+      "side": "L",
+      "source_label": "LEFT / Faceted floating prow shield",
+      "object_type": "MESH",
+      "material_names": [
+        "02 | Satin titanium alloy"
+      ]
+    },
+    {
+      "id": "A9.PANELS.L.069.LEFT_Wide_recessed_cerami",
+      "group": "PANELS",
+      "side": "L",
+      "source_label": "LEFT / Wide recessed ceramic flank",
+      "object_type": "MESH",
+      "material_names": [
+        "09 | Recessed charcoal carbon"
+      ]
+    },
+    {
+      "id": "A9.PANELS.L.070.LEFT_Sweeping_hero_highli",
+      "group": "PANELS",
+      "side": "L",
+      "source_label": "LEFT / Sweeping hero highlight",
+      "object_type": "CURVE",
+      "material_names": [
+        "05 | Honed silver edges"
+      ]
+    },
+    {
+      "id": "A9.REAR.L.071.LEFT_Cyan_decorative_back",
+      "group": "REAR",
+      "side": "L",
+      "source_label": "LEFT / Cyan decorative back sweep",
+      "object_type": "CURVE",
+      "material_names": [
+        "06 | Photonic cyan / artwork"
+      ]
+    },
+    {
+      "id": "A9.PANELS.R.072.RIGHT_Faceted_floating_pr",
+      "group": "PANELS",
+      "side": "R",
+      "source_label": "RIGHT / Faceted floating prow shield",
+      "object_type": "MESH",
+      "material_names": [
+        "02 | Satin titanium alloy"
+      ]
+    },
+    {
+      "id": "A9.PANELS.R.073.RIGHT_Wide_recessed_ceram",
+      "group": "PANELS",
+      "side": "R",
+      "source_label": "RIGHT / Wide recessed ceramic flank",
+      "object_type": "MESH",
+      "material_names": [
+        "09 | Recessed charcoal carbon"
+      ]
+    },
+    {
+      "id": "A9.PANELS.R.074.RIGHT_Sweeping_hero_highl",
+      "group": "PANELS",
+      "side": "R",
+      "source_label": "RIGHT / Sweeping hero highlight",
+      "object_type": "CURVE",
+      "material_names": [
+        "05 | Honed silver edges"
+      ]
+    },
+    {
+      "id": "A9.REAR.R.075.RIGHT_Cyan_decorative_bac",
+      "group": "REAR",
+      "side": "R",
+      "source_label": "RIGHT / Cyan decorative back sweep",
+      "object_type": "CURVE",
+      "material_names": [
+        "06 | Photonic cyan / artwork"
+      ]
+    }
+  ]
+}
