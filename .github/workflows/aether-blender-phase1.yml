@@ -1,4 +1,4 @@
-name: CROSSFire - AETHER Blender Phase 2.2
+name: CROSSFire - AETHER Blender Phase 2.3
 
 on:
   push:
@@ -6,6 +6,7 @@ on:
       - tools/aether9_blender_phase1.py
       - tools/aether_topology21.py
       - tools/aether_uv22.py
+      - tools/aether_uvqa23.py
       - .github/workflows/aether-blender-phase1.yml
   workflow_dispatch:
 
@@ -63,8 +64,23 @@ jobs:
           manifest = json.loads(manifest_file.read_text())
           assert manifest["schema"] == "crossfire-aether-art-asset-v1"
           assert manifest["asset_id"] == "AETHER9_SPECTER"
-          assert manifest["phase"] == "2.2"
-          assert report_data["phase"] == "2.2"
+          assert manifest["phase"] == "2.3"
+          assert report_data["phase"] == "2.3"
+          qa_file=root/"aether9-phase2-uv-quality.json"
+          islands_svg=root/"aether9-phase2-islands.svg"
+          assert qa_file.is_file() and islands_svg.is_file()
+          qa=json.loads(qa_file.read_text())
+          assert qa["phase"]=="2.3" and qa["passed"]
+          assert qa["source_meshes"]==60
+          assert qa["totals"]["uv_islands"]>60
+          assert qa["totals"]["overlapping_uv_triangle_pairs"]==0
+          assert qa["totals"]["objects_below_padding"]==0
+          assert qa["totals"]["uv_triangles"]>=4000
+          assert qa["minimum_required_island_padding_px"]>=8
+          assert len(qa["families"])==uv_report["material_family_count"] if "uv_report" in locals() else len(qa["families"])==9
+          assert report_data["uv_qa_summary"]==qa["totals"]
+          assert manifest["uv_qa_summary"]==qa["totals"]
+          print("AETHER PHASE 2.3 QA",qa["totals"],"warnings",len(qa["warnings"]))
           uv_file=root / "aether9-phase2-uv.json"
           uv_layout=root / "aether9-phase2-uv-layout.svg"
           assert uv_file.is_file() and uv_layout.is_file()
@@ -142,7 +158,7 @@ jobs:
                   colorful = sum(1 for px in pixels.getdata() if max(px)>60)
                   assert colorful>145, f"Blank or near-black preview: {name} ({colorful})"
                   print("VISIBLE REVIEW FRAME", name, colorful)
-          print("VALID AETHER PHASE 2.2", len(gltf["meshes"]), report_data["mesh_objects"])
+          print("VALID AETHER PHASE 2.3", len(gltf["meshes"]), report_data["mesh_objects"])
           PY
 
       - name: Install generated game art
@@ -155,6 +171,8 @@ jobs:
           cp build/aether-phase1/aether9-phase1-manifest.json art/blender/
           cp build/aether-phase1/aether9-phase2-topology.json art/blender/
           cp build/aether-phase1/aether9-phase2-uv.json art/blender/
+          cp build/aether-phase1/aether9-phase2-uv-quality.json art/blender/
+          cp build/aether-phase1/aether9-phase2-islands.svg static/previews/
           cp build/aether-phase1/aether9-phase2-uv-layout.svg static/previews/
 
       - name: Commit validated Blender exports
@@ -167,11 +185,13 @@ jobs:
             art/blender/aether9-phase1-manifest.json \
             art/blender/aether9-phase2-topology.json \
             art/blender/aether9-phase2-uv.json \
+            art/blender/aether9-phase2-uv-quality.json \
+            static/previews/aether9-phase2-islands.svg \
             static/previews/aether9-phase2-uv-layout.svg \
             static/assets/aether9-specter-phase1.glb
           git add static/previews/aether9-specter-phase1*.png
           if ! git diff --cached --quiet; then
-            git commit -m "AETHER Phase 2.2: Blender UV atlases and glTF export with verified texture coordinates"
+            git commit -m "AETHER Phase 2.3: validate UV island padding and geometry-to-texture mapping"
             # Another CI or documentation commit can land while Blender runs.
             # Rebase on fresh main instead of dropping a validated export.
             git fetch origin main
