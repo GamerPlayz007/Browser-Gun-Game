@@ -1,6 +1,6 @@
 {
-  "phase": "2.3",
-  "status": "Verified UV island integrity and Blender export",
+  "phase": "3.4",
+  "status": "AETHER PBR skins, texture maps and AO baked",
   "source": "/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/build/aether-phase1/aether9-specter-phase1.blend",
   "asset": "/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/build/aether-phase1/aether9-specter-phase1.glb",
   "preview": "/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/build/aether-phase1/aether9-specter-phase1.png",
@@ -56,6 +56,55 @@
   "authoring_mesh_objects": 75,
   "base_triangles_before_modifiers": 4864,
   "uv_islands": "Phase 2.3 validated island padding, texture coordinate integrity and UV stretch",
-  "texture_bakes": "pending Phase 3",
-  "glb_bytes": 252528
+  "texture_bakes": "Cycles AO 512 -> 2048; procedural height normals -> 2048",
+  "glb_bytes": 252528,
+  "pbr_report": "aether9-phase3-report.json",
+  "pbr_variants": {
+    "midnight": {
+      "glb": "aether9-specter-midnight.glb",
+      "bytes": 44529064,
+      "image_bindings": {
+        "materials": 9,
+        "textures": 29,
+        "images": 29,
+        "normal_materials": 9,
+        "occlusion_materials": 9,
+        "basecolor_materials": 9,
+        "emissive_materials": 2
+      },
+      "preview": "aether9-specter-midnight-pbr.png",
+      "preview_bytes": 328260
+    },
+    "glacier": {
+      "glb": "aether9-specter-glacier.glb",
+      "bytes": 48197220,
+      "image_bindings": {
+        "materials": 9,
+        "textures": 29,
+        "images": 29,
+        "normal_materials": 9,
+        "occlusion_materials": 9,
+        "basecolor_materials": 9,
+        "emissive_materials": 2
+      },
+      "preview": "aether9-specter-glacier-pbr.png",
+      "preview_bytes": 328260
+    },
+    "eclipse": {
+      "glb": "aether9-specter-eclipse.glb",
+      "bytes": 45218604,
+      "image_bindings": {
+        "materials": 9,
+        "textures": 29,
+        "images": 29,
+        "normal_materials": 9,
+        "occlusion_materials": 9,
+        "basecolor_materials": 9,
+        "emissive_materials": 2
+      },
+      "preview": "aether9-specter-eclipse-pbr.png",
+      "preview_bytes": 328260
+    }
+  },
+  "pbr_source": "aether9-specter-pbr.blend"
 }

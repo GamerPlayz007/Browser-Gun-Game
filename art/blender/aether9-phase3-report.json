@@ -1,0 +1,189 @@
+{
+  "phase": "3",
+  "asset_id": "AETHER9_SPECTER",
+  "status": "complete, pending external visual review",
+  "atlas_resolution": 2048,
+  "geometric_ao_bake_resolution": 512,
+  "normal_source": "procedural microheight-derived tangent normals; not a high-poly sculpt bake",
+  "bake_details": {
+    "ceramic": {
+      "source_path": "/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/build/aether-phase1/textures/aether9_ceramic_ao_baked_512.png",
+      "bake_resolution": 512,
+      "atlas_resolution": 2048,
+      "min": 0,
+      "max": 255,
+      "mean": 191.9561812877655
+    },
+    "frame": {
+      "source_path": "/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/build/aether-phase1/textures/aether9_frame_ao_baked_512.png",
+      "bake_resolution": 512,
+      "atlas_resolution": 2048,
+      "min": 0,
+      "max": 255,
+      "mean": 194.604070186615
+    },
+    "mid": {
+      "source_path": "/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/build/aether-phase1/textures/aether9_mid_ao_baked_512.png",
+      "bake_resolution": 512,
+      "atlas_resolution": 2048,
+      "min": 0,
+      "max": 255,
+      "mean": 180.21163606643677
+    },
+    "polymer": {
+      "source_path": "/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/build/aether-phase1/textures/aether9_polymer_ao_baked_512.png",
+      "bake_resolution": 512,
+      "atlas_resolution": 2048,
+      "min": 0,
+      "max": 255,
+      "mean": 236.40937089920044
+    },
+    "silver": {
+      "source_path": "/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/build/aether-phase1/textures/aether9_silver_ao_baked_512.png",
+      "bake_resolution": 512,
+      "atlas_resolution": 2048,
+      "min": 0,
+      "max": 255,
+      "mean": 223.1196644306183
+    },
+    "cyan": {
+      "source_path": "/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/build/aether-phase1/textures/aether9_cyan_ao_baked_512.png",
+      "bake_resolution": 512,
+      "atlas_resolution": 2048,
+      "min": 0,
+      "max": 255,
+      "mean": 167.37835144996643
+    },
+    "glass": {
+      "source_path": "/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/build/aether-phase1/textures/aether9_glass_ao_baked_512.png",
+      "bake_resolution": 512,
+      "atlas_resolution": 2048,
+      "min": 0,
+      "max": 255,
+      "mean": 169.95893049240112
+    },
+    "copper": {
+      "source_path": "/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/build/aether-phase1/textures/aether9_copper_ao_baked_512.png",
+      "bake_resolution": 512,
+      "atlas_resolution": 2048,
+      "min": 0,
+      "max": 255,
+      "mean": 209.6499626636505
+    },
+    "carbon": {
+      "source_path": "/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/build/aether-phase1/textures/aether9_carbon_ao_baked_512.png",
+      "bake_resolution": 512,
+      "atlas_resolution": 2048,
+      "min": 0,
+      "max": 255,
+      "mean": 183.47849464416504
+    }
+  },
+  "pbr_families": 9,
+  "variants": {
+    "midnight": {
+      "glb": "aether9-specter-midnight.glb",
+      "bytes": 44529064,
+      "image_bindings": {
+        "materials": 9,
+        "textures": 29,
+        "images": 29,
+        "normal_materials": 9,
+        "occlusion_materials": 9,
+        "basecolor_materials": 9,
+        "emissive_materials": 2
+      },
+      "preview": "aether9-specter-midnight-pbr.png",
+      "preview_bytes": 328260
+    },
+    "glacier": {
+      "glb": "aether9-specter-glacier.glb",
+      "bytes": 48197220,
+      "image_bindings": {
+        "materials": 9,
+        "textures": 29,
+        "images": 29,
+        "normal_materials": 9,
+        "occlusion_materials": 9,
+        "basecolor_materials": 9,
+        "emissive_materials": 2
+      },
+      "preview": "aether9-specter-glacier-pbr.png",
+      "preview_bytes": 328260
+    },
+    "eclipse": {
+      "glb": "aether9-specter-eclipse.glb",
+      "bytes": 45218604,
+      "image_bindings": {
+        "materials": 9,
+        "textures": 29,
+        "images": 29,
+        "normal_materials": 9,
+        "occlusion_materials": 9,
+        "basecolor_materials": 9,
+        "emissive_materials": 2
+      },
+      "preview": "aether9-specter-eclipse-pbr.png",
+      "preview_bytes": 328260
+    }
+  },
+  "source_texture_count": 51,
+  "source_textures": [
+    "aether9_carbon_normal.png",
+    "aether9_carbon_orm.png",
+    "aether9_ceramic_normal.png",
+    "aether9_ceramic_orm.png",
+    "aether9_copper_normal.png",
+    "aether9_copper_orm.png",
+    "aether9_cyan_normal.png",
+    "aether9_cyan_orm.png",
+    "aether9_eclipse_carbon_base.png",
+    "aether9_eclipse_ceramic_base.png",
+    "aether9_eclipse_copper_base.png",
+    "aether9_eclipse_copper_emission.png",
+    "aether9_eclipse_cyan_base.png",
+    "aether9_eclipse_cyan_emission.png",
+    "aether9_eclipse_frame_base.png",
+    "aether9_eclipse_glass_base.png",
+    "aether9_eclipse_mid_base.png",
+    "aether9_eclipse_polymer_base.png",
+    "aether9_eclipse_silver_base.png",
+    "aether9_frame_normal.png",
+    "aether9_frame_orm.png",
+    "aether9_glacier_carbon_base.png",
+    "aether9_glacier_ceramic_base.png",
+    "aether9_glacier_copper_base.png",
+    "aether9_glacier_copper_emission.png",
+    "aether9_glacier_cyan_base.png",
+    "aether9_glacier_cyan_emission.png",
+    "aether9_glacier_frame_base.png",
+    "aether9_glacier_glass_base.png",
+    "aether9_glacier_mid_base.png",
+    "aether9_glacier_polymer_base.png",
+    "aether9_glacier_silver_base.png",
+    "aether9_glass_normal.png",
+    "aether9_glass_orm.png",
+    "aether9_mid_normal.png",
+    "aether9_mid_orm.png",
+    "aether9_midnight_carbon_base.png",
+    "aether9_midnight_ceramic_base.png",
+    "aether9_midnight_copper_base.png",
+    "aether9_midnight_copper_emission.png",
+    "aether9_midnight_cyan_base.png",
+    "aether9_midnight_cyan_emission.png",
+    "aether9_midnight_frame_base.png",
+    "aether9_midnight_glass_base.png",
+    "aether9_midnight_mid_base.png",
+    "aether9_midnight_polymer_base.png",
+    "aether9_midnight_silver_base.png",
+    "aether9_polymer_normal.png",
+    "aether9_polymer_orm.png",
+    "aether9_silver_normal.png",
+    "aether9_silver_orm.png"
+  ],
+  "limitations": [
+    "AO baked at 512px and upsampled to 2048px",
+    "normal maps derived from procedural surface height, not high-to-low geometry",
+    "PBR art is authored procedurally, not hand-painted"
+  ]
+}

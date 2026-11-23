@@ -1,7 +1,7 @@
 {
   "schema": "crossfire-aether-art-asset-v1",
   "asset_id": "AETHER9_SPECTER",
-  "phase": "2.3",
+  "phase": "3.4",
   "asset_kind": "original fictional sci-fi game prop",
   "asset_root": "A9.ROOT.SPECTER",
   "orientation": {
@@ -24,7 +24,7 @@
     "objects_below_padding": 0,
     "objects_with_island_seams": 60
   },
-  "baked_textures": "not yet (Phase 3)",
+  "baked_textures": "512px Cycles AO baked + upscaled 2K, height-derived normal textures",
   "topology_status": "BMesh cleanup, watertight surfaces, outward normals and hard-edge shading",
   "topology_report": "aether9-phase2-topology.json",
   "topology_summary": {
@@ -4847,5 +4847,13 @@
         "06 | Photonic cyan / artwork"
       ]
     }
-  ]
+  ],
+  "material_workflow": "external PNG PBR maps, Cycles AO and procedural height normals",
+  "pbr_file": "aether9-specter-pbr.blend",
+  "pbr_report": "aether9-phase3-report.json",
+  "pbr_variants": {
+    "midnight": "aether9-specter-midnight.glb",
+    "glacier": "aether9-specter-glacier.glb",
+    "eclipse": "aether9-specter-eclipse.glb"
+  }
 }
