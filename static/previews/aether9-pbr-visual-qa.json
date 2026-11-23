@@ -1,0 +1,59 @@
+{
+  "midnight": {
+    "skin": "midnight",
+    "imported_meshes": 75,
+    "bounds_min": [
+      -0.4368,
+      -1.8024,
+      -0.882
+    ],
+    "bounds_max": [
+      0.4368,
+      2.53,
+      0.635
+    ],
+    "visible_pixels": 61515,
+    "mean_lit_rgb": 138.76,
+    "preview_file": "aether9-specter-midnight-pbr.png",
+    "bytes": 114596,
+    "render_engine": "BLENDER_EEVEE; freshly imported GLB with real PBR images"
+  },
+  "glacier": {
+    "skin": "glacier",
+    "imported_meshes": 75,
+    "bounds_min": [
+      -0.4368,
+      -1.8024,
+      -0.882
+    ],
+    "bounds_max": [
+      0.4368,
+      2.53,
+      0.635
+    ],
+    "visible_pixels": 61515,
+    "mean_lit_rgb": 203.69,
+    "preview_file": "aether9-specter-glacier-pbr.png",
+    "bytes": 84704,
+    "render_engine": "BLENDER_EEVEE; freshly imported GLB with real PBR images"
+  },
+  "eclipse": {
+    "skin": "eclipse",
+    "imported_meshes": 75,
+    "bounds_min": [
+      -0.4368,
+      -1.8024,
+      -0.882
+    ],
+    "bounds_max": [
+      0.4368,
+      2.53,
+      0.635
+    ],
+    "visible_pixels": 61515,
+    "mean_lit_rgb": 132.22,
+    "preview_file": "aether9-specter-eclipse-pbr.png",
+    "bytes": 113573,
+    "render_engine": "BLENDER_EEVEE; freshly imported GLB with real PBR images"
+  }
+}
