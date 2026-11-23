@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#080f1a">
+<title>AETHER-9 / PHANTOM EDITION — CROSSFire 3D Armory</title>
+<meta name="description" content="Inspect an original, premium 3D sci-fi weapon prop concept for CROSSFire. Rotate, zoom, and compare the AETHER-9 Phantom Edition.">
+<script type="importmap">{"imports":{"three":"/static/vendor/three.module.js","three/addons/":"/static/vendor/addons/"}}</script>
+<style>
+:root{--accent:#4ce7ff;--text:#f0f8fb;--soft:#93aeba;--line:#3a58676a;color-scheme:dark}
+*{box-sizing:border-box}html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#080f1a;color:var(--text);font-family:Inter,'Segoe UI',system-ui,sans-serif}
+button,a{font:inherit}button{cursor:pointer}
+#canvas{position:fixed;inset:0;width:100%;height:100%;touch-action:none;display:block}
+#loading{position:fixed;inset:0;display:grid;place-items:center;background:#080f1a;color:#a3eef7;font:700 13px system-ui;letter-spacing:.27em;z-index:20}
+#loading[hidden]{display:none}
+#loading small{display:block;margin-top:15px;color:#6992a6;font-size:10px;letter-spacing:.17em;text-align:center}
+header{position:fixed;inset:0 0 auto;z-index:5;display:flex;justify-content:space-between;align-items:center;gap:18px;padding:24px 3vw;pointer-events:none}
+.logo{font-weight:900;font-size:14px;letter-spacing:.24em;color:#f5ffff;text-decoration:none;pointer-events:auto}
+.logo span{color:var(--accent)}
+nav{display:flex;gap:8px;pointer-events:auto;align-items:center}
+nav a{font-size:10px;color:#b1d1dc;text-decoration:none;border:1px solid #4562738f;background:#0d1e2bbd;padding:10px 14px;border-radius:5px;letter-spacing:.09em;transition:background .2s}
+nav a:hover{background:#173548;color:#fff}
+nav .current{color:var(--accent);font-size:10px;font-weight:800;letter-spacing:.13em;padding:8px 11px;border-left:2px solid var(--accent)}
+aside{position:fixed;left:3vw;top:50%;transform:translateY(-40%);width:310px;z-index:3;pointer-events:none}
+.eyebrow{display:flex;align-items:center;gap:10px;color:var(--accent);font-size:10px;letter-spacing:.26em;font-weight:800;margin-bottom:18px}
+.eyebrow:before{content:'';display:block;width:24px;height:1px;background:var(--accent)}
+h1{font-family:'Arial Narrow',Impact,'Segoe UI',sans-serif;font-stretch:condensed;font-size:clamp(48px,6vw,92px);line-height:.83;margin:0;letter-spacing:-.048em;text-shadow:0 10px 46px #000a}
+h1 span{display:block;font:800 16px/1.4 Inter,'Segoe UI',sans-serif;letter-spacing:.32em;color:var(--accent);margin:17px 0 0}
+.description{color:#b8c9d0;line-height:1.78;font-size:12px;max-width:295px;margin:22px 0 26px;text-shadow:0 2px 20px #06141c}
+.visual-data{border-left:2px solid var(--accent);padding:5px 0 5px 13px;color:#99b6bf;font-size:10px;letter-spacing:.115em;line-height:2}
+.visual-data b{color:#f0f9f8;font-weight:700}
+.folio{display:flex;gap:16px;margin-top:25px}
+.folio div{display:flex;flex-direction:column;gap:7px}
+.folio strong{font:900 20px/1 'Arial Narrow',Arial,sans-serif;letter-spacing:.06em}
+.folio span{font-size:9px;color:#83a1b1;letter-spacing:.12em}
+.control-card{position:fixed;bottom:26px;right:3vw;width:min(347px,calc(100vw - 28px));z-index:6;border:1px solid #476b7a83;border-radius:12px;background:linear-gradient(135deg,#102331f0,#091722ed);box-shadow:0 22px 66px #000a;padding:19px 19px 16px;backdrop-filter:blur(18px)}
+.control-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px}
+.control-head strong{font-size:11px;letter-spacing:.19em}
+.control-head small{font-size:10px;letter-spacing:.11em;color:var(--accent);font-weight:700}
+.finishes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.finishes button{border:1px solid #3b5865;background:#142733;border-radius:7px;color:#9dbdc8;font-size:10px;font-weight:800;letter-spacing:.07em;text-align:left;padding:12px 9px;min-height:55px}
+.finishes button i{display:block;width:30px;height:3px;margin-bottom:8px;border-radius:4px}
+.finishes button:nth-child(1) i{background:linear-gradient(90deg,#2e4f60,#4ce7ff)}
+.finishes button:nth-child(2) i{background:linear-gradient(90deg,#91b3bb,#6ffff1)}
+.finishes button:nth-child(3) i{background:linear-gradient(90deg,#393451,#bd91ff)}
+.finishes button.active{border-color:var(--accent);color:#f5fcff;background:#1b3644}
+.actions{display:flex;gap:8px;margin-top:12px}
+.actions button{flex:1;border-radius:6px;background:#0b1d29;border:1px solid #3c5c68;color:#cae3e8;padding:10px 5px;font-size:10px;font-weight:800;letter-spacing:.06em}
+.actions button.active{color:#b6f8fa;border-color:#5fcbd380;background:#174050}
+.instructions{font-size:10px;color:#8daebd;letter-spacing:.035em;line-height:1.6;margin:12px 0 0}
+footer{position:fixed;bottom:32px;left:3vw;z-index:3;color:#7899aa;font-size:9px;letter-spacing:.17em;pointer-events:none}
+.corner-decoration{position:fixed;right:3vw;top:20vh;z-index:2;text-align:right;color:#547485;pointer-events:none;font:700 9px/1.9 monospace;letter-spacing:.13em}
+.corner-decoration em{font-style:normal;color:var(--accent)}
+#render-failure{position:fixed;bottom:15%;left:50%;transform:translateX(-50%);color:#ffd3b8;background:#24202ada;padding:12px 16px;border:1px solid #be8061;z-index:30;font:12px system-ui;max-width:90vw;text-align:center}
+#render-failure[hidden]{display:none}
+@media(max-width:900px){
+ aside{top:130px;left:20px;transform:none;width:235px}h1{font-size:48px}
+ h1 span{font-size:11px;letter-spacing:.25em}.description{font-size:11px;max-width:215px;margin:13px 0}
+ .folio,.visual-data{display:none}.corner-decoration{display:none}
+ header{padding:18px 20px}nav .current{display:none}
+ .control-card{right:13px;bottom:13px;width:min(310px,calc(100vw - 26px));padding:13px}
+ footer{bottom:18px;left:17px;font-size:8px}
+}
+@media(max-width:600px){
+ header{padding:14px 13px}.logo{font-size:11px}nav a{padding:8px;font-size:8px}
+ aside{top:77px;left:15px;width:245px}
+ .eyebrow{font-size:8px;margin-bottom:10px}
+ h1{font-size:40px}h1 span{margin-top:10px;font-size:10px}
+ .description{display:none}.folio,.visual-data,footer{display:none}
+ .control-card{bottom:8px;left:8px;right:8px;width:auto;padding:12px}
+ .control-head{margin-bottom:8px}.finishes button{min-height:46px;padding:9px 7px;font-size:9px}
+ .finishes button i{margin-bottom:5px}
+ .instructions{font-size:9px;margin-top:9px}
+}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<canvas id="canvas" aria-label="Interactive rotating 3D model of the AETHER-9 Phantom Edition sci-fi game prop"></canvas>
+<div id="loading">ASSEMBLING PHANTOM CONCEPT<small>CUSTOM SCULPTED 3D MESHES · MATERIAL STUDIO</small></div>
+<div id="render-failure" hidden>3D preview could not start. Try Chrome with hardware acceleration enabled.</div>
+<header>
+<a class="logo" href="/">CROSS<span>FIRE</span></a>
+<nav aria-label="Armory comparison">
+<a href="/static/ar-futuristic.html">AETHER-9 ORIGINAL</a>
+<a href="/static/ar-studio.html">SANDLINE</a>
+<span class="current">NEW / PHANTOM EDITION</span>
+</nav>
+</header>
+<aside>
+<div class="eyebrow">ARMORY LAB / CONCEPT 004</div>
+<h1>AETHER<br>09<span>PHANTOM EDITION</span></h1>
+<p class="description">An entirely new 3D artwork pass: longer sci-fi silhouette, layered beveled armor, skeletal rear frame, luminous photonic core, engraved panels and physical materials. Explore every angle before deciding whether it belongs in CROSSFire.</p>
+<div class="visual-data"><b>ORIGINAL GAME-ART CONCEPT</b><br>CUSTOM PROFILE MESHES / PBR MATERIALS<br>REAL-TIME WEBGL · VISUAL PROP ONLY</div>
+<div class="folio"><div><strong>04</strong><span>VISUAL FINISHES*</span></div><div><strong id="mesh-count">—</strong><span>RENDER PARTS</span></div></div>
+</aside>
+<div class="corner-decoration">ARMORY / <em>09-PH</em><br>DIMENSIONAL ART STUDY<br>PROJECT CROSSFire<br>NOT YET IN LIVE GAME</div>
+<section class="control-card" aria-label="Interactive 3D controls">
+<div class="control-head"><strong>FINISH SELECTOR</strong><small id="finish-name">MIDNIGHT</small></div>
+<div class="finishes">
+<button class="active" data-finish="midnight" aria-pressed="true"><i></i>MIDNIGHT</button>
+<button data-finish="glacier" aria-pressed="false"><i></i>GLACIER</button>
+<button data-finish="eclipse" aria-pressed="false"><i></i>ECLIPSE</button>
+</div>
+<div class="actions"><button class="active" id="auto" aria-pressed="true">AUTO ROTATE: ON</button><button id="reset">RESET VIEW</button></div>
+<p class="instructions">Drag to rotate · Scroll/pinch to zoom · Double-click to reset · Keys 1–3 change finishes</p>
+</section>
+<footer>PHANTOM 3D STUDY · SEPARATE PREVIEW, NOT DEPLOYED TO MATCHES · <span id="mesh-counter-foot">LIVE RENDER</span></footer>
+<script>
+window.addEventListener('error',e=>{
+ const loading=document.getElementById('loading');
+ if(loading)loading.hidden=true;
+ const fail=document.getElementById('render-failure');
+ if(fail){fail.hidden=false;fail.textContent='3D preview error: '+(e.message||'Unable to initialize renderer');}
+});
+</script>
+<script type="module" src="/static/aether9-rebuild.js"></script>
+</body>
+</html>
