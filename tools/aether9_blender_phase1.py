@@ -332,6 +332,8 @@ def main():
     scene.render.resolution_percentage=100
     scene.render.image_settings.file_format="PNG"
     scene.render.film_transparent=False
+    if scene.world is None:
+        scene.world=bpy.data.worlds.new("AETHER / studio environment")
     scene.world.color=(.015,.026,.043)
 
     # Blender file is the editable source of truth.
@@ -339,6 +341,14 @@ def main():
     glb=out/"aether9-specter-phase1.glb"
     preview=out/"aether9-specter-phase1.png"
     bpy.ops.wm.save_as_mainfile(filepath=str(blend))
+    # Preserve truly editable curve objects inside .blend, then convert
+    # the in-memory scene's luminous ribbons to exportable polygon meshes.
+    # glTF cannot directly serialize Blender's bevel-curve primitives.
+    for source_curve in [o for o in list(asset.objects) if o.type=="CURVE"]:
+        bpy.ops.object.select_all(action="DESELECT")
+        source_curve.select_set(True)
+        bpy.context.view_layer.objects.active=source_curve
+        bpy.ops.object.convert(target="MESH")
     bpy.ops.object.select_all(action="DESELECT")
     for obj in asset.objects:
         obj.select_set(True)
