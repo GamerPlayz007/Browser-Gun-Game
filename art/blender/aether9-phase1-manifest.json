@@ -1,7 +1,7 @@
 {
   "schema": "crossfire-aether-art-asset-v1",
   "asset_id": "AETHER9_SPECTER",
-  "phase": "1.4",
+  "phase": "2.1",
   "asset_kind": "original fictional sci-fi game prop",
   "asset_root": "A9.ROOT.SPECTER",
   "orientation": {
@@ -11,7 +11,19 @@
   },
   "uv_status": "provisional / dedicated UVs in Phase 2",
   "baked_textures": "not yet (Phase 3)",
-  "topology_status": "visual sculpt / not yet final game LOD",
+  "topology_status": "BMesh cleanup, watertight surfaces, outward normals and hard-edge shading",
+  "topology_report": "aether9-phase2-topology.json",
+  "topology_summary": {
+    "meshes": 60,
+    "vertices_before": 2138,
+    "vertices_after": 2138,
+    "triangles_before": 4044,
+    "triangles_after": 4044,
+    "ngons_resolved": 20,
+    "welded_vertices": 0,
+    "reversed_inward_normals": 0,
+    "weighted_normal_objects": 15
+  },
   "material_families": {
     "ceramic": "01 | Matte graphite ceramic",
     "frame": "02 | Satin titanium alloy",
@@ -72,6 +84,39 @@
       "side": "C",
       "source_label": "01 / Ceramic monocoque : visual silhouette",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 282,
+          "edges": 588,
+          "faces": 308,
+          "triangles": 560,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.497216311
+        },
+        "after": {
+          "vertices": 282,
+          "edges": 588,
+          "faces": 308,
+          "triangles": 560,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.497216311
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "01 | Matte graphite ceramic"
       ]
@@ -82,6 +127,39 @@
       "side": "C",
       "source_label": "02 / Raised continuous titanium spine",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 98,
+          "edges": 208,
+          "faces": 112,
+          "triangles": 192,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.080154398
+        },
+        "after": {
+          "vertices": 98,
+          "edges": 208,
+          "faces": 112,
+          "triangles": 192,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.080154398
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "02 | Satin titanium alloy"
       ]
@@ -92,6 +170,7 @@
       "side": "C",
       "source_label": "03 / Single dorsal light line",
       "object_type": "CURVE",
+      "topology": null,
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]
@@ -102,6 +181,39 @@
       "side": "L",
       "source_label": "LEFT / Swept structural cheek",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 16,
+          "edges": 24,
+          "faces": 10,
+          "triangles": 28,
+          "ngons": 2,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.004077842
+        },
+        "after": {
+          "vertices": 16,
+          "edges": 34,
+          "faces": 20,
+          "triangles": 28,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.012233526
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 2,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": true,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "02 | Satin titanium alloy"
       ]
@@ -112,6 +224,39 @@
       "side": "L",
       "source_label": "LEFT / Quiet ceramic insert",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 10,
+          "edges": 15,
+          "faces": 7,
+          "triangles": 16,
+          "ngons": 2,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.000231617
+        },
+        "after": {
+          "vertices": 10,
+          "edges": 19,
+          "faces": 11,
+          "triangles": 16,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.000694851
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 2,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": true,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "09 | Recessed charcoal carbon"
       ]
@@ -122,6 +267,39 @@
       "side": "L",
       "source_label": "LEFT / Satin highlight",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 4.2107e-05
+        },
+        "after": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.00012632
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": true,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "05 | Honed silver edges"
       ]
@@ -132,6 +310,39 @@
       "side": "L",
       "source_label": "LEFT / Vent-side aero fin",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 12,
+          "edges": 18,
+          "faces": 8,
+          "triangles": 20,
+          "ngons": 2,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.002750001
+        },
+        "after": {
+          "vertices": 12,
+          "edges": 24,
+          "faces": 14,
+          "triangles": 20,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.008250003
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 2,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": true,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "01 | Matte graphite ceramic"
       ]
@@ -142,6 +353,7 @@
       "side": "L",
       "source_label": "LEFT / Cyan side trace",
       "object_type": "CURVE",
+      "topology": null,
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]
@@ -152,6 +364,39 @@
       "side": "L",
       "source_label": "LEFT / light recess 1",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3662e-05
+        },
+        "after": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3662e-05
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]
@@ -162,6 +407,39 @@
       "side": "L",
       "source_label": "LEFT / light recess 2",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3662e-05
+        },
+        "after": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3662e-05
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]
@@ -172,6 +450,39 @@
       "side": "L",
       "source_label": "LEFT / light recess 3",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3662e-05
+        },
+        "after": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3662e-05
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]
@@ -182,6 +493,39 @@
       "side": "L",
       "source_label": "LEFT / light recess 4",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3662e-05
+        },
+        "after": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3662e-05
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]
@@ -192,6 +536,39 @@
       "side": "L",
       "source_label": "LEFT / Monolithic stock arch",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 62,
+          "edges": 132,
+          "faces": 72,
+          "triangles": 120,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": -0.01287991
+        },
+        "after": {
+          "vertices": 62,
+          "edges": 132,
+          "faces": 72,
+          "triangles": 120,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.01287991
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "01 | Matte graphite ceramic"
       ]
@@ -202,6 +579,7 @@
       "side": "L",
       "source_label": "LEFT / Lower open cantilever",
       "object_type": "CURVE",
+      "topology": null,
       "material_names": [
         "02 | Satin titanium alloy"
       ]
@@ -212,6 +590,7 @@
       "side": "L",
       "source_label": "LEFT / Upper fine rim",
       "object_type": "CURVE",
+      "topology": null,
       "material_names": [
         "05 | Honed silver edges"
       ]
@@ -222,6 +601,7 @@
       "side": "L",
       "source_label": "LEFT / Reactor visual cradle",
       "object_type": "CURVE",
+      "topology": null,
       "material_names": [
         "02 | Satin titanium alloy"
       ]
@@ -232,6 +612,7 @@
       "side": "L",
       "source_label": "LEFT / Core internal light",
       "object_type": "CURVE",
+      "topology": null,
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]
@@ -242,6 +623,39 @@
       "side": "R",
       "source_label": "RIGHT / Swept structural cheek",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 16,
+          "edges": 24,
+          "faces": 10,
+          "triangles": 28,
+          "ngons": 2,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": -0.004077842
+        },
+        "after": {
+          "vertices": 16,
+          "edges": 34,
+          "faces": 20,
+          "triangles": 28,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.012233526
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 2,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": true,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "02 | Satin titanium alloy"
       ]
@@ -252,6 +666,39 @@
       "side": "R",
       "source_label": "RIGHT / Quiet ceramic insert",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 10,
+          "edges": 15,
+          "faces": 7,
+          "triangles": 16,
+          "ngons": 2,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": -0.000231617
+        },
+        "after": {
+          "vertices": 10,
+          "edges": 19,
+          "faces": 11,
+          "triangles": 16,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.000694851
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 2,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": true,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "09 | Recessed charcoal carbon"
       ]
@@ -262,6 +709,39 @@
       "side": "R",
       "source_label": "RIGHT / Satin highlight",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": -4.2107e-05
+        },
+        "after": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.00012632
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": true,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "05 | Honed silver edges"
       ]
@@ -272,6 +752,39 @@
       "side": "R",
       "source_label": "RIGHT / Vent-side aero fin",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 12,
+          "edges": 18,
+          "faces": 8,
+          "triangles": 20,
+          "ngons": 2,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": -0.002750001
+        },
+        "after": {
+          "vertices": 12,
+          "edges": 24,
+          "faces": 14,
+          "triangles": 20,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.008250003
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 2,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": true,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "01 | Matte graphite ceramic"
       ]
@@ -282,6 +795,7 @@
       "side": "R",
       "source_label": "RIGHT / Cyan side trace",
       "object_type": "CURVE",
+      "topology": null,
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]
@@ -292,6 +806,39 @@
       "side": "R",
       "source_label": "RIGHT / light recess 1",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3662e-05
+        },
+        "after": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3662e-05
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]
@@ -302,6 +849,39 @@
       "side": "R",
       "source_label": "RIGHT / light recess 2",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3662e-05
+        },
+        "after": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3662e-05
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]
@@ -312,6 +892,39 @@
       "side": "R",
       "source_label": "RIGHT / light recess 3",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3662e-05
+        },
+        "after": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3662e-05
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]
@@ -322,6 +935,39 @@
       "side": "R",
       "source_label": "RIGHT / light recess 4",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3662e-05
+        },
+        "after": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3662e-05
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]
@@ -332,6 +978,39 @@
       "side": "R",
       "source_label": "RIGHT / Monolithic stock arch",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 62,
+          "edges": 132,
+          "faces": 72,
+          "triangles": 120,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": -0.01287991
+        },
+        "after": {
+          "vertices": 62,
+          "edges": 132,
+          "faces": 72,
+          "triangles": 120,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.01287991
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "01 | Matte graphite ceramic"
       ]
@@ -342,6 +1021,7 @@
       "side": "R",
       "source_label": "RIGHT / Lower open cantilever",
       "object_type": "CURVE",
+      "topology": null,
       "material_names": [
         "02 | Satin titanium alloy"
       ]
@@ -352,6 +1032,7 @@
       "side": "R",
       "source_label": "RIGHT / Upper fine rim",
       "object_type": "CURVE",
+      "topology": null,
       "material_names": [
         "05 | Honed silver edges"
       ]
@@ -362,6 +1043,7 @@
       "side": "R",
       "source_label": "RIGHT / Reactor visual cradle",
       "object_type": "CURVE",
+      "topology": null,
       "material_names": [
         "02 | Satin titanium alloy"
       ]
@@ -372,6 +1054,7 @@
       "side": "R",
       "source_label": "RIGHT / Core internal light",
       "object_type": "CURVE",
+      "topology": null,
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]
@@ -382,6 +1065,39 @@
       "side": "C",
       "source_label": "04 / Graphite handguard support",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 66,
+          "edges": 144,
+          "faces": 80,
+          "triangles": 128,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": -0.01982752
+        },
+        "after": {
+          "vertices": 66,
+          "edges": 144,
+          "faces": 80,
+          "triangles": 128,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.01982752
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "04 | Carbon-black soft polymer"
       ]
@@ -392,6 +1108,39 @@
       "side": "L",
       "source_label": "Grip rib -1-0",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3104e-05
+        },
+        "after": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3104e-05
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "03 | Gunmetal structural inlay"
       ]
@@ -402,6 +1151,39 @@
       "side": "R",
       "source_label": "Grip rib 1-0",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3104e-05
+        },
+        "after": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3104e-05
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "03 | Gunmetal structural inlay"
       ]
@@ -412,6 +1194,39 @@
       "side": "L",
       "source_label": "Grip rib -1-1",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3104e-05
+        },
+        "after": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3104e-05
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "03 | Gunmetal structural inlay"
       ]
@@ -422,6 +1237,39 @@
       "side": "R",
       "source_label": "Grip rib 1-1",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3104e-05
+        },
+        "after": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3104e-05
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "03 | Gunmetal structural inlay"
       ]
@@ -432,6 +1280,39 @@
       "side": "L",
       "source_label": "Grip rib -1-2",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3104e-05
+        },
+        "after": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3104e-05
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "03 | Gunmetal structural inlay"
       ]
@@ -442,6 +1323,39 @@
       "side": "R",
       "source_label": "Grip rib 1-2",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3104e-05
+        },
+        "after": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3104e-05
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "03 | Gunmetal structural inlay"
       ]
@@ -452,6 +1366,39 @@
       "side": "L",
       "source_label": "Grip rib -1-3",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3104e-05
+        },
+        "after": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3104e-05
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "03 | Gunmetal structural inlay"
       ]
@@ -462,6 +1409,39 @@
       "side": "R",
       "source_label": "Grip rib 1-3",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3104e-05
+        },
+        "after": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3104e-05
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "03 | Gunmetal structural inlay"
       ]
@@ -472,6 +1452,39 @@
       "side": "L",
       "source_label": "Grip rib -1-4",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3104e-05
+        },
+        "after": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3104e-05
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "03 | Gunmetal structural inlay"
       ]
@@ -482,6 +1495,39 @@
       "side": "R",
       "source_label": "Grip rib 1-4",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3104e-05
+        },
+        "after": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3104e-05
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "03 | Gunmetal structural inlay"
       ]
@@ -492,6 +1538,39 @@
       "side": "L",
       "source_label": "Grip rib -1-5",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3104e-05
+        },
+        "after": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3104e-05
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "03 | Gunmetal structural inlay"
       ]
@@ -502,6 +1581,39 @@
       "side": "R",
       "source_label": "Grip rib 1-5",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3104e-05
+        },
+        "after": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3104e-05
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "03 | Gunmetal structural inlay"
       ]
@@ -512,6 +1624,39 @@
       "side": "L",
       "source_label": "Grip rib -1-6",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3104e-05
+        },
+        "after": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3104e-05
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "03 | Gunmetal structural inlay"
       ]
@@ -522,6 +1667,39 @@
       "side": "R",
       "source_label": "Grip rib 1-6",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3104e-05
+        },
+        "after": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.3104e-05
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "03 | Gunmetal structural inlay"
       ]
@@ -532,6 +1710,39 @@
       "side": "C",
       "source_label": "05 / Rear ergonomic polymer pad",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.020736
+        },
+        "after": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.020736
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": true,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "04 | Carbon-black soft polymer"
       ]
@@ -542,6 +1753,39 @@
       "side": "C",
       "source_label": "06 / Rear satin inset",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 480,
+          "edges": 960,
+          "faces": 480,
+          "triangles": 960,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.000653482
+        },
+        "after": {
+          "vertices": 480,
+          "edges": 960,
+          "faces": 480,
+          "triangles": 960,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.000653482
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "05 | Honed silver edges"
       ]
@@ -552,6 +1796,39 @@
       "side": "C",
       "source_label": "07 / Floating cyan energy prism",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 50,
+          "edges": 108,
+          "faces": 60,
+          "triangles": 96,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": -0.040916396
+        },
+        "after": {
+          "vertices": 50,
+          "edges": 108,
+          "faces": 60,
+          "triangles": 96,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.040916396
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]
@@ -562,6 +1839,39 @@
       "side": "L",
       "source_label": "08 / Laminated outer core glass -1",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 38,
+          "edges": 84,
+          "faces": 48,
+          "triangles": 72,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": -0.006355665
+        },
+        "after": {
+          "vertices": 38,
+          "edges": 84,
+          "faces": 48,
+          "triangles": 72,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.006355665
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "07 | Blue translucent optical glass"
       ]
@@ -572,6 +1882,39 @@
       "side": "R",
       "source_label": "08 / Laminated outer core glass 1",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 38,
+          "edges": 84,
+          "faces": 48,
+          "triangles": 72,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": -0.006355665
+        },
+        "after": {
+          "vertices": 38,
+          "edges": 84,
+          "faces": 48,
+          "triangles": 72,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.006355665
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "07 | Blue translucent optical glass"
       ]
@@ -582,6 +1925,39 @@
       "side": "C",
       "source_label": "Photonic core indicator 0",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.00014375
+        },
+        "after": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.00014375
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]
@@ -592,6 +1968,39 @@
       "side": "R",
       "source_label": "Photonic core indicator 1",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.00014375
+        },
+        "after": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.00014375
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]
@@ -602,6 +2011,39 @@
       "side": "C",
       "source_label": "Photonic core indicator 2",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.00014375
+        },
+        "after": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.00014375
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]
@@ -612,6 +2054,39 @@
       "side": "C",
       "source_label": "Photonic core indicator 3",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.00014375
+        },
+        "after": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.00014375
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]
@@ -622,6 +2097,39 @@
       "side": "C",
       "source_label": "Photonic core indicator 4",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.00014375
+        },
+        "after": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.00014375
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]
@@ -632,6 +2140,39 @@
       "side": "C",
       "source_label": "09 / Integrated optical crown",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 50,
+          "edges": 108,
+          "faces": 60,
+          "triangles": 96,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": -0.020893302
+        },
+        "after": {
+          "vertices": 50,
+          "edges": 108,
+          "faces": 60,
+          "triangles": 96,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.020893302
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "02 | Satin titanium alloy"
       ]
@@ -642,6 +2183,39 @@
       "side": "L",
       "source_label": "10 / Visor sculpted cheek -1",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.0003178
+        },
+        "after": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.0009534
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": true,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "01 | Matte graphite ceramic"
       ]
@@ -652,6 +2226,39 @@
       "side": "R",
       "source_label": "10 / Visor sculpted cheek 1",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": -0.0003178
+        },
+        "after": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.0009534
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": true,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "01 | Matte graphite ceramic"
       ]
@@ -662,6 +2269,39 @@
       "side": "C",
       "source_label": "11 / Cyan holographic viewing panel",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.00138125
+        },
+        "after": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.00138125
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "07 | Blue translucent optical glass"
       ]
@@ -672,6 +2312,39 @@
       "side": "C",
       "source_label": "12 / Translucent visor halo",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 480,
+          "edges": 960,
+          "faces": 480,
+          "triangles": 960,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 5.7744e-05
+        },
+        "after": {
+          "vertices": 480,
+          "edges": 960,
+          "faces": 480,
+          "triangles": 960,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 5.7744e-05
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]
@@ -682,6 +2355,39 @@
       "side": "L",
       "source_label": "13 / Copper ID mark -1-0",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.56e-05
+        },
+        "after": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.56e-05
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "08 | Warm alloy insignia"
       ]
@@ -692,6 +2398,39 @@
       "side": "L",
       "source_label": "13 / Copper ID mark -1-1",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.56e-05
+        },
+        "after": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.56e-05
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "08 | Warm alloy insignia"
       ]
@@ -702,6 +2441,39 @@
       "side": "L",
       "source_label": "13 / Copper ID mark -1-2",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.56e-05
+        },
+        "after": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.56e-05
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "08 | Warm alloy insignia"
       ]
@@ -712,6 +2484,39 @@
       "side": "R",
       "source_label": "13 / Copper ID mark 1-0",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.56e-05
+        },
+        "after": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.56e-05
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "08 | Warm alloy insignia"
       ]
@@ -722,6 +2527,39 @@
       "side": "R",
       "source_label": "13 / Copper ID mark 1-1",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.56e-05
+        },
+        "after": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.56e-05
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "08 | Warm alloy insignia"
       ]
@@ -732,6 +2570,39 @@
       "side": "R",
       "source_label": "13 / Copper ID mark 1-2",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.56e-05
+        },
+        "after": {
+          "vertices": 8,
+          "edges": 12,
+          "faces": 6,
+          "triangles": 12,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 1.56e-05
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 0,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": false,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "08 | Warm alloy insignia"
       ]
@@ -742,6 +2613,39 @@
       "side": "L",
       "source_label": "LEFT / Faceted floating prow shield",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 12,
+          "edges": 18,
+          "faces": 8,
+          "triangles": 20,
+          "ngons": 2,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.000773797
+        },
+        "after": {
+          "vertices": 12,
+          "edges": 24,
+          "faces": 14,
+          "triangles": 20,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.00232139
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 2,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": true,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "02 | Satin titanium alloy"
       ]
@@ -752,6 +2656,39 @@
       "side": "L",
       "source_label": "LEFT / Wide recessed ceramic flank",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 10,
+          "edges": 15,
+          "faces": 7,
+          "triangles": 16,
+          "ngons": 2,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.00029655
+        },
+        "after": {
+          "vertices": 10,
+          "edges": 19,
+          "faces": 11,
+          "triangles": 16,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.00088965
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 2,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": true,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "09 | Recessed charcoal carbon"
       ]
@@ -762,6 +2699,7 @@
       "side": "L",
       "source_label": "LEFT / Sweeping hero highlight",
       "object_type": "CURVE",
+      "topology": null,
       "material_names": [
         "05 | Honed silver edges"
       ]
@@ -772,6 +2710,7 @@
       "side": "L",
       "source_label": "LEFT / Cyan decorative back sweep",
       "object_type": "CURVE",
+      "topology": null,
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]
@@ -782,6 +2721,39 @@
       "side": "R",
       "source_label": "RIGHT / Faceted floating prow shield",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 12,
+          "edges": 18,
+          "faces": 8,
+          "triangles": 20,
+          "ngons": 2,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": -0.000773797
+        },
+        "after": {
+          "vertices": 12,
+          "edges": 24,
+          "faces": 14,
+          "triangles": 20,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.00232139
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 2,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": true,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "02 | Satin titanium alloy"
       ]
@@ -792,6 +2764,39 @@
       "side": "R",
       "source_label": "RIGHT / Wide recessed ceramic flank",
       "object_type": "MESH",
+      "topology": {
+        "before": {
+          "vertices": 10,
+          "edges": 15,
+          "faces": 7,
+          "triangles": 16,
+          "ngons": 2,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": -0.00029655
+        },
+        "after": {
+          "vertices": 10,
+          "edges": 19,
+          "faces": 11,
+          "triangles": 16,
+          "ngons": 0,
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "wire_edges": 0,
+          "loose_vertices": 0,
+          "degenerate_faces": 0,
+          "signed_volume": 0.00088965
+        },
+        "welded_vertices": 0,
+        "triangulated_ngons": 2,
+        "reversed_inward_normals": false,
+        "weighted_normal_modifier": true,
+        "hard_edge_angle_degrees": 55
+      },
       "material_names": [
         "09 | Recessed charcoal carbon"
       ]
@@ -802,6 +2807,7 @@
       "side": "R",
       "source_label": "RIGHT / Sweeping hero highlight",
       "object_type": "CURVE",
+      "topology": null,
       "material_names": [
         "05 | Honed silver edges"
       ]
@@ -812,6 +2818,7 @@
       "side": "R",
       "source_label": "RIGHT / Cyan decorative back sweep",
       "object_type": "CURVE",
+      "topology": null,
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]

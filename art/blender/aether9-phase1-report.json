@@ -1,6 +1,6 @@
 {
-  "phase": "1.4",
-  "status": "Blender scene organization and asset export pass",
+  "phase": "2.1",
+  "status": "Topology cleanup and verified Blender scene export",
   "source": "/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/build/aether-phase1/aether9-specter-phase1.blend",
   "asset": "/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/build/aether-phase1/aether9-specter-phase1.glb",
   "preview": "/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/build/aether-phase1/aether9-specter-phase1.png",
@@ -22,10 +22,22 @@
     "GRIP": 15,
     "ACCENTS": 14
   },
+  "topology_stats": {
+    "meshes": 60,
+    "vertices_before": 2138,
+    "vertices_after": 2138,
+    "triangles_before": 4044,
+    "triangles_after": 4044,
+    "ngons_resolved": 20,
+    "welded_vertices": 0,
+    "reversed_inward_normals": 0,
+    "weighted_normal_objects": 15
+  },
+  "topology_report": "aether9-phase2-topology.json",
   "manifest": "aether9-phase1-manifest.json",
   "authoring_mesh_objects": 75,
   "base_triangles_before_modifiers": 4864,
   "uv_islands": "provisional / atlas pending Phase 2",
   "texture_bakes": "pending Phase 3",
-  "glb_bytes": 288844
+  "glb_bytes": 217052
 }
