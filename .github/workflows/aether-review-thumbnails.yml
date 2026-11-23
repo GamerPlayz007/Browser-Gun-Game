@@ -26,6 +26,14 @@ jobs:
         run: python -m pip install 'Pillow>=10,<13'
       - name: Verify renders and prepare small previews
         run: python tools/make_aether_thumbnails.py
+      - name: Check review gallery images
+        run: |
+          ls -lh static/previews/aether9-specter-phase1*-thumb.jpg
+          python - <<'PY'
+          from pathlib import Path
+          previews=list(Path('static/previews').glob('aether9-specter-phase1*-thumb.jpg'))
+          assert len(previews)==3, f'Expected three distinct art-review views, got {len(previews)}'
+          PY
       - name: Publish visual review thumbnails
         if: github.ref_name == 'main'
         run: |
