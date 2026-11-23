@@ -21,6 +21,7 @@ from mathutils import Vector, Matrix
 sys.path.insert(0,str(Path(__file__).resolve().parent))
 from aether_topology21 import prepare_topology
 from aether_uv22 import prepare_uv_atlases, unwrap_export_curves
+from aether_uvqa23 import audit_uv_quality
 
 
 def main():
@@ -352,6 +353,11 @@ def main():
     uv_report=prepare_uv_atlases(list(asset.objects),out)
     if uv_report["source_mesh_count"]!=topology_report["stats"]["meshes"]:
         raise RuntimeError("UV map does not cover all authored source meshes")
+    # Phase 2.3: check true face-to-face island seams, overlap, gutter
+    # clearance, and per-triangle world-space-to-UV distortion.
+    qa_report=audit_uv_quality(list(asset.objects),out,uv_report)
+    if not qa_report["passed"]:
+        raise RuntimeError("Phase 2.3 UV quality review failed")
 
     # Phase 1.4 / deterministic scene organization for Blender editing and
     # portable scene exports. These are ART groups, never physical mechanisms.
@@ -400,7 +406,7 @@ def main():
     group_counts={}
     root=bpy.data.objects.new("A9.ROOT.SPECTER",None)
     root["aether_asset"]="AETHER9_SPECTER"
-    root["asset_version"]="2.2"
+    root["asset_version"]="2.3"
     root["asset_class"]="fictional-scifi-prop"
     asset.objects.link(root)
     for key,label in GROUP_SPECS:
@@ -446,6 +452,7 @@ def main():
             "source_label":old_name,"object_type":obj.type,
             "topology":topology_report["objects"].get(old_name),
             "uv":uv_report["objects"].get(old_name),
+            "uv_quality":qa_report["objects"].get(old_name),
             "material_names":[m.name for m in obj.data.materials if m]
                 if hasattr(obj.data,"materials") else [],
         })
@@ -456,7 +463,7 @@ def main():
     manifest={
         "schema":"crossfire-aether-art-asset-v1",
         "asset_id":"AETHER9_SPECTER",
-        "phase":"2.2",
+        "phase":"2.3",
         "asset_kind":"original fictional sci-fi game prop",
         "asset_root":"A9.ROOT.SPECTER",
         "orientation":{"export_format":"glTF 2.0 binary",
@@ -467,6 +474,9 @@ def main():
         "uv_atlas_layout":"aether9-phase2-uv-layout.svg",
         "uv_material_family_count":uv_report["material_family_count"],
         "uv_source_mesh_count":uv_report["source_mesh_count"],
+        "uv_quality_report":"aether9-phase2-uv-quality.json",
+        "uv_island_layout":"aether9-phase2-islands.svg",
+        "uv_qa_summary":qa_report["totals"],
         "baked_textures":"not yet (Phase 3)",
         "topology_status":"BMesh cleanup, watertight surfaces, outward normals and hard-edge shading",
         "topology_report":"aether9-phase2-topology.json",
@@ -613,7 +623,7 @@ def main():
         tri_count+=len(obj.data.loop_triangles)
 
     report={
-        "phase":"2.2","status":"Material-aware UV atlas and validated Blender export",
+        "phase":"2.3","status":"Verified UV island integrity and Blender export",
         "source":str(blend),"asset":str(glb),
         "preview":str(preview) if preview.exists() else None,
         "review_angles":review_paths,
@@ -624,6 +634,9 @@ def main():
         "topology_report":"aether9-phase2-topology.json",
         "uv_report":"aether9-phase2-uv.json",
         "uv_layout":"aether9-phase2-uv-layout.svg",
+        "uv_quality_report":"aether9-phase2-uv-quality.json",
+        "uv_island_layout":"aether9-phase2-islands.svg",
+        "uv_qa_summary":qa_report["totals"],
         "uv_stats":{
             "source_mesh_count":uv_report["source_mesh_count"],
             "material_families":uv_report["material_family_count"],
@@ -633,7 +646,7 @@ def main():
         "manifest":"aether9-phase1-manifest.json",
         "authoring_mesh_objects":len(authored_objects),
         "base_triangles_before_modifiers":tri_count,
-        "uv_islands":"smart projection and per-material padded UV tiles; bake pending Phase 3",
+        "uv_islands":"Phase 2.3 validated island padding, texture coordinate integrity and UV stretch",
         "texture_bakes":"pending Phase 3",
         "glb_bytes":glb.stat().st_size
     }
