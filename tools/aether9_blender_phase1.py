@@ -297,9 +297,18 @@ def main():
                    (side*.43,.27,-.62+k*.14),(.01,.03,.052),
                    M["copper"],.003)
 
+    # Axis normalization: modeling profiles used Y-up because the game uses
+    # Three.js Y-up. Blender uses Z-up and its glTF exporter swaps axes.
+    # Rotate the authored collection +90 degrees around Blender X so the
+    # resulting glTF returns to the intended horizontal game orientation.
+    # We apply this before .blend is saved, so the native Blender scene
+    # is also correctly oriented (Z-up, weapon longitudinal in XY plane).
+    for asset_obj in asset.objects:
+        asset_obj.rotation_euler.x += math.pi / 2
+
     # Scene setup: only models in ASSET collection are exported.
-    ground = cuboid("STUDIO / Background", (0,-.98,0),
-                    (11,.16,9), material("STUDIO gray",(.018,.034,.051),.2,.75),
+    ground = cuboid("STUDIO / Background", (0,0,-1.05),
+                    (11,9,.16), material("STUDIO gray",(.018,.034,.051),.2,.75),
                     .02,studio)
     ground.hide_render=False
 
@@ -311,21 +320,21 @@ def main():
         obj=bpy.data.objects.new(name,light)
         studio.objects.link(obj)
         obj.location=location
-        direction=Vector((0,.05,-.25))-obj.location
+        direction=Vector((0,-.15,.05))-obj.location
         obj.rotation_euler=direction.to_track_quat("-Z","Y").to_euler()
         light.color=temperature_color
 
-    area("STUDIO | Keybox",(3,5,4),1100,6.0,(.83,.91,1.0))
-    area("STUDIO | Cyan rim",(-2,4,-3),980,4.0,(.30,.76,1.0))
-    area("STUDIO | Warm fill",(1,-1,4),500,3.5,(1.0,.72,.49))
+    area("STUDIO | Keybox",(3,-4,5),1700,6.0,(.83,.91,1.0))
+    area("STUDIO | Cyan rim",(-3,2,4),1300,4.0,(.30,.76,1.0))
+    area("STUDIO | Warm fill",(1,3,3),650,3.5,(1.0,.72,.49))
 
     camera=bpy.data.cameras.new("STUDIO camera / hero three-quarter")
     cam=bpy.data.objects.new("STUDIO camera / hero three-quarter",camera)
     studio.objects.link(cam)
-    cam.location=(5.9,3.05,6.8)
-    focus=Vector((0,.02,-.35))
+    cam.location=(5.5,-7.8,4.0)
+    focus=Vector((0,-.22,.05))
     cam.rotation_euler=(focus-Vector(cam.location)).to_track_quat("-Z","Y").to_euler()
-    camera.type="ORTHO";camera.ortho_scale=7.6
+    camera.type="ORTHO";camera.ortho_scale=7.1
     scene=bpy.context.scene;scene.camera=cam
     scene.render.resolution_x=1360
     scene.render.resolution_y=820
@@ -334,7 +343,7 @@ def main():
     scene.render.film_transparent=False
     if scene.world is None:
         scene.world=bpy.data.worlds.new("AETHER / studio environment")
-    scene.world.color=(.015,.026,.043)
+    scene.world.color=(.075,.088,.115)
 
     # Blender file is the editable source of truth.
     blend=out/"aether9-specter-phase1.blend"
