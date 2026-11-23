@@ -18,6 +18,8 @@ import bpy
 import numpy as np
 from PIL import Image, ImageFilter
 
+BICUBIC=getattr(getattr(Image,'Resampling',Image),'BICUBIC')
+
 MAP_SIZE=2048
 AO_BAKE_SIZE=512
 AO_RAYS=8
@@ -57,7 +59,7 @@ def _noise_family(key):
     # A smooth, deterministic structure shared by all three skins.
     rng=np.random.default_rng(851+FAMILIES.index(key)*127)
     n=Image.fromarray(rng.integers(0,256,(128,128),dtype=np.uint8),"L")
-    return np.asarray(n.resize((MAP_SIZE,MAP_SIZE),Image.Resampling.BICUBIC),dtype=np.float32)/255.0-.5
+    return np.asarray(n.resize((MAP_SIZE,MAP_SIZE),BICUBIC),dtype=np.float32)/255.0-.5
 
 
 def _detail_maps(key):
@@ -137,7 +139,7 @@ def bake_ambient_occlusion(objects,material_family,out_dir):
     mat.node_tree.nodes.remove(nd)
     # PBR texture-pack red channel contains real geometrical AO data.
     image=Image.open(path).convert("L")
-    full=image.resize((MAP_SIZE,MAP_SIZE),Image.Resampling.BICUBIC)
+    full=image.resize((MAP_SIZE,MAP_SIZE),BICUBIC)
     values=np.asarray(full,dtype=np.uint8)
     return {
         "source_path":str(path),"bake_resolution":AO_BAKE_SIZE,
