@@ -334,6 +334,122 @@ def main():
         # detached graphic details floating at their pre-rotation positions.
         asset_obj.matrix_world = axis_rotation @ asset_obj.matrix_world
 
+    # Phase 1.4 / deterministic scene organization for Blender editing and
+    # portable scene exports. These are ART groups, never physical mechanisms.
+    # Each mesh/curve retains its world transform after parenting.
+    GROUP_SPECS = (
+        ("SHELL", "01 | SHELL / primary sculpt"),
+        ("SPINE", "02 | SPINE / crest and crown"),
+        ("PANELS", "03 | PANELS / floating side sculpture"),
+        ("REAR", "04 | REAR / open-frame silhouette"),
+        ("VISOR", "05 | VISOR / optical ornament"),
+        ("CORE", "06 | CORE / fictional light artwork"),
+        ("GRIP", "07 | GRIP / lower support"),
+        ("ACCENTS", "08 | ACCENTS / micro-details"),
+    )
+    def classify_art_group(name):
+        text=name.lower()
+        if "ceramic monocoque" in text:
+            return "SHELL"
+        if "titanium spine" in text or "dorsal light" in text:
+            return "SPINE"
+        if any(tag in text for tag in (
+            "monolithic stock", "rear", "open cantilever", "upper fine rim",
+            "cyan decorative back sweep")):
+            return "REAR"
+        if any(tag in text for tag in (
+            "integrated optical", "visor", "holographic", "optical crown")):
+            return "VISOR"
+        if any(tag in text for tag in (
+            "energy prism", "outer core", "photonic core", "core internal",
+            "reactor", "cyan energy", "laminated outer", "core indicator")):
+            return "CORE"
+        if any(tag in text for tag in (
+            "graphite handguard", "grip rib", "handgrip")):
+            return "GRIP"
+        if any(tag in text for tag in (
+            "cheek", "flank", "aero fin", "hero highlight",
+            "structural", "satin highlight", "ceramic insert",
+            "side trace", "prow shield", "floating")):
+            return "PANELS"
+        return "ACCENTS"
+
+    authored_objects=list(asset.objects)
+    authored_names=[obj.name for obj in authored_objects]
+    assert len(authored_names)==len(set(authored_names)), "Unstable Blender object names"
+    groups={}
+    group_counts={}
+    root=bpy.data.objects.new("A9.ROOT.SPECTER",None)
+    root["aether_asset"]="AETHER9_SPECTER"
+    root["asset_version"]="1.4"
+    root["asset_class"]="fictional-scifi-prop"
+    asset.objects.link(root)
+    for key,label in GROUP_SPECS:
+        child=bpy.data.collections.new(label)
+        asset.children.link(child)
+        anchor=bpy.data.objects.new("A9.GRP."+key,None)
+        child.objects.link(anchor)
+        anchor.parent=root
+        anchor["aether_group"]=key
+        groups[key]=(child,anchor)
+        group_counts[key]=0
+    object_manifest=[]
+    for obj in authored_objects:
+        old_name=obj.name
+        group=classify_art_group(old_name)
+        if group not in groups:
+            raise RuntimeError("Undefined Blender art group: "+group)
+        collection,group_anchor=groups[group]
+        old_transform=obj.matrix_world.copy()
+        for prior in tuple(obj.users_collection):
+            prior.objects.unlink(obj)
+        collection.objects.link(obj)
+        obj.parent=group_anchor
+        obj.matrix_world=old_transform
+        if (obj.matrix_world.translation-old_transform.translation).length>1e-6:
+            raise RuntimeError("Regrouping shifted a sculpted element: "+old_name)
+        group_counts[group]+=1
+        obj["aether_group"]=group
+        obj["aether_source_label"]=old_name
+        obj["aether_asset"]="AETHER9_SPECTER"
+        obj["aether_uv_state"]="provisional"
+        side=("L" if old_name.startswith("LEFT") or " -1" in old_name
+              else "R" if old_name.startswith("RIGHT") or " 1" in old_name
+              else "C")
+        clean="".join(ch if ch.isalnum() else "_" for ch in old_name)
+        clean="_".join(filter(None,clean.split("_")))[:25]
+        obj.name=f"A9.{group}.{side}.{len(object_manifest)+1:03d}.{clean}"
+        object_manifest.append({
+            "id":obj.name,"group":group,"side":side,
+            "source_label":old_name,"object_type":obj.type,
+            "material_names":[m.name for m in obj.data.materials if m]
+                if hasattr(obj.data,"materials") else [],
+        })
+    if len(object_manifest)!=len(authored_objects):
+        raise RuntimeError("Grouping lost sculpted assets")
+    if not all(count>0 for count in group_counts.values()):
+        raise RuntimeError("An AETHER art group was left empty: "+str(group_counts))
+    manifest={
+        "schema":"crossfire-aether-art-asset-v1",
+        "asset_id":"AETHER9_SPECTER",
+        "phase":"1.4",
+        "asset_kind":"original fictional sci-fi game prop",
+        "asset_root":"A9.ROOT.SPECTER",
+        "orientation":{"export_format":"glTF 2.0 binary",
+                       "coordinate_system":"Y-up after Blender export",
+                       "unit_scale":"Blender scene units"},
+        "uv_status":"provisional / dedicated UVs in Phase 2",
+        "baked_textures":"not yet (Phase 3)",
+        "topology_status":"visual sculpt / not yet final game LOD",
+        "material_families":{k:v.name for k,v in M.items()},
+        "groups":{k:{"blender_collection":label,"object_count":group_counts[k],
+                      "anchor":"A9.GRP."+k}
+                  for k,label in GROUP_SPECS},
+        "objects":object_manifest,
+    }
+    manifest_path=out/"aether9-phase1-manifest.json"
+    manifest_path.write_text(json.dumps(manifest,indent=2),encoding="utf-8")
+
     # Scene setup: only models in ASSET collection are exported.
     ground = cuboid("STUDIO / Background", (0,0,-1.05),
                     (11,9,.16), material("STUDIO gray",(.018,.034,.051),.2,.75),
@@ -381,16 +497,16 @@ def main():
     # Preserve truly editable curve objects inside .blend, then convert
     # the in-memory scene's luminous ribbons to exportable polygon meshes.
     # glTF cannot directly serialize Blender's bevel-curve primitives.
-    for source_curve in [o for o in list(asset.objects) if o.type=="CURVE"]:
+    for source_curve in [o for o in list(asset.all_objects) if o.type=="CURVE"]:
         bpy.ops.object.select_all(action="DESELECT")
         source_curve.select_set(True)
         bpy.context.view_layer.objects.active=source_curve
         bpy.ops.object.convert(target="MESH")
     bpy.ops.object.select_all(action="DESELECT")
-    for obj in asset.objects:
+    for obj in asset.all_objects:
         obj.select_set(True)
-    if list(asset.objects):
-        bpy.context.view_layer.objects.active=next(iter(asset.objects))
+    if list(asset.all_objects):
+        bpy.context.view_layer.objects.active=next(iter(asset.all_objects))
     props=bpy.ops.export_scene.gltf.get_rna_type().properties.keys()
     kwargs={"filepath":str(glb),"export_format":"GLB"}
     if "use_selection" in props:
@@ -401,6 +517,8 @@ def main():
         kwargs["export_texcoords"]=True
     if "export_normals" in props:
         kwargs["export_normals"]=True
+    if "export_extras" in props:
+        kwargs["export_extras"]=True
     bpy.ops.export_scene.gltf(**kwargs)
 
     # Phase 1.3 / review-grade geometry renders. Workbench gives robust,
@@ -450,22 +568,25 @@ def main():
     cam.rotation_euler=(Vector(review_views["hero"][1])-Vector(cam.location)).to_track_quat("-Z","Y").to_euler()
     camera.ortho_scale=review_views["hero"][2]
 
-    mesh_count=sum(1 for x in asset.objects if x.type=="MESH")
-    named=len(list(asset.objects))
+    mesh_count=sum(1 for x in asset.all_objects if x.type=="MESH")
+    named=len(list(asset.all_objects))
     tri_count=0
-    for obj in asset.objects:
+    for obj in asset.all_objects:
         if obj.type!="MESH":
             continue
         obj.data.calc_loop_triangles()
         tri_count+=len(obj.data.loop_triangles)
 
     report={
-        "phase":"1.3","status":"Blender sculpt/refinement and geometry review pass",
+        "phase":"1.4","status":"Blender scene organization and asset export pass",
         "source":str(blend),"asset":str(glb),
         "preview":str(preview) if preview.exists() else None,
         "review_angles":review_paths,
         "render_engine":"BLENDER_WORKBENCH / MATERIAL COLOR",
         "native_objects":named,"mesh_objects":mesh_count,
+        "art_groups":group_counts,
+        "manifest":"aether9-phase1-manifest.json",
+        "authoring_mesh_objects":len(authored_objects),
         "base_triangles_before_modifiers":tri_count,
         "uv_islands":"provisional / atlas pending Phase 2",
         "texture_bakes":"pending Phase 3",
