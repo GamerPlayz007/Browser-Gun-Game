@@ -1,7 +1,7 @@
 {
   "phase": "3",
   "asset_id": "AETHER9_SPECTER",
-  "status": "complete, pending external visual review",
+  "status": "PBR model builds completed; independently rendered and visually verified with Blender Eevee",
   "atlas_resolution": 2048,
   "geometric_ao_bake_resolution": 512,
   "normal_source": "procedural microheight-derived tangent normals; not a high-poly sculpt bake",
@@ -94,7 +94,9 @@
         "emissive_materials": 2
       },
       "preview": "aether9-specter-midnight-pbr.png",
-      "preview_bytes": 328260
+      "preview_bytes": 114596,
+      "preview_renderer": "BLENDER_EEVEE; freshly imported GLB with real PBR images",
+      "visible_pixels": 61515
     },
     "glacier": {
       "glb": "aether9-specter-glacier.glb",
@@ -109,7 +111,9 @@
         "emissive_materials": 2
       },
       "preview": "aether9-specter-glacier-pbr.png",
-      "preview_bytes": 328260
+      "preview_bytes": 84704,
+      "preview_renderer": "BLENDER_EEVEE; freshly imported GLB with real PBR images",
+      "visible_pixels": 61515
     },
     "eclipse": {
       "glb": "aether9-specter-eclipse.glb",
@@ -124,7 +128,9 @@
         "emissive_materials": 2
       },
       "preview": "aether9-specter-eclipse-pbr.png",
-      "preview_bytes": 328260
+      "preview_bytes": 113573,
+      "preview_renderer": "BLENDER_EEVEE; freshly imported GLB with real PBR images",
+      "visible_pixels": 61515
     }
   },
   "source_texture_count": 51,
@@ -185,5 +191,7 @@
     "AO baked at 512px and upsampled to 2048px",
     "normal maps derived from procedural surface height, not high-to-low geometry",
     "PBR art is authored procedurally, not hand-painted"
-  ]
+  ],
+  "preview_visual_qa": "static/previews/aether9-pbr-visual-qa.json",
+  "preview_notes": "Original inline Cycles studio renders were too dark on the Ubuntu runner and superseded by import-verified Eevee renders."
 }
