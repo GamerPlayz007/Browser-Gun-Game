@@ -1,0 +1,94 @@
+name: CROSSFire - AETHER Blender Phase 1
+
+on:
+  push:
+    paths:
+      - tools/aether9_blender_phase1.py
+      - .github/workflows/aether-blender-phase1.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: aether-phase1-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  blender-phase1:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 35
+    steps:
+      - name: Checkout CROSSFire
+        uses: actions/checkout@v4
+
+      - name: Install Blender headless
+        run: |
+          sudo apt-get update -qq
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y blender
+          blender --version | head -n 2
+
+      - name: Build Blender source GLB and art preview
+        run: |
+          mkdir -p build/aether-phase1
+          blender -b -t 2 --python tools/aether9_blender_phase1.py -- \
+            --output-dir build/aether-phase1
+
+      - name: Validate source asset and export
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json, struct
+          root = Path("build/aether-phase1")
+          blend = root / "aether9-specter-phase1.blend"
+          glb = root / "aether9-specter-phase1.glb"
+          report = root / "aether9-phase1-report.json"
+          assert blend.is_file() and blend.stat().st_size > 1024
+          assert blend.read_bytes()[:7] == b"BLENDER"
+          assert glb.is_file() and glb.stat().st_size > 1024
+          content = glb.read_bytes()
+          magic, version, length = struct.unpack_from("<III", content)
+          assert magic == 0x46546C67 and version == 2 and length == len(content)
+          json_length, json_type = struct.unpack_from("<II", content, 12)
+          assert json_type == 0x4E4F534A
+          gltf = json.loads(content[20:20+json_length])
+          assert len(gltf.get("meshes", [])) > 12
+          report_data = json.loads(report.read_text())
+          assert report_data["mesh_objects"] > 12
+          print("VALID AETHER PHASE 1", len(gltf["meshes"]), report_data["mesh_objects"])
+          PY
+
+      - name: Install generated game art
+        run: |
+          mkdir -p art/blender static/assets static/previews
+          cp build/aether-phase1/aether9-specter-phase1.blend art/blender/
+          cp build/aether-phase1/aether9-specter-phase1.glb static/assets/
+          if test -s build/aether-phase1/aether9-specter-phase1.png; then
+            cp build/aether-phase1/aether9-specter-phase1.png static/previews/
+          fi
+          cp build/aether-phase1/aether9-phase1-report.json art/blender/
+
+      - name: Commit validated Blender exports
+        if: github.ref_name == 'main'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add art/blender/aether9-specter-phase1.blend \
+            art/blender/aether9-phase1-report.json \
+            static/assets/aether9-specter-phase1.glb
+          if test -s static/previews/aether9-specter-phase1.png; then
+            git add static/previews/aether9-specter-phase1.png
+          fi
+          if ! git diff --cached --quiet; then
+            git commit -m "AETHER Phase 1: editable Blender SPECTER and GLB"
+            git push
+          fi
+
+      - name: Archive Blender output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aether9-blender-phase1
+          path: build/aether-phase1/
+          if-no-files-found: warn
+          retention-days: 14
