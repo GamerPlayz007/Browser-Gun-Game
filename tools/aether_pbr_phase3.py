@@ -112,7 +112,10 @@ def bake_ambient_occlusion(objects,material_family,out_dir):
         f"AETHER_AO_{slot_family}",width=AO_BAKE_SIZE,height=AO_BAKE_SIZE,
         alpha=False,float_buffer=False)
     AO_IMAGE.generated_color=(1,1,1,1)
-    AO_IMAGE.colorspace_settings.name="Non-Color"
+    try:
+        AO_IMAGE.colorspace_settings.name="Non-Color"
+    except TypeError:
+        AO_IMAGE.colorspace_settings.name="Linear"  # Blender 3.0 minimal OCIO
     nd=mat.node_tree.nodes.new("ShaderNodeTexImage")
     nd.name="AETHER_TEMP_AO_BAKE"
     nd.image=AO_IMAGE
@@ -151,7 +154,13 @@ material_family_map={}
 def _image(path,noncolor=False):
     im=bpy.data.images.load(str(path),check_existing=True)
     im.filepath=str(Path(path).resolve())
-    im.colorspace_settings.name="Non-Color" if noncolor else "sRGB"
+    if noncolor:
+        try:
+            im.colorspace_settings.name="Non-Color"
+        except TypeError:
+            im.colorspace_settings.name="Linear"  # Blender 3.0 minimal OCIO
+    else:
+        im.colorspace_settings.name="sRGB"
     return im
 
 
