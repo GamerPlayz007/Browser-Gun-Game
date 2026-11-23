@@ -123,14 +123,15 @@ function mountGltf(gltf,name){
  $('asset-name').textContent=name.replace(/\.[^.]+$/,'');
  $('loading').hidden=true;$('instructions').textContent='DRAG TO ORBIT · SCROLL TO ZOOM · REPLACE VIA GLB IMPORT';
 }
-async function loadPreset(){
+async function loadPreset(which='specter'){
+ const beacon=which==='beacon';
  const id=++loadingSeq;
  $('loading').hidden=false;
  show('LOADING GLTF ASSET…');
  try{
-  const gltf=await gltfLoader.loadAsync('/static/assets/studio-beacon.gltf');
+  const gltf=await gltfLoader.loadAsync(beacon?'/static/assets/studio-beacon.gltf':'/static/assets/aether9-specter.glb');
   if(id!==loadingSeq){disposeRoot(gltf.scene);return}
-  mountGltf(gltf,'STUDIO BEACON');
+  mountGltf(gltf,beacon?'STUDIO BEACON':'AETHER-9 SPECTER');
  }catch(e){if(id===loadingSeq){$('loading').hidden=true;show('COULD NOT LOAD DEMO ASSET: '+(e?.message||e),true)}}
 }
 async function importLocal(file){
@@ -152,7 +153,8 @@ async function importLocal(file){
  }
 }
 $('file').addEventListener('change',e=>importLocal(e.target.files?.[0]));
-$('preset').addEventListener('click',loadPreset);
+$('preset').addEventListener('click',()=>loadPreset('specter'));
+$('beacon').addEventListener('click',()=>loadPreset('beacon'));
 $('wire').addEventListener('click',()=>{wire=!wire;syncWire();$('wire').classList.toggle('active',wire)});
 $('auto').addEventListener('click',()=>{
  orbit.auto=!orbit.auto;$('auto').classList.toggle('active',orbit.auto);
@@ -238,4 +240,4 @@ function frame(time){
  renderer.render(scene,camera);
 }
 requestAnimationFrame(frame);
-loadPreset();
+loadPreset('specter');
