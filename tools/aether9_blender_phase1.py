@@ -180,7 +180,7 @@ def main():
         (-.66,.19,.32,.19,0),(-1.06,.20,.30,.18,0),
         (-1.49,.21,.27,.17,0),(-1.91,.20,.23,.14,0),
         (-2.31,.18,.15,.11,0),(-2.53,.18,.08,.065,0)
-    ],M["ceramic"],sides=24,power=.62)
+    ],M["ceramic"],sides=28,power=.62)
 
     loft("02 / Raised continuous titanium spine",[
         (.51,.31,.08,.045,0),(.09,.39,.15,.070,0),
@@ -297,6 +297,30 @@ def main():
                    (side*.43,.27,-.62+k*.14),(.01,.03,.052),
                    M["copper"],.003)
 
+    # Phase 1.3: artist-directed shape refinements (purely fictional art).
+    # Quiet carved surfaces and long luminous ribbons make the major forms
+    # read at normal viewing distance without overwhelming them with details.
+    for side in (-1,1):
+        label = "LEFT" if side < 0 else "RIGHT"
+        plate(label+" / Faceted floating prow shield",[
+            (-2.42,.200),(-2.18,.325),(-1.91,.336),
+            (-1.72,.267),(-1.84,.160),(-2.23,.113)
+        ],side,.294,.023,M["frame"],.008)
+        plate(label+" / Wide recessed ceramic flank",[
+            (-1.49,.128),(-1.28,.205),(-1.07,.191),
+            (-1.00,.090),(-1.26,.043)
+        ],side,.342,.018,M["carbon"],.007)
+        tube(label+" / Sweeping hero highlight",[
+            (side*.375,.259,-1.72),(side*.390,.299,-1.52),
+            (side*.411,.314,-1.28),(side*.423,.302,-1.06)
+        ],.010,M["silver"])
+        # This floating ornament provides negative space and a subtle
+        # science-fiction signature, not an actual functional mechanism.
+        tube(label+" / Cyan decorative back sweep",[
+            (side*.273,.299,.82),(side*.285,.318,1.08),
+            (side*.282,.293,1.43)
+        ],.0075,M["cyan"])
+
     # Axis normalization: modeling profiles used Y-up because the game uses
     # Three.js Y-up. Blender uses Z-up and its glTF exporter swaps axes.
     # Rotate the authored collection +90 degrees around Blender X so the
@@ -331,10 +355,10 @@ def main():
     camera=bpy.data.cameras.new("STUDIO camera / hero three-quarter")
     cam=bpy.data.objects.new("STUDIO camera / hero three-quarter",camera)
     studio.objects.link(cam)
-    cam.location=(5.5,-7.8,4.0)
-    focus=Vector((0,-.22,.05))
+    cam.location=(6.6,4.5,3.8)
+    focus=Vector((0,-.35,.13))
     cam.rotation_euler=(focus-Vector(cam.location)).to_track_quat("-Z","Y").to_euler()
-    camera.type="ORTHO";camera.ortho_scale=7.1
+    camera.type="ORTHO";camera.ortho_scale=5.8
     scene=bpy.context.scene;scene.camera=cam
     scene.render.resolution_x=1360
     scene.render.resolution_y=820
@@ -375,15 +399,51 @@ def main():
         kwargs["export_normals"]=True
     bpy.ops.export_scene.gltf(**kwargs)
 
-    # Render uses CPU-compatible Cycles instead of depending on GPU drivers.
-    try:
-        scene.render.engine="CYCLES"
-        scene.cycles.samples=18
-        scene.cycles.use_denoising=True
-        scene.render.filepath=str(preview)
+    # Phase 1.3 / review-grade geometry renders. Workbench gives robust,
+    # deterministic visible MATERIAL color on headless CPU Blender 3.x.
+    # These are sculpt/shape review frames, not final cinematic PBR renders.
+    scene.render.engine="BLENDER_WORKBENCH"
+    shade=scene.display.shading
+    shade.light="STUDIO"
+    shade.color_type="MATERIAL"
+    shade.background_type="WORLD"
+    shade.show_cavity=True
+    shade.cavity_type="BOTH"
+    shade.curvature_ridge_factor=1.12
+    shade.curvature_valley_factor=1.02
+    shade.show_shadows=True
+    shade.show_specular_highlight=True
+    shade.show_object_outline=True
+    shade.object_outline_color=(.018,.030,.053)
+    shade.studiolight_rotate_z=.26
+    scene.view_settings.view_transform="Standard"
+    scene.view_settings.look="Medium High Contrast"
+    scene.view_settings.exposure=.26
+    scene.view_settings.gamma=1.0
+    scene.render.image_settings.color_mode="RGBA"
+    scene.render.film_transparent=False
+    scene.render.resolution_percentage=100
+    review_views={
+        "hero": ((6.6,4.5,3.8),(0,-.35,.13),5.8),
+        "profile": ((9.8,-.32,2.5),(0,-.35,.13),5.1),
+        "rear": ((-5.0,7.2,3.8),(0,-.27,.13),5.9)
+    }
+    review_paths={}
+    for label,(position,aim,scale) in review_views.items():
+        cam.location=position
+        target=Vector(aim)
+        cam.rotation_euler=(target-Vector(position)).to_track_quat("-Z","Y").to_euler()
+        camera.ortho_scale=scale
+        scene.render.filepath=str(out/("aether9-specter-phase1.png" if label=="hero"
+                                   else f"aether9-specter-phase1-{label}.png"))
         bpy.ops.render.render(write_still=True)
-    except Exception as exc:
-        print("PREVIEW_NOT_RENDERED:",str(exc),flush=True)
+        if not Path(scene.render.filepath).is_file():
+            raise RuntimeError(f"Missing Phase 1.3 {label} preview")
+        review_paths[label]=scene.render.filepath
+    # Return to the standard hero framing in the editable native scene.
+    cam.location=review_views["hero"][0]
+    cam.rotation_euler=(Vector(review_views["hero"][1])-Vector(cam.location)).to_track_quat("-Z","Y").to_euler()
+    camera.ortho_scale=review_views["hero"][2]
 
     mesh_count=sum(1 for x in asset.objects if x.type=="MESH")
     named=len(list(asset.objects))
@@ -395,9 +455,11 @@ def main():
         tri_count+=len(obj.data.loop_triangles)
 
     report={
-        "phase":"1","status":"Blender sculpt/export pass",
+        "phase":"1.3","status":"Blender sculpt/refinement and geometry review pass",
         "source":str(blend),"asset":str(glb),
         "preview":str(preview) if preview.exists() else None,
+        "review_angles":review_paths,
+        "render_engine":"BLENDER_WORKBENCH / MATERIAL COLOR",
         "native_objects":named,"mesh_objects":mesh_count,
         "base_triangles_before_modifiers":tri_count,
         "uv_islands":"provisional / atlas pending Phase 2",
