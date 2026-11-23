@@ -25,13 +25,13 @@ jobs:
       - name: Install Blender headless
         run: |
           sudo apt-get update -qq
-          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y blender
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y blender python3-numpy
           blender --version | head -n 2
 
       - name: Build Blender source GLB and art preview
         run: |
           mkdir -p build/aether-phase1
-          blender -b -t 2 --python tools/aether9_blender_phase1.py -- \
+          PYTHONPATH=/usr/lib/python3/dist-packages blender -b -t 2 --python tools/aether9_blender_phase1.py -- \
             --output-dir build/aether-phase1
 
       - name: Validate source asset and export
