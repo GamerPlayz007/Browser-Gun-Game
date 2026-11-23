@@ -73,7 +73,8 @@
         "emissive_materials": 2
       },
       "preview": "aether9-specter-midnight-pbr.png",
-      "preview_bytes": 328260
+      "preview_bytes": 114596,
+      "preview_renderer": "BLENDER_EEVEE; freshly imported GLB with real PBR images"
     },
     "glacier": {
       "glb": "aether9-specter-glacier.glb",
@@ -88,7 +89,8 @@
         "emissive_materials": 2
       },
       "preview": "aether9-specter-glacier-pbr.png",
-      "preview_bytes": 328260
+      "preview_bytes": 84704,
+      "preview_renderer": "BLENDER_EEVEE; freshly imported GLB with real PBR images"
     },
     "eclipse": {
       "glb": "aether9-specter-eclipse.glb",
@@ -103,8 +105,10 @@
         "emissive_materials": 2
       },
       "preview": "aether9-specter-eclipse-pbr.png",
-      "preview_bytes": 328260
+      "preview_bytes": 113573,
+      "preview_renderer": "BLENDER_EEVEE; freshly imported GLB with real PBR images"
     }
   },
-  "pbr_source": "aether9-specter-pbr.blend"
+  "pbr_source": "aether9-specter-pbr.blend",
+  "pbr_preview_visual_qa": "static/previews/aether9-pbr-visual-qa.json"
 }
