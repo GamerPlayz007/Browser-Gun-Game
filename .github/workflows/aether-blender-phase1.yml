@@ -1,4 +1,4 @@
-name: CROSSFire - AETHER Blender Phase 2.3
+name: CROSSFire - AETHER Blender Phase 3 — PBR Collection
 
 on:
   push:
@@ -7,6 +7,7 @@ on:
       - tools/aether_topology21.py
       - tools/aether_uv22.py
       - tools/aether_uvqa23.py
+      - tools/aether_pbr_phase3.py
       - .github/workflows/aether-blender-phase1.yml
   workflow_dispatch:
 
@@ -20,7 +21,7 @@ concurrency:
 jobs:
   blender-phase1:
     runs-on: ubuntu-22.04
-    timeout-minutes: 35
+    timeout-minutes: 90
     steps:
       - name: Checkout CROSSFire
         uses: actions/checkout@v4
@@ -64,8 +65,50 @@ jobs:
           manifest = json.loads(manifest_file.read_text())
           assert manifest["schema"] == "crossfire-aether-art-asset-v1"
           assert manifest["asset_id"] == "AETHER9_SPECTER"
-          assert manifest["phase"] == "2.3"
-          assert report_data["phase"] == "2.3"
+          assert manifest["phase"] == "3.4"
+          assert report_data["phase"] == "3.4"
+          pbr_file=root/"aether9-phase3-report.json"
+          pbr_source=root/"aether9-specter-pbr.blend"
+          assert pbr_file.is_file() and pbr_source.is_file()
+          assert pbr_source.read_bytes().startswith(b"BLENDER")
+          pbr=json.loads(pbr_file.read_text())
+          assert pbr["phase"]=="3"
+          assert pbr["atlas_resolution"]==2048
+          assert pbr["geometric_ao_bake_resolution"]==512
+          assert len(pbr["bake_details"])==9
+          assert pbr["source_texture_count"]>=45
+          assert set(pbr["variants"])=={"midnight","glacier","eclipse"}
+          assert manifest["pbr_variants"]=={k:v["glb"] for k,v in pbr["variants"].items()}
+          assert report_data["pbr_variants"]==pbr["variants"]
+          for name,metrics in pbr["variants"].items():
+              image=root/f"aether9-specter-{name}-pbr.png"
+              model=root/metrics["glb"]
+              assert image.is_file() and image.stat().st_size>8000
+              with open(model,"rb") as src:
+                  header=src.read(12)
+              magic,version,bytelength=struct.unpack("<III",header)
+              assert magic==0x46546c67 and version==2 and bytelength==model.stat().st_size
+              bindings=metrics["image_bindings"]
+              assert bindings["materials"]>=9
+              assert bindings["basecolor_materials"]>=9
+              assert bindings["normal_materials"]>=9
+              assert bindings["occlusion_materials"]>=9
+              assert bindings["emissive_materials"]>=2
+              from PIL import Image as PILImage
+              with PILImage.open(image) as preview:
+                  assert preview.width>=900 and preview.height>=500
+              print("VALID PBR FINISH",name,model.stat().st_size,bindings)
+          from PIL import Image as PILImage
+          for role in pbr["bake_details"]:
+              texdir=root/"textures"
+              for suffix in ["orm","normal"]:
+                  tex=texdir/f"aether9_{role}_{suffix}.png"
+                  assert tex.is_file()
+                  with PILImage.open(tex) as check:
+                      assert check.size==(2048,2048)
+              assert (texdir/f"aether9_{role}_ao_baked_512.png").is_file()
+          print("VALID AETHER PHASE 3",pbr["source_texture_count"],
+                len(pbr["variants"]),len(pbr["bake_details"]))
           qa_file=root/"aether9-phase2-uv-quality.json"
           islands_svg=root/"aether9-phase2-islands.svg"
           assert qa_file.is_file() and islands_svg.is_file()
@@ -158,7 +201,7 @@ jobs:
                   colorful = sum(1 for px in pixels.getdata() if max(px)>60)
                   assert colorful>145, f"Blank or near-black preview: {name} ({colorful})"
                   print("VISIBLE REVIEW FRAME", name, colorful)
-          print("VALID AETHER PHASE 2.3", len(gltf["meshes"]), report_data["mesh_objects"])
+          print("VALID AETHER PHASE 3 UV FOUNDATION", len(gltf["meshes"]), report_data["mesh_objects"])
           PY
 
       - name: Install generated game art
@@ -172,6 +215,12 @@ jobs:
           cp build/aether-phase1/aether9-phase2-topology.json art/blender/
           cp build/aether-phase1/aether9-phase2-uv.json art/blender/
           cp build/aether-phase1/aether9-phase2-uv-quality.json art/blender/
+          cp build/aether-phase1/aether9-specter-pbr.blend art/blender/
+          cp build/aether-phase1/aether9-phase3-report.json art/blender/
+          cp build/aether-phase1/aether9-specter-{midnight,glacier,eclipse}.glb static/assets/
+          cp build/aether-phase1/aether9-specter-*-pbr.png static/previews/
+          mkdir -p static/textures/aether9
+          cp build/aether-phase1/textures/*.png static/textures/aether9/
           cp build/aether-phase1/aether9-phase2-islands.svg static/previews/
           cp build/aether-phase1/aether9-phase2-uv-layout.svg static/previews/
 
@@ -186,12 +235,21 @@ jobs:
             art/blender/aether9-phase2-topology.json \
             art/blender/aether9-phase2-uv.json \
             art/blender/aether9-phase2-uv-quality.json \
+            art/blender/aether9-specter-pbr.blend \
+            art/blender/aether9-phase3-report.json \
+            static/assets/aether9-specter-midnight.glb \
+            static/assets/aether9-specter-glacier.glb \
+            static/assets/aether9-specter-eclipse.glb \
+            static/previews/aether9-specter-midnight-pbr.png \
+            static/previews/aether9-specter-glacier-pbr.png \
+            static/previews/aether9-specter-eclipse-pbr.png \
             static/previews/aether9-phase2-islands.svg \
             static/previews/aether9-phase2-uv-layout.svg \
             static/assets/aether9-specter-phase1.glb
           git add static/previews/aether9-specter-phase1*.png
+          git add static/textures/aether9/*.png
           if ! git diff --cached --quiet; then
-            git commit -m "AETHER Phase 2.3: validate UV island padding and geometry-to-texture mapping"
+            git commit -m "AETHER Phase 3: PBR material maps, AO bake, normals and three cosmetic exports"
             # Another CI or documentation commit can land while Blender runs.
             # Rebase on fresh main instead of dropping a validated export.
             git fetch origin main
