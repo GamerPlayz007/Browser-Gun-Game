@@ -90,15 +90,44 @@ def build_and_render(glb_path,out_path,skin):
     raw=out_path.with_name(out_path.stem+"-raw.png")
     scene.render.filepath=str(raw)
     bpy.ops.render.render(write_still=True)
-    fg=Image.open(raw).convert("RGBA")
-    colors=np.asarray(fg,dtype=np.uint8)
-    alpha=colors[:,:,3]>28
-    visible=int(alpha.sum())
-    if visible<10000:
-        raise RuntimeError(f"{skin}: model invisible in true PBR render: {visible} pixels")
-    mean_luma=float(np.mean(colors[:,:,:3][alpha]))
-    if mean_luma<17:
-        raise RuntimeError(f"{skin}: lit model remains too dark: {mean_luma:.2f}")
+    def inspect_pixels(path):
+        im=Image.open(path).convert("RGBA")
+        data=np.asarray(im,dtype=np.uint8)
+        mask=data[:,:,3]>28
+        visible_pixels=int(mask.sum())
+        brightness=float(np.mean(data[:,:,:3][mask])) if visible_pixels else 0.0
+        return im,data,mask,visible_pixels,brightness
+
+    fg,colors,alpha,visible,mean_luma=inspect_pixels(raw)
+    if visible<10000 or mean_luma<17:
+        print("CYCLES_PBR_TOO_DARK",skin,{
+            "visible_pixels":visible,"mean_lit_rgb":round(mean_luma,3),
+            "mesh_count":len(meshes)},flush=True)
+        # Try the real-time PBR renderer, which uses the same imported glTF
+        # image textures but avoids problems in some Ubuntu Cycles builds.
+        scene.render.engine="BLENDER_EEVEE"
+        if hasattr(scene,"eevee"):
+            scene.eevee.taa_render_samples=48
+            scene.eevee.use_gtao=True
+        scene.render.filepath=str(raw)
+        bpy.ops.render.render(write_still=True)
+        fg,colors,alpha,visible,mean_luma=inspect_pixels(raw)
+        print("EEVEE_PBR_DIAGNOSTICS",skin,{
+            "visible_pixels":visible,"mean_lit_rgb":round(mean_luma,3)},flush=True)
+    if visible<10000 or mean_luma<17:
+        details={}
+        for mat in list(bpy.data.materials)[:9]:
+            bsdf=next((n for n in mat.node_tree.nodes if n.type=="BSDF_PRINCIPLED"),None) if mat.use_nodes else None
+            details[mat.name]={
+                "use_nodes":mat.use_nodes,
+                "bsdf":bool(bsdf),
+                "base_links":len(bsdf.inputs["Base Color"].links) if bsdf else 0,
+                "base":list(bsdf.inputs["Base Color"].default_value) if bsdf else None,
+                "metal":float(bsdf.inputs["Metallic"].default_value) if bsdf else None,
+                "alpha":float(bsdf.inputs["Alpha"].default_value) if bsdf else None
+            }
+        print("PBR_MATERIAL_DIAGNOSTICS",json.dumps(details),flush=True)
+        raise RuntimeError(f"{skin}: both PBR engines render too dark: {mean_luma:.2f}")
     # Composite against a deliberate photographic dark studio gradient.
     h,w=colors.shape[:2]
     yy=np.linspace(0,1,h,dtype=np.float32)[:,None,None]
@@ -118,7 +147,7 @@ def build_and_render(glb_path,out_path,skin):
         "bounds_max":[round(v,4) for v in maxs],
         "visible_pixels":visible,"mean_lit_rgb":round(mean_luma,2),
         "preview_file":out_path.name,"bytes":out_path.stat().st_size,
-        "render_engine":"Blender Cycles; freshly imported GLB with real PBR images"
+        "render_engine":scene.render.engine+"; freshly imported GLB with real PBR images"
     }
 
 
