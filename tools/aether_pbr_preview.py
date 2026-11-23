@@ -73,9 +73,11 @@ def build_and_render(glb_path,out_path,skin):
     studio_light("LOW / front bounce",center+Vector((2.5,-1.8,-3.2)),
                  center,850,(.78,.86,1.0),4)
 
-    scene.render.engine="CYCLES"
-    scene.cycles.samples=18
-    scene.cycles.use_denoising=True
+    # This runner's Cycles render is nearly black despite valid textures;
+    # use the separately inspected, working Eevee PBR studio renderer.
+    scene.render.engine="BLENDER_EEVEE"
+    scene.eevee.taa_render_samples=48
+    scene.eevee.use_gtao=True
     scene.render.resolution_x=1152
     scene.render.resolution_y=720
     scene.render.resolution_percentage=100
@@ -99,21 +101,8 @@ def build_and_render(glb_path,out_path,skin):
         return im,data,mask,visible_pixels,brightness
 
     fg,colors,alpha,visible,mean_luma=inspect_pixels(raw)
-    if visible<10000 or mean_luma<17:
-        print("CYCLES_PBR_TOO_DARK",skin,{
-            "visible_pixels":visible,"mean_lit_rgb":round(mean_luma,3),
-            "mesh_count":len(meshes)},flush=True)
-        # Try the real-time PBR renderer, which uses the same imported glTF
-        # image textures but avoids problems in some Ubuntu Cycles builds.
-        scene.render.engine="BLENDER_EEVEE"
-        if hasattr(scene,"eevee"):
-            scene.eevee.taa_render_samples=48
-            scene.eevee.use_gtao=True
-        scene.render.filepath=str(raw)
-        bpy.ops.render.render(write_still=True)
-        fg,colors,alpha,visible,mean_luma=inspect_pixels(raw)
-        print("EEVEE_PBR_DIAGNOSTICS",skin,{
-            "visible_pixels":visible,"mean_lit_rgb":round(mean_luma,3)},flush=True)
+    print("EEVEE_PBR_DIAGNOSTICS",skin,{
+        "visible_pixels":visible,"mean_lit_rgb":round(mean_luma,3)},flush=True)
     if visible<10000 or mean_luma<17:
         details={}
         for mat in list(bpy.data.materials)[:9]:
@@ -127,7 +116,7 @@ def build_and_render(glb_path,out_path,skin):
                 "alpha":float(bsdf.inputs["Alpha"].default_value) if bsdf else None
             }
         print("PBR_MATERIAL_DIAGNOSTICS",json.dumps(details),flush=True)
-        raise RuntimeError(f"{skin}: both PBR engines render too dark: {mean_luma:.2f}")
+        raise RuntimeError(f"{skin}: Eevee PBR render is too dark: {mean_luma:.2f}")
     # Composite against a deliberate photographic dark studio gradient.
     h,w=colors.shape[:2]
     yy=np.linspace(0,1,h,dtype=np.float32)[:,None,None]
