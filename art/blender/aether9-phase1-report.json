@@ -1,13 +1,19 @@
 {
-  "phase": "1",
-  "status": "Blender sculpt/export pass",
+  "phase": "1.3",
+  "status": "Blender sculpt/refinement and geometry review pass",
   "source": "/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/build/aether-phase1/aether9-specter-phase1.blend",
   "asset": "/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/build/aether-phase1/aether9-specter-phase1.glb",
   "preview": "/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/build/aether-phase1/aether9-specter-phase1.png",
-  "native_objects": 67,
-  "mesh_objects": 67,
-  "base_triangles_before_modifiers": 4512,
+  "review_angles": {
+    "hero": "/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/build/aether-phase1/aether9-specter-phase1.png",
+    "profile": "/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/build/aether-phase1/aether9-specter-phase1-profile.png",
+    "rear": "/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/build/aether-phase1/aether9-specter-phase1-rear.png"
+  },
+  "render_engine": "BLENDER_WORKBENCH / MATERIAL COLOR",
+  "native_objects": 75,
+  "mesh_objects": 75,
+  "base_triangles_before_modifiers": 4864,
   "uv_islands": "provisional / atlas pending Phase 2",
   "texture_bakes": "pending Phase 3",
-  "glb_bytes": 262136
+  "glb_bytes": 276164
 }
