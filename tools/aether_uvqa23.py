@@ -212,8 +212,13 @@ def _audit_one_mesh(obj):
         for other,c,d in boundary[i+1:]:
             if isle==other:
                 continue
-            if bbox1[0]-max(c[0],d[0])>math.sqrt(min_dist_sq) if math.isfinite(min_dist_sq) else False:
-                continue
+            if math.isfinite(min_dist_sq):
+                left=max(0.0,max(min(c[0],d[0])-bbox1[2],
+                                 bbox1[0]-max(c[0],d[0])))
+                bottom=max(0.0,max(min(c[1],d[1])-bbox1[3],
+                                   bbox1[1]-max(c[1],d[1])))
+                if left*left+bottom*bottom>=min_dist_sq:
+                    continue
             # Test exact segment distance; no assumed UV island margin.
             distance_sq=_segment_distance_sq(a,b,c,d)
             if distance_sq<min_dist_sq:
