@@ -829,7 +829,8 @@ const viewsV2={
  profile:{yaw:Math.PI/2,pitch:.08,dist:5.55,focus:[0,.12,-.46]},
  sculpt:{yaw:1.42,pitch:.41,dist:4.15,focus:[0,.27,-1.14]},
  core:{yaw:1.25,pitch:.16,dist:3.25,focus:[0,-.09,-.03]},
- back:{yaw:Math.PI*1.56,pitch:.18,dist:4.95,focus:[0,.10,.44]}
+ back:{yaw:Math.PI*1.56,pitch:.18,dist:4.50,focus:[0,.20,.85]},
+ visor:{yaw:1.02,pitch:.34,dist:3.22,focus:[0,.47,-.45]}
 };
 const targetFocusV2=new T.Vector3(0,.12,-.39);
 function setViewV2(name){
@@ -845,13 +846,31 @@ function setViewV2(name){
 }
 document.querySelectorAll('[data-view]').forEach(b=>
  b.addEventListener('click',()=>setViewV2(b.dataset.view)));
+
+let dramaticLightV3=false;
+function setDramaticLightV3(on){
+ dramaticLightV3=on;
+ key.intensity=on?2.55:4.4;
+ rim.intensity=on?5.3:3.9;
+ fill.intensity=on?.45:2;
+ scene.environmentIntensity=on?.42:(qualityHighV2?.95:.68);
+ renderer.toneMappingExposure=on?1.49:(qualityHighV2?1.37:1.24);
+ const button=$('lighting');
+ if(button){
+  button.classList.toggle('active',on);
+  button.textContent=on?'LIGHT: DRAMATIC':'LIGHT: STUDIO';
+  button.setAttribute('aria-pressed',String(on));
+ }
+}
+$('lighting').addEventListener('click',()=>setDramaticLightV3(!dramaticLightV3));
+
 let qualityHighV2=true;
 function setQualityV2(high){
  qualityHighV2=high;
  renderer.shadowMap.enabled=high;
  v3Micro.visible=high;
- scene.environmentIntensity=high?.95:.68;
- renderer.toneMappingExposure=high?1.37:1.24;
+ scene.environmentIntensity=dramaticLightV3?.42:(high?.95:.68);
+ renderer.toneMappingExposure=dramaticLightV3?1.49:(high?1.37:1.24);
  resize();
  const btn=$('quality');
  btn.classList.toggle('active',high);
