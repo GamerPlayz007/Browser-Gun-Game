@@ -1,4 +1,4 @@
-name: CROSSFire - AETHER Blender Phase 1.3
+name: CROSSFire - AETHER Blender Phase 1.4
 
 on:
   push:
@@ -54,8 +54,24 @@ jobs:
           gltf = json.loads(content[20:20+json_length])
           assert len(gltf.get("meshes", [])) > 12
           report_data = json.loads(report.read_text())
-          assert report_data["mesh_objects"] > 12
+          assert report_data["mesh_objects"] >= 75
           assert "BLENDER_WORKBENCH" in report_data["render_engine"]
+          manifest_file = root / "aether9-phase1-manifest.json"
+          assert manifest_file.is_file(), "Missing Phase 1.4 asset manifest"
+          manifest = json.loads(manifest_file.read_text())
+          assert manifest["schema"] == "crossfire-aether-art-asset-v1"
+          assert manifest["asset_id"] == "AETHER9_SPECTER"
+          assert manifest["phase"] == "1.4"
+          assert len(manifest["groups"]) == 8
+          assert len(manifest["objects"]) == report_data["mesh_objects"]
+          assert sum(v["object_count"] for v in manifest["groups"].values()) == len(manifest["objects"])
+          assert all(v["object_count"] > 0 for v in manifest["groups"].values())
+          assert len({obj["id"] for obj in manifest["objects"]}) == len(manifest["objects"])
+          node_names = {node.get("name") for node in gltf.get("nodes", [])}
+          assert manifest["asset_root"] in node_names, "Missing GLB asset root"
+          assert all(v["anchor"] in node_names for v in manifest["groups"].values()), "Missing GLB art group anchors"
+          assert len(gltf["meshes"]) >= report_data["mesh_objects"], "GLB export omitted visual meshes"
+          print("AETHER PHASE 1.4 SCENE GROUPS", {k:v["object_count"] for k,v in manifest["groups"].items()})
           from PIL import Image
           for name in [
               "aether9-specter-phase1.png",
@@ -80,6 +96,7 @@ jobs:
           cp build/aether-phase1/aether9-specter-phase1.glb static/assets/
           cp build/aether-phase1/aether9-specter-phase1*.png static/previews/
           cp build/aether-phase1/aether9-phase1-report.json art/blender/
+          cp build/aether-phase1/aether9-phase1-manifest.json art/blender/
 
       - name: Commit validated Blender exports
         if: github.ref_name == 'main'
@@ -88,10 +105,11 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add art/blender/aether9-specter-phase1.blend \
             art/blender/aether9-phase1-report.json \
+            art/blender/aether9-phase1-manifest.json \
             static/assets/aether9-specter-phase1.glb
           git add static/previews/aether9-specter-phase1*.png
           if ! git diff --cached --quiet; then
-            git commit -m "AETHER Phase 1: editable Blender SPECTER and GLB"
+            git commit -m "AETHER Phase 1.4: editable grouped Blender asset, manifest and GLB"
             git push
           fi
 
