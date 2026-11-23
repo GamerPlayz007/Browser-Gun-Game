@@ -110,7 +110,11 @@ jobs:
           git add static/previews/aether9-specter-phase1*.png
           if ! git diff --cached --quiet; then
             git commit -m "AETHER Phase 1.4: editable grouped Blender asset, manifest and GLB"
-            git push
+            # Another CI or documentation commit can land while Blender runs.
+            # Rebase on fresh main instead of dropping a validated export.
+            git fetch origin main
+            git rebase origin/main
+            git push origin HEAD:main
           fi
 
       - name: Archive Blender output
