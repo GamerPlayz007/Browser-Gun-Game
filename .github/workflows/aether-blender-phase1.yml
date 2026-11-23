@@ -1,10 +1,11 @@
-name: CROSSFire - AETHER Blender Phase 2.1
+name: CROSSFire - AETHER Blender Phase 2.2
 
 on:
   push:
     paths:
       - tools/aether9_blender_phase1.py
       - tools/aether_topology21.py
+      - tools/aether_uv22.py
       - .github/workflows/aether-blender-phase1.yml
   workflow_dispatch:
 
@@ -62,8 +63,42 @@ jobs:
           manifest = json.loads(manifest_file.read_text())
           assert manifest["schema"] == "crossfire-aether-art-asset-v1"
           assert manifest["asset_id"] == "AETHER9_SPECTER"
-          assert manifest["phase"] == "2.1"
-          assert report_data["phase"] == "2.1"
+          assert manifest["phase"] == "2.2"
+          assert report_data["phase"] == "2.2"
+          uv_file=root / "aether9-phase2-uv.json"
+          uv_layout=root / "aether9-phase2-uv-layout.svg"
+          assert uv_file.is_file() and uv_layout.is_file()
+          uv_report=json.loads(uv_file.read_text())
+          assert uv_report["phase"]=="2.2"
+          assert uv_report["atlas_resolution"]==2048
+          assert uv_report["object_edge_gutter_pixels"]>=8
+          assert uv_report["material_family_count"]>=8
+          assert uv_report["source_mesh_count"]==60
+          assert len(uv_report["objects"])==60
+          assert uv_report["total_uv_loops"]>1000
+          assert report_data["uv_stats"]["source_mesh_count"]==60
+          assert report_data["uv_stats"]["converted_ribbon_uv_meshes"]==15
+          assert manifest["uv_material_family_count"]==uv_report["material_family_count"]
+          assert manifest["uv_source_mesh_count"]==uv_report["source_mesh_count"]
+          # All UV tiles must be disjoint within their own material family.
+          for family, record in uv_report["families"].items():
+              assert record["object_count"]==len(record["uv_tiles"])
+              tiles=list(record["uv_tiles"].items())
+              for i,(name,a) in enumerate(tiles):
+                  assert all(0<=x<=1 for x in a), name
+                  assert a[2]>a[0] and a[3]>a[1], name
+                  for other,b in tiles[i+1:]:
+                      assert not (min(a[2],b[2])-max(a[0],b[0])>1e-7 and
+                                  min(a[3],b[3])-max(a[1],b[1])>1e-7), (name,other)
+          textured_meshes=sum(
+              1 for mesh in gltf["meshes"]
+              for primitive in mesh["primitives"]
+              if "TEXCOORD_0" in primitive["attributes"]
+          )
+          assert textured_meshes>=75, f"Missing GLB UV coordinates ({textured_meshes})"
+          print("AETHER PHASE 2.2 UVS",
+                uv_report["source_mesh_count"],uv_report["material_family_count"],
+                textured_meshes)
           topology_file = root / "aether9-phase2-topology.json"
           assert topology_file.is_file(), "Missing mesh topology inspection"
           topology = json.loads(topology_file.read_text())
@@ -107,7 +142,7 @@ jobs:
                   colorful = sum(1 for px in pixels.getdata() if max(px)>60)
                   assert colorful>145, f"Blank or near-black preview: {name} ({colorful})"
                   print("VISIBLE REVIEW FRAME", name, colorful)
-          print("VALID AETHER PHASE 2.1", len(gltf["meshes"]), report_data["mesh_objects"])
+          print("VALID AETHER PHASE 2.2", len(gltf["meshes"]), report_data["mesh_objects"])
           PY
 
       - name: Install generated game art
@@ -119,6 +154,8 @@ jobs:
           cp build/aether-phase1/aether9-phase1-report.json art/blender/
           cp build/aether-phase1/aether9-phase1-manifest.json art/blender/
           cp build/aether-phase1/aether9-phase2-topology.json art/blender/
+          cp build/aether-phase1/aether9-phase2-uv.json art/blender/
+          cp build/aether-phase1/aether9-phase2-uv-layout.svg static/previews/
 
       - name: Commit validated Blender exports
         if: github.ref_name == 'main'
@@ -129,10 +166,12 @@ jobs:
             art/blender/aether9-phase1-report.json \
             art/blender/aether9-phase1-manifest.json \
             art/blender/aether9-phase2-topology.json \
+            art/blender/aether9-phase2-uv.json \
+            static/previews/aether9-phase2-uv-layout.svg \
             static/assets/aether9-specter-phase1.glb
           git add static/previews/aether9-specter-phase1*.png
           if ! git diff --cached --quiet; then
-            git commit -m "AETHER Phase 2.1: cleaned Blender mesh, topology audit and validated GLB"
+            git commit -m "AETHER Phase 2.2: Blender UV atlases and glTF export with verified texture coordinates"
             # Another CI or documentation commit can land while Blender runs.
             # Rebase on fresh main instead of dropping a validated export.
             git fetch origin main
