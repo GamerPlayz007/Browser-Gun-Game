@@ -22,6 +22,7 @@ sys.path.insert(0,str(Path(__file__).resolve().parent))
 from aether_topology21 import prepare_topology
 from aether_uv22 import prepare_uv_atlases, unwrap_export_curves
 from aether_uvqa23 import audit_uv_quality
+from aether_pbr_phase3 import build_pbr, STYLES
 
 
 def main():
@@ -651,7 +652,51 @@ def main():
         "glb_bytes":glb.stat().st_size
     }
     (out/"aether9-phase1-report.json").write_text(json.dumps(report,indent=2))
-    print("CROSSFIRE_BLENDER_PHASE1 "+json.dumps(report),flush=True)
+    # Phase 3: build physically-based image textures, Cycles-baked AO,
+    # height-derived surface normals, and three self-contained cosmetic GLBs.
+    # The original Phase 2.3 geometry-review .blend/.glb remain unmodified;
+    # this builds a new production art source and distinct PBR files.
+    root["asset_version"]="3.4"
+    original_meshes=[
+        obj for obj in asset.all_objects
+        if obj.type=="MESH" and obj.get("aether_source_label") in uv_report["objects"]
+    ]
+    if len(original_meshes)!=uv_report["source_mesh_count"]:
+        raise RuntimeError("PBR baker did not locate all original UV meshes")
+    def export_pbr_variant(filename):
+        bpy.ops.object.select_all(action="DESELECT")
+        for game_obj in asset.all_objects:
+            game_obj.select_set(True)
+        bpy.context.view_layer.objects.active=root
+        options=dict(kwargs)
+        options["filepath"]=str(filename)
+        bpy.ops.export_scene.gltf(**options)
+    pbr_report=build_pbr(
+        original_meshes,M,list(asset.all_objects),out,
+        export_pbr_variant,scene,cam
+    )
+    if set(pbr_report["variants"])!=set(STYLES):
+        raise RuntimeError("Missing AETHER cosmetic finish")
+    manifest["phase"]="3.4"
+    manifest["material_workflow"]="external PNG PBR maps, Cycles AO and procedural height normals"
+    manifest["pbr_file"]="aether9-specter-pbr.blend"
+    manifest["pbr_report"]="aether9-phase3-report.json"
+    manifest["pbr_variants"]={k:v["glb"] for k,v in pbr_report["variants"].items()}
+    manifest["baked_textures"]="512px Cycles AO baked + upscaled 2K, height-derived normal textures"
+    manifest_path.write_text(json.dumps(manifest,indent=2),encoding="utf-8")
+    report["phase"]="3.4"
+    report["status"]="AETHER PBR skins, texture maps and AO baked"
+    report["pbr_report"]="aether9-phase3-report.json"
+    report["pbr_variants"]=pbr_report["variants"]
+    report["pbr_source"]= "aether9-specter-pbr.blend"
+    report["texture_bakes"]="Cycles AO 512 -> 2048; procedural height normals -> 2048"
+    (out/"aether9-phase1-report.json").write_text(json.dumps(report,indent=2))
+    print("CROSSFIRE_PBR_PHASE3 "+json.dumps({
+        "phase":report["phase"],"variants":list(pbr_report["variants"]),
+        "materials":len(M),"source_maps":pbr_report["source_texture_count"],
+        "ao_bakes":len(pbr_report["bake_details"])
+    }),flush=True)
+
 
 
 if __name__=="__main__":
