@@ -1,7 +1,7 @@
 {
   "schema": "crossfire-aether-art-asset-v1",
   "asset_id": "AETHER9_SPECTER",
-  "phase": "2.2",
+  "phase": "2.3",
   "asset_kind": "original fictional sci-fi game prop",
   "asset_root": "A9.ROOT.SPECTER",
   "orientation": {
@@ -14,6 +14,16 @@
   "uv_atlas_layout": "aether9-phase2-uv-layout.svg",
   "uv_material_family_count": 9,
   "uv_source_mesh_count": 60,
+  "uv_quality_report": "aether9-phase2-uv-quality.json",
+  "uv_island_layout": "aether9-phase2-islands.svg",
+  "uv_qa_summary": {
+    "faces": 2194,
+    "uv_triangles": 4044,
+    "uv_islands": 344,
+    "overlapping_uv_triangle_pairs": 0,
+    "objects_below_padding": 0,
+    "objects_with_island_seams": 60
+  },
   "baked_textures": "not yet (Phase 3)",
   "topology_status": "BMesh cleanup, watertight surfaces, outward normals and hard-edge shading",
   "topology_report": "aether9-phase2-topology.json",
@@ -132,9 +142,27 @@
         ],
         "surface_area": 4.6821063,
         "relative_weight": 1.0,
+        "authored_island_margin": 0.02424,
+        "target_tile_side_px": 1484.97,
         "approx_density": 686.272,
         "polygon_count": 308,
         "uv_loops": 1176
+      },
+      "uv_quality": {
+        "mesh": "01 / Ceramic monocoque : visual silhouette",
+        "faces": 308,
+        "uv_triangles": 560,
+        "uv_islands": 6,
+        "boundary_segments": 184,
+        "min_island_padding_px": 13.489,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 524.12,
+        "density_px_per_unit_p50": 578.16,
+        "density_px_per_unit_p90": 582.97,
+        "density_p90_p10_ratio": 1.112,
+        "stretch_edge_ratio_p95": 1.568,
+        "stretch_edge_ratio_max": 1.727
       },
       "material_names": [
         "01 | Matte graphite ceramic"
@@ -190,9 +218,27 @@
         ],
         "surface_area": 1.8771086,
         "relative_weight": 1.0,
+        "authored_island_margin": 0.03556,
+        "target_tile_side_px": 1012.47,
         "approx_density": 738.989,
         "polygon_count": 112,
         "uv_loops": 416
+      },
+      "uv_quality": {
+        "mesh": "02 / Raised continuous titanium spine",
+        "faces": 112,
+        "uv_triangles": 192,
+        "uv_islands": 6,
+        "boundary_segments": 112,
+        "min_island_padding_px": 9.305,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 477.07,
+        "density_px_per_unit_p50": 531.45,
+        "density_px_per_unit_p90": 535.82,
+        "density_p90_p10_ratio": 1.123,
+        "stretch_edge_ratio_p95": 2.422,
+        "stretch_edge_ratio_max": 2.473
       },
       "material_names": [
         "02 | Satin titanium alloy"
@@ -206,6 +252,7 @@
       "object_type": "CURVE",
       "topology": null,
       "uv": null,
+      "uv_quality": null,
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]
@@ -260,9 +307,27 @@
         ],
         "surface_area": 0.7584938,
         "relative_weight": 0.63567,
+        "authored_island_margin": 0.05594,
+        "target_tile_side_px": 643.6,
         "approx_density": 738.989,
         "polygon_count": 20,
         "uv_loops": 68
+      },
+      "uv_quality": {
+        "mesh": "LEFT / Swept structural cheek",
+        "faces": 20,
+        "uv_triangles": 28,
+        "uv_islands": 5,
+        "boundary_segments": 38,
+        "min_island_padding_px": 16.528,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 595.82,
+        "density_px_per_unit_p50": 604.86,
+        "density_px_per_unit_p90": 604.87,
+        "density_p90_p10_ratio": 1.015,
+        "stretch_edge_ratio_p95": 2.117,
+        "stretch_edge_ratio_max": 3.021
       },
       "material_names": [
         "02 | Satin titanium alloy"
@@ -318,9 +383,27 @@
         ],
         "surface_area": 0.1249686,
         "relative_weight": 1.0,
+        "authored_island_margin": 0.03677,
+        "target_tile_side_px": 979.09,
         "approx_density": 2769.633,
         "polygon_count": 11,
         "uv_loops": 38
+      },
+      "uv_quality": {
+        "mesh": "LEFT / Quiet ceramic insert",
+        "faces": 11,
+        "uv_triangles": 16,
+        "uv_islands": 5,
+        "boundary_segments": 26,
+        "min_island_padding_px": 19.178,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 2224.1,
+        "density_px_per_unit_p50": 2230.08,
+        "density_px_per_unit_p90": 2230.08,
+        "density_p90_p10_ratio": 1.003,
+        "stretch_edge_ratio_p95": 2.423,
+        "stretch_edge_ratio_max": 2.423
       },
       "material_names": [
         "09 | Recessed charcoal carbon"
@@ -376,9 +459,27 @@
         ],
         "surface_area": 0.0407466,
         "relative_weight": 0.62052,
+        "authored_island_margin": 0.04801,
+        "target_tile_side_px": 749.81,
         "approx_density": 3714.568,
         "polygon_count": 6,
         "uv_loops": 24
+      },
+      "uv_quality": {
+        "mesh": "LEFT / Satin highlight",
+        "faces": 6,
+        "uv_triangles": 12,
+        "uv_islands": 4,
+        "boundary_segments": 20,
+        "min_island_padding_px": 26.577,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 2782.29,
+        "density_px_per_unit_p50": 2791.29,
+        "density_px_per_unit_p90": 2791.29,
+        "density_p90_p10_ratio": 1.003,
+        "stretch_edge_ratio_p95": 4.533,
+        "stretch_edge_ratio_max": 4.533
       },
       "material_names": [
         "05 | Honed silver edges"
@@ -434,9 +535,27 @@
         ],
         "surface_area": 0.3859541,
         "relative_weight": 0.28711,
+        "authored_island_margin": 0.08444,
+        "target_tile_side_px": 426.35,
         "approx_density": 686.272,
         "polygon_count": 14,
         "uv_loops": 48
+      },
+      "uv_quality": {
+        "mesh": "LEFT / Vent-side aero fin",
+        "faces": 14,
+        "uv_triangles": 20,
+        "uv_islands": 5,
+        "boundary_segments": 30,
+        "min_island_padding_px": 13.447,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 469.56,
+        "density_px_per_unit_p50": 525.81,
+        "density_px_per_unit_p90": 525.81,
+        "density_p90_p10_ratio": 1.12,
+        "stretch_edge_ratio_p95": 1.42,
+        "stretch_edge_ratio_max": 1.707
       },
       "material_names": [
         "01 | Matte graphite ceramic"
@@ -450,6 +569,7 @@
       "object_type": "CURVE",
       "topology": null,
       "uv": null,
+      "uv_quality": null,
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]
@@ -504,9 +624,27 @@
         ],
         "surface_area": 0.004178,
         "relative_weight": 0.19,
+        "authored_island_margin": 0.13489,
+        "target_tile_side_px": 266.89,
         "approx_density": 4129.064,
         "polygon_count": 6,
         "uv_loops": 24
+      },
+      "uv_quality": {
+        "mesh": "LEFT / light recess 1",
+        "faces": 6,
+        "uv_triangles": 12,
+        "uv_islands": 6,
+        "boundary_segments": 24,
+        "min_island_padding_px": 13.413,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 3309.34,
+        "density_px_per_unit_p50": 3309.34,
+        "density_px_per_unit_p90": 3309.34,
+        "density_p90_p10_ratio": 1.0,
+        "stretch_edge_ratio_p95": 1.011,
+        "stretch_edge_ratio_max": 1.011
       },
       "material_names": [
         "06 | Photonic cyan / artwork"
@@ -562,9 +700,27 @@
         ],
         "surface_area": 0.004178,
         "relative_weight": 0.19,
+        "authored_island_margin": 0.13489,
+        "target_tile_side_px": 266.89,
         "approx_density": 4129.064,
         "polygon_count": 6,
         "uv_loops": 24
+      },
+      "uv_quality": {
+        "mesh": "LEFT / light recess 2",
+        "faces": 6,
+        "uv_triangles": 12,
+        "uv_islands": 6,
+        "boundary_segments": 24,
+        "min_island_padding_px": 13.413,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 3309.34,
+        "density_px_per_unit_p50": 3309.34,
+        "density_px_per_unit_p90": 3309.35,
+        "density_p90_p10_ratio": 1.0,
+        "stretch_edge_ratio_p95": 1.011,
+        "stretch_edge_ratio_max": 1.011
       },
       "material_names": [
         "06 | Photonic cyan / artwork"
@@ -620,9 +776,27 @@
         ],
         "surface_area": 0.004178,
         "relative_weight": 0.19,
+        "authored_island_margin": 0.13489,
+        "target_tile_side_px": 266.89,
         "approx_density": 4129.064,
         "polygon_count": 6,
         "uv_loops": 24
+      },
+      "uv_quality": {
+        "mesh": "LEFT / light recess 3",
+        "faces": 6,
+        "uv_triangles": 12,
+        "uv_islands": 6,
+        "boundary_segments": 24,
+        "min_island_padding_px": 13.413,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 3309.34,
+        "density_px_per_unit_p50": 3309.34,
+        "density_px_per_unit_p90": 3309.35,
+        "density_p90_p10_ratio": 1.0,
+        "stretch_edge_ratio_p95": 1.011,
+        "stretch_edge_ratio_max": 1.011
       },
       "material_names": [
         "06 | Photonic cyan / artwork"
@@ -678,9 +852,27 @@
         ],
         "surface_area": 0.004178,
         "relative_weight": 0.19,
+        "authored_island_margin": 0.13489,
+        "target_tile_side_px": 266.89,
         "approx_density": 4129.064,
         "polygon_count": 6,
         "uv_loops": 24
+      },
+      "uv_quality": {
+        "mesh": "LEFT / light recess 4",
+        "faces": 6,
+        "uv_triangles": 12,
+        "uv_islands": 6,
+        "boundary_segments": 24,
+        "min_island_padding_px": 13.413,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 3309.34,
+        "density_px_per_unit_p50": 3309.34,
+        "density_px_per_unit_p90": 3309.34,
+        "density_p90_p10_ratio": 1.0,
+        "stretch_edge_ratio_p95": 1.011,
+        "stretch_edge_ratio_max": 1.011
       },
       "material_names": [
         "06 | Photonic cyan / artwork"
@@ -736,9 +928,27 @@
         ],
         "surface_area": 0.4754664,
         "relative_weight": 0.31867,
+        "authored_island_margin": 0.07608,
+        "target_tile_side_px": 473.21,
         "approx_density": 686.272,
         "polygon_count": 72,
         "uv_loops": 264
+      },
+      "uv_quality": {
+        "mesh": "LEFT / Monolithic stock arch",
+        "faces": 72,
+        "uv_triangles": 120,
+        "uv_islands": 6,
+        "boundary_segments": 80,
+        "min_island_padding_px": 10.034,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 430.65,
+        "density_px_per_unit_p50": 498.09,
+        "density_px_per_unit_p90": 500.52,
+        "density_p90_p10_ratio": 1.162,
+        "stretch_edge_ratio_p95": 1.825,
+        "stretch_edge_ratio_max": 1.829
       },
       "material_names": [
         "01 | Matte graphite ceramic"
@@ -752,6 +962,7 @@
       "object_type": "CURVE",
       "topology": null,
       "uv": null,
+      "uv_quality": null,
       "material_names": [
         "02 | Satin titanium alloy"
       ]
@@ -764,6 +975,7 @@
       "object_type": "CURVE",
       "topology": null,
       "uv": null,
+      "uv_quality": null,
       "material_names": [
         "05 | Honed silver edges"
       ]
@@ -776,6 +988,7 @@
       "object_type": "CURVE",
       "topology": null,
       "uv": null,
+      "uv_quality": null,
       "material_names": [
         "02 | Satin titanium alloy"
       ]
@@ -788,6 +1001,7 @@
       "object_type": "CURVE",
       "topology": null,
       "uv": null,
+      "uv_quality": null,
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]
@@ -842,9 +1056,27 @@
         ],
         "surface_area": 0.7584938,
         "relative_weight": 0.63567,
+        "authored_island_margin": 0.05594,
+        "target_tile_side_px": 643.6,
         "approx_density": 738.989,
         "polygon_count": 20,
         "uv_loops": 68
+      },
+      "uv_quality": {
+        "mesh": "RIGHT / Swept structural cheek",
+        "faces": 20,
+        "uv_triangles": 28,
+        "uv_islands": 5,
+        "boundary_segments": 38,
+        "min_island_padding_px": 16.528,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 595.82,
+        "density_px_per_unit_p50": 604.86,
+        "density_px_per_unit_p90": 604.87,
+        "density_p90_p10_ratio": 1.015,
+        "stretch_edge_ratio_p95": 2.117,
+        "stretch_edge_ratio_max": 3.021
       },
       "material_names": [
         "02 | Satin titanium alloy"
@@ -900,9 +1132,27 @@
         ],
         "surface_area": 0.1249686,
         "relative_weight": 1.0,
+        "authored_island_margin": 0.03677,
+        "target_tile_side_px": 979.09,
         "approx_density": 2769.633,
         "polygon_count": 11,
         "uv_loops": 38
+      },
+      "uv_quality": {
+        "mesh": "RIGHT / Quiet ceramic insert",
+        "faces": 11,
+        "uv_triangles": 16,
+        "uv_islands": 5,
+        "boundary_segments": 26,
+        "min_island_padding_px": 19.178,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 2224.1,
+        "density_px_per_unit_p50": 2230.08,
+        "density_px_per_unit_p90": 2230.08,
+        "density_p90_p10_ratio": 1.003,
+        "stretch_edge_ratio_p95": 2.423,
+        "stretch_edge_ratio_max": 2.423
       },
       "material_names": [
         "09 | Recessed charcoal carbon"
@@ -958,9 +1208,27 @@
         ],
         "surface_area": 0.0407466,
         "relative_weight": 0.62052,
+        "authored_island_margin": 0.04801,
+        "target_tile_side_px": 749.81,
         "approx_density": 3714.568,
         "polygon_count": 6,
         "uv_loops": 24
+      },
+      "uv_quality": {
+        "mesh": "RIGHT / Satin highlight",
+        "faces": 6,
+        "uv_triangles": 12,
+        "uv_islands": 4,
+        "boundary_segments": 20,
+        "min_island_padding_px": 26.577,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 2782.3,
+        "density_px_per_unit_p50": 2791.29,
+        "density_px_per_unit_p90": 2791.29,
+        "density_p90_p10_ratio": 1.003,
+        "stretch_edge_ratio_p95": 4.533,
+        "stretch_edge_ratio_max": 4.533
       },
       "material_names": [
         "05 | Honed silver edges"
@@ -1016,9 +1284,27 @@
         ],
         "surface_area": 0.3859541,
         "relative_weight": 0.28711,
+        "authored_island_margin": 0.08444,
+        "target_tile_side_px": 426.35,
         "approx_density": 686.272,
         "polygon_count": 14,
         "uv_loops": 48
+      },
+      "uv_quality": {
+        "mesh": "RIGHT / Vent-side aero fin",
+        "faces": 14,
+        "uv_triangles": 20,
+        "uv_islands": 5,
+        "boundary_segments": 30,
+        "min_island_padding_px": 13.447,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 469.56,
+        "density_px_per_unit_p50": 525.81,
+        "density_px_per_unit_p90": 525.81,
+        "density_p90_p10_ratio": 1.12,
+        "stretch_edge_ratio_p95": 1.42,
+        "stretch_edge_ratio_max": 1.707
       },
       "material_names": [
         "01 | Matte graphite ceramic"
@@ -1032,6 +1318,7 @@
       "object_type": "CURVE",
       "topology": null,
       "uv": null,
+      "uv_quality": null,
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]
@@ -1086,9 +1373,27 @@
         ],
         "surface_area": 0.004178,
         "relative_weight": 0.19,
+        "authored_island_margin": 0.13489,
+        "target_tile_side_px": 266.89,
         "approx_density": 4129.064,
         "polygon_count": 6,
         "uv_loops": 24
+      },
+      "uv_quality": {
+        "mesh": "RIGHT / light recess 1",
+        "faces": 6,
+        "uv_triangles": 12,
+        "uv_islands": 6,
+        "boundary_segments": 24,
+        "min_island_padding_px": 13.413,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 3309.34,
+        "density_px_per_unit_p50": 3309.34,
+        "density_px_per_unit_p90": 3309.35,
+        "density_p90_p10_ratio": 1.0,
+        "stretch_edge_ratio_p95": 1.011,
+        "stretch_edge_ratio_max": 1.011
       },
       "material_names": [
         "06 | Photonic cyan / artwork"
@@ -1144,9 +1449,27 @@
         ],
         "surface_area": 0.004178,
         "relative_weight": 0.19,
+        "authored_island_margin": 0.13489,
+        "target_tile_side_px": 266.89,
         "approx_density": 4129.064,
         "polygon_count": 6,
         "uv_loops": 24
+      },
+      "uv_quality": {
+        "mesh": "RIGHT / light recess 2",
+        "faces": 6,
+        "uv_triangles": 12,
+        "uv_islands": 6,
+        "boundary_segments": 24,
+        "min_island_padding_px": 13.413,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 3309.34,
+        "density_px_per_unit_p50": 3309.34,
+        "density_px_per_unit_p90": 3309.34,
+        "density_p90_p10_ratio": 1.0,
+        "stretch_edge_ratio_p95": 1.011,
+        "stretch_edge_ratio_max": 1.011
       },
       "material_names": [
         "06 | Photonic cyan / artwork"
@@ -1202,9 +1525,27 @@
         ],
         "surface_area": 0.004178,
         "relative_weight": 0.19,
+        "authored_island_margin": 0.13489,
+        "target_tile_side_px": 266.89,
         "approx_density": 4129.064,
         "polygon_count": 6,
         "uv_loops": 24
+      },
+      "uv_quality": {
+        "mesh": "RIGHT / light recess 3",
+        "faces": 6,
+        "uv_triangles": 12,
+        "uv_islands": 6,
+        "boundary_segments": 24,
+        "min_island_padding_px": 13.413,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 3309.34,
+        "density_px_per_unit_p50": 3309.34,
+        "density_px_per_unit_p90": 3309.34,
+        "density_p90_p10_ratio": 1.0,
+        "stretch_edge_ratio_p95": 1.011,
+        "stretch_edge_ratio_max": 1.011
       },
       "material_names": [
         "06 | Photonic cyan / artwork"
@@ -1260,9 +1601,27 @@
         ],
         "surface_area": 0.004178,
         "relative_weight": 0.19,
+        "authored_island_margin": 0.13489,
+        "target_tile_side_px": 266.89,
         "approx_density": 4129.064,
         "polygon_count": 6,
         "uv_loops": 24
+      },
+      "uv_quality": {
+        "mesh": "RIGHT / light recess 4",
+        "faces": 6,
+        "uv_triangles": 12,
+        "uv_islands": 6,
+        "boundary_segments": 24,
+        "min_island_padding_px": 13.413,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 3309.34,
+        "density_px_per_unit_p50": 3309.34,
+        "density_px_per_unit_p90": 3309.34,
+        "density_p90_p10_ratio": 1.0,
+        "stretch_edge_ratio_p95": 1.011,
+        "stretch_edge_ratio_max": 1.011
       },
       "material_names": [
         "06 | Photonic cyan / artwork"
@@ -1318,9 +1677,27 @@
         ],
         "surface_area": 0.4754664,
         "relative_weight": 0.31867,
+        "authored_island_margin": 0.07608,
+        "target_tile_side_px": 473.21,
         "approx_density": 686.272,
         "polygon_count": 72,
         "uv_loops": 264
+      },
+      "uv_quality": {
+        "mesh": "RIGHT / Monolithic stock arch",
+        "faces": 72,
+        "uv_triangles": 120,
+        "uv_islands": 6,
+        "boundary_segments": 80,
+        "min_island_padding_px": 10.255,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 430.65,
+        "density_px_per_unit_p50": 498.08,
+        "density_px_per_unit_p90": 500.52,
+        "density_p90_p10_ratio": 1.162,
+        "stretch_edge_ratio_p95": 1.826,
+        "stretch_edge_ratio_max": 1.835
       },
       "material_names": [
         "01 | Matte graphite ceramic"
@@ -1334,6 +1711,7 @@
       "object_type": "CURVE",
       "topology": null,
       "uv": null,
+      "uv_quality": null,
       "material_names": [
         "02 | Satin titanium alloy"
       ]
@@ -1346,6 +1724,7 @@
       "object_type": "CURVE",
       "topology": null,
       "uv": null,
+      "uv_quality": null,
       "material_names": [
         "05 | Honed silver edges"
       ]
@@ -1358,6 +1737,7 @@
       "object_type": "CURVE",
       "topology": null,
       "uv": null,
+      "uv_quality": null,
       "material_names": [
         "02 | Satin titanium alloy"
       ]
@@ -1370,6 +1750,7 @@
       "object_type": "CURVE",
       "topology": null,
       "uv": null,
+      "uv_quality": null,
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]
@@ -1424,9 +1805,27 @@
         ],
         "surface_area": 0.5827622,
         "relative_weight": 1.0,
+        "authored_island_margin": 0.03628,
+        "target_tile_side_px": 992.36,
         "approx_density": 1299.945,
         "polygon_count": 80,
         "uv_loops": 288
+      },
+      "uv_quality": {
+        "mesh": "04 / Graphite handguard support",
+        "faces": 80,
+        "uv_triangles": 128,
+        "uv_islands": 4,
+        "boundary_segments": 64,
+        "min_island_padding_px": 13.557,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 1141.8,
+        "density_px_per_unit_p50": 1203.09,
+        "density_px_per_unit_p90": 1222.48,
+        "density_p90_p10_ratio": 1.071,
+        "stretch_edge_ratio_p95": 1.137,
+        "stretch_edge_ratio_max": 1.148
       },
       "material_names": [
         "04 | Carbon-black soft polymer"
@@ -1482,9 +1881,27 @@
         ],
         "surface_area": 0.004512,
         "relative_weight": 1.0,
+        "authored_island_margin": 0.07505,
+        "target_tile_side_px": 479.7,
         "approx_density": 7141.355,
         "polygon_count": 6,
         "uv_loops": 24
+      },
+      "uv_quality": {
+        "mesh": "Grip rib -1-0",
+        "faces": 6,
+        "uv_triangles": 12,
+        "uv_islands": 6,
+        "boundary_segments": 24,
+        "min_island_padding_px": 13.249,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 6199.28,
+        "density_px_per_unit_p50": 6199.28,
+        "density_px_per_unit_p90": 6199.29,
+        "density_p90_p10_ratio": 1.0,
+        "stretch_edge_ratio_p95": 1.178,
+        "stretch_edge_ratio_max": 1.178
       },
       "material_names": [
         "03 | Gunmetal structural inlay"
@@ -1540,9 +1957,27 @@
         ],
         "surface_area": 0.004512,
         "relative_weight": 1.0,
+        "authored_island_margin": 0.07505,
+        "target_tile_side_px": 479.7,
         "approx_density": 7141.355,
         "polygon_count": 6,
         "uv_loops": 24
+      },
+      "uv_quality": {
+        "mesh": "Grip rib 1-0",
+        "faces": 6,
+        "uv_triangles": 12,
+        "uv_islands": 6,
+        "boundary_segments": 24,
+        "min_island_padding_px": 13.249,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 6199.28,
+        "density_px_per_unit_p50": 6199.28,
+        "density_px_per_unit_p90": 6199.29,
+        "density_p90_p10_ratio": 1.0,
+        "stretch_edge_ratio_p95": 1.178,
+        "stretch_edge_ratio_max": 1.178
       },
       "material_names": [
         "03 | Gunmetal structural inlay"
@@ -1598,9 +2033,27 @@
         ],
         "surface_area": 0.004512,
         "relative_weight": 1.0,
+        "authored_island_margin": 0.07505,
+        "target_tile_side_px": 479.7,
         "approx_density": 7141.355,
         "polygon_count": 6,
         "uv_loops": 24
+      },
+      "uv_quality": {
+        "mesh": "Grip rib -1-1",
+        "faces": 6,
+        "uv_triangles": 12,
+        "uv_islands": 6,
+        "boundary_segments": 24,
+        "min_island_padding_px": 13.249,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 6199.28,
+        "density_px_per_unit_p50": 6199.28,
+        "density_px_per_unit_p90": 6199.29,
+        "density_p90_p10_ratio": 1.0,
+        "stretch_edge_ratio_p95": 1.178,
+        "stretch_edge_ratio_max": 1.178
       },
       "material_names": [
         "03 | Gunmetal structural inlay"
@@ -1656,9 +2109,27 @@
         ],
         "surface_area": 0.004512,
         "relative_weight": 1.0,
+        "authored_island_margin": 0.07505,
+        "target_tile_side_px": 479.7,
         "approx_density": 7141.355,
         "polygon_count": 6,
         "uv_loops": 24
+      },
+      "uv_quality": {
+        "mesh": "Grip rib 1-1",
+        "faces": 6,
+        "uv_triangles": 12,
+        "uv_islands": 6,
+        "boundary_segments": 24,
+        "min_island_padding_px": 13.249,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 6199.28,
+        "density_px_per_unit_p50": 6199.28,
+        "density_px_per_unit_p90": 6199.29,
+        "density_p90_p10_ratio": 1.0,
+        "stretch_edge_ratio_p95": 1.178,
+        "stretch_edge_ratio_max": 1.178
       },
       "material_names": [
         "03 | Gunmetal structural inlay"
@@ -1714,9 +2185,27 @@
         ],
         "surface_area": 0.004512,
         "relative_weight": 1.0,
+        "authored_island_margin": 0.07505,
+        "target_tile_side_px": 479.7,
         "approx_density": 7141.355,
         "polygon_count": 6,
         "uv_loops": 24
+      },
+      "uv_quality": {
+        "mesh": "Grip rib -1-2",
+        "faces": 6,
+        "uv_triangles": 12,
+        "uv_islands": 6,
+        "boundary_segments": 24,
+        "min_island_padding_px": 13.249,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 6199.28,
+        "density_px_per_unit_p50": 6199.28,
+        "density_px_per_unit_p90": 6199.29,
+        "density_p90_p10_ratio": 1.0,
+        "stretch_edge_ratio_p95": 1.178,
+        "stretch_edge_ratio_max": 1.178
       },
       "material_names": [
         "03 | Gunmetal structural inlay"
@@ -1772,9 +2261,27 @@
         ],
         "surface_area": 0.004512,
         "relative_weight": 1.0,
+        "authored_island_margin": 0.07505,
+        "target_tile_side_px": 479.7,
         "approx_density": 7141.355,
         "polygon_count": 6,
         "uv_loops": 24
+      },
+      "uv_quality": {
+        "mesh": "Grip rib 1-2",
+        "faces": 6,
+        "uv_triangles": 12,
+        "uv_islands": 6,
+        "boundary_segments": 24,
+        "min_island_padding_px": 13.249,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 6199.28,
+        "density_px_per_unit_p50": 6199.28,
+        "density_px_per_unit_p90": 6199.29,
+        "density_p90_p10_ratio": 1.0,
+        "stretch_edge_ratio_p95": 1.178,
+        "stretch_edge_ratio_max": 1.178
       },
       "material_names": [
         "03 | Gunmetal structural inlay"
@@ -1830,9 +2337,27 @@
         ],
         "surface_area": 0.004512,
         "relative_weight": 1.0,
+        "authored_island_margin": 0.07505,
+        "target_tile_side_px": 479.7,
         "approx_density": 7141.355,
         "polygon_count": 6,
         "uv_loops": 24
+      },
+      "uv_quality": {
+        "mesh": "Grip rib -1-3",
+        "faces": 6,
+        "uv_triangles": 12,
+        "uv_islands": 6,
+        "boundary_segments": 24,
+        "min_island_padding_px": 13.249,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 6199.28,
+        "density_px_per_unit_p50": 6199.28,
+        "density_px_per_unit_p90": 6199.29,
+        "density_p90_p10_ratio": 1.0,
+        "stretch_edge_ratio_p95": 1.178,
+        "stretch_edge_ratio_max": 1.178
       },
       "material_names": [
         "03 | Gunmetal structural inlay"
@@ -1888,9 +2413,27 @@
         ],
         "surface_area": 0.004512,
         "relative_weight": 1.0,
+        "authored_island_margin": 0.07505,
+        "target_tile_side_px": 479.7,
         "approx_density": 7141.355,
         "polygon_count": 6,
         "uv_loops": 24
+      },
+      "uv_quality": {
+        "mesh": "Grip rib 1-3",
+        "faces": 6,
+        "uv_triangles": 12,
+        "uv_islands": 6,
+        "boundary_segments": 24,
+        "min_island_padding_px": 13.249,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 6199.28,
+        "density_px_per_unit_p50": 6199.28,
+        "density_px_per_unit_p90": 6199.29,
+        "density_p90_p10_ratio": 1.0,
+        "stretch_edge_ratio_p95": 1.178,
+        "stretch_edge_ratio_max": 1.178
       },
       "material_names": [
         "03 | Gunmetal structural inlay"
@@ -1946,9 +2489,27 @@
         ],
         "surface_area": 0.004512,
         "relative_weight": 1.0,
+        "authored_island_margin": 0.07505,
+        "target_tile_side_px": 479.7,
         "approx_density": 7141.355,
         "polygon_count": 6,
         "uv_loops": 24
+      },
+      "uv_quality": {
+        "mesh": "Grip rib -1-4",
+        "faces": 6,
+        "uv_triangles": 12,
+        "uv_islands": 6,
+        "boundary_segments": 24,
+        "min_island_padding_px": 13.249,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 6199.28,
+        "density_px_per_unit_p50": 6199.28,
+        "density_px_per_unit_p90": 6199.29,
+        "density_p90_p10_ratio": 1.0,
+        "stretch_edge_ratio_p95": 1.178,
+        "stretch_edge_ratio_max": 1.178
       },
       "material_names": [
         "03 | Gunmetal structural inlay"
@@ -2004,9 +2565,27 @@
         ],
         "surface_area": 0.004512,
         "relative_weight": 1.0,
+        "authored_island_margin": 0.07505,
+        "target_tile_side_px": 479.7,
         "approx_density": 7141.355,
         "polygon_count": 6,
         "uv_loops": 24
+      },
+      "uv_quality": {
+        "mesh": "Grip rib 1-4",
+        "faces": 6,
+        "uv_triangles": 12,
+        "uv_islands": 6,
+        "boundary_segments": 24,
+        "min_island_padding_px": 13.249,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 6199.28,
+        "density_px_per_unit_p50": 6199.28,
+        "density_px_per_unit_p90": 6199.29,
+        "density_p90_p10_ratio": 1.0,
+        "stretch_edge_ratio_p95": 1.178,
+        "stretch_edge_ratio_max": 1.178
       },
       "material_names": [
         "03 | Gunmetal structural inlay"
@@ -2062,9 +2641,27 @@
         ],
         "surface_area": 0.004512,
         "relative_weight": 1.0,
+        "authored_island_margin": 0.07505,
+        "target_tile_side_px": 479.7,
         "approx_density": 7141.355,
         "polygon_count": 6,
         "uv_loops": 24
+      },
+      "uv_quality": {
+        "mesh": "Grip rib -1-5",
+        "faces": 6,
+        "uv_triangles": 12,
+        "uv_islands": 6,
+        "boundary_segments": 24,
+        "min_island_padding_px": 13.249,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 6199.28,
+        "density_px_per_unit_p50": 6199.28,
+        "density_px_per_unit_p90": 6199.29,
+        "density_p90_p10_ratio": 1.0,
+        "stretch_edge_ratio_p95": 1.178,
+        "stretch_edge_ratio_max": 1.178
       },
       "material_names": [
         "03 | Gunmetal structural inlay"
@@ -2120,9 +2717,27 @@
         ],
         "surface_area": 0.004512,
         "relative_weight": 1.0,
+        "authored_island_margin": 0.07505,
+        "target_tile_side_px": 479.7,
         "approx_density": 7141.355,
         "polygon_count": 6,
         "uv_loops": 24
+      },
+      "uv_quality": {
+        "mesh": "Grip rib 1-5",
+        "faces": 6,
+        "uv_triangles": 12,
+        "uv_islands": 6,
+        "boundary_segments": 24,
+        "min_island_padding_px": 13.249,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 6199.28,
+        "density_px_per_unit_p50": 6199.28,
+        "density_px_per_unit_p90": 6199.29,
+        "density_p90_p10_ratio": 1.0,
+        "stretch_edge_ratio_p95": 1.178,
+        "stretch_edge_ratio_max": 1.178
       },
       "material_names": [
         "03 | Gunmetal structural inlay"
@@ -2178,9 +2793,27 @@
         ],
         "surface_area": 0.004512,
         "relative_weight": 1.0,
+        "authored_island_margin": 0.07505,
+        "target_tile_side_px": 479.7,
         "approx_density": 7141.355,
         "polygon_count": 6,
         "uv_loops": 24
+      },
+      "uv_quality": {
+        "mesh": "Grip rib -1-6",
+        "faces": 6,
+        "uv_triangles": 12,
+        "uv_islands": 6,
+        "boundary_segments": 24,
+        "min_island_padding_px": 13.249,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 6199.28,
+        "density_px_per_unit_p50": 6199.28,
+        "density_px_per_unit_p90": 6199.29,
+        "density_p90_p10_ratio": 1.0,
+        "stretch_edge_ratio_p95": 1.178,
+        "stretch_edge_ratio_max": 1.178
       },
       "material_names": [
         "03 | Gunmetal structural inlay"
@@ -2236,9 +2869,27 @@
         ],
         "surface_area": 0.004512,
         "relative_weight": 1.0,
+        "authored_island_margin": 0.07505,
+        "target_tile_side_px": 479.7,
         "approx_density": 7141.355,
         "polygon_count": 6,
         "uv_loops": 24
+      },
+      "uv_quality": {
+        "mesh": "Grip rib 1-6",
+        "faces": 6,
+        "uv_triangles": 12,
+        "uv_islands": 6,
+        "boundary_segments": 24,
+        "min_island_padding_px": 13.249,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 6199.28,
+        "density_px_per_unit_p50": 6199.28,
+        "density_px_per_unit_p90": 6199.29,
+        "density_p90_p10_ratio": 1.0,
+        "stretch_edge_ratio_p95": 1.178,
+        "stretch_edge_ratio_max": 1.178
       },
       "material_names": [
         "03 | Gunmetal structural inlay"
@@ -2294,9 +2945,27 @@
         ],
         "surface_area": 0.552,
         "relative_weight": 0.97325,
+        "authored_island_margin": 0.03727,
+        "target_tile_side_px": 965.82,
         "approx_density": 1299.945,
         "polygon_count": 6,
         "uv_loops": 24
+      },
+      "uv_quality": {
+        "mesh": "05 / Rear ergonomic polymer pad",
+        "faces": 6,
+        "uv_triangles": 12,
+        "uv_islands": 6,
+        "boundary_segments": 24,
+        "min_island_padding_px": 13.577,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 1078.48,
+        "density_px_per_unit_p50": 1078.48,
+        "density_px_per_unit_p90": 1078.48,
+        "density_p90_p10_ratio": 1.0,
+        "stretch_edge_ratio_p95": 1.053,
+        "stretch_edge_ratio_max": 1.053
       },
       "material_names": [
         "04 | Carbon-black soft polymer"
@@ -2352,9 +3021,27 @@
         ],
         "surface_area": 0.1058229,
         "relative_weight": 1.0,
+        "authored_island_margin": 0.02979,
+        "target_tile_side_px": 1208.37,
         "approx_density": 3714.568,
         "polygon_count": 480,
         "uv_loops": 1920
+      },
+      "uv_quality": {
+        "mesh": "06 / Rear satin inset",
+        "faces": 480,
+        "uv_triangles": 960,
+        "uv_islands": 10,
+        "boundary_segments": 508,
+        "min_island_padding_px": 16.743,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 1229.83,
+        "density_px_per_unit_p50": 1353.99,
+        "density_px_per_unit_p90": 1465.14,
+        "density_p90_p10_ratio": 1.191,
+        "stretch_edge_ratio_p95": 1.366,
+        "stretch_edge_ratio_max": 1.883
       },
       "material_names": [
         "05 | Honed silver edges"
@@ -2410,9 +3097,27 @@
         ],
         "surface_area": 0.6913829,
         "relative_weight": 1.0,
+        "authored_island_margin": 0.02563,
+        "target_tile_side_px": 1404.7,
         "approx_density": 1689.363,
         "polygon_count": 60,
         "uv_loops": 216
+      },
+      "uv_quality": {
+        "mesh": "07 / Floating cyan energy prism",
+        "faces": 60,
+        "uv_triangles": 96,
+        "uv_islands": 6,
+        "boundary_segments": 76,
+        "min_island_padding_px": 13.899,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 1224.56,
+        "density_px_per_unit_p50": 1311.97,
+        "density_px_per_unit_p90": 1375.35,
+        "density_p90_p10_ratio": 1.123,
+        "stretch_edge_ratio_p95": 1.47,
+        "stretch_edge_ratio_max": 1.696
       },
       "material_names": [
         "06 | Photonic cyan / artwork"
@@ -2468,9 +3173,27 @@
         ],
         "surface_area": 0.3772921,
         "relative_weight": 1.0,
+        "authored_island_margin": 0.03677,
+        "target_tile_side_px": 979.09,
         "approx_density": 1593.983,
         "polygon_count": 48,
         "uv_loops": 168
+      },
+      "uv_quality": {
+        "mesh": "08 / Laminated outer core glass -1",
+        "faces": 48,
+        "uv_triangles": 72,
+        "uv_islands": 4,
+        "boundary_segments": 56,
+        "min_island_padding_px": 11.057,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 1325.74,
+        "density_px_per_unit_p50": 1528.04,
+        "density_px_per_unit_p90": 1529.83,
+        "density_p90_p10_ratio": 1.154,
+        "stretch_edge_ratio_p95": 1.66,
+        "stretch_edge_ratio_max": 1.665
       },
       "material_names": [
         "07 | Blue translucent optical glass"
@@ -2526,9 +3249,27 @@
         ],
         "surface_area": 0.3772921,
         "relative_weight": 1.0,
+        "authored_island_margin": 0.03677,
+        "target_tile_side_px": 979.09,
         "approx_density": 1593.983,
         "polygon_count": 48,
         "uv_loops": 168
+      },
+      "uv_quality": {
+        "mesh": "08 / Laminated outer core glass 1",
+        "faces": 48,
+        "uv_triangles": 72,
+        "uv_islands": 4,
+        "boundary_segments": 56,
+        "min_island_padding_px": 13.094,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 1325.73,
+        "density_px_per_unit_p50": 1528.05,
+        "density_px_per_unit_p90": 1529.83,
+        "density_p90_p10_ratio": 1.154,
+        "stretch_edge_ratio_p95": 1.66,
+        "stretch_edge_ratio_max": 1.665
       },
       "material_names": [
         "07 | Blue translucent optical glass"
@@ -2584,9 +3325,27 @@
         ],
         "surface_area": 0.02425,
         "relative_weight": 0.19,
+        "authored_island_margin": 0.13489,
+        "target_tile_side_px": 266.89,
         "approx_density": 1713.878,
         "polygon_count": 6,
         "uv_loops": 24
+      },
+      "uv_quality": {
+        "mesh": "Photonic core indicator 0",
+        "faces": 6,
+        "uv_triangles": 12,
+        "uv_islands": 6,
+        "boundary_segments": 24,
+        "min_island_padding_px": 11.06,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 1377.88,
+        "density_px_per_unit_p50": 1377.88,
+        "density_px_per_unit_p90": 1377.88,
+        "density_p90_p10_ratio": 1.0,
+        "stretch_edge_ratio_p95": 1.41,
+        "stretch_edge_ratio_max": 1.41
       },
       "material_names": [
         "06 | Photonic cyan / artwork"
@@ -2642,9 +3401,27 @@
         ],
         "surface_area": 0.02425,
         "relative_weight": 0.19,
+        "authored_island_margin": 0.13489,
+        "target_tile_side_px": 266.89,
         "approx_density": 1713.878,
         "polygon_count": 6,
         "uv_loops": 24
+      },
+      "uv_quality": {
+        "mesh": "Photonic core indicator 1",
+        "faces": 6,
+        "uv_triangles": 12,
+        "uv_islands": 6,
+        "boundary_segments": 24,
+        "min_island_padding_px": 11.06,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 1377.88,
+        "density_px_per_unit_p50": 1377.88,
+        "density_px_per_unit_p90": 1377.88,
+        "density_p90_p10_ratio": 1.0,
+        "stretch_edge_ratio_p95": 1.41,
+        "stretch_edge_ratio_max": 1.41
       },
       "material_names": [
         "06 | Photonic cyan / artwork"
@@ -2700,9 +3477,27 @@
         ],
         "surface_area": 0.02425,
         "relative_weight": 0.19,
+        "authored_island_margin": 0.13489,
+        "target_tile_side_px": 266.89,
         "approx_density": 1713.878,
         "polygon_count": 6,
         "uv_loops": 24
+      },
+      "uv_quality": {
+        "mesh": "Photonic core indicator 2",
+        "faces": 6,
+        "uv_triangles": 12,
+        "uv_islands": 6,
+        "boundary_segments": 24,
+        "min_island_padding_px": 11.06,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 1377.88,
+        "density_px_per_unit_p50": 1377.88,
+        "density_px_per_unit_p90": 1377.88,
+        "density_p90_p10_ratio": 1.0,
+        "stretch_edge_ratio_p95": 1.41,
+        "stretch_edge_ratio_max": 1.41
       },
       "material_names": [
         "06 | Photonic cyan / artwork"
@@ -2758,9 +3553,27 @@
         ],
         "surface_area": 0.02425,
         "relative_weight": 0.19,
+        "authored_island_margin": 0.13489,
+        "target_tile_side_px": 266.89,
         "approx_density": 1713.878,
         "polygon_count": 6,
         "uv_loops": 24
+      },
+      "uv_quality": {
+        "mesh": "Photonic core indicator 3",
+        "faces": 6,
+        "uv_triangles": 12,
+        "uv_islands": 6,
+        "boundary_segments": 24,
+        "min_island_padding_px": 11.06,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 1377.88,
+        "density_px_per_unit_p50": 1377.88,
+        "density_px_per_unit_p90": 1377.88,
+        "density_p90_p10_ratio": 1.0,
+        "stretch_edge_ratio_p95": 1.41,
+        "stretch_edge_ratio_max": 1.41
       },
       "material_names": [
         "06 | Photonic cyan / artwork"
@@ -2816,9 +3629,27 @@
         ],
         "surface_area": 0.02425,
         "relative_weight": 0.19,
+        "authored_island_margin": 0.13489,
+        "target_tile_side_px": 266.89,
         "approx_density": 1713.878,
         "polygon_count": 6,
         "uv_loops": 24
+      },
+      "uv_quality": {
+        "mesh": "Photonic core indicator 4",
+        "faces": 6,
+        "uv_triangles": 12,
+        "uv_islands": 6,
+        "boundary_segments": 24,
+        "min_island_padding_px": 11.06,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 1377.88,
+        "density_px_per_unit_p50": 1377.88,
+        "density_px_per_unit_p90": 1377.88,
+        "density_p90_p10_ratio": 1.0,
+        "stretch_edge_ratio_p95": 1.41,
+        "stretch_edge_ratio_max": 1.41
       },
       "material_names": [
         "06 | Photonic cyan / artwork"
@@ -2874,9 +3705,27 @@
         ],
         "surface_area": 0.5669776,
         "relative_weight": 0.54959,
+        "authored_island_margin": 0.0647,
+        "target_tile_side_px": 556.44,
         "approx_density": 738.989,
         "polygon_count": 60,
         "uv_loops": 216
+      },
+      "uv_quality": {
+        "mesh": "09 / Integrated optical crown",
+        "faces": 60,
+        "uv_triangles": 96,
+        "uv_islands": 4,
+        "boundary_segments": 60,
+        "min_island_padding_px": 13.969,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 467.22,
+        "density_px_per_unit_p50": 666.44,
+        "density_px_per_unit_p90": 679.6,
+        "density_p90_p10_ratio": 1.455,
+        "stretch_edge_ratio_p95": 2.831,
+        "stretch_edge_ratio_max": 2.845
       },
       "material_names": [
         "02 | Satin titanium alloy"
@@ -2932,9 +3781,27 @@
         ],
         "surface_area": 0.0910831,
         "relative_weight": 0.19,
+        "authored_island_margin": 0.12759,
+        "target_tile_side_px": 282.14,
         "approx_density": 934.871,
         "polygon_count": 6,
         "uv_loops": 24
+      },
+      "uv_quality": {
+        "mesh": "10 / Visor sculpted cheek -1",
+        "faces": 6,
+        "uv_triangles": 12,
+        "uv_islands": 5,
+        "boundary_segments": 22,
+        "min_island_padding_px": 11.253,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 742.57,
+        "density_px_per_unit_p50": 742.58,
+        "density_px_per_unit_p90": 742.58,
+        "density_p90_p10_ratio": 1.0,
+        "stretch_edge_ratio_p95": 1.324,
+        "stretch_edge_ratio_max": 1.324
       },
       "material_names": [
         "01 | Matte graphite ceramic"
@@ -2990,9 +3857,27 @@
         ],
         "surface_area": 0.0910831,
         "relative_weight": 0.19,
+        "authored_island_margin": 0.12759,
+        "target_tile_side_px": 282.14,
         "approx_density": 934.871,
         "polygon_count": 6,
         "uv_loops": 24
+      },
+      "uv_quality": {
+        "mesh": "10 / Visor sculpted cheek 1",
+        "faces": 6,
+        "uv_triangles": 12,
+        "uv_islands": 5,
+        "boundary_segments": 22,
+        "min_island_padding_px": 11.253,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 742.58,
+        "density_px_per_unit_p50": 742.58,
+        "density_px_per_unit_p90": 742.58,
+        "density_p90_p10_ratio": 1.0,
+        "stretch_edge_ratio_p95": 1.324,
+        "stretch_edge_ratio_max": 1.324
       },
       "material_names": [
         "01 | Matte graphite ceramic"
@@ -3048,9 +3933,27 @@
         ],
         "surface_area": 0.13525,
         "relative_weight": 0.59873,
+        "authored_island_margin": 0.06141,
+        "target_tile_side_px": 586.21,
         "approx_density": 1593.983,
         "polygon_count": 6,
         "uv_loops": 24
+      },
+      "uv_quality": {
+        "mesh": "11 / Cyan holographic viewing panel",
+        "faces": 6,
+        "uv_triangles": 12,
+        "uv_islands": 6,
+        "boundary_segments": 24,
+        "min_island_padding_px": 12.4,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 1472.49,
+        "density_px_per_unit_p50": 1472.49,
+        "density_px_per_unit_p90": 1472.49,
+        "density_p90_p10_ratio": 1.0,
+        "stretch_edge_ratio_p95": 1.297,
+        "stretch_edge_ratio_max": 1.297
       },
       "material_names": [
         "07 | Blue translucent optical glass"
@@ -3106,9 +4009,27 @@
         ],
         "surface_area": 0.0173658,
         "relative_weight": 0.19,
+        "authored_island_margin": 0.13489,
+        "target_tile_side_px": 266.89,
         "approx_density": 2025.295,
         "polygon_count": 480,
         "uv_loops": 1920
+      },
+      "uv_quality": {
+        "mesh": "12 / Translucent visor halo",
+        "faces": 480,
+        "uv_triangles": 960,
+        "uv_islands": 10,
+        "boundary_segments": 472,
+        "min_island_padding_px": 15.928,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 877.66,
+        "density_px_per_unit_p50": 929.2,
+        "density_px_per_unit_p90": 1012.9,
+        "density_p90_p10_ratio": 1.154,
+        "stretch_edge_ratio_p95": 1.325,
+        "stretch_edge_ratio_max": 1.605
       },
       "material_names": [
         "06 | Photonic cyan / artwork"
@@ -3164,9 +4085,27 @@
         ],
         "surface_area": 0.00476,
         "relative_weight": 1.0,
-        "approx_density": 9365.622,
+        "authored_island_margin": 0.05571,
+        "target_tile_side_px": 646.16,
+        "approx_density": 9365.621,
         "polygon_count": 6,
         "uv_loops": 24
+      },
+      "uv_quality": {
+        "mesh": "13 / Copper ID mark -1-0",
+        "faces": 6,
+        "uv_triangles": 12,
+        "uv_islands": 6,
+        "boundary_segments": 24,
+        "min_island_padding_px": 13.438,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 7642.77,
+        "density_px_per_unit_p50": 7642.77,
+        "density_px_per_unit_p90": 7642.77,
+        "density_p90_p10_ratio": 1.0,
+        "stretch_edge_ratio_p95": 1.018,
+        "stretch_edge_ratio_max": 1.018
       },
       "material_names": [
         "08 | Warm alloy insignia"
@@ -3222,9 +4161,27 @@
         ],
         "surface_area": 0.00476,
         "relative_weight": 1.0,
-        "approx_density": 9365.622,
+        "authored_island_margin": 0.05571,
+        "target_tile_side_px": 646.16,
+        "approx_density": 9365.621,
         "polygon_count": 6,
         "uv_loops": 24
+      },
+      "uv_quality": {
+        "mesh": "13 / Copper ID mark -1-1",
+        "faces": 6,
+        "uv_triangles": 12,
+        "uv_islands": 6,
+        "boundary_segments": 24,
+        "min_island_padding_px": 13.438,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 7642.77,
+        "density_px_per_unit_p50": 7642.77,
+        "density_px_per_unit_p90": 7642.78,
+        "density_p90_p10_ratio": 1.0,
+        "stretch_edge_ratio_p95": 1.018,
+        "stretch_edge_ratio_max": 1.018
       },
       "material_names": [
         "08 | Warm alloy insignia"
@@ -3280,9 +4237,27 @@
         ],
         "surface_area": 0.00476,
         "relative_weight": 1.0,
-        "approx_density": 9365.622,
+        "authored_island_margin": 0.05571,
+        "target_tile_side_px": 646.16,
+        "approx_density": 9365.621,
         "polygon_count": 6,
         "uv_loops": 24
+      },
+      "uv_quality": {
+        "mesh": "13 / Copper ID mark -1-2",
+        "faces": 6,
+        "uv_triangles": 12,
+        "uv_islands": 6,
+        "boundary_segments": 24,
+        "min_island_padding_px": 13.438,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 7642.77,
+        "density_px_per_unit_p50": 7642.77,
+        "density_px_per_unit_p90": 7642.77,
+        "density_p90_p10_ratio": 1.0,
+        "stretch_edge_ratio_p95": 1.018,
+        "stretch_edge_ratio_max": 1.018
       },
       "material_names": [
         "08 | Warm alloy insignia"
@@ -3338,9 +4313,27 @@
         ],
         "surface_area": 0.00476,
         "relative_weight": 1.0,
-        "approx_density": 9365.622,
+        "authored_island_margin": 0.05571,
+        "target_tile_side_px": 646.16,
+        "approx_density": 9365.621,
         "polygon_count": 6,
         "uv_loops": 24
+      },
+      "uv_quality": {
+        "mesh": "13 / Copper ID mark 1-0",
+        "faces": 6,
+        "uv_triangles": 12,
+        "uv_islands": 6,
+        "boundary_segments": 24,
+        "min_island_padding_px": 13.438,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 7642.77,
+        "density_px_per_unit_p50": 7642.77,
+        "density_px_per_unit_p90": 7642.78,
+        "density_p90_p10_ratio": 1.0,
+        "stretch_edge_ratio_p95": 1.018,
+        "stretch_edge_ratio_max": 1.018
       },
       "material_names": [
         "08 | Warm alloy insignia"
@@ -3396,9 +4389,27 @@
         ],
         "surface_area": 0.00476,
         "relative_weight": 1.0,
-        "approx_density": 9365.622,
+        "authored_island_margin": 0.05571,
+        "target_tile_side_px": 646.16,
+        "approx_density": 9365.621,
         "polygon_count": 6,
         "uv_loops": 24
+      },
+      "uv_quality": {
+        "mesh": "13 / Copper ID mark 1-1",
+        "faces": 6,
+        "uv_triangles": 12,
+        "uv_islands": 6,
+        "boundary_segments": 24,
+        "min_island_padding_px": 13.438,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 7642.77,
+        "density_px_per_unit_p50": 7642.77,
+        "density_px_per_unit_p90": 7642.78,
+        "density_p90_p10_ratio": 1.0,
+        "stretch_edge_ratio_p95": 1.018,
+        "stretch_edge_ratio_max": 1.018
       },
       "material_names": [
         "08 | Warm alloy insignia"
@@ -3454,9 +4465,27 @@
         ],
         "surface_area": 0.00476,
         "relative_weight": 1.0,
-        "approx_density": 9365.622,
+        "authored_island_margin": 0.05571,
+        "target_tile_side_px": 646.16,
+        "approx_density": 9365.621,
         "polygon_count": 6,
         "uv_loops": 24
+      },
+      "uv_quality": {
+        "mesh": "13 / Copper ID mark 1-2",
+        "faces": 6,
+        "uv_triangles": 12,
+        "uv_islands": 6,
+        "boundary_segments": 24,
+        "min_island_padding_px": 13.438,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 7642.77,
+        "density_px_per_unit_p50": 7642.77,
+        "density_px_per_unit_p90": 7642.77,
+        "density_p90_p10_ratio": 1.0,
+        "stretch_edge_ratio_p95": 1.018,
+        "stretch_edge_ratio_max": 1.018
       },
       "material_names": [
         "08 | Warm alloy insignia"
@@ -3512,9 +4541,27 @@
         ],
         "surface_area": 0.2364873,
         "relative_weight": 0.35494,
+        "authored_island_margin": 0.10018,
+        "target_tile_side_px": 359.37,
         "approx_density": 738.989,
         "polygon_count": 14,
         "uv_loops": 48
+      },
+      "uv_quality": {
+        "mesh": "LEFT / Faceted floating prow shield",
+        "faces": 14,
+        "uv_triangles": 20,
+        "uv_islands": 5,
+        "boundary_segments": 30,
+        "min_island_padding_px": 13.555,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 565.86,
+        "density_px_per_unit_p50": 571.28,
+        "density_px_per_unit_p90": 571.28,
+        "density_p90_p10_ratio": 1.01,
+        "stretch_edge_ratio_p95": 1.297,
+        "stretch_edge_ratio_max": 1.55
       },
       "material_names": [
         "02 | Satin titanium alloy"
@@ -3570,9 +4617,27 @@
         ],
         "surface_area": 0.118046,
         "relative_weight": 0.97191,
+        "authored_island_margin": 0.03783,
+        "target_tile_side_px": 951.59,
         "approx_density": 2769.633,
         "polygon_count": 11,
         "uv_loops": 38
+      },
+      "uv_quality": {
+        "mesh": "LEFT / Wide recessed ceramic flank",
+        "faces": 11,
+        "uv_triangles": 16,
+        "uv_islands": 5,
+        "boundary_segments": 26,
+        "min_island_padding_px": 14.004,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 2112.98,
+        "density_px_per_unit_p50": 2136.36,
+        "density_px_per_unit_p90": 2136.36,
+        "density_p90_p10_ratio": 1.011,
+        "stretch_edge_ratio_p95": 1.262,
+        "stretch_edge_ratio_max": 1.262
       },
       "material_names": [
         "09 | Recessed charcoal carbon"
@@ -3586,6 +4651,7 @@
       "object_type": "CURVE",
       "topology": null,
       "uv": null,
+      "uv_quality": null,
       "material_names": [
         "05 | Honed silver edges"
       ]
@@ -3598,6 +4664,7 @@
       "object_type": "CURVE",
       "topology": null,
       "uv": null,
+      "uv_quality": null,
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]
@@ -3652,9 +4719,27 @@
         ],
         "surface_area": 0.2364873,
         "relative_weight": 0.35494,
+        "authored_island_margin": 0.10018,
+        "target_tile_side_px": 359.37,
         "approx_density": 738.989,
         "polygon_count": 14,
         "uv_loops": 48
+      },
+      "uv_quality": {
+        "mesh": "RIGHT / Faceted floating prow shield",
+        "faces": 14,
+        "uv_triangles": 20,
+        "uv_islands": 5,
+        "boundary_segments": 30,
+        "min_island_padding_px": 13.555,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 565.86,
+        "density_px_per_unit_p50": 571.28,
+        "density_px_per_unit_p90": 571.28,
+        "density_p90_p10_ratio": 1.01,
+        "stretch_edge_ratio_p95": 1.297,
+        "stretch_edge_ratio_max": 1.55
       },
       "material_names": [
         "02 | Satin titanium alloy"
@@ -3710,9 +4795,27 @@
         ],
         "surface_area": 0.118046,
         "relative_weight": 0.97191,
+        "authored_island_margin": 0.03783,
+        "target_tile_side_px": 951.59,
         "approx_density": 2769.633,
         "polygon_count": 11,
         "uv_loops": 38
+      },
+      "uv_quality": {
+        "mesh": "RIGHT / Wide recessed ceramic flank",
+        "faces": 11,
+        "uv_triangles": 16,
+        "uv_islands": 5,
+        "boundary_segments": 26,
+        "min_island_padding_px": 14.004,
+        "overlapping_uv_triangle_pairs": 0,
+        "worst_overlap_px2": 0.0,
+        "density_px_per_unit_p10": 2112.98,
+        "density_px_per_unit_p50": 2136.36,
+        "density_px_per_unit_p90": 2136.36,
+        "density_p90_p10_ratio": 1.011,
+        "stretch_edge_ratio_p95": 1.262,
+        "stretch_edge_ratio_max": 1.262
       },
       "material_names": [
         "09 | Recessed charcoal carbon"
@@ -3726,6 +4829,7 @@
       "object_type": "CURVE",
       "topology": null,
       "uv": null,
+      "uv_quality": null,
       "material_names": [
         "05 | Honed silver edges"
       ]
@@ -3738,6 +4842,7 @@
       "object_type": "CURVE",
       "topology": null,
       "uv": null,
+      "uv_quality": null,
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]

@@ -5,6 +5,7 @@
   "atlas_resolution": 2048,
   "object_edge_gutter_pixels": 10,
   "blender_island_margin": 0.023,
+  "adaptive_island_margin": "max(default, 0.12*300/tile_pixel_side), capped at 0.20",
   "source_mesh_count": 60,
   "families": {
     "01 | Matte graphite ceramic": {
@@ -461,6 +462,8 @@
       ],
       "surface_area": 4.6821063,
       "relative_weight": 1.0,
+      "authored_island_margin": 0.02424,
+      "target_tile_side_px": 1484.97,
       "approx_density": 686.272,
       "polygon_count": 308,
       "uv_loops": 1176
@@ -476,6 +479,8 @@
       ],
       "surface_area": 0.0910831,
       "relative_weight": 0.19,
+      "authored_island_margin": 0.12759,
+      "target_tile_side_px": 282.14,
       "approx_density": 934.871,
       "polygon_count": 6,
       "uv_loops": 24
@@ -491,6 +496,8 @@
       ],
       "surface_area": 0.0910831,
       "relative_weight": 0.19,
+      "authored_island_margin": 0.12759,
+      "target_tile_side_px": 282.14,
       "approx_density": 934.871,
       "polygon_count": 6,
       "uv_loops": 24
@@ -506,6 +513,8 @@
       ],
       "surface_area": 0.4754664,
       "relative_weight": 0.31867,
+      "authored_island_margin": 0.07608,
+      "target_tile_side_px": 473.21,
       "approx_density": 686.272,
       "polygon_count": 72,
       "uv_loops": 264
@@ -521,6 +530,8 @@
       ],
       "surface_area": 0.3859541,
       "relative_weight": 0.28711,
+      "authored_island_margin": 0.08444,
+      "target_tile_side_px": 426.35,
       "approx_density": 686.272,
       "polygon_count": 14,
       "uv_loops": 48
@@ -536,6 +547,8 @@
       ],
       "surface_area": 0.4754664,
       "relative_weight": 0.31867,
+      "authored_island_margin": 0.07608,
+      "target_tile_side_px": 473.21,
       "approx_density": 686.272,
       "polygon_count": 72,
       "uv_loops": 264
@@ -551,6 +564,8 @@
       ],
       "surface_area": 0.3859541,
       "relative_weight": 0.28711,
+      "authored_island_margin": 0.08444,
+      "target_tile_side_px": 426.35,
       "approx_density": 686.272,
       "polygon_count": 14,
       "uv_loops": 48
@@ -566,6 +581,8 @@
       ],
       "surface_area": 1.8771086,
       "relative_weight": 1.0,
+      "authored_island_margin": 0.03556,
+      "target_tile_side_px": 1012.47,
       "approx_density": 738.989,
       "polygon_count": 112,
       "uv_loops": 416
@@ -581,6 +598,8 @@
       ],
       "surface_area": 0.5669776,
       "relative_weight": 0.54959,
+      "authored_island_margin": 0.0647,
+      "target_tile_side_px": 556.44,
       "approx_density": 738.989,
       "polygon_count": 60,
       "uv_loops": 216
@@ -596,6 +615,8 @@
       ],
       "surface_area": 0.2364873,
       "relative_weight": 0.35494,
+      "authored_island_margin": 0.10018,
+      "target_tile_side_px": 359.37,
       "approx_density": 738.989,
       "polygon_count": 14,
       "uv_loops": 48
@@ -611,6 +632,8 @@
       ],
       "surface_area": 0.7584938,
       "relative_weight": 0.63567,
+      "authored_island_margin": 0.05594,
+      "target_tile_side_px": 643.6,
       "approx_density": 738.989,
       "polygon_count": 20,
       "uv_loops": 68
@@ -626,6 +649,8 @@
       ],
       "surface_area": 0.2364873,
       "relative_weight": 0.35494,
+      "authored_island_margin": 0.10018,
+      "target_tile_side_px": 359.37,
       "approx_density": 738.989,
       "polygon_count": 14,
       "uv_loops": 48
@@ -641,6 +666,8 @@
       ],
       "surface_area": 0.7584938,
       "relative_weight": 0.63567,
+      "authored_island_margin": 0.05594,
+      "target_tile_side_px": 643.6,
       "approx_density": 738.989,
       "polygon_count": 20,
       "uv_loops": 68
@@ -656,6 +683,8 @@
       ],
       "surface_area": 0.004512,
       "relative_weight": 1.0,
+      "authored_island_margin": 0.07505,
+      "target_tile_side_px": 479.7,
       "approx_density": 7141.355,
       "polygon_count": 6,
       "uv_loops": 24
@@ -671,6 +700,8 @@
       ],
       "surface_area": 0.004512,
       "relative_weight": 1.0,
+      "authored_island_margin": 0.07505,
+      "target_tile_side_px": 479.7,
       "approx_density": 7141.355,
       "polygon_count": 6,
       "uv_loops": 24
@@ -686,6 +717,8 @@
       ],
       "surface_area": 0.004512,
       "relative_weight": 1.0,
+      "authored_island_margin": 0.07505,
+      "target_tile_side_px": 479.7,
       "approx_density": 7141.355,
       "polygon_count": 6,
       "uv_loops": 24
@@ -701,6 +734,8 @@
       ],
       "surface_area": 0.004512,
       "relative_weight": 1.0,
+      "authored_island_margin": 0.07505,
+      "target_tile_side_px": 479.7,
       "approx_density": 7141.355,
       "polygon_count": 6,
       "uv_loops": 24
@@ -716,6 +751,8 @@
       ],
       "surface_area": 0.004512,
       "relative_weight": 1.0,
+      "authored_island_margin": 0.07505,
+      "target_tile_side_px": 479.7,
       "approx_density": 7141.355,
       "polygon_count": 6,
       "uv_loops": 24
@@ -731,6 +768,8 @@
       ],
       "surface_area": 0.004512,
       "relative_weight": 1.0,
+      "authored_island_margin": 0.07505,
+      "target_tile_side_px": 479.7,
       "approx_density": 7141.355,
       "polygon_count": 6,
       "uv_loops": 24
@@ -746,6 +785,8 @@
       ],
       "surface_area": 0.004512,
       "relative_weight": 1.0,
+      "authored_island_margin": 0.07505,
+      "target_tile_side_px": 479.7,
       "approx_density": 7141.355,
       "polygon_count": 6,
       "uv_loops": 24
@@ -761,6 +802,8 @@
       ],
       "surface_area": 0.004512,
       "relative_weight": 1.0,
+      "authored_island_margin": 0.07505,
+      "target_tile_side_px": 479.7,
       "approx_density": 7141.355,
       "polygon_count": 6,
       "uv_loops": 24
@@ -776,6 +819,8 @@
       ],
       "surface_area": 0.004512,
       "relative_weight": 1.0,
+      "authored_island_margin": 0.07505,
+      "target_tile_side_px": 479.7,
       "approx_density": 7141.355,
       "polygon_count": 6,
       "uv_loops": 24
@@ -791,6 +836,8 @@
       ],
       "surface_area": 0.004512,
       "relative_weight": 1.0,
+      "authored_island_margin": 0.07505,
+      "target_tile_side_px": 479.7,
       "approx_density": 7141.355,
       "polygon_count": 6,
       "uv_loops": 24
@@ -806,6 +853,8 @@
       ],
       "surface_area": 0.004512,
       "relative_weight": 1.0,
+      "authored_island_margin": 0.07505,
+      "target_tile_side_px": 479.7,
       "approx_density": 7141.355,
       "polygon_count": 6,
       "uv_loops": 24
@@ -821,6 +870,8 @@
       ],
       "surface_area": 0.004512,
       "relative_weight": 1.0,
+      "authored_island_margin": 0.07505,
+      "target_tile_side_px": 479.7,
       "approx_density": 7141.355,
       "polygon_count": 6,
       "uv_loops": 24
@@ -836,6 +887,8 @@
       ],
       "surface_area": 0.004512,
       "relative_weight": 1.0,
+      "authored_island_margin": 0.07505,
+      "target_tile_side_px": 479.7,
       "approx_density": 7141.355,
       "polygon_count": 6,
       "uv_loops": 24
@@ -851,6 +904,8 @@
       ],
       "surface_area": 0.004512,
       "relative_weight": 1.0,
+      "authored_island_margin": 0.07505,
+      "target_tile_side_px": 479.7,
       "approx_density": 7141.355,
       "polygon_count": 6,
       "uv_loops": 24
@@ -866,6 +921,8 @@
       ],
       "surface_area": 0.5827622,
       "relative_weight": 1.0,
+      "authored_island_margin": 0.03628,
+      "target_tile_side_px": 992.36,
       "approx_density": 1299.945,
       "polygon_count": 80,
       "uv_loops": 288
@@ -881,6 +938,8 @@
       ],
       "surface_area": 0.552,
       "relative_weight": 0.97325,
+      "authored_island_margin": 0.03727,
+      "target_tile_side_px": 965.82,
       "approx_density": 1299.945,
       "polygon_count": 6,
       "uv_loops": 24
@@ -896,6 +955,8 @@
       ],
       "surface_area": 0.1058229,
       "relative_weight": 1.0,
+      "authored_island_margin": 0.02979,
+      "target_tile_side_px": 1208.37,
       "approx_density": 3714.568,
       "polygon_count": 480,
       "uv_loops": 1920
@@ -911,6 +972,8 @@
       ],
       "surface_area": 0.0407466,
       "relative_weight": 0.62052,
+      "authored_island_margin": 0.04801,
+      "target_tile_side_px": 749.81,
       "approx_density": 3714.568,
       "polygon_count": 6,
       "uv_loops": 24
@@ -926,6 +989,8 @@
       ],
       "surface_area": 0.0407466,
       "relative_weight": 0.62052,
+      "authored_island_margin": 0.04801,
+      "target_tile_side_px": 749.81,
       "approx_density": 3714.568,
       "polygon_count": 6,
       "uv_loops": 24
@@ -941,6 +1006,8 @@
       ],
       "surface_area": 0.6913829,
       "relative_weight": 1.0,
+      "authored_island_margin": 0.02563,
+      "target_tile_side_px": 1404.7,
       "approx_density": 1689.363,
       "polygon_count": 60,
       "uv_loops": 216
@@ -956,6 +1023,8 @@
       ],
       "surface_area": 0.0173658,
       "relative_weight": 0.19,
+      "authored_island_margin": 0.13489,
+      "target_tile_side_px": 266.89,
       "approx_density": 2025.295,
       "polygon_count": 480,
       "uv_loops": 1920
@@ -971,6 +1040,8 @@
       ],
       "surface_area": 0.004178,
       "relative_weight": 0.19,
+      "authored_island_margin": 0.13489,
+      "target_tile_side_px": 266.89,
       "approx_density": 4129.064,
       "polygon_count": 6,
       "uv_loops": 24
@@ -986,6 +1057,8 @@
       ],
       "surface_area": 0.004178,
       "relative_weight": 0.19,
+      "authored_island_margin": 0.13489,
+      "target_tile_side_px": 266.89,
       "approx_density": 4129.064,
       "polygon_count": 6,
       "uv_loops": 24
@@ -1001,6 +1074,8 @@
       ],
       "surface_area": 0.004178,
       "relative_weight": 0.19,
+      "authored_island_margin": 0.13489,
+      "target_tile_side_px": 266.89,
       "approx_density": 4129.064,
       "polygon_count": 6,
       "uv_loops": 24
@@ -1016,6 +1091,8 @@
       ],
       "surface_area": 0.004178,
       "relative_weight": 0.19,
+      "authored_island_margin": 0.13489,
+      "target_tile_side_px": 266.89,
       "approx_density": 4129.064,
       "polygon_count": 6,
       "uv_loops": 24
@@ -1031,6 +1108,8 @@
       ],
       "surface_area": 0.02425,
       "relative_weight": 0.19,
+      "authored_island_margin": 0.13489,
+      "target_tile_side_px": 266.89,
       "approx_density": 1713.878,
       "polygon_count": 6,
       "uv_loops": 24
@@ -1046,6 +1125,8 @@
       ],
       "surface_area": 0.02425,
       "relative_weight": 0.19,
+      "authored_island_margin": 0.13489,
+      "target_tile_side_px": 266.89,
       "approx_density": 1713.878,
       "polygon_count": 6,
       "uv_loops": 24
@@ -1061,6 +1142,8 @@
       ],
       "surface_area": 0.02425,
       "relative_weight": 0.19,
+      "authored_island_margin": 0.13489,
+      "target_tile_side_px": 266.89,
       "approx_density": 1713.878,
       "polygon_count": 6,
       "uv_loops": 24
@@ -1076,6 +1159,8 @@
       ],
       "surface_area": 0.02425,
       "relative_weight": 0.19,
+      "authored_island_margin": 0.13489,
+      "target_tile_side_px": 266.89,
       "approx_density": 1713.878,
       "polygon_count": 6,
       "uv_loops": 24
@@ -1091,6 +1176,8 @@
       ],
       "surface_area": 0.02425,
       "relative_weight": 0.19,
+      "authored_island_margin": 0.13489,
+      "target_tile_side_px": 266.89,
       "approx_density": 1713.878,
       "polygon_count": 6,
       "uv_loops": 24
@@ -1106,6 +1193,8 @@
       ],
       "surface_area": 0.004178,
       "relative_weight": 0.19,
+      "authored_island_margin": 0.13489,
+      "target_tile_side_px": 266.89,
       "approx_density": 4129.064,
       "polygon_count": 6,
       "uv_loops": 24
@@ -1121,6 +1210,8 @@
       ],
       "surface_area": 0.004178,
       "relative_weight": 0.19,
+      "authored_island_margin": 0.13489,
+      "target_tile_side_px": 266.89,
       "approx_density": 4129.064,
       "polygon_count": 6,
       "uv_loops": 24
@@ -1136,6 +1227,8 @@
       ],
       "surface_area": 0.004178,
       "relative_weight": 0.19,
+      "authored_island_margin": 0.13489,
+      "target_tile_side_px": 266.89,
       "approx_density": 4129.064,
       "polygon_count": 6,
       "uv_loops": 24
@@ -1151,6 +1244,8 @@
       ],
       "surface_area": 0.004178,
       "relative_weight": 0.19,
+      "authored_island_margin": 0.13489,
+      "target_tile_side_px": 266.89,
       "approx_density": 4129.064,
       "polygon_count": 6,
       "uv_loops": 24
@@ -1166,6 +1261,8 @@
       ],
       "surface_area": 0.3772921,
       "relative_weight": 1.0,
+      "authored_island_margin": 0.03677,
+      "target_tile_side_px": 979.09,
       "approx_density": 1593.983,
       "polygon_count": 48,
       "uv_loops": 168
@@ -1181,6 +1278,8 @@
       ],
       "surface_area": 0.3772921,
       "relative_weight": 1.0,
+      "authored_island_margin": 0.03677,
+      "target_tile_side_px": 979.09,
       "approx_density": 1593.983,
       "polygon_count": 48,
       "uv_loops": 168
@@ -1196,6 +1295,8 @@
       ],
       "surface_area": 0.13525,
       "relative_weight": 0.59873,
+      "authored_island_margin": 0.06141,
+      "target_tile_side_px": 586.21,
       "approx_density": 1593.983,
       "polygon_count": 6,
       "uv_loops": 24
@@ -1211,7 +1312,9 @@
       ],
       "surface_area": 0.00476,
       "relative_weight": 1.0,
-      "approx_density": 9365.622,
+      "authored_island_margin": 0.05571,
+      "target_tile_side_px": 646.16,
+      "approx_density": 9365.621,
       "polygon_count": 6,
       "uv_loops": 24
     },
@@ -1226,7 +1329,9 @@
       ],
       "surface_area": 0.00476,
       "relative_weight": 1.0,
-      "approx_density": 9365.622,
+      "authored_island_margin": 0.05571,
+      "target_tile_side_px": 646.16,
+      "approx_density": 9365.621,
       "polygon_count": 6,
       "uv_loops": 24
     },
@@ -1241,7 +1346,9 @@
       ],
       "surface_area": 0.00476,
       "relative_weight": 1.0,
-      "approx_density": 9365.622,
+      "authored_island_margin": 0.05571,
+      "target_tile_side_px": 646.16,
+      "approx_density": 9365.621,
       "polygon_count": 6,
       "uv_loops": 24
     },
@@ -1256,7 +1363,9 @@
       ],
       "surface_area": 0.00476,
       "relative_weight": 1.0,
-      "approx_density": 9365.622,
+      "authored_island_margin": 0.05571,
+      "target_tile_side_px": 646.16,
+      "approx_density": 9365.621,
       "polygon_count": 6,
       "uv_loops": 24
     },
@@ -1271,7 +1380,9 @@
       ],
       "surface_area": 0.00476,
       "relative_weight": 1.0,
-      "approx_density": 9365.622,
+      "authored_island_margin": 0.05571,
+      "target_tile_side_px": 646.16,
+      "approx_density": 9365.621,
       "polygon_count": 6,
       "uv_loops": 24
     },
@@ -1286,7 +1397,9 @@
       ],
       "surface_area": 0.00476,
       "relative_weight": 1.0,
-      "approx_density": 9365.622,
+      "authored_island_margin": 0.05571,
+      "target_tile_side_px": 646.16,
+      "approx_density": 9365.621,
       "polygon_count": 6,
       "uv_loops": 24
     },
@@ -1301,6 +1414,8 @@
       ],
       "surface_area": 0.1249686,
       "relative_weight": 1.0,
+      "authored_island_margin": 0.03677,
+      "target_tile_side_px": 979.09,
       "approx_density": 2769.633,
       "polygon_count": 11,
       "uv_loops": 38
@@ -1316,6 +1431,8 @@
       ],
       "surface_area": 0.118046,
       "relative_weight": 0.97191,
+      "authored_island_margin": 0.03783,
+      "target_tile_side_px": 951.59,
       "approx_density": 2769.633,
       "polygon_count": 11,
       "uv_loops": 38
@@ -1331,6 +1448,8 @@
       ],
       "surface_area": 0.1249686,
       "relative_weight": 1.0,
+      "authored_island_margin": 0.03677,
+      "target_tile_side_px": 979.09,
       "approx_density": 2769.633,
       "polygon_count": 11,
       "uv_loops": 38
@@ -1346,6 +1465,8 @@
       ],
       "surface_area": 0.118046,
       "relative_weight": 0.97191,
+      "authored_island_margin": 0.03783,
+      "target_tile_side_px": 951.59,
       "approx_density": 2769.633,
       "polygon_count": 11,
       "uv_loops": 38
