@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#08111b">
 <meta name="description" content="CROSSFire's new asset import laboratory: inspect real glTF and GLB game-art files.">
-<title>CROSSFire · glTF / GLB Asset Lab</title>
+<title>CROSSFire · AETHER-9 SPECTER — 3D Asset Lab</title>
 <script type="importmap">{"imports":{"three":"/static/vendor/three.module.js","three/addons/":"/static/vendor/addons/"}}</script>
 <style>
 :root{color-scheme:dark;--c:#6bdcfa;--fg:#f1faff;--muted:#9db9c5;--dim:#68899a;--line:#345466}
@@ -62,25 +62,30 @@ footer{position:fixed;bottom:26px;left:3vw;z-index:2;color:#7291a3;font:700 9px 
  .upload{padding:10px}.row button{min-height:31px;font-size:9px}
  #status{margin-top:7px;font-size:9px}#instructions{font-size:9px}
 }
+
+.asset-link{margin:13px 0 0;text-align:center}
+.asset-link a{font-size:10px;letter-spacing:.12em;font-weight:800;color:#7de9ff;text-decoration:none}
+.asset-link a:hover{text-decoration:underline}
+@media(max-width:600px){.asset-link{margin:7px 0 0}}
 </style>
 </head>
 <body>
 <canvas id="canvas" aria-label="Interactive glTF / GLB 3D scene viewer"></canvas>
-<div id="loading">LOADING EXTERNAL 3D ASSET…</div>
+<div id="loading">LOADING SPECTER 3D ASSET…</div>
 <div id="dropzone" hidden>DROP YOUR GLB FILE HERE</div>
 <header>
 <a href="/" class="logo">CROSS<b>FIRE</b></a>
 <nav><a href="/static/aether9-phantom-v3.html">PREVIOUS 3D CONCEPT</a><span>ASSET PIPELINE LAB</span></nav>
 </header>
 <aside>
-<div class="overline">PIPELINE / ASSET LAB 01</div>
-<h1>REAL<br>3D ASSETS<small>GLTF 2.0 / GLB WORKFLOW</small></h1>
-<p>The next stage for CROSSFire: properly authored and exportable 3D game-art files, with reusable meshes, materials, UVs and asset inspection. The studio beacon is our neutral reference prop.</p>
-<div class="note">THREE.JS / GLTFLOADER<br>EXTERNAL GEOMETRY · NO RUNTIME MESH-BUILDING<br>BLENDER-COMPATIBLE SOURCE</div>
+<div class="overline">PIPELINE / ASSET LAB 02 · ORIGINAL GAME ART</div>
+<h1>AETHER<br>SPECTER<small>REAL GLB / 3D MODEL ASSET</small></h1>
+<p>Meet AETHER-9 SPECTER, an original stylized sci-fi game-art model saved as a real GLB file, with reusable meshes, editable materials and UV data. Unlike earlier previews, the geometry loads from a standalone asset.</p>
+<div class="note">THREE.JS / GLTFLOADER<br>EXTERNAL GLB · UV-READY MESHES<br>EDITABLE IN BLENDER · VISUAL DESIGN ONLY</div>
 </aside>
 <section class="panel" aria-label="Asset inspection controls">
  <div class="section-head"><strong>ASSET INSPECTOR</strong><span>LIVE 3D</span></div>
- <div id="asset-name">STUDIO BEACON</div>
+ <div id="asset-name">AETHER-9 SPECTER</div>
  <div class="metrics">
   <div class="metric"><strong id="meshes">—</strong><small>MESHES</small></div>
   <div class="metric"><strong id="tris">—</strong><small>TRIANGLES</small></div>
@@ -89,7 +94,8 @@ footer{position:fixed;bottom:26px;left:3vw;z-index:2;color:#7291a3;font:700 9px 
  </div>
  <label class="upload">IMPORT A .GLB / .GLTF FILE<input id="file" type="file" accept=".glb,.gltf,model/gltf-binary,model/gltf+json"></label>
  <div class="row">
-  <button id="preset">LOAD DEMO ASSET</button>
+  <button id="preset">LOAD SPECTER GLB</button>
+  <button id="beacon">SHOW BEACON DEMO</button>
   <button id="wire">WIREFRAME</button>
   <button class="active" id="auto">AUTO ROTATE: ON</button>
   <button id="reset">RESET VIEW</button>
@@ -97,6 +103,7 @@ footer{position:fixed;bottom:26px;left:3vw;z-index:2;color:#7291a3;font:700 9px 
  </div>
  <div id="status" aria-live="polite">INITIALIZING GLTF LOADER…</div>
  <div id="instructions">DRAG TO ORBIT · SCROLL TO ZOOM · OR DROP A .GLB FILE</div>
+ <p class="asset-link"><a href="/static/assets/aether9-specter.glb" download="aether9-specter.glb">DOWNLOAD SPECTER · GLB FILE</a></p>
 </section>
 <footer>GAME ART PIPELINE · SEPARATE FROM MULTIPLAYER · BUILT FOR REUSABLE ASSETS</footer>
 <script type="module" src="/static/asset-lab.js"></script>
