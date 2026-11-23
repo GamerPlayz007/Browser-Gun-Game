@@ -1,7 +1,7 @@
 {
   "schema": "crossfire-aether-art-asset-v1",
   "asset_id": "AETHER9_SPECTER",
-  "phase": "2.1",
+  "phase": "2.2",
   "asset_kind": "original fictional sci-fi game prop",
   "asset_root": "A9.ROOT.SPECTER",
   "orientation": {
@@ -9,7 +9,11 @@
     "coordinate_system": "Y-up after Blender export",
     "unit_scale": "Blender scene units"
   },
-  "uv_status": "provisional / dedicated UVs in Phase 2",
+  "uv_status": "packed smart-projected source mesh UVs / 10px planned gutters",
+  "uv_report": "aether9-phase2-uv.json",
+  "uv_atlas_layout": "aether9-phase2-uv-layout.svg",
+  "uv_material_family_count": 9,
+  "uv_source_mesh_count": 60,
   "baked_textures": "not yet (Phase 3)",
   "topology_status": "BMesh cleanup, watertight surfaces, outward normals and hard-edge shading",
   "topology_report": "aether9-phase2-topology.json",
@@ -117,6 +121,21 @@
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
       },
+      "uv": {
+        "material": "01 | Matte graphite ceramic",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.009766,
+          0.009766,
+          0.734847,
+          0.734847
+        ],
+        "surface_area": 4.6821063,
+        "relative_weight": 1.0,
+        "approx_density": 686.272,
+        "polygon_count": 308,
+        "uv_loops": 1176
+      },
       "material_names": [
         "01 | Matte graphite ceramic"
       ]
@@ -160,6 +179,21 @@
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
       },
+      "uv": {
+        "material": "02 | Satin titanium alloy",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.009766,
+          0.009766,
+          0.504136,
+          0.504136
+        ],
+        "surface_area": 1.8771086,
+        "relative_weight": 1.0,
+        "approx_density": 738.989,
+        "polygon_count": 112,
+        "uv_loops": 416
+      },
       "material_names": [
         "02 | Satin titanium alloy"
       ]
@@ -171,6 +205,7 @@
       "source_label": "03 / Single dorsal light line",
       "object_type": "CURVE",
       "topology": null,
+      "uv": null,
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]
@@ -213,6 +248,21 @@
         "reversed_inward_normals": false,
         "weighted_normal_modifier": true,
         "hard_edge_angle_degrees": 55
+      },
+      "uv": {
+        "material": "02 | Satin titanium alloy",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.009766,
+          0.513902,
+          0.324022,
+          0.828158
+        ],
+        "surface_area": 0.7584938,
+        "relative_weight": 0.63567,
+        "approx_density": 738.989,
+        "polygon_count": 20,
+        "uv_loops": 68
       },
       "material_names": [
         "02 | Satin titanium alloy"
@@ -257,6 +307,21 @@
         "weighted_normal_modifier": true,
         "hard_edge_angle_degrees": 55
       },
+      "uv": {
+        "material": "09 | Recessed charcoal carbon",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.009766,
+          0.009766,
+          0.487837,
+          0.487837
+        ],
+        "surface_area": 0.1249686,
+        "relative_weight": 1.0,
+        "approx_density": 2769.633,
+        "polygon_count": 11,
+        "uv_loops": 38
+      },
       "material_names": [
         "09 | Recessed charcoal carbon"
       ]
@@ -299,6 +364,21 @@
         "reversed_inward_normals": false,
         "weighted_normal_modifier": true,
         "hard_edge_angle_degrees": 55
+      },
+      "uv": {
+        "material": "05 | Honed silver edges",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.009766,
+          0.609553,
+          0.375886,
+          0.975674
+        ],
+        "surface_area": 0.0407466,
+        "relative_weight": 0.62052,
+        "approx_density": 3714.568,
+        "polygon_count": 6,
+        "uv_loops": 24
       },
       "material_names": [
         "05 | Honed silver edges"
@@ -343,6 +423,21 @@
         "weighted_normal_modifier": true,
         "hard_edge_angle_degrees": 55
       },
+      "uv": {
+        "material": "01 | Matte graphite ceramic",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.250592,
+          0.744613,
+          0.45877,
+          0.952791
+        ],
+        "surface_area": 0.3859541,
+        "relative_weight": 0.28711,
+        "approx_density": 686.272,
+        "polygon_count": 14,
+        "uv_loops": 48
+      },
       "material_names": [
         "01 | Matte graphite ceramic"
       ]
@@ -354,6 +449,7 @@
       "source_label": "LEFT / Cyan side trace",
       "object_type": "CURVE",
       "topology": null,
+      "uv": null,
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]
@@ -396,6 +492,21 @@
         "reversed_inward_normals": false,
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
+      },
+      "uv": {
+        "material": "06 | Photonic cyan / artwork",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.845502,
+          0.009766,
+          0.97582,
+          0.140084
+        ],
+        "surface_area": 0.004178,
+        "relative_weight": 0.19,
+        "approx_density": 4129.064,
+        "polygon_count": 6,
+        "uv_loops": 24
       },
       "material_names": [
         "06 | Photonic cyan / artwork"
@@ -440,6 +551,21 @@
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
       },
+      "uv": {
+        "material": "06 | Photonic cyan / artwork",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.009766,
+          0.705418,
+          0.140084,
+          0.835736
+        ],
+        "surface_area": 0.004178,
+        "relative_weight": 0.19,
+        "approx_density": 4129.064,
+        "polygon_count": 6,
+        "uv_loops": 24
+      },
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]
@@ -482,6 +608,21 @@
         "reversed_inward_normals": false,
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
+      },
+      "uv": {
+        "material": "06 | Photonic cyan / artwork",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.14985,
+          0.705418,
+          0.280168,
+          0.835736
+        ],
+        "surface_area": 0.004178,
+        "relative_weight": 0.19,
+        "approx_density": 4129.064,
+        "polygon_count": 6,
+        "uv_loops": 24
       },
       "material_names": [
         "06 | Photonic cyan / artwork"
@@ -526,6 +667,21 @@
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
       },
+      "uv": {
+        "material": "06 | Photonic cyan / artwork",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.289934,
+          0.705418,
+          0.420252,
+          0.835736
+        ],
+        "surface_area": 0.004178,
+        "relative_weight": 0.19,
+        "approx_density": 4129.064,
+        "polygon_count": 6,
+        "uv_loops": 24
+      },
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]
@@ -569,6 +725,21 @@
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
       },
+      "uv": {
+        "material": "01 | Matte graphite ceramic",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.009766,
+          0.744613,
+          0.240826,
+          0.975674
+        ],
+        "surface_area": 0.4754664,
+        "relative_weight": 0.31867,
+        "approx_density": 686.272,
+        "polygon_count": 72,
+        "uv_loops": 264
+      },
       "material_names": [
         "01 | Matte graphite ceramic"
       ]
@@ -580,6 +751,7 @@
       "source_label": "LEFT / Lower open cantilever",
       "object_type": "CURVE",
       "topology": null,
+      "uv": null,
       "material_names": [
         "02 | Satin titanium alloy"
       ]
@@ -591,6 +763,7 @@
       "source_label": "LEFT / Upper fine rim",
       "object_type": "CURVE",
       "topology": null,
+      "uv": null,
       "material_names": [
         "05 | Honed silver edges"
       ]
@@ -602,6 +775,7 @@
       "source_label": "LEFT / Reactor visual cradle",
       "object_type": "CURVE",
       "topology": null,
+      "uv": null,
       "material_names": [
         "02 | Satin titanium alloy"
       ]
@@ -613,6 +787,7 @@
       "source_label": "LEFT / Core internal light",
       "object_type": "CURVE",
       "topology": null,
+      "uv": null,
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]
@@ -655,6 +830,21 @@
         "reversed_inward_normals": false,
         "weighted_normal_modifier": true,
         "hard_edge_angle_degrees": 55
+      },
+      "uv": {
+        "material": "02 | Satin titanium alloy",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.513902,
+          0.009766,
+          0.828158,
+          0.324022
+        ],
+        "surface_area": 0.7584938,
+        "relative_weight": 0.63567,
+        "approx_density": 738.989,
+        "polygon_count": 20,
+        "uv_loops": 68
       },
       "material_names": [
         "02 | Satin titanium alloy"
@@ -699,6 +889,21 @@
         "weighted_normal_modifier": true,
         "hard_edge_angle_degrees": 55
       },
+      "uv": {
+        "material": "09 | Recessed charcoal carbon",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.497603,
+          0.009766,
+          0.975674,
+          0.487837
+        ],
+        "surface_area": 0.1249686,
+        "relative_weight": 1.0,
+        "approx_density": 2769.633,
+        "polygon_count": 11,
+        "uv_loops": 38
+      },
       "material_names": [
         "09 | Recessed charcoal carbon"
       ]
@@ -741,6 +946,21 @@
         "reversed_inward_normals": false,
         "weighted_normal_modifier": true,
         "hard_edge_angle_degrees": 55
+      },
+      "uv": {
+        "material": "05 | Honed silver edges",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.609553,
+          0.009766,
+          0.975674,
+          0.375886
+        ],
+        "surface_area": 0.0407466,
+        "relative_weight": 0.62052,
+        "approx_density": 3714.568,
+        "polygon_count": 6,
+        "uv_loops": 24
       },
       "material_names": [
         "05 | Honed silver edges"
@@ -785,6 +1005,21 @@
         "weighted_normal_modifier": true,
         "hard_edge_angle_degrees": 55
       },
+      "uv": {
+        "material": "01 | Matte graphite ceramic",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.468535,
+          0.744613,
+          0.676713,
+          0.952791
+        ],
+        "surface_area": 0.3859541,
+        "relative_weight": 0.28711,
+        "approx_density": 686.272,
+        "polygon_count": 14,
+        "uv_loops": 48
+      },
       "material_names": [
         "01 | Matte graphite ceramic"
       ]
@@ -796,6 +1031,7 @@
       "source_label": "RIGHT / Cyan side trace",
       "object_type": "CURVE",
       "topology": null,
+      "uv": null,
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]
@@ -838,6 +1074,21 @@
         "reversed_inward_normals": false,
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
+      },
+      "uv": {
+        "material": "06 | Photonic cyan / artwork",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.14985,
+          0.845502,
+          0.280168,
+          0.97582
+        ],
+        "surface_area": 0.004178,
+        "relative_weight": 0.19,
+        "approx_density": 4129.064,
+        "polygon_count": 6,
+        "uv_loops": 24
       },
       "material_names": [
         "06 | Photonic cyan / artwork"
@@ -882,6 +1133,21 @@
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
       },
+      "uv": {
+        "material": "06 | Photonic cyan / artwork",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.289934,
+          0.845502,
+          0.420252,
+          0.97582
+        ],
+        "surface_area": 0.004178,
+        "relative_weight": 0.19,
+        "approx_density": 4129.064,
+        "polygon_count": 6,
+        "uv_loops": 24
+      },
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]
@@ -924,6 +1190,21 @@
         "reversed_inward_normals": false,
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
+      },
+      "uv": {
+        "material": "06 | Photonic cyan / artwork",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.430018,
+          0.845502,
+          0.560336,
+          0.97582
+        ],
+        "surface_area": 0.004178,
+        "relative_weight": 0.19,
+        "approx_density": 4129.064,
+        "polygon_count": 6,
+        "uv_loops": 24
       },
       "material_names": [
         "06 | Photonic cyan / artwork"
@@ -968,6 +1249,21 @@
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
       },
+      "uv": {
+        "material": "06 | Photonic cyan / artwork",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.570102,
+          0.845502,
+          0.70042,
+          0.97582
+        ],
+        "surface_area": 0.004178,
+        "relative_weight": 0.19,
+        "approx_density": 4129.064,
+        "polygon_count": 6,
+        "uv_loops": 24
+      },
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]
@@ -1011,6 +1307,21 @@
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
       },
+      "uv": {
+        "material": "01 | Matte graphite ceramic",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.744613,
+          0.009766,
+          0.975674,
+          0.240826
+        ],
+        "surface_area": 0.4754664,
+        "relative_weight": 0.31867,
+        "approx_density": 686.272,
+        "polygon_count": 72,
+        "uv_loops": 264
+      },
       "material_names": [
         "01 | Matte graphite ceramic"
       ]
@@ -1022,6 +1333,7 @@
       "source_label": "RIGHT / Lower open cantilever",
       "object_type": "CURVE",
       "topology": null,
+      "uv": null,
       "material_names": [
         "02 | Satin titanium alloy"
       ]
@@ -1033,6 +1345,7 @@
       "source_label": "RIGHT / Upper fine rim",
       "object_type": "CURVE",
       "topology": null,
+      "uv": null,
       "material_names": [
         "05 | Honed silver edges"
       ]
@@ -1044,6 +1357,7 @@
       "source_label": "RIGHT / Reactor visual cradle",
       "object_type": "CURVE",
       "topology": null,
+      "uv": null,
       "material_names": [
         "02 | Satin titanium alloy"
       ]
@@ -1055,6 +1369,7 @@
       "source_label": "RIGHT / Core internal light",
       "object_type": "CURVE",
       "topology": null,
+      "uv": null,
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]
@@ -1097,6 +1412,21 @@
         "reversed_inward_normals": false,
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
+      },
+      "uv": {
+        "material": "04 | Carbon-black soft polymer",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.009766,
+          0.009766,
+          0.494318,
+          0.494318
+        ],
+        "surface_area": 0.5827622,
+        "relative_weight": 1.0,
+        "approx_density": 1299.945,
+        "polygon_count": 80,
+        "uv_loops": 288
       },
       "material_names": [
         "04 | Carbon-black soft polymer"
@@ -1141,6 +1471,21 @@
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
       },
+      "uv": {
+        "material": "03 | Gunmetal structural inlay",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.009766,
+          0.009766,
+          0.243992,
+          0.243992
+        ],
+        "surface_area": 0.004512,
+        "relative_weight": 1.0,
+        "approx_density": 7141.355,
+        "polygon_count": 6,
+        "uv_loops": 24
+      },
       "material_names": [
         "03 | Gunmetal structural inlay"
       ]
@@ -1183,6 +1528,21 @@
         "reversed_inward_normals": false,
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
+      },
+      "uv": {
+        "material": "03 | Gunmetal structural inlay",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.741741,
+          0.253757,
+          0.975967,
+          0.487983
+        ],
+        "surface_area": 0.004512,
+        "relative_weight": 1.0,
+        "approx_density": 7141.355,
+        "polygon_count": 6,
+        "uv_loops": 24
       },
       "material_names": [
         "03 | Gunmetal structural inlay"
@@ -1227,6 +1587,21 @@
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
       },
+      "uv": {
+        "material": "03 | Gunmetal structural inlay",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.253757,
+          0.009766,
+          0.487983,
+          0.243992
+        ],
+        "surface_area": 0.004512,
+        "relative_weight": 1.0,
+        "approx_density": 7141.355,
+        "polygon_count": 6,
+        "uv_loops": 24
+      },
       "material_names": [
         "03 | Gunmetal structural inlay"
       ]
@@ -1269,6 +1644,21 @@
         "reversed_inward_normals": false,
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
+      },
+      "uv": {
+        "material": "03 | Gunmetal structural inlay",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.009766,
+          0.497749,
+          0.243992,
+          0.731975
+        ],
+        "surface_area": 0.004512,
+        "relative_weight": 1.0,
+        "approx_density": 7141.355,
+        "polygon_count": 6,
+        "uv_loops": 24
       },
       "material_names": [
         "03 | Gunmetal structural inlay"
@@ -1313,6 +1703,21 @@
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
       },
+      "uv": {
+        "material": "03 | Gunmetal structural inlay",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.497749,
+          0.009766,
+          0.731975,
+          0.243992
+        ],
+        "surface_area": 0.004512,
+        "relative_weight": 1.0,
+        "approx_density": 7141.355,
+        "polygon_count": 6,
+        "uv_loops": 24
+      },
       "material_names": [
         "03 | Gunmetal structural inlay"
       ]
@@ -1355,6 +1760,21 @@
         "reversed_inward_normals": false,
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
+      },
+      "uv": {
+        "material": "03 | Gunmetal structural inlay",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.253757,
+          0.497749,
+          0.487983,
+          0.731975
+        ],
+        "surface_area": 0.004512,
+        "relative_weight": 1.0,
+        "approx_density": 7141.355,
+        "polygon_count": 6,
+        "uv_loops": 24
       },
       "material_names": [
         "03 | Gunmetal structural inlay"
@@ -1399,6 +1819,21 @@
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
       },
+      "uv": {
+        "material": "03 | Gunmetal structural inlay",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.741741,
+          0.009766,
+          0.975967,
+          0.243992
+        ],
+        "surface_area": 0.004512,
+        "relative_weight": 1.0,
+        "approx_density": 7141.355,
+        "polygon_count": 6,
+        "uv_loops": 24
+      },
       "material_names": [
         "03 | Gunmetal structural inlay"
       ]
@@ -1441,6 +1876,21 @@
         "reversed_inward_normals": false,
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
+      },
+      "uv": {
+        "material": "03 | Gunmetal structural inlay",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.497749,
+          0.497749,
+          0.731975,
+          0.731975
+        ],
+        "surface_area": 0.004512,
+        "relative_weight": 1.0,
+        "approx_density": 7141.355,
+        "polygon_count": 6,
+        "uv_loops": 24
       },
       "material_names": [
         "03 | Gunmetal structural inlay"
@@ -1485,6 +1935,21 @@
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
       },
+      "uv": {
+        "material": "03 | Gunmetal structural inlay",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.009766,
+          0.253757,
+          0.243992,
+          0.487983
+        ],
+        "surface_area": 0.004512,
+        "relative_weight": 1.0,
+        "approx_density": 7141.355,
+        "polygon_count": 6,
+        "uv_loops": 24
+      },
       "material_names": [
         "03 | Gunmetal structural inlay"
       ]
@@ -1527,6 +1992,21 @@
         "reversed_inward_normals": false,
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
+      },
+      "uv": {
+        "material": "03 | Gunmetal structural inlay",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.741741,
+          0.497749,
+          0.975967,
+          0.731975
+        ],
+        "surface_area": 0.004512,
+        "relative_weight": 1.0,
+        "approx_density": 7141.355,
+        "polygon_count": 6,
+        "uv_loops": 24
       },
       "material_names": [
         "03 | Gunmetal structural inlay"
@@ -1571,6 +2051,21 @@
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
       },
+      "uv": {
+        "material": "03 | Gunmetal structural inlay",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.253757,
+          0.253757,
+          0.487983,
+          0.487983
+        ],
+        "surface_area": 0.004512,
+        "relative_weight": 1.0,
+        "approx_density": 7141.355,
+        "polygon_count": 6,
+        "uv_loops": 24
+      },
       "material_names": [
         "03 | Gunmetal structural inlay"
       ]
@@ -1613,6 +2108,21 @@
         "reversed_inward_normals": false,
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
+      },
+      "uv": {
+        "material": "03 | Gunmetal structural inlay",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.009766,
+          0.741741,
+          0.243992,
+          0.975967
+        ],
+        "surface_area": 0.004512,
+        "relative_weight": 1.0,
+        "approx_density": 7141.355,
+        "polygon_count": 6,
+        "uv_loops": 24
       },
       "material_names": [
         "03 | Gunmetal structural inlay"
@@ -1657,6 +2167,21 @@
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
       },
+      "uv": {
+        "material": "03 | Gunmetal structural inlay",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.497749,
+          0.253757,
+          0.731975,
+          0.487983
+        ],
+        "surface_area": 0.004512,
+        "relative_weight": 1.0,
+        "approx_density": 7141.355,
+        "polygon_count": 6,
+        "uv_loops": 24
+      },
       "material_names": [
         "03 | Gunmetal structural inlay"
       ]
@@ -1699,6 +2224,21 @@
         "reversed_inward_normals": false,
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
+      },
+      "uv": {
+        "material": "03 | Gunmetal structural inlay",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.253757,
+          0.741741,
+          0.487983,
+          0.975967
+        ],
+        "surface_area": 0.004512,
+        "relative_weight": 1.0,
+        "approx_density": 7141.355,
+        "polygon_count": 6,
+        "uv_loops": 24
       },
       "material_names": [
         "03 | Gunmetal structural inlay"
@@ -1743,6 +2283,21 @@
         "weighted_normal_modifier": true,
         "hard_edge_angle_degrees": 55
       },
+      "uv": {
+        "material": "04 | Carbon-black soft polymer",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.504084,
+          0.009766,
+          0.975674,
+          0.481356
+        ],
+        "surface_area": 0.552,
+        "relative_weight": 0.97325,
+        "approx_density": 1299.945,
+        "polygon_count": 6,
+        "uv_loops": 24
+      },
       "material_names": [
         "04 | Carbon-black soft polymer"
       ]
@@ -1785,6 +2340,21 @@
         "reversed_inward_normals": false,
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
+      },
+      "uv": {
+        "material": "05 | Honed silver edges",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.009766,
+          0.009766,
+          0.599788,
+          0.599788
+        ],
+        "surface_area": 0.1058229,
+        "relative_weight": 1.0,
+        "approx_density": 3714.568,
+        "polygon_count": 480,
+        "uv_loops": 1920
       },
       "material_names": [
         "05 | Honed silver edges"
@@ -1829,6 +2399,21 @@
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
       },
+      "uv": {
+        "material": "06 | Photonic cyan / artwork",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.009766,
+          0.009766,
+          0.695652,
+          0.695652
+        ],
+        "surface_area": 0.6913829,
+        "relative_weight": 1.0,
+        "approx_density": 1689.363,
+        "polygon_count": 60,
+        "uv_loops": 216
+      },
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]
@@ -1871,6 +2456,21 @@
         "reversed_inward_normals": false,
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
+      },
+      "uv": {
+        "material": "07 | Blue translucent optical glass",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.009766,
+          0.009766,
+          0.487837,
+          0.487837
+        ],
+        "surface_area": 0.3772921,
+        "relative_weight": 1.0,
+        "approx_density": 1593.983,
+        "polygon_count": 48,
+        "uv_loops": 168
       },
       "material_names": [
         "07 | Blue translucent optical glass"
@@ -1915,6 +2515,21 @@
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
       },
+      "uv": {
+        "material": "07 | Blue translucent optical glass",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.497603,
+          0.009766,
+          0.975674,
+          0.487837
+        ],
+        "surface_area": 0.3772921,
+        "relative_weight": 1.0,
+        "approx_density": 1593.983,
+        "polygon_count": 48,
+        "uv_loops": 168
+      },
       "material_names": [
         "07 | Blue translucent optical glass"
       ]
@@ -1957,6 +2572,21 @@
         "reversed_inward_normals": false,
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
+      },
+      "uv": {
+        "material": "06 | Photonic cyan / artwork",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.430018,
+          0.705418,
+          0.560336,
+          0.835736
+        ],
+        "surface_area": 0.02425,
+        "relative_weight": 0.19,
+        "approx_density": 1713.878,
+        "polygon_count": 6,
+        "uv_loops": 24
       },
       "material_names": [
         "06 | Photonic cyan / artwork"
@@ -2001,6 +2631,21 @@
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
       },
+      "uv": {
+        "material": "06 | Photonic cyan / artwork",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.570102,
+          0.705418,
+          0.70042,
+          0.835736
+        ],
+        "surface_area": 0.02425,
+        "relative_weight": 0.19,
+        "approx_density": 1713.878,
+        "polygon_count": 6,
+        "uv_loops": 24
+      },
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]
@@ -2043,6 +2688,21 @@
         "reversed_inward_normals": false,
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
+      },
+      "uv": {
+        "material": "06 | Photonic cyan / artwork",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.710186,
+          0.705418,
+          0.840504,
+          0.835736
+        ],
+        "surface_area": 0.02425,
+        "relative_weight": 0.19,
+        "approx_density": 1713.878,
+        "polygon_count": 6,
+        "uv_loops": 24
       },
       "material_names": [
         "06 | Photonic cyan / artwork"
@@ -2087,6 +2747,21 @@
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
       },
+      "uv": {
+        "material": "06 | Photonic cyan / artwork",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.85027,
+          0.705418,
+          0.980588,
+          0.835736
+        ],
+        "surface_area": 0.02425,
+        "relative_weight": 0.19,
+        "approx_density": 1713.878,
+        "polygon_count": 6,
+        "uv_loops": 24
+      },
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]
@@ -2129,6 +2804,21 @@
         "reversed_inward_normals": false,
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
+      },
+      "uv": {
+        "material": "06 | Photonic cyan / artwork",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.009766,
+          0.845502,
+          0.140084,
+          0.97582
+        ],
+        "surface_area": 0.02425,
+        "relative_weight": 0.19,
+        "approx_density": 1713.878,
+        "polygon_count": 6,
+        "uv_loops": 24
       },
       "material_names": [
         "06 | Photonic cyan / artwork"
@@ -2173,6 +2863,21 @@
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
       },
+      "uv": {
+        "material": "02 | Satin titanium alloy",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.333788,
+          0.513902,
+          0.605488,
+          0.785603
+        ],
+        "surface_area": 0.5669776,
+        "relative_weight": 0.54959,
+        "approx_density": 738.989,
+        "polygon_count": 60,
+        "uv_loops": 216
+      },
       "material_names": [
         "02 | Satin titanium alloy"
       ]
@@ -2215,6 +2920,21 @@
         "reversed_inward_normals": false,
         "weighted_normal_modifier": true,
         "hard_edge_angle_degrees": 55
+      },
+      "uv": {
+        "material": "01 | Matte graphite ceramic",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.686479,
+          0.744613,
+          0.824244,
+          0.882379
+        ],
+        "surface_area": 0.0910831,
+        "relative_weight": 0.19,
+        "approx_density": 934.871,
+        "polygon_count": 6,
+        "uv_loops": 24
       },
       "material_names": [
         "01 | Matte graphite ceramic"
@@ -2259,6 +2979,21 @@
         "weighted_normal_modifier": true,
         "hard_edge_angle_degrees": 55
       },
+      "uv": {
+        "material": "01 | Matte graphite ceramic",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.83401,
+          0.744613,
+          0.971775,
+          0.882379
+        ],
+        "surface_area": 0.0910831,
+        "relative_weight": 0.19,
+        "approx_density": 934.871,
+        "polygon_count": 6,
+        "uv_loops": 24
+      },
       "material_names": [
         "01 | Matte graphite ceramic"
       ]
@@ -2301,6 +3036,21 @@
         "reversed_inward_normals": false,
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
+      },
+      "uv": {
+        "material": "07 | Blue translucent optical glass",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.009766,
+          0.497603,
+          0.296,
+          0.783837
+        ],
+        "surface_area": 0.13525,
+        "relative_weight": 0.59873,
+        "approx_density": 1593.983,
+        "polygon_count": 6,
+        "uv_loops": 24
       },
       "material_names": [
         "07 | Blue translucent optical glass"
@@ -2345,6 +3095,21 @@
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
       },
+      "uv": {
+        "material": "06 | Photonic cyan / artwork",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.705418,
+          0.009766,
+          0.835736,
+          0.140084
+        ],
+        "surface_area": 0.0173658,
+        "relative_weight": 0.19,
+        "approx_density": 2025.295,
+        "polygon_count": 480,
+        "uv_loops": 1920
+      },
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]
@@ -2387,6 +3152,21 @@
         "reversed_inward_normals": false,
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
+      },
+      "uv": {
+        "material": "08 | Warm alloy insignia",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.009766,
+          0.009766,
+          0.325273,
+          0.325273
+        ],
+        "surface_area": 0.00476,
+        "relative_weight": 1.0,
+        "approx_density": 9365.622,
+        "polygon_count": 6,
+        "uv_loops": 24
       },
       "material_names": [
         "08 | Warm alloy insignia"
@@ -2431,6 +3211,21 @@
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
       },
+      "uv": {
+        "material": "08 | Warm alloy insignia",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.335039,
+          0.009766,
+          0.650547,
+          0.325273
+        ],
+        "surface_area": 0.00476,
+        "relative_weight": 1.0,
+        "approx_density": 9365.622,
+        "polygon_count": 6,
+        "uv_loops": 24
+      },
       "material_names": [
         "08 | Warm alloy insignia"
       ]
@@ -2473,6 +3268,21 @@
         "reversed_inward_normals": false,
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
+      },
+      "uv": {
+        "material": "08 | Warm alloy insignia",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.660313,
+          0.009766,
+          0.97582,
+          0.325273
+        ],
+        "surface_area": 0.00476,
+        "relative_weight": 1.0,
+        "approx_density": 9365.622,
+        "polygon_count": 6,
+        "uv_loops": 24
       },
       "material_names": [
         "08 | Warm alloy insignia"
@@ -2517,6 +3327,21 @@
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
       },
+      "uv": {
+        "material": "08 | Warm alloy insignia",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.009766,
+          0.335039,
+          0.325273,
+          0.650547
+        ],
+        "surface_area": 0.00476,
+        "relative_weight": 1.0,
+        "approx_density": 9365.622,
+        "polygon_count": 6,
+        "uv_loops": 24
+      },
       "material_names": [
         "08 | Warm alloy insignia"
       ]
@@ -2559,6 +3384,21 @@
         "reversed_inward_normals": false,
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
+      },
+      "uv": {
+        "material": "08 | Warm alloy insignia",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.335039,
+          0.335039,
+          0.650547,
+          0.650547
+        ],
+        "surface_area": 0.00476,
+        "relative_weight": 1.0,
+        "approx_density": 9365.622,
+        "polygon_count": 6,
+        "uv_loops": 24
       },
       "material_names": [
         "08 | Warm alloy insignia"
@@ -2603,6 +3443,21 @@
         "weighted_normal_modifier": false,
         "hard_edge_angle_degrees": 55
       },
+      "uv": {
+        "material": "08 | Warm alloy insignia",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.660313,
+          0.335039,
+          0.97582,
+          0.650547
+        ],
+        "surface_area": 0.00476,
+        "relative_weight": 1.0,
+        "approx_density": 9365.622,
+        "polygon_count": 6,
+        "uv_loops": 24
+      },
       "material_names": [
         "08 | Warm alloy insignia"
       ]
@@ -2645,6 +3500,21 @@
         "reversed_inward_normals": false,
         "weighted_normal_modifier": true,
         "hard_edge_angle_degrees": 55
+      },
+      "uv": {
+        "material": "02 | Satin titanium alloy",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.800493,
+          0.513902,
+          0.975967,
+          0.689375
+        ],
+        "surface_area": 0.2364873,
+        "relative_weight": 0.35494,
+        "approx_density": 738.989,
+        "polygon_count": 14,
+        "uv_loops": 48
       },
       "material_names": [
         "02 | Satin titanium alloy"
@@ -2689,6 +3559,21 @@
         "weighted_normal_modifier": true,
         "hard_edge_angle_degrees": 55
       },
+      "uv": {
+        "material": "09 | Recessed charcoal carbon",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.009766,
+          0.497603,
+          0.474407,
+          0.962244
+        ],
+        "surface_area": 0.118046,
+        "relative_weight": 0.97191,
+        "approx_density": 2769.633,
+        "polygon_count": 11,
+        "uv_loops": 38
+      },
       "material_names": [
         "09 | Recessed charcoal carbon"
       ]
@@ -2700,6 +3585,7 @@
       "source_label": "LEFT / Sweeping hero highlight",
       "object_type": "CURVE",
       "topology": null,
+      "uv": null,
       "material_names": [
         "05 | Honed silver edges"
       ]
@@ -2711,6 +3597,7 @@
       "source_label": "LEFT / Cyan decorative back sweep",
       "object_type": "CURVE",
       "topology": null,
+      "uv": null,
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]
@@ -2753,6 +3640,21 @@
         "reversed_inward_normals": false,
         "weighted_normal_modifier": true,
         "hard_edge_angle_degrees": 55
+      },
+      "uv": {
+        "material": "02 | Satin titanium alloy",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.615254,
+          0.513902,
+          0.790728,
+          0.689375
+        ],
+        "surface_area": 0.2364873,
+        "relative_weight": 0.35494,
+        "approx_density": 738.989,
+        "polygon_count": 14,
+        "uv_loops": 48
       },
       "material_names": [
         "02 | Satin titanium alloy"
@@ -2797,6 +3699,21 @@
         "weighted_normal_modifier": true,
         "hard_edge_angle_degrees": 55
       },
+      "uv": {
+        "material": "09 | Recessed charcoal carbon",
+        "uv_layer": "UVMap",
+        "slot": [
+          0.484173,
+          0.497603,
+          0.948814,
+          0.962244
+        ],
+        "surface_area": 0.118046,
+        "relative_weight": 0.97191,
+        "approx_density": 2769.633,
+        "polygon_count": 11,
+        "uv_loops": 38
+      },
       "material_names": [
         "09 | Recessed charcoal carbon"
       ]
@@ -2808,6 +3725,7 @@
       "source_label": "RIGHT / Sweeping hero highlight",
       "object_type": "CURVE",
       "topology": null,
+      "uv": null,
       "material_names": [
         "05 | Honed silver edges"
       ]
@@ -2819,6 +3737,7 @@
       "source_label": "RIGHT / Cyan decorative back sweep",
       "object_type": "CURVE",
       "topology": null,
+      "uv": null,
       "material_names": [
         "06 | Photonic cyan / artwork"
       ]

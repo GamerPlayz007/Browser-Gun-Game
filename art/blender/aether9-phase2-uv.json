@@ -1,0 +1,1358 @@
+{
+  "phase": "2.2",
+  "asset_id": "AETHER9_SPECTER",
+  "status": "authored mesh UV islands packed by material family",
+  "atlas_resolution": 2048,
+  "object_edge_gutter_pixels": 10,
+  "blender_island_margin": 0.023,
+  "source_mesh_count": 60,
+  "families": {
+    "01 | Matte graphite ceramic": {
+      "object_count": 7,
+      "uv_tiles": {
+        "01 / Ceramic monocoque : visual silhouette": [
+          0.009766,
+          0.009766,
+          0.734847,
+          0.734847
+        ],
+        "10 / Visor sculpted cheek -1": [
+          0.686479,
+          0.744613,
+          0.824244,
+          0.882379
+        ],
+        "10 / Visor sculpted cheek 1": [
+          0.83401,
+          0.744613,
+          0.971775,
+          0.882379
+        ],
+        "LEFT / Monolithic stock arch": [
+          0.009766,
+          0.744613,
+          0.240826,
+          0.975674
+        ],
+        "LEFT / Vent-side aero fin": [
+          0.250592,
+          0.744613,
+          0.45877,
+          0.952791
+        ],
+        "RIGHT / Monolithic stock arch": [
+          0.744613,
+          0.009766,
+          0.975674,
+          0.240826
+        ],
+        "RIGHT / Vent-side aero fin": [
+          0.468535,
+          0.744613,
+          0.676713,
+          0.952791
+        ]
+      },
+      "reserved_edge_px": 10,
+      "approximate_density_min": 686.27,
+      "approximate_density_max": 934.87,
+      "packed_tile_area_fraction": 0.7572
+    },
+    "02 | Satin titanium alloy": {
+      "object_count": 6,
+      "uv_tiles": {
+        "02 / Raised continuous titanium spine": [
+          0.009766,
+          0.009766,
+          0.504136,
+          0.504136
+        ],
+        "09 / Integrated optical crown": [
+          0.333788,
+          0.513902,
+          0.605488,
+          0.785603
+        ],
+        "LEFT / Faceted floating prow shield": [
+          0.800493,
+          0.513902,
+          0.975967,
+          0.689375
+        ],
+        "LEFT / Swept structural cheek": [
+          0.009766,
+          0.513902,
+          0.324022,
+          0.828158
+        ],
+        "RIGHT / Faceted floating prow shield": [
+          0.615254,
+          0.513902,
+          0.790728,
+          0.689375
+        ],
+        "RIGHT / Swept structural cheek": [
+          0.513902,
+          0.009766,
+          0.828158,
+          0.324022
+        ]
+      },
+      "reserved_edge_px": 10,
+      "approximate_density_min": 738.99,
+      "approximate_density_max": 738.99,
+      "packed_tile_area_fraction": 0.5773
+    },
+    "03 | Gunmetal structural inlay": {
+      "object_count": 14,
+      "uv_tiles": {
+        "Grip rib -1-0": [
+          0.009766,
+          0.009766,
+          0.243992,
+          0.243992
+        ],
+        "Grip rib -1-1": [
+          0.253757,
+          0.009766,
+          0.487983,
+          0.243992
+        ],
+        "Grip rib -1-2": [
+          0.497749,
+          0.009766,
+          0.731975,
+          0.243992
+        ],
+        "Grip rib -1-3": [
+          0.741741,
+          0.009766,
+          0.975967,
+          0.243992
+        ],
+        "Grip rib -1-4": [
+          0.009766,
+          0.253757,
+          0.243992,
+          0.487983
+        ],
+        "Grip rib -1-5": [
+          0.253757,
+          0.253757,
+          0.487983,
+          0.487983
+        ],
+        "Grip rib -1-6": [
+          0.497749,
+          0.253757,
+          0.731975,
+          0.487983
+        ],
+        "Grip rib 1-0": [
+          0.741741,
+          0.253757,
+          0.975967,
+          0.487983
+        ],
+        "Grip rib 1-1": [
+          0.009766,
+          0.497749,
+          0.243992,
+          0.731975
+        ],
+        "Grip rib 1-2": [
+          0.253757,
+          0.497749,
+          0.487983,
+          0.731975
+        ],
+        "Grip rib 1-3": [
+          0.497749,
+          0.497749,
+          0.731975,
+          0.731975
+        ],
+        "Grip rib 1-4": [
+          0.741741,
+          0.497749,
+          0.975967,
+          0.731975
+        ],
+        "Grip rib 1-5": [
+          0.009766,
+          0.741741,
+          0.243992,
+          0.975967
+        ],
+        "Grip rib 1-6": [
+          0.253757,
+          0.741741,
+          0.487983,
+          0.975967
+        ]
+      },
+      "reserved_edge_px": 10,
+      "approximate_density_min": 7141.36,
+      "approximate_density_max": 7141.36,
+      "packed_tile_area_fraction": 0.7681
+    },
+    "04 | Carbon-black soft polymer": {
+      "object_count": 2,
+      "uv_tiles": {
+        "04 / Graphite handguard support": [
+          0.009766,
+          0.009766,
+          0.494318,
+          0.494318
+        ],
+        "05 / Rear ergonomic polymer pad": [
+          0.504084,
+          0.009766,
+          0.975674,
+          0.481356
+        ]
+      },
+      "reserved_edge_px": 10,
+      "approximate_density_min": 1299.95,
+      "approximate_density_max": 1299.95,
+      "packed_tile_area_fraction": 0.4572
+    },
+    "05 | Honed silver edges": {
+      "object_count": 3,
+      "uv_tiles": {
+        "06 / Rear satin inset": [
+          0.009766,
+          0.009766,
+          0.599788,
+          0.599788
+        ],
+        "LEFT / Satin highlight": [
+          0.009766,
+          0.609553,
+          0.375886,
+          0.975674
+        ],
+        "RIGHT / Satin highlight": [
+          0.609553,
+          0.009766,
+          0.975674,
+          0.375886
+        ]
+      },
+      "reserved_edge_px": 10,
+      "approximate_density_min": 3714.57,
+      "approximate_density_max": 3714.57,
+      "packed_tile_area_fraction": 0.6162
+    },
+    "06 | Photonic cyan / artwork": {
+      "object_count": 15,
+      "uv_tiles": {
+        "07 / Floating cyan energy prism": [
+          0.009766,
+          0.009766,
+          0.695652,
+          0.695652
+        ],
+        "12 / Translucent visor halo": [
+          0.705418,
+          0.009766,
+          0.835736,
+          0.140084
+        ],
+        "LEFT / light recess 1": [
+          0.845502,
+          0.009766,
+          0.97582,
+          0.140084
+        ],
+        "LEFT / light recess 2": [
+          0.009766,
+          0.705418,
+          0.140084,
+          0.835736
+        ],
+        "LEFT / light recess 3": [
+          0.14985,
+          0.705418,
+          0.280168,
+          0.835736
+        ],
+        "LEFT / light recess 4": [
+          0.289934,
+          0.705418,
+          0.420252,
+          0.835736
+        ],
+        "Photonic core indicator 0": [
+          0.430018,
+          0.705418,
+          0.560336,
+          0.835736
+        ],
+        "Photonic core indicator 1": [
+          0.570102,
+          0.705418,
+          0.70042,
+          0.835736
+        ],
+        "Photonic core indicator 2": [
+          0.710186,
+          0.705418,
+          0.840504,
+          0.835736
+        ],
+        "Photonic core indicator 3": [
+          0.85027,
+          0.705418,
+          0.980588,
+          0.835736
+        ],
+        "Photonic core indicator 4": [
+          0.009766,
+          0.845502,
+          0.140084,
+          0.97582
+        ],
+        "RIGHT / light recess 1": [
+          0.14985,
+          0.845502,
+          0.280168,
+          0.97582
+        ],
+        "RIGHT / light recess 2": [
+          0.289934,
+          0.845502,
+          0.420252,
+          0.97582
+        ],
+        "RIGHT / light recess 3": [
+          0.430018,
+          0.845502,
+          0.560336,
+          0.97582
+        ],
+        "RIGHT / light recess 4": [
+          0.570102,
+          0.845502,
+          0.70042,
+          0.97582
+        ]
+      },
+      "reserved_edge_px": 10,
+      "approximate_density_min": 1689.36,
+      "approximate_density_max": 4129.06,
+      "packed_tile_area_fraction": 0.7082
+    },
+    "07 | Blue translucent optical glass": {
+      "object_count": 3,
+      "uv_tiles": {
+        "08 / Laminated outer core glass -1": [
+          0.009766,
+          0.009766,
+          0.487837,
+          0.487837
+        ],
+        "08 / Laminated outer core glass 1": [
+          0.497603,
+          0.009766,
+          0.975674,
+          0.487837
+        ],
+        "11 / Cyan holographic viewing panel": [
+          0.009766,
+          0.497603,
+          0.296,
+          0.783837
+        ]
+      },
+      "reserved_edge_px": 10,
+      "approximate_density_min": 1593.98,
+      "approximate_density_max": 1593.98,
+      "packed_tile_area_fraction": 0.539
+    },
+    "08 | Warm alloy insignia": {
+      "object_count": 6,
+      "uv_tiles": {
+        "13 / Copper ID mark -1-0": [
+          0.009766,
+          0.009766,
+          0.325273,
+          0.325273
+        ],
+        "13 / Copper ID mark -1-1": [
+          0.335039,
+          0.009766,
+          0.650547,
+          0.325273
+        ],
+        "13 / Copper ID mark -1-2": [
+          0.660313,
+          0.009766,
+          0.97582,
+          0.325273
+        ],
+        "13 / Copper ID mark 1-0": [
+          0.009766,
+          0.335039,
+          0.325273,
+          0.650547
+        ],
+        "13 / Copper ID mark 1-1": [
+          0.335039,
+          0.335039,
+          0.650547,
+          0.650547
+        ],
+        "13 / Copper ID mark 1-2": [
+          0.660313,
+          0.335039,
+          0.97582,
+          0.650547
+        ]
+      },
+      "reserved_edge_px": 10,
+      "approximate_density_min": 9365.62,
+      "approximate_density_max": 9365.62,
+      "packed_tile_area_fraction": 0.5973
+    },
+    "09 | Recessed charcoal carbon": {
+      "object_count": 4,
+      "uv_tiles": {
+        "LEFT / Quiet ceramic insert": [
+          0.009766,
+          0.009766,
+          0.487837,
+          0.487837
+        ],
+        "LEFT / Wide recessed ceramic flank": [
+          0.009766,
+          0.497603,
+          0.474407,
+          0.962244
+        ],
+        "RIGHT / Quiet ceramic insert": [
+          0.497603,
+          0.009766,
+          0.975674,
+          0.487837
+        ],
+        "RIGHT / Wide recessed ceramic flank": [
+          0.484173,
+          0.497603,
+          0.948814,
+          0.962244
+        ]
+      },
+      "reserved_edge_px": 10,
+      "approximate_density_min": 2769.63,
+      "approximate_density_max": 2769.63,
+      "packed_tile_area_fraction": 0.8889
+    }
+  },
+  "objects": {
+    "01 / Ceramic monocoque : visual silhouette": {
+      "material": "01 | Matte graphite ceramic",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.009766,
+        0.009766,
+        0.734847,
+        0.734847
+      ],
+      "surface_area": 4.6821063,
+      "relative_weight": 1.0,
+      "approx_density": 686.272,
+      "polygon_count": 308,
+      "uv_loops": 1176
+    },
+    "10 / Visor sculpted cheek -1": {
+      "material": "01 | Matte graphite ceramic",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.686479,
+        0.744613,
+        0.824244,
+        0.882379
+      ],
+      "surface_area": 0.0910831,
+      "relative_weight": 0.19,
+      "approx_density": 934.871,
+      "polygon_count": 6,
+      "uv_loops": 24
+    },
+    "10 / Visor sculpted cheek 1": {
+      "material": "01 | Matte graphite ceramic",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.83401,
+        0.744613,
+        0.971775,
+        0.882379
+      ],
+      "surface_area": 0.0910831,
+      "relative_weight": 0.19,
+      "approx_density": 934.871,
+      "polygon_count": 6,
+      "uv_loops": 24
+    },
+    "LEFT / Monolithic stock arch": {
+      "material": "01 | Matte graphite ceramic",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.009766,
+        0.744613,
+        0.240826,
+        0.975674
+      ],
+      "surface_area": 0.4754664,
+      "relative_weight": 0.31867,
+      "approx_density": 686.272,
+      "polygon_count": 72,
+      "uv_loops": 264
+    },
+    "LEFT / Vent-side aero fin": {
+      "material": "01 | Matte graphite ceramic",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.250592,
+        0.744613,
+        0.45877,
+        0.952791
+      ],
+      "surface_area": 0.3859541,
+      "relative_weight": 0.28711,
+      "approx_density": 686.272,
+      "polygon_count": 14,
+      "uv_loops": 48
+    },
+    "RIGHT / Monolithic stock arch": {
+      "material": "01 | Matte graphite ceramic",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.744613,
+        0.009766,
+        0.975674,
+        0.240826
+      ],
+      "surface_area": 0.4754664,
+      "relative_weight": 0.31867,
+      "approx_density": 686.272,
+      "polygon_count": 72,
+      "uv_loops": 264
+    },
+    "RIGHT / Vent-side aero fin": {
+      "material": "01 | Matte graphite ceramic",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.468535,
+        0.744613,
+        0.676713,
+        0.952791
+      ],
+      "surface_area": 0.3859541,
+      "relative_weight": 0.28711,
+      "approx_density": 686.272,
+      "polygon_count": 14,
+      "uv_loops": 48
+    },
+    "02 / Raised continuous titanium spine": {
+      "material": "02 | Satin titanium alloy",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.009766,
+        0.009766,
+        0.504136,
+        0.504136
+      ],
+      "surface_area": 1.8771086,
+      "relative_weight": 1.0,
+      "approx_density": 738.989,
+      "polygon_count": 112,
+      "uv_loops": 416
+    },
+    "09 / Integrated optical crown": {
+      "material": "02 | Satin titanium alloy",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.333788,
+        0.513902,
+        0.605488,
+        0.785603
+      ],
+      "surface_area": 0.5669776,
+      "relative_weight": 0.54959,
+      "approx_density": 738.989,
+      "polygon_count": 60,
+      "uv_loops": 216
+    },
+    "LEFT / Faceted floating prow shield": {
+      "material": "02 | Satin titanium alloy",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.800493,
+        0.513902,
+        0.975967,
+        0.689375
+      ],
+      "surface_area": 0.2364873,
+      "relative_weight": 0.35494,
+      "approx_density": 738.989,
+      "polygon_count": 14,
+      "uv_loops": 48
+    },
+    "LEFT / Swept structural cheek": {
+      "material": "02 | Satin titanium alloy",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.009766,
+        0.513902,
+        0.324022,
+        0.828158
+      ],
+      "surface_area": 0.7584938,
+      "relative_weight": 0.63567,
+      "approx_density": 738.989,
+      "polygon_count": 20,
+      "uv_loops": 68
+    },
+    "RIGHT / Faceted floating prow shield": {
+      "material": "02 | Satin titanium alloy",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.615254,
+        0.513902,
+        0.790728,
+        0.689375
+      ],
+      "surface_area": 0.2364873,
+      "relative_weight": 0.35494,
+      "approx_density": 738.989,
+      "polygon_count": 14,
+      "uv_loops": 48
+    },
+    "RIGHT / Swept structural cheek": {
+      "material": "02 | Satin titanium alloy",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.513902,
+        0.009766,
+        0.828158,
+        0.324022
+      ],
+      "surface_area": 0.7584938,
+      "relative_weight": 0.63567,
+      "approx_density": 738.989,
+      "polygon_count": 20,
+      "uv_loops": 68
+    },
+    "Grip rib -1-0": {
+      "material": "03 | Gunmetal structural inlay",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.009766,
+        0.009766,
+        0.243992,
+        0.243992
+      ],
+      "surface_area": 0.004512,
+      "relative_weight": 1.0,
+      "approx_density": 7141.355,
+      "polygon_count": 6,
+      "uv_loops": 24
+    },
+    "Grip rib -1-1": {
+      "material": "03 | Gunmetal structural inlay",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.253757,
+        0.009766,
+        0.487983,
+        0.243992
+      ],
+      "surface_area": 0.004512,
+      "relative_weight": 1.0,
+      "approx_density": 7141.355,
+      "polygon_count": 6,
+      "uv_loops": 24
+    },
+    "Grip rib -1-2": {
+      "material": "03 | Gunmetal structural inlay",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.497749,
+        0.009766,
+        0.731975,
+        0.243992
+      ],
+      "surface_area": 0.004512,
+      "relative_weight": 1.0,
+      "approx_density": 7141.355,
+      "polygon_count": 6,
+      "uv_loops": 24
+    },
+    "Grip rib -1-3": {
+      "material": "03 | Gunmetal structural inlay",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.741741,
+        0.009766,
+        0.975967,
+        0.243992
+      ],
+      "surface_area": 0.004512,
+      "relative_weight": 1.0,
+      "approx_density": 7141.355,
+      "polygon_count": 6,
+      "uv_loops": 24
+    },
+    "Grip rib -1-4": {
+      "material": "03 | Gunmetal structural inlay",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.009766,
+        0.253757,
+        0.243992,
+        0.487983
+      ],
+      "surface_area": 0.004512,
+      "relative_weight": 1.0,
+      "approx_density": 7141.355,
+      "polygon_count": 6,
+      "uv_loops": 24
+    },
+    "Grip rib -1-5": {
+      "material": "03 | Gunmetal structural inlay",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.253757,
+        0.253757,
+        0.487983,
+        0.487983
+      ],
+      "surface_area": 0.004512,
+      "relative_weight": 1.0,
+      "approx_density": 7141.355,
+      "polygon_count": 6,
+      "uv_loops": 24
+    },
+    "Grip rib -1-6": {
+      "material": "03 | Gunmetal structural inlay",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.497749,
+        0.253757,
+        0.731975,
+        0.487983
+      ],
+      "surface_area": 0.004512,
+      "relative_weight": 1.0,
+      "approx_density": 7141.355,
+      "polygon_count": 6,
+      "uv_loops": 24
+    },
+    "Grip rib 1-0": {
+      "material": "03 | Gunmetal structural inlay",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.741741,
+        0.253757,
+        0.975967,
+        0.487983
+      ],
+      "surface_area": 0.004512,
+      "relative_weight": 1.0,
+      "approx_density": 7141.355,
+      "polygon_count": 6,
+      "uv_loops": 24
+    },
+    "Grip rib 1-1": {
+      "material": "03 | Gunmetal structural inlay",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.009766,
+        0.497749,
+        0.243992,
+        0.731975
+      ],
+      "surface_area": 0.004512,
+      "relative_weight": 1.0,
+      "approx_density": 7141.355,
+      "polygon_count": 6,
+      "uv_loops": 24
+    },
+    "Grip rib 1-2": {
+      "material": "03 | Gunmetal structural inlay",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.253757,
+        0.497749,
+        0.487983,
+        0.731975
+      ],
+      "surface_area": 0.004512,
+      "relative_weight": 1.0,
+      "approx_density": 7141.355,
+      "polygon_count": 6,
+      "uv_loops": 24
+    },
+    "Grip rib 1-3": {
+      "material": "03 | Gunmetal structural inlay",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.497749,
+        0.497749,
+        0.731975,
+        0.731975
+      ],
+      "surface_area": 0.004512,
+      "relative_weight": 1.0,
+      "approx_density": 7141.355,
+      "polygon_count": 6,
+      "uv_loops": 24
+    },
+    "Grip rib 1-4": {
+      "material": "03 | Gunmetal structural inlay",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.741741,
+        0.497749,
+        0.975967,
+        0.731975
+      ],
+      "surface_area": 0.004512,
+      "relative_weight": 1.0,
+      "approx_density": 7141.355,
+      "polygon_count": 6,
+      "uv_loops": 24
+    },
+    "Grip rib 1-5": {
+      "material": "03 | Gunmetal structural inlay",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.009766,
+        0.741741,
+        0.243992,
+        0.975967
+      ],
+      "surface_area": 0.004512,
+      "relative_weight": 1.0,
+      "approx_density": 7141.355,
+      "polygon_count": 6,
+      "uv_loops": 24
+    },
+    "Grip rib 1-6": {
+      "material": "03 | Gunmetal structural inlay",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.253757,
+        0.741741,
+        0.487983,
+        0.975967
+      ],
+      "surface_area": 0.004512,
+      "relative_weight": 1.0,
+      "approx_density": 7141.355,
+      "polygon_count": 6,
+      "uv_loops": 24
+    },
+    "04 / Graphite handguard support": {
+      "material": "04 | Carbon-black soft polymer",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.009766,
+        0.009766,
+        0.494318,
+        0.494318
+      ],
+      "surface_area": 0.5827622,
+      "relative_weight": 1.0,
+      "approx_density": 1299.945,
+      "polygon_count": 80,
+      "uv_loops": 288
+    },
+    "05 / Rear ergonomic polymer pad": {
+      "material": "04 | Carbon-black soft polymer",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.504084,
+        0.009766,
+        0.975674,
+        0.481356
+      ],
+      "surface_area": 0.552,
+      "relative_weight": 0.97325,
+      "approx_density": 1299.945,
+      "polygon_count": 6,
+      "uv_loops": 24
+    },
+    "06 / Rear satin inset": {
+      "material": "05 | Honed silver edges",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.009766,
+        0.009766,
+        0.599788,
+        0.599788
+      ],
+      "surface_area": 0.1058229,
+      "relative_weight": 1.0,
+      "approx_density": 3714.568,
+      "polygon_count": 480,
+      "uv_loops": 1920
+    },
+    "LEFT / Satin highlight": {
+      "material": "05 | Honed silver edges",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.009766,
+        0.609553,
+        0.375886,
+        0.975674
+      ],
+      "surface_area": 0.0407466,
+      "relative_weight": 0.62052,
+      "approx_density": 3714.568,
+      "polygon_count": 6,
+      "uv_loops": 24
+    },
+    "RIGHT / Satin highlight": {
+      "material": "05 | Honed silver edges",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.609553,
+        0.009766,
+        0.975674,
+        0.375886
+      ],
+      "surface_area": 0.0407466,
+      "relative_weight": 0.62052,
+      "approx_density": 3714.568,
+      "polygon_count": 6,
+      "uv_loops": 24
+    },
+    "07 / Floating cyan energy prism": {
+      "material": "06 | Photonic cyan / artwork",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.009766,
+        0.009766,
+        0.695652,
+        0.695652
+      ],
+      "surface_area": 0.6913829,
+      "relative_weight": 1.0,
+      "approx_density": 1689.363,
+      "polygon_count": 60,
+      "uv_loops": 216
+    },
+    "12 / Translucent visor halo": {
+      "material": "06 | Photonic cyan / artwork",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.705418,
+        0.009766,
+        0.835736,
+        0.140084
+      ],
+      "surface_area": 0.0173658,
+      "relative_weight": 0.19,
+      "approx_density": 2025.295,
+      "polygon_count": 480,
+      "uv_loops": 1920
+    },
+    "LEFT / light recess 1": {
+      "material": "06 | Photonic cyan / artwork",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.845502,
+        0.009766,
+        0.97582,
+        0.140084
+      ],
+      "surface_area": 0.004178,
+      "relative_weight": 0.19,
+      "approx_density": 4129.064,
+      "polygon_count": 6,
+      "uv_loops": 24
+    },
+    "LEFT / light recess 2": {
+      "material": "06 | Photonic cyan / artwork",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.009766,
+        0.705418,
+        0.140084,
+        0.835736
+      ],
+      "surface_area": 0.004178,
+      "relative_weight": 0.19,
+      "approx_density": 4129.064,
+      "polygon_count": 6,
+      "uv_loops": 24
+    },
+    "LEFT / light recess 3": {
+      "material": "06 | Photonic cyan / artwork",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.14985,
+        0.705418,
+        0.280168,
+        0.835736
+      ],
+      "surface_area": 0.004178,
+      "relative_weight": 0.19,
+      "approx_density": 4129.064,
+      "polygon_count": 6,
+      "uv_loops": 24
+    },
+    "LEFT / light recess 4": {
+      "material": "06 | Photonic cyan / artwork",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.289934,
+        0.705418,
+        0.420252,
+        0.835736
+      ],
+      "surface_area": 0.004178,
+      "relative_weight": 0.19,
+      "approx_density": 4129.064,
+      "polygon_count": 6,
+      "uv_loops": 24
+    },
+    "Photonic core indicator 0": {
+      "material": "06 | Photonic cyan / artwork",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.430018,
+        0.705418,
+        0.560336,
+        0.835736
+      ],
+      "surface_area": 0.02425,
+      "relative_weight": 0.19,
+      "approx_density": 1713.878,
+      "polygon_count": 6,
+      "uv_loops": 24
+    },
+    "Photonic core indicator 1": {
+      "material": "06 | Photonic cyan / artwork",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.570102,
+        0.705418,
+        0.70042,
+        0.835736
+      ],
+      "surface_area": 0.02425,
+      "relative_weight": 0.19,
+      "approx_density": 1713.878,
+      "polygon_count": 6,
+      "uv_loops": 24
+    },
+    "Photonic core indicator 2": {
+      "material": "06 | Photonic cyan / artwork",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.710186,
+        0.705418,
+        0.840504,
+        0.835736
+      ],
+      "surface_area": 0.02425,
+      "relative_weight": 0.19,
+      "approx_density": 1713.878,
+      "polygon_count": 6,
+      "uv_loops": 24
+    },
+    "Photonic core indicator 3": {
+      "material": "06 | Photonic cyan / artwork",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.85027,
+        0.705418,
+        0.980588,
+        0.835736
+      ],
+      "surface_area": 0.02425,
+      "relative_weight": 0.19,
+      "approx_density": 1713.878,
+      "polygon_count": 6,
+      "uv_loops": 24
+    },
+    "Photonic core indicator 4": {
+      "material": "06 | Photonic cyan / artwork",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.009766,
+        0.845502,
+        0.140084,
+        0.97582
+      ],
+      "surface_area": 0.02425,
+      "relative_weight": 0.19,
+      "approx_density": 1713.878,
+      "polygon_count": 6,
+      "uv_loops": 24
+    },
+    "RIGHT / light recess 1": {
+      "material": "06 | Photonic cyan / artwork",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.14985,
+        0.845502,
+        0.280168,
+        0.97582
+      ],
+      "surface_area": 0.004178,
+      "relative_weight": 0.19,
+      "approx_density": 4129.064,
+      "polygon_count": 6,
+      "uv_loops": 24
+    },
+    "RIGHT / light recess 2": {
+      "material": "06 | Photonic cyan / artwork",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.289934,
+        0.845502,
+        0.420252,
+        0.97582
+      ],
+      "surface_area": 0.004178,
+      "relative_weight": 0.19,
+      "approx_density": 4129.064,
+      "polygon_count": 6,
+      "uv_loops": 24
+    },
+    "RIGHT / light recess 3": {
+      "material": "06 | Photonic cyan / artwork",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.430018,
+        0.845502,
+        0.560336,
+        0.97582
+      ],
+      "surface_area": 0.004178,
+      "relative_weight": 0.19,
+      "approx_density": 4129.064,
+      "polygon_count": 6,
+      "uv_loops": 24
+    },
+    "RIGHT / light recess 4": {
+      "material": "06 | Photonic cyan / artwork",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.570102,
+        0.845502,
+        0.70042,
+        0.97582
+      ],
+      "surface_area": 0.004178,
+      "relative_weight": 0.19,
+      "approx_density": 4129.064,
+      "polygon_count": 6,
+      "uv_loops": 24
+    },
+    "08 / Laminated outer core glass -1": {
+      "material": "07 | Blue translucent optical glass",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.009766,
+        0.009766,
+        0.487837,
+        0.487837
+      ],
+      "surface_area": 0.3772921,
+      "relative_weight": 1.0,
+      "approx_density": 1593.983,
+      "polygon_count": 48,
+      "uv_loops": 168
+    },
+    "08 / Laminated outer core glass 1": {
+      "material": "07 | Blue translucent optical glass",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.497603,
+        0.009766,
+        0.975674,
+        0.487837
+      ],
+      "surface_area": 0.3772921,
+      "relative_weight": 1.0,
+      "approx_density": 1593.983,
+      "polygon_count": 48,
+      "uv_loops": 168
+    },
+    "11 / Cyan holographic viewing panel": {
+      "material": "07 | Blue translucent optical glass",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.009766,
+        0.497603,
+        0.296,
+        0.783837
+      ],
+      "surface_area": 0.13525,
+      "relative_weight": 0.59873,
+      "approx_density": 1593.983,
+      "polygon_count": 6,
+      "uv_loops": 24
+    },
+    "13 / Copper ID mark -1-0": {
+      "material": "08 | Warm alloy insignia",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.009766,
+        0.009766,
+        0.325273,
+        0.325273
+      ],
+      "surface_area": 0.00476,
+      "relative_weight": 1.0,
+      "approx_density": 9365.622,
+      "polygon_count": 6,
+      "uv_loops": 24
+    },
+    "13 / Copper ID mark -1-1": {
+      "material": "08 | Warm alloy insignia",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.335039,
+        0.009766,
+        0.650547,
+        0.325273
+      ],
+      "surface_area": 0.00476,
+      "relative_weight": 1.0,
+      "approx_density": 9365.622,
+      "polygon_count": 6,
+      "uv_loops": 24
+    },
+    "13 / Copper ID mark -1-2": {
+      "material": "08 | Warm alloy insignia",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.660313,
+        0.009766,
+        0.97582,
+        0.325273
+      ],
+      "surface_area": 0.00476,
+      "relative_weight": 1.0,
+      "approx_density": 9365.622,
+      "polygon_count": 6,
+      "uv_loops": 24
+    },
+    "13 / Copper ID mark 1-0": {
+      "material": "08 | Warm alloy insignia",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.009766,
+        0.335039,
+        0.325273,
+        0.650547
+      ],
+      "surface_area": 0.00476,
+      "relative_weight": 1.0,
+      "approx_density": 9365.622,
+      "polygon_count": 6,
+      "uv_loops": 24
+    },
+    "13 / Copper ID mark 1-1": {
+      "material": "08 | Warm alloy insignia",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.335039,
+        0.335039,
+        0.650547,
+        0.650547
+      ],
+      "surface_area": 0.00476,
+      "relative_weight": 1.0,
+      "approx_density": 9365.622,
+      "polygon_count": 6,
+      "uv_loops": 24
+    },
+    "13 / Copper ID mark 1-2": {
+      "material": "08 | Warm alloy insignia",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.660313,
+        0.335039,
+        0.97582,
+        0.650547
+      ],
+      "surface_area": 0.00476,
+      "relative_weight": 1.0,
+      "approx_density": 9365.622,
+      "polygon_count": 6,
+      "uv_loops": 24
+    },
+    "LEFT / Quiet ceramic insert": {
+      "material": "09 | Recessed charcoal carbon",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.009766,
+        0.009766,
+        0.487837,
+        0.487837
+      ],
+      "surface_area": 0.1249686,
+      "relative_weight": 1.0,
+      "approx_density": 2769.633,
+      "polygon_count": 11,
+      "uv_loops": 38
+    },
+    "LEFT / Wide recessed ceramic flank": {
+      "material": "09 | Recessed charcoal carbon",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.009766,
+        0.497603,
+        0.474407,
+        0.962244
+      ],
+      "surface_area": 0.118046,
+      "relative_weight": 0.97191,
+      "approx_density": 2769.633,
+      "polygon_count": 11,
+      "uv_loops": 38
+    },
+    "RIGHT / Quiet ceramic insert": {
+      "material": "09 | Recessed charcoal carbon",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.497603,
+        0.009766,
+        0.975674,
+        0.487837
+      ],
+      "surface_area": 0.1249686,
+      "relative_weight": 1.0,
+      "approx_density": 2769.633,
+      "polygon_count": 11,
+      "uv_loops": 38
+    },
+    "RIGHT / Wide recessed ceramic flank": {
+      "material": "09 | Recessed charcoal carbon",
+      "uv_layer": "UVMap",
+      "slot": [
+        0.484173,
+        0.497603,
+        0.948814,
+        0.962244
+      ],
+      "surface_area": 0.118046,
+      "relative_weight": 0.97191,
+      "approx_density": 2769.633,
+      "polygon_count": 11,
+      "uv_loops": 38
+    }
+  },
+  "editable_curves": "UVs generated after conversion for GLB only",
+  "baked_texture_maps": "none (Phase 3)",
+  "material_family_count": 9,
+  "total_uv_loops": 8432
+}

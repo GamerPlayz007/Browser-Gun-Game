@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1260" height="1280" viewBox="0 0 1260 1280">
+<rect width="1260" height="1280" fill="#07141f"/>
+<text x="36" y="38" fill="#cfeeff" font-family="sans-serif" font-size="23" font-weight="bold">AETHER-9 · UV ATLAS / PHASE 2.2</text>
+<text x="36" y="61" fill="#8dacbd" font-family="sans-serif" font-size="13">60 source meshes · nine independently bakeable material layouts · 2048 px target</text>
+<rect x="30" y="90" width="387" height="375" rx="10" fill="#142b3d" stroke="#426174"/>
+<text x="46" y="114" fill="#e7faff" font-size="13" font-family="sans-serif">01 | Matte graphite ceramic</text>
+<text x="46" y="133" fill="#8eb1c1" font-size="11" font-family="sans-serif">7 mesh objects</text>
+<rect x="50" y="146" width="292" height="292" fill="#07141b" stroke="#416f81"/>
+<rect x="52.85" y="223.42" width="211.72" height="211.72" fill="#66d5ec" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="250.45" y="180.35" width="40.23" height="40.23" fill="#e5a96a" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="293.53" y="180.35" width="40.23" height="40.23" fill="#9ba8f1" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="52.85" y="153.10" width="67.47" height="67.47" fill="#7bd6ad" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="123.17" y="159.79" width="60.79" height="60.79" fill="#c1b7ef" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="267.43" y="367.68" width="67.47" height="67.47" fill="#f3ce83" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="186.81" y="159.79" width="60.79" height="60.79" fill="#66d5ec" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="440" y="90" width="387" height="375" rx="10" fill="#173648" stroke="#426174"/>
+<text x="456" y="114" fill="#e7faff" font-size="13" font-family="sans-serif">02 | Satin titanium alloy</text>
+<text x="456" y="133" fill="#8eb1c1" font-size="11" font-family="sans-serif">6 mesh objects</text>
+<rect x="460" y="146" width="292" height="292" fill="#07141b" stroke="#416f81"/>
+<rect x="462.85" y="290.79" width="144.36" height="144.36" fill="#66d5ec" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="557.47" y="208.60" width="79.34" height="79.34" fill="#e5a96a" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="693.74" y="236.70" width="51.24" height="51.24" fill="#9ba8f1" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="462.85" y="196.18" width="91.76" height="91.76" fill="#7bd6ad" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="639.65" y="236.70" width="51.24" height="51.24" fill="#c1b7ef" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="610.06" y="343.39" width="91.76" height="91.76" fill="#f3ce83" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="850" y="90" width="387" height="375" rx="10" fill="#203047" stroke="#426174"/>
+<text x="866" y="114" fill="#e7faff" font-size="13" font-family="sans-serif">03 | Gunmetal structural inlay</text>
+<text x="866" y="133" fill="#8eb1c1" font-size="11" font-family="sans-serif">14 mesh objects</text>
+<rect x="870" y="146" width="292" height="292" fill="#07141b" stroke="#416f81"/>
+<rect x="872.85" y="366.75" width="68.39" height="68.39" fill="#66d5ec" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="944.10" y="366.75" width="68.39" height="68.39" fill="#e5a96a" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="1015.34" y="366.75" width="68.39" height="68.39" fill="#9ba8f1" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="1086.59" y="366.75" width="68.39" height="68.39" fill="#7bd6ad" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="872.85" y="295.51" width="68.39" height="68.39" fill="#c1b7ef" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="944.10" y="295.51" width="68.39" height="68.39" fill="#f3ce83" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="1015.34" y="295.51" width="68.39" height="68.39" fill="#66d5ec" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="1086.59" y="295.51" width="68.39" height="68.39" fill="#e5a96a" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="872.85" y="224.26" width="68.39" height="68.39" fill="#9ba8f1" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="944.10" y="224.26" width="68.39" height="68.39" fill="#7bd6ad" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="1015.34" y="224.26" width="68.39" height="68.39" fill="#c1b7ef" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="1086.59" y="224.26" width="68.39" height="68.39" fill="#f3ce83" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="872.85" y="153.02" width="68.39" height="68.39" fill="#66d5ec" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="944.10" y="153.02" width="68.39" height="68.39" fill="#e5a96a" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="30" y="479" width="387" height="375" rx="10" fill="#29313d" stroke="#426174"/>
+<text x="46" y="503" fill="#e7faff" font-size="13" font-family="sans-serif">04 | Carbon-black soft polymer</text>
+<text x="46" y="522" fill="#8eb1c1" font-size="11" font-family="sans-serif">2 mesh objects</text>
+<rect x="50" y="535" width="292" height="292" fill="#07141b" stroke="#416f81"/>
+<rect x="52.85" y="682.66" width="141.49" height="141.49" fill="#66d5ec" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="197.19" y="686.44" width="137.70" height="137.70" fill="#e5a96a" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="440" y="479" width="387" height="375" rx="10" fill="#243d41" stroke="#426174"/>
+<text x="456" y="503" fill="#e7faff" font-size="13" font-family="sans-serif">05 | Honed silver edges</text>
+<text x="456" y="522" fill="#8eb1c1" font-size="11" font-family="sans-serif">3 mesh objects</text>
+<rect x="460" y="535" width="292" height="292" fill="#07141b" stroke="#416f81"/>
+<rect x="462.85" y="651.86" width="172.29" height="172.29" fill="#66d5ec" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="462.85" y="542.10" width="106.91" height="106.91" fill="#e5a96a" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="637.99" y="717.24" width="106.91" height="106.91" fill="#9ba8f1" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="850" y="479" width="387" height="375" rx="10" fill="#343047" stroke="#426174"/>
+<text x="866" y="503" fill="#e7faff" font-size="13" font-family="sans-serif">06 | Photonic cyan / artwork</text>
+<text x="866" y="522" fill="#8eb1c1" font-size="11" font-family="sans-serif">15 mesh objects</text>
+<rect x="870" y="535" width="292" height="292" fill="#07141b" stroke="#416f81"/>
+<rect x="872.85" y="623.87" width="200.28" height="200.28" fill="#66d5ec" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="1075.98" y="786.10" width="38.05" height="38.05" fill="#e5a96a" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="1116.89" y="786.10" width="38.05" height="38.05" fill="#9ba8f1" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="872.85" y="582.97" width="38.05" height="38.05" fill="#7bd6ad" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="913.76" y="582.97" width="38.05" height="38.05" fill="#c1b7ef" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="954.66" y="582.97" width="38.05" height="38.05" fill="#f3ce83" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="995.57" y="582.97" width="38.05" height="38.05" fill="#66d5ec" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="1036.47" y="582.97" width="38.05" height="38.05" fill="#e5a96a" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="1077.37" y="582.97" width="38.05" height="38.05" fill="#9ba8f1" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="1118.28" y="582.97" width="38.05" height="38.05" fill="#7bd6ad" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="872.85" y="542.06" width="38.05" height="38.05" fill="#c1b7ef" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="913.76" y="542.06" width="38.05" height="38.05" fill="#f3ce83" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="954.66" y="542.06" width="38.05" height="38.05" fill="#66d5ec" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="995.57" y="542.06" width="38.05" height="38.05" fill="#e5a96a" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="1036.47" y="542.06" width="38.05" height="38.05" fill="#9ba8f1" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="30" y="868" width="387" height="375" rx="10" fill="#333946" stroke="#426174"/>
+<text x="46" y="892" fill="#e7faff" font-size="13" font-family="sans-serif">07 | Blue translucent optical glass</text>
+<text x="46" y="911" fill="#8eb1c1" font-size="11" font-family="sans-serif">3 mesh objects</text>
+<rect x="50" y="924" width="292" height="292" fill="#07141b" stroke="#416f81"/>
+<rect x="52.85" y="1073.55" width="139.60" height="139.60" fill="#66d5ec" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="195.30" y="1073.55" width="139.60" height="139.60" fill="#e5a96a" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="52.85" y="987.12" width="83.58" height="83.58" fill="#9ba8f1" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="440" y="868" width="387" height="375" rx="10" fill="#243542" stroke="#426174"/>
+<text x="456" y="892" fill="#e7faff" font-size="13" font-family="sans-serif">08 | Warm alloy insignia</text>
+<text x="456" y="911" fill="#8eb1c1" font-size="11" font-family="sans-serif">6 mesh objects</text>
+<rect x="460" y="924" width="292" height="292" fill="#07141b" stroke="#416f81"/>
+<rect x="462.85" y="1121.02" width="92.13" height="92.13" fill="#66d5ec" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="557.83" y="1121.02" width="92.13" height="92.13" fill="#e5a96a" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="652.81" y="1121.02" width="92.13" height="92.13" fill="#9ba8f1" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="462.85" y="1026.04" width="92.13" height="92.13" fill="#7bd6ad" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="557.83" y="1026.04" width="92.13" height="92.13" fill="#c1b7ef" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="652.81" y="1026.04" width="92.13" height="92.13" fill="#f3ce83" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="850" y="868" width="387" height="375" rx="10" fill="#292e3e" stroke="#426174"/>
+<text x="866" y="892" fill="#e7faff" font-size="13" font-family="sans-serif">09 | Recessed charcoal carbon</text>
+<text x="866" y="911" fill="#8eb1c1" font-size="11" font-family="sans-serif">4 mesh objects</text>
+<rect x="870" y="924" width="292" height="292" fill="#07141b" stroke="#416f81"/>
+<rect x="872.85" y="1073.55" width="139.60" height="139.60" fill="#66d5ec" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="872.85" y="935.02" width="135.68" height="135.68" fill="#e5a96a" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="1015.30" y="1073.55" width="139.60" height="139.60" fill="#9ba8f1" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+<rect x="1011.38" y="935.02" width="135.68" height="135.68" fill="#7bd6ad" fill-opacity=".76" stroke="#e0f7ff" stroke-width=".5"/>
+</svg>

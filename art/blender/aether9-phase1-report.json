@@ -1,6 +1,6 @@
 {
-  "phase": "2.1",
-  "status": "Topology cleanup and verified Blender scene export",
+  "phase": "2.2",
+  "status": "Material-aware UV atlas and validated Blender export",
   "source": "/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/build/aether-phase1/aether9-specter-phase1.blend",
   "asset": "/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/build/aether-phase1/aether9-specter-phase1.glb",
   "preview": "/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/build/aether-phase1/aether9-specter-phase1.png",
@@ -34,10 +34,18 @@
     "weighted_normal_objects": 15
   },
   "topology_report": "aether9-phase2-topology.json",
+  "uv_report": "aether9-phase2-uv.json",
+  "uv_layout": "aether9-phase2-uv-layout.svg",
+  "uv_stats": {
+    "source_mesh_count": 60,
+    "material_families": 9,
+    "uv_loops": 8432,
+    "converted_ribbon_uv_meshes": 15
+  },
   "manifest": "aether9-phase1-manifest.json",
   "authoring_mesh_objects": 75,
   "base_triangles_before_modifiers": 4864,
-  "uv_islands": "provisional / atlas pending Phase 2",
+  "uv_islands": "smart projection and per-material padded UV tiles; bake pending Phase 3",
   "texture_bakes": "pending Phase 3",
-  "glb_bytes": 217052
+  "glb_bytes": 252528
 }
