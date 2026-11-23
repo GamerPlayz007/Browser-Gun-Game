@@ -1,4 +1,4 @@
-name: CROSSFire - AETHER Blender Phase 1
+name: CROSSFire - AETHER Blender Phase 1.3
 
 on:
   push:
@@ -25,7 +25,7 @@ jobs:
       - name: Install Blender headless
         run: |
           sudo apt-get update -qq
-          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y blender python3-numpy
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y blender python3-numpy python3-pil
           blender --version | head -n 2
 
       - name: Build Blender source GLB and art preview
@@ -55,7 +55,22 @@ jobs:
           assert len(gltf.get("meshes", [])) > 12
           report_data = json.loads(report.read_text())
           assert report_data["mesh_objects"] > 12
-          print("VALID AETHER PHASE 1", len(gltf["meshes"]), report_data["mesh_objects"])
+          assert "BLENDER_WORKBENCH" in report_data["render_engine"]
+          from PIL import Image
+          for name in [
+              "aether9-specter-phase1.png",
+              "aether9-specter-phase1-profile.png",
+              "aether9-specter-phase1-rear.png",
+          ]:
+              frame = root / name
+              assert frame.is_file() and frame.stat().st_size > 3000, name
+              with Image.open(frame) as img:
+                  assert img.size[0] >= 1024 and img.size[1] >= 640
+                  pixels = img.convert("RGB").resize((160,96))
+                  colorful = sum(1 for px in pixels.getdata() if max(px)>60)
+                  assert colorful>145, f"Blank or near-black preview: {name} ({colorful})"
+                  print("VISIBLE REVIEW FRAME", name, colorful)
+          print("VALID AETHER PHASE 1.3", len(gltf["meshes"]), report_data["mesh_objects"])
           PY
 
       - name: Install generated game art
@@ -63,9 +78,7 @@ jobs:
           mkdir -p art/blender static/assets static/previews
           cp build/aether-phase1/aether9-specter-phase1.blend art/blender/
           cp build/aether-phase1/aether9-specter-phase1.glb static/assets/
-          if test -s build/aether-phase1/aether9-specter-phase1.png; then
-            cp build/aether-phase1/aether9-specter-phase1.png static/previews/
-          fi
+          cp build/aether-phase1/aether9-specter-phase1*.png static/previews/
           cp build/aether-phase1/aether9-phase1-report.json art/blender/
 
       - name: Commit validated Blender exports
@@ -76,9 +89,7 @@ jobs:
           git add art/blender/aether9-specter-phase1.blend \
             art/blender/aether9-phase1-report.json \
             static/assets/aether9-specter-phase1.glb
-          if test -s static/previews/aether9-specter-phase1.png; then
-            git add static/previews/aether9-specter-phase1.png
-          fi
+          git add static/previews/aether9-specter-phase1*.png
           if ! git diff --cached --quiet; then
             git commit -m "AETHER Phase 1: editable Blender SPECTER and GLB"
             git push
