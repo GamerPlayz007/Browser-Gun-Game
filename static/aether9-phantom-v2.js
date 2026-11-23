@@ -55,7 +55,9 @@ const body=new T.Group();display.add(body);
 body.rotation.y=-.06;
 let parts=0,litParts=[];
 function mk(name,c,metal,rough,extras={}){
- const m=new T.MeshStandardMaterial({name,color:c,metalness:metal,roughness:rough,...extras});return m;
+ const m=new T.MeshPhysicalMaterial({name,color:c,metalness:metal,roughness:rough,
+  clearcoat: name.includes('plate')?.17:name.includes('armor')?.24:.07,
+  clearcoatRoughness:.32,...extras});return m;
 }
 function brushedTexture(){
  const c=document.createElement('canvas');c.width=c.height=256;const x=c.getContext('2d');
@@ -455,7 +457,8 @@ function loftHullV2(parent,frames,material,name){
   const j2=(j+1)%ringCount;
   const a=fi*ringCount+j,b=fi*ringCount+j2;
   const c=(fi+1)*ringCount+j,d=(fi+1)*ringCount+j2;
-  indices.push(a,c,b,b,c,d);
+  // Outward facing triangles for the clockwise XY cross-section.
+  indices.push(a,b,c,b,d,c);
  }
  for(const end of [0,frames.length-1]){
   const f=frames[end],idx=positions.length/3;
