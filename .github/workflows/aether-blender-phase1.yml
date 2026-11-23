@@ -1,9 +1,10 @@
-name: CROSSFire - AETHER Blender Phase 1.4
+name: CROSSFire - AETHER Blender Phase 2.1
 
 on:
   push:
     paths:
       - tools/aether9_blender_phase1.py
+      - tools/aether_topology21.py
       - .github/workflows/aether-blender-phase1.yml
   workflow_dispatch:
 
@@ -61,7 +62,27 @@ jobs:
           manifest = json.loads(manifest_file.read_text())
           assert manifest["schema"] == "crossfire-aether-art-asset-v1"
           assert manifest["asset_id"] == "AETHER9_SPECTER"
-          assert manifest["phase"] == "1.4"
+          assert manifest["phase"] == "2.1"
+          assert report_data["phase"] == "2.1"
+          topology_file = root / "aether9-phase2-topology.json"
+          assert topology_file.is_file(), "Missing mesh topology inspection"
+          topology = json.loads(topology_file.read_text())
+          summary = topology["stats"]
+          assert topology["phase"] == "2.1"
+          assert summary["meshes"] >= 25
+          assert summary["triangles_after"] >= 1000
+          assert summary["ngons_resolved"] >= 1
+          assert summary["vertices_after"] <= summary["vertices_before"]
+          assert sum(len(x["before"])>0 for x in topology["objects"].values()) == summary["meshes"]
+          for name, detail in topology["objects"].items():
+              assert detail["after"]["ngons"] == 0, name
+              assert detail["after"]["nonmanifold_edges"] == 0, name
+              assert detail["after"]["degenerate_faces"] == 0, name
+              assert detail["after"]["loose_vertices"] == 0, name
+              assert detail["after"]["signed_volume"] > 0, name
+          assert manifest["topology_summary"] == summary
+          assert report_data["topology_stats"] == summary
+          print("AETHER PHASE 2.1 TOPOLOGY", summary)
           assert len(manifest["groups"]) == 8
           assert len(manifest["objects"]) == report_data["mesh_objects"]
           assert sum(v["object_count"] for v in manifest["groups"].values()) == len(manifest["objects"])
@@ -86,7 +107,7 @@ jobs:
                   colorful = sum(1 for px in pixels.getdata() if max(px)>60)
                   assert colorful>145, f"Blank or near-black preview: {name} ({colorful})"
                   print("VISIBLE REVIEW FRAME", name, colorful)
-          print("VALID AETHER PHASE 1.3", len(gltf["meshes"]), report_data["mesh_objects"])
+          print("VALID AETHER PHASE 2.1", len(gltf["meshes"]), report_data["mesh_objects"])
           PY
 
       - name: Install generated game art
@@ -97,6 +118,7 @@ jobs:
           cp build/aether-phase1/aether9-specter-phase1*.png static/previews/
           cp build/aether-phase1/aether9-phase1-report.json art/blender/
           cp build/aether-phase1/aether9-phase1-manifest.json art/blender/
+          cp build/aether-phase1/aether9-phase2-topology.json art/blender/
 
       - name: Commit validated Blender exports
         if: github.ref_name == 'main'
@@ -106,10 +128,11 @@ jobs:
           git add art/blender/aether9-specter-phase1.blend \
             art/blender/aether9-phase1-report.json \
             art/blender/aether9-phase1-manifest.json \
+            art/blender/aether9-phase2-topology.json \
             static/assets/aether9-specter-phase1.glb
           git add static/previews/aether9-specter-phase1*.png
           if ! git diff --cached --quiet; then
-            git commit -m "AETHER Phase 1.4: editable grouped Blender asset, manifest and GLB"
+            git commit -m "AETHER Phase 2.1: cleaned Blender mesh, topology audit and validated GLB"
             # Another CI or documentation commit can land while Blender runs.
             # Rebase on fresh main instead of dropping a validated export.
             git fetch origin main
