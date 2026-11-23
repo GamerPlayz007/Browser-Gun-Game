@@ -417,7 +417,7 @@ def main():
     shade.object_outline_color=(.018,.030,.053)
     shade.studiolight_rotate_z=.26
     scene.view_settings.view_transform="Standard"
-    scene.view_settings.look="Medium High Contrast"
+    scene.view_settings.look="None"  # Blender 3.0 runner uses Standard-only OCIO config
     scene.view_settings.exposure=.26
     scene.view_settings.gamma=1.0
     scene.render.image_settings.color_mode="RGBA"
