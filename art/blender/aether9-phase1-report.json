@@ -1,0 +1,13 @@
+{
+  "phase": "1",
+  "status": "Blender sculpt/export pass",
+  "source": "/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/build/aether-phase1/aether9-specter-phase1.blend",
+  "asset": "/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/build/aether-phase1/aether9-specter-phase1.glb",
+  "preview": "/home/runner/work/Browser-Gun-Game/Browser-Gun-Game/build/aether-phase1/aether9-specter-phase1.png",
+  "native_objects": 67,
+  "mesh_objects": 67,
+  "base_triangles_before_modifiers": 4512,
+  "uv_islands": "provisional / atlas pending Phase 2",
+  "texture_bakes": "pending Phase 3",
+  "glb_bytes": 258448
+}
