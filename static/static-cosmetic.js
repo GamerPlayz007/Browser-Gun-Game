@@ -58,8 +58,10 @@ export function createStaticCosmetic(rig,{finish='midnight'}={}){
  if(!group)return {update(){},dispose(){}};
  const old=group.children.filter(o=>o!==rig.userData.flash&&o!==rig.userData.reloadGlyph70);
  const visibility=new Map(old.map(o=>[o,o.visible]));
- const bounds=localArtBounds(group);
- let report=null,reportRequested=false,tier=null,lastTier=null,art=null,pending=null,attempted=null;
+ let bounds;
+ try{bounds=localArtBounds(group);}catch(error){console.warn('Optional cosmetic bounds unavailable',error);return {update(){},dispose(){}};}
+ if(bounds.isEmpty())return {update(){},dispose(){}};
+ let report=null,reportRequested=false,lastTier=null,art=null,pending=null,attempted=null;
  function restore(){
   if(art){disposeArtwork(art);art=null;}
   for(const [o,visible] of visibility)o.visible=visible;
@@ -90,7 +92,7 @@ export function createStaticCosmetic(rig,{finish='midnight'}={}){
  }
  return {
   update(visible,nextTier){
-   tier=nextTier;
+   const tier=nextTier;
    if(tier!==lastTier){cancel();restore();attempted=null;lastTier=tier;}
    if(!visible)return;
    if(tier==='performance'||tier==='auto')requestManifest();
