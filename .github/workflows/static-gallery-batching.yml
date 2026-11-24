@@ -1,0 +1,27 @@
+name: Static gallery batching QA
+on:
+  push:
+    branches: [main]
+    paths:
+      - static/static-gallery-batching.js
+      - tools/test-static-gallery-batching.mjs
+      - .github/workflows/static-gallery-batching.yml
+      - static/vendor/**
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  geometry-fixture:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Resolve existing vendored Three.js as ESM
+        run: |
+          mkdir -p node_modules
+          ln -s ../static/vendor node_modules/three
+          printf '%s\n' '{"type":"module","main":"./three.module.js"}' > static/vendor/package.json
+      - name: Verify synthetic scene geometry
+        run: node --experimental-default-type=module tools/test-static-gallery-batching.mjs
