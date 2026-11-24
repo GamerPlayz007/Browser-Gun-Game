@@ -270,12 +270,12 @@ viewport.addEventListener('webglcontextlost',e=>{e.preventDefault();contextLost=
 viewport.addEventListener('webglcontextrestored',()=>{contextLost=false;renderer.shadowMap.needsUpdate=true;invalidate();show('GRAPHICS CONTEXT RESTORED')});
 document.addEventListener('visibilitychange',invalidate);
 resize();
-let prev=performance.now(),lastRender=0,diagnosticStart=prev,renderCount=0;
+let prev=performance.now(),lastRender=0,diagnosticStart=prev,renderCount=0,idleReported=false;
 function frame(time){
  requestAnimationFrame(frame);
  if(document.hidden||contextLost){prev=time;diagnosticStart=time;renderCount=0;return;}
  const moving=orbit.auto||Math.abs(orbit.yawTarget-orbit.yaw)>.0001||Math.abs(orbit.pitchTarget-orbit.pitch)>.0001||Math.abs(orbit.distTarget-orbit.dist)>.0001||target.distanceToSquared(targetDesired)>1e-8;
- if(!dirty&&!moving){prev=time;diagnosticStart=time;renderCount=0;$('render-metrics').textContent='IDLE · RENDER ON CHANGE · asset: '+loadedProfile;return;}
+ if(!dirty&&!moving){prev=time;diagnosticStart=time;renderCount=0;if(!idleReported){$('render-metrics').textContent='IDLE · RENDER ON CHANGE · asset: '+loadedProfile;idleReported=true;}return;}
  const interval=1000/profiles[quality].fps;
  if(lastRender&&time-lastRender<interval-1)return;
  lastRender=time;
@@ -291,7 +291,7 @@ function frame(time){
   target.y+Math.sin(orbit.pitch)*orbit.dist,
   target.z+Math.cos(orbit.yaw)*cs*orbit.dist);
  camera.lookAt(target);
- renderer.render(scene,camera);dirty=false;
+ renderer.render(scene,camera);dirty=false;idleReported=false;
  renderCount++;
  if(time-diagnosticStart>=1000){
   const fps=Math.round(renderCount*1000/(time-diagnosticStart));
