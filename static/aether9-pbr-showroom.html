@@ -83,7 +83,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--c);outline-offset:3
 </head>
 <body>
 <canvas id="canvas" aria-label="Interactive glTF / GLB 3D scene viewer"></canvas>
-<div id="loading" role="status" aria-live="polite">LOADING AETHER PBR MATERIALS…</div>
+<div id="loading" hidden role="status" aria-live="polite">LOADING AETHER PBR MATERIALS…</div>
 <div id="dropzone" hidden>DROP YOUR GLB FILE HERE</div>
 <header>
 <a href="/" class="logo">CROSS<b>FIRE</b></a>
@@ -97,7 +97,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--c);outline-offset:3
 </aside>
 <section class="panel" aria-label="Asset inspection controls">
  <div class="section-head"><strong>ASSET INSPECTOR</strong><span>LIVE 3D</span></div>
- <div id="asset-name">AETHER-9 / MIDNIGHT</div>
+ <div id="asset-name">SELECT A FINISH</div>
  <div class="metrics">
   <div class="metric"><strong id="meshes">—</strong><small>MESHES</small></div>
   <div class="metric"><strong id="tris">—</strong><small>TRIANGLES</small></div>
@@ -122,13 +122,14 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--c);outline-offset:3
  </div>
  <label for="quality" class="gallery-label" style="display:block;margin-bottom:6px">QUALITY PROFILE</label>
  <select id="quality" style="width:100%;padding:8px;background:#102736;color:#e7f9ff;border:1px solid #36586b;border-radius:6px">
- <option value="performance">Performance · 512px textures</option>
- <option value="balanced">Balanced · 1024px textures</option>
+ <option value="performance" disabled>Performance · 512px textures</option>
+ <option value="balanced" disabled>Balanced · 1024px textures</option>
  <option value="original" selected>Original · full resolution</option>
  </select>
+ <div id="profile-status" style="font-size:10px;color:#9db9c5;margin-top:7px" role="status">CHECKING OPTIMIZED EXPORTS…</div>
  <div id="render-metrics" aria-live="off" style="font:10px ui-monospace,monospace;color:#9db9c5;margin-top:8px">Rendering diagnostics pending</div>
- <div id="status" aria-live="polite">INITIALIZING GLTF LOADER…</div>
- <div id="instructions">DRAG TO ORBIT · SCROLL TO ZOOM · OR DROP A .GLB FILE</div>
+ <div id="status" aria-live="polite">GALLERY READY · SELECT A FINISH FOR 3D</div>
+ <div id="instructions">SELECT A FINISH TO LOAD 3D · GALLERY AVAILABLE WITHOUT MODEL DOWNLOAD</div>
  <p class="asset-link"><a href="/static/assets/aether9-specter-midnight.glb" download>GET MIDNIGHT GLB</a> · <a href="/static/assets/aether9-specter-glacier.glb" download>GET GLACIER GLB</a> · <a href="/static/assets/aether9-specter-eclipse.glb" download>GET ECLIPSE GLB</a></p>
  <p class="asset-link"><a href="/static/previews/aether9-specter-midnight-pbr.png" target="_blank" rel="noopener">VIEW PBR RENDER</a> · <a href="/static/previews/aether9-specter-glacier-pbr.png" target="_blank" rel="noopener">GLACIER RENDER</a> · <a href="/static/previews/aether9-specter-eclipse-pbr.png" target="_blank" rel="noopener">ECLIPSE RENDER</a></p>
 </section>
