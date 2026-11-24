@@ -140,7 +140,7 @@ function mountGltf(gltf,name,{batch=false}={}){
  updateStats(stats(next));
  show('ASSET LOADED · '+name.toUpperCase());
  $('asset-name').textContent=name.replace(/\.[^.]+$/,'');
- $('loading').hidden=true;$('instructions').textContent='DRAG TO ORBIT · SCROLL TO ZOOM · REPLACE VIA GLB IMPORT';
+ $('loading').hidden=true;$('instructions').textContent='DRAG OR ARROW KEYS TO ORBIT · SCROLL OR +/- TO ZOOM · R TO RESET';
 }
 const aetherPresets={
  midnight:{path:'/static/assets/aether9-specter-midnight.glb',name:'AETHER-9 / MIDNIGHT'},
@@ -261,7 +261,18 @@ document.addEventListener('drop',ev=>{
 });
 document.addEventListener('keydown',e=>{
  if(e.key==='Escape')drop.hidden=true;
+ if(e.target?.closest?.('input,select,textarea,button,a')||e.target?.isContentEditable)return;
  if(e.key.toLowerCase()==='r')reset();
+});
+viewport.addEventListener('keydown',e=>{
+ if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','+','-','='].includes(e.key))return;
+ e.preventDefault();pauseRotation();
+ if(e.key==='ArrowLeft')orbit.yawTarget+=.14;
+ if(e.key==='ArrowRight')orbit.yawTarget-=.14;
+ if(e.key==='ArrowUp')orbit.pitchTarget=T.MathUtils.clamp(orbit.pitchTarget+.08,-.5,1.35);
+ if(e.key==='ArrowDown')orbit.pitchTarget=T.MathUtils.clamp(orbit.pitchTarget-.08,-.5,1.35);
+ if(e.key==='+'||e.key==='=')orbit.distTarget=T.MathUtils.clamp(orbit.distTarget-.32,2.3,16);
+ if(e.key==='-')orbit.distTarget=T.MathUtils.clamp(orbit.distTarget+.32,2.3,16);
 });
 function resize(){
  const w=Math.max(1,innerWidth),h=Math.max(1,innerHeight);
