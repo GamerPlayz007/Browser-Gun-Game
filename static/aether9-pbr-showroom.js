@@ -36,6 +36,9 @@ halo.rotation.x=-Math.PI/2;halo.position.y=-.035;scene.add(halo);
 const assetRoot=new T.Group();scene.add(assetRoot);
 const gltfLoader=new GLTFLoader();
 let active=null,loadedName='',loadingSeq=0;
+let currentPreset='midnight',loadedProfile='original';
+const profiles={performance:{pixelRatio:1,shadows:false,fps:30},balanced:{pixelRatio:1.25,shadows:true,fps:45},original:{pixelRatio:1.65,shadows:true,fps:60}};
+let quality='original';
 const orbit={yaw:.74,pitch:.28,dist:4.5,yawTarget:.74,pitchTarget:.28,distTarget:4.5,
  auto:!window.matchMedia('(prefers-reduced-motion: reduce)').matches,interacting:false};
 const target=new T.Vector3(0,1.05,0),targetDesired=target.clone();
@@ -131,16 +134,19 @@ const aetherPresets={
  glacier:{path:'/static/assets/aether9-specter-glacier.glb',name:'AETHER-9 / GLACIER'},
  eclipse:{path:'/static/assets/aether9-specter-eclipse.glb',name:'AETHER-9 / ECLIPSE'}
 };
-async function loadPreset(which='midnight'){
+async function loadPreset(which='midnight',profile=quality){
+ currentPreset=which;
+ const suffix=profile==='original'?'':'-'+profile;
  const preset=aetherPresets[which]||aetherPresets.midnight;
  const id=++loadingSeq;
  $('loading').hidden=false;
  show('LOADING GLTF ASSET…');$('loading').textContent='LOADING '+preset.name+'…';
  try{
-  const gltf=await gltfLoader.loadAsync(preset.path,event=>{if(id!==loadingSeq)return;const pct=event.lengthComputable&&event.total>0?Math.min(100,Math.round(event.loaded/event.total*100)):null;$('loading').textContent=pct===null?'LOADING '+preset.name+'…':'LOADING '+preset.name+' · '+pct+'%';});
+  const path=preset.path.replace(/\.glb$/,suffix+'.glb');
+  const gltf=await gltfLoader.loadAsync(path,event=>{if(id!==loadingSeq)return;const pct=event.lengthComputable&&event.total>0?Math.min(100,Math.round(event.loaded/event.total*100)):null;$('loading').textContent=pct===null?'LOADING '+preset.name+'…':'LOADING '+preset.name+' · '+pct+'%';});
   if(id!==loadingSeq){disposeRoot(gltf.scene);return}
-  mountGltf(gltf,preset.name);selectionUI(which);
- }catch(e){if(id===loadingSeq){$('loading').hidden=true;show('COULD NOT LOAD DEMO ASSET: '+(e?.message||e),true)}}
+  mountGltf(gltf,preset.name+' / '+profile.toUpperCase());loadedProfile=profile;selectionUI(which);
+ }catch(e){if(id===loadingSeq){$('loading').hidden=true;show('PROFILE COULD NOT LOAD · '+profile.toUpperCase()+' · '+(active?'PREVIOUS ASSET RETAINED':'SELECT ORIGINAL')+' · '+(e?.message||e),true)}}
 }
 async function importLocal(file){
  if(!file)return;
@@ -155,11 +161,18 @@ async function importLocal(file){
    gltfLoader.parse(input,'',resolve,reject);
   });
   if(seq!==loadingSeq){disposeRoot(result.scene);return}
-  mountGltf(result,file.name);selectionUI(null);
+  mountGltf(result,file.name);currentPreset=null;loadedProfile='local';selectionUI(null);
  }catch(e){
   if(seq===loadingSeq){$('loading').hidden=true;show('IMPORT FAILED: '+(e?.message||e),true)}
  }
 }
+$('quality').addEventListener('change',()=>{
+ const selected=$('quality').value;
+ if(!Object.hasOwn(profiles,selected))return;
+ quality=selected;renderer.shadowMap.enabled=profiles[quality].shadows;
+ key.castShadow=profiles[quality].shadows;resize();
+ if(currentPreset)loadPreset(currentPreset,quality);
+});
 $('file').addEventListener('change',e=>importLocal(e.target.files?.[0]));
 $('preset').addEventListener('click',()=>loadPreset('midnight'));
 $('glacier').addEventListener('click',()=>loadPreset('glacier'));
@@ -221,16 +234,19 @@ document.addEventListener('keydown',e=>{
 });
 function resize(){
  const w=Math.max(1,innerWidth),h=Math.max(1,innerHeight);
- renderer.setPixelRatio(Math.min(devicePixelRatio||1,w<800?1.25:1.65));
+ renderer.setPixelRatio(Math.min(devicePixelRatio||1,profiles[quality].pixelRatio,w<800?1.25:1.65));
  renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();
 }
 window.addEventListener('resize',resize);
 resize();
-let prev=performance.now();
+let prev=performance.now(),lastRender=0,diagnosticStart=prev,renderCount=0;
 function frame(time){
  requestAnimationFrame(frame);
+ if(document.hidden){prev=time;diagnosticStart=time;renderCount=0;return;}
+ const interval=1000/profiles[quality].fps;
+ if(lastRender&&time-lastRender<interval-1)return;
+ lastRender=time;
  const dt=Math.min(.08,Math.max(0,(time-prev)/1000));prev=time;
- if(document.hidden)return;
  if(orbit.auto)orbit.yawTarget+=dt*.18;
  const smooth=1-Math.exp(-dt*9);
  orbit.yaw+=(orbit.yawTarget-orbit.yaw)*smooth;
@@ -243,6 +259,12 @@ function frame(time){
   target.z+Math.cos(orbit.yaw)*cs*orbit.dist);
  camera.lookAt(target);
  renderer.render(scene,camera);
+ renderCount++;
+ if(time-diagnosticStart>=1000){
+  const fps=Math.round(renderCount*1000/(time-diagnosticStart));
+  $('render-metrics').textContent=fps+' rendered FPS · '+renderer.info.render.calls+' draw calls · '+renderer.info.memory.textures+' GPU texture objects · asset: '+loadedProfile;
+  diagnosticStart=time;renderCount=0;
+ }
 }
 rotationUI();
 requestAnimationFrame(frame);
