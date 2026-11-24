@@ -1,0 +1,73 @@
+name: GLB Texture Profiles — Phase 5
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/glb_texture_profiles.py
+      - .github/workflows/glb-texture-profiles.yml
+      - static/assets/aether9-specter-midnight.glb
+      - static/assets/aether9-specter-glacier.glb
+      - static/assets/aether9-specter-eclipse.glb
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: glb-texture-profiles-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install Pillow==11.3.0
+      - name: Run fixture and generate smaller GLB copies
+        run: |
+          python tools/glb_texture_profiles.py --self-test
+          python tools/glb_texture_profiles.py --asset-dir static/assets aether9-specter-midnight.glb aether9-specter-glacier.glb aether9-specter-eclipse.glb
+      - name: Verify generated profile report
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path("static/assets")
+          report=json.loads((root/"texture-profile-report.json").read_text())
+          assert len(report)==3
+          for filename, profiles in report.items():
+              assert set(profiles)=={"balanced","performance"}
+              for key, limit in (("balanced",1024),("performance",512)):
+                  item=profiles[key]
+                  path=root/(Path(filename).stem+"-"+key+".glb")
+                  assert item["max_texture_dimension"]==limit
+                  assert path.stat().st_size==item["output_bytes"]<item["input_bytes"]
+                  assert item["estimated_rgba_mipped_bytes_after"] < item["estimated_rgba_mipped_bytes_before"]
+              assert profiles["performance"]["estimated_rgba_mipped_bytes_after"] <= profiles["balanced"]["estimated_rgba_mipped_bytes_after"]
+          print("Six profile outputs validated")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: glb-texture-profiles
+          path: |
+            static/assets/*-balanced.glb
+            static/assets/*-performance.glb
+            static/assets/texture-profile-report.json
+          retention-days: 14
+      - name: Publish validated copies only
+        if: github.ref_name == 'main'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add static/assets/aether9-specter-*-balanced.glb static/assets/aether9-specter-*-performance.glb static/assets/texture-profile-report.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Phase 5: publish validated GLB texture profiles"
+            git fetch origin main
+            git rebase origin/main
+            git push origin HEAD:main
+          fi
