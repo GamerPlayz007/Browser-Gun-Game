@@ -126,6 +126,8 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--c);outline-offset:3
  <option value="balanced" disabled>Balanced · 1024px textures</option>
  <option value="original" selected>Original · full resolution</option>
  </select>
+ <label style="display:flex;align-items:center;gap:8px;margin-top:9px;font-size:11px;color:#d4e5ed"><input id="batch-static" type="checkbox"> Batch compatible static meshes (experimental)</label>
+ <div id="batch-status" style="font-size:10px;color:#9db9c5;margin-top:5px" role="status">STATIC BATCHING OFF</div>
  <div id="profile-status" style="font-size:10px;color:#9db9c5;margin-top:7px" role="status">CHECKING OPTIMIZED EXPORTS…</div>
  <div id="render-metrics" aria-live="off" style="font:10px ui-monospace,monospace;color:#9db9c5;margin-top:8px">Rendering diagnostics pending</div>
  <div id="status" aria-live="polite">GALLERY READY · SELECT A FINISH FOR 3D</div>
