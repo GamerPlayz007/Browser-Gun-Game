@@ -41,6 +41,8 @@ let pendingFetch=null,dirty=true,contextLost=false;
 const invalidate=()=>{dirty=true};
 const profiles={performance:{pixelRatio:1,shadows:false,fps:30},balanced:{pixelRatio:1.25,shadows:true,fps:45},original:{pixelRatio:1.65,shadows:true,fps:60}};
 let quality='original';
+let profileReport=null;
+const verifiedProfiles=new Set(['original']);
 const orbit={yaw:.74,pitch:.28,dist:4.5,yawTarget:.74,pitchTarget:.28,distTarget:4.5,
  auto:!window.matchMedia('(prefers-reduced-motion: reduce)').matches,interacting:false};
 const target=new T.Vector3(0,1.05,0),targetDesired=target.clone();
@@ -152,6 +154,7 @@ async function fetchGlb(path,signal,onProgress){
  return bytes.buffer;
 }
 async function loadPreset(which='midnight',profile=quality){
+ if(!verifiedProfiles.has(profile)){show('QUALITY PROFILE NOT YET PUBLISHED · USE THE GALLERY OR SELECT ORIGINAL',true);return;}
  if(active&&loadedPreset===which&&loadedProfile===profile&&!pendingFetch&&currentPreset===which)return;
  pendingFetch?.abort();
  const controller=new AbortController();pendingFetch=controller;
@@ -195,10 +198,11 @@ async function importLocal(file){
 }
 $('quality').addEventListener('change',()=>{
  const selected=$('quality').value;
- if(!Object.hasOwn(profiles,selected))return;
+ if(!Object.hasOwn(profiles,selected)||!verifiedProfiles.has(selected))return;
  quality=selected;renderer.shadowMap.enabled=profiles[quality].shadows;
  key.castShadow=profiles[quality].shadows;renderer.shadowMap.needsUpdate=true;resize();
- if(currentPreset)loadPreset(currentPreset,quality);
+ if(active||pendingFetch){if(currentPreset)loadPreset(currentPreset,quality);}
+ else show('PROFILE SELECTED · CHOOSE A FINISH TO LOAD 3D');
 });
 $('file').addEventListener('change',e=>importLocal(e.target.files?.[0]));
 $('preset').addEventListener('click',()=>loadPreset('midnight'));
@@ -274,13 +278,13 @@ let prev=performance.now(),lastRender=0,diagnosticStart=prev,renderCount=0,idleR
 function frame(time){
  requestAnimationFrame(frame);
  if(document.hidden||contextLost){prev=time;diagnosticStart=time;renderCount=0;return;}
- const moving=orbit.auto||Math.abs(orbit.yawTarget-orbit.yaw)>.0001||Math.abs(orbit.pitchTarget-orbit.pitch)>.0001||Math.abs(orbit.distTarget-orbit.dist)>.0001||target.distanceToSquared(targetDesired)>1e-8;
+ const moving=(!!active&&orbit.auto)||Math.abs(orbit.yawTarget-orbit.yaw)>.0001||Math.abs(orbit.pitchTarget-orbit.pitch)>.0001||Math.abs(orbit.distTarget-orbit.dist)>.0001||target.distanceToSquared(targetDesired)>1e-8;
  if(!dirty&&!moving){prev=time;diagnosticStart=time;renderCount=0;if(!idleReported){$('render-metrics').textContent='IDLE · RENDER ON CHANGE · asset: '+loadedProfile;idleReported=true;}return;}
  const interval=1000/profiles[quality].fps;
  if(lastRender&&time-lastRender<interval-1)return;
  lastRender=time;
  const dt=Math.min(.08,Math.max(0,(time-prev)/1000));prev=time;
- if(orbit.auto)orbit.yawTarget+=dt*.18;
+ if(active&&orbit.auto)orbit.yawTarget+=dt*.18;
  const smooth=1-Math.exp(-dt*9);
  orbit.yaw+=(orbit.yawTarget-orbit.yaw)*smooth;
  orbit.pitch+=(orbit.pitchTarget-orbit.pitch)*smooth;
@@ -299,6 +303,28 @@ function frame(time){
   diagnosticStart=time;renderCount=0;
  }
 }
+async function discoverProfiles(){
+ const select=$('quality');
+ for(const option of select.options)if(option.value!=='original')option.disabled=true;
+ try{
+  const res=await fetch('/static/assets/texture-profile-report.json',{cache:'no-cache'});
+  if(!res.ok)throw Error('Profile report unavailable');
+  profileReport=await res.json();
+  for(const [name,limit] of [['performance',512],['balanced',1024]]){
+   const valid=Object.values(aetherPresets).every(p=>{
+    const filename=p.path.split('/').pop(),record=profileReport?.[filename]?.[name];
+    return record&&record.max_texture_dimension===limit&&Number.isSafeInteger(record.output_bytes)&&record.output_bytes>0&&record.output_bytes<record.input_bytes;
+   });
+   if(valid){verifiedProfiles.add(name);select.querySelector('option[value="'+name+'"]').disabled=false;}
+  }
+ }catch(e){profileReport=null;}
+ $('profile-status').textContent=verifiedProfiles.size===3?'ALL THREE PROFILES REPORTED READY': 'OPTIMIZED EXPORTS NOT YET CONFIRMED · ORIGINAL AVAILABLE';
+ if(!active&&!pendingFetch&&verifiedProfiles.has('performance')){
+  quality='performance';select.value=quality;renderer.shadowMap.enabled=false;key.castShadow=false;resize();
+ }
+}
+$('loading').hidden=true;
+show('GALLERY READY · CHOOSE A FINISH TO LOAD INTERACTIVE 3D');
 rotationUI();
 requestAnimationFrame(frame);
-loadPreset('midnight');
+discoverProfiles();
