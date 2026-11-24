@@ -109,11 +109,13 @@ def main():
     parser.add_argument("--self-test",action="store_true")
     parser.add_argument("sources",nargs="*",type=Path)
     args=parser.parse_args(sys.argv[sys.argv.index("--")+1:] if "--" in sys.argv else [])
+    args.out_dir=args.out_dir.resolve()
     args.out_dir.mkdir(parents=True,exist_ok=True)
     if args.self_test:
         fixture(args.out_dir)
     report=[]
     for source in args.sources:
+        source=source.resolve()
         for name,ratio in (("medium",.65),("low",.35)):
             report.append(build(source,args.out_dir/(source.stem+"-lod-"+name+".glb"),ratio))
     if report:
