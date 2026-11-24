@@ -5,6 +5,7 @@
  */
 import * as T from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { batchStaticScene } from './static-gallery-batching.js';
 
 const $=id=>document.getElementById(id);
 const status=$('status'),viewport=$('canvas');
@@ -37,6 +38,7 @@ const assetRoot=new T.Group();scene.add(assetRoot);
 const gltfLoader=new GLTFLoader();
 let active=null,loadedName='',loadingSeq=0;
 let currentPreset='midnight',loadedProfile='original',loadedPreset=null;
+let loadedBatching=false,batchReport=null;
 let pendingFetch=null,dirty=true,contextLost=false;
 const invalidate=()=>{dirty=true};
 const profiles={performance:{pixelRatio:1,shadows:false,fps:30},balanced:{pixelRatio:1.25,shadows:true,fps:45},original:{pixelRatio:1.65,shadows:true,fps:60}};
@@ -119,7 +121,7 @@ function syncWire(){
   mats.forEach(m=>{if(m&&'wireframe' in m)m.wireframe=wire});
  });
 }
-function mountGltf(gltf,name){
+function mountGltf(gltf,name,{batch=false}={}){
  if(!gltf?.scene)throw Error('No glTF scene');
  const next=gltf.scene;
  next.traverse(o=>{
@@ -127,6 +129,8 @@ function mountGltf(gltf,name){
    o.frustumCulled=true;}
  });
  fit(next);
+ batchReport=batch?batchStaticScene(next,{animated:!!gltf.animations?.length}):null;
+ $('batch-status').textContent=batchReport?'STATIC MESHES: '+batchReport.before+' → '+batchReport.after+' · TRIANGLES UNCHANGED':'STATIC BATCHING OFF';
  if(active)disposeRoot(active);
  active=next;assetRoot.add(next);invalidate();renderer.shadowMap.needsUpdate=true;
  loadedName=name;wire=false;pressed('wire',false);
@@ -155,7 +159,8 @@ async function fetchGlb(path,signal,onProgress){
 }
 async function loadPreset(which='midnight',profile=quality){
  if(!verifiedProfiles.has(profile)){show('QUALITY PROFILE NOT YET PUBLISHED · USE THE GALLERY OR SELECT ORIGINAL',true);return;}
- if(active&&loadedPreset===which&&loadedProfile===profile&&!pendingFetch&&currentPreset===which)return;
+ const batch=$('batch-static').checked;
+ if(active&&loadedPreset===which&&loadedProfile===profile&&loadedBatching===batch&&!pendingFetch&&currentPreset===which)return;
  pendingFetch?.abort();
  const controller=new AbortController();pendingFetch=controller;
  currentPreset=which;
@@ -174,7 +179,7 @@ async function loadPreset(which='midnight',profile=quality){
   $('loading').textContent='DECODING 3D ASSET…';
   const gltf=await new Promise((resolve,reject)=>gltfLoader.parse(bytes,new URL('.',new URL(path,location.href)).href,resolve,reject));
   if(id!==loadingSeq){disposeRoot(gltf.scene);return}
-  mountGltf(gltf,preset.name+' / '+profile.toUpperCase());loadedProfile=profile;loadedPreset=which;selectionUI(which);
+  mountGltf(gltf,preset.name+' / '+profile.toUpperCase(),{batch});loadedBatching=batch;loadedProfile=profile;loadedPreset=which;selectionUI(which);
  }catch(e){if(id===loadingSeq){$('loading').hidden=true;show('PROFILE COULD NOT LOAD · '+profile.toUpperCase()+' · '+(active?'PREVIOUS ASSET RETAINED':'SELECT ORIGINAL')+' · '+(e?.message||e),true)}}finally{if(pendingFetch===controller)pendingFetch=null;}
 }
 async function importLocal(file){
@@ -191,7 +196,7 @@ async function importLocal(file){
    gltfLoader.parse(input,'',resolve,reject);
   });
   if(seq!==loadingSeq){disposeRoot(result.scene);return}
-  mountGltf(result,file.name);currentPreset=null;loadedPreset=null;loadedProfile='local';selectionUI(null);
+  mountGltf(result,file.name);loadedBatching=false;currentPreset=null;loadedPreset=null;loadedProfile='local';selectionUI(null);
  }catch(e){
   if(seq===loadingSeq){$('loading').hidden=true;show('IMPORT FAILED: '+(e?.message||e),true)}
  }
@@ -203,6 +208,10 @@ $('quality').addEventListener('change',()=>{
  key.castShadow=profiles[quality].shadows;renderer.shadowMap.needsUpdate=true;resize();
  if(active||pendingFetch){if(currentPreset)loadPreset(currentPreset,quality);}
  else show('PROFILE SELECTED · CHOOSE A FINISH TO LOAD 3D');
+});
+$('batch-static').addEventListener('change',()=>{
+ if((active||pendingFetch)&&currentPreset)loadPreset(currentPreset,quality);
+ else $('batch-status').textContent=$('batch-static').checked?'BATCHING ENABLED FOR NEXT PRESET LOAD':'STATIC BATCHING OFF';
 });
 $('file').addEventListener('change',e=>importLocal(e.target.files?.[0]));
 $('preset').addEventListener('click',()=>loadPreset('midnight'));
