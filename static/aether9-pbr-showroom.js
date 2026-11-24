@@ -5,6 +5,7 @@
  */
 import * as T from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { readAssetBytes, chooseGalleryFinish, chooseGalleryProfile } from './gallery-assets.js';
 import { batchStaticScene } from './static-gallery-batching.js';
 
 const $=id=>document.getElementById(id);
@@ -37,7 +38,9 @@ halo.rotation.x=-Math.PI/2;halo.position.y=-.035;scene.add(halo);
 const assetRoot=new T.Group();scene.add(assetRoot);
 const gltfLoader=new GLTFLoader();
 let active=null,loadedName='',loadingSeq=0;
-let currentPreset='midnight',loadedProfile='original',loadedPreset=null;
+const requestedFinish=chooseGalleryFinish(new URLSearchParams(location.search).get('finish'));
+const requestedProfile=new URLSearchParams(location.search).get('profile');
+let currentPreset=requestedFinish,loadedProfile='original',loadedPreset=null;
 let loadedBatching=false,batchReport=null;
 let pendingFetch=null,dirty=true,contextLost=false;
 const invalidate=()=>{dirty=true};
@@ -144,19 +147,6 @@ const aetherPresets={
  glacier:{path:'/static/assets/aether9-specter-glacier.glb',name:'AETHER-9 / GLACIER'},
  eclipse:{path:'/static/assets/aether9-specter-eclipse.glb',name:'AETHER-9 / ECLIPSE'}
 };
-async function fetchGlb(path,signal,onProgress){
- const response=await fetch(path,{signal});
- if(!response.ok)throw Error('HTTP '+response.status);
- const total=Number(response.headers.get('content-length'))||0;
- if(!response.body)return response.arrayBuffer();
- const reader=response.body.getReader(),chunks=[];let loaded=0;
- try{
-  while(true){const {done,value}=await reader.read();if(done)break;chunks.push(value);loaded+=value.byteLength;onProgress(loaded,total);}
- }finally{reader.releaseLock()}
- const bytes=new Uint8Array(loaded);let offset=0;
- for(const chunk of chunks){bytes.set(chunk,offset);offset+=chunk.byteLength;}
- return bytes.buffer;
-}
 async function loadPreset(which='midnight',profile=quality){
  if(!verifiedProfiles.has(profile)){show('QUALITY PROFILE NOT YET PUBLISHED · USE THE GALLERY OR SELECT ORIGINAL',true);return;}
  const batch=$('batch-static').checked;
@@ -171,10 +161,10 @@ async function loadPreset(which='midnight',profile=quality){
  show('LOADING GLTF ASSET…');$('loading').textContent='LOADING '+preset.name+'…';
  try{
   const path=preset.path.replace(/\.glb$/,suffix+'.glb');
-  const bytes=await fetchGlb(path,controller.signal,(loaded,total)=>{
+  const bytes=await readAssetBytes(path,{signal:controller.signal,onProgress:(loaded,total)=>{
    if(id!==loadingSeq)return;const pct=total>0?Math.min(100,Math.round(loaded/total*100)):null;
    $('loading').textContent=pct===null?'LOADING '+preset.name+'…':'LOADING '+preset.name+' · '+pct+'%';
-  });
+  }});
   if(id!==loadingSeq)return;
   $('loading').textContent='DECODING 3D ASSET…';
   const gltf=await new Promise((resolve,reject)=>gltfLoader.parse(bytes,new URL('.',new URL(path,location.href)).href,resolve,reject));
@@ -328,11 +318,14 @@ async function discoverProfiles(){
   }
  }catch(e){profileReport=null;}
  $('profile-status').textContent=verifiedProfiles.size===3?'ALL THREE PROFILES REPORTED READY': 'OPTIMIZED EXPORTS NOT YET CONFIRMED · ORIGINAL AVAILABLE';
- if(!active&&!pendingFetch&&verifiedProfiles.has('performance')){
-  quality='performance';select.value=quality;renderer.shadowMap.enabled=false;key.castShadow=false;resize();
+ if(!active&&!pendingFetch){
+  quality=chooseGalleryProfile(requestedProfile??'performance',verifiedProfiles);select.value=quality;
+  renderer.shadowMap.enabled=profiles[quality].shadows;key.castShadow=profiles[quality].shadows;resize();
  }
+ if(!active&&!pendingFetch)show('GALLERY READY · PREFERRED FINISH: '+requestedFinish.toUpperCase()+' · CHOOSE A FINISH TO LOAD 3D');
 }
 $('loading').hidden=true;
+$('asset-name').textContent='PREFERRED FINISH / '+requestedFinish.toUpperCase();
 show('GALLERY READY · CHOOSE A FINISH TO LOAD INTERACTIVE 3D');
 rotationUI();
 requestAnimationFrame(frame);
