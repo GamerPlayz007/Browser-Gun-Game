@@ -7,6 +7,8 @@ root.position.set(2,3,4);
 const material=new T.MeshStandardMaterial();
 const glass=new T.MeshStandardMaterial({transparent:true,opacity:.5});
 const shared=new T.BoxGeometry(1,1,1);
+// Match a single-material glTF primitive rather than BoxGeometry's six material groups.
+shared.clearGroups();
 const parent=new T.Group();parent.position.set(2,0,0);root.add(parent);
 const a=new T.Mesh(shared,material);a.position.set(1,0,0);parent.add(a);
 const b=new T.Mesh(shared,material);b.position.set(-3,0,0);root.add(b);
