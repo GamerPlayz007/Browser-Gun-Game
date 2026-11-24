@@ -7,7 +7,7 @@ import * as T from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 const $=id=>document.getElementById(id);
-const status=$('status'),progress=$('progress'),viewport=$('canvas');
+const status=$('status'),viewport=$('canvas');
 const scene=new T.Scene();scene.background=new T.Color('#08111b');
 const camera=new T.PerspectiveCamera(44,1,.05,150);
 const renderer=new T.WebGLRenderer({canvas:viewport,antialias:true,powerPreference:'high-performance'});
