@@ -37,9 +37,12 @@ const assetRoot=new T.Group();scene.add(assetRoot);
 const gltfLoader=new GLTFLoader();
 let active=null,loadedName='',loadingSeq=0;
 const orbit={yaw:.74,pitch:.28,dist:4.5,yawTarget:.74,pitchTarget:.28,distTarget:4.5,
- auto:true,interacting:false};
+ auto:!window.matchMedia('(prefers-reduced-motion: reduce)').matches,interacting:false};
 const target=new T.Vector3(0,1.05,0),targetDesired=target.clone();
-let dramatic=false,wire=false;
+let dramatic=false,wire=false,fitDistance=4.5;
+const pressed=(id,on)=>{$(id).classList.toggle('active',on);$(id).setAttribute('aria-pressed',String(on))};
+const rotationUI=()=>{pressed('auto',orbit.auto);$('auto').textContent=orbit.auto?'AUTO ROTATE: ON':'AUTO ROTATE: OFF'};
+function selectionUI(which){for(const [id,key] of [['preset','midnight'],['glacier','glacier'],['eclipse','eclipse']])pressed(id,which===key)}
 const pointers=new Map();
 let lastPinch=0;
 const show=(message,error=false)=>{status.textContent=message;status.classList.toggle('error',error)};
@@ -98,7 +101,7 @@ function fit(root){
  const after=new T.Box3().setFromObject(root);
  const fitted=after.getSize(new T.Vector3());
  targetDesired.set(0,Math.max(.5,fitted.y*.48),0);
- orbit.distTarget=T.MathUtils.clamp(Math.max(3.6,fitted.length()*1.34),3.6,9);
+ fitDistance=T.MathUtils.clamp(Math.max(3.6,fitted.length()*1.34),3.6,9);orbit.distTarget=fitDistance;
 }
 function syncWire(){
  if(!active)return;
@@ -117,7 +120,7 @@ function mountGltf(gltf,name){
  fit(next);
  if(active)disposeRoot(active);
  active=next;assetRoot.add(next);
- loadedName=name;wire=false;$('wire').classList.remove('active');
+ loadedName=name;wire=false;pressed('wire',false);
  updateStats(stats(next));
  show('ASSET LOADED · '+name.toUpperCase());
  $('asset-name').textContent=name.replace(/\.[^.]+$/,'');
@@ -132,19 +135,19 @@ async function loadPreset(which='midnight'){
  const preset=aetherPresets[which]||aetherPresets.midnight;
  const id=++loadingSeq;
  $('loading').hidden=false;
- show('LOADING GLTF ASSET…');
+ show('LOADING GLTF ASSET…');$('loading').textContent='LOADING '+preset.name+'…';
  try{
-  const gltf=await gltfLoader.loadAsync(preset.path);
+  const gltf=await gltfLoader.loadAsync(preset.path,event=>{if(id!==loadingSeq)return;const pct=event.lengthComputable&&event.total>0?Math.min(100,Math.round(event.loaded/event.total*100)):null;$('loading').textContent=pct===null?'LOADING '+preset.name+'…':'LOADING '+preset.name+' · '+pct+'%';});
   if(id!==loadingSeq){disposeRoot(gltf.scene);return}
-  mountGltf(gltf,preset.name);
+  mountGltf(gltf,preset.name);selectionUI(which);
  }catch(e){if(id===loadingSeq){$('loading').hidden=true;show('COULD NOT LOAD DEMO ASSET: '+(e?.message||e),true)}}
 }
 async function importLocal(file){
  if(!file)return;
  if(!/\.(glb|gltf)$/i.test(file.name)){show('CHOOSE A .GLB OR EMBEDDED .GLTF FILE',true);return}
- if(file.size>35_000_000){show('ASSET TOO LARGE FOR THIS PREVIEW (35 MB LIMIT)',true);return}
+ if(file.size>65_000_000){show('ASSET TOO LARGE FOR THIS PREVIEW (65 MB LIMIT)',true);return}
  const seq=++loadingSeq;
- $('loading').hidden=false;show('DECODING '+file.name+'…');
+ $('loading').hidden=false;$('loading').textContent='DECODING LOCAL ASSET…';show('DECODING '+file.name+'…');
  try{
   const data=await file.arrayBuffer();
   const result=await new Promise((resolve,reject)=>{
@@ -152,7 +155,7 @@ async function importLocal(file){
    gltfLoader.parse(input,'',resolve,reject);
   });
   if(seq!==loadingSeq){disposeRoot(result.scene);return}
-  mountGltf(result,file.name);
+  mountGltf(result,file.name);selectionUI(null);
  }catch(e){
   if(seq===loadingSeq){$('loading').hidden=true;show('IMPORT FAILED: '+(e?.message||e),true)}
  }
@@ -161,25 +164,21 @@ $('file').addEventListener('change',e=>importLocal(e.target.files?.[0]));
 $('preset').addEventListener('click',()=>loadPreset('midnight'));
 $('glacier').addEventListener('click',()=>loadPreset('glacier'));
 $('eclipse').addEventListener('click',()=>loadPreset('eclipse'));
-$('wire').addEventListener('click',()=>{wire=!wire;syncWire();$('wire').classList.toggle('active',wire)});
+$('wire').addEventListener('click',()=>{wire=!wire;syncWire();pressed('wire',wire)});
 $('auto').addEventListener('click',()=>{
- orbit.auto=!orbit.auto;$('auto').classList.toggle('active',orbit.auto);
- $('auto').textContent=orbit.auto?'AUTO ROTATE: ON':'AUTO ROTATE: OFF';
+ orbit.auto=!orbit.auto;rotationUI();
 });
 $('light').addEventListener('click',()=>{
  dramatic=!dramatic;key.intensity=dramatic?2.35:4.1;
  rim.intensity=dramatic?5.2:3;warm.intensity=dramatic?.25:.95;
  renderer.toneMappingExposure=dramatic?1.40:1.28;
- $('light').classList.toggle('active',dramatic);
+ pressed('light',dramatic);
  $('light').textContent=dramatic?'LIGHT: DRAMATIC':'LIGHT: STUDIO';
 });
 function reset(){orbit.yawTarget=.74;orbit.pitchTarget=.28;
- orbit.distTarget=4.5;orbit.auto=false;
- $('auto').classList.remove('active');
- $('auto').textContent='AUTO ROTATE: OFF';}
+ orbit.distTarget=fitDistance;orbit.auto=false;rotationUI();}
 $('reset').addEventListener('click',reset);
-function pauseRotation(){orbit.auto=false;$('auto').classList.remove('active');
- $('auto').textContent='AUTO ROTATE: OFF';}
+function pauseRotation(){orbit.auto=false;rotationUI();}
 viewport.addEventListener('pointerdown',e=>{
  viewport.setPointerCapture(e.pointerId);
  pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
@@ -245,5 +244,6 @@ function frame(time){
  camera.lookAt(target);
  renderer.render(scene,camera);
 }
+rotationUI();
 requestAnimationFrame(frame);
 loadPreset('midnight');
