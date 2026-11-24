@@ -36,7 +36,9 @@ halo.rotation.x=-Math.PI/2;halo.position.y=-.035;scene.add(halo);
 const assetRoot=new T.Group();scene.add(assetRoot);
 const gltfLoader=new GLTFLoader();
 let active=null,loadedName='',loadingSeq=0;
-let currentPreset='midnight',loadedProfile='original';
+let currentPreset='midnight',loadedProfile='original',loadedPreset=null;
+let pendingFetch=null,dirty=true,contextLost=false;
+const invalidate=()=>{dirty=true};
 const profiles={performance:{pixelRatio:1,shadows:false,fps:30},balanced:{pixelRatio:1.25,shadows:true,fps:45},original:{pixelRatio:1.65,shadows:true,fps:60}};
 let quality='original';
 const orbit={yaw:.74,pitch:.28,dist:4.5,yawTarget:.74,pitchTarget:.28,distTarget:4.5,
@@ -44,7 +46,7 @@ const orbit={yaw:.74,pitch:.28,dist:4.5,yawTarget:.74,pitchTarget:.28,distTarget
 const target=new T.Vector3(0,1.05,0),targetDesired=target.clone();
 let dramatic=false,wire=false,fitDistance=4.5;
 const pressed=(id,on)=>{$(id).classList.toggle('active',on);$(id).setAttribute('aria-pressed',String(on))};
-const rotationUI=()=>{pressed('auto',orbit.auto);$('auto').textContent=orbit.auto?'AUTO ROTATE: ON':'AUTO ROTATE: OFF'};
+const rotationUI=()=>{invalidate();pressed('auto',orbit.auto);$('auto').textContent=orbit.auto?'AUTO ROTATE: ON':'AUTO ROTATE: OFF'};
 function selectionUI(which){for(const [id,key] of [['preset','midnight'],['glacier','glacier'],['eclipse','eclipse']])pressed(id,which===key)}
 const pointers=new Map();
 let lastPinch=0;
@@ -83,7 +85,9 @@ function disposeRoot(root){
     if(m[prop])textures.add(m[prop]);
   }
  });
- geos.forEach(g=>g.dispose());textures.forEach(t=>t.dispose());materials.forEach(m=>m.dispose());
+ geos.forEach(g=>g.dispose());
+ const images=new Set();textures.forEach(t=>{const im=t.source?.data;if(im&&typeof im.close==='function')images.add(im);t.dispose()});
+ images.forEach(im=>im.close());materials.forEach(m=>m.dispose());
  root.removeFromParent();
 }
 function fit(root){
@@ -122,7 +126,7 @@ function mountGltf(gltf,name){
  });
  fit(next);
  if(active)disposeRoot(active);
- active=next;assetRoot.add(next);
+ active=next;assetRoot.add(next);invalidate();renderer.shadowMap.needsUpdate=true;
  loadedName=name;wire=false;pressed('wire',false);
  updateStats(stats(next));
  show('ASSET LOADED · '+name.toUpperCase());
@@ -134,7 +138,23 @@ const aetherPresets={
  glacier:{path:'/static/assets/aether9-specter-glacier.glb',name:'AETHER-9 / GLACIER'},
  eclipse:{path:'/static/assets/aether9-specter-eclipse.glb',name:'AETHER-9 / ECLIPSE'}
 };
+async function fetchGlb(path,signal,onProgress){
+ const response=await fetch(path,{signal});
+ if(!response.ok)throw Error('HTTP '+response.status);
+ const total=Number(response.headers.get('content-length'))||0;
+ if(!response.body)return response.arrayBuffer();
+ const reader=response.body.getReader(),chunks=[];let loaded=0;
+ try{
+  while(true){const {done,value}=await reader.read();if(done)break;chunks.push(value);loaded+=value.byteLength;onProgress(loaded,total);}
+ }finally{reader.releaseLock()}
+ const bytes=new Uint8Array(loaded);let offset=0;
+ for(const chunk of chunks){bytes.set(chunk,offset);offset+=chunk.byteLength;}
+ return bytes.buffer;
+}
 async function loadPreset(which='midnight',profile=quality){
+ if(active&&loadedPreset===which&&loadedProfile===profile&&!pendingFetch&&currentPreset===which)return;
+ pendingFetch?.abort();
+ const controller=new AbortController();pendingFetch=controller;
  currentPreset=which;
  const suffix=profile==='original'?'':'-'+profile;
  const preset=aetherPresets[which]||aetherPresets.midnight;
@@ -143,15 +163,22 @@ async function loadPreset(which='midnight',profile=quality){
  show('LOADING GLTF ASSET…');$('loading').textContent='LOADING '+preset.name+'…';
  try{
   const path=preset.path.replace(/\.glb$/,suffix+'.glb');
-  const gltf=await gltfLoader.loadAsync(path,event=>{if(id!==loadingSeq)return;const pct=event.lengthComputable&&event.total>0?Math.min(100,Math.round(event.loaded/event.total*100)):null;$('loading').textContent=pct===null?'LOADING '+preset.name+'…':'LOADING '+preset.name+' · '+pct+'%';});
+  const bytes=await fetchGlb(path,controller.signal,(loaded,total)=>{
+   if(id!==loadingSeq)return;const pct=total>0?Math.min(100,Math.round(loaded/total*100)):null;
+   $('loading').textContent=pct===null?'LOADING '+preset.name+'…':'LOADING '+preset.name+' · '+pct+'%';
+  });
+  if(id!==loadingSeq)return;
+  $('loading').textContent='DECODING 3D ASSET…';
+  const gltf=await new Promise((resolve,reject)=>gltfLoader.parse(bytes,new URL('.',new URL(path,location.href)).href,resolve,reject));
   if(id!==loadingSeq){disposeRoot(gltf.scene);return}
-  mountGltf(gltf,preset.name+' / '+profile.toUpperCase());loadedProfile=profile;selectionUI(which);
- }catch(e){if(id===loadingSeq){$('loading').hidden=true;show('PROFILE COULD NOT LOAD · '+profile.toUpperCase()+' · '+(active?'PREVIOUS ASSET RETAINED':'SELECT ORIGINAL')+' · '+(e?.message||e),true)}}
+  mountGltf(gltf,preset.name+' / '+profile.toUpperCase());loadedProfile=profile;loadedPreset=which;selectionUI(which);
+ }catch(e){if(id===loadingSeq){$('loading').hidden=true;show('PROFILE COULD NOT LOAD · '+profile.toUpperCase()+' · '+(active?'PREVIOUS ASSET RETAINED':'SELECT ORIGINAL')+' · '+(e?.message||e),true)}}finally{if(pendingFetch===controller)pendingFetch=null;}
 }
 async function importLocal(file){
  if(!file)return;
  if(!/\.(glb|gltf)$/i.test(file.name)){show('CHOOSE A .GLB OR EMBEDDED .GLTF FILE',true);return}
  if(file.size>65_000_000){show('ASSET TOO LARGE FOR THIS PREVIEW (65 MB LIMIT)',true);return}
+ pendingFetch?.abort();pendingFetch=null;
  const seq=++loadingSeq;
  $('loading').hidden=false;$('loading').textContent='DECODING LOCAL ASSET…';show('DECODING '+file.name+'…');
  try{
@@ -161,7 +188,7 @@ async function importLocal(file){
    gltfLoader.parse(input,'',resolve,reject);
   });
   if(seq!==loadingSeq){disposeRoot(result.scene);return}
-  mountGltf(result,file.name);currentPreset=null;loadedProfile='local';selectionUI(null);
+  mountGltf(result,file.name);currentPreset=null;loadedPreset=null;loadedProfile='local';selectionUI(null);
  }catch(e){
   if(seq===loadingSeq){$('loading').hidden=true;show('IMPORT FAILED: '+(e?.message||e),true)}
  }
@@ -170,14 +197,14 @@ $('quality').addEventListener('change',()=>{
  const selected=$('quality').value;
  if(!Object.hasOwn(profiles,selected))return;
  quality=selected;renderer.shadowMap.enabled=profiles[quality].shadows;
- key.castShadow=profiles[quality].shadows;resize();
+ key.castShadow=profiles[quality].shadows;renderer.shadowMap.needsUpdate=true;resize();
  if(currentPreset)loadPreset(currentPreset,quality);
 });
 $('file').addEventListener('change',e=>importLocal(e.target.files?.[0]));
 $('preset').addEventListener('click',()=>loadPreset('midnight'));
 $('glacier').addEventListener('click',()=>loadPreset('glacier'));
 $('eclipse').addEventListener('click',()=>loadPreset('eclipse'));
-$('wire').addEventListener('click',()=>{wire=!wire;syncWire();pressed('wire',wire)});
+$('wire').addEventListener('click',()=>{wire=!wire;syncWire();invalidate();pressed('wire',wire)});
 $('auto').addEventListener('click',()=>{
  orbit.auto=!orbit.auto;rotationUI();
 });
@@ -185,7 +212,7 @@ $('light').addEventListener('click',()=>{
  dramatic=!dramatic;key.intensity=dramatic?2.35:4.1;
  rim.intensity=dramatic?5.2:3;warm.intensity=dramatic?.25:.95;
  renderer.toneMappingExposure=dramatic?1.40:1.28;
- pressed('light',dramatic);
+ invalidate();renderer.shadowMap.needsUpdate=true;pressed('light',dramatic);
  $('light').textContent=dramatic?'LIGHT: DRAMATIC':'LIGHT: STUDIO';
 });
 function reset(){orbit.yawTarget=.74;orbit.pitchTarget=.28;
@@ -235,14 +262,20 @@ document.addEventListener('keydown',e=>{
 function resize(){
  const w=Math.max(1,innerWidth),h=Math.max(1,innerHeight);
  renderer.setPixelRatio(Math.min(devicePixelRatio||1,profiles[quality].pixelRatio,w<800?1.25:1.65));
- renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();
+ renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();invalidate();
 }
 window.addEventListener('resize',resize);
+renderer.shadowMap.autoUpdate=false;renderer.shadowMap.needsUpdate=true;
+viewport.addEventListener('webglcontextlost',e=>{e.preventDefault();contextLost=true;show('GRAPHICS CONTEXT LOST · WAITING FOR RECOVERY',true)});
+viewport.addEventListener('webglcontextrestored',()=>{contextLost=false;renderer.shadowMap.needsUpdate=true;invalidate();show('GRAPHICS CONTEXT RESTORED')});
+document.addEventListener('visibilitychange',invalidate);
 resize();
 let prev=performance.now(),lastRender=0,diagnosticStart=prev,renderCount=0;
 function frame(time){
  requestAnimationFrame(frame);
- if(document.hidden){prev=time;diagnosticStart=time;renderCount=0;return;}
+ if(document.hidden||contextLost){prev=time;diagnosticStart=time;renderCount=0;return;}
+ const moving=orbit.auto||Math.abs(orbit.yawTarget-orbit.yaw)>.0001||Math.abs(orbit.pitchTarget-orbit.pitch)>.0001||Math.abs(orbit.distTarget-orbit.dist)>.0001||target.distanceToSquared(targetDesired)>1e-8;
+ if(!dirty&&!moving){prev=time;diagnosticStart=time;renderCount=0;$('render-metrics').textContent='IDLE · RENDER ON CHANGE · asset: '+loadedProfile;return;}
  const interval=1000/profiles[quality].fps;
  if(lastRender&&time-lastRender<interval-1)return;
  lastRender=time;
@@ -258,7 +291,7 @@ function frame(time){
   target.y+Math.sin(orbit.pitch)*orbit.dist,
   target.z+Math.cos(orbit.yaw)*cs*orbit.dist);
  camera.lookAt(target);
- renderer.render(scene,camera);
+ renderer.render(scene,camera);dirty=false;
  renderCount++;
  if(time-diagnosticStart>=1000){
   const fps=Math.round(renderCount*1000/(time-diagnosticStart));
