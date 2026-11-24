@@ -45,7 +45,7 @@ let loadedBatching=false,batchReport=null;
 let pendingFetch=null,dirty=true,contextLost=false;
 const invalidate=()=>{dirty=true};
 const profiles={performance:{pixelRatio:1,shadows:false,fps:30},balanced:{pixelRatio:1.25,shadows:true,fps:45},original:{pixelRatio:1.65,shadows:true,fps:60}};
-let quality='original';
+let quality='original',qualityChosen=false;
 let profileReport=null;
 const verifiedProfiles=new Set(['original']);
 const orbit={yaw:.74,pitch:.28,dist:4.5,yawTarget:.74,pitchTarget:.28,distTarget:4.5,
@@ -194,7 +194,7 @@ async function importLocal(file){
 $('quality').addEventListener('change',()=>{
  const selected=$('quality').value;
  if(!Object.hasOwn(profiles,selected)||!verifiedProfiles.has(selected))return;
- quality=selected;renderer.shadowMap.enabled=profiles[quality].shadows;
+ qualityChosen=true;quality=selected;renderer.shadowMap.enabled=profiles[quality].shadows;
  key.castShadow=profiles[quality].shadows;renderer.shadowMap.needsUpdate=true;resize();
  if(active||pendingFetch){if(currentPreset)loadPreset(currentPreset,quality);}
  else show('PROFILE SELECTED · CHOOSE A FINISH TO LOAD 3D');
@@ -204,6 +204,7 @@ $('batch-static').addEventListener('change',()=>{
  else $('batch-status').textContent=$('batch-static').checked?'BATCHING ENABLED FOR NEXT PRESET LOAD':'STATIC BATCHING OFF';
 });
 $('file').addEventListener('change',e=>importLocal(e.target.files?.[0]));
+$('load-preferred').addEventListener('click',()=>loadPreset(requestedFinish));
 $('preset').addEventListener('click',()=>loadPreset('midnight'));
 $('glacier').addEventListener('click',()=>loadPreset('glacier'));
 $('eclipse').addEventListener('click',()=>loadPreset('eclipse'));
@@ -318,7 +319,7 @@ async function discoverProfiles(){
   }
  }catch(e){profileReport=null;}
  $('profile-status').textContent=verifiedProfiles.size===3?'ALL THREE PROFILES REPORTED READY': 'OPTIMIZED EXPORTS NOT YET CONFIRMED · ORIGINAL AVAILABLE';
- if(!active&&!pendingFetch){
+ if(!active&&!pendingFetch&&!qualityChosen){
   quality=chooseGalleryProfile(requestedProfile??'performance',verifiedProfiles);select.value=quality;
   renderer.shadowMap.enabled=profiles[quality].shadows;key.castShadow=profiles[quality].shadows;resize();
  }
