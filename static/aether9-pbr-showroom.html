@@ -67,19 +67,31 @@ footer{position:fixed;bottom:26px;left:3vw;z-index:2;color:#7291a3;font:700 9px 
 .asset-link a{font-size:10px;letter-spacing:.12em;font-weight:800;color:#7de9ff;text-decoration:none}
 .asset-link a:hover{text-decoration:underline}
 @media(max-width:600px){.asset-link{margin:7px 0 0}}
+
+.finish-gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:12px 0 14px}
+.finish-gallery a{display:block;overflow:hidden;border:1px solid #36586b;border-radius:7px;background:#0b2230;color:#d8eaf2;text-align:center;text-decoration:none;font-size:9px;letter-spacing:.07em;font-weight:750}
+.finish-gallery a:hover,.finish-gallery a:focus-visible{border-color:var(--c);outline:2px solid var(--c);outline-offset:2px}
+.finish-gallery img{display:block;width:100%;aspect-ratio:16/10;object-fit:contain;background:#08111b}
+.finish-gallery span{display:block;padding:7px 2px}
+.gallery-label{font-size:10px;letter-spacing:.1em;color:#9db9c5;margin:11px 0 0}
+button:focus-visible,a:focus-visible{outline:2px solid var(--c);outline-offset:3px}
+.row button[aria-pressed="true"]{border-color:var(--c);background:#16485a;color:white}
+#loading{inset:0 0 auto;height:58px;background:#08111bf2;z-index:8;pointer-events:none;border-bottom:1px solid #345466;text-align:center;padding:8px}
+@media(max-width:600px){.finish-gallery{margin:7px 0;gap:5px}.finish-gallery span{padding:4px 2px}.gallery-label{margin-top:6px}.finish-gallery img{aspect-ratio:2/1}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
 <canvas id="canvas" aria-label="Interactive glTF / GLB 3D scene viewer"></canvas>
-<div id="loading">LOADING AETHER PBR MATERIALS…</div>
+<div id="loading" role="status" aria-live="polite">LOADING AETHER PBR MATERIALS…</div>
 <div id="dropzone" hidden>DROP YOUR GLB FILE HERE</div>
 <header>
 <a href="/" class="logo">CROSS<b>FIRE</b></a>
-<nav><a href="/static/aether9-phantom-v3.html">PREVIOUS 3D CONCEPT</a><span>ASSET PIPELINE LAB</span></nav>
+<nav><a href="/static/aether9-phantom-v3.html">PREVIOUS 3D CONCEPT</a><span>PHASE 4 · ART SHOWROOM</span></nav>
 </header>
 <aside>
-<div class="overline">PHASE 3 / PBR MATERIALS · THREE COSMETIC FINISHES</div>
-<h1>AETHER<br>PHASE THREE<small>TRUE TEXTURED GLB · PBR GAME ART</small></h1>
+<div class="overline">PHASE 4 / PRESENTATION · THREE COSMETIC FINISHES</div>
+<h1>AETHER<br>COLLECTION<small>INTERACTIVE ART GALLERY · PBR GAME ART</small></h1>
 <p>AETHER-9 SPECTER now has true image-textured PBR surfaces. Compare Midnight, Glacier, and Eclipse in an interactive Three.js studio. Each finish loads a separately exported GLB with embedded base-color, normal, metallic, roughness, emissive and baked ambient-occlusion textures.</p>
 <div class="note">THREE.JS / GLTFLOADER<br>THREE TEXTURED GLB FINISHES · PHOTONIC MATERIALS<br>REAL MATERIAL MAPS · GAME ART ONLY</div>
 </aside>
@@ -92,15 +104,21 @@ footer{position:fixed;bottom:26px;left:3vw;z-index:2;color:#7291a3;font:700 9px 
   <div class="metric"><strong id="materials">—</strong><small>MATERIALS</small></div>
   <div class="metric"><strong id="textures">—</strong><small>TEXTURES</small></div>
  </div>
+ <div class="gallery-label">RENDER GALLERY · OPEN FULL IMAGE</div>
+ <div class="finish-gallery" aria-label="Verified Phase 3 preview gallery">
+ <a href="/static/previews/aether9-specter-midnight-pbr.png" target="_blank" rel="noopener"><img src="/static/previews/aether9-specter-midnight-pbr.png" alt="Midnight studio render" decoding="async"><span>MIDNIGHT</span></a>
+ <a href="/static/previews/aether9-specter-glacier-pbr.png" target="_blank" rel="noopener"><img src="/static/previews/aether9-specter-glacier-pbr.png" alt="Glacier studio render" decoding="async"><span>GLACIER</span></a>
+ <a href="/static/previews/aether9-specter-eclipse-pbr.png" target="_blank" rel="noopener"><img src="/static/previews/aether9-specter-eclipse-pbr.png" alt="Eclipse studio render" decoding="async"><span>ECLIPSE</span></a>
+ </div>
  <label class="upload">IMPORT A .GLB / .GLTF FILE<input id="file" type="file" accept=".glb,.gltf,model/gltf-binary,model/gltf+json"></label>
  <div class="row">
-  <button id="preset">MIDNIGHT</button>
-  <button id="glacier">GLACIER</button>
-  <button id="eclipse">ECLIPSE</button>
-  <button id="wire">WIREFRAME</button>
-  <button class="active" id="auto">AUTO ROTATE: ON</button>
+  <button id="preset" aria-pressed="false">MIDNIGHT</button>
+  <button id="glacier" aria-pressed="false">GLACIER</button>
+  <button id="eclipse" aria-pressed="false">ECLIPSE</button>
+  <button id="wire" aria-pressed="false">WIREFRAME</button>
+  <button class="active" id="auto" aria-pressed="true">AUTO ROTATE: ON</button>
   <button id="reset">RESET VIEW</button>
-  <button id="light">LIGHT: STUDIO</button>
+  <button id="light" aria-pressed="false">LIGHT: STUDIO</button>
  </div>
  <div id="status" aria-live="polite">INITIALIZING GLTF LOADER…</div>
  <div id="instructions">DRAG TO ORBIT · SCROLL TO ZOOM · OR DROP A .GLB FILE</div>
@@ -108,6 +126,7 @@ footer{position:fixed;bottom:26px;left:3vw;z-index:2;color:#7291a3;font:700 9px 
  <p class="asset-link"><a href="/static/previews/aether9-specter-midnight-pbr.png" target="_blank" rel="noopener">VIEW PBR RENDER</a> · <a href="/static/previews/aether9-specter-glacier-pbr.png" target="_blank" rel="noopener">GLACIER RENDER</a> · <a href="/static/previews/aether9-specter-eclipse-pbr.png" target="_blank" rel="noopener">ECLIPSE RENDER</a></p>
 </section>
 <footer>GAME ART PIPELINE · SEPARATE FROM MULTIPLAYER · BUILT FOR REUSABLE ASSETS</footer>
+<noscript><p style="position:fixed;left:12px;top:55px;z-index:11;background:#08111b;padding:10px">Interactive 3D requires JavaScript. The render gallery remains available.</p><style>#loading{display:none}</style></noscript>
 <script type="module" src="/static/aether9-pbr-showroom.js"></script>
 </body>
 </html>
