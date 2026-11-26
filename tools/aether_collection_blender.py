@@ -180,6 +180,7 @@ def smg():
         beam("S9 / light stroke "+str(side),(side*.248,.31,-.61),(side*.248,.26,-.43),.012,"accent")
     box("S9 / folding butt",(0,.180,.719),(.37,.184,.074),"rubber",.021)
     fins("S9 / handguard",-.675,6,.052,.212,.28,"metal")
+    fins("S9 / chassis under-vents",-.48,9,.04,.16,.055,"accent")
     box("S9 / optic base",(0,.388,-.067),(.170,.050,.22),"recess")
     ring("S9 / compact holo ring",(0,.488,-.085),.095,.012,"glow")
     cylinder("S9 / optic eye",(0,.485,-.106),.044,.014,"glass")
@@ -246,7 +247,7 @@ def setup_studio(kind):
     sc.render.resolution_x=1200;sc.render.resolution_y=720;sc.render.resolution_percentage=100
     sc.render.film_transparent=True
     sc.world.color=(.06,.08,.12)
-    bpy.ops.object.camera_add(location=(3.5,2.0,4.1))
+    bpy.ops.object.camera_add(location=(3.5,2.0,-4.1))
     cam=bpy.context.object
     from mathutils import Vector
     center=Vector((0,.19,-.31 if kind=="l7" else -.08))
