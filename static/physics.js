@@ -164,6 +164,8 @@ export function simulate(p,input,dt,now,allBoxes,weapon){
  if(ny<=ground||(p.grounded&&p.vy<=0&&old-ground<=.29)){ny=ground;p.vy=0;p.grounded=true;}
  else p.grounded=false;
  p.y=ny;
- if(p.grounded&&!startGrounded){p.jump_consumed=false;p.jump_cut=false;p.wall_kick_used=false;}
+ // A blocked takeoff may contact the floor again in the SAME tick.
+ // Re-arm whenever grounded, rather than waiting for a false->true transition.
+ if(p.grounded){p.jump_consumed=false;p.jump_cut=false;p.wall_kick_used=false;}
  p.lean=allowedLean63(p,input,allBoxes);
 }
