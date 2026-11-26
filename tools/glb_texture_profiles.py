@@ -82,7 +82,7 @@ def optimize(raw, limit):
     def slice_view(index):
         v = source_views[index]
         start, n = v.get("byteOffset", 0), v["byteLength"]
-        if start < 0 or n < 0 or start+n > buffers[0]["byteLength"]:
+        if start < 0 or n < 0 or start+n > source["buffers"][0]["byteLength"]:
             raise ValueError("bufferView outside buffer")
         return binary[start:start+n]
     image_views = set()
