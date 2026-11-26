@@ -59,6 +59,9 @@ function fitStaticArt(scene,bounds){
  return container;
 }
 export function createStaticCosmetic(rig,{finish='midnight',weaponId=0}={}){
+ // AR-01 v0.4 is now the canonical art in every quality tier.
+ // Do not restore older AETHER-9 gallery assets over the active AR.
+ if(Number(weaponId)===0)return {update(){},dispose(){}};
  const group=rig?.userData?.aetherArtGun71;
  if(!group)return {update(){},dispose(){}};
  const old=group.children.filter(o=>o!==rig.userData.flash&&o!==rig.userData.reloadGlyph70);
