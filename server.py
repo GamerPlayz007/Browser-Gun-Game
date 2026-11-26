@@ -463,7 +463,14 @@ class Room:
                 # Render instances. A shared 30Hz native simulation halves
                 # collision work without changing other arenas' 60Hz physics.
                 step_dt=OCTAVUS_TICK if self.arena.id=='octavus' else TICK
-                p['move_credit']=min(.2,p['move_credit']+dt)
+                # Avoid saving up a large burst of physics ticks during a network stall.
+                # Imported BVH maps become unresponsive if an entire backlog is replayed
+                # in one event-loop pass; dropping old commands favors current controls.
+                p['move_credit']=min(step_dt*2,p['move_credit']+dt)
+                if len(p['commands'])>8:
+                    while len(p['commands'])>4:
+                        p['commands'].popleft()
+                        p['input_overruns']=p.get('input_overruns',0)+1
                 while p['commands'] and p['move_credit']>=step_dt-1e-8:
                     cmd=p['commands'].popleft()
                     if cmd['spawn']!=p['spawn']:continue
@@ -526,7 +533,7 @@ async def socket(request):
     code=request.match_info['code'].upper();room=rooms.get(code)
     if not room:return web.json_response({'error':'Room expired. Create a new room.'},status=404)
     if len(room.players)+room.joining>=MAX_PLAYERS:return web.json_response({'error':f'Room full ({MAX_PLAYERS} players).'},status=409)
-    ws=web.WebSocketResponse(heartbeat=15,max_msg_size=2048);room.joining+=1
+    ws=web.WebSocketResponse(heartbeat=40,max_msg_size=2048);room.joining+=1
     try:await ws.prepare(request)
     finally:room.joining-=1
     pid=secrets.token_hex(5);name=re.sub(r'[^\w .-]','',request.query.get('name','Player'))[:16].strip() or 'Player'
@@ -589,9 +596,25 @@ async def socket(request):
 
 async def broadcast(room,packet):
     async def send(ws):
-        try:await asyncio.wait_for(ws.send_str(packet),.08)
-        except Exception:
-            if not ws.closed:asyncio.create_task(ws.close())
+        if ws.closed:
+            return
+        # A slow laptop or a high-latency connection should miss an obsolete
+        # positional snapshot, not be kicked from the room. The next snapshot
+        # is self-contained and carries the newest authoritative state.
+        writer=getattr(ws,'_writer',None)
+        transport=getattr(writer,'transport',None)
+        if transport is not None:
+            if transport.is_closing() or transport.get_write_buffer_size()>98304:
+                return
+        try:
+            await asyncio.wait_for(ws.send_str(packet),.04)
+        except asyncio.TimeoutError:
+            # send_str may have queued the frame already. Do not close the
+            # socket for one slow drain; flow-control will skip later frames.
+            pass
+        except (ConnectionError,RuntimeError):
+            # The receive loop/heartbeat cleans up genuinely broken sockets.
+            pass
     await asyncio.gather(*(send(ws) for ws in list(room.sockets.values())))
 async def loop(app):
     last=time.monotonic();snapshot_budget=0.
@@ -602,7 +625,7 @@ async def loop(app):
         if publish:snapshot_budget%=.05
         for code,room in list(rooms.items()):
             if not room.players:
-                if now-room.last_active>180:rooms.pop(code,None)
+                if now-room.last_active>(600 if room.arena.id in ('octavus','dust_corridor') else 180):rooms.pop(code,None)
                 continue
             room.step(dt,now)
             if publish:
