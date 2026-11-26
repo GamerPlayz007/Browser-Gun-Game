@@ -1,0 +1,35 @@
+{
+  "asset": "AETHER-S9 VESPER",
+  "stage": "Phase 2 / new custom sculpt / clay & midnight reviews",
+  "nonfunctional_fictional_game_art": true,
+  "old_s9_replaced": false,
+  "mesh_objects": 48,
+  "authoring_objects": 48,
+  "material_families": [
+    "ceramic",
+    "frame",
+    "mid",
+    "polymer",
+    "silver",
+    "cyan",
+    "glass",
+    "copper",
+    "carbon"
+  ],
+  "geometry_methods": [
+    "tapered ring lofts",
+    "extruded hand-sketched side blades",
+    "Bezier art ribbons",
+    "swept rear arches"
+  ],
+  "model": "aether-s9-vesper-sculpt.glb",
+  "clay_previews": [
+    "aether-s9-vesper-clay-hero.png",
+    "aether-s9-vesper-clay-profile.png"
+  ],
+  "midnight_previews": [
+    "aether-s9-vesper-midnight-hero.png",
+    "aether-s9-vesper-midnight-profile.png"
+  ],
+  "notes": "Sculpt phase; not yet production UV/PBR bake/LOD or game replacement"
+}
