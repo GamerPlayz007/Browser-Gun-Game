@@ -75,7 +75,8 @@ function extrude(coords,holes,half,y,bevel=0){
  const shape=outline(coords);
  for(const poly of holes){
   const path=new T.Path();
-  const reverse=T.ShapeUtils.isClockWise(poly)===T.ShapeUtils.isClockWise(coords);
+  const clockwise=points=>T.ShapeUtils.isClockWise(points.map(p=>new T.Vector2(p[0],p[1])));
+  const reverse=clockwise(poly)===clockwise(coords);
   const points=reverse?[...poly].reverse():poly;
   for(let i=0;i<points.length;i++){
    const p=points[i];if(i===0)path.moveTo(p[0],p[1]);else path.lineTo(p[0],p[1]);
