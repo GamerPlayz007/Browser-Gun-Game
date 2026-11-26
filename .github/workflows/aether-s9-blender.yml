@@ -1,0 +1,77 @@
+name: AETHER S9 Blender art and visual QA
+on:
+  push:
+    paths:
+      - tools/aether_s9_blender.py
+      - tools/aether_s9_render.py
+      - .github/workflows/aether-s9-blender.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: aether-s9-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  art:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y blender python3-numpy python3-pil xvfb xauth libgl1-mesa-dri
+      - name: Build native scene and textured GLBs
+        run: |
+          mkdir -p build/aether-s9
+          PYTHONPATH=/usr/lib/python3/dist-packages blender -b -t 2 --python-exit-code 1 --python tools/aether_s9_blender.py -- "$PWD/build/aether-s9"
+      - name: Independently import and render actual exports
+        run: |
+          LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a blender -b -t 2 --python-exit-code 1 --python tools/aether_s9_render.py -- "$PWD/build/aether-s9"
+      - name: Verify assets and rendered coverage
+        run: |
+          python3 - <<'PY'
+          from PIL import Image, ImageChops, ImageStat
+          from pathlib import Path
+          import json, struct
+          p=Path('build/aether-s9')
+          assert (p/'aether-s9.blend').read_bytes().startswith(b'BLENDER')
+          previews=[]
+          for v in ('midnight','glacier','eclipse'):
+              b=(p/f'aether-s9-{v}.glb').read_bytes()
+              magic,ver,length=struct.unpack_from('<III',b)
+              assert magic==0x46546c67 and ver==2 and length==len(b)
+              size=struct.unpack_from('<I',b,12)[0]
+              g=json.loads(b[20:20+size])
+              assert len(g['materials'])>=6 and len(g['images'])>=6
+              assert all('normalTexture' in m and 'baseColorTexture' in m['pbrMetallicRoughness'] for m in g['materials'])
+              im=Image.open(p/f'aether-s9-{v}.png').convert('RGBA')
+              a=im.getchannel('A')
+              coverage=sum(a.histogram()[16:])/(im.width*im.height)
+              assert .04<coverage<.80,coverage
+              rgb=Image.new('RGB',im.size,(25,32,43));rgb.paste(im,mask=a)
+              assert max(ImageStat.Stat(rgb).stddev)>8
+              previews.append(rgb)
+          assert all(max(ImageStat.Stat(ImageChops.difference(previews[0],x)).mean)>2 for x in previews[1:])
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: s9-native-art-and-qa
+          path: build/aether-s9/
+      - name: Publish validated art to the existing site
+        if: github.ref == 'refs/heads/main'
+        run: |
+          mkdir -p static/assets static/previews art/blender
+          cp build/aether-s9/aether-s9-*.glb static/assets/
+          cp build/aether-s9/aether-s9-*.png static/previews/
+          cp build/aether-s9/aether-s9-build.json static/assets/
+          cp build/aether-s9/aether-s9-render.json static/previews/
+          cp build/aether-s9/aether-s9.blend art/blender/
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add static/assets/aether-s9-*.glb static/assets/aether-s9-build.json static/previews/aether-s9-*.png static/previews/aether-s9-render.json art/blender/aether-s9.blend
+          git diff --cached --quiet && exit 0
+          git commit -m "Publish validated S9 Blender art and renders"
+          git pull --rebase origin main
+          git push origin HEAD:main
