@@ -26,7 +26,7 @@ export function buildS9(){
   for(let i=1;i<7;i++){tri(m,rr[0][0],rr[0][i],rr[0][i+1]);const r=rr[rr.length-1];tri(m,r[0],r[i+1],r[i]);}
  }
  function panel(m,x,y,z,l,h,d,roll=0){const bevel=Math.min(.06,l*.16);shell(m,[[x-l/2,h*.68,d*.7],[x-l/2+bevel,h,d],[x+l/2-bevel,h,d],[x+l/2,h*.68,d*.7]],y,z,roll);}
- function torus(m,x,rad,tube,segments=48,sides=10){
+ function torus(m,x,rad,tube,segments=32,sides=6){
   const v=(i,j)=>{const a=i*Math.PI*2/segments,b=j*Math.PI*2/sides;return [x+tube*Math.sin(b),(rad+tube*Math.cos(b))*Math.cos(a),(rad+tube*Math.cos(b))*Math.sin(a)];};
   for(let i=0;i<segments;i++)for(let j=0;j<sides;j++)quad(m,v(i,j),v(i+1,j),v(i+1,j+1),v(i,j+1));
  }
@@ -53,7 +53,7 @@ export function buildS9(){
    panel(2,at+sign*.12,.29*Math.cos(a),.29*Math.sin(a),.22,.036,.05,a);
    panel(5,at+sign*.12,.326*Math.cos(a),.326*Math.sin(a),.08,.012,.018,a);
   }
-  torus(4,sign*1.36,.135,.021,32,8);
+  torus(4,sign*1.36,.135,.021,24,6);
  }
  // Offset armor fins and decorative ID tiles interrupt the otherwise radial symmetry.
  for(const z of [-1,1]){
