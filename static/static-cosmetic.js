@@ -3,9 +3,13 @@ import * as T from 'three';
 import {readAssetBytes,chooseGalleryFinish} from './gallery-assets.js';
 
 export function cosmeticAssetPath(finish,tier,report,weaponId=0){
- const tag=['aether9-specter','aether-s9','aether-w12','aether-l7'][Number(weaponId)]||'aether9-specter';
+ // S9 is the approved-for-preview sculpted VESPER; the other asset families stay unchanged.
+ const tag=['aether9-specter','aether-s9-vesper','aether-w12','aether-l7'][Number(weaponId)]||'aether9-specter';
  const name=tag+'-'+chooseGalleryFinish(finish);
  const original='/static/assets/'+name+'.glb';
+ // School laptops keep cheap geometry on Performance; larger VESPER texture variants
+ // are optional cosmetics on Auto/High and never participate in gameplay logic.
+ if(Number(weaponId)===1&&tier==='performance')return null;
  const profile=tier==='performance'?'performance':tier==='auto'?'balanced':null;
  if(profile){
   const item=report?.[name+'.glb']?.[profile];
@@ -71,7 +75,7 @@ export function createStaticCosmetic(rig,{finish='midnight',weaponId=0}={}){
  function requestManifest(){
   if(reportRequested)return;
   reportRequested=true;
-  fetch('/static/assets/texture-profile-report.json',{cache:'no-cache'}).then(r=>r.ok?r.json():null).then(data=>{report=data;}).catch(()=>{});
+  fetch(Number(weaponId)===1?'/static/assets/vesper-texture-profile-report.json':'/static/assets/texture-profile-report.json',{cache:'no-cache'}).then(r=>r.ok?r.json():null).then(data=>{report=data;}).catch(()=>{});
  }
  async function load(path){
   const controller=new AbortController();pending=controller;attempted=path;
