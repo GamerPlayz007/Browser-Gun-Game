@@ -2,8 +2,9 @@
 import * as T from 'three';
 import {readAssetBytes,chooseGalleryFinish} from './gallery-assets.js';
 
-export function cosmeticAssetPath(finish,tier,report){
- const name='aether9-specter-'+chooseGalleryFinish(finish);
+export function cosmeticAssetPath(finish,tier,report,weaponId=0){
+ const tag=['aether9-specter','aether-s9','aether-w12','aether-l7'][Number(weaponId)]||'aether9-specter';
+ const name=tag+'-'+chooseGalleryFinish(finish);
  const original='/static/assets/'+name+'.glb';
  const profile=tier==='performance'?'performance':tier==='auto'?'balanced':null;
  if(profile){
@@ -53,7 +54,7 @@ function fitStaticArt(scene,bounds){
  container.name='Imported fictional cosmetic';
  return container;
 }
-export function createStaticCosmetic(rig,{finish='midnight'}={}){
+export function createStaticCosmetic(rig,{finish='midnight',weaponId=0}={}){
  const group=rig?.userData?.aetherArtGun71;
  if(!group)return {update(){},dispose(){}};
  const old=group.children.filter(o=>o!==rig.userData.flash&&o!==rig.userData.reloadGlyph70);
@@ -96,7 +97,7 @@ export function createStaticCosmetic(rig,{finish='midnight'}={}){
    if(tier!==lastTier){cancel();restore();attempted=null;lastTier=tier;}
    if(!visible)return;
    if(tier==='performance'||tier==='auto')requestManifest();
-   const path=cosmeticAssetPath(finish,tier,report);
+   const path=cosmeticAssetPath(finish,tier,report,weaponId);
    if(!path||art||pending||attempted===path)return;
    load(path);
   },
