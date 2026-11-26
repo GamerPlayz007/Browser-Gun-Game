@@ -97,6 +97,7 @@ def bevel(ob,r=.012):
         if hasattr(mod,"affect"):mod.affect="EDGES"
         smooth=ob.modifiers.new("Surface normals","WEIGHTED_NORMAL")
         smooth.keep_sharp=True
+        if hasattr(ob.data,"use_auto_smooth"):ob.data.use_auto_smooth=True
     return ob
 def box(name,xyz,whd,role="shell",r=.012):
     bpy.ops.mesh.primitive_cube_add(size=1,location=xyz)
@@ -246,6 +247,7 @@ def setup_studio(kind):
     sc.render.engine="BLENDER_EEVEE"
     sc.render.resolution_x=1200;sc.render.resolution_y=720;sc.render.resolution_percentage=100
     sc.render.film_transparent=True
+    if sc.world is None:sc.world=bpy.data.worlds.new("AETHER studio environment")
     sc.world.color=(.06,.08,.12)
     bpy.ops.object.camera_add(location=(3.5,2.0,-4.1))
     cam=bpy.context.object
