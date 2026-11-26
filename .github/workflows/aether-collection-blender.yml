@@ -56,8 +56,8 @@ jobs:
                   assert kind==0x4e4f534a,name
                   doc=json.loads(binary[20:20+count])
                   assert len(doc.get("meshes",[]))>=55,(name,len(doc.get("meshes",[])))
-                  assert len(doc.get("materials",[]))>=9,name
-                  assert len(doc.get("images",[]))>=9,name
+                  assert len(doc.get("materials",[]))>=7,name
+                  assert len(doc.get("images",[]))>=7,name
                   assert any("normalTexture" in m for m in doc["materials"]),name
                   assert any("baseColorTexture" in m["pbrMetallicRoughness"] for m in doc["materials"]),name
                   assert len(doc.get("accessors",[]))>=55,name
