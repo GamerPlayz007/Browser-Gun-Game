@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CROSSFire · AETHER-W12 RAMPART · Sculpt Review</title>
+<meta name="description" content="Independent RAMPART shotgun Phase 2 Blender sculpt review, with interactive model and clay / Midnight shape comparisons.">
+<script type="importmap">{"imports":{"three":"/static/vendor/three.module.js","three/addons/":"/static/vendor/addons/"}}</script>
+<style>
+:root{color-scheme:dark;--bg:#07121e;--panel:#101f2e;--stroke:#25445b;--cyan:#7bdeef;--ink:#e7f4fb;--muted:#98b3c4}
+*{box-sizing:border-box}
+body{background:radial-gradient(ellipse at 33% 6%,#19374a 0,transparent 44%),var(--bg);margin:0;color:var(--ink);font:14px/1.55 system-ui,-apple-system,Segoe UI,sans-serif}
+a{color:var(--cyan)}
+header{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:20px clamp(18px,4vw,60px);border-bottom:1px solid var(--stroke);background:#081523bd}
+.brand{color:white;text-decoration:none;font-size:17px;letter-spacing:.22em;font-weight:850}.brand b{color:var(--cyan)}
+header .back{font-weight:750;font-size:12px;text-decoration:none;color:var(--muted)}
+main{padding:30px clamp(16px,4vw,60px) 70px;max-width:1600px;margin:auto}
+.eyebrow{font-weight:750;font-size:11px;color:var(--cyan);letter-spacing:.24em}
+h1{font-size:clamp(40px,7vw,80px);line-height:1.05;letter-spacing:-.055em;margin:6px 0 9px}
+h1 small{font-size:.24em;color:var(--cyan);letter-spacing:.15em;vertical-align:middle;margin-left:15px}
+.intro{color:var(--muted);max-width:780px}
+.hero{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(290px,.73fr);gap:16px;margin-top:27px;align-items:stretch}
+.stage{position:relative;border:1px solid #32516a;background:radial-gradient(ellipse at center,#20384e,#060f1a 72%);border-radius:16px;overflow:hidden;min-height:470px}
+canvas{display:block;touch-action:none;width:100%;height:470px;cursor:grab}canvas:active{cursor:grabbing}
+.stamp{position:absolute;left:16px;top:16px;font:700 10px ui-monospace,monospace;letter-spacing:.1em;color:var(--cyan);pointer-events:none}
+#status{position:absolute;left:16px;bottom:17px;right:16px;overflow-wrap:anywhere;color:#c6e6f7;font:650 11px/1.5 ui-monospace,monospace;pointer-events:none}
+aside{border:1px solid var(--stroke);background:linear-gradient(145deg,#132d3e,#0a1927);border-radius:16px;padding:24px;display:flex;flex-direction:column;gap:12px}
+aside h2{font-size:22px;margin:0;line-height:1.15}
+aside p{color:var(--muted);font-size:12px;margin:0}
+.controls{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+button{border:1px solid #3f6579;background:#122b40;color:#bdd3de;border-radius:8px;font-size:12px;font-weight:800;min-height:39px;cursor:pointer}
+button[aria-pressed="true"],button:hover{border-color:#7ad6eb;color:white;background:#19485c}
+button:focus-visible,a:focus-visible,canvas:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.rules{border-top:1px solid var(--stroke);padding-top:14px;color:var(--muted);font-size:12px}
+.rules strong{color:#e2f0f7}
+h2.section{font-size:24px;margin:42px 0 5px}
+.section-sub{color:var(--muted);margin:0 0 16px}
+.comparison{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.preview{border:1px solid var(--stroke);border-radius:14px;overflow:hidden;background:#102236;text-decoration:none;color:var(--ink);display:block}
+.preview img{width:100%;height:auto;aspect-ratio:1360/820;object-fit:contain;display:block;background:#101723}
+.preview figcaption{font-size:12px;color:var(--muted);padding:12px 16px}
+.preview figcaption strong{display:block;color:var(--ink);font-size:13px}
+figure{margin:0}
+.disclaimer{padding:18px 0;color:#93afbc;font-size:12px}
+@media(max-width:900px){.hero{grid-template-columns:1fr}.stage,canvas{min-height:360px;height:360px}.comparison{grid-template-columns:1fr}aside{gap:15px}}
+@media(max-width:540px){h1 small{display:block;margin:10px 0}.stage,canvas{height:300px;min-height:300px}main{padding-top:22px}aside{padding:18px}}
+</style>
+</head>
+<body>
+<header><a href="/" class="brand">CROSS<b>FIRE</b></a><a class="back" href="/static/aether9-pbr-showroom.html">View original AETHER-9 AR</a></header>
+<main>
+<div class="eyebrow">AETHER COLLECTION / W12 ART REVIEW / GEOMETRY FIRST</div>
+<h1>RAMPART <small>AETHER-W12 · SCULPT REVIEW</small></h1>
+<p class="intro">A separately sculpted sci-fi shotgun cosmetic with a bold manta-ray silhouette and paired photonic jewels. Compare its shape against the original AR before any in-game weapon is replaced. This is a <strong>design-review workbench</strong>, not an approved in-game replacement. Inspect the sculpt, three PBR studies and neutral clay before approving the art.</p>
+<div class="hero">
+  <div class="stage">
+    <canvas id="canvas" tabindex="0" aria-label="Interactive 3D RAMPART sculpt, drag to rotate, scroll to zoom"></canvas>
+    <span class="stamp">ORBITABLE BLENDER GLB · NEW SCULPT</span>
+    <div id="status" role="status" aria-live="polite">LOADING SCULPT...</div>
+  </div>
+  <aside>
+    <div class="eyebrow">ASSET INSPECTOR</div>
+    <h2>AETHER-W12 RAMPART</h2>
+    <p>Clay reveals the sculpture. Midnight previews the AR-family graphite, brushed titanium and restrained cyan palette. Switch between both without hiding geometry.</p>
+    <div class="controls">
+      <button id="midnight" aria-pressed="true">PBR MIDNIGHT</button>
+      <button id="glacier" aria-pressed="false">PBR GLACIER</button>
+      <button id="eclipse" aria-pressed="false">PBR ECLIPSE</button>
+      <button id="sculpt" aria-pressed="false">BASE SCULPT</button>
+      <button id="clay" aria-pressed="false">GRAY CLAY</button>
+      <button id="wire" aria-pressed="false">WIREFRAME</button>
+      <button id="spin" aria-pressed="false">AUTO ROTATE</button>
+      <button id="side" aria-pressed="false">SIDE PROFILE</button>
+      <button id="reset">RESET CAMERA</button>
+    </div>
+    <div class="rules">
+      <strong>Design proof:</strong> sculpted tapered hull · overlapping cheek art · shortened curved rear yoke · contained energy jewel · embedded visor.<br><br>
+      <strong>Control:</strong> drag to rotate, scroll to zoom. This separate review does not change CROSSFire's existing shotgun or AR.
+    </div>
+    <p id="stats">Mesh statistics pending</p>
+  </aside>
+</div>
+
+<h2 class="section">Same-family comparison</h2>
+<p class="section-sub">The AR is our quality reference. RAMPART is the independent new sculpt; the neutral renders expose the geometry before texture work.</p>
+<div class="comparison">
+  <figure class="preview"><img src="/static/previews/aether9-specter-midnight-pbr.png" alt="Original AR Midnight PBR preview" loading="lazy"><figcaption><strong>Original AETHER-9 SPECTER</strong>Production AR reference · Midnight PBR</figcaption></figure>
+  <a class="preview" href="/static/previews/aether-w12-rampart-midnight-hero.png" target="_blank" rel="noopener"><img src="/static/previews/aether-w12-rampart-midnight-hero.png" alt="RAMPART hero angle Midnight sculpt preview" loading="lazy"><figcaption><strong>New RAMPART · three-quarter angle</strong>Preliminary Midnight sculpt materials · open full render</figcaption></a>
+  <a class="preview" href="/static/previews/aether-w12-rampart-clay-hero.png" target="_blank" rel="noopener"><img src="/static/previews/aether-w12-rampart-clay-hero.png" alt="RAMPART neutral gray clay hero render" loading="lazy"><figcaption><strong>New RAMPART · gray clay</strong>Geometry only, no deceptive neon camouflage · open full render</figcaption></a>
+  <a class="preview" href="/static/previews/aether-w12-rampart-clay-profile.png" target="_blank" rel="noopener"><img src="/static/previews/aether-w12-rampart-clay-profile.png" alt="RAMPART neutral gray full side profile" loading="lazy"><figcaption><strong>New RAMPART · full side profile</strong>Read the silhouette, shadow gaps and curved rear form</figcaption></a>
+  <a class="preview" href="/static/previews/aether-w12-rampart-pbr-midnight-hero.png" target="_blank" rel="noopener"><img src="/static/previews/aether-w12-rampart-pbr-midnight-hero.png" alt="RAMPART Midnight textured PBR hero review" loading="lazy"><figcaption><strong>RAMPART · textured Midnight</strong>AR-family mapped PBR material review · open full render</figcaption></a>
+  <a class="preview" href="/static/previews/aether-w12-rampart-pbr-midnight-profile.png" target="_blank" rel="noopener"><img src="/static/previews/aether-w12-rampart-pbr-midnight-profile.png" alt="RAMPART PBR side view" loading="lazy"><figcaption><strong>RAMPART · PBR full side profile</strong>Same geometry, finished material study · open full render</figcaption></a>
+</div>
+<p class="disclaimer">Original, nonfunctional sci-fi game art. Stage 2 review files remain isolated. The current game assets are untouched pending visual approval and performance checks.</p>
+</main>
+<script type="module">
+import * as T from 'three';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+const $=s=>document.getElementById(s);
+const canvas=$('canvas');
+const scene=new T.Scene();scene.background=new T.Color(0x0b1726);
+const renderer=new T.WebGLRenderer({canvas,antialias:true,powerPreference:'high-performance'});
+renderer.outputColorSpace=T.SRGBColorSpace;
+renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.34;
+const camera=new T.PerspectiveCamera(42,1,.05,100);
+scene.add(new T.HemisphereLight(0xcceaff,0x253c5d,2.5));
+const key=new T.DirectionalLight(0xffffff,4.2);key.position.set(3,5,5);scene.add(key);
+const rim=new T.DirectionalLight(0x83e8ff,2.3);rim.position.set(-3,2,-5);scene.add(rim);
+const warm=new T.DirectionalLight(0xffc3a5,.85);warm.position.set(4,-2,-3);scene.add(warm);
+const stage=new T.Group();scene.add(stage);
+const state={variant:'midnight',mode:'material',wire:false,spin:false,yaw:.55,desiredYaw:.55,pitch:.24,desiredPitch:.24,dist:4.4,desiredDist:4.4,root:null};
+const original=new Map();
+const clayMat=new T.MeshStandardMaterial({color:0xa9b4be,metalness:.12,roughness:.64,side:T.DoubleSide});
+const wireMat=new T.MeshBasicMaterial({color:0x79d8ef,wireframe:true,side:T.DoubleSide});
+let points=new Map(),pinch=0,loadRequest=0;
+function sync(){
+ for(const id of ['midnight','glacier','eclipse','sculpt'])
+   $(id).setAttribute('aria-pressed',String(state.mode!=='clay'&&state.variant===id));
+ $('clay').setAttribute('aria-pressed',String(state.mode==='clay'));
+ $('wire').setAttribute('aria-pressed',String(state.wire));
+ $('spin').setAttribute('aria-pressed',String(state.spin));
+}
+function materials(){
+ if(!state.root)return;
+ state.root.traverse(o=>{if(!o.isMesh)return;o.material=state.wire?wireMat:state.mode==='clay'?clayMat:original.get(o);});
+ sync();
+}
+function disposeOld(){
+ if(!state.root)return;
+ const meshes=new Set(),mats=new Set(),tex=new Set();
+ state.root.traverse(o=>{
+  if(!o.isMesh)return;
+  if(o.geometry)meshes.add(o.geometry);
+  const saved=original.get(o);
+  for(const m of (Array.isArray(saved)?saved:[saved]))if(m){
+   mats.add(m);for(const v of Object.values(m))if(v?.isTexture)tex.add(v);
+  }
+ });
+ state.root.removeFromParent();state.root=null;
+ meshes.forEach(x=>x.dispose());mats.forEach(x=>x.dispose());tex.forEach(x=>x.dispose());
+ original.clear();
+}
+function loadVariant(variant,fellBack=false){
+ const request=++loadRequest;
+ state.variant=variant;state.mode='material';state.wire=false;sync();
+ const url=variant==='sculpt'?'/static/assets/aether-w12-rampart-sculpt.glb':'/static/assets/aether-w12-rampart-'+variant+'.glb';
+ $('status').textContent='LOADING '+variant.toUpperCase()+' GLB…';
+ new GLTFLoader().load(url,gltf=>{
+  if(request!==loadRequest)return;
+  const root=gltf.scene;
+  const b=new T.Box3().setFromObject(root);
+  if(b.isEmpty()){$('status').textContent='EMPTY GLB MODEL';return;}
+  const dims=b.getSize(new T.Vector3()),center=b.getCenter(new T.Vector3());
+  const scale=2.8/Math.max(dims.x,dims.y,dims.z);
+  root.scale.setScalar(scale);root.position.copy(center.multiplyScalar(-scale));
+  disposeOld();
+  let tris=0,meshes=0;
+  root.traverse(o=>{if(o.isMesh){
+   original.set(o,o.material);meshes++;
+   tris+=(o.geometry.index?.count||o.geometry.attributes.position.count)/3;
+  }});
+  state.root=root;stage.add(root);materials();
+  $('status').textContent=fellBack?'SCULPT FALLBACK · PBR ASSET NOT AVAILABLE YET':
+   'READY · '+variant.toUpperCase()+' · DRAG / ZOOM / CLAY MODE';
+  $('stats').textContent=meshes+' meshes · '+Math.round(tris).toLocaleString()+' triangles · '+variant.toUpperCase()+' GLB';
+ },progress=>{
+  if(request===loadRequest&&progress.total)
+   $('status').textContent='LOADING '+variant.toUpperCase()+' · '+Math.round(progress.loaded/progress.total*100)+'%';
+ },error=>{
+  if(request!==loadRequest)return;
+  if(variant!=='sculpt')loadVariant('sculpt',true);
+  else $('status').textContent='GLB NOT AVAILABLE · '+error.message;
+ });
+}
+for(const id of ['midnight','glacier','eclipse','sculpt'])$(id).onclick=()=>loadVariant(id);
+$('clay').onclick=()=>{state.mode='clay';materials();};
+$('wire').onclick=()=>{state.wire=!state.wire;materials();};
+$('spin').onclick=()=>{state.spin=!state.spin;sync();};
+$('side').onclick=()=>{state.desiredYaw=Math.PI/2;state.desiredPitch=.02;state.spin=false;sync();};
+$('reset').onclick=()=>{state.desiredYaw=.55;state.desiredPitch=.24;state.desiredDist=4.4;state.spin=false;sync();};
+canvas.addEventListener('pointerdown',e=>{canvas.setPointerCapture(e.pointerId);points.set(e.pointerId,{x:e.clientX,y:e.clientY});state.spin=false;sync();});
+canvas.addEventListener('pointermove',e=>{
+ if(!points.has(e.pointerId))return;
+ const p=points.get(e.pointerId),dx=e.clientX-p.x,dy=e.clientY-p.y;p.x=e.clientX;p.y=e.clientY;
+ if(points.size===1){state.desiredYaw+=dx*.007;state.desiredPitch=Math.max(-1.2,Math.min(1.2,state.desiredPitch+dy*.005));}
+ else if(points.size===2){const a=[...points.values()],d=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y);if(pinch)state.desiredDist=Math.max(2.5,Math.min(8,state.desiredDist+(pinch-d)*.009));pinch=d;}
+});
+for(const type of ['pointerup','pointercancel'])canvas.addEventListener(type,e=>{points.delete(e.pointerId);if(points.size<2)pinch=0;});
+canvas.addEventListener('wheel',e=>{e.preventDefault();state.desiredDist=Math.max(2.5,Math.min(8,state.desiredDist+e.deltaY*.004));},{passive:false});
+let last=performance.now();
+function animate(t){
+ requestAnimationFrame(animate);
+ const dt=Math.min(.06,(t-last)/1000||.016);last=t;
+ const w=canvas.clientWidth,h=canvas.clientHeight;
+ if(w>0&&h>0&&(canvas.width!==Math.round(w*Math.min(devicePixelRatio,1.6))||canvas.height!==Math.round(h*Math.min(devicePixelRatio,1.6)))){
+  renderer.setPixelRatio(Math.min(devicePixelRatio,1.6));renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();
+ }
+ if(state.spin)state.desiredYaw+=dt*.20;
+ state.yaw+=(state.desiredYaw-state.yaw)*Math.min(1,dt*10);
+ state.pitch+=(state.desiredPitch-state.pitch)*Math.min(1,dt*10);
+ state.dist+=(state.desiredDist-state.dist)*Math.min(1,dt*10);
+ stage.rotation.y=state.yaw;
+ camera.position.set(0,Math.sin(state.pitch)*state.dist*.85,Math.cos(state.pitch)*state.dist);
+ camera.lookAt(0,0,0);renderer.render(scene,camera);
+}
+requestAnimationFrame(animate);
+loadVariant('midnight');
+</script>
+</body>
+</html>
