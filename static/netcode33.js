@@ -115,6 +115,20 @@ export function sampleRemote(sync,id,nowMs){
  return {...newest,x:newest.x+vx*dt,z:newest.z+vz*dt,
   y:newest.y+(newest.grounded?0:vy*dt)};
 }
+/**
+ * Reconciliation is only safe when we can replay every outstanding input.
+ * Skipping older inputs and replaying only the newest ones is equivalent to
+ * deleting real movement, which creates continuous rubber-banding.
+ * On native BVH maps, defer expensive reconciliation while network backlog
+ * is high and let the local controller keep moving until it catches up.
+ */
+export function shouldReconcilePrediction(ackSeq,lastReconciledSeq,pendingCount,importedMesh,elapsedSeconds){
+ if(!Number.isSafeInteger(ackSeq)||ackSeq<0||
+    !Number.isInteger(pendingCount)||pendingCount<0)return false;
+ return ackSeq!==lastReconciledSeq&&
+  pendingCount<=(importedMesh?12:60)&&
+  elapsedSeconds>=(importedMesh?0.10:0.035);
+}
 export function cameraCorrection(oldVisual,newPredicted,snapDistance=2.5){
  const dx=oldVisual.x-newPredicted.x,dy=oldVisual.y-newPredicted.y,dz=oldVisual.z-newPredicted.z;
  const length=Math.hypot(dx,dy,dz);
