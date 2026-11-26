@@ -1,0 +1,56 @@
+{
+  "aether-s9-vesper-midnight.glb": {
+    "balanced": {
+      "input_bytes": 17930836,
+      "output_bytes": 4987152,
+      "image_count": 28,
+      "max_texture_dimension": 512,
+      "estimated_rgba_mipped_bytes_before": 156587349,
+      "estimated_rgba_mipped_bytes_after": 39146837
+    },
+    "performance": {
+      "input_bytes": 17930836,
+      "output_bytes": 1797464,
+      "image_count": 28,
+      "max_texture_dimension": 256,
+      "estimated_rgba_mipped_bytes_before": 156587349,
+      "estimated_rgba_mipped_bytes_after": 9786709
+    }
+  },
+  "aether-s9-vesper-glacier.glb": {
+    "balanced": {
+      "input_bytes": 17930768,
+      "output_bytes": 4987104,
+      "image_count": 28,
+      "max_texture_dimension": 512,
+      "estimated_rgba_mipped_bytes_before": 156587349,
+      "estimated_rgba_mipped_bytes_after": 39146837
+    },
+    "performance": {
+      "input_bytes": 17930768,
+      "output_bytes": 1797416,
+      "image_count": 28,
+      "max_texture_dimension": 256,
+      "estimated_rgba_mipped_bytes_before": 156587349,
+      "estimated_rgba_mipped_bytes_after": 9786709
+    }
+  },
+  "aether-s9-vesper-eclipse.glb": {
+    "balanced": {
+      "input_bytes": 17930776,
+      "output_bytes": 4987132,
+      "image_count": 28,
+      "max_texture_dimension": 512,
+      "estimated_rgba_mipped_bytes_before": 156587349,
+      "estimated_rgba_mipped_bytes_after": 39146837
+    },
+    "performance": {
+      "input_bytes": 17930776,
+      "output_bytes": 1797408,
+      "image_count": 28,
+      "max_texture_dimension": 256,
+      "estimated_rgba_mipped_bytes_before": 156587349,
+      "estimated_rgba_mipped_bytes_after": 9786709
+    }
+  }
+}
