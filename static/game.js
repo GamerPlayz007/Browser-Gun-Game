@@ -432,13 +432,18 @@ function handle(data){if(data.type==='manual_respawn_result65'){toast(data.messa
   // the whole high-detail collision mesh on every 20 Hz snapshot compounds
   // the lag. Still reconcile regularly, but limit expensive large replays.
   pendingMoves=pendingMoves.filter(cmd=>cmd.seq>me.seq&&cmd.spawn===me.spawn);
-  const shouldReconcile=pendingMoves.length<=32||now-lastReconcileAt>=.20;
+  const importedMesh=!!(map.dustOriginal||map.octavusOriginal);
+  const shouldReconcile=pendingMoves.length<=(importedMesh?12:32)||now-lastReconcileAt>=.16;
   if(shouldReconcile){
    lastReconcileAt=now;
    const old=new T.Vector3(local.x+viewError.x,local.y+viewError.y,local.z+viewError.z);
    local={...me};
    const stepDt=movementDt();
-   for(const cmd of pendingMoves){
+   // On complex BVH maps, replaying dozens of old inputs for every snapshot
+   // freezes the browser and feeds the network lag spiral. Give recent input
+   // priority while the authoritative server catches up.
+   const replayMoves=importedMesh&&pendingMoves.length>16?pendingMoves.slice(-16):pendingMoves;
+   for(const cmd of replayMoves){
    local.yaw=cmd.yaw;local.motion_time+=stepDt;
    if(map.dustOriginal||map.octavusOriginal)world.physics.simulate(local,cmd,stepDt,local.motion_time,weapons[me.weapon]);
    else simulate(local,cmd,stepDt,local.motion_time,map.boxes,weapons[me.weapon]);
