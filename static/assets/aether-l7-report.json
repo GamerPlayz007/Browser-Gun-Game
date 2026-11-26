@@ -1,0 +1,12 @@
+{
+  "id": "l7",
+  "mesh_parts": 77,
+  "variants": [
+    "midnight",
+    "glacier",
+    "eclipse"
+  ],
+  "geometry": "independent Blender scene",
+  "materials": 9,
+  "texture_resolution": 384
+}

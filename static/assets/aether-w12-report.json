@@ -1,0 +1,12 @@
+{
+  "id": "w12",
+  "mesh_parts": 65,
+  "variants": [
+    "midnight",
+    "glacier",
+    "eclipse"
+  ],
+  "geometry": "independent Blender scene",
+  "materials": 9,
+  "texture_resolution": 384
+}
