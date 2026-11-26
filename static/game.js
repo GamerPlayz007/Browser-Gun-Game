@@ -154,7 +154,7 @@ const AETHER_NAMES68=['AETHER-9 SPECTER','AETHER-S9','AETHER-12 WARDRUM','AETHER
  const weapons=map.weapons,weaponModels=weapons.map(w=>makeWeapon(w.id));for(const g of weaponModels){g.visible=false;viewScene.add(g);}
 const armoryCosmetics=weaponModels.map((rig,weaponId)=>createStaticCosmetic(rig,{finish:safeRead56('cf-gallery-finish','midnight'),weaponId}));
 let selected=0,desiredWeapon64=null,weaponMags64=weapons.map(w=>w.mag),ws=null,myId=null,roomCode='',state=null,me=null,local=null,joined=false,keys={},aiming=false,yaw=0,pitch=0,seq=0,shotId=0,pendingShots=[];let pendingMoves=[],movementAccumulator=0,viewError=new T.Vector3(),rosterSignature='',scoreSignature='';
-let groundVelocity=0,landingPulse=0,lastLocalGrounded=true,movementHint='',slideHopUntil53=0,visualLean63=0,lastReconcileAt=0;
+let groundVelocity=0,landingPulse=0,lastLocalGrounded=true,movementHint='',slideHopUntil53=0,visualLean63=0,lastReconcileAt=0,lastReconciledSeq=-1;
 // Octavus only: lighter authoritative input cadence, unchanged render FPS.
 const movementDt=()=>map.octavusOriginal?1/30:FIXED_DT;
 let spectatorTarget55=null;
@@ -282,7 +282,7 @@ function disconnect(message,rejoinCode56=null){
  localWeaponFinishKey68='';
  const code56=validRoom65(rejoinCode56)?rejoinCode56.toUpperCase():null;
  $('rejoin56').hidden=!code56;if(code56)$('code').value=code56;
- netSync=createNetSync();frameMeter.reset();feedback52.reset();slideHopUntil53=0;spectatorTarget55=null;clearVisualEffects52();$('perf-panel').hidden=true;joined=false;state=me=local=null;myId=null;lastPhase='';lastSpawn=-1;pendingShots=[];pendingMoves=[];movementAccumulator=0;lastReconcileAt=0;landingPulse=0;lastLocalGrounded=true;movementHint='';viewError.set(0,0,0);rosterSignature=scoreSignature='';matchBannerUntil=0;resetInput();document.exitPointerLock?.();for(const g of opponents.values())disposePlayer(g);opponents.clear();for(const id of ['hud','room-panel','death','results','scoreboard'])$(id).hidden=true;$('home').hidden=false;$('shade').style.opacity=1;$('status').textContent=message;$('create').disabled=$('join').disabled=false;refreshRooms65(code56);}
+ netSync=createNetSync();frameMeter.reset();feedback52.reset();slideHopUntil53=0;spectatorTarget55=null;clearVisualEffects52();$('perf-panel').hidden=true;joined=false;state=me=local=null;myId=null;lastPhase='';lastSpawn=-1;pendingShots=[];pendingMoves=[];movementAccumulator=0;lastReconcileAt=0;lastReconciledSeq=-1;landingPulse=0;lastLocalGrounded=true;movementHint='';viewError.set(0,0,0);rosterSignature=scoreSignature='';matchBannerUntil=0;resetInput();document.exitPointerLock?.();for(const g of opponents.values())disposePlayer(g);opponents.clear();for(const id of ['hud','room-panel','death','results','scoreboard'])$(id).hidden=true;$('home').hidden=false;$('shade').style.opacity=1;$('status').textContent=message;$('create').disabled=$('join').disabled=false;refreshRooms65(code56);}
 function scoreboard(players,body){
  body.replaceChildren();
  if(state?.mode==='botmatch'){
@@ -425,32 +425,34 @@ function handle(data){if(data.type==='manual_respawn_result65'){toast(data.messa
  }
  pendingShots=pendingShots.filter(s=>s.id>me.ack_shot);
  if(!local||me.spawn!==lastSpawn){
-  local={...me};lastReconcileAt=0;lastSpawn=me.spawn;desiredWeapon64=null;selected=me.weapon;weaponMags64=weapons.map(w=>w.mag);updateSelection(selected);pendingMoves=[];movementAccumulator=0;landingPulse=0;visualLean63=0;movementControls63.reset();lastLocalGrounded=!!me.grounded;movementHint='';viewError.set(0,0,0);pendingShots=[];lastShot=-10;shotRecovery=0;feedback52.reset();slideHopUntil53=0;spectatorTarget55=null;releaseTrigger(combatTrigger);
+  local={...me};lastReconcileAt=0;lastReconciledSeq=me.seq;lastSpawn=me.spawn;desiredWeapon64=null;selected=me.weapon;weaponMags64=weapons.map(w=>w.mag);updateSelection(selected);pendingMoves=[];movementAccumulator=0;landingPulse=0;visualLean63=0;movementControls63.reset();lastLocalGrounded=!!me.grounded;movementHint='';viewError.set(0,0,0);pendingShots=[];lastShot=-10;shotRecovery=0;feedback52.reset();slideHopUntil53=0;spectatorTarget55=null;releaseTrigger(combatTrigger);
   yaw=me.yaw;pitch=0;
  }else{
-  // An overloaded server can leave many input ticks unacknowledged. Replaying
-  // the whole high-detail collision mesh on every 20 Hz snapshot compounds
-  // the lag. Still reconcile regularly, but limit expensive large replays.
+  // Every unacknowledged command must be replayed, or the predicted position
+  // loses exactly the time that has not yet reached the server. Slicing off
+  // the oldest commands caused a snap backwards on EACH new snapshot.
   pendingMoves=pendingMoves.filter(cmd=>cmd.seq>me.seq&&cmd.spawn===me.spawn);
   const importedMesh=!!(map.dustOriginal||map.octavusOriginal);
-  const shouldReconcile=pendingMoves.length<=(importedMesh?12:32)||now-lastReconcileAt>=.16;
+  // Keep local prediction moving during heavy network backlog. Rewinding a
+  // detailed BVH collision mesh with dozens of commands causes frame stalls.
+  // Wait until enough commands are acknowledged, then replay ALL of the rest.
+  const replayLimit=importedMesh?12:60;
+  const shouldReconcile=me.seq!==lastReconciledSeq&&
+   pendingMoves.length<=replayLimit&&now-lastReconcileAt>=(importedMesh?.10:.035);
   if(shouldReconcile){
-   lastReconcileAt=now;
+   lastReconcileAt=now;lastReconciledSeq=me.seq;
    const old=new T.Vector3(local.x+viewError.x,local.y+viewError.y,local.z+viewError.z);
    local={...me};
    const stepDt=movementDt();
-   // On complex BVH maps, replaying dozens of old inputs for every snapshot
-   // freezes the browser and feeds the network lag spiral. Give recent input
-   // priority while the authoritative server catches up.
-   const replayMoves=importedMesh&&pendingMoves.length>16?pendingMoves.slice(-16):pendingMoves;
-   for(const cmd of replayMoves){
-   local.yaw=cmd.yaw;local.motion_time+=stepDt;
-   if(map.dustOriginal||map.octavusOriginal)world.physics.simulate(local,cmd,stepDt,local.motion_time,weapons[me.weapon]);
-   else simulate(local,cmd,stepDt,local.motion_time,map.boxes,weapons[me.weapon]);
-  }
-   const correction=cameraCorrection(old,local,2.5);
+   for(const cmd of pendingMoves){
+    local.yaw=cmd.yaw;local.motion_time+=stepDt;
+    if(importedMesh)world.physics.simulate(local,cmd,stepDt,local.motion_time,weapons[me.weapon]);
+    else simulate(local,cmd,stepDt,local.motion_time,map.boxes,weapons[me.weapon]);
+   }
+   // Smooth the small residual server corrections, but never conceal a
+   // genuine respawn or a massive world-position disagreement.
+   const correction=cameraCorrection(old,local,6);
    viewError.set(correction.x,correction.y,correction.z);
-   // Large corrections snap, small corrections decay visually.
   }
  }
  weaponMags64[me.weapon]=me.ammo;
@@ -573,7 +575,7 @@ function frame(ms){try{const now=ms/1000,rawMs=ms-clock,dt=Math.min(rawMs/1000,.
    const stepDt=movementDt();
    let steps=0;while(movementAccumulator>=stepDt&&steps++<6){predictStep(controls());movementAccumulator-=stepDt;}if(steps>=6)movementAccumulator=Math.min(movementAccumulator,stepDt*2);
   }else movementAccumulator=0;
-  viewError.multiplyScalar(Math.exp(-dt*14));
+  viewError.multiplyScalar(Math.exp(-dt*9));
   tryTriggerFire(now);
   if(now-lastShot>.12&&shotRecovery>0){const recovery=Math.min(shotRecovery,dt*.12);pitch-=recovery;shotRecovery-=recovery;}
   ads+=(Number(aiming&&locked()&&me.reload<=0)-ads)*Math.min(1,dt*16);const crouched=local.crouch?1:0;
