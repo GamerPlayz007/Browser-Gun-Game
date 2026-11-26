@@ -33,7 +33,7 @@ def textures(kind,finish,role):
     rng=np.random.default_rng(seed)
     size=384
     coarse=rng.integers(0,255,(48,48),dtype=np.uint8)
-    smooth=np.array(Image.fromarray(coarse,"L").resize((size,size),Image.Resampling.BICUBIC),dtype=np.float32)/255-.5
+    smooth=np.array(Image.fromarray(coarse,"L").resize((size,size),getattr(getattr(Image,"Resampling",Image),"BICUBIC")),dtype=np.float32)/255-.5
     yy,xx=np.mgrid[:size,:size]
     grain=np.sin(xx*.48+yy*.045)*.6+np.sin(yy*.23+xx*.018)*.34
     lines=((xx+yy*.08)%63<1.4).astype(np.float32)
