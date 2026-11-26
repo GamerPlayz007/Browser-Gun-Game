@@ -20,11 +20,23 @@ try{
  $('spin').setAttribute('aria-pressed',String(controls.autoRotate));$('spin').onclick=()=>{controls.autoRotate=!controls.autoRotate;$('spin').setAttribute('aria-pressed',String(controls.autoRotate));};
  $('wire').onclick=()=>{wire=!wire;matSet.forEach(m=>m.wireframe=wire);$('wire').setAttribute('aria-pressed',String(wire));};
  $('reset').onclick=place;$('light').onclick=()=>{alternate=!alternate;key.intensity=alternate?2:4;rim.intensity=alternate?6:3;fill.intensity=alternate?2:1.25;$('light').setAttribute('aria-pressed',String(alternate));};
- new GLTFLoader().load('/static/assets/aether-s9-photonic.gltf',gltf=>{
-  asset=gltf.scene;const bounds=new T.Box3().setFromObject(asset);asset.position.sub(bounds.getCenter(new T.Vector3()));asset.position.y+=.93;scene.add(asset);let triangles=0;
-  asset.traverse(o=>{if(o.isMesh){triangles+=(o.geometry.index?.count??o.geometry.attributes.position.count)/3;for(const m of Array.isArray(o.material)?o.material:[o.material]){matSet.add(m);m.wireframe=wire;}}});
-  $('tris').textContent=Math.round(triangles).toLocaleString();$('mats').textContent=matSet.size;status.textContent='ASSET LOADED · GLTF 2.0';
- },undefined,error=>{console.error(error);status.classList.add('error');status.textContent='Asset failed to load; download remains available.';});
+ let sequence=0;
+ function dispose(root){if(!root)return;const g=new Set(),m=new Set(),t=new Set();root.traverse(o=>{if(o.geometry)g.add(o.geometry);if(o.material)for(const mat of Array.isArray(o.material)?o.material:[o.material]){m.add(mat);for(const v of Object.values(mat))if(v?.isTexture)t.add(v);}});root.removeFromParent();for(const x of g)x.dispose();for(const x of t)x.dispose();for(const x of m)x.dispose();}
+ async function loadFinish(){
+  const seq=++sequence,finish=$('finish').value,path='/static/assets/aether-s9-'+finish+'.glb';
+  $('download').hidden=true;$('render').hidden=true;status.classList.remove('error');status.textContent='Checking Blender export…';
+  try{
+   const res=await fetch('/static/assets/aether-s9-build.json',{cache:'no-cache'});if(!res.ok)throw Error('Blender build not published');const report=await res.json();if(!report.variants?.[finish])throw Error('Finish not published');
+   if(seq!==sequence)return;status.textContent='Loading Blender GLB…';
+   const gltf=await new GLTFLoader().loadAsync(path);if(seq!==sequence){dispose(gltf.scene);return;}
+   dispose(asset);matSet.clear();asset=new T.Group();asset.add(gltf.scene);
+   const bounds=new T.Box3().setFromObject(gltf.scene),size=bounds.getSize(new T.Vector3()),center=bounds.getCenter(new T.Vector3());const scale=2.8/Math.max(size.x,size.y,size.z);asset.scale.setScalar(scale);asset.position.copy(center.multiplyScalar(-scale));asset.position.y+=.93;scene.add(asset);
+   let triangles=0;asset.traverse(o=>{if(o.isMesh){triangles+=(o.geometry.index?.count??o.geometry.attributes.position.count)/3;for(const m of Array.isArray(o.material)?o.material:[o.material]){matSet.add(m);m.wireframe=wire;}}});
+   $('tris').textContent=Math.round(triangles).toLocaleString();$('mats').textContent=matSet.size;
+   $('download').href=path;$('download').hidden=false;$('render').href='/static/previews/aether-s9-'+finish+'.png';$('render').hidden=false;status.textContent='BLENDER GLB LOADED';
+  }catch(error){if(seq!==sequence)return;status.classList.add('error');status.textContent='New Blender export not available: '+error.message;}
+ }
+ $('finish').addEventListener('change',loadFinish);loadFinish();
  function resize(){const w=canvas.clientWidth,h=canvas.clientHeight;if(w&&h){renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}}
  new ResizeObserver(resize).observe(canvas);resize();
  let previous=performance.now();renderer.setAnimationLoop(now=>{const dt=Math.min(.05,(now-previous)/1000);previous=now;if(document.hidden)return;updateCamera(dt);renderer.render(scene,camera);});
