@@ -41,19 +41,17 @@ function seedNoise(seed){
 }
 function makeMaterials(){
  return SWATCHES.map((a,i)=>{
-  const canvas=document.createElement('canvas');
-  canvas.width=canvas.height=64;
-  const ctx=canvas.getContext('2d');
-  const pixels=ctx.createImageData(64,64);
+  // GPU-uploadable noise texture, without a canvas or DOM dependency.
+  const pixels=new Uint8Array(64*64*4);
   const rand=seedNoise(i*19+7);
   for(let y=0;y<64;y++)for(let x=0;x<64;x++){
    const j=(y*64+x)*4;
    const grain=(rand()-.5)*16 + (i%5===0?Math.sin(y*.41)*2:0);
-   for(let k=0;k<3;k++)pixels.data[j+k]=Math.max(0,Math.min(255,a[k]+grain));
-   pixels.data[j+3]=255;
+   for(let k=0;k<3;k++)pixels[j+k]=Math.max(0,Math.min(255,a[k]+grain));
+   pixels[j+3]=255;
   }
-  ctx.putImageData(pixels,0,0);
-  const tex=new T.CanvasTexture(canvas);tex.colorSpace=T.SRGBColorSpace;
+  const tex=new T.DataTexture(pixels,64,64,T.RGBAFormat);
+  tex.needsUpdate=true;tex.colorSpace=T.SRGBColorSpace;
   tex.wrapS=tex.wrapT=T.RepeatWrapping;tex.anisotropy=2;
   const mat=new T.MeshStandardMaterial({
    map:tex,metalness:a[4],roughness:a[3],side:T.DoubleSide
