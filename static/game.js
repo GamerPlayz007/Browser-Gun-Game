@@ -24,7 +24,7 @@ import {createControlBeacon54} from './control54.js';
 import {readyView55,spectatorCandidates55,cycleSpectator55,teamStandings55} from './competitive55.js';
 import {createSquadLineup} from './squad_lineup69.js';
 import {safeRead56,safeWrite56,safeName56,safeQuality56,skinColor56} from './preferences56.js';
-import {createNetSync,observePong,ingestSnapshot,sampleRemote,cameraCorrection,syncStats} from './netcode33.js';
+import {createNetSync,observePong,ingestSnapshot,sampleRemote,cameraCorrection,syncStats,shouldReconcilePrediction} from './netcode33.js';
 import {fireMode, makeTrigger, pressTrigger, releaseTrigger, takeTriggerPulse,
  predictedAmmo, reloadFraction, ammoState, damageBearing} from './combat32.js';
 const $=id=>document.getElementById(id),clamp=T.MathUtils.clamp;
@@ -436,9 +436,8 @@ function handle(data){if(data.type==='manual_respawn_result65'){toast(data.messa
   // Keep local prediction moving during heavy network backlog. Rewinding a
   // detailed BVH collision mesh with dozens of commands causes frame stalls.
   // Wait until enough commands are acknowledged, then replay ALL of the rest.
-  const replayLimit=importedMesh?12:60;
-  const shouldReconcile=me.seq!==lastReconciledSeq&&
-   pendingMoves.length<=replayLimit&&now-lastReconcileAt>=(importedMesh?.10:.035);
+  const shouldReconcile=shouldReconcilePrediction(me.seq,lastReconciledSeq,
+   pendingMoves.length,importedMesh,now-lastReconcileAt);
   if(shouldReconcile){
    lastReconcileAt=now;lastReconciledSeq=me.seq;
    const old=new T.Vector3(local.x+viewError.x,local.y+viewError.y,local.z+viewError.z);
@@ -728,6 +727,7 @@ function createDebugReport51(){
    'Quality setting: '+settings.quality,
    'Movement simulation: '+Math.round(1/movementDt())+' Hz',
    'Unacknowledged movement inputs: '+pendingMoves.length,
+   'Last movement acknowledged/reconciled: '+(me?.seq??'unknown')+' / '+lastReconciledSeq,
    'Server input queue: '+(me?.inputQueue??'unknown'),
    'Dropped stale inputs (server): '+(me?.inputOverruns??'unknown'),
    ...(world?.isOctavusMatch?[
