@@ -463,20 +463,23 @@ class Room:
                 # Render instances. A shared 30Hz native simulation halves
                 # collision work without changing other arenas' 60Hz physics.
                 step_dt=OCTAVUS_TICK if self.arena.id=='octavus' else TICK
-                # Avoid saving up a large burst of physics ticks during a network stall.
-                # Imported BVH maps become unresponsive if an entire backlog is replayed
-                # in one event-loop pass; dropping old commands favors current controls.
-                p['move_credit']=min(step_dt*2,p['move_credit']+dt)
-                if len(p['commands'])>8:
-                    while len(p['commands'])>4:
-                        p['commands'].popleft()
-                        p['input_overruns']=p.get('input_overruns',0)+1
-                while p['commands'] and p['move_credit']>=step_dt-1e-8:
+                # Preserve elapsed simulation time across a short event-loop or
+                # network stall. The previous two-tick cap silently discarded
+                # movement time, causing permanent client/server position drift.
+                p['move_credit']=min(.25,p['move_credit']+dt)
+                # Each input corresponds to exactly one predicted movement tick.
+                # Never skip a normal burst: acknowledging a later sequence after
+                # dropping earlier ticks makes the client rubber-band backwards.
+                # The receiver already bounds the queue to 30 commands.
+                steps=0
+                while p['commands'] and p['move_credit']>=step_dt-1e-8 and steps<4:
                     cmd=p['commands'].popleft()
                     if cmd['spawn']!=p['spawn']:continue
                     p['input']=cmd['input'];p['yaw']=cmd['yaw'];p['pitch']=cmd['pitch']
                     p['motion_time']+=step_dt;p['last_input']=p['motion_time']
-                    move(p,step_dt,p['motion_time'],self.arena);p['seq']=cmd['seq'];p['move_credit']-=step_dt
+                    move(p,step_dt,p['motion_time'],self.arena)
+                    p['seq']=cmd['seq'];p['move_credit']-=step_dt
+                    steps+=1
             else:
                 p['commands'].clear();p['move_credit']=0.
         self.step_bots(now)
