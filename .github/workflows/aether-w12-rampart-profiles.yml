@@ -1,0 +1,77 @@
+name: CROSSFire — RAMPART optimized game GLBs
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/aether_w12_rampart_profiles.py
+      - tools/glb_texture_profiles.py
+      - .github/workflows/aether-w12-rampart-profiles.yml
+      - static/assets/aether-w12-rampart-midnight.glb
+      - static/assets/aether-w12-rampart-glacier.glb
+      - static/assets/aether-w12-rampart-eclipse.glb
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: rampart-optimized-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  generate-and-publish:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install portable PNG decoder
+        run: python -m pip install Pillow==11.3.0
+      - name: Run preservation fixture and optimize all three reviewed RAMPART finishes
+        run: |
+          python tools/glb_texture_profiles.py --self-test
+          python tools/aether_w12_rampart_profiles.py static/assets
+      - name: Validate optimized GLB size, source metadata and performance tiers
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          from tools.glb_texture_profiles import read_glb
+          root=Path("static/assets")
+          report=json.loads((root/"rampart-texture-profile-report.json").read_text())
+          assert len(report)==3
+          for name,outputs in report.items():
+              before=(root/name).read_bytes()
+              assert set(outputs)=={"balanced","performance"}
+              first,_=read_glb(before)
+              for tier,size in (("balanced",512),("performance",256)):
+                  meta=outputs[tier]
+                  file=root/(Path(name).stem+"-"+tier+".glb")
+                  raw=file.read_bytes()
+                  doc,_=read_glb(raw)
+                  assert meta["output_bytes"]==len(raw)<len(before)
+                  assert meta["max_texture_dimension"]==size
+                  assert len(doc["meshes"])==len(first["meshes"])
+                  assert len(doc["images"])==len(first["images"])
+                  assert len(doc["materials"])==len(first["materials"])
+              assert outputs["performance"]["estimated_rgba_mipped_bytes_after"]<outputs["balanced"]["estimated_rgba_mipped_bytes_after"]
+          print("Verified six optimized RAMPART game-art GLBs, no geometry/material loss")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: crossfire-rampart-optimized-glbs
+          path: |
+            static/assets/aether-w12-rampart-*-balanced.glb
+            static/assets/aether-w12-rampart-*-performance.glb
+            static/assets/rampart-texture-profile-report.json
+          retention-days: 14
+      - name: Publish size-verified RAMPART profiles only
+        if: github.ref_name == 'main'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add static/assets/aether-w12-rampart-*-balanced.glb static/assets/aether-w12-rampart-*-performance.glb static/assets/rampart-texture-profile-report.json
+          git diff --cached --quiet && exit 0
+          git commit -m "Publish size-optimized RAMPART PBR copies without geometry changes"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
