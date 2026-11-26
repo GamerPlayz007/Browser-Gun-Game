@@ -68,6 +68,10 @@ def optimize(raw, limit):
     if len(buffers) != 1 or "uri" in buffers[0] or buffers[0]["byteLength"] > len(binary):
         raise ValueError("expected one embedded buffer")
     views = doc.get("bufferViews", [])
+    # Retain original input view offsets for the byte-for-byte geometry check.
+    # Resizing embedded textures shifts subsequent bufferView offsets. Looking
+    # up the mutated 'views' below would then compare the wrong input bytes.
+    source_views = source.get("bufferViews", [])
     if any(v.get("buffer", 0) != 0 or "extensions" in v for v in views):
         raise ValueError("unsupported bufferView extension or external buffer")
     forbidden = {"EXT_meshopt_compression", "KHR_draco_mesh_compression", "KHR_texture_basisu"}
@@ -76,7 +80,7 @@ def optimize(raw, limit):
     images = doc.get("images", [])
     replacements, before_sizes, after_sizes = {}, [], []
     def slice_view(index):
-        v = views[index]
+        v = source_views[index]
         start, n = v.get("byteOffset", 0), v["byteLength"]
         if start < 0 or n < 0 or start+n > buffers[0]["byteLength"]:
             raise ValueError("bufferView outside buffer")
