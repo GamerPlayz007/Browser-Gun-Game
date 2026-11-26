@@ -15,7 +15,7 @@ import sys
 ROOT=Path(__file__).resolve().parents[1]
 STATIC=(ROOT/"static").resolve()
 ENTRY=STATIC/"game.js"
-FROM=re.compile(r"\bfrom\s*['\"]([^'\"]+)['\"]")
+FROM=re.compile(r"""(?m)^[ \t]*(?:import|export)[ \t]+(?:[A-Za-z_$][\w$]*\s*,\s*)?(?:\{[\s\S]*?\}|\*\s+as\s+[A-Za-z_$][\w$]*|\*|[A-Za-z_$][\w$]*)[ \t]*from[ \t]*['"]([^'"]+)['"]""")
 DIRECT=re.compile(r"(?:^|\n)\s*import\s*['\"]([^'\"]+)['\"]")
 DYNAMIC=re.compile(r"\bimport\s*\(\s*['\"]([^'\"]+)['\"]\s*\)")
 IMPORTED=(FROM,DIRECT,DYNAMIC)
