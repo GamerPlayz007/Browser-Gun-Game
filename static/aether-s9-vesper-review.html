@@ -50,7 +50,7 @@ figure{margin:0}
 <main>
 <div class="eyebrow">AETHER COLLECTION / PHASE 2 / GEOMETRY FIRST</div>
 <h1>VESPER <small>AETHER-S9 · SCULPT REVIEW</small></h1>
-<p class="intro">A separate, freshly sculpted sci-fi SMG. Compare its shape against the original AR before any in-game weapon is replaced. This is a <strong>sculpt review</strong>, not the finished texture-baked production model.</p>
+<p class="intro">A separate, freshly sculpted sci-fi SMG. Compare its shape against the original AR before any in-game weapon is replaced. This is a <strong>design-review workbench</strong>, not an approved in-game replacement. Inspect the sculpt, three PBR studies and neutral clay before approving the art.</p>
 <div class="hero">
   <div class="stage">
     <canvas id="canvas" tabindex="0" aria-label="Interactive 3D VESPER sculpt, drag to rotate, scroll to zoom"></canvas>
@@ -62,7 +62,10 @@ figure{margin:0}
     <h2>AETHER-S9 VESPER</h2>
     <p>Clay reveals the sculpture. Midnight previews the AR-family graphite, brushed titanium and restrained cyan palette. Switch between both without hiding geometry.</p>
     <div class="controls">
-      <button id="midnight" aria-pressed="true">MIDNIGHT</button>
+      <button id="midnight" aria-pressed="true">PBR MIDNIGHT</button>
+      <button id="glacier" aria-pressed="false">PBR GLACIER</button>
+      <button id="eclipse" aria-pressed="false">PBR ECLIPSE</button>
+      <button id="sculpt" aria-pressed="false">BASE SCULPT</button>
       <button id="clay" aria-pressed="false">GRAY CLAY</button>
       <button id="wire" aria-pressed="false">WIREFRAME</button>
       <button id="spin" aria-pressed="false">AUTO ROTATE</button>
@@ -84,6 +87,8 @@ figure{margin:0}
   <a class="preview" href="/static/previews/aether-s9-vesper-midnight-hero.png" target="_blank" rel="noopener"><img src="/static/previews/aether-s9-vesper-midnight-hero.png" alt="VESPER hero angle Midnight sculpt preview" loading="lazy"><figcaption><strong>New VESPER · three-quarter angle</strong>Preliminary Midnight sculpt materials · open full render</figcaption></a>
   <a class="preview" href="/static/previews/aether-s9-vesper-clay-hero.png" target="_blank" rel="noopener"><img src="/static/previews/aether-s9-vesper-clay-hero.png" alt="VESPER neutral gray clay hero render" loading="lazy"><figcaption><strong>New VESPER · gray clay</strong>Geometry only, no deceptive neon camouflage · open full render</figcaption></a>
   <a class="preview" href="/static/previews/aether-s9-vesper-clay-profile.png" target="_blank" rel="noopener"><img src="/static/previews/aether-s9-vesper-clay-profile.png" alt="VESPER neutral gray full side profile" loading="lazy"><figcaption><strong>New VESPER · full side profile</strong>Read the silhouette, shadow gaps and curved rear form</figcaption></a>
+  <a class="preview" href="/static/previews/aether-s9-vesper-pbr-midnight-hero.png" target="_blank" rel="noopener"><img src="/static/previews/aether-s9-vesper-pbr-midnight-hero.png" alt="VESPER Midnight textured PBR hero review" loading="lazy"><figcaption><strong>VESPER · textured Midnight</strong>AR-family mapped PBR material review · open full render</figcaption></a>
+  <a class="preview" href="/static/previews/aether-s9-vesper-pbr-midnight-profile.png" target="_blank" rel="noopener"><img src="/static/previews/aether-s9-vesper-pbr-midnight-profile.png" alt="VESPER PBR side view" loading="lazy"><figcaption><strong>VESPER · PBR full side profile</strong>Same geometry, finished material study · open full render</figcaption></a>
 </div>
 <p class="disclaimer">Original, nonfunctional sci-fi game art. Stage 2 review files remain isolated. The current game assets are untouched pending visual approval and performance checks.</p>
 </main>
@@ -102,13 +107,15 @@ const key=new T.DirectionalLight(0xffffff,4.2);key.position.set(3,5,5);scene.add
 const rim=new T.DirectionalLight(0x83e8ff,2.3);rim.position.set(-3,2,-5);scene.add(rim);
 const warm=new T.DirectionalLight(0xffc3a5,.85);warm.position.set(4,-2,-3);scene.add(warm);
 const stage=new T.Group();scene.add(stage);
-const state={mode:'midnight',wire:false,spin:false,yaw:.55,desiredYaw:.55,pitch:.24,desiredPitch:.24,dist:4.4,desiredDist:4.4,root:null};
+const state={variant:'midnight',mode:'material',wire:false,spin:false,yaw:.55,desiredYaw:.55,pitch:.24,desiredPitch:.24,dist:4.4,desiredDist:4.4,root:null};
 const original=new Map();
 const clayMat=new T.MeshStandardMaterial({color:0xa9b4be,metalness:.12,roughness:.64,side:T.DoubleSide});
 const wireMat=new T.MeshBasicMaterial({color:0x79d8ef,wireframe:true,side:T.DoubleSide});
-let points=new Map(),pinch=0;
+let points=new Map(),pinch=0,loadRequest=0;
 function sync(){
- for(const id of ['midnight','clay'])$(id).setAttribute('aria-pressed',String(state.mode===id));
+ for(const id of ['midnight','glacier','eclipse','sculpt'])
+   $(id).setAttribute('aria-pressed',String(state.mode!=='clay'&&state.variant===id));
+ $('clay').setAttribute('aria-pressed',String(state.mode==='clay'));
  $('wire').setAttribute('aria-pressed',String(state.wire));
  $('spin').setAttribute('aria-pressed',String(state.spin));
 }
@@ -117,22 +124,54 @@ function materials(){
  state.root.traverse(o=>{if(!o.isMesh)return;o.material=state.wire?wireMat:state.mode==='clay'?clayMat:original.get(o);});
  sync();
 }
-new GLTFLoader().load('/static/assets/aether-s9-vesper-sculpt.glb',gltf=>{
- const root=gltf.scene;
- const b=new T.Box3().setFromObject(root);
- if(b.isEmpty()){ $('status').textContent='Empty GLB';return;}
- const dims=b.getSize(new T.Vector3()),center=b.getCenter(new T.Vector3());
- const scale=2.8/Math.max(dims.x,dims.y,dims.z);
- root.scale.setScalar(scale);root.position.copy(center.multiplyScalar(-scale));
- let tris=0,meshes=0;
- root.traverse(o=>{if(o.isMesh){original.set(o,o.material);meshes++;tris+=(o.geometry.index?.count||o.geometry.attributes.position.count)/3;}});
- state.root=root;stage.add(root);materials();
- $('status').textContent='MODEL READY · DRAG / ZOOM / TOGGLE CLAY';
- $('stats').textContent=meshes+' meshes · '+Math.round(tris).toLocaleString()+' triangles · original editable Blender source';
-},progress=>{
- if(progress.total)$('status').textContent='LOADING '+Math.round(progress.loaded/progress.total*100)+'%';
-},error=>{$('status').textContent='Model not deployed yet: '+error.message;});
-$('midnight').onclick=()=>{state.mode='midnight';materials();};
+function disposeOld(){
+ if(!state.root)return;
+ const meshes=new Set(),mats=new Set(),tex=new Set();
+ state.root.traverse(o=>{
+  if(!o.isMesh)return;
+  if(o.geometry)meshes.add(o.geometry);
+  const saved=original.get(o);
+  for(const m of (Array.isArray(saved)?saved:[saved]))if(m){
+   mats.add(m);for(const v of Object.values(m))if(v?.isTexture)tex.add(v);
+  }
+ });
+ state.root.removeFromParent();state.root=null;
+ meshes.forEach(x=>x.dispose());mats.forEach(x=>x.dispose());tex.forEach(x=>x.dispose());
+ original.clear();
+}
+function loadVariant(variant,fellBack=false){
+ const request=++loadRequest;
+ state.variant=variant;state.mode='material';state.wire=false;sync();
+ const url=variant==='sculpt'?'/static/assets/aether-s9-vesper-sculpt.glb':'/static/assets/aether-s9-vesper-'+variant+'.glb';
+ $('status').textContent='LOADING '+variant.toUpperCase()+' GLB…';
+ new GLTFLoader().load(url,gltf=>{
+  if(request!==loadRequest)return;
+  const root=gltf.scene;
+  const b=new T.Box3().setFromObject(root);
+  if(b.isEmpty()){$('status').textContent='EMPTY GLB MODEL';return;}
+  const dims=b.getSize(new T.Vector3()),center=b.getCenter(new T.Vector3());
+  const scale=2.8/Math.max(dims.x,dims.y,dims.z);
+  root.scale.setScalar(scale);root.position.copy(center.multiplyScalar(-scale));
+  disposeOld();
+  let tris=0,meshes=0;
+  root.traverse(o=>{if(o.isMesh){
+   original.set(o,o.material);meshes++;
+   tris+=(o.geometry.index?.count||o.geometry.attributes.position.count)/3;
+  }});
+  state.root=root;stage.add(root);materials();
+  $('status').textContent=fellBack?'SCULPT FALLBACK · PBR ASSET NOT AVAILABLE YET':
+   'READY · '+variant.toUpperCase()+' · DRAG / ZOOM / CLAY MODE';
+  $('stats').textContent=meshes+' meshes · '+Math.round(tris).toLocaleString()+' triangles · '+variant.toUpperCase()+' GLB';
+ },progress=>{
+  if(request===loadRequest&&progress.total)
+   $('status').textContent='LOADING '+variant.toUpperCase()+' · '+Math.round(progress.loaded/progress.total*100)+'%';
+ },error=>{
+  if(request!==loadRequest)return;
+  if(variant!=='sculpt')loadVariant('sculpt',true);
+  else $('status').textContent='GLB NOT AVAILABLE · '+error.message;
+ });
+}
+for(const id of ['midnight','glacier','eclipse','sculpt'])$(id).onclick=()=>loadVariant(id);
 $('clay').onclick=()=>{state.mode='clay';materials();};
 $('wire').onclick=()=>{state.wire=!state.wire;materials();};
 $('spin').onclick=()=>{state.spin=!state.spin;sync();};
@@ -164,6 +203,7 @@ function animate(t){
  camera.lookAt(0,0,0);renderer.render(scene,camera);
 }
 requestAnimationFrame(animate);
+loadVariant('midnight');
 </script>
 </body>
 </html>
