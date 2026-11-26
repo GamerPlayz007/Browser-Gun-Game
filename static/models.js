@@ -53,9 +53,11 @@ function buildReloadGlove72(parent,gloveColor,accentMat,x,y,z){
 }
 // AR-01 v0.4 has one original nonfunctional exterior design; old AETHER AR
 // primitives are not built for weapon 0. Multiplayer mechanics remain in server.py.
-function makeAR01V04Scaffold(model){
+function makeAR01V04Scaffold(model,magazine){
  const gun=new T.Group();gun.name='CROSSFIRE_AR01_V04';
  gun.position.set(0,-.31,0);gun.scale.setScalar(.8);model.add(gun);
+ // Same animated magazine hierarchy used by the other game weapons.
+ gun.add(magazine);magazine.position.set(0,-.10,-.035);
  const flash=new T.Mesh(new T.OctahedronGeometry(.078),
   new T.MeshBasicMaterial({color:0xffe6b6,depthWrite:false}));
  flash.name='ar01-v04-muzzle-flash';flash.visible=false;gun.add(flash);
@@ -68,7 +70,7 @@ export function makeWeapon(id,arms=true,finish=Math.floor(Math.random()*3)){
  const root=new T.Group(),model=new T.Group(),magazine=new T.Group();
  const left=new T.Group(),right=new T.Group();
  root.add(model,left,right);model.add(magazine);
- const visual=id===0?makeAR01V04Scaffold(model):buildAetherGameVisuals(model,magazine,id,finish);
+ const visual=id===0?makeAR01V04Scaffold(model,magazine):buildAetherGameVisuals(model,magazine,id,finish);
  const {flash,action}=visual;
  // Abstract glowing visual marker: the AETHER energy cycle is unmistakable.
  const reloadGlyph70=new T.Mesh(new T.TorusGeometry(.105,.009,5,24),
