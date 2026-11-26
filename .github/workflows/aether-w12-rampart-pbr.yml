@@ -1,0 +1,95 @@
+name: CROSSFire — RAMPART W12 PBR collection
+on:
+  push:
+    paths:
+      - tools/aether_w12_rampart_pbr.py
+      - art/blender/aether-w12-rampart-sculpt.blend
+      - .github/workflows/aether-w12-rampart-pbr.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: crossfire-rampart-pbr-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  sculpt-to-pbr:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender texture tools
+        run: |
+          sudo apt-get update -qq
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y blender python3-numpy python3-pil xvfb xauth libgl1-mesa-dri
+          blender --version | head -n 2
+      - name: Check source and base sculpt
+        run: |
+          python3 -m py_compile tools/aether_w12_rampart_pbr.py
+          test -s art/blender/aether-w12-rampart-sculpt.blend
+          test -s static/assets/aether-w12-rampart-sculpt.glb
+      - name: Bake mapped PBR materials and three GLBs from separate W12 Blender sculpt
+        run: |
+          mkdir -p build/aether-w12-rampart-pbr
+          LIBGL_ALWAYS_SOFTWARE=1 PYTHONPATH=/usr/lib/python3/dist-packages \
+            xvfb-run -a -s "-screen 0 1600x960x24" blender -b -t 2 \
+            --python-exit-code 1 --python tools/aether_w12_rampart_pbr.py \
+            -- "$PWD/art/blender/aether-w12-rampart-sculpt.blend" "$PWD/build/aether-w12-rampart-pbr"
+      - name: Validate GLB skin textures and transparent sculpt provenance
+        run: |
+          python3 - <<'PY'
+          import json,struct
+          from pathlib import Path
+          from PIL import Image
+          root=Path("build/aether-w12-rampart-pbr")
+          report=json.loads((root/"aether-w12-rampart-pbr-report.json").read_text())
+          assert report["old_w12_replaced"] is False
+          assert report["textures"]["resolution"]==1024
+          assert report["mesh_objects"]>=32
+          assert len(report["material_families"])==9
+          blend=(root/"aether-w12-rampart-pbr.blend").read_bytes()
+          assert blend.startswith(b"BLENDER")
+          for skin in ("midnight","glacier","eclipse"):
+            name="aether-w12-rampart-"+skin
+            raw=(root/(name+".glb")).read_bytes()
+            magic,version,length=struct.unpack_from("<III",raw)
+            assert (magic,version,length)==(0x46546c67,2,len(raw)),name
+            json_size,kind=struct.unpack_from("<II",raw,12)
+            assert kind==0x4e4f534a,name
+            doc=json.loads(raw[20:20+json_size])
+            assert len(doc.get("meshes",[]))>=32,(name,len(doc.get("meshes",[])))
+            assert len(doc.get("materials",[]))>=9,(name,len(doc.get("materials",[])))
+            assert len(doc.get("images",[]))>=9,(name,len(doc.get("images",[])))
+            assert any("normalTexture" in m for m in doc["materials"]),name
+            assert any("baseColorTexture" in m.get("pbrMetallicRoughness",{}) for m in doc["materials"]),name
+            assert any("metallicRoughnessTexture" in m.get("pbrMetallicRoughness",{}) for m in doc["materials"]),name
+            for view in ("hero","profile"):
+              p=root/("aether-w12-rampart-pbr-"+skin+"-"+view+".png")
+              with Image.open(p) as im:assert im.size==(1360,820),(p,im.size)
+            print("VALID RAMPART PBR",name,len(raw),len(doc["materials"]),len(doc["images"]))
+          PY
+      - name: Upload production-ready review artifacts, not runtime replacement
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: crossfire-w12-rampart-pbr-review
+          path: |
+            build/aether-w12-rampart-pbr/aether-w12-rampart-*.glb
+            build/aether-w12-rampart-pbr/aether-w12-rampart-pbr-*.png
+            build/aether-w12-rampart-pbr/aether-w12-rampart-pbr.blend
+            build/aether-w12-rampart-pbr/aether-w12-rampart-pbr-report.json
+          if-no-files-found: warn
+      - name: Publish reviewed RAMPART PBR finishes to isolated asset paths
+        if: github.ref == 'refs/heads/main'
+        run: |
+          mkdir -p static/assets static/previews art/blender
+          cp build/aether-w12-rampart-pbr/aether-w12-rampart-{midnight,glacier,eclipse}.glb static/assets/
+          cp build/aether-w12-rampart-pbr/aether-w12-rampart-pbr-*.png static/previews/
+          cp build/aether-w12-rampart-pbr/aether-w12-rampart-pbr-report.json static/assets/
+          cp build/aether-w12-rampart-pbr/aether-w12-rampart-pbr.blend art/blender/
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add static/assets/aether-w12-rampart-{midnight,glacier,eclipse}.glb static/assets/aether-w12-rampart-pbr-report.json static/previews/aether-w12-rampart-pbr-* art/blender/aether-w12-rampart-pbr.blend
+          git diff --cached --quiet && exit 0
+          git commit -m "Publish AR-family RAMPART PBR artwork for visual review"
+          git pull --rebase origin main
+          git push origin HEAD:main
