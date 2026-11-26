@@ -1,12 +1,18 @@
 import * as T from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
-import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 const $=id=>document.getElementById(id),canvas=$('view'),status=$('status');
 try{
  const renderer=new T.WebGLRenderer({canvas,antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5));renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.28;
  const scene=new T.Scene();scene.background=new T.Color(0x101c28);const camera=new T.PerspectiveCamera(37,1,.05,50);
- const controls=new OrbitControls(camera,canvas);controls.enableDamping=true;controls.autoRotate=!matchMedia('(prefers-reduced-motion: reduce)').matches;controls.autoRotateSpeed=.65;controls.minDistance=2.7;controls.maxDistance=12;
- const place=()=>{camera.position.set(3.7,2,5.2);controls.target.set(0,.93,0);controls.update()};place();
+ const controls={autoRotate:!matchMedia('(prefers-reduced-motion: reduce)').matches};
+ const orbit={yaw:.64,pitch:.2,distance:5.6};let pointer=null;
+ const place=()=>{orbit.yaw=.64;orbit.pitch=.2;orbit.distance=5.6;};
+ canvas.addEventListener('pointerdown',e=>{if(pointer)return;canvas.setPointerCapture(e.pointerId);pointer={id:e.pointerId,x:e.clientX,y:e.clientY};controls.autoRotate=false;$('spin').setAttribute('aria-pressed','false');});
+ canvas.addEventListener('pointermove',e=>{if(pointer?.id!==e.pointerId)return;orbit.yaw-=(e.clientX-pointer.x)*.008;orbit.pitch=T.MathUtils.clamp(orbit.pitch+(e.clientY-pointer.y)*.006,-1.15,1.15);pointer.x=e.clientX;pointer.y=e.clientY;});
+ for(const type of ['pointerup','pointercancel','lostpointercapture'])canvas.addEventListener(type,e=>{if(pointer?.id===e.pointerId)pointer=null;});
+ canvas.addEventListener('wheel',e=>{e.preventDefault();orbit.distance=T.MathUtils.clamp(orbit.distance*Math.exp(e.deltaY*.001),2.7,12);},{passive:false});
+ function updateCamera(dt){if(controls.autoRotate&&!pointer)orbit.yaw+=dt*.24;const h=Math.cos(orbit.pitch)*orbit.distance;camera.position.set(Math.sin(orbit.yaw)*h,.93+Math.sin(orbit.pitch)*orbit.distance,Math.cos(orbit.yaw)*h);camera.lookAt(0,.93,0);}
+ place();updateCamera(0);
  const key=new T.DirectionalLight(0xe9faff,4);key.position.set(3,5,4);scene.add(key);const rim=new T.DirectionalLight(0x64d9ff,3);rim.position.set(-3,2,-4);scene.add(rim);const fill=new T.DirectionalLight(0xffb57a,1.25);fill.position.set(-4,1,3);scene.add(fill,new T.HemisphereLight(0xd2efff,0x2b303c,2.1));
  const platform=new T.Mesh(new T.CylinderGeometry(1.65,1.8,.13,80),new T.MeshStandardMaterial({color:0x182a38,roughness:.38,metalness:.62}));platform.position.y=.04;scene.add(platform);
  const ring=new T.Mesh(new T.RingGeometry(1.49,1.51,96),new T.MeshBasicMaterial({color:0x4bbacc,side:T.DoubleSide}));ring.rotation.x=-Math.PI/2;ring.position.y=.112;scene.add(ring);
@@ -21,6 +27,6 @@ try{
  },undefined,error=>{console.error(error);status.classList.add('error');status.textContent='Asset failed to load; download remains available.';});
  function resize(){const w=canvas.clientWidth,h=canvas.clientHeight;if(w&&h){renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}}
  new ResizeObserver(resize).observe(canvas);resize();
- renderer.setAnimationLoop(()=>{if(document.hidden)return;controls.update();renderer.render(scene,camera);});
+ let previous=performance.now();renderer.setAnimationLoop(now=>{const dt=Math.min(.05,(now-previous)/1000);previous=now;if(document.hidden)return;updateCamera(dt);renderer.render(scene,camera);});
  canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();status.textContent='Graphics context lost. Refresh to retry.';});
 }catch(error){console.error(error);status.classList.add('error');status.textContent='WebGL unavailable. Download the asset to inspect in Blender.';}
