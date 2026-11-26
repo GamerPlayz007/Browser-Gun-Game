@@ -33,25 +33,50 @@ class JumpRecoveryTests(unittest.TestCase):
 
 
 class MultiplayerRecoveryTests(unittest.TestCase):
-    def test_idle_player_cannot_bank_large_physics_burst(self):
+    def test_idle_credit_has_finite_network_stall_limit(self):
         room = Room('MAX')
         player = new_player(room, 'idle', 'Idle', 1., 0)
         for frame in range(40):
             room.step(FIXED_DT, 1. + frame * FIXED_DT)
-        self.assertLessEqual(player['move_credit'], 2 * FIXED_DT + 1e-9)
+        self.assertLessEqual(player['move_credit'], .25 + 1e-9)
 
-    def test_old_inputs_are_discarded_in_favor_of_recent_directions(self):
+    def test_delayed_inputs_are_simulated_in_order_not_acknowledged_without_movement(self):
         room = Room('MAX')
         player = new_player(room, 'lag', 'Lagged', 1., 0)
+        start = (player['x'], player['y'], player['z'])
         for seq in range(1, 16):
             player['commands'].append({
                 'seq': seq, 'spawn': player['spawn'],
                 'yaw': 0., 'pitch': 0., 'input': {'w': True}
             })
-        room.step(FIXED_DT, 1. + FIXED_DT)
-        self.assertGreaterEqual(player['input_overruns'], 11)
-        self.assertLessEqual(len(player['commands']), 4)
-        self.assertGreaterEqual(player['seq'], 12)
+        # A 200-ms stall leaves ten or more packets arriving together.
+        room.step(.2, 1.2)
+        self.assertEqual(player['seq'], 4,
+                         'Only four costly collision steps per loop')
+        self.assertEqual(len(player['commands']), 11)
+        self.assertGreater(player['move_credit'], 2 * FIXED_DT)
+        for frame in range(4):
+            room.step(FIXED_DT, 1.2 + (frame + 1) * FIXED_DT)
+        self.assertEqual(player['seq'], 15,
+                         'All fifteen predicted commands must be simulated')
+        self.assertEqual(len(player['commands']), 0)
+        self.assertEqual(player.get('input_overruns', 0), 0)
+        self.assertNotEqual((player['x'], player['y'], player['z']), start)
+
+    def test_normal_30hz_octavus_input_cadence_is_unchanged(self):
+        from server import OCTAVUS_TICK
+        room = Room('MAX', 'octavus')
+        player = new_player(room, 'cadence', 'Cadence', 100., 0)
+        for frame in range(30):
+            if frame % 2 == 0:
+                player['commands'].append({
+                    'seq': frame // 2 + 1, 'spawn': player['spawn'],
+                    'yaw': 0., 'pitch': 0., 'input': {'w': True}
+                })
+            room.step(FIXED_DT, 100. + frame * FIXED_DT)
+        self.assertEqual(player['seq'], 15)
+        self.assertEqual(len(player['commands']), 0)
+        self.assertAlmostEqual(player['motion_time'], 15 * OCTAVUS_TICK)
 
 
 if __name__ == '__main__':
