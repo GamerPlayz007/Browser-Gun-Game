@@ -44,7 +44,7 @@ jobs:
           report=json.loads((root/"aether-w12-rampart-pbr-report.json").read_text())
           assert report["old_w12_replaced"] is False
           assert report["textures"]["resolution"]==1024
-          assert report["mesh_objects"]>=32
+          assert report["mesh_objects"]>=60
           assert len(report["material_families"])==9
           blend=(root/"aether-w12-rampart-pbr.blend").read_bytes()
           assert blend.startswith(b"BLENDER")
