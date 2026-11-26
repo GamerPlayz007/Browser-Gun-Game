@@ -1,0 +1,56 @@
+{
+  "aether9-specter-midnight.glb": {
+    "balanced": {
+      "input_bytes": 44529064,
+      "output_bytes": 17629452,
+      "image_count": 29,
+      "max_texture_dimension": 1024,
+      "estimated_rgba_mipped_bytes_before": 648719019,
+      "estimated_rgba_mipped_bytes_after": 162179755
+    },
+    "performance": {
+      "input_bytes": 44529064,
+      "output_bytes": 6062328,
+      "image_count": 29,
+      "max_texture_dimension": 512,
+      "estimated_rgba_mipped_bytes_before": 648719019,
+      "estimated_rgba_mipped_bytes_after": 40544939
+    }
+  },
+  "aether9-specter-glacier.glb": {
+    "balanced": {
+      "input_bytes": 48197220,
+      "output_bytes": 19236748,
+      "image_count": 29,
+      "max_texture_dimension": 1024,
+      "estimated_rgba_mipped_bytes_before": 648719019,
+      "estimated_rgba_mipped_bytes_after": 162179755
+    },
+    "performance": {
+      "input_bytes": 48197220,
+      "output_bytes": 6462244,
+      "image_count": 29,
+      "max_texture_dimension": 512,
+      "estimated_rgba_mipped_bytes_before": 648719019,
+      "estimated_rgba_mipped_bytes_after": 40544939
+    }
+  },
+  "aether9-specter-eclipse.glb": {
+    "balanced": {
+      "input_bytes": 45218604,
+      "output_bytes": 17908124,
+      "image_count": 29,
+      "max_texture_dimension": 1024,
+      "estimated_rgba_mipped_bytes_before": 648719019,
+      "estimated_rgba_mipped_bytes_after": 162179755
+    },
+    "performance": {
+      "input_bytes": 45218604,
+      "output_bytes": 6129964,
+      "image_count": 29,
+      "max_texture_dimension": 512,
+      "estimated_rgba_mipped_bytes_before": 648719019,
+      "estimated_rgba_mipped_bytes_after": 40544939
+    }
+  }
+}
