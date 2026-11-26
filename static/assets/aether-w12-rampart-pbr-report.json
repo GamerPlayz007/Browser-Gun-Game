@@ -1,0 +1,36 @@
+{
+  "asset": "AETHER-W12 RAMPART",
+  "phase": "3 / texture-mapped PBR art",
+  "fictional_nonfunctional_art": true,
+  "old_w12_replaced": false,
+  "textures": {
+    "resolution": 1024,
+    "unique_maps": 48,
+    "sources": "basecolor, ORM, tangent normal, cyan emissive",
+    "ao": "neutral, not geometry-baked",
+    "normal": "procedural height-derived, not sculpt-baked"
+  },
+  "mesh_objects": 72,
+  "material_families": [
+    "ceramic",
+    "frame",
+    "mid",
+    "polymer",
+    "silver",
+    "cyan",
+    "glass",
+    "copper",
+    "carbon"
+  ],
+  "finish_glb_bytes": {
+    "midnight": 18222624,
+    "glacier": 18222560,
+    "eclipse": 18222568
+  },
+  "review_views": [
+    "hero",
+    "profile"
+  ],
+  "source_blend": "aether-w12-rampart-pbr.blend",
+  "production_approval": "pending visual comparison and school-laptop performance check"
+}
