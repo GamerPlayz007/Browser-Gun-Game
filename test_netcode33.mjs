@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {createNetSync,observePong,ingestSnapshot,sampleRemote,shortAngle,
- cameraCorrection,syncStats} from './static/netcode33.js';
+ cameraCorrection,syncStats,shouldReconcilePrediction} from './static/netcode33.js';
 
 const near=(a,b,e=.0001)=>assert.ok(Math.abs(a-b)<=e,`expected ${a} ~= ${b}`);
 const createPlayer=(x,yaw=0,spawn=1,other={})=>({
@@ -54,6 +54,21 @@ assert.ok(unstable.delayMs<=185,'interpolation stays bounded');
 assert.ok(unstable.remote.get('rival').length<=32);
 assert.ok(syncStats(unstable,4000).stale,'stale link is detectable');
 assert.equal(syncStats(unstable,2700).stale,false,'recent snapshot is active');
+
+// Never rewind to an authoritative snapshot if doing so requires silently
+// discarding unacknowledged movement on a detailed map.
+assert.equal(shouldReconcilePrediction(18,17,20,true,.3),false,
+ 'A 20-command BVH backlog must not force a truncated rewind');
+assert.equal(shouldReconcilePrediction(18,17,12,true,.1),true,
+ 'A complete 12-command replay can recover once acknowledgements catch up');
+assert.equal(shouldReconcilePrediction(18,18,8,true,.2),false,
+ 'Receiving the same acknowledgement twice must not rewind the player');
+assert.equal(shouldReconcilePrediction(19,18,8,true,.02),false,
+ 'Heavy-map collision replays should be rate-limited');
+assert.equal(shouldReconcilePrediction(19,18,16,false,.05),true,
+ 'Typical higher-latency city movement must retain ALL pending inputs');
+assert.equal(shouldReconcilePrediction(19,18,61,false,.05),false,
+ 'Excess backlog should not trigger a massive frame-stalling replay');
 
 const smooth=cameraCorrection({x:5.1,y:1,z:1},{x:5,y:1,z:1});
 assert.equal(smooth.snapped,false);near(smooth.x,.1);
