@@ -93,7 +93,8 @@ def register(ob,name,role):
 def bevel(ob,r=.012):
     if r>0:
         mod=ob.modifiers.new("Machined rim / real bevel","BEVEL")
-        mod.width=r;mod.segments=2;mod.affect="EDGES" if hasattr(mod,"affect") else None
+        mod.width=r;mod.segments=2
+        if hasattr(mod,"affect"):mod.affect="EDGES"
         smooth=ob.modifiers.new("Surface normals","WEIGHTED_NORMAL")
         smooth.keep_sharp=True
     return ob
@@ -273,8 +274,11 @@ def main():
             for ob in PARTS:ob.select_set(True)
             bpy.context.view_layer.objects.active=PARTS[0]
             dst=OUT/f"aether-{kind}-{finish}.glb"
-            bpy.ops.export_scene.gltf(filepath=str(dst),export_format="GLB",use_selection=True,
-                                      export_apply=True,export_materials="EXPORT")
+            export_args=dict(filepath=str(dst),export_format="GLB",export_apply=True,export_materials="EXPORT")
+            properties=bpy.ops.export_scene.gltf.get_rna_type().properties.keys()
+            if "use_selection" in properties:export_args["use_selection"]=True
+            if "export_selected" in properties:export_args["export_selected"]=True
+            bpy.ops.export_scene.gltf(**export_args)
             assert dst.is_file() and dst.stat().st_size>1024,dst
             bpy.ops.object.select_all(action="DESELECT")
             bpy.context.scene.render.filepath=str(OUT/f"aether-{kind}-{finish}.png")
