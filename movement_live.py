@@ -192,6 +192,9 @@ def step_player(p,dt,now,arena,weapons):
         ny=ground;p['vy']=0;p['grounded']=True
     else:p['grounded']=False
     p['y']=ny
-    if p['grounded'] and not start_grounded:
+    if p['grounded']:
+        # Even an immediate ceiling collision can land during the takeoff tick.
+        # Always re-arm on verified ground contact; otherwise jump_consumed
+        # can stay latched forever after leaving the obstruction.
         p['jump_consumed']=False;p['jump_cut']=False;p['wall_kick_used']=False
     p['lean']=allowed_lean(p,inp,arena)
