@@ -64,7 +64,8 @@ def make_mat(kind,finish,role):
     nt.links.new(base.outputs["Color"],bs.inputs["Base Color"])
     tex=nt.nodes.new("ShaderNodeTexImage")
     tex.image=bpy.data.images.load(str(normal),check_existing=False)
-    tex.image.colorspace_settings.name="Non-Color"
+    try:tex.image.colorspace_settings.name="Non-Color"
+    except TypeError:tex.image.colorspace_settings.name="Linear"
     n=nt.nodes.new("ShaderNodeNormalMap")
     n.inputs["Strength"].default_value=.42
     nt.links.new(tex.outputs["Color"],n.inputs["Color"])
@@ -277,8 +278,10 @@ def main():
             for ob in PARTS:ob.select_set(True)
             bpy.context.view_layer.objects.active=PARTS[0]
             dst=OUT/f"aether-{kind}-{finish}.glb"
-            export_args=dict(filepath=str(dst),export_format="GLB",export_apply=True,export_materials="EXPORT")
+            export_args=dict(filepath=str(dst),export_format="GLB")
             properties=bpy.ops.export_scene.gltf.get_rna_type().properties.keys()
+            if "export_apply" in properties:export_args["export_apply"]=True
+            if "export_materials" in properties:export_args["export_materials"]="EXPORT"
             if "use_selection" in properties:export_args["use_selection"]=True
             if "export_selected" in properties:export_args["export_selected"]=True
             bpy.ops.export_scene.gltf(**export_args)
