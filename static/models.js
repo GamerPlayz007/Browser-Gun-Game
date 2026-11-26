@@ -3,6 +3,7 @@ import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js'
 import {makeAvatarAnim,trackAvatar,markAvatar,avatarPose} from './animation34.js';
 import {buildAetherGameVisuals,disposeAetherMaterials} from './aether_game_models.js';
 import {sampleReloadPose23} from './reload_motion23.js';
+import {attachAR01V04} from './ar01_v04_model.js';
 const materials=new Map();const material=c=>{if(!materials.has(c))materials.set(c,new T.MeshStandardMaterial({color:c,roughness:.48,metalness:.25}));return materials.get(c);};
 function box(parent,w,h,d,c,x,y,z,r=.018){const m=new T.Mesh(new RoundedBoxGeometry(w,h,d,1,Math.min(r,w/3,h/3,d/3)),material(c));m.position.set(x,y,z);parent.add(m);return m;}
 function cylinder(parent,r1,r2,h,c,x,y,z){const m=new T.Mesh(new T.CylinderGeometry(r1,r2,h,12),material(c));m.position.set(x,y,z);parent.add(m);return m;}
@@ -50,11 +51,24 @@ function buildReloadGlove72(parent,gloveColor,accentMat,x,y,z){
  marker.position.set(0,.049,-.011);marker.visible=false;hand.add(marker);
  return {hand,fingers,thumb,marker,base:{x,y,z}};
 }
+// AR-01 v0.4 has one original nonfunctional exterior design; old AETHER AR
+// primitives are not built for weapon 0. Multiplayer mechanics remain in server.py.
+function makeAR01V04Scaffold(model){
+ const gun=new T.Group();gun.name='CROSSFIRE_AR01_V04';
+ gun.position.set(0,-.31,0);gun.scale.setScalar(.8);model.add(gun);
+ const flash=new T.Mesh(new T.OctahedronGeometry(.078),
+  new T.MeshBasicMaterial({color:0xffe6b6,depthWrite:false}));
+ flash.name='ar01-v04-muzzle-flash';flash.visible=false;gun.add(flash);
+ const adsAnchor=new T.Object3D();adsAnchor.name='ar01-v04-ads-center';
+ adsAnchor.position.set(0,.90*.46,-(-.24)*.46);gun.add(adsAnchor);
+ return {flash,action:{},adsAnchor,gun,uniqueMaterials:[flash.material],batchCount:0,
+  setFinish:()=>false,getGlowColor:()=>0xeac68d};
+}
 export function makeWeapon(id,arms=true,finish=Math.floor(Math.random()*3)){
  const root=new T.Group(),model=new T.Group(),magazine=new T.Group();
  const left=new T.Group(),right=new T.Group();
  root.add(model,left,right);model.add(magazine);
- const visual=buildAetherGameVisuals(model,magazine,id,finish);
+ const visual=id===0?makeAR01V04Scaffold(model):buildAetherGameVisuals(model,magazine,id,finish);
  const {flash,action}=visual;
  // Abstract glowing visual marker: the AETHER energy cycle is unmistakable.
  const reloadGlyph70=new T.Mesh(new T.TorusGeometry(.105,.009,5,24),
@@ -84,6 +98,7 @@ export function makeWeapon(id,arms=true,finish=Math.floor(Math.random()*3)){
   aetherSetFinish:visual.setFinish,aetherGetGlowColor:visual.getGlowColor,
   aetherArtGun71:visual.gun,aetherDefaultYaw71:visual.gun.rotation.y,
   aetherBatchCount:visual.batchCount};
+ if(id===0)attachAR01V04(root);
  return root;
 }
 // Material palettes are private to each rig: changing a player's finish
@@ -101,8 +116,9 @@ export function setWeaponFinish(root,index){
 }
 export function disposeWeaponRig(root){
  if(!root)return;
+ root.userData.ar04Disposed=true;
  disposeAetherMaterials(root);
- root.traverse(o=>o.geometry?.dispose());
+ root.traverse(o=>{if(o.geometry&&!o.userData.ar04Shared)o.geometry.dispose();});
  root.removeFromParent();
 }
 // CROSSFire 07.1 — layered, movement-aware AETHER viewmodel animation.
