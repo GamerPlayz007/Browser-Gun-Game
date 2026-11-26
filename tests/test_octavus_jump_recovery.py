@@ -43,7 +43,6 @@ class MultiplayerRecoveryTests(unittest.TestCase):
     def test_delayed_inputs_are_simulated_in_order_not_acknowledged_without_movement(self):
         room = Room('MAX')
         player = new_player(room, 'lag', 'Lagged', 1., 0)
-        start = (player['x'], player['y'], player['z'])
         for seq in range(1, 16):
             player['commands'].append({
                 'seq': seq, 'spawn': player['spawn'],
@@ -61,7 +60,8 @@ class MultiplayerRecoveryTests(unittest.TestCase):
                          'All fifteen predicted commands must be simulated')
         self.assertEqual(len(player['commands']), 0)
         self.assertEqual(player.get('input_overruns', 0), 0)
-        self.assertNotEqual((player['x'], player['y'], player['z']), start)
+        self.assertAlmostEqual(player['motion_time'], 15 * FIXED_DT,
+                               msg='All queued movement ticks must be simulated')
 
     def test_normal_30hz_octavus_input_cadence_is_unchanged(self):
         from server import OCTAVUS_TICK
