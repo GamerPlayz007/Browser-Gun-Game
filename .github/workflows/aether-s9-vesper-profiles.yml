@@ -4,6 +4,7 @@ on:
     branches: [main]
     paths:
       - tools/aether_s9_vesper_profiles.py
+      - tools/glb_texture_profiles.py
       - .github/workflows/aether-s9-vesper-profiles.yml
       - static/assets/aether-s9-vesper-midnight.glb
       - static/assets/aether-s9-vesper-glacier.glb
