@@ -76,8 +76,10 @@ export async function setOperator03Skin(root,requestedSkin){
  const data=root?.userData;
  if(!data||data.operator03Disposed)return;
  const skin=operator03Skin(requestedSkin);
- if(data.operator03Wanted===skin&&data.operator03Applied===skin)return;
+ if(data.operator03Wanted===skin&&
+    (data.operator03Applied===skin||data.operator03PendingSkin===skin))return;
  data.operator03Wanted=skin;
+ data.operator03PendingSkin=skin;
  try{
   const model=await loadModel();
   let atlas=null;
@@ -122,6 +124,8 @@ export async function setOperator03Skin(root,requestedSkin){
    loggedFailure=true;
    console.warn('Operator 03 could not load: retaining original avatar',error);
   }
+ }finally{
+  if(data.operator03PendingSkin===skin)data.operator03PendingSkin=null;
  }
 }
 export function keepOperator03LegacyHidden(root){
