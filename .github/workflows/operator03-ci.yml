@@ -1,0 +1,47 @@
+name: Operator 03 cosmetics regression checks
+
+on:
+  pull_request:
+    paths:
+      - 'static/operator03_*'
+      - 'static/game.js'
+      - 'static/models.js'
+      - 'static/squad_lineup69.js'
+      - 'static/index.html'
+      - 'server.py'
+      - 'operator03_skins.py'
+      - 'test_operator03_*'
+      - 'package.json'
+      - '.github/workflows/operator03-ci.yml'
+  push:
+    branches: [feature/operator03-camo-lobby]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v4
+      - name: Install Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          npm install --ignore-scripts --no-audit --no-fund
+          python -m pip install -r requirements.txt
+      - name: Verify JS and multiplayer cosmetics
+        run: |
+          node --check static/game.js
+          node --check static/models.js
+          node --check static/squad_lineup69.js
+          node --check static/operator03_model.js
+          node --check static/operator03_skins.js
+          node test_operator03_skins.mjs
+      - name: Verify authoritative team camouflages
+        run: python -m unittest test_operator03_skins.py
