@@ -1,16 +1,19 @@
-# Sniper artwork identity correction
+# CROSSFire sniper artwork — single current version
 
-The **AETHER-L7 Longwatch** (archived native .blend/GLBs) is **not** the previously created AWP-01 v0.3 sniper.
+**AWP-01 v0.3 ORIGINAL** is the only supported sniper artwork.
 
-The correct 3D artwork in the ChatGPT project session is:
-- `CROSSFIRE_AWP_ReferenceInspired_v03.glb` (4,682,872 bytes)
-- SHA256: `a227f177bc1d5398ec5919aaf537a8a29ab48a2c10b9c9c51b73b74366351b4b`
-- `CROSSFIRE_AWP_v03_Interactive_3D_Viewer.html`
-- `CROSSFIRE_AWP_v03_Blender_Ready_Kit.zip`
-- Preview: `AWP01_v03_ThreeQuarter.png`
+- Source model: `static/assets/CROSSFIRE_AWP_ReferenceInspired_v03.glb`
+- Size: 4,682,872 bytes
+- SHA-256: `a227f177bc1d5398ec5919aaf537a8a29ab48a2c10b9c9c51b73b74366351b4b`
+- Source generator: `tools/awp01_v03_builder.py` (digital nonfunctional exterior art)
+- Multiplayer rendering module: `static/awp01_v03_model.js`
+- Workshop: `/static/workshop.html?asset=awp01-v03`
 
-The correct model has a long horizontal silhouette and its own full artist textures. It is a self-contained **nonfunctional fictional game-art GLB**, not a physical weapon specification.
+The old AETHER-L7/Longwatch GLBs, old Blender source exports, and standalone
+legacy studio are removed from this repository. The AWP-01 v0.3 GLB replaces
+the sniper's **artwork only**. No shooting rules, collision, physics or networking
+are changed. The imported GLB is shared and batched to avoid 396 draw calls.
 
-**Important:** The AWP-01 v0.3 binary is currently in the ChatGPT project artifacts but has **not been uploaded to the GitHub repo**. The Workshop cannot fetch files from a private ChatGPT sandbox automatically. Visit `/static/workshop.html?asset=awp01-v03` to view the original model directly on any computer. No manual import is necessary.
-
-Do not present the archived L7 exports as the original AWP sniper again, and do not change multiplayer unless the intended art asset has been reviewed.
+The exact source GLB is intentionally preserved for workshop inspection and
+reproducible exports. Git history still contains the removed assets if recovery
+is needed.

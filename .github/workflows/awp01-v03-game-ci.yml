@@ -1,0 +1,49 @@
+name: AWP-01 v0.3 artwork integration checks
+on:
+  pull_request:
+    paths:
+      - 'static/awp01_v03_model.js'
+      - 'static/models.js'
+      - 'static/workshop-library.js'
+      - 'static/game.js'
+      - 'static/assets/CROSSFIRE_AWP_ReferenceInspired_v03.glb'
+      - 'tools/test-awp01-v03-integration.mjs'
+      - 'tools/test-workshop-library.mjs'
+      - 'tools/test-s12-v04.mjs'
+      - '.github/workflows/awp01-v03-game-ci.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'static/awp01_v03_model.js'
+      - 'static/models.js'
+      - 'static/workshop-library.js'
+      - 'static/game.js'
+      - 'static/assets/CROSSFIRE_AWP_ReferenceInspired_v03.glb'
+      - 'tools/test-awp01-v03-integration.mjs'
+      - 'tools/test-workshop-library.mjs'
+      - 'tools/test-s12-v04.mjs'
+      - '.github/workflows/awp01-v03-game-ci.yml'
+permissions:
+  contents: read
+jobs:
+  art-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: npm ci --no-audit --no-fund
+      - name: Verify AWP 3D module, exact model, and absent old sniper
+        run: |
+          node --check static/awp01_v03_model.js
+          node tools/test-awp01-v03-integration.mjs
+          node tools/test-classic-shotgun-sniper.mjs
+          node tools/test-s12-v04.mjs
+      - name: Verify workshop GLBs and inventory
+        run: npm run test:workshop

@@ -166,8 +166,8 @@ async function loadArena(id){
  minimap=createMinimap($('minimap'),$('district-label'),map);$('map-select').value=id;
  display.quality.reset();display.resize(true);
 }
-const AETHER_NAMES68=['AR-01 V0.4','SMG-05 V0.2','S-12 V0.4','AETHER-L7 LONGWATCH'];
- const AETHER_SHORT68=['A9','S5','W12','L7'];
+const AETHER_NAMES68=['AR-01 V0.4','SMG-05 V0.2','S-12 V0.4','AWP-01 V0.3'];
+ const AETHER_SHORT68=['A9','S5','W12','AWP'];
  const displayWeaponName68=id=>AETHER_NAMES68[id]||weapons[id]?.name||'WEAPON';
  const displayWeaponShort68=id=>AETHER_SHORT68[id]||weapons[id]?.short||'W';
  const weapons=map.weapons,weaponModels=weapons.map(w=>makeWeapon(w.id));for(const g of weaponModels){g.visible=false;viewScene.add(g);}
