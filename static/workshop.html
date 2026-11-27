@@ -94,6 +94,13 @@ h2{font-size:12px;letter-spacing:.17em;margin:0 0 10px}small,.dim{color:var(--mu
 .station-nav{margin-top:8px}
 .attrib{margin-top:12px;font-size:9px}
 @media(max-width:650px){.panel{max-height:64vh;width:auto}.intro{max-width:170px}.intro p{display:none} .mode-tabs button{font-size:9px;padding:7px 1px}}
+
+/* Keep the workshop identity visible without blocking the wall-mounted artwork. */
+.intro{top:76px;left:clamp(12px,1.6vw,28px);max-width:225px;padding:10px 12px;background:#071825c7;border-left:2px solid #6bc5d5;border-radius:0 7px 7px 0}
+.intro h1{font-size:32px;margin:5px 0 1px;line-height:1.05}
+.intro .overline{font-size:8px;letter-spacing:.12em}
+.intro p,.intro .station-tag{display:none}
+@media(max-width:650px){.intro{top:46px;max-width:135px;padding:7px}.intro h1{font-size:21px}.intro .overline{font-size:7px}}
 </style></head><body>
 <canvas id="stage" aria-label="CROSSFire garage workshop with a 3D asset inspection bay"></canvas>
 <header><a href="/" class="brand">CROSS<span>FIRE</span> / THE WORKSHOP</a><div class="meta">GARAGE 01 / ASSET DEVELOPMENT HQ<br><a href="/static/map-art-v5.html">DAYBREAK FIELD TEST</a> · <a href="/">PLAY THE GAME</a></div></header>
