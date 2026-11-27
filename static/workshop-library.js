@@ -61,9 +61,10 @@ export const WORKSHOP_CATALOG = Object.freeze([
   entry('operator03-code','Operator 03 · Camouflage','production','Game-only',
     'The player model and camouflages are imported through game runtime code.',[],
     'Source: static/operator03_model.js. No standalone GLB in this repository.'),
-  entry('awp-local-draft','AWP-01 · v0.3 ORIGINAL DESIGN','development','Local GLB import',
-    'The intended green-and-black sniper we designed: long scope, shaped stock and a full horizontal silhouette. Its original GLB is not yet in GitHub.',[],
-    'Original project file: CROSSFIRE_AWP_ReferenceInspired_v03.glb. Download the recovered GLB from the ChatGPT session, then IMPORT & SAVE GLB into your browser library.')
+  entry('awp01-v03','AWP-01 · v0.3 ORIGINAL','development','Workshop ready',
+    'Our original green-and-black AWP-01 sniper game artwork: extended scope, contoured stock and full horizontal silhouette. Exact original recovered, not the archived AETHER-L7.',[
+      profile('ORIGINAL','Original approved artwork · v0.3','CROSSFIRE_AWP_ReferenceInspired_v03.glb',4682872)
+    ],'Permanent repository GLB, 396 artist meshes and 23 materials. Verified exact SHA-256 a227f177bc1d5398ec5919aaf537a8a29ab48a2c10b9c9c51b73b74366351b4b. Preview only; not yet in multiplayer.','CROSSFire / AWP-01 original')
 ]);
 export const PERSONAL_MAX_BYTES=30_000_000;
 const DB_NAME='crossfire-workshop-asset-library-v1',TABLE='assets';

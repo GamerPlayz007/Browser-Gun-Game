@@ -11,6 +11,6 @@ The correct 3D artwork in the ChatGPT project session is:
 
 The correct model has a long horizontal silhouette and its own full artist textures. It is a self-contained **nonfunctional fictional game-art GLB**, not a physical weapon specification.
 
-**Important:** The AWP-01 v0.3 binary is currently in the ChatGPT project artifacts but has **not been uploaded to the GitHub repo**. The Workshop cannot fetch files from a private ChatGPT sandbox automatically. Download the GLB from the user-provided project artifact link, then open the existing Workshop and choose **IMPORT & SAVE GLB** to place it onto the garage pedestal. This import stays in the user's browser.
+**Important:** The AWP-01 v0.3 binary is currently in the ChatGPT project artifacts but has **not been uploaded to the GitHub repo**. The Workshop cannot fetch files from a private ChatGPT sandbox automatically. Visit `/static/workshop.html?asset=awp01-v03` to view the original model directly on any computer. No manual import is necessary.
 
 Do not present the archived L7 exports as the original AWP sniper again, and do not change multiplayer unless the intended art asset has been reviewed.

@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
 import {existsSync,readFileSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
@@ -9,8 +10,9 @@ const html=get('static/workshop.html'),workshop=get('static/workshop.js'),ui=get
 assert.equal(WORKSHOP_CATALOG.length,13);
 assert.ok(WORKSHOP_CATALOG.some(x=>x.id==='s12-v04'&&x.status==='In game'));
 assert.ok(WORKSHOP_CATALOG.some(x=>x.id==='l7-native'&&x.status==='Archived design'&&x.profiles.length===2));
-assert.ok(WORKSHOP_CATALOG.some(x=>x.id==='awp-local-draft'&&!x.profiles.length));
-assert.ok(WORKSHOP_CATALOG.find(x=>x.id==='awp-local-draft').title.includes('v0.3 ORIGINAL DESIGN'));
+assert.ok(WORKSHOP_CATALOG.some(x=>x.id==='awp01-v03'&&x.status==='Workshop ready'&&x.profiles.length===1));
+assert.ok(WORKSHOP_CATALOG.find(x=>x.id==='awp01-v03').title.includes('v0.3 ORIGINAL'));
+assert.equal(WORKSHOP_CATALOG.find(x=>x.id==='awp01-v03').profiles[0].bytes,4682872);
 assert.ok(WORKSHOP_CATALOG.find(x=>x.id==='l7-native').description.includes('NOT the CROSSFire AWP-01'));
 
 assert.ok(WORKSHOP_CATALOG.some(x=>x.id==='fox-reference'&&x.profiles.length===2));
@@ -18,6 +20,22 @@ for(const entry of WORKSHOP_CATALOG)for(const p of entry.profiles){
  if(p.url)assert.ok(existsSync(path.join(root,p.url.slice(1))),`Missing repo asset: ${p.url}`);
  assert.ok(Number.isInteger(p.bytes)&&p.bytes>0,`Unverified asset size: ${entry.title}`);
 }
+// The AWP model must remain byte-for-byte identical to the recovered original artwork.
+const awpPath=path.join(root,'static/assets/CROSSFIRE_AWP_ReferenceInspired_v03.glb');
+const awpBytes=readFileSync(awpPath);
+const awpDataView=new DataView(awpBytes.buffer,awpBytes.byteOffset,awpBytes.byteLength);
+assert.equal(awpBytes.length,4682872,'AWP original bytes changed');
+assert.equal(awpDataView.getUint32(0,true),0x46546c67,'AWP is not a GLB');
+assert.equal(awpDataView.getUint32(8,true),awpBytes.length,'AWP GLB size mismatch');
+const awpChunkLength=awpDataView.getUint32(12,true);
+const awpDoc=JSON.parse(awpBytes.subarray(20,20+awpChunkLength).toString('utf8'));
+assert.equal(awpDoc.meshes.length,396,'AWP original mesh count changed');
+assert.equal(awpDoc.materials.length,23,'AWP original material count changed');
+assert.equal(awpDoc.images.length,59,'AWP original embedded image count changed');
+assert.equal(createHash('sha256').update(awpBytes).digest('hex'),
+ 'a227f177bc1d5398ec5919aaf537a8a29ab48a2c10b9c9c51b73b74366351b4b',
+ 'AWP original model checksum changed');
+
 assert.ok(matchCatalog(WORKSHOP_CATALOG,{query:'glacier'}).some(x=>x.id==='specter-glacier'));
 assert.ok(matchCatalog(WORKSHOP_CATALOG,{category:'production'}).every(x=>x.category==='production'));
 assert.ok(matchCatalog(WORKSHOP_CATALOG,{query:'nonsense-no-asset'}).length===0);

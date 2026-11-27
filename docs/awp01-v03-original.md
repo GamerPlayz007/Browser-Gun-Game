@@ -10,3 +10,6 @@ SHA256: a227f177bc1d5398ec5919aaf537a8a29ab48a2c10b9c9c51b73b74366351b4b
 Inventory: 396 meshes, 23 materials, 59 images, 59 textures.
 
 GitHub Actions runs the pinned source and checks the binary checksum before publishing to static/assets. No multiplayer, physics, collision, network, or game-model code is changed.
+
+## Permanent Workshop publication
+GitHub Actions published the byte-for-byte verified original GLB to `static/assets/CROSSFIRE_AWP_ReferenceInspired_v03.glb`. The permanent Asset Library card is `AWP-01 · v0.3 ORIGINAL` (`awp01-v03`); direct URL: `/static/workshop.html?asset=awp01-v03`.
