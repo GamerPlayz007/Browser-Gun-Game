@@ -6,7 +6,7 @@
  * Never participates in world collision, aim, network state or gameplay.
  */
 import * as T from 'three';
-import {makeLobbyAvatar,disposePlayer,setOperator03Skin} from './models.js';
+import {makeLobbyAvatar,disposePlayer,setOperator03Skin,syncOperator03Rig} from './models.js';
 import {operator03Color,OPERATOR03_SKINS} from './operator03_skins.js';
 
 const MAX_SLOTS=8;
@@ -171,6 +171,7 @@ export function createSquadLineup(canvas,roster){
     actor.position.y=.013*Math.sin(time*1.5+i*.7);
     actor.rotation.y=.08*Math.sin(time*.45+i*.65);
     actor.userData.head.rotation.y=.08*Math.sin(time*.9+i);
+    syncOperator03Rig(actor);
    });
   }
   renderOnce();
