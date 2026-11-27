@@ -584,3 +584,14 @@
  .operator03-room-skin{grid-template-columns:1fr;}
  .operator03-room-skin small{grid-column:auto;}
 }
+
+
+/* Homepage: prominent entry to the actual asset garage, not a hidden header link. */
+.home-workshop-launch{display:flex;align-items:center;gap:13px;width:min(400px,100%);margin-top:22px;padding:15px 16px;color:#e6fbff;text-decoration:none;text-shadow:none;background:linear-gradient(110deg,#163f4de8,#102938e8);border:1px solid #56b8c6;border-left:4px solid #79e2ef;border-radius:9px;box-shadow:0 9px 34px #02141c6b;transition:background .18s,border-color .18s,transform .18s}
+.home-workshop-launch:hover,.home-workshop-launch:focus-visible{background:linear-gradient(110deg,#206174,#143a4b);border-color:#b4f8ff;transform:translateY(-2px);outline:0}
+.home-workshop-launch-icon{font-size:28px;line-height:1;color:#9cf2fc}
+.home-workshop-launch-copy{flex:1;display:flex;flex-direction:column;gap:2px}
+.home-workshop-launch-copy strong{font-size:12px;font-weight:850;letter-spacing:1.65px}
+.home-workshop-launch-copy small{font-size:10px;font-weight:550;letter-spacing:.03em;color:#a5d4dc;line-height:1.55}
+.home-workshop-launch-arrow{font-size:23px;color:#8ae2ec;align-self:center}
+@media(max-width:700px){.home-workshop-launch{margin-top:13px;padding:11px 12px}.home-workshop-launch-copy small{font-size:9px}.home-workshop-launch-icon{font-size:22px}}

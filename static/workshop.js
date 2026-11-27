@@ -137,8 +137,24 @@ const orbit={angle:.16,pitch:.11,distance:24,targetAngle:.16,targetPitch:.11,tar
 let interaction=null;
 const target=new T.Vector3(0,1.45,0);
 let viewMode='wall',pointerDownAt=null,savedRecords=[];
+const tableRaycaster=new T.Raycaster(),tableMouse=new T.Vector2();
+const tabletopDragPlane=new T.Plane(new T.Vector3(0,1,0),-.08);
+function pointOnWorkbench(clientX,clientY){
+ const rect=canvas.getBoundingClientRect();
+ tableMouse.set((clientX-rect.left)/rect.width*2-1,-((clientY-rect.top)/rect.height*2-1));
+ tableRaycaster.setFromCamera(tableMouse,camera);
+ return tableRaycaster.ray.intersectPlane(tabletopDragPlane,new T.Vector3());
+}
+function showComponentBadge(item){
+ const badge=$('componentTooltip');
+ if(!item){badge.hidden=true;return}
+ $('componentTooltipName').textContent=item.label||item.name;
+ $('componentTooltipMeta').textContent='ARTIST MESH: '+item.name+' · '+
+  item.triangles.toLocaleString()+' TRIS · DRAG TO REPOSITION';
+ badge.hidden=viewMode!=='top'&&viewMode!=='parts';
+}
 const inspector=createWorkshopComponentInspector({
- onSelection:item=>renderPartDetails(item),
+ onSelection:item=>{renderPartDetails(item);showComponentBadge(item)},
  onCount:n=>{const el=$('partsCount');if(el)el.textContent=n+' MESH PARTS'}
 });
 const gallery=createWorkshopWallRacks({
@@ -241,7 +257,7 @@ function playAnimation(){const clipName=$('clip').value;
   if(clip){const act=mixer.clipAction(clip);act.reset();act.time=(i%9)*.13;act.play();}
  }
 }
-function buildInstances(n){if(!source)return;clearInstances();count=n;
+function buildInstances(n){if(!source)return;if(viewMode==='top')n=1;clearInstances();count=n;
  $('workbench').classList.toggle('on',n===1);$('stress').classList.toggle('on',n===24);
  const side=Math.ceil(Math.sqrt(n));const sep=1.75;const origin=(side-1)/2;
  for(let i=0;i<n;i++){
@@ -254,12 +270,37 @@ function buildInstances(n){if(!source)return;clearInstances();count=n;
   mixers.push(new T.AnimationMixer(obj));
  }
  playAnimation();applyWireframe();
- inspector.attach(n===1?instances[0]:null);
+ if(viewMode==='top')poseWorkbenchModel(true);
+ else inspector.attach(n===1?instances[0]:null);
  if(viewMode==='parts'&&n===1)inspector.setSpread(Number($('spread').value));
  renderPartList();
  orbit.targetDistance=viewMode==='top'?6.2:(viewMode==='wall'?24:Math.max(6,Math.min(33,5.4+Math.sqrt(n)*2.85)));
  $('inventory').textContent=`${sharedStats(source).meshes} mesh · ${sourceClips.length} clips × ${n}`;
  $('geometry').textContent=`${sharedStats(source).triangles.toLocaleString()} × ${n} triangles (source)`;
+}
+/**
+ * Non-destructive display pose: rotate the visible artist mesh to lie flat
+ * and keep its visible underside just above the virtual worktable.
+ * The imported GLB and the original source geometry remain unchanged.
+ */
+function poseWorkbenchModel(layFlat){
+ inspector.reset();
+ stage.rotation.set(0,0,0);
+ stage.scale.setScalar(1);
+ stage.position.set(0,0,0);
+ stage.updateMatrixWorld(true);
+ if(layFlat&&instances.length===1){
+  const span=new T.Box3().setFromObject(stage).getSize(new T.Vector3());
+  if(span.y>span.x&&span.y>=span.z)stage.rotation.set(-Math.PI/2,0,-Math.PI/2);
+  else if(span.z>span.x&&span.z>span.y)stage.rotation.set(0,Math.PI/2,0);
+  else stage.rotation.set(-Math.PI/2,0,0);
+  stage.scale.setScalar(2.25);
+  stage.updateMatrixWorld(true);
+  stage.position.y=.085-new T.Box3().setFromObject(stage).min.y;
+  stage.updateMatrixWorld(true);
+ }
+ inspector.attach(instances.length===1?instances[0]:null);
+ renderPartList();
 }
 function mount(gltf,mode,bytes,elapsed){
  if(!gltf?.scene)throw Error('Missing GLB scene');
@@ -422,22 +463,29 @@ function exportReport(format){if(!results.length){status('Take a measurement bef
   download([keys.join(','),...results.map(r=>keys.map(k=>JSON.stringify(r[k])).join(','))].join('\n'),'CROSSFIRE_Workshop_Library_Benchmark.csv','text/csv');}
 }
 $('workbench').addEventListener('click',()=>{if(running)return;$('count').value='1';buildInstances(1);status('INSPECTION BENCH READY · one imported art asset.');});
-$('stress').addEventListener('click',()=>{if(running)return;$('count').value='24';buildInstances(24);status('STRESS BAY READY · 24 independently animated art assets.');});
+$('stress').addEventListener('click',()=>{if(running)return;if(viewMode==='top')setViewMode('360');$('count').value='24';buildInstances(24);status('STRESS BAY READY · 24 independently animated art assets.');});
 
 function renderPartDetails(item){
  const detail=$('partDetails');if(!detail)return;
- detail.textContent=item?
-  item.name+' · '+item.triangles.toLocaleString()+' triangles · '+item.materials.join(', '):
-  'Select a mesh on the workbench or in the component list to inspect its geometry.';
+ if(!item){
+  detail.textContent='Click an artwork component on the table to see its artist-assigned name, materials, and geometry. Drag the highlighted piece to reposition it.';
+ }else{
+  const point=item.object.getWorldPosition(new T.Vector3());
+  detail.textContent=item.label+'\nOriginal mesh: '+item.name+
+   '\nMaterials: '+(item.materials.join(', ')||'Unspecified')+
+   '\nGeometry: '+item.triangles.toLocaleString()+' triangles'+
+   (viewMode==='top'?'\nTable position: X '+point.x.toFixed(2)+' / Z '+point.z.toFixed(2)+'\nDrag this visual piece to move it.':'');
+ }
  $('focusPart').disabled=!item;
+ $('partRestore').disabled=!item;
 }
 function renderPartList(){
  const results=inspector.list($('partSearch').value,96);
  const holder=$('partList');holder.replaceChildren();
  $('partsCount').textContent=inspector.length+' MESH PARTS';
  for(const part of results.items){
-  const b=document.createElement('button');b.type='button';b.textContent=(part.index+1)+'. '+part.name;
-  b.title=part.name;b.classList.toggle('selected',inspector.selected===part);
+  const b=document.createElement('button');b.type='button';b.textContent=(part.index+1)+'. '+part.label;
+  b.title='GLB source node: '+part.name;b.classList.toggle('selected',inspector.selected===part);
   b.setAttribute('role','option');b.setAttribute('aria-selected',inspector.selected===part?'true':'false');
   b.addEventListener('click',()=>{inspector.select(part.index);renderPartList()});
   holder.append(b);
@@ -448,7 +496,10 @@ function renderPartList(){
  }
 }
 function setViewMode(mode){
+ const previous=viewMode;
  viewMode=mode;
+ if(mode==='top'&&source&&instances.length!==1){$('count').value='1';buildInstances(1)}
+ if(mode==='top'||previous==='top')poseWorkbenchModel(mode==='top');
  $('navWorkbench').classList.toggle('active',mode==='top');
  $('navWorkbench').setAttribute('aria-pressed',mode==='top'?'true':'false');
  $('navGarage').classList.toggle('active',mode!=='top');
@@ -459,7 +510,8 @@ function setViewMode(mode){
   $(id).classList.toggle('on',mode===value);
   $(id).setAttribute('aria-pressed',mode===value?'true':'false');
  }
- $('partTools').hidden=mode!=='parts';
+ $('partTools').hidden=mode!=='parts'&&mode!=='top';
+ $('partToolsTitle').textContent=mode==='top'?'SELECT & MOVE ARTWORK PARTS':'EXPLODED COMPONENTS';
  if(mode==='parts'&&source&&instances.length!==1){
   $('count').value='1';buildInstances(1);
  }
@@ -470,6 +522,7 @@ function setViewMode(mode){
   // True overhead camera rather than a steep orbit: consistent top silhouette.
   target.set(0,.75,0);orbit.targetAngle=0;orbit.targetPitch=Math.PI/2;
   orbit.distance=orbit.targetDistance=6.2;autoRotate=false;
+  $('clip').value='Pause';playAnimation();
  }else if(mode==='360'){
   target.set(0,.75,0);orbit.targetAngle=.48;orbit.targetPitch=.2;orbit.targetDistance=7.7;
   autoRotate=true;
@@ -484,6 +537,7 @@ function setViewMode(mode){
   inspector.setSpread(0);$('spread').value='0';
  }
  $('spreadValue').textContent=$('spread').value+'%';
+ showComponentBadge(inspector.selected);
  $('toggleRotate').textContent='ROTATION: '+(autoRotate?'ON':'OFF');
  $('toggleRotate').classList.toggle('on',autoRotate);
  renderPartList();
@@ -506,6 +560,7 @@ $('spread').addEventListener('input',e=>{
 });
 $('partSearch').addEventListener('input',renderPartList);
 $('partReset').addEventListener('click',()=>{$('spread').value='0';inspector.setSpread(0);$('spreadValue').textContent='0%'});
+$('partRestore').addEventListener('click',()=>inspector.resetSelected());
 $('focusPart').addEventListener('click',()=>{
  const p=inspector.focusPoint();if(!p)return;
  target.copy(p);orbit.targetDistance=4.2;autoRotate=false;
@@ -522,7 +577,10 @@ if(activeAsset.profiles.some(p=>p.id===startQuery.get('profile')))$('quality').v
 $('importAsset').addEventListener('click',()=>$('file').click());
 $('downloadAsset').addEventListener('click',downloadCurrentAsset);
 $('quality').addEventListener('change',e=>loadPreset(e.target.value).catch(()=>{}));
-$('count').addEventListener('change',e=>buildInstances(Number(e.target.value)));
+$('count').addEventListener('change',e=>{
+ if(viewMode==='top'){e.target.value='1';buildInstances(1);status('Top-down inspection uses one model. Switch modes for multiple copies.');return}
+ buildInstances(Number(e.target.value));
+});
 $('clip').addEventListener('change',playAnimation);
 $('pixelRatio').addEventListener('change',resize);
 $('toggleWire').addEventListener('click',()=>{toggledWire=!toggledWire;applyWireframe();$('toggleWire').textContent='WIREFRAME: '+(toggledWire?'ON':'OFF');$('toggleWire').classList.toggle('on',toggledWire);});
@@ -532,25 +590,56 @@ $('measure').addEventListener('click',runOne);
 $('saveReport').addEventListener('click',()=>exportReport('json'));
 $('saveCsv').addEventListener('click',()=>exportReport('csv'));
 $('file').addEventListener('change',e=>loadFile(e.target.files?.[0]));
-canvas.addEventListener('pointerdown',e=>{canvas.setPointerCapture(e.pointerId);interaction={x:e.clientX,y:e.clientY};pointerDownAt={x:e.clientX,y:e.clientY};autoRotate=false;$('toggleRotate').textContent='ROTATION: OFF';$('toggleRotate').classList.remove('on');});
+canvas.addEventListener('pointerdown',e=>{
+ canvas.setPointerCapture(e.pointerId);
+ pointerDownAt={x:e.clientX,y:e.clientY};
+ if(viewMode==='top'&&!running){
+  // Pick the actual 3D artwork submesh, not any virtual wall or tabletop.
+  const picked=inspector.pick(camera,canvas,e.clientX,e.clientY);
+  if(picked){
+   interaction={type:'move-part',lastPoint:pointOnWorkbench(e.clientX,e.clientY)};
+   renderPartList();
+   return;
+  }
+ }
+ interaction={type:'orbit',x:e.clientX,y:e.clientY};
+ autoRotate=false;
+ $('toggleRotate').textContent='ROTATION: OFF';
+ $('toggleRotate').classList.remove('on');
+});
 canvas.addEventListener('pointermove',e=>{
  if(!interaction)return;
+ if(viewMode==='top'&&interaction.type==='move-part'){
+  const point=pointOnWorkbench(e.clientX,e.clientY);
+  if(point&&interaction.lastPoint){
+   inspector.moveSelectedByWorld(point.x-interaction.lastPoint.x,
+                                 point.z-interaction.lastPoint.z);
+  }
+  if(point)interaction.lastPoint=point;
+  return;
+ }
  if(viewMode==='top'){
-  // In bird's-eye mode dragging pans the workbench rather than tilting the camera.
+  // Dragging empty tabletop pans; dragging the model moves its selected piece.
   const step=Math.max(.004,orbit.distance*.0005);
-  target.x=T.MathUtils.clamp(target.x+(e.clientX-interaction.x)*step,-2.0,2.0);
-  target.z=T.MathUtils.clamp(target.z+(e.clientY-interaction.y)*step,-2.0,2.0);
+  target.x=T.MathUtils.clamp(target.x+(e.clientX-interaction.x)*step,-2,2);
+  target.z=T.MathUtils.clamp(target.z+(e.clientY-interaction.y)*step,-2,2);
  }else{
   orbit.targetAngle-=(e.clientX-interaction.x)*.006;
   orbit.targetPitch=T.MathUtils.clamp(orbit.targetPitch+(e.clientY-interaction.y)*.004,-.9,1.4);
  }
- interaction={x:e.clientX,y:e.clientY};
+ interaction.x=e.clientX;
+ interaction.y=e.clientY;
 });
 for(const event of ['pointerup','pointercancel'])canvas.addEventListener(event,e=>{
- if(event==='pointerup'&&pointerDownAt&&Math.hypot(e.clientX-pointerDownAt.x,e.clientY-pointerDownAt.y)<7&&!running){
-  const wall=gallery.pick(camera,canvas,e.clientX,e.clientY);
-  if(wall)gallery.choose(wall);
-  else if(viewMode==='parts'&&inspector.pick(camera,canvas,e.clientX,e.clientY))renderPartList();
+ const movedPart=interaction?.type==='move-part';
+ if(event==='pointerup'&&!movedPart&&pointerDownAt&&
+    Math.hypot(e.clientX-pointerDownAt.x,e.clientY-pointerDownAt.y)<7&&!running){
+  if(viewMode==='wall'){
+   const wall=gallery.pick(camera,canvas,e.clientX,e.clientY);
+   if(wall)gallery.choose(wall);
+  }else if((viewMode==='parts'||viewMode==='top')&&inspector.pick(camera,canvas,e.clientX,e.clientY)){
+   renderPartList();
+  }
  }
  pointerDownAt=null;interaction=null;
 });

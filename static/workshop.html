@@ -110,9 +110,21 @@ h2{font-size:12px;letter-spacing:.17em;margin:0 0 10px}small,.dim{color:var(--mu
 #overheadHud strong{display:block;font:800 12px/1.4 ui-monospace,Consolas,monospace;color:#e8fcff;letter-spacing:.08em}
 #overheadHud span{display:block;margin-top:3px;font:700 9px/1.5 ui-monospace,Consolas,monospace;color:#91c9d5;letter-spacing:.04em}
 @media(max-width:650px){#overheadHud{top:115px;bottom:auto;max-width:170px;padding:7px 9px}#overheadHud strong{font-size:9px}#overheadHud span{font-size:8px}}
+
+/* Interactive art assembly table. Floating readout is not a mesh editor. */
+#componentTooltip{position:fixed;z-index:4;left:clamp(16px,2.1vw,34px);bottom:92px;max-width:min(360px,calc(100vw - 390px));min-width:200px;padding:12px 14px;border-radius:9px;background:#0b2331ef;border:1px solid #65c4d4;border-left:4px solid #8ce6eb;pointer-events:none;box-shadow:0 15px 38px #0008}
+#componentTooltip[hidden]{display:none}
+#componentTooltip strong{display:block;font-size:13px;color:#effdff;line-height:1.4}
+#componentTooltip small{display:block;margin-top:5px;font:10px/1.6 ui-monospace,monospace;color:#b0d0d9;overflow-wrap:anywhere}
+#partDetails{white-space:pre-line}
+.part-restore{margin-top:7px;width:100%;padding:9px;font-size:9px;letter-spacing:.07em}
+#navWorkbench.active{border-color:#93e4ed;background:#195266}
+@media(max-width:850px){#componentTooltip{max-width:min(320px,calc(100vw - 34px));bottom:45px}}
+@media(max-width:650px){#componentTooltip{top:176px;bottom:auto;left:12px;max-width:180px;min-width:0;padding:7px 8px}#componentTooltip strong{font-size:10px}#componentTooltip small{font-size:9px}}
 </style></head><body>
 <canvas id="stage" aria-label="CROSSFire garage workshop with a 3D asset inspection bay"></canvas>
-<div id="overheadHud" hidden aria-live="polite"><strong>WORKBENCH / TOP VIEW</strong><span>DRAG TO PAN · SCROLL TO ZOOM · 3D MODEL FROM ABOVE</span></div>
+<div id="overheadHud" hidden aria-live="polite"><strong>WORKBENCH / TOP VIEW</strong><span>CLICK A PART TO IDENTIFY · DRAG PART TO MOVE · DRAG EMPTY SPACE TO PAN · SCROLL TO ZOOM</span></div>
+<div id="componentTooltip" hidden aria-live="polite"><strong id="componentTooltipName">Select a part</strong><small id="componentTooltipMeta"></small></div>
 <header><a href="/" class="brand">CROSS<span>FIRE</span> / THE WORKSHOP</a><div class="meta">GARAGE 01 / ASSET DEVELOPMENT HQ<br><a href="/static/map-art-v5.html">DAYBREAK FIELD TEST</a> · <a href="/">PLAY THE GAME</a></div></header>
 <section class="intro"><span class="overline">CROSSFIRE ENGINEERING DIVISION / GARAGE 01</span><h1>The<br><em>Workshop.</em></h1><p>Our place to build the game. Bring artist-made GLB models from Blender, study their geometry and materials, preview animation, and test performance before taking them into Daybreak City.</p><div class="station-tag">DESIGN → IMPORT → INSPECT → TEST → FIELD</div></section>
 <aside class="panel" aria-label="Workshop tools">
@@ -127,14 +139,15 @@ h2{font-size:12px;letter-spacing:.17em;margin:0 0 10px}small,.dim{color:var(--mu
   <div class="buttons"><button id="downloadAsset">DOWNLOAD GLB</button><button id="openComparison">COMPARE VERSIONS</button></div>
  </section>
  <section id="partTools" class="part-tools" hidden aria-label="Component inspection tools">
-  <div class="part-head"><span class="eyebrow">EXPLODED COMPONENTS</span><strong id="partsCount">0 PARTS</strong></div>
+  <div class="part-head"><span class="eyebrow" id="partToolsTitle">EXPLODED COMPONENTS</span><strong id="partsCount">0 PARTS</strong></div>
   <label class="control" for="spread">EXPLOSION / SPREAD <span id="spreadValue">0%</span></label>
   <input id="spread" type="range" min="0" max="100" step="1" value="0"/>
   <div class="buttons"><button id="partReset">ASSEMBLE MODEL</button><button id="focusPart">FOCUS PART</button></div>
+  <button id="partRestore" type="button" class="part-restore">RESET SELECTED PART POSITION</button>
   <label class="control" for="partSearch">FIND AN ARTWORK COMPONENT</label>
   <input id="partSearch" type="search" placeholder="Search mesh names…" autocomplete="off"/>
   <div id="partList" role="listbox" aria-label="Selectable 3D mesh components"></div>
-  <p id="partDetails">Select a mesh in the 3D view or in this list to inspect it.</p>
+  <p id="partDetails">Click any mesh in the 3D view to identify its artist-defined component and move it across the workbench.</p>
  </section>
  <section class="single-import" aria-label="Import your own 3D assets">
   <button id="importAsset" type="button" class="main">+ IMPORT GLB MODEL</button>

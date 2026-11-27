@@ -3,6 +3,29 @@
  */
 import * as T from 'three';
 
+
+/**
+ * Presentation-only label derived from the artist's GLB node name.
+ * We intentionally don't infer any operating behavior from the mesh geometry.
+ */
+export function describeWorkshopPart(rawName=''){
+ const source=String(rawName||'').trim();
+ const stripped=source.replace(/^[A-Z]{1,4}\d{1,4}[_-]/i,'');
+ const bits=stripped.split(/[_-]+/).filter(Boolean);
+ const head=(bits.shift()||'').toUpperCase();
+ const classes={
+   FOREND:'Front exterior', RECEIVER:'Main body exterior', STOCK:'Rear body shell',
+   SCOPE:'Optic exterior', OPTIC:'Optic exterior', RAIL:'Detail strip',
+   BARREL:'Front casing', GRIP:'Grip exterior', MUZZLE:'Front trim',
+   SIGHT:'Sight detail', LENS:'Glass detail', ACCENT:'Surface accent',
+   LABEL:'Printed detail', SCREW:'Fastener detail', RING:'Trim ring'
+ };
+ const category=classes[head] || (head?head.slice(0,1)+head.slice(1).toLowerCase():'Model artwork');
+ const description=bits.join(' ').replace(/(\d)([A-Za-z])/g,'$1 $2')
+  .replace(/\b[a-z]/g,c=>c.toUpperCase()) || 'Decorative mesh';
+ return {label:category+' · '+description,category,sourceName:source||'Unnamed GLB node'};
+}
+
 export function createWorkshopComponentInspector({onSelection=()=>{},onCount=()=>{}}={}){
  const box=new T.Box3(),c=new T.Vector3(),mid=new T.Vector3(),world=new T.Vector3();
  const ray=new T.Raycaster(),pointer=new T.Vector2();
@@ -14,7 +37,7 @@ export function createWorkshopComponentInspector({onSelection=()=>{},onCount=()=
    highlight=null;
  }
  function reset(){
-   clearHighlight();for(const item of items)item.object.position.copy(item.origin);
+   clearHighlight();for(const item of items)item.object.position.copy(item.initialOrigin);
    items=[];selected=null;root=null;enabled=false;amount=0;onSelection(null);onCount(0);
  }
  function attach(instance){
@@ -41,8 +64,11 @@ export function createWorkshopComponentInspector({onSelection=()=>{},onCount=()=
      const tris=Math.round((geometry?.index?.count??geometry?.attributes?.position?.count??0)/3);
      const materials=(Array.isArray(object.material)?object.material:[object.material])
         .filter(Boolean).map(mat=>mat.name||'Unnamed material');
-     items.push({object,name:object.name||object.parent?.name||'Component '+String(i+1),
-       index:items.length,origin:object.position.clone(),delta,triangles:tris,materials});
+     const artistName=object.name||object.parent?.name||'Component '+String(i+1);
+     const visual=describeWorkshopPart(artistName);
+     items.push({object,name:artistName,label:visual.label,category:visual.category,
+       index:items.length,origin:object.position.clone(),initialOrigin:object.position.clone(),
+       delta,triangles:tris,materials});
    }
    onCount(items.length);
  }
@@ -78,15 +104,44 @@ export function createWorkshopComponentInspector({onSelection=()=>{},onCount=()=
    if(!found)return null;
    return select(found.index);
  }
+ /**
+  * User-interface drag only: translate the selected GLB mesh along the virtual
+  * workbench's horizontal X/Z plane. Source vertices and saved GLB stay intact.
+  */
+ function moveSelectedByWorld(dx,dz){
+   if(!selected||!root)return null;
+   if(!Number.isFinite(dx)||!Number.isFinite(dz))return selected;
+   root.updateMatrixWorld(true);
+   const node=selected.object,parent=node.parent;
+   if(!parent)return selected;
+   const current=node.getWorldPosition(new T.Vector3());
+   const next=current.clone();
+   next.x=T.MathUtils.clamp(current.x+dx,-2.04,2.04);
+   next.z=T.MathUtils.clamp(current.z+dz,-2.04,2.04);
+   const local=parent.worldToLocal(next);
+   const deltaLocal=local.sub(node.position);
+   selected.origin.add(deltaLocal);
+   node.position.add(deltaLocal);
+   root.updateMatrixWorld(true);
+   onSelection(selected);
+   return selected;
+ }
+ function resetSelected(){
+   if(!selected||!root)return;
+   selected.origin.copy(selected.initialOrigin);
+   selected.object.position.copy(selected.initialOrigin).addScaledVector(selected.delta,amount);
+   root.updateMatrixWorld(true);
+   onSelection(selected);
+ }
  function focusPoint(){
    if(!selected)return null;
    return new T.Box3().setFromObject(selected.object).getCenter(new T.Vector3());
  }
  function list(query='',limit=80){
    const term=String(query).trim().toLowerCase();
-   const found=term?items.filter(i=>i.name.toLowerCase().includes(term)):items;
+   const found=term?items.filter(i=>(i.name+' '+i.label+' '+i.materials.join(' ')).toLowerCase().includes(term)):items;
    return{matches:found.length,items:found.slice(0,limit)};
  }
- return{attach,reset,setSpread,select,pick,focusPoint,list,
+ return{attach,reset,setSpread,select,pick,focusPoint,list,moveSelectedByWorld,resetSelected,
    get selected(){return selected},get length(){return items.length},get enabled(){return enabled},get spread(){return amount}};
 }

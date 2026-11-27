@@ -4,6 +4,9 @@ on:
   push:
     paths:
       - 'static/workshop.html'
+      - 'static/index.html'
+      - 'static/style.css'
+      - 'tools/test-workshop-top-parts.mjs'
       - 'static/workshop.js'
       - 'static/workshop-library.js'
       - 'static/workshop-library-ui.js'

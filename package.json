@@ -8,7 +8,7 @@
     "test:gallery": "node --check static/gallery-assets.js && node --check static/gallery-bootstrap.js && node --check static/gallery-lobby.js && node --check static/aether9-pbr-showroom.js && node tools/test-gallery-release.mjs",
     "test:operator03": "node --check static/operator03_model.js && node --check static/operator03_skins.js && node test_operator03_skins.mjs && python -m unittest test_operator03_skins.py",
     "test:s12": "node --check static/s12_v04_model.js && node tools/test-s12-v04.mjs",
-    "test:workshop": "node --check static/workshop.js && node --check static/workshop-library-ui.js && node --check static/workshop-library.js && node --check static/workshop-comparison.js && node --check static/workshop-wall-racks.js && node --check static/workshop-component-inspector.js && node tools/test-workshop.mjs && node tools/test-workshop-library.mjs && node tools/test-workshop-stage2.mjs && node tools/test-workshop-wall-racks.mjs && python -m py_compile tools/blender_lantern_stage2.py",
+    "test:workshop": "node --check static/workshop.js && node --check static/workshop-library-ui.js && node --check static/workshop-library.js && node --check static/workshop-comparison.js && node --check static/workshop-wall-racks.js && node --check static/workshop-component-inspector.js && node tools/test-workshop.mjs && node tools/test-workshop-library.mjs && node tools/test-workshop-stage2.mjs && node tools/test-workshop-wall-racks.mjs && node tools/test-workshop-top-parts.mjs && python -m py_compile tools/blender_lantern_stage2.py",
     "test:workshop:production": "node --check static/workshop-comparison.js && node tools/test-workshop-stage2.mjs && python -m py_compile tools/blender_lantern_stage2.py"
   },
   "dependencies": {
