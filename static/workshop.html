@@ -43,6 +43,25 @@ h2{font-size:12px;letter-spacing:.17em;margin:0 0 10px}small,.dim{color:var(--mu
 .asset-detail-active{font-weight:900;color:#75f4c2}.asset-detail-empty{color:#e8b88f}.asset-delete{margin-top:9px;border-color:#94545a;color:#f8d2c4;background:#3a2029}
 .asset-actions{margin-top:10px}.asset-storage{display:block;font-size:9px;line-height:1.45;margin:10px 0 0;color:#84aabd}
 @media(max-width:650px){.asset-cards{max-height:185px}.asset-library{padding:10px}.asset-filters{grid-template-columns:1fr}}
+
+.production-entry{margin:12px 0;padding:12px;border:1px solid #477589;background:#112e3d;border-radius:10px}.production-entry button{display:block;width:100%}.production-entry p{font-size:10px;color:#abcbd4;margin:9px 0 0}
+.source-prop{border:1px solid #5f6e58;background:#172921;margin:14px 0;padding:12px;border-radius:9px}.source-prop strong{display:block;font-size:12px;color:#f1f3da;margin:6px 0}.source-prop p{color:#c2d1bc;font-size:10px;line-height:1.55}.source-prop a{font-size:10px;color:#e4eea5;font-weight:850;letter-spacing:.07em}
+.comparison-bay{position:fixed;inset:0;z-index:40;background:#0b1925;overflow:hidden}.comparison-bay[hidden]{display:none}
+#comparisonCanvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+.comparison-header{position:absolute;top:0;left:0;right:0;z-index:3;padding:17px 23px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;background:linear-gradient(#091a27ed,#091a27b1 72%,transparent);pointer-events:none}
+.comparison-header>*{pointer-events:auto}.comparison-header strong{display:block;font-size:13px;letter-spacing:.18em}.comparison-header small{display:block;color:#a6c8d7;font-size:9px;margin-top:5px;letter-spacing:.13em}
+.compare-header-actions{display:flex;align-items:center;gap:7px}.compare-header-actions button{padding:8px;font-size:9px}#comparisonFps{white-space:nowrap;font:700 10px ui-monospace,monospace;color:#93dbe7}
+.comparison-divider{position:absolute;left:50%;top:0;bottom:0;z-index:1;border-left:2px solid #b2dee859;pointer-events:none}
+.compare-label{position:absolute;z-index:2;top:91px;padding:8px 12px;background:#0b2031dd;color:#8de2ec;font-size:11px;letter-spacing:.2em;font-weight:900;pointer-events:none}
+.compare-label-a{left:3%}.compare-label-b{left:53%;color:#ebc694}
+.compare-controls{position:absolute;left:12px;right:12px;bottom:50px;z-index:3;display:grid;grid-template-columns:1fr 1fr;gap:16px;pointer-events:none}
+.compare-side{width:min(400px,100%);padding:13px;border:1px solid #426d81;border-radius:10px;background:#0a1b29f2;pointer-events:auto}
+.compare-side:last-child{justify-self:end;border-color:#9f8256}.compare-side label{display:block;font-size:9px;font-weight:900;letter-spacing:.1em;color:#c0dde5;margin-bottom:4px}
+.compare-side select{width:100%;min-width:0;padding:7px;font-size:11px;margin-bottom:8px}
+.compare-side p{margin:7px 0;color:#c2d9e2;font-size:10px;line-height:1.5;overflow-wrap:anywhere}.compare-side p.bad{color:#ffb6a3}
+.comparison-foot{position:absolute;bottom:0;left:0;right:0;z-index:3;padding:10px 18px;display:flex;justify-content:space-between;gap:18px;background:#091622ef;color:#abc9d7;font-size:10px;pointer-events:none}
+.comparison-foot strong{font-weight:750;color:#effaff}.comparison-foot span{font-size:9px;white-space:nowrap}
+@media(max-width:780px){.comparison-header{padding:10px;flex-wrap:wrap}.comparison-header strong{font-size:11px}.compare-header-actions button{padding:6px;font-size:8px}.compare-label{top:110px;font-size:9px}.compare-controls{left:5px;right:5px;bottom:72px;gap:6px}.compare-side{padding:8px}.compare-side select{font-size:9px;padding:5px}.compare-side p{font-size:9px}.comparison-foot{padding:6px 8px;display:block}.comparison-foot span{display:block;white-space:normal}}
 </style></head><body>
 <canvas id="stage" aria-label="CROSSFire garage workshop with a 3D asset inspection bay"></canvas>
 <header><a href="/" class="brand">CROSS<span>FIRE</span> / THE WORKSHOP</a><div class="meta">GARAGE 01 / ASSET DEVELOPMENT HQ<br><a href="/static/map-art-v5.html">DAYBREAK FIELD TEST</a> · <a href="/">PLAY THE GAME</a></div></header>
@@ -62,8 +81,14 @@ h2{font-size:12px;letter-spacing:.17em;margin:0 0 10px}small,.dim{color:var(--mu
 <div class="two"><div><label class="control" for="quality">Selected asset · version / profile</label><select id="quality"><option value="HERO">Hero · 1024px</option><option value="PERFORMANCE">Performance · 256px</option></select></div><div><label class="control" for="count">Copies in scene</label><select id="count"><option value="1" selected>1 copy</option><option value="8">8 copies</option><option value="24">24 copies</option><option value="48">48 copies</option></select></div></div>
 <div class="two"><div><label class="control" for="clip">Animation</label><select id="clip"><option value="Walk">Walk</option><option value="Run">Run</option><option value="Survey">Survey</option><option value="Pause">Pause</option></select></div><div><label class="control" for="pixelRatio">Pixel density</label><select id="pixelRatio"><option value="1">School · 1×</option><option value="1.5">Balanced · 1.5×</option><option value="2">Ultra · 2×</option></select></div></div>
 <div class="buttons"><button class="main" id="benchmark">RUN 4-WAY A/B TEST</button><button id="measure">MEASURE THIS VIEW</button><button id="toggleWire">WIREFRAME: OFF</button><button id="toggleRotate" class="on">ROTATION: ON</button></div>
+<section class="production-entry"><button id="openComparison" class="main" type="button">COMPARE TWO VERSIONS</button>
+<p>Before / after · independent real models · synchronized camera &amp; file diagnostics.</p></section>
 <label id="import">IMPORT ANOTHER BLENDER GLB · SAVE LOCALLY<input id="file" type="file" accept=".glb,model/gltf-binary"></label>
-<div class="workflow-note"><strong>HOW THIS GARAGE WORKS</strong><span>Select a repository asset or import a GLB from Blender, inspect the real mesh and animations, then run rendering tests. Personal GLBs are saved in this browser only; editing still happens in Blender.</span></div>
+<section class="source-prop"><span class="eyebrow">INDUSTRIAL SOURCE / CC0</span>
+<strong>LANTERN · ARTIST-MADE STREET LIGHT</strong>
+<p>Prepared for the Blender pipeline with a pinned source, verified license and production script. Not yet processed or added to the game.</p>
+<a href="https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/e124e8d8d7330a5372bc2b4d00d39a4a9d7997ea/Models/Lantern/glTF-Binary/Lantern.glb" target="_blank" rel="noopener noreferrer">GET OFFICIAL SOURCE GLB</a>
+</section><div class="workflow-note"><strong>HOW THIS GARAGE WORKS</strong><span>Select a repository asset or import a GLB from Blender, inspect the real mesh and animations, then run rendering tests. Personal GLBs are saved in this browser only; editing still happens in Blender.</span></div>
 <p id="status" aria-live="polite">Loading original artist geometry…</p>
 <hr><h2>WORKBENCH DIAGNOSTICS</h2><div class="metrics"><div class="metric"><strong id="fps">—</strong><small>FRAME RATE</small></div><div class="metric"><strong id="draws">—</strong><small>DRAW CALLS</small></div><div class="metric"><strong id="tris">—</strong><small>TRIANGLES</small></div></div>
 <canvas id="chart" width="620" height="194" aria-label="Recent frames per second chart"></canvas>
@@ -72,4 +97,33 @@ h2{font-size:12px;letter-spacing:.17em;margin:0 0 10px}small,.dim{color:var(--mu
 <div class="buttons"><button id="saveReport">EXPORT JSON</button><button id="saveCsv">EXPORT CSV</button></div>
 <div id="explain">Test the actual imported mesh and its original animation rig. A/B compares 1 and 24 animated copies at identical settings. FPS measurements depend on the computer you use.</div>
 <hr><div class="attrib">WORKSHOP STATUS · All changes are local to this page. No game weapons, multiplayer state, or collision data are modified.<br>Fox reference demo credits: PixelMannen (CC0 model), tomkranis (CC BY 4.0 rig/animation), AsoboStudio &amp; scurest (CC BY 4.0 conversion). <a href="https://github.com/KhronosGroup/glTF-Sample-Assets/tree/main/Models/Fox" target="_blank" rel="noopener noreferrer">Source &amp; licenses</a>.<br>Original meshes/UVs are retained; no gameplay, weapon or multiplayer changes.</div>
-</aside><script type="module" src="/static/workshop.js"></script></body></html>
+</aside>
+<!-- Phase 2 Stage 2: production bay inside the same Workshop page -->
+<section id="comparisonBay" class="comparison-bay" hidden aria-label="Synchronized version comparison">
+ <canvas id="comparisonCanvas" aria-label="Side-by-side 3D model viewer. Drag to orbit both and scroll to zoom both."></canvas>
+ <header class="comparison-header"><div><strong>CROSSFIRE / PRODUCTION BAY</strong>
+  <small>PHASE 2 · STAGE 2 · SHARED VIEW / REAL ASSETS</small></div>
+  <div class="compare-header-actions"><span id="comparisonFps">—</span>
+   <button id="comparisonReset" type="button">RESET VIEW</button>
+   <button id="comparisonExport" type="button">EXPORT REPORT</button>
+   <button id="comparisonClose" type="button">CLOSE ×</button></div>
+ </header>
+ <div class="comparison-divider" aria-hidden="true"></div>
+ <div class="compare-label compare-label-a">A / BEFORE</div>
+ <div class="compare-label compare-label-b">B / AFTER</div>
+ <div class="compare-controls">
+  <div class="compare-side">
+   <label for="comparisonAssetA">Asset A</label><select id="comparisonAssetA"></select>
+   <label for="comparisonProfileA">Version A</label><select id="comparisonProfileA"></select>
+   <p id="comparisonStatsA">—</p><p id="comparisonStatusA" aria-live="polite">Loading…</p>
+  </div>
+  <div class="compare-side">
+   <label for="comparisonAssetB">Asset B</label><select id="comparisonAssetB"></select>
+   <label for="comparisonProfileB">Version B</label><select id="comparisonProfileB"></select>
+   <p id="comparisonStatsB">—</p><p id="comparisonStatusB" aria-live="polite">Loading…</p>
+  </div>
+ </div>
+ <div class="comparison-foot"><strong id="comparisonDelta">Comparing…</strong>
+  <span>DRAG TO ORBIT · WHEEL TO ZOOM · BOTH VIEWS SYNCHRONIZED · FIT-NORMALIZED</span></div>
+</section>
+<script type="module" src="/static/workshop.js"></script></body></html>

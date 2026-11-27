@@ -40,6 +40,9 @@ export const WORKSHOP_CATALOG = Object.freeze([
       profile('PHASE1','Phase 1 prototype','aether9-specter-phase1.glb',252528),
       profile('V1','Early studio export','aether9-specter.glb',841348)
     ]),
+  entry('industrial-lantern','Lantern · Industrial Street Light','development','Import required',
+    'CC0 artist-made street light from Khronos, prepared for Blender processing.',[],
+    'Use the official pinned source link in the Production Workbench. Source is not bundled, no Blender exports have run.','Khronos glTF Sample Assets'),
   entry('beacon','Studio Beacon','reference','Reference',
     'Original neutral 3D scene for testing material import.',[
       profile('GLTF','Embedded glTF scene','studio-beacon.gltf',110079)

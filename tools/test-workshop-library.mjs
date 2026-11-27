@@ -6,7 +6,7 @@ import {WORKSHOP_CATALOG,matchCatalog,personalToEntry,validateGLBHeader,validate
 const root=path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const get=p=>readFileSync(path.join(root,p),'utf8');
 const html=get('static/workshop.html'),workshop=get('static/workshop.js'),ui=get('static/workshop-library-ui.js');
-assert.equal(WORKSHOP_CATALOG.length,11);
+assert.equal(WORKSHOP_CATALOG.length,12);
 assert.ok(WORKSHOP_CATALOG.some(x=>x.id==='s12-v04'&&x.status==='In game'));
 assert.ok(WORKSHOP_CATALOG.some(x=>x.id==='awp-local-draft'&&!x.profiles.length));
 assert.ok(WORKSHOP_CATALOG.some(x=>x.id==='fox-reference'&&x.profiles.length===2));
@@ -38,4 +38,4 @@ assert.ok(workshop.includes('getPersonalAsset('));
 assert.ok(ui.includes('removePersonalAsset('));
 assert.ok(!workshop.includes('new WebSocket('));
 assert.ok(!workshop.includes("fetch('/api/rooms"));
-console.log('PASS workshop asset library: 11 catalog entries, repository file existence, GLB validation, search/filter, UI, personal storage and multiplayer isolation');
+console.log('PASS workshop asset library: 12 catalog entries, repository file existence, GLB validation, search/filter, UI, personal storage and multiplayer isolation');

@@ -120,6 +120,11 @@ let fps=0,avgFrame=0,last=performance.now(),windowMs=0,windowFrames=0,frameTimes
 const orbit={angle:.56,pitch:.35,distance:21,targetAngle:.56,targetPitch:.35,targetDistance:21};
 let interaction=null;
 const target=new T.Vector3(0,.8,0);
+$('openComparison').addEventListener('click',async()=>{
+ if(running){status('Complete the active benchmark before comparing.',true);return}
+ try{const bay=await import('./workshop-comparison.js');await bay.openComparison()}
+ catch(e){status('Comparison bay could not open: '+e.message,true);console.error(e)}
+});
 const reportSchema='CROSSFIRE_workshop_asset_library_v2';
 let activeAsset=WORKSHOP_CATALOG[0],libraryUI=null,pendingFetch=null;
 const MAX_REPOSITORY_BYTES=65_000_000;
@@ -338,7 +343,7 @@ async function measure(duration=2400){if(document.hidden)throw Error('Benchmark 
  await idle(750);return collectFramesFor(duration);
 }
 function lockUI(locked){running=locked;
- for(const id of ['benchmark','measure','quality','count','clip','pixelRatio','file','workbench','stress','downloadAsset','importAsset','assetSearch','assetFilter'])$(id).disabled=locked;
+ for(const id of ['benchmark','measure','quality','count','clip','pixelRatio','file','workbench','stress','downloadAsset','importAsset','assetSearch','assetFilter','openComparison'])$(id).disabled=locked;
  if(!locked)setProfileOptions(activeAsset);
  libraryUI?.setBusy(locked);
 }
@@ -419,7 +424,7 @@ let graph=[];function drawChart(){const c=$('chart'),ctx=c.getContext('2d');if(!
 }
 function frame(now){requestAnimationFrame(frame);
  const raw=now-last;last=now;
- if(document.hidden){frameTimes=[];windowMs=0;windowFrames=0;return;}
+ if(document.hidden || !$('comparisonBay').hidden){frameTimes=[];windowMs=0;windowFrames=0;return;}
  const ms=Math.min(180,Math.max(0,raw)),dt=Math.min(.075,ms/1000);
  if(autoRotate)orbit.targetAngle+=dt*.13;
  const smooth=1-Math.exp(-dt*9);
