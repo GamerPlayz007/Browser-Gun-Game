@@ -20,17 +20,31 @@ def objects():
         if not o.data.uv_layers:raise RuntimeError("Missing source UVs: "+o.name)
     return art.PARTS
 def profile(label,dimension):
-    art.assign_mats("l7","midnight")
+    # Blender 3.0 cannot pack scaled in-memory images as PNG.
+    # Instead resize the generated texture files BEFORE materials import them.
+    from PIL import Image
+    original_textures=art.textures
+    def sized_textures(kind,finish,role):
+        color,normal=original_textures(kind,finish,role)
+        if dimension < 384:
+            for path in (color,normal):
+                with Image.open(path) as image:
+                    scale=dimension/max(image.size)
+                    dims=(max(1,int(image.width*scale)),max(1,int(image.height*scale)))
+                    resized=image.resize(dims,Image.LANCZOS)
+                    resized.save(path,optimize=True)
+        return color,normal
+    art.textures=sized_textures
+    try:
+        art.assign_mats("l7","midnight")
+    finally:
+        art.textures=original_textures
     for img in list(bpy.data.images):
-        # The old .blend has stale source-image names with missing files.
-        # Only process NEW deterministic textures generated into OUT.
+        # Old .blend carries unresolvable former CI paths. Only pack newly
+        # generated materials actually used by this export.
         if not img.name.startswith("l7-midnight-"):continue
         if Path(bpy.path.abspath(img.filepath)).resolve().parent != OUT:continue
-        width,height=img.size
-        if max(width,height)>dimension:
-            factor=dimension/max(width,height)
-            img.scale(max(1,int(width*factor)),max(1,int(height*factor)))
-        img.pack(as_png=True)
+        img.pack()
     bpy.ops.object.select_all(action="DESELECT")
     for obj in art.PARTS:obj.select_set(True)
     bpy.context.view_layer.objects.active=art.PARTS[0]
