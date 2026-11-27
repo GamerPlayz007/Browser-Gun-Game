@@ -3,7 +3,7 @@ import {buildWorld} from './world.js';
 import {createStaticCosmetic} from './static-cosmetic.js';
 import {buildDustMatch65} from './dust_match65.js';
 import {loadDustSource66} from './dust_source66.js';
-import {makeWeapon,animateWeapon,makePlayer,setPlayerSkin56,setWeaponFinish,disposeWeaponRig,animatePlayer,markPlayerEvent,disposePlayer,setModelQuality67} from './models.js';
+import {makeWeapon,animateWeapon,makePlayer,setPlayerSkin56,setOperator03Skin,setWeaponFinish,disposeWeaponRig,animatePlayer,markPlayerEvent,disposePlayer,setModelQuality67} from './models.js';
 import {simulate,FIXED_DT} from './physics.js';
 import {createJumpLatch62} from './input62.js';
 import {leanOffset63} from './lean63.js';
@@ -23,12 +23,32 @@ import {matchPresentation,finishPresentation,matchNotice} from './match35.js';
 import {createControlBeacon54} from './control54.js';
 import {readyView55,spectatorCandidates55,cycleSpectator55,teamStandings55} from './competitive55.js';
 import {createSquadLineup} from './squad_lineup69.js';
-import {safeRead56,safeWrite56,safeName56,safeQuality56,skinColor56} from './preferences56.js';
+import {safeRead56,safeWrite56,safeName56,safeQuality56} from './preferences56.js';
+import {OPERATOR03_SKINS,operator03Skin,operator03Color} from './operator03_skins.js';
 import {createNetSync,observePong,ingestSnapshot,sampleRemote,cameraCorrection,syncStats,shouldReconcilePrediction} from './netcode33.js';
 import {fireMode, makeTrigger, pressTrigger, releaseTrigger, takeTriggerPulse,
  predictedAmmo, reloadFraction, ammoState, damageBearing} from './combat32.js';
 const $=id=>document.getElementById(id),clamp=T.MathUtils.clamp;
 const audio=new AudioEngine();
+// Choose before joining, then change in the room lobby without reconnecting.
+let operatorSkin03=operator03Skin(safeRead56('cf-operator03-skin','woodland'));
+for(const id of ['operator-skin-home','operator-skin-room']){
+ const select=$(id);
+ for(const skin of OPERATOR03_SKINS){
+  const option=document.createElement('option');
+  option.value=skin.id;option.textContent=skin.label;
+  select.append(option);
+ }
+ select.value=operatorSkin03;
+ select.addEventListener('change',()=>{
+  operatorSkin03=operator03Skin(select.value);
+  safeWrite56('cf-operator03-skin',operatorSkin03);
+  $('operator-skin-home').value=$('operator-skin-room').value=operatorSkin03;
+  if(joined&&['lobby','results'].includes(state?.phase))
+   send({type:'operator_skin',skin:operatorSkin03});
+ });
+}
+
 const settings={sens:clamp(Number(safeRead56('cf-sens','1'))||1,.4,2.5),
  motion:safeRead56('cf-motion','true')!=='false',
  quality:safeQuality56(safeRead56('cf-quality-25','auto'))};
@@ -275,7 +295,7 @@ async function refreshRooms65(prefer){
  }catch{ /* The room can still be entered with a known premade code. */ }
 }
 async function enter(create){$('create').disabled=$('join').disabled=true;$('rejoin56').hidden=true;$('status').textContent='Connecting to arena…';try{let code=$('code').value.trim().toUpperCase();const response=await fetch(create?'/api/rooms':'/api/rooms/'+code,create?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mapId:$('map-select').value})}:{});const data=await response.json();if(!response.ok)throw Error(data.error||'Connection failed.');if(create){code=data.room;$('code').value=code;}else if(data.players>=data.max)throw Error('This room is full.');
-await loadArena(data.mapId);const name=safeName56($('name').value);safeWrite56('cf-name',name);const conn=new WebSocket(`${location.protocol==='https:'?'wss':'ws'}://${location.host}/ws/${code}?name=${encodeURIComponent(name)}&weapon=${selected}`);ws=conn;const timeout=setTimeout(()=>{if(conn.readyState!==1)conn.close();},12000);conn.onopen=()=>clearTimeout(timeout);conn.onmessage=e=>{if(ws===conn)handle(JSON.parse(e.data));};conn.onclose=()=>{clearTimeout(timeout);if(ws===conn)disconnect('Connection closed. Rejoining creates a new player identity.',code);};conn.onerror=()=>{$('status').textContent='Could not connect. Check the server is awake.';};}catch(e){$('status').textContent=e.message;$('create').disabled=$('join').disabled=false;refreshRooms65();}}
+await loadArena(data.mapId);const name=safeName56($('name').value);safeWrite56('cf-name',name);const conn=new WebSocket(`${location.protocol==='https:'?'wss':'ws'}://${location.host}/ws/${code}?name=${encodeURIComponent(name)}&weapon=${selected}&operatorSkin=${encodeURIComponent(operatorSkin03)}`);ws=conn;const timeout=setTimeout(()=>{if(conn.readyState!==1)conn.close();},12000);conn.onopen=()=>clearTimeout(timeout);conn.onmessage=e=>{if(ws===conn)handle(JSON.parse(e.data));};conn.onclose=()=>{clearTimeout(timeout);if(ws===conn)disconnect('Connection closed. Rejoining creates a new player identity.',code);};conn.onerror=()=>{$('status').textContent='Could not connect. Check the server is awake.';};}catch(e){$('status').textContent=e.message;$('create').disabled=$('join').disabled=false;refreshRooms65();}}
 function disconnect(message,rejoinCode56=null){
  $('aim-ammo70').hidden=true;
  squadLineup69.setVisible(false);squadLineup69.update([],null,null,'deathmatch');
@@ -353,6 +373,11 @@ function uiRoom(){
   b.classList.toggle('active',b.dataset.mode===(state.nextMode||state.mode));
   b.disabled=!host||!between;
  });
+ const teamSkins03=['teamdeathmatch','control'].includes(state.nextMode||state.mode);
+ $('operator-skin-room').disabled=teamSkins03||!between;
+ $('operator-skin-info').textContent=teamSkins03?
+  'TEAM UNIFORMS LOCKED · AZURE = WHITE (ARCTIC) · EMBER = BLACK (SHADOW)':
+  'YOUR PICK: '+(OPERATOR03_SKINS.find(s=>s.id===operatorSkin03)?.label||'Woodland').toUpperCase()+' · VISIBLE TO EVERYONE';
  document.querySelectorAll('#room-weapons button').forEach(b=>b.disabled=state.mode==='gungame'&&state.phase!=='lobby');
  syncSquadVisibility69();
 }
@@ -504,9 +529,11 @@ function handle(data){if(data.type==='manual_respawn_result65'){toast(data.messa
  $('countdown').textContent=Math.ceil(data.countdown);
  $('slide-label').textContent=me.slide>0?'C / SLIDING':'C / SLIDE · CTRL / CROUCH';
  const present=new Set();for(const p of data.players){if(p.id===myId)continue;present.add(p.id);let g=opponents.get(p.id);
-  const visualSkin=p.bot?0xef6a86:skinColor56(p.skin);
-  if(!g){g=makePlayer(p.name,visualSkin,p.weapon,p.weapon_finishes?.[p.weapon]??0);setModelQuality67(g,qualityTier61());scene.add(g);g.position.set(p.x,p.y,p.z);opponents.set(p.id,g);}
+  const camo=p.operator_skin||'woodland';
+  const visualSkin=p.bot?0xef6a86:operator03Color(camo);
+  if(!g){g=makePlayer(p.name,visualSkin,p.weapon,p.weapon_finishes?.[p.weapon]??0);setModelQuality67(g,qualityTier61());scene.add(g);g.position.set(p.x,p.y,p.z);opponents.set(p.id,g);setOperator03Skin(g,camo);}
   setPlayerSkin56(g,visualSkin);
+  if(g.userData.operator03Wanted!==camo)setOperator03Skin(g,camo);
   if(g.userData.team54!==p.team){
    g.userData.team54=p.team;
    g.userData.tag.material.color.set(p.bot?'#ff8ba7':p.team==='azure'?'#7de4ff':p.team==='ember'?'#ffb69b':'#ffffff');
@@ -522,7 +549,7 @@ function handle(data){if(data.type==='manual_respawn_result65'){toast(data.messa
    setWeaponFinish(g.userData.gun,p.weapon_finishes[p.weapon]);
   }}
  for(const [id,g] of opponents)if(!present.has(id)){disposePlayer(g);opponents.delete(id);}for(const t of data.targets)world.targets.get(t.id).visible=t.hp>0;
- const rosterKey=JSON.stringify([data.host,data.mode,data.nextMode,data.players.map(p=>[p.id,p.name,p.team,p.ready,p.bot,p.skin])]);
+ const rosterKey=JSON.stringify([data.host,data.mode,data.nextMode,data.players.map(p=>[p.id,p.name,p.team,p.ready,p.bot,p.skin,p.operator_skin])]);
  if(rosterKey!==rosterSignature){renderRoster();rosterSignature=rosterKey;}
  const scoreKey=JSON.stringify([data.mode,data.round,data.standings,data.teamScores]);
  if(scoreKey!==scoreSignature){scoreboard(data.players,$('scores'));scoreSignature=scoreKey;}
