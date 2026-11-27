@@ -3,13 +3,14 @@ import * as T from 'three';
 import {readAssetBytes,chooseGalleryFinish} from './gallery-assets.js';
 
 export function cosmeticAssetPath(finish,tier,report,weaponId=0){
- // S9 is the approved-for-preview sculpted VESPER; the other asset families stay unchanged.
- const tag=['aether9-specter','aether-s9-vesper','aether-w12','aether-l7'][Number(weaponId)]||'aether9-specter';
+ // AR-01 and SMG-05 own their approved art; optional overlays are only for shotgun/sniper.
+ if(Number(weaponId)===0||Number(weaponId)===1)return null;
+ const tag=['aether9-specter',null,'aether-w12','aether-l7'][Number(weaponId)]||'aether9-specter';
  const name=tag+'-'+chooseGalleryFinish(finish);
  const original='/static/assets/'+name+'.glb';
  // School laptops keep cheap geometry on Performance; larger VESPER texture variants
  // are optional cosmetics on Auto/High and never participate in gameplay logic.
- if(Number(weaponId)===1&&tier==='performance')return null;
+ 
  const profile=tier==='performance'?'performance':tier==='auto'?'balanced':null;
  if(profile){
   const item=report?.[name+'.glb']?.[profile];
@@ -61,7 +62,7 @@ function fitStaticArt(scene,bounds){
 export function createStaticCosmetic(rig,{finish='midnight',weaponId=0}={}){
  // AR-01 v0.4 is now the canonical art in every quality tier.
  // Do not restore older AETHER-9 gallery assets over the active AR.
- if(Number(weaponId)===0)return {update(){},dispose(){}};
+ if(Number(weaponId)===0||Number(weaponId)===1)return {update(){},dispose(){}};
  const group=rig?.userData?.aetherArtGun71;
  if(!group)return {update(){},dispose(){}};
  const old=group.children.filter(o=>o!==rig.userData.flash&&o!==rig.userData.reloadGlyph70);
@@ -78,7 +79,7 @@ export function createStaticCosmetic(rig,{finish='midnight',weaponId=0}={}){
  function requestManifest(){
   if(reportRequested)return;
   reportRequested=true;
-  fetch(Number(weaponId)===1?'/static/assets/vesper-texture-profile-report.json':'/static/assets/texture-profile-report.json',{cache:'no-cache'}).then(r=>r.ok?r.json():null).then(data=>{report=data;}).catch(()=>{});
+  fetch('/static/assets/texture-profile-report.json',{cache:'no-cache'}).then(r=>r.ok?r.json():null).then(data=>{report=data;}).catch(()=>{});
  }
  async function load(path){
   const controller=new AbortController();pending=controller;attempted=path;

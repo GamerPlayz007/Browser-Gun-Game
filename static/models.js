@@ -4,6 +4,7 @@ import {makeAvatarAnim,trackAvatar,markAvatar,avatarPose} from './animation34.js
 import {buildAetherGameVisuals,disposeAetherMaterials} from './aether_game_models.js';
 import {sampleReloadPose23} from './reload_motion23.js';
 import {attachAR01V04} from './ar01_v04_model.js';
+import {attachSMG05V02} from './smg05_v02_model.js';
 const materials=new Map();const material=c=>{if(!materials.has(c))materials.set(c,new T.MeshStandardMaterial({color:c,roughness:.48,metalness:.25}));return materials.get(c);};
 function box(parent,w,h,d,c,x,y,z,r=.018){const m=new T.Mesh(new RoundedBoxGeometry(w,h,d,1,Math.min(r,w/3,h/3,d/3)),material(c));m.position.set(x,y,z);parent.add(m);return m;}
 function cylinder(parent,r1,r2,h,c,x,y,z){const m=new T.Mesh(new T.CylinderGeometry(r1,r2,h,12),material(c));m.position.set(x,y,z);parent.add(m);return m;}
@@ -66,11 +67,25 @@ function makeAR01V04Scaffold(model,magazine){
  return {flash,action:{},adsAnchor,gun,uniqueMaterials:[flash.material],batchCount:0,
   setFinish:()=>false,getGlowColor:()=>0xeac68d};
 }
+// Single source of truth for the approved SMG-05 v0.2 game prop.
+// Previous AETHER-S9 geometry and high-quality overrides are not instantiated.
+function makeSMG05V02Scaffold(model,magazine){
+ const gun=new T.Group();gun.name='CROSSFIRE_SMG05_V02';
+ gun.position.set(0,-.31,0);gun.scale.setScalar(.8);model.add(gun);
+ gun.add(magazine);magazine.position.set(0,-.10,-.035);
+ const flash=new T.Mesh(new T.OctahedronGeometry(.064),
+  new T.MeshBasicMaterial({color:0xffe6b6,depthWrite:false}));
+ flash.name='smg05-v02-muzzle-flash';flash.visible=false;gun.add(flash);
+ const adsAnchor=new T.Object3D();adsAnchor.name='smg05-v02-ads-center';
+ adsAnchor.position.set(0,.25,.26);gun.add(adsAnchor);
+ return {flash,action:{},adsAnchor,gun,uniqueMaterials:[flash.material],batchCount:0,
+  setFinish:()=>false,getGlowColor:()=>0x8b8f90};
+}
 export function makeWeapon(id,arms=true,finish=Math.floor(Math.random()*3)){
  const root=new T.Group(),model=new T.Group(),magazine=new T.Group();
  const left=new T.Group(),right=new T.Group();
  root.add(model,left,right);model.add(magazine);
- const visual=id===0?makeAR01V04Scaffold(model,magazine):buildAetherGameVisuals(model,magazine,id,finish);
+ const visual=id===0?makeAR01V04Scaffold(model,magazine):id===1?makeSMG05V02Scaffold(model,magazine):buildAetherGameVisuals(model,magazine,id,finish);
  const {flash,action}=visual;
  // Abstract glowing visual marker: the AETHER energy cycle is unmistakable.
  const reloadGlyph70=new T.Mesh(new T.TorusGeometry(.105,.009,5,24),
@@ -101,6 +116,7 @@ export function makeWeapon(id,arms=true,finish=Math.floor(Math.random()*3)){
   aetherArtGun71:visual.gun,aetherDefaultYaw71:visual.gun.rotation.y,
   aetherBatchCount:visual.batchCount};
  if(id===0)attachAR01V04(root);
+ if(id===1)attachSMG05V02(root);
  return root;
 }
 // Material palettes are private to each rig: changing a player's finish

@@ -15,7 +15,7 @@ header a{pointer-events:auto;color:white;text-decoration:none;letter-spacing:.24
 aside{position:fixed;z-index:2;left:clamp(18px,4vw,64px);top:31%;pointer-events:none;max-width:330px;text-shadow:0 4px 25px #000b}
 .kicker{color:var(--a);font-size:11px;letter-spacing:.27em;font-weight:800}h1{font-size:clamp(32px,4.4vw,72px);line-height:.94;letter-spacing:-.055em;margin:18px 0}h1 span{display:block;color:var(--a)}.desc{max-width:290px;color:#c1cfdd;font-size:13px;line-height:1.7}.features{padding-left:14px;border-left:2px solid var(--a);font-size:11px;letter-spacing:.12em;line-height:1.9;color:#c1d7e7;margin-top:25px}
 .panel{position:fixed;right:28px;bottom:25px;width:min(375px,calc(100vw - 36px));padding:20px 22px 18px;border:1px solid #3a4662;background:#0b1424ed;backdrop-filter:blur(18px);border-radius:14px;box-shadow:0 25px 80px #0009;z-index:3}
-.label{font-size:10px;letter-spacing:.19em;color:#93a7bf;text-transform:uppercase;margin:0 0 9px}.pick{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:14px}
+.label{font-size:10px;letter-spacing:.19em;color:#93a7bf;text-transform:uppercase;margin:0 0 9px}.pick{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-bottom:14px}
 button{color:#c0cfe0;border:1px solid #39445c;background:#131e31;border-radius:7px;padding:12px 5px;cursor:pointer;font:600 11px "Segoe UI",sans-serif}
 button:hover{border-color:#a2b0cb}button.active{color:white;border-color:var(--a);background:#39284f}
 .meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}.metric{padding:10px;background:#152037;border-radius:6px}.metric span{display:block;font-size:9px;color:#93a7bd;letter-spacing:.11em}.metric strong{display:block;font-size:13px;margin-top:4px}.hint{font-size:10px;color:#90a3b7;line-height:1.6;margin-top:12px}
@@ -28,10 +28,10 @@ button:hover{border-color:#a2b0cb}button.active{color:white;border-color:var(--a
 <canvas id="canvas" aria-label="Rotatable 3D weapon art showroom"></canvas>
 <div id="loading">LOADING AETHER PBR ASSETS…</div>
 <header><a href="/">CROSS<span>FIRE</span></a><div class="tag">AETHER / NEXT-GEN ART COLLECTION</div></header>
-<aside><div class="kicker">HIGH FIDELITY · GAME ASSET STUDY</div><h1 id="hero">AETHER<span>S9</span></h1><p class="desc" id="description">Compact, angular, violet-lit SMG with a sculpted alloy chassis.</p><div class="features">BLENDER AUTHORED GEOMETRY<br>SELF-CONTAINED PBR / GLB<br>ROTATE · INSPECT · COMPARE</div></aside>
+<aside><div class="kicker">HIGH FIDELITY · GAME ASSET STUDY</div><h1 id="hero">WARDRUM<span>W12</span></h1><p class="desc" id="description">High-detail shotgun and sniper artwork.</p><div class="features">BLENDER AUTHORED GEOMETRY<br>SELF-CONTAINED PBR / GLB<br>ROTATE · INSPECT · COMPARE</div></aside>
 <section class="panel">
 <div class="label">SELECT WEAPON</div>
-<div id="weapons" class="pick"><button class="active" data-weapon="s9">S9 · SMG</button><button data-weapon="w12">W12 · SHOTGUN</button><button data-weapon="l7">L7 · SNIPER</button></div>
+<div id="weapons" class="pick"><button class="active" data-weapon="w12">W12 · SHOTGUN</button><button data-weapon="l7">L7 · SNIPER</button></div>
 <div class="label">MATERIAL FINISH</div>
 <div id="finishes" class="pick"><button class="active" data-finish="midnight">MIDNIGHT</button><button data-finish="glacier">GLACIER</button><button data-finish="eclipse">ECLIPSE</button></div>
 <div class="pick"><button id="spin" class="active">AUTO ROTATE: ON</button><button id="wire">WIREFRAME: OFF</button><button id="reset">RESET VIEW</button></div>

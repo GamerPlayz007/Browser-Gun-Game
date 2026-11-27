@@ -16,11 +16,10 @@ const halo=new T.Mesh(new T.RingGeometry(1.19,1.22,80),new T.MeshBasicMaterial({
 halo.rotation.x=-Math.PI/2;halo.position.y=-1.02;scene.add(halo);
 const stage=new T.Group();scene.add(stage);
 const details={
- s9:{head:'AETHER',sub:'S9',description:'A compact violet-lit SMG with an open skeleton stock, layered receiver armor and a short photonic emitter.',color:'#cb87ff'},
  w12:{head:'WARDRUM',sub:'W12',description:'A broad ember-orange shotgun silhouette with twin illuminated front cores, chunky shield armor and a ribbed underbody.',color:'#ff9c6b'},
  l7:{head:'LONGWATCH',sub:'L7',description:'An extended precision-rifle silhouette with a long scope, lime-green light channels and open alloy support arches.',color:'#b7ff88'}
 };
-const state={weapon:'s9',finish:'midnight',auto:true,wire:false,token:0,controller:null,root:null,yaw:.61,pitch:.22,dist:4.4,dyaw:.61,dpitch:.22,ddist:4.4};
+const state={weapon:'w12',finish:'midnight',auto:true,wire:false,token:0,controller:null,root:null,yaw:.61,pitch:.22,dist:4.4,dyaw:.61,dpitch:.22,ddist:4.4};
 const loader=new GLTFLoader();let dirty=true,prev=performance.now();
 function mark(){dirty=true}
 function setStatus(t){$('status').textContent=t}
