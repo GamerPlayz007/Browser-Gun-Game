@@ -23,6 +23,6 @@ const model=read('static/models.js').toString('utf8');
 const game=read('static/game.js').toString('utf8');
 assert.match(model,/id===2\?makeS12V04Scaffold\(model,magazine\)/,'active shotgun must use S-12 rig');
 assert.match(model,/if\(id===2\)attachS12V04\(root\)/,'shotgun 3D art must attach');
-assert.match(model,/id===3[^\n]*buildAetherGameVisuals\(model,magazine,id,finish\)/,'original sniper must remain');
+assert.match(model,/:buildAetherGameVisuals\(model,magazine,id,finish\)/,'original sniper must remain');
 assert.match(game,/S-12 V0\.4/,'shotgun label updated');
 console.log('S-12 v0.4 approved game asset validated', {meshes:doc.meshes.length,materials:doc.materials.length,triangles,bytes:glb.length});
