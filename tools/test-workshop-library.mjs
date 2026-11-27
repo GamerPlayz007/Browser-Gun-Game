@@ -50,14 +50,14 @@ const good={name:'test.glb',size:128,slice:()=>({arrayBuffer:async()=>hdr})};
 await validatePersonalGLB(good);
 await assert.rejects(validatePersonalGLB({...good,name:'test.exe'}),/\.glb/);
 await assert.rejects(validatePersonalGLB({...good,size:PERSONAL_MAX_BYTES+1}),/30 MB/);
-for(const id of ['assetSearch','assetFilter','assetCards','assetDetail','assetStorage','assetCount','downloadAsset','importAsset','quality','workbench','stress','file','fps','benchmark','measure'])assert.ok(html.includes(`id="${id}"`),`Missing UI ${id}`);
+for(const id of ['modeWall','mode360','modeParts','partTools','partList','spread','savedImports','downloadAsset','importAsset','quality','workbench','stress','file','fps','benchmark','measure'])assert.ok(html.includes(`id="${id}"`),`Missing UI ${id}`);
 assert.ok(workshop.includes("from './workshop-library.js'"));
-assert.ok(workshop.includes("from './workshop-library-ui.js'"));
-assert.ok(workshop.includes('createWorkshopLibraryUI('));
+assert.ok(workshop.includes("from './workshop-wall-racks.js'"));
+assert.ok(workshop.includes("from './workshop-component-inspector.js'"));
 assert.ok(workshop.includes('savePersonalAsset('));
 assert.ok(workshop.includes('readAssetBytes('));
 assert.ok(workshop.includes('getPersonalAsset('));
-assert.ok(ui.includes('removePersonalAsset('));
+assert.ok(ui.includes('removePersonalAsset(')); // The older Library module stays available for migration.
 assert.ok(!workshop.includes('new WebSocket('));
 assert.ok(!workshop.includes("fetch('/api/rooms"));
 console.log('PASS workshop asset library: 13 catalog entries, repository file existence, GLB validation, search/filter, UI, personal storage and multiplayer isolation');

@@ -22,7 +22,8 @@ assert.ok(compare.includes('sourceDimensions:'), 'Keep original dimensions in st
 assert.ok(compare.includes('dispose(side)'), 'Clean GPU assets');
 assert.ok(!compare.includes('WebSocket(') && !compare.includes('/api/rooms'));
 assert.ok(catalog.includes("'industrial-lantern'"));
-assert.ok(page.includes('GET OFFICIAL SOURCE GLB'));
+assert.ok(!page.includes('GET OFFICIAL SOURCE GLB'), 'Retired Lantern feature must not clutter the Workshop');
+assert.ok(page.includes('id="modeParts"'), 'Component inspection should be visible');
 assert.ok(blender.includes('bpy.ops.import_scene.gltf('));
 assert.ok(blender.includes('bpy.ops.wm.save_as_mainfile('));
 assert.ok(blender.includes('bpy.ops.export_scene.gltf('));

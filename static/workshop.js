@@ -8,8 +8,9 @@ import * as T from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {HERO_GLB_BASE64, PERFORMANCE_GLB_BASE64} from './artist-mesh-v3-data.js';
 import {readAssetBytes} from './gallery-assets.js';
-import {WORKSHOP_CATALOG,personalToEntry,savePersonalAsset,validatePersonalGLB,getPersonalAsset} from './workshop-library.js';
-import {createWorkshopLibraryUI} from './workshop-library-ui.js';
+import {WORKSHOP_CATALOG,personalToEntry,savePersonalAsset,validatePersonalGLB,getPersonalAsset,listPersonalAssets} from './workshop-library.js';
+import {createWorkshopWallRacks} from './workshop-wall-racks.js';
+import {createWorkshopComponentInspector} from './workshop-component-inspector.js';
 const $=id=>document.getElementById(id);
 const scene=new T.Scene();scene.background=new T.Color(0x0e1a27);
 const camera=new T.PerspectiveCamera(44,1,.015,250);
@@ -115,11 +116,22 @@ buildWorkshopGarage();
 const loader=new GLTFLoader();
 const VARIANTS={HERO:{b64:HERO_GLB_BASE64,expectedBytes:162928,textureSize:1024},PERFORMANCE:{b64:PERFORMANCE_GLB_BASE64,expectedBytes:150248,textureSize:256}};
 let source=null,sourceClips=[],instances=[],mixers=[],variant='HERO',sourceBytes=0,serial=0;
-let toggledWire=false,autoRotate=true,count=1,running=false,results=[],loadMs=0;
+let toggledWire=false,autoRotate=false,count=1,running=false,results=[],loadMs=0;
 let fps=0,avgFrame=0,last=performance.now(),windowMs=0,windowFrames=0,frameTimes=[];
-const orbit={angle:.56,pitch:.35,distance:21,targetAngle:.56,targetPitch:.35,targetDistance:21};
+const orbit={angle:.16,pitch:.11,distance:24,targetAngle:.16,targetPitch:.11,targetDistance:24};
 let interaction=null;
-const target=new T.Vector3(0,.8,0);
+const target=new T.Vector3(0,1.45,0);
+let viewMode='wall',pointerDownAt=null,savedRecords=[];
+const inspector=createWorkshopComponentInspector({
+ onSelection:item=>renderPartDetails(item),
+ onCount:n=>{const el=$('partsCount');if(el)el.textContent=n+' MESH PARTS'}
+});
+const gallery=createWorkshopWallRacks({
+ scene,isBusy:()=>running,
+ onChoose:id=>{const item=WORKSHOP_CATALOG.find(a=>a.id===id);if(item)chooseLibraryAsset(item)},
+ onMessage:msg=>{console.warn(msg)}
+});
+
 $('openComparison').addEventListener('click',async()=>{
  if(running){status('Complete the active benchmark before comparing.',true);return}
  try{const bay=await import('./workshop-comparison.js');await bay.openComparison()}
@@ -127,8 +139,7 @@ $('openComparison').addEventListener('click',async()=>{
 });
 const reportSchema='CROSSFIRE_workshop_asset_library_v2';
 const startQuery=new URLSearchParams(location.search);
-let activeAsset=WORKSHOP_CATALOG.find(a=>a.id===startQuery.get('asset')&&a.profiles.length)||WORKSHOP_CATALOG[0],
- libraryUI=null,pendingFetch=null;
+let activeAsset=WORKSHOP_CATALOG.find(a=>a.id===startQuery.get('asset')&&a.profiles.length)||WORKSHOP_CATALOG.find(a=>a.id==='awp01-v03')||WORKSHOP_CATALOG[0],pendingFetch=null;
 const MAX_REPOSITORY_BYTES=65_000_000;
 function setProfileOptions(entry){
  const select=$('quality'),previous=select.value;select.replaceChildren();
@@ -139,6 +150,9 @@ function setProfileOptions(entry){
  select.disabled=!entry.profiles.length||running;
  $('benchmark').disabled=entry.profiles.length<2||running;
  $('downloadAsset').disabled=!entry.profiles.length||running;
+ $('selectedTitle').textContent=entry.title;
+ $('selectedMeta').textContent=entry.description;
+ gallery.setActive(entry.id);
 }
 function syncClipOptions(){
  const sel=$('clip'),wanted=sel.value;sel.replaceChildren();
@@ -150,7 +164,7 @@ async function chooseLibraryAsset(entry){
  if(running||!entry?.profiles.length)return;
  const old=activeAsset;activeAsset=entry;setProfileOptions(entry);
  results=[];renderTable();
- try{await loadPreset($('quality').value)}
+ try{await loadPreset($('quality').value);setViewMode('360')}
  catch(err){activeAsset=old;setProfileOptions(old);status('Preview unavailable: '+err.message,true)}
 }
 function downloadBlob(blob,name){
@@ -199,7 +213,7 @@ function clearInstances(){for(const m of mixers)m.stopAllAction();mixers=[];
  for(const obj of instances){obj.traverse(n=>{if(n.isSkinnedMesh&&n.skeleton)n.skeleton.dispose()});obj.removeFromParent();}
  instances=[];
 }
-function disposeSource(){clearInstances();if(!source)return;
+function disposeSource(){inspector.reset();clearInstances();if(!source)return;
  const g=new Set(),m=new Set(),t=new Set();
  source.traverse(node=>{if(!node.isMesh)return;g.add(node.geometry);
   for(const mat of Array.isArray(node.material)?node.material:[node.material])if(mat){m.add(mat);for(const k of ['map','normalMap','roughnessMap','metalnessMap','aoMap','emissiveMap'])if(mat[k])t.add(mat[k]);}
@@ -225,7 +239,10 @@ function buildInstances(n){if(!source)return;clearInstances();count=n;
   mixers.push(new T.AnimationMixer(obj));
  }
  playAnimation();applyWireframe();
- orbit.targetDistance=Math.max(6,Math.min(33,5.4+Math.sqrt(n)*2.85));
+ inspector.attach(n===1?instances[0]:null);
+ if(viewMode==='parts'&&n===1)inspector.setSpread(Number($('spread').value));
+ renderPartList();
+ orbit.targetDistance=viewMode==='wall'?24:Math.max(6,Math.min(33,5.4+Math.sqrt(n)*2.85));
  $('inventory').textContent=`${sharedStats(source).meshes} mesh · ${sourceClips.length} clips × ${n}`;
  $('geometry').textContent=`${sharedStats(source).triangles.toLocaleString()} × ${n} triangles (source)`;
 }
@@ -284,7 +301,7 @@ async function loadPreset(mode){
   const gltf=await loader.parseAsync(payload,'');
   if(own!==serial)return;
   mount(gltf,mode,bytesCount,performance.now()-started);
-  libraryUI?.setActive(entry.id);
+  gallery.setActive(entry.id);
  }catch(err){if(own===serial&&err.name!=='AbortError')status('ASSET FAILED: '+err.message,true);throw err}
  finally{if(own===serial)pendingFetch=null}
 }
@@ -304,12 +321,12 @@ async function loadFile(file){
   if(saved){
    activeAsset=personalToEntry(saved);setProfileOptions(activeAsset);
    mount(gltf,'LOCAL',file.size,performance.now()-started);
-   await libraryUI.refresh();libraryUI.setActive(saved.id);
+   await refreshSavedImports();setViewMode('360');
    status('SAVED IN THIS BROWSER: '+saved.name+' · '+sourceClips.length+' animation clips. Not uploaded to the game or GitHub.');
   }else{
    activeAsset={id:'temporary-preview',title:file.name,category:'personal',profiles:[]};
    setProfileOptions(activeAsset);mount(gltf,'CUSTOM',file.size,performance.now()-started);
-   $('quality').disabled=true;
+   $('quality').disabled=true;setViewMode('360');
    status('TEMPORARY PREVIEW: '+file.name+'. Browser storage unavailable: '+(saveError?.message||'unknown reason'),true);
   }
  }catch(err){if(own===serial)status('IMPORT FAILED: '+err.message,true)}
@@ -345,9 +362,9 @@ async function measure(duration=2400){if(document.hidden)throw Error('Benchmark 
  await idle(750);return collectFramesFor(duration);
 }
 function lockUI(locked){running=locked;
- for(const id of ['benchmark','measure','quality','count','clip','pixelRatio','file','workbench','stress','downloadAsset','importAsset','assetSearch','assetFilter','openComparison'])$(id).disabled=locked;
+ for(const id of ['benchmark','measure','quality','count','clip','pixelRatio','file','workbench','stress','downloadAsset','importAsset','openComparison','modeWall','mode360','modeParts','spread','partSearch','focusPart','partReset','savedImports'])$(id).disabled=locked;
  if(!locked)setProfileOptions(activeAsset);
- libraryUI?.setBusy(locked);
+
 }
 async function runOne(){if(running)return;lockUI(true);
  try{status('Warming up renderer, then measuring visible frames…');const item=await measure(3000);
@@ -391,15 +408,92 @@ function exportReport(format){if(!results.length){status('Take a measurement bef
 }
 $('workbench').addEventListener('click',()=>{if(running)return;$('count').value='1';buildInstances(1);status('INSPECTION BENCH READY · one imported art asset.');});
 $('stress').addEventListener('click',()=>{if(running)return;$('count').value='24';buildInstances(24);status('STRESS BAY READY · 24 independently animated art assets.');});
-libraryUI=createWorkshopLibraryUI({
- onOpen:chooseLibraryAsset,
- onUnavailable:message=>status(message,true),
- onDeleteActive:()=>chooseLibraryAsset(WORKSHOP_CATALOG[0]),
- isBusy:()=>running
+
+function renderPartDetails(item){
+ const detail=$('partDetails');if(!detail)return;
+ detail.textContent=item?
+  item.name+' · '+item.triangles.toLocaleString()+' triangles · '+item.materials.join(', '):
+  'Select a mesh on the workbench or in the component list to inspect its geometry.';
+ $('focusPart').disabled=!item;
+}
+function renderPartList(){
+ const results=inspector.list($('partSearch').value,96);
+ const holder=$('partList');holder.replaceChildren();
+ $('partsCount').textContent=inspector.length+' MESH PARTS';
+ for(const part of results.items){
+  const b=document.createElement('button');b.type='button';b.textContent=(part.index+1)+'. '+part.name;
+  b.title=part.name;b.classList.toggle('selected',inspector.selected===part);
+  b.setAttribute('role','option');b.setAttribute('aria-selected',inspector.selected===part?'true':'false');
+  b.addEventListener('click',()=>{inspector.select(part.index);renderPartList()});
+  holder.append(b);
+ }
+ if(results.matches>results.items.length){
+  const hint=document.createElement('small');hint.textContent='Showing '+results.items.length+
+   ' of '+results.matches+' matches. Search to find any other component.';holder.append(hint);
+ }
+}
+function setViewMode(mode){
+ viewMode=mode;
+ for(const [id,value] of [['modeWall','wall'],['mode360','360'],['modeParts','parts']]){
+  $(id).classList.toggle('on',mode===value);
+  $(id).setAttribute('aria-pressed',mode===value?'true':'false');
+ }
+ $('partTools').hidden=mode!=='parts';
+ if(mode==='parts'&&source&&instances.length!==1){
+  $('count').value='1';buildInstances(1);
+ }
+ if(mode==='wall'){
+  target.set(0,1.55,0);orbit.targetAngle=.16;orbit.targetPitch=.1;orbit.targetDistance=24;
+  autoRotate=false;
+ }else if(mode==='360'){
+  target.set(0,.75,0);orbit.targetAngle=.48;orbit.targetPitch=.2;orbit.targetDistance=7.7;
+  autoRotate=true;
+ }else{
+  target.set(0,.85,0);orbit.targetAngle=.45;orbit.targetPitch=.20;orbit.targetDistance=9.8;
+  autoRotate=false;
+ }
+ if(mode==='parts'){
+  if(Number($('spread').value)<1)$('spread').value='60';
+  inspector.setSpread(Number($('spread').value));
+ }else{
+  inspector.setSpread(0);$('spread').value='0';
+ }
+ $('spreadValue').textContent=$('spread').value+'%';
+ $('toggleRotate').textContent='ROTATION: '+(autoRotate?'ON':'OFF');
+ $('toggleRotate').classList.toggle('on',autoRotate);
+ renderPartList();
+}
+async function refreshSavedImports(){
+ const sel=$('savedImports');const previous=sel.value;sel.replaceChildren();
+ const opt=document.createElement('option');opt.value='';opt.textContent='Open one of your saved GLBs…';sel.append(opt);
+ try{savedRecords=await listPersonalAssets()}catch{savedRecords=[]}
+ for(const record of savedRecords){
+  const op=document.createElement('option');op.value=record.id;op.textContent=record.name;sel.append(op);
+ }
+ if(savedRecords.some(r=>r.id===previous))sel.value=previous;
+}
+for(const [id,mode] of [['modeWall','wall'],['mode360','360'],['modeParts','parts']]){
+ $(id).addEventListener('click',()=>setViewMode(mode));
+}
+$('spread').addEventListener('input',e=>{
+ inspector.setSpread(Number(e.target.value));
+ $('spreadValue').textContent=e.target.value+'%';
+});
+$('partSearch').addEventListener('input',renderPartList);
+$('partReset').addEventListener('click',()=>{$('spread').value='0';inspector.setSpread(0);$('spreadValue').textContent='0%'});
+$('focusPart').addEventListener('click',()=>{
+ const p=inspector.focusPoint();if(!p)return;
+ target.copy(p);orbit.targetDistance=4.2;autoRotate=false;
+ $('toggleRotate').textContent='ROTATION: OFF';$('toggleRotate').classList.remove('on');
+});
+$('savedImports').addEventListener('change',e=>{
+ const record=savedRecords.find(r=>r.id===e.target.value);
+ if(record)chooseLibraryAsset(personalToEntry(record));
 });
 setProfileOptions(activeAsset);
+refreshSavedImports().catch(e=>console.warn('Browser imports unavailable',e));
 if(activeAsset.profiles.some(p=>p.id===startQuery.get('profile')))$('quality').value=startQuery.get('profile');
-libraryUI.refresh().catch(e=>status('Library could not initialize: '+e.message,true));
+
 $('importAsset').addEventListener('click',()=>$('file').click());
 $('downloadAsset').addEventListener('click',downloadCurrentAsset);
 $('quality').addEventListener('change',e=>loadPreset(e.target.value).catch(()=>{}));
@@ -413,9 +507,16 @@ $('measure').addEventListener('click',runOne);
 $('saveReport').addEventListener('click',()=>exportReport('json'));
 $('saveCsv').addEventListener('click',()=>exportReport('csv'));
 $('file').addEventListener('change',e=>loadFile(e.target.files?.[0]));
-canvas.addEventListener('pointerdown',e=>{canvas.setPointerCapture(e.pointerId);interaction={x:e.clientX,y:e.clientY};autoRotate=false;$('toggleRotate').textContent='ROTATION: OFF';$('toggleRotate').classList.remove('on');});
+canvas.addEventListener('pointerdown',e=>{canvas.setPointerCapture(e.pointerId);interaction={x:e.clientX,y:e.clientY};pointerDownAt={x:e.clientX,y:e.clientY};autoRotate=false;$('toggleRotate').textContent='ROTATION: OFF';$('toggleRotate').classList.remove('on');});
 canvas.addEventListener('pointermove',e=>{if(!interaction)return;orbit.targetAngle-=(e.clientX-interaction.x)*.006;orbit.targetPitch=T.MathUtils.clamp(orbit.targetPitch+(e.clientY-interaction.y)*.004,-.9,1.4);interaction={x:e.clientX,y:e.clientY};});
-for(const event of ['pointerup','pointercancel'])canvas.addEventListener(event,()=>{interaction=null});
+for(const event of ['pointerup','pointercancel'])canvas.addEventListener(event,e=>{
+ if(event==='pointerup'&&pointerDownAt&&Math.hypot(e.clientX-pointerDownAt.x,e.clientY-pointerDownAt.y)<7&&!running){
+  const wall=gallery.pick(camera,canvas,e.clientX,e.clientY);
+  if(wall)gallery.choose(wall);
+  else if(viewMode==='parts'&&inspector.pick(camera,canvas,e.clientX,e.clientY))renderPartList();
+ }
+ pointerDownAt=null;interaction=null;
+});
 canvas.addEventListener('wheel',e=>{e.preventDefault();orbit.targetDistance=T.MathUtils.clamp(orbit.targetDistance+Math.sign(e.deltaY)*1.0,2.8,65)},{passive:false});
 let graph=[];function drawChart(){const c=$('chart'),ctx=c.getContext('2d');if(!ctx)return;
  const W=c.width,H=c.height;ctx.clearRect(0,0,W,H);
@@ -442,4 +543,5 @@ function frame(now){requestAnimationFrame(frame);
   graph.push(fps);if(graph.length>100)graph.shift();drawChart();windowMs=0;windowFrames=0;}
 }
 requestAnimationFrame(frame);
-loadPreset(activeAsset.profiles[0].id).catch(()=>{});
+loadPreset(activeAsset.profiles[0].id).then(()=>{setViewMode('wall')}).catch(e=>status('Default model load failed: '+e.message,true));
+gallery.loadAll().catch(e=>console.warn('Wall display preview failed',e));

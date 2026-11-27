@@ -62,41 +62,87 @@ h2{font-size:12px;letter-spacing:.17em;margin:0 0 10px}small,.dim{color:var(--mu
 .comparison-foot{position:absolute;bottom:0;left:0;right:0;z-index:3;padding:10px 18px;display:flex;justify-content:space-between;gap:18px;background:#091622ef;color:#abc9d7;font-size:10px;pointer-events:none}
 .comparison-foot strong{font-weight:750;color:#effaff}.comparison-foot span{font-size:9px;white-space:nowrap}
 @media(max-width:780px){.comparison-header{padding:10px;flex-wrap:wrap}.comparison-header strong{font-size:11px}.compare-header-actions button{padding:6px;font-size:8px}.compare-label{top:110px;font-size:9px}.compare-controls{left:5px;right:5px;bottom:72px;gap:6px}.compare-side{padding:8px}.compare-side select{font-size:9px;padding:5px}.compare-side p{font-size:9px}.comparison-foot{padding:6px 8px;display:block}.comparison-foot span{display:block;white-space:normal}}
+
+/* Phase 2 — a concise workshop sidebar. Models now live on 3D garage walls. */
+.panel{width:min(344px,calc(100vw - 18px));padding:15px 15px 20px;scrollbar-width:thin}
+.rack-tip{font-size:11px;color:#a5c3cf;line-height:1.6;margin:5px 0 13px}
+.mode-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin:13px 0}
+.mode-tabs button{padding:11px 3px;font-size:10px;letter-spacing:.01em;min-height:45px}
+.selection-card{background:#0b2736;border:1px solid #3c6575;padding:13px;border-radius:10px;margin-bottom:13px}
+.selection-card strong{display:block;font-size:16px;color:#f3fdff;margin:5px 0}
+.selection-card p{font-size:10px;color:#a5bdc8;line-height:1.55;margin:4px 0}
+.selection-card .buttons{margin-top:9px}
+.single-import{padding:11px 0;border-top:1px solid #2f5261;border-bottom:1px solid #2f5261}
+.single-import>button{width:100%;padding:12px}
+.single-import small{display:block;margin-top:7px;font-size:9px;color:#8eb1c0;line-height:1.5}
+.single-import select{font-size:10px}
+#status{font-size:10px;max-height:74px;overflow:auto;line-height:1.48}
+.part-tools{border:1px solid #4d8492;padding:12px;border-radius:10px;margin:13px 0;background:#0b2330}
+.part-tools[hidden]{display:none}
+.part-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.part-head strong{font:800 10px monospace;color:#c1f2f0}
+#spread{display:block;width:100%;accent-color:#78d8e7;margin:9px 0}
+#spreadValue{font-family:monospace;color:#8de7f2;float:right}
+#partSearch{display:block;width:100%;padding:9px;background:#0d3142;border:1px solid #456b79;border-radius:7px;color:#fff;font:12px system-ui}
+#partList{max-height:212px;overflow-y:auto;display:flex;flex-direction:column;gap:4px;padding:5px 0;scrollbar-width:thin}
+#partList button{padding:7px;text-align:left;font-size:10px;font-weight:650;border-radius:6px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
+#partList button.selected{color:#fff;background:#22637a;border-color:#7bdcec}
+#partDetails{font-size:10px;color:#b5d1d9;line-height:1.6;overflow-wrap:anywhere;margin:8px 0 0}
+#advanced{border:1px solid #355262;padding:10px 11px;border-radius:9px;margin:13px 0}
+#advanced summary{cursor:pointer;font:800 10px system-ui;letter-spacing:.12em;color:#a5d7e2;list-style-position:inside}
+#advanced[open]{background:#0c2330}#advanced .buttons{margin-top:10px}
+.station-nav{margin-top:8px}
+.attrib{margin-top:12px;font-size:9px}
+@media(max-width:650px){.panel{max-height:64vh;width:auto}.intro{max-width:170px}.intro p{display:none} .mode-tabs button{font-size:9px;padding:7px 1px}}
 </style></head><body>
 <canvas id="stage" aria-label="CROSSFire garage workshop with a 3D asset inspection bay"></canvas>
 <header><a href="/" class="brand">CROSS<span>FIRE</span> / THE WORKSHOP</a><div class="meta">GARAGE 01 / ASSET DEVELOPMENT HQ<br><a href="/static/map-art-v5.html">DAYBREAK FIELD TEST</a> · <a href="/">PLAY THE GAME</a></div></header>
 <section class="intro"><span class="overline">CROSSFIRE ENGINEERING DIVISION / GARAGE 01</span><h1>The<br><em>Workshop.</em></h1><p>Our place to build the game. Bring artist-made GLB models from Blender, study their geometry and materials, preview animation, and test performance before taking them into Daybreak City.</p><div class="station-tag">DESIGN → IMPORT → INSPECT → TEST → FIELD</div></section>
-<aside class="panel"><div class="garage-heading"><div><span class="eyebrow">GARAGE / STATION 01</span><h2>3D ASSET WORKBENCH</h2></div><span class="live-dot">● READY</span></div><p class="dim" style="font-size:11px;margin-top:4px">Bring a model in from Blender. Inspect it here; we never replace the geometry with JavaScript.</p><nav class="station-nav"><a class="active" href="/static/workshop.html">01 · WORKBENCH</a><a href="/static/artist-mesh-v4.html">02 · BENCHMARK LAB</a><a href="/static/map-art-v5.html">03 · CITY TEST</a></nav>
-<section class="asset-library" aria-label="Permanent asset library">
-<div class="asset-head"><h2>ASSET LIBRARY <small>PHASE 02 / 01</small></h2><span id="assetCount" aria-live="polite">Loading…</span></div>
-<div class="asset-filters"><input type="search" id="assetSearch" aria-label="Search workshop models" placeholder="Search assets, versions, finishes…" autocomplete="off">
-<select id="assetFilter" aria-label="Filter asset library"><option value="all">All assets</option><option value="production">In game / production</option><option value="development">Development & drafts</option><option value="reference">Reference models</option><option value="personal">My saved GLBs</option></select></div>
-<div id="assetCards" class="asset-cards" aria-label="Repository and personal models"></div>
-<div id="assetDetail" class="asset-detail" aria-live="polite">Loading library metadata…</div>
-<div class="buttons asset-actions"><button id="importAsset" type="button" class="main">IMPORT & SAVE GLB</button><button id="downloadAsset" type="button">DOWNLOAD VERSION</button></div>
-<small id="assetStorage" class="asset-storage">Personal uploads are stored only in this browser.</small>
-</section>
-<div class="buttons"><button id="workbench" class="main on">INSPECT ONE MODEL</button><button id="stress">LOAD 24 COPIES</button></div>
-<div class="dim" style="font-size:10px;margin-top:10px">Import the original AWP-01 v0.3 GLB to inspect the intended sniper. The archived AETHER-L7 is a different concept.</div>
-<div class="two"><div><label class="control" for="quality">Selected asset · version / profile</label><select id="quality"><option value="HERO">Hero · 1024px</option><option value="PERFORMANCE">Performance · 256px</option></select></div><div><label class="control" for="count">Copies in scene</label><select id="count"><option value="1" selected>1 copy</option><option value="8">8 copies</option><option value="24">24 copies</option><option value="48">48 copies</option></select></div></div>
-<div class="two"><div><label class="control" for="clip">Animation</label><select id="clip"><option value="Walk">Walk</option><option value="Run">Run</option><option value="Survey">Survey</option><option value="Pause">Pause</option></select></div><div><label class="control" for="pixelRatio">Pixel density</label><select id="pixelRatio"><option value="1">School · 1×</option><option value="1.5">Balanced · 1.5×</option><option value="2">Ultra · 2×</option></select></div></div>
-<div class="buttons"><button class="main" id="benchmark">RUN 4-WAY A/B TEST</button><button id="measure">MEASURE THIS VIEW</button><button id="toggleWire">WIREFRAME: OFF</button><button id="toggleRotate" class="on">ROTATION: ON</button></div>
-<section class="production-entry"><button id="openComparison" class="main" type="button">COMPARE TWO VERSIONS</button>
-<p>Before / after · independent real models · synchronized camera &amp; file diagnostics.</p></section>
-<label id="import">IMPORT ANOTHER BLENDER GLB · SAVE LOCALLY<input id="file" type="file" accept=".glb,model/gltf-binary"></label>
-<section class="source-prop"><span class="eyebrow">INDUSTRIAL SOURCE / CC0</span>
-<strong>LANTERN · ARTIST-MADE STREET LIGHT</strong>
-<p>Prepared for the Blender pipeline with a pinned source, verified license and production script. Not yet processed or added to the game.</p>
-<a href="https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/e124e8d8d7330a5372bc2b4d00d39a4a9d7997ea/Models/Lantern/glTF-Binary/Lantern.glb" target="_blank" rel="noopener noreferrer">GET OFFICIAL SOURCE GLB</a>
-</section><div class="workflow-note"><strong>HOW THIS GARAGE WORKS</strong><span>Select a repository asset or import a GLB from Blender, inspect the real mesh and animations, then run rendering tests. Personal GLBs are saved in this browser only; editing still happens in Blender.</span></div>
-<p id="status" aria-live="polite">Loading original artist geometry…</p>
-<hr><h2>WORKBENCH DIAGNOSTICS</h2><div class="metrics"><div class="metric"><strong id="fps">—</strong><small>FRAME RATE</small></div><div class="metric"><strong id="draws">—</strong><small>DRAW CALLS</small></div><div class="metric"><strong id="tris">—</strong><small>TRIANGLES</small></div></div>
-<canvas id="chart" width="620" height="194" aria-label="Recent frames per second chart"></canvas>
-<div class="two"><div><label class="control">Loaded geometry</label><div id="geometry" class="dim">—</div></div><div><label class="control">Meshes / animations</label><div id="inventory" class="dim">—</div></div></div>
-<hr><h2>STRESS-TEST RESULTS <small>LOCAL BROWSER ONLY</small></h2><div style="overflow-x:auto"><table id="results"><thead><tr><th>PROFILE</th><th>COPIES</th><th>AVG FPS</th><th>1% LOW</th><th>DRAWS</th></tr></thead><tbody id="resultRows"><tr><td colspan="5" style="text-align:left">Run the benchmark to compare four identical camera/settings scenarios.</td></tr></tbody></table></div>
-<div class="buttons"><button id="saveReport">EXPORT JSON</button><button id="saveCsv">EXPORT CSV</button></div>
-<div id="explain">Test the actual imported mesh and its original animation rig. A/B compares 1 and 24 animated copies at identical settings. FPS measurements depend on the computer you use.</div>
-<hr><div class="attrib">WORKSHOP STATUS · All changes are local to this page. No game weapons, multiplayer state, or collision data are modified.<br>Fox reference demo credits: PixelMannen (CC0 model), tomkranis (CC BY 4.0 rig/animation), AsoboStudio &amp; scurest (CC BY 4.0 conversion). <a href="https://github.com/KhronosGroup/glTF-Sample-Assets/tree/main/Models/Fox" target="_blank" rel="noopener noreferrer">Source &amp; licenses</a>.<br>Original meshes/UVs are retained; no gameplay, weapon or multiplayer changes.</div>
+<aside class="panel" aria-label="Workshop tools">
+ <div class="garage-heading"><div><span class="eyebrow">GARAGE 01 / MAIN BAY</span><h2>THE WORKBENCH</h2></div><span class="live-dot">● ONLINE</span></div>
+ <p class="rack-tip">Select a real 3D model from the wall racks. Inspect the entire artwork or spread out its individual mesh parts.</p>
+ <nav class="station-nav" aria-label="Workshop areas"><a class="active" href="/static/workshop.html">GARAGE</a><a href="/static/artist-mesh-v4.html">LAB</a><a href="/static/map-art-v5.html">CITY TEST</a></nav>
+ <div class="mode-tabs" role="group" aria-label="Inspection modes">
+  <button id="modeWall" class="on">WALL RACKS</button><button id="mode360">360° VIEW</button><button id="modeParts">COMPONENTS</button>
+ </div>
+ <section class="selection-card"><span class="eyebrow">SELECTED ON WORKBENCH</span><strong id="selectedTitle">Loading selected model…</strong><p id="selectedMeta">Click any mounted artwork on the wall.</p>
+  <label class="control" for="quality">ARTWORK VERSION</label><select id="quality" aria-label="Selected artwork version"></select>
+  <div class="buttons"><button id="downloadAsset">DOWNLOAD GLB</button><button id="openComparison">COMPARE VERSIONS</button></div>
+ </section>
+ <section id="partTools" class="part-tools" hidden aria-label="Component inspection tools">
+  <div class="part-head"><span class="eyebrow">EXPLODED COMPONENTS</span><strong id="partsCount">0 PARTS</strong></div>
+  <label class="control" for="spread">EXPLOSION / SPREAD <span id="spreadValue">0%</span></label>
+  <input id="spread" type="range" min="0" max="100" step="1" value="0"/>
+  <div class="buttons"><button id="partReset">ASSEMBLE MODEL</button><button id="focusPart">FOCUS PART</button></div>
+  <label class="control" for="partSearch">FIND AN ARTWORK COMPONENT</label>
+  <input id="partSearch" type="search" placeholder="Search mesh names…" autocomplete="off"/>
+  <div id="partList" role="listbox" aria-label="Selectable 3D mesh components"></div>
+  <p id="partDetails">Select a mesh in the 3D view or in this list to inspect it.</p>
+ </section>
+ <section class="single-import" aria-label="Import your own 3D assets">
+  <button id="importAsset" type="button" class="main">+ IMPORT GLB MODEL</button>
+  <input id="file" type="file" accept=".glb,model/gltf-binary" hidden/>
+  <label for="savedImports" class="control">YOUR SAVED IMPORTS</label>
+  <select id="savedImports" aria-label="Saved local model imports"><option value="">None yet · select a saved import</option></select>
+  <small>Imported models are saved in this browser. Official wall models come from GitHub.</small>
+ </section>
+ <p id="status" aria-live="polite">Loading art models…</p>
+ <details id="advanced"><summary>ADVANCED TESTING &amp; DIAGNOSTICS</summary>
+  <div class="two"><div><label class="control" for="pixelRatio">DISPLAY QUALITY</label><select id="pixelRatio"><option value="1" selected>School · 1×</option><option value="1.5">Balanced · 1.5×</option><option value="2">Ultra · 2×</option></select></div>
+   <div><label class="control" for="clip">ANIMATION</label><select id="clip"><option value="Pause">Pause</option></select></div></div>
+  <div class="buttons"><button id="workbench" class="on">ONE MODEL</button><button id="stress">24 COPIES</button></div>
+  <label class="control" for="count">STRESS-TEST COPIES</label><select id="count"><option value="1" selected>1 copy</option><option value="8">8 copies</option><option value="24">24 copies</option><option value="48">48 copies</option></select>
+  <div class="buttons"><button id="toggleWire">WIREFRAME: OFF</button><button id="toggleRotate">ROTATION: OFF</button><button id="benchmark">RUN 4-WAY TEST</button><button id="measure">MEASURE FPS</button></div>
+  <hr/><h2>LIVE RENDERER</h2>
+  <div class="metrics"><div class="metric"><strong id="fps">—</strong><small>FPS</small></div><div class="metric"><strong id="draws">—</strong><small>DRAW CALLS</small></div><div class="metric"><strong id="tris">—</strong><small>TRIANGLES</small></div></div>
+  <canvas id="chart" width="620" height="194" aria-label="Frame-rate chart"></canvas>
+  <div class="two"><div><label class="control">LOADED GEOMETRY</label><div id="geometry" class="dim">—</div></div><div><label class="control">MESH INVENTORY</label><div id="inventory" class="dim">—</div></div></div>
+  <hr/><h2>PERFORMANCE RESULTS</h2>
+  <div style="overflow-x:auto"><table id="results"><thead><tr><th>PROFILE</th><th>COPIES</th><th>AVG FPS</th><th>1% LOW</th><th>DRAWS</th></tr></thead><tbody id="resultRows"><tr><td colspan="5">No measurements recorded</td></tr></tbody></table></div>
+  <div class="buttons"><button id="saveReport">EXPORT JSON</button><button id="saveCsv">EXPORT CSV</button></div>
+  <div id="explain">Browser-only graphics profiling. Results vary by hardware. Workshop art inspection never changes game mechanics.</div>
+ </details>
+ <div class="attrib">3D artwork only · Live multiplayer and gameplay are not modified. Imported GLBs stay in your browser.</div>
 </aside>
 <!-- Phase 2 Stage 2: production bay inside the same Workshop page -->
 <section id="comparisonBay" class="comparison-bay" hidden aria-label="Synchronized version comparison">
