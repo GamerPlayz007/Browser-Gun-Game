@@ -7,6 +7,9 @@
 import * as T from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {HERO_GLB_BASE64, PERFORMANCE_GLB_BASE64} from './artist-mesh-v3-data.js';
+import {readAssetBytes} from './gallery-assets.js';
+import {WORKSHOP_CATALOG,personalToEntry,savePersonalAsset,validatePersonalGLB,getPersonalAsset} from './workshop-library.js';
+import {createWorkshopLibraryUI} from './workshop-library-ui.js';
 const $=id=>document.getElementById(id);
 const scene=new T.Scene();scene.background=new T.Color(0x0e1a27);
 const camera=new T.PerspectiveCamera(44,1,.015,250);
@@ -117,7 +120,48 @@ let fps=0,avgFrame=0,last=performance.now(),windowMs=0,windowFrames=0,frameTimes
 const orbit={angle:.56,pitch:.35,distance:21,targetAngle:.56,targetPitch:.35,targetDistance:21};
 let interaction=null;
 const target=new T.Vector3(0,.8,0);
-const reportSchema='CROSSFIRE_permanent_workshop_benchmark_v1';
+const reportSchema='CROSSFIRE_workshop_asset_library_v2';
+let activeAsset=WORKSHOP_CATALOG[0],libraryUI=null,pendingFetch=null;
+const MAX_REPOSITORY_BYTES=65_000_000;
+function setProfileOptions(entry){
+ const select=$('quality'),previous=select.value;select.replaceChildren();
+ for(const profile of entry.profiles){
+  const opt=document.createElement('option');opt.value=profile.id;opt.textContent=profile.label;select.append(opt);
+ }
+ select.value=entry.profiles.some(p=>p.id===previous)?previous:(entry.profiles[0]?.id||'');
+ select.disabled=!entry.profiles.length||running;
+ $('benchmark').disabled=entry.profiles.length<2||running;
+ $('downloadAsset').disabled=!entry.profiles.length||running;
+}
+function syncClipOptions(){
+ const sel=$('clip'),wanted=sel.value;sel.replaceChildren();
+ for(const clip of sourceClips){const opt=document.createElement('option');opt.value=clip.name;opt.textContent=clip.name;sel.append(opt)}
+ const pause=document.createElement('option');pause.value='Pause';pause.textContent='Pause';sel.append(pause);
+ sel.value=sourceClips.some(x=>x.name===wanted)?wanted:(sourceClips[0]?.name||'Pause');
+}
+async function chooseLibraryAsset(entry){
+ if(running||!entry?.profiles.length)return;
+ const old=activeAsset;activeAsset=entry;setProfileOptions(entry);
+ results=[];renderTable();
+ try{await loadPreset($('quality').value)}
+ catch(err){activeAsset=old;setProfileOptions(old);status('Preview unavailable: '+err.message,true)}
+}
+function downloadBlob(blob,name){
+ const href=URL.createObjectURL(blob),a=document.createElement('a');a.href=href;a.download=name;
+ document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(href),4000);
+}
+async function downloadCurrentAsset(){
+ const profile=activeAsset?.profiles.find(p=>p.id===$('quality').value)||activeAsset?.profiles[0];
+ if(!profile)return;
+ try{
+  if(profile.url){const a=document.createElement('a');a.href=profile.url;a.download=profile.url.split('/').pop();a.click();return}
+  if(profile.type==='embedded'){downloadBlob(new Blob([decode64(VARIANTS[profile.id].b64)],{type:'model/gltf-binary'}),'CROSSFIRE_Fox_'+profile.id+'.glb');return}
+  if(profile.type==='local'){
+   const record=await getPersonalAsset(activeAsset.id);if(!record?.blob)throw Error('Saved GLB not found');
+   downloadBlob(record.blob,record.name);
+  }
+ }catch(e){status('Download failed: '+e.message,true)}
+}
 function status(message,error=false){$('status').textContent=message;$('status').classList.toggle('error',error);}
 function decode64(text){const raw=atob(text);const output=new Uint8Array(raw.length);for(let i=0;i<raw.length;i++)output[i]=raw.charCodeAt(i);return output;}
 function resize(){renderer.setPixelRatio(Math.min(2,Number($('pixelRatio').value)));renderer.setSize(Math.max(1,innerWidth),Math.max(1,innerHeight),false);camera.aspect=Math.max(1,innerWidth)/Math.max(1,innerHeight);camera.updateProjectionMatrix();}
@@ -191,28 +235,77 @@ function mount(gltf,mode,bytes,elapsed){
  source.position.set(-mid.x,-scaled.min.y,-mid.z);source.updateMatrixWorld(true);
  variant=mode;sourceBytes=bytes;loadMs=elapsed;
  if(mode!=='CUSTOM')$('quality').value=mode;
+ syncClipOptions();
  buildInstances(Number($('count').value));
  const s=sharedStats(source);
  status(`${mode==='CUSTOM'?'CUSTOM IMPORT':'ARTIST GLB'} READY · ${(bytes/1024).toFixed(1)} KB · decode ${elapsed.toFixed(0)} ms\n${s.triangles} original triangles, ${s.meshes} mesh, ${s.materials} materials, ${s.textures} textures. Skin/animations: ${sourceClips.length} clips.`);
  if(old&&old===source)throw Error('Source was unexpectedly reused');
 }
+/**
+ * The Workshop only fetches paths present in its versioned repository catalog,
+ * or GLBs saved in this browser's IndexedDB. No game network endpoints.
+ */
 async function loadPreset(mode){
- const own=++serial,started=performance.now();status(`Loading ${mode} GLB…`);
- try{
-  const bytes=decode64(VARIANTS[mode].b64);
-  if(bytes.byteLength!==VARIANTS[mode].expectedBytes)throw Error('Bundled asset byte length mismatch');
-  const gltf=await loader.parseAsync(bytes.buffer,'');
-  if(own!==serial)return;
-  mount(gltf,mode,bytes.byteLength,performance.now()-started);
- }catch(err){if(own===serial)status(`ASSET FAILED: ${err.message}`,true);throw err;}
-}
-async function loadFile(file){if(!file)return;
- if(!/\.glb$/i.test(file.name)||file.size>30_000_000){status('Choose an embedded .GLB up to 30 MB.',true);return;}
+ const entry=activeAsset,profile=entry.profiles.find(p=>p.id===mode);
+ if(!profile)throw Error('Unknown asset version');
  const own=++serial,started=performance.now();
- try{const data=await file.arrayBuffer();const gltf=await loader.parseAsync(data,'');if(own!==serial)return;
-  results=[];renderTable();mount(gltf,'CUSTOM',file.size,performance.now()-started);
-  $('quality').disabled=true;status(`Local-only import: ${file.name} · ${sourceClips.length} animation clips.`);
- }catch(err){if(own===serial)status(`IMPORT ERROR: ${err.message}`,true);}
+ pendingFetch?.abort();pendingFetch=null;
+ status('Loading '+entry.title+' · '+profile.label+'…');
+ try{
+  let payload,bytesCount=0;
+  if(profile.type==='embedded'){
+   const bytes=decode64(VARIANTS[mode]?.b64||'');
+   if(bytes.byteLength!==profile.bytes)throw Error('Bundled reference asset mismatch');
+   payload=bytes.buffer;bytesCount=bytes.byteLength;
+  }else if(profile.type==='url'||profile.type==='gltf'){
+   const ctl=new AbortController();pendingFetch=ctl;
+   if(profile.type==='url'){
+    payload=await readAssetBytes(profile.url,{signal:ctl.signal,maxBytes:MAX_REPOSITORY_BYTES});
+    bytesCount=payload.byteLength;
+   }else{
+    const response=await fetch(profile.url,{signal:ctl.signal});
+    if(!response.ok)throw Error('HTTP '+response.status);
+    payload=await response.text();bytesCount=new TextEncoder().encode(payload).byteLength;
+   }
+   if(bytesCount!==profile.bytes)throw Error('Repository asset size changed. Refresh the workshop.');
+  }else if(profile.type==='local'){
+   const saved=await getPersonalAsset(entry.id);
+   if(!saved?.blob)throw Error('This model is no longer saved in this browser');
+   payload=await saved.blob.arrayBuffer();bytesCount=payload.byteLength;
+  }else throw Error('Unsupported model source');
+  if(own!==serial)return;
+  const gltf=await loader.parseAsync(payload,'');
+  if(own!==serial)return;
+  mount(gltf,mode,bytesCount,performance.now()-started);
+  libraryUI?.setActive(entry.id);
+ }catch(err){if(own===serial&&err.name!=='AbortError')status('ASSET FAILED: '+err.message,true);throw err}
+ finally{if(own===serial)pendingFetch=null}
+}
+async function loadFile(file){
+ if(!file||running)return;
+ const own=++serial,started=performance.now();
+ pendingFetch?.abort();pendingFetch=null;
+ try{
+  await validatePersonalGLB(file);
+  const buffer=await file.arrayBuffer();
+  const gltf=await loader.parseAsync(buffer,'');
+  if(own!==serial)return;
+  results=[];renderTable();
+  let saved=null,saveError=null;
+  try{saved=await savePersonalAsset(file)}catch(err){saveError=err}
+  if(own!==serial)return;
+  if(saved){
+   activeAsset=personalToEntry(saved);setProfileOptions(activeAsset);
+   mount(gltf,'LOCAL',file.size,performance.now()-started);
+   await libraryUI.refresh();libraryUI.setActive(saved.id);
+   status('SAVED IN THIS BROWSER: '+saved.name+' · '+sourceClips.length+' animation clips. Not uploaded to the game or GitHub.');
+  }else{
+   activeAsset={id:'temporary-preview',title:file.name,category:'personal',profiles:[]};
+   setProfileOptions(activeAsset);mount(gltf,'CUSTOM',file.size,performance.now()-started);
+   $('quality').disabled=true;
+   status('TEMPORARY PREVIEW: '+file.name+'. Browser storage unavailable: '+(saveError?.message||'unknown reason'),true);
+  }
+ }catch(err){if(own===serial)status('IMPORT FAILED: '+err.message,true)}
 }
 function renderTable(){const body=$('resultRows');body.replaceChildren();
  if(!results.length){const r=document.createElement('tr'),c=document.createElement('td');c.colSpan=5;c.textContent='No measurements yet. Run A/B or measure this view.';r.appendChild(c);body.appendChild(r);return;}
@@ -228,7 +321,7 @@ function finishCapture(){if(!capture)return;
  if(c.frames.length<15){c.reject(Error('Insufficient visible frames. Keep this tab active.'));return;}
  const sorted=[...c.frames].sort((a,b)=>a-b),time=c.frames.reduce((a,b)=>a+b,0);
  const meanMs=time/c.frames.length,slowMs=sorted[Math.min(sorted.length-1,Math.floor(sorted.length*.99))];
- const result={profile:variant,copies:count,avgFps:1000/meanMs,low1pctFps:1000/slowMs,
+ const result={assetId:activeAsset.id,assetTitle:activeAsset.title,profile:variant,copies:count,avgFps:1000/meanMs,low1pctFps:1000/slowMs,
   medianFps:1000/sorted[Math.floor(sorted.length*.5)],frames:sorted.length,avgFrameMs:meanMs,
   drawCalls:renderer.info.render.calls,renderedTriangles:renderer.info.render.triangles,
   geometryCount:renderer.info.memory.geometries,textureCount:renderer.info.memory.textures,
@@ -245,19 +338,27 @@ async function measure(duration=2400){if(document.hidden)throw Error('Benchmark 
  await idle(750);return collectFramesFor(duration);
 }
 function lockUI(locked){running=locked;
- for(const id of ['benchmark','measure','quality','count','clip','pixelRatio','file','workbench','stress'])$(id).disabled=locked;
- if(!locked&&variant==='CUSTOM')$('quality').disabled=true;
+ for(const id of ['benchmark','measure','quality','count','clip','pixelRatio','file','workbench','stress','downloadAsset','importAsset','assetSearch','assetFilter'])$(id).disabled=locked;
+ if(!locked)setProfileOptions(activeAsset);
+ libraryUI?.setBusy(locked);
 }
 async function runOne(){if(running)return;lockUI(true);
  try{status('Warming up renderer, then measuring visible frames…');const item=await measure(3000);
   results.push(item);renderTable();status(`${item.profile} / ${item.copies} copies: ${item.avgFps.toFixed(1)} FPS average, ${item.low1pctFps.toFixed(1)} FPS 1% low. (${item.frames} frames)`);
  }catch(e){status('MEASUREMENT FAILED: '+e.message,true)}finally{lockUI(false)}
 }
-async function runAB(){if(running)return;lockUI(true);const saved={mode:variant,count:Number($('count').value),clip:$('clip').value};
+async function runAB(){
+ if(running)return;
+ if(!activeAsset||activeAsset.profiles.length<2){status('A/B requires an asset with two or more versions.',true);return}
+ const profiles=activeAsset.profiles;
+ const one=profiles.find(p=>p.id==='HERO')||profiles[0];
+ const two=profiles.find(p=>p.id==='PERFORMANCE'&&p.id!==one.id)||profiles.find(p=>p.id!==one.id);
+ lockUI(true);const saved={mode:variant,count:Number($('count').value),clip:$('clip').value};
  try{
-  results=[];renderTable();$('clip').value='Walk';
-  // Identical animated workload, camera policy and render profile for all cases.
-  const scenarios=[['HERO',1],['PERFORMANCE',1],['HERO',24],['PERFORMANCE',24]];
+  results=[];renderTable();
+  if(sourceClips.some(x=>x.name==='Walk'))$('clip').value='Walk';
+  // Identical cameras and renderer profile across four real asset scenarios.
+  const scenarios=[[one.id,1],[two.id,1],[one.id,24],[two.id,24]];
   for(let i=0;i<scenarios.length;i++){
    if(document.hidden)throw Error('Keep this tab visible during all four measurements');
    const [mode,n]=scenarios[i];status(`A/B TEST ${i+1}/4 — ${mode}, ${n} animated copies\nLoading original artist geometry…`);
@@ -271,18 +372,28 @@ async function runAB(){if(running)return;lockUI(true);const saved={mode:variant,
  }catch(e){status('A/B TEST STOPPED: '+e.message,true)}
  finally{
   $('clip').value=saved.clip;$('count').value=String(saved.count);
-  try{if(saved.mode!=='CUSTOM'){await loadPreset(saved.mode);}else if(source){buildInstances(saved.count)}}catch(e){status('Restore failed: '+e.message,true)}
+  try{if(saved.mode!=='CUSTOM'&&activeAsset.profiles.some(p=>p.id===saved.mode)){await loadPreset(saved.mode)}else if(source){buildInstances(saved.count)}}catch(e){status('Restore failed: '+e.message,true)}
   lockUI(false);
  }
 }
 function download(text,filename,type){const blob=new Blob([text],{type}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);}
 function exportReport(format){if(!results.length){status('Take a measurement before exporting.',true);return;}
- if(format==='json')download(JSON.stringify({schema:reportSchema,notes:'Client-side rAF measurements. Hardware/browser-specific. Copies share geometry and textures but use independently animated rigs.',renderer:{pixelRatio:renderer.getPixelRatio(),quality:renderer.capabilities.precision},scenarios:results},null,2),'CROSSFIRE_ArtistMesh_v4_Benchmark.json','application/json');
+ if(format==='json')download(JSON.stringify({schema:reportSchema,notes:'Client-side rAF measurements. Hardware/browser-specific. Copies share geometry and textures but use independently animated rigs.',renderer:{pixelRatio:renderer.getPixelRatio(),quality:renderer.capabilities.precision},scenarios:results},null,2),'CROSSFIRE_Workshop_Library_Benchmark.json','application/json');
  else {const keys=['profile','copies','avgFps','low1pctFps','medianFps','avgFrameMs','drawCalls','renderedTriangles','geometryCount','textureCount','pixelRatio','frames','sourceBytes','loadMs','animation','measuredAt'];
-  download([keys.join(','),...results.map(r=>keys.map(k=>JSON.stringify(r[k])).join(','))].join('\n'),'CROSSFIRE_ArtistMesh_v4_Benchmark.csv','text/csv');}
+  download([keys.join(','),...results.map(r=>keys.map(k=>JSON.stringify(r[k])).join(','))].join('\n'),'CROSSFIRE_Workshop_Library_Benchmark.csv','text/csv');}
 }
 $('workbench').addEventListener('click',()=>{if(running)return;$('count').value='1';buildInstances(1);status('INSPECTION BENCH READY · one imported art asset.');});
 $('stress').addEventListener('click',()=>{if(running)return;$('count').value='24';buildInstances(24);status('STRESS BAY READY · 24 independently animated art assets.');});
+libraryUI=createWorkshopLibraryUI({
+ onOpen:chooseLibraryAsset,
+ onUnavailable:message=>status(message,true),
+ onDeleteActive:()=>chooseLibraryAsset(WORKSHOP_CATALOG[0]),
+ isBusy:()=>running
+});
+setProfileOptions(activeAsset);
+libraryUI.refresh().catch(e=>status('Library could not initialize: '+e.message,true));
+$('importAsset').addEventListener('click',()=>$('file').click());
+$('downloadAsset').addEventListener('click',downloadCurrentAsset);
 $('quality').addEventListener('change',e=>loadPreset(e.target.value).catch(()=>{}));
 $('count').addEventListener('change',e=>buildInstances(Number(e.target.value)));
 $('clip').addEventListener('change',playAnimation);
@@ -323,4 +434,4 @@ function frame(now){requestAnimationFrame(frame);
   graph.push(fps);if(graph.length>100)graph.shift();drawChart();windowMs=0;windowFrames=0;}
 }
 requestAnimationFrame(frame);
-loadPreset('HERO').catch(()=>{});
+loadPreset(activeAsset.profiles[0].id).catch(()=>{});

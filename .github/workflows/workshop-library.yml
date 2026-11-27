@@ -1,0 +1,28 @@
+name: CROSSFire Workshop Asset Library
+
+on:
+  push:
+    paths:
+      - 'static/workshop.html'
+      - 'static/workshop.js'
+      - 'static/workshop-library.js'
+      - 'static/workshop-library-ui.js'
+      - 'tools/test-workshop.mjs'
+      - 'tools/test-workshop-library.mjs'
+      - 'package.json'
+      - '.github/workflows/workshop-library.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-workshop:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate workshop modules and asset inventory
+        run: npm run test:workshop
