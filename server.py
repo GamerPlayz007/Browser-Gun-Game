@@ -15,6 +15,7 @@ from modes54 import (TEAM_MODES,TEAM_IDS,TEAM_NAMES,CONTROL_POINT,
     is_team_mode,next_team,balance_teams,winner_team,controller,presence)
 from competitive55 import spawn_score,balanced_draft,ready_summary
 from cosmetics56 import random_skin56
+from operator03_skins import OPERATOR_SKINS, normalize_operator_skin, effective_operator_skin
 from bot57 import (MODE as BOT_MODE,BOT_COUNT,BOT_GOAL,BOT_WIN_GOAL,BOT_NAMES,
                    BOT_FIRE_SECONDS,decide as bot_decide,can_attack as bot_can_attack,
                    miss_offset,is_bot_mode)
@@ -90,11 +91,11 @@ def spawn(p,players,now,arena=DEFAULT,history=None):
     reset_health(p,now)
     seed_movement(p)
 
-def new_player(room,pid,name,now,weapon=0):
+def new_player(room,pid,name,now,weapon=0,operator_skin='woodland'):
     team=next_team(room.players) if is_team_mode(room.mode) else None
-    # The server chooses an unused color; clients cannot request a skin.
+    # The old flat tint stays as an offline fallback; Operator 03 has a validated camo choice.
     skin=random_skin56(p['skin'] for p in room.players.values())
-    p=dict(id=pid,name=name,team=team,bot=False,ready=False,skin=skin,kills=0,deaths=0,headshots=0,streak=0,best_streak=0,weapon=weapon,yaw=0.,pitch=0.,last_input=now,switch_at=0.,seq=0,shot_seq=0,ack_shot=0,last_manual_respawn=-1e9)
+    p=dict(id=pid,name=name,team=team,bot=False,ready=False,skin=skin,operator_skin_choice=normalize_operator_skin(operator_skin),kills=0,deaths=0,headshots=0,streak=0,best_streak=0,weapon=weapon,yaw=0.,pitch=0.,last_input=now,switch_at=0.,seq=0,shot_seq=0,ack_shot=0,last_manual_respawn=-1e9)
     spawn(p,{**room.players,**room.bots},now,room.arena,room.spawn_history);room.players[pid]=p
     if room.host is None:room.host=pid
     room.last_active=now
@@ -224,6 +225,14 @@ class Room:
             if is_team_mode(mode):balance_teams(self.players)
             else:
                 for p in self.players.values():p['team']=None
+        return True
+    def set_operator_skin(self,pid,skin):
+        """Lobby cosmetics only. Team colours are enforced in every snapshot."""
+        if pid not in self.players or self.phase not in ('lobby','results'):
+            return False
+        if not isinstance(skin,str) or skin not in OPERATOR_SKINS:
+            return False
+        self.players[pid]['operator_skin_choice']=skin
         return True
     def set_ready(self,pid,ready):
         """Ready-up is optional and can only change the caller's own flag."""
@@ -512,7 +521,7 @@ class Room:
             objective=({**self.control_point,'controller':self.control_owner,
                         'contested':self.control_contested,'presence':self.control_presence.copy()}
                        if self.mode=='control' else None),
-            winReason=self.win_reason,players=[{k:p[k] for k in fields}|dict(inputQueue=len(p['commands']),inputOverruns=p.get('input_overruns',0),reload=max(0,p['reload_at']-now),respawn=max(0,p['respawn_at']-now),shield=max(0,p['shield']-now),slide=max(0,p['slide_until']-p['motion_time']),slideCooldown=max(0,p['slide_ready']-p['motion_time']),switch=0.,regenDelay=max(0.,p['regen_after']-now) if 0<p['hp']<MAX_HEALTH else 0.) for p in list(self.players.values())+list(self.bots.values())],targets=self.targets,events=self.events,remaining=max(0,ROUND_SECONDS-((self.ended_at if self.phase=='results' else now)-self.started)) if self.phase in ('playing','results') else ROUND_SECONDS,countdown=max(0,self.countdown_at-now),winner=self.winner)
+            winReason=self.win_reason,players=[{k:p[k] for k in fields}|dict(operator_skin_choice=p.get('operator_skin_choice','woodland'),operator_skin=effective_operator_skin(p,self.next_mode if self.phase in ('lobby','results') else self.mode),inputQueue=len(p['commands']),inputOverruns=p.get('input_overruns',0),reload=max(0,p['reload_at']-now),respawn=max(0,p['respawn_at']-now),shield=max(0,p['shield']-now),slide=max(0,p['slide_until']-p['motion_time']),slideCooldown=max(0,p['slide_ready']-p['motion_time']),switch=0.,regenDelay=max(0.,p['regen_after']-now) if 0<p['hp']<MAX_HEALTH else 0.) for p in list(self.players.values())+list(self.bots.values())],targets=self.targets,events=self.events,remaining=max(0,ROUND_SECONDS-((self.ended_at if self.phase=='results' else now)-self.started)) if self.phase in ('playing','results') else ROUND_SECONDS,countdown=max(0,self.countdown_at-now),winner=self.winner)
 
 rooms={}
 async def create_room(request):
@@ -543,7 +552,7 @@ async def socket(request):
     try:weapon=max(0,min(3,int(request.query.get('weapon','0'))))
     except ValueError:weapon=0
     if room.mode=='gungame' and room.phase!='lobby':weapon=0
-    p=new_player(room,pid,name,time.monotonic(),weapon);room.sockets[pid]=ws
+    p=new_player(room,pid,name,time.monotonic(),weapon,request.query.get('operatorSkin','woodland'));room.sockets[pid]=ws
     await ws.send_json(dict(type='welcome',id=pid,room=code,mapId=room.arena.id));room.event('notice',text=f'{name} joined')
     bucket=0;bucket_time=time.monotonic()
     try:
@@ -589,6 +598,7 @@ async def socket(request):
                 elif action=='start':room.start(pid,now)
                 elif action=='mode':room.set_mode(pid,data.get('mode'))
                 elif action=='ready':room.set_ready(pid,data.get('ready') is True)
+                elif action=='operator_skin':room.set_operator_skin(pid,data.get('skin'))
                 elif action=='balance':room.balance(pid)
             except (ValueError,TypeError,OverflowError):continue
     finally:

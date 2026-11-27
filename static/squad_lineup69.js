@@ -6,8 +6,8 @@
  * Never participates in world collision, aim, network state or gameplay.
  */
 import * as T from 'three';
-import {makeLobbyAvatar,disposePlayer} from './models.js';
-import {skinColor56} from './preferences56.js';
+import {makeLobbyAvatar,disposePlayer,setOperator03Skin,syncOperator03Rig} from './models.js';
+import {operator03Color,OPERATOR03_SKINS} from './operator03_skins.js';
 
 const MAX_SLOTS=8;
 const STAGE_HEIGHT=3.45;
@@ -119,7 +119,8 @@ export function createSquadLineup(canvas,roster){
     if(pad){pad.ring.material.color.setHex(OPEN_COLOR);pad.ring.material.opacity=.32;}
     continue;
    }
-   const color=skinColor56(player.skin);
+   const camo=player.operator_skin||'woodland';
+   const color=operator03Color(camo);
    const colorCss='#'+color.toString(16).padStart(6,'0');
    item.style.setProperty('--squad-color',colorCss);
    if(player.id===selfId)item.classList.add('is-you');
@@ -129,7 +130,8 @@ export function createSquadLineup(canvas,roster){
    const role=player.id===hostId?'HOST':player.id===selfId?'YOU':'SQUAD';
    const team=(mode==='teamdeathmatch'||mode==='control')&&player.team?
     player.team.toUpperCase()+' · ':'';
-   detail.textContent=team+role+' · '+(player.ready?'READY':'NOT READY');
+   const skinLabel=(OPERATOR03_SKINS.find(s=>s.id===camo)?.label||'Woodland').toUpperCase();
+   detail.textContent=team+role+' · '+skinLabel+' · '+(player.ready?'READY':'NOT READY');
    if(pad){
     const frameColor=player.ready?READY_COLOR:TEAM_COLORS[player.team]||color;
     pad.ring.material.color.setHex(frameColor);
@@ -141,7 +143,9 @@ export function createSquadLineup(canvas,roster){
      if(actor)disposePlayer(actor);
      actor=makeLobbyAvatar(player.name,color);
      scene.add(actor);actors.set(player.id,actor);
+     setOperator03Skin(actor,camo);
     }
+    if(actor.userData.operator03Wanted!==camo)setOperator03Skin(actor,camo);
     actor.position.set(slotX(i),0,0);
     actor.rotation.y=(i%2?-.12:.12);
    }
@@ -167,6 +171,7 @@ export function createSquadLineup(canvas,roster){
     actor.position.y=.013*Math.sin(time*1.5+i*.7);
     actor.rotation.y=.08*Math.sin(time*.45+i*.65);
     actor.userData.head.rotation.y=.08*Math.sin(time*.9+i);
+    syncOperator03Rig(actor);
    });
   }
   renderOnce();

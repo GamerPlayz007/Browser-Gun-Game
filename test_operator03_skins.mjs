@@ -1,0 +1,26 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {OPERATOR03_SKINS,OPERATOR03_DEFAULT,operator03Skin,
+ operator03EffectiveSkin,operator03Color} from './static/operator03_skins.js';
+assert.equal(OPERATOR03_SKINS.length,8);
+assert.equal(new Set(OPERATOR03_SKINS.map(x=>x.id)).size,8);
+assert.equal(OPERATOR03_DEFAULT,'woodland');
+assert.equal(operator03Skin('bad-value'),'woodland');
+assert.equal(operator03EffectiveSkin('desert','deathmatch','azure'),'desert');
+assert.equal(operator03EffectiveSkin('jungle','gungame','ember'),'jungle');
+assert.equal(operator03EffectiveSkin('desert','teamdeathmatch','azure'),'arctic');
+assert.equal(operator03EffectiveSkin('desert','teamdeathmatch','ember'),'shadow');
+assert.equal(operator03EffectiveSkin('desert','control','azure'),'arctic');
+assert.equal(operator03EffectiveSkin('desert','control','ember'),'shadow');
+assert.notEqual(operator03Color('arctic'),operator03Color('shadow'));
+const html=readFileSync('static/index.html','utf8');
+const game=readFileSync('static/game.js','utf8');
+const models=readFileSync('static/models.js','utf8');
+const server=readFileSync('server.py','utf8');
+assert.ok(html.includes('id="operator-skin-home"'));
+assert.ok(html.includes('id="operator-skin-room"'));
+assert.ok(game.includes('operatorSkin='));
+assert.ok(game.includes('setOperator03Skin(g,camo)'));
+assert.ok(models.includes('syncOperator03Rig(root)'));
+assert.ok(server.includes('effective_operator_skin('));
+console.log('Operator 03: 8 camouflages, lobby controls, network, team overrides and rig adapter passed.');
