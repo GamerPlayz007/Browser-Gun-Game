@@ -1,0 +1,2014 @@
+{
+  "model": "CROSSFIRE_AWP_ReferenceInspired_v03",
+  "source_image": "Reference_Image.png",
+  "type": "Nonfunctional digital FPS game-art prop. Not a working mechanical reproduction.",
+  "geometry": {
+    "meshes": 396,
+    "triangles": 29962
+  },
+  "materials": [
+    "olive",
+    "olive_light",
+    "olive_recess",
+    "receiver_black",
+    "receiver_edge",
+    "barrel_black",
+    "barrel_highlight",
+    "scope_black",
+    "scope_edge",
+    "rubber",
+    "grip_poly",
+    "steel",
+    "screws",
+    "silver_label",
+    "optic_lens",
+    "dark_olive",
+    "mid_olive",
+    "shadow_slots",
+    "rail_black"
+  ],
+  "dimensions": "Arbitrary artistic units based on image pixel proportions",
+  "notes": "v0.3 major silhouette rework based on the visible external features; mechanical systems not modeled.",
+  "parts": [
+    {
+      "name": "F01_FOREND_olive_shell",
+      "material": "olive",
+      "triangles": 352
+    },
+    {
+      "name": "F02_FOREND_lower_rib",
+      "material": "olive_light",
+      "triangles": 16
+    },
+    {
+      "name": "F03_FOREND_front_bezel",
+      "material": "mid_olive",
+      "triangles": 16
+    },
+    {
+      "name": "F04_FOREND_top_rail",
+      "material": "receiver_black",
+      "triangles": 12
+    },
+    {
+      "name": "R01_RECEIVER_main",
+      "material": "receiver_black",
+      "triangles": 48
+    },
+    {
+      "name": "R02_RECEIVER_side_olive",
+      "material": "olive_light",
+      "triangles": 40
+    },
+    {
+      "name": "R03_RECEIVER_step_top",
+      "material": "receiver_edge",
+      "triangles": 12
+    },
+    {
+      "name": "R04_RECEIVER_bolt_panel",
+      "material": "receiver_black",
+      "triangles": 24
+    },
+    {
+      "name": "R05_RECEIVER_side_lower_contour",
+      "material": "dark_olive",
+      "triangles": 36
+    },
+    {
+      "name": "S01_STOCK_thumbhole_shell",
+      "material": "olive",
+      "triangles": 608
+    },
+    {
+      "name": "S02_STOCK_upper_slab",
+      "material": "olive_light",
+      "triangles": 16
+    },
+    {
+      "name": "S03_STOCK_lower_panel",
+      "material": "dark_olive",
+      "triangles": 32
+    },
+    {
+      "name": "S04_STOCK_fine_mold_seam",
+      "material": "olive_recess",
+      "triangles": 116
+    },
+    {
+      "name": "S05_STOCK_lower_mold_seam",
+      "material": "mid_olive",
+      "triangles": 80
+    },
+    {
+      "name": "S06_STOCK_visor",
+      "material": "dark_olive",
+      "triangles": 16
+    },
+    {
+      "name": "S07_STOCK_buttpad",
+      "material": "rubber",
+      "triangles": 20
+    },
+    {
+      "name": "S08_STOCK_buttpad_edge",
+      "material": "receiver_black",
+      "triangles": 20
+    },
+    {
+      "name": "S09_STOCK_thumbhole_rim",
+      "material": "mid_olive",
+      "triangles": 448
+    },
+    {
+      "name": "S10_STOCK_cheek_riser",
+      "material": "dark_olive",
+      "triangles": 20
+    },
+    {
+      "name": "S11_STOCK_cheek_pad",
+      "material": "rubber",
+      "triangles": 16
+    },
+    {
+      "name": "G01_GRIP_underbody",
+      "material": "grip_poly",
+      "triangles": 80
+    },
+    {
+      "name": "G02_GRIP_raised_lip",
+      "material": "rubber",
+      "triangles": 20
+    },
+    {
+      "name": "G03_TRIGGER_guard_ring",
+      "material": "receiver_black",
+      "triangles": 56
+    },
+    {
+      "name": "G04_TRIGGER_silhouette",
+      "material": "steel",
+      "triangles": 84
+    },
+    {
+      "name": "M01_MAGAZINE_profile",
+      "material": "receiver_black",
+      "triangles": 28
+    },
+    {
+      "name": "M02_MAGAZINE_front_face",
+      "material": "dark_olive",
+      "triangles": 12
+    },
+    {
+      "name": "M03_MAGAZINE_baseplate",
+      "material": "receiver_edge",
+      "triangles": 12
+    },
+    {
+      "name": "M04_MAGAZINE_striation_0",
+      "material": "shadow_slots",
+      "triangles": 68
+    },
+    {
+      "name": "M04_MAGAZINE_striation_1",
+      "material": "shadow_slots",
+      "triangles": 68
+    },
+    {
+      "name": "M04_MAGAZINE_striation_2",
+      "material": "shadow_slots",
+      "triangles": 68
+    },
+    {
+      "name": "M04_MAGAZINE_striation_3",
+      "material": "shadow_slots",
+      "triangles": 68
+    },
+    {
+      "name": "B01_BARREL_steel_tube",
+      "material": "barrel_black",
+      "triangles": 176
+    },
+    {
+      "name": "B02_BARREL_socket_step",
+      "material": "receiver_edge",
+      "triangles": 144
+    },
+    {
+      "name": "B03_BARREL_socket_band",
+      "material": "steel",
+      "triangles": 144
+    },
+    {
+      "name": "B04_BARREL_linear_highlight",
+      "material": "barrel_highlight",
+      "triangles": 80
+    },
+    {
+      "name": "B05_MUZZLE_shroud",
+      "material": "barrel_black",
+      "triangles": 560
+    },
+    {
+      "name": "B06_MUZZLE_vent_recess_0",
+      "material": "shadow_slots",
+      "triangles": 76
+    },
+    {
+      "name": "B06_MUZZLE_vent_recess_1",
+      "material": "shadow_slots",
+      "triangles": 76
+    },
+    {
+      "name": "B06_MUZZLE_vent_recess_2",
+      "material": "shadow_slots",
+      "triangles": 76
+    },
+    {
+      "name": "B06_MUZZLE_vent_recess_3",
+      "material": "shadow_slots",
+      "triangles": 76
+    },
+    {
+      "name": "B07_MUZZLE_band_30",
+      "material": "receiver_edge",
+      "triangles": 192
+    },
+    {
+      "name": "B07_MUZZLE_band_129",
+      "material": "receiver_edge",
+      "triangles": 192
+    },
+    {
+      "name": "F05_FOREND_inset_slot_0",
+      "material": "shadow_slots",
+      "triangles": 100
+    },
+    {
+      "name": "F05_FOREND_inset_slot_1",
+      "material": "shadow_slots",
+      "triangles": 100
+    },
+    {
+      "name": "F05_FOREND_inset_slot_2",
+      "material": "shadow_slots",
+      "triangles": 100
+    },
+    {
+      "name": "F05_FOREND_inset_slot_3",
+      "material": "shadow_slots",
+      "triangles": 100
+    },
+    {
+      "name": "F06_FOREND_lower_seam",
+      "material": "olive_recess",
+      "triangles": 84
+    },
+    {
+      "name": "F07_FOREND_diagnostic_inlay",
+      "material": "olive_recess",
+      "triangles": 80
+    },
+    {
+      "name": "R06_RECEIVER_upper_line",
+      "material": "steel",
+      "triangles": 68
+    },
+    {
+      "name": "R07_RECEIVER_side_step",
+      "material": "olive_recess",
+      "triangles": 88
+    },
+    {
+      "name": "D01_FASTENER_00_head",
+      "material": "screws",
+      "triangles": 48
+    },
+    {
+      "name": "D01_FASTENER_00_core",
+      "material": "steel",
+      "triangles": 40
+    },
+    {
+      "name": "D01_FASTENER_00_slot",
+      "material": "shadow_slots",
+      "triangles": 68
+    },
+    {
+      "name": "D01_FASTENER_01_head",
+      "material": "screws",
+      "triangles": 48
+    },
+    {
+      "name": "D01_FASTENER_01_core",
+      "material": "steel",
+      "triangles": 40
+    },
+    {
+      "name": "D01_FASTENER_01_slot",
+      "material": "shadow_slots",
+      "triangles": 68
+    },
+    {
+      "name": "D01_FASTENER_02_head",
+      "material": "screws",
+      "triangles": 48
+    },
+    {
+      "name": "D01_FASTENER_02_core",
+      "material": "steel",
+      "triangles": 40
+    },
+    {
+      "name": "D01_FASTENER_02_slot",
+      "material": "shadow_slots",
+      "triangles": 68
+    },
+    {
+      "name": "D01_FASTENER_03_head",
+      "material": "screws",
+      "triangles": 48
+    },
+    {
+      "name": "D01_FASTENER_03_core",
+      "material": "steel",
+      "triangles": 40
+    },
+    {
+      "name": "D01_FASTENER_03_slot",
+      "material": "shadow_slots",
+      "triangles": 68
+    },
+    {
+      "name": "D01_FASTENER_04_head",
+      "material": "screws",
+      "triangles": 48
+    },
+    {
+      "name": "D01_FASTENER_04_core",
+      "material": "steel",
+      "triangles": 40
+    },
+    {
+      "name": "D01_FASTENER_04_slot",
+      "material": "shadow_slots",
+      "triangles": 68
+    },
+    {
+      "name": "D01_FASTENER_05_head",
+      "material": "screws",
+      "triangles": 48
+    },
+    {
+      "name": "D01_FASTENER_05_core",
+      "material": "steel",
+      "triangles": 40
+    },
+    {
+      "name": "D01_FASTENER_05_slot",
+      "material": "shadow_slots",
+      "triangles": 68
+    },
+    {
+      "name": "D01_FASTENER_06_head",
+      "material": "screws",
+      "triangles": 48
+    },
+    {
+      "name": "D01_FASTENER_06_core",
+      "material": "steel",
+      "triangles": 40
+    },
+    {
+      "name": "D01_FASTENER_06_slot",
+      "material": "shadow_slots",
+      "triangles": 68
+    },
+    {
+      "name": "D01_FASTENER_07_head",
+      "material": "screws",
+      "triangles": 48
+    },
+    {
+      "name": "D01_FASTENER_07_core",
+      "material": "steel",
+      "triangles": 40
+    },
+    {
+      "name": "D01_FASTENER_07_slot",
+      "material": "shadow_slots",
+      "triangles": 68
+    },
+    {
+      "name": "D01_FASTENER_08_head",
+      "material": "screws",
+      "triangles": 48
+    },
+    {
+      "name": "D01_FASTENER_08_core",
+      "material": "steel",
+      "triangles": 40
+    },
+    {
+      "name": "D01_FASTENER_08_slot",
+      "material": "shadow_slots",
+      "triangles": 68
+    },
+    {
+      "name": "D01_FASTENER_09_head",
+      "material": "screws",
+      "triangles": 48
+    },
+    {
+      "name": "D01_FASTENER_09_core",
+      "material": "steel",
+      "triangles": 40
+    },
+    {
+      "name": "D01_FASTENER_09_slot",
+      "material": "shadow_slots",
+      "triangles": 68
+    },
+    {
+      "name": "D01_FASTENER_10_head",
+      "material": "screws",
+      "triangles": 48
+    },
+    {
+      "name": "D01_FASTENER_10_core",
+      "material": "steel",
+      "triangles": 40
+    },
+    {
+      "name": "D01_FASTENER_10_slot",
+      "material": "shadow_slots",
+      "triangles": 68
+    },
+    {
+      "name": "D01_FASTENER_11_head",
+      "material": "screws",
+      "triangles": 48
+    },
+    {
+      "name": "D01_FASTENER_11_core",
+      "material": "steel",
+      "triangles": 40
+    },
+    {
+      "name": "D01_FASTENER_11_slot",
+      "material": "shadow_slots",
+      "triangles": 68
+    },
+    {
+      "name": "S12_BUTTPAD_ribline",
+      "material": "receiver_edge",
+      "triangles": 68
+    },
+    {
+      "name": "S13_BUTTPAD_molding_0",
+      "material": "receiver_black",
+      "triangles": 68
+    },
+    {
+      "name": "S13_BUTTPAD_molding_1",
+      "material": "receiver_black",
+      "triangles": 68
+    },
+    {
+      "name": "S13_BUTTPAD_molding_2",
+      "material": "receiver_black",
+      "triangles": 68
+    },
+    {
+      "name": "S13_BUTTPAD_molding_3",
+      "material": "receiver_black",
+      "triangles": 68
+    },
+    {
+      "name": "F08_FRONT_mould_recess_0",
+      "material": "shadow_slots",
+      "triangles": 100
+    },
+    {
+      "name": "F08_FRONT_mould_recess_1",
+      "material": "shadow_slots",
+      "triangles": 100
+    },
+    {
+      "name": "F08_FRONT_mould_recess_2",
+      "material": "shadow_slots",
+      "triangles": 100
+    },
+    {
+      "name": "O01_SCOPE_rail_mount",
+      "material": "rail_black",
+      "triangles": 12
+    },
+    {
+      "name": "O02_RAIL_tooth_0",
+      "material": "receiver_edge",
+      "triangles": 12
+    },
+    {
+      "name": "O02_RAIL_tooth_1",
+      "material": "receiver_edge",
+      "triangles": 12
+    },
+    {
+      "name": "O02_RAIL_tooth_2",
+      "material": "receiver_edge",
+      "triangles": 12
+    },
+    {
+      "name": "O02_RAIL_tooth_3",
+      "material": "receiver_edge",
+      "triangles": 12
+    },
+    {
+      "name": "O02_RAIL_tooth_4",
+      "material": "receiver_edge",
+      "triangles": 12
+    },
+    {
+      "name": "O02_RAIL_tooth_5",
+      "material": "receiver_edge",
+      "triangles": 12
+    },
+    {
+      "name": "O02_RAIL_tooth_6",
+      "material": "receiver_edge",
+      "triangles": 12
+    },
+    {
+      "name": "O02_RAIL_tooth_7",
+      "material": "receiver_edge",
+      "triangles": 12
+    },
+    {
+      "name": "O02_RAIL_tooth_8",
+      "material": "receiver_edge",
+      "triangles": 12
+    },
+    {
+      "name": "O02_RAIL_tooth_9",
+      "material": "receiver_edge",
+      "triangles": 12
+    },
+    {
+      "name": "O02_RAIL_tooth_10",
+      "material": "receiver_edge",
+      "triangles": 12
+    },
+    {
+      "name": "O03_SCOPE_ring_foot_0",
+      "material": "scope_edge",
+      "triangles": 12
+    },
+    {
+      "name": "O04_SCOPE_ring_bolt_0",
+      "material": "screws",
+      "triangles": 80
+    },
+    {
+      "name": "O03_SCOPE_ring_foot_1",
+      "material": "scope_edge",
+      "triangles": 12
+    },
+    {
+      "name": "O04_SCOPE_ring_bolt_1",
+      "material": "screws",
+      "triangles": 80
+    },
+    {
+      "name": "O05_OPTIC_front_objective",
+      "material": "scope_black",
+      "triangles": 672
+    },
+    {
+      "name": "O06_OPTIC_center_tube",
+      "material": "scope_black",
+      "triangles": 160
+    },
+    {
+      "name": "O07_OPTIC_rear_eyepiece",
+      "material": "scope_black",
+      "triangles": 384
+    },
+    {
+      "name": "O08_OPTIC_front_glass",
+      "material": "optic_lens",
+      "triangles": 192
+    },
+    {
+      "name": "O09_OPTIC_rear_glass",
+      "material": "optic_lens",
+      "triangles": 192
+    },
+    {
+      "name": "O10_OPTIC_rim_0",
+      "material": "scope_edge",
+      "triangles": 192
+    },
+    {
+      "name": "O10_OPTIC_rim_1",
+      "material": "scope_edge",
+      "triangles": 192
+    },
+    {
+      "name": "O10_OPTIC_rim_2",
+      "material": "scope_edge",
+      "triangles": 192
+    },
+    {
+      "name": "O10_OPTIC_rim_3",
+      "material": "scope_edge",
+      "triangles": 192
+    },
+    {
+      "name": "O11_OPTIC_rear_gripring_0",
+      "material": "scope_edge",
+      "triangles": 192
+    },
+    {
+      "name": "O11_OPTIC_rear_gripring_1",
+      "material": "scope_edge",
+      "triangles": 192
+    },
+    {
+      "name": "O11_OPTIC_rear_gripring_2",
+      "material": "scope_edge",
+      "triangles": 192
+    },
+    {
+      "name": "O11_OPTIC_rear_gripring_3",
+      "material": "scope_edge",
+      "triangles": 192
+    },
+    {
+      "name": "O11_OPTIC_rear_gripring_4",
+      "material": "scope_edge",
+      "triangles": 192
+    },
+    {
+      "name": "O11_OPTIC_rear_gripring_5",
+      "material": "scope_edge",
+      "triangles": 192
+    },
+    {
+      "name": "O11_OPTIC_rear_gripring_6",
+      "material": "scope_edge",
+      "triangles": 192
+    },
+    {
+      "name": "O11_OPTIC_rear_gripring_7",
+      "material": "scope_edge",
+      "triangles": 192
+    },
+    {
+      "name": "O11_OPTIC_rear_gripring_8",
+      "material": "scope_edge",
+      "triangles": 192
+    },
+    {
+      "name": "O11_OPTIC_rear_gripring_9",
+      "material": "scope_edge",
+      "triangles": 192
+    },
+    {
+      "name": "O12_OPTIC_top_turret",
+      "material": "scope_edge",
+      "triangles": 112
+    },
+    {
+      "name": "O13_OPTIC_top_dial",
+      "material": "scope_black",
+      "triangles": 128
+    },
+    {
+      "name": "O14_OPTIC_dial_serration_0",
+      "material": "receiver_edge",
+      "triangles": 12
+    },
+    {
+      "name": "O14_OPTIC_dial_serration_1",
+      "material": "receiver_edge",
+      "triangles": 12
+    },
+    {
+      "name": "O14_OPTIC_dial_serration_2",
+      "material": "receiver_edge",
+      "triangles": 12
+    },
+    {
+      "name": "O14_OPTIC_dial_serration_3",
+      "material": "receiver_edge",
+      "triangles": 12
+    },
+    {
+      "name": "O14_OPTIC_dial_serration_4",
+      "material": "receiver_edge",
+      "triangles": 12
+    },
+    {
+      "name": "O14_OPTIC_dial_serration_5",
+      "material": "receiver_edge",
+      "triangles": 12
+    },
+    {
+      "name": "O14_OPTIC_dial_serration_6",
+      "material": "receiver_edge",
+      "triangles": 12
+    },
+    {
+      "name": "O15_OPTIC_side_turret",
+      "material": "scope_black",
+      "triangles": 144
+    },
+    {
+      "name": "O16_OPTIC_side_turret_center",
+      "material": "scope_edge",
+      "triangles": 128
+    },
+    {
+      "name": "O17_OPTIC_side_turret_badge",
+      "material": "steel",
+      "triangles": 96
+    },
+    {
+      "name": "O18_OPTIC_mount_band_0",
+      "material": "scope_edge",
+      "triangles": 12
+    },
+    {
+      "name": "O19_OPTIC_mount_screw_0_0_head",
+      "material": "screws",
+      "triangles": 48
+    },
+    {
+      "name": "O19_OPTIC_mount_screw_0_0_core",
+      "material": "steel",
+      "triangles": 40
+    },
+    {
+      "name": "O19_OPTIC_mount_screw_0_0_slot",
+      "material": "shadow_slots",
+      "triangles": 68
+    },
+    {
+      "name": "O19_OPTIC_mount_screw_0_1_head",
+      "material": "screws",
+      "triangles": 48
+    },
+    {
+      "name": "O19_OPTIC_mount_screw_0_1_core",
+      "material": "steel",
+      "triangles": 40
+    },
+    {
+      "name": "O19_OPTIC_mount_screw_0_1_slot",
+      "material": "shadow_slots",
+      "triangles": 68
+    },
+    {
+      "name": "O18_OPTIC_mount_band_1",
+      "material": "scope_edge",
+      "triangles": 12
+    },
+    {
+      "name": "O19_OPTIC_mount_screw_1_0_head",
+      "material": "screws",
+      "triangles": 48
+    },
+    {
+      "name": "O19_OPTIC_mount_screw_1_0_core",
+      "material": "steel",
+      "triangles": 40
+    },
+    {
+      "name": "O19_OPTIC_mount_screw_1_0_slot",
+      "material": "shadow_slots",
+      "triangles": 68
+    },
+    {
+      "name": "O19_OPTIC_mount_screw_1_1_head",
+      "material": "screws",
+      "triangles": 48
+    },
+    {
+      "name": "O19_OPTIC_mount_screw_1_1_core",
+      "material": "steel",
+      "triangles": 40
+    },
+    {
+      "name": "O19_OPTIC_mount_screw_1_1_slot",
+      "material": "shadow_slots",
+      "triangles": 68
+    },
+    {
+      "name": "R08_BOLT_diagonal_visual",
+      "material": "receiver_black",
+      "triangles": 68
+    },
+    {
+      "name": "R09_BOLT_handle_knob",
+      "material": "receiver_edge",
+      "triangles": 80
+    },
+    {
+      "name": "S14_REAR_support_leg",
+      "material": "receiver_black",
+      "triangles": 12
+    },
+    {
+      "name": "S15_REAR_support_foot",
+      "material": "rubber",
+      "triangles": 16
+    },
+    {
+      "name": "S16_REAR_support_brace",
+      "material": "receiver_edge",
+      "triangles": 16
+    },
+    {
+      "name": "S17_SUPPORT_pin_0_head",
+      "material": "screws",
+      "triangles": 48
+    },
+    {
+      "name": "S17_SUPPORT_pin_0_core",
+      "material": "steel",
+      "triangles": 40
+    },
+    {
+      "name": "S17_SUPPORT_pin_0_slot",
+      "material": "shadow_slots",
+      "triangles": 68
+    },
+    {
+      "name": "S17_SUPPORT_pin_1_head",
+      "material": "screws",
+      "triangles": 48
+    },
+    {
+      "name": "S17_SUPPORT_pin_1_core",
+      "material": "steel",
+      "triangles": 40
+    },
+    {
+      "name": "S17_SUPPORT_pin_1_slot",
+      "material": "shadow_slots",
+      "triangles": 68
+    },
+    {
+      "name": "G05_GRIP_grain_0_0",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_0_1",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_0_2",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_1_0",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_1_1",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_1_2",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_2_0",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_2_1",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_2_2",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_3_0",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_3_1",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_3_2",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_4_0",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_4_1",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_4_2",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_4_3",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_5_0",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_5_1",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_5_2",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_6_0",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_6_1",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_6_2",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_6_3",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_7_0",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_7_1",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_7_2",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_7_3",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_8_0",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_8_1",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_8_2",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_8_3",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_9_0",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_9_1",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_9_2",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_9_3",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_10_0",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_10_1",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_10_2",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_10_3",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_10_4",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_11_0",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_11_1",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_11_2",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_11_3",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_11_4",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_12_0",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_12_1",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_12_2",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_12_3",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_12_4",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_13_0",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_13_1",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_13_2",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_13_3",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_13_4",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_14_0",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_14_1",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_14_2",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_14_3",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_14_4",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_15_0",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_15_1",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_15_2",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_15_3",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_15_4",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_16_0",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_16_1",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_16_2",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_16_3",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "G05_GRIP_grain_16_4",
+      "material": "olive_recess",
+      "triangles": 32
+    },
+    {
+      "name": "S18_STOCK_top_join_line_0",
+      "material": "olive_recess",
+      "triangles": 68
+    },
+    {
+      "name": "S18_STOCK_top_join_line_1",
+      "material": "olive_recess",
+      "triangles": 68
+    },
+    {
+      "name": "S18_STOCK_top_join_line_2",
+      "material": "olive_recess",
+      "triangles": 68
+    },
+    {
+      "name": "S18_STOCK_top_join_line_3",
+      "material": "olive_recess",
+      "triangles": 68
+    },
+    {
+      "name": "V02_CHEEK_upper_facet",
+      "material": "olive_light",
+      "triangles": 60
+    },
+    {
+      "name": "V02_CHEEK_riser_shoulder_0",
+      "material": "receiver_edge",
+      "triangles": 12
+    },
+    {
+      "name": "V02_CHEEK_pin_0",
+      "material": "screws",
+      "triangles": 80
+    },
+    {
+      "name": "V02_CHEEK_riser_shoulder_1",
+      "material": "receiver_edge",
+      "triangles": 12
+    },
+    {
+      "name": "V02_CHEEK_pin_1",
+      "material": "screws",
+      "triangles": 80
+    },
+    {
+      "name": "V02_FOREND_vent_lip_top_0",
+      "material": "mid_olive",
+      "triangles": 68
+    },
+    {
+      "name": "V02_FOREND_vent_lip_low_0",
+      "material": "olive_recess",
+      "triangles": 68
+    },
+    {
+      "name": "V02_FOREND_vent_lip_top_1",
+      "material": "mid_olive",
+      "triangles": 68
+    },
+    {
+      "name": "V02_FOREND_vent_lip_low_1",
+      "material": "olive_recess",
+      "triangles": 68
+    },
+    {
+      "name": "V02_FOREND_vent_lip_top_2",
+      "material": "mid_olive",
+      "triangles": 68
+    },
+    {
+      "name": "V02_FOREND_vent_lip_low_2",
+      "material": "olive_recess",
+      "triangles": 68
+    },
+    {
+      "name": "V02_BARREL_shallow_flute_0",
+      "material": "receiver_edge",
+      "triangles": 68
+    },
+    {
+      "name": "V02_BARREL_shallow_flute_1",
+      "material": "receiver_edge",
+      "triangles": 68
+    },
+    {
+      "name": "V02_RECEIVER_side_chamfer",
+      "material": "dark_olive",
+      "triangles": 20
+    },
+    {
+      "name": "V02_RECEIVER_lower_engraved_seam",
+      "material": "receiver_edge",
+      "triangles": 92
+    },
+    {
+      "name": "V02_STOCK_cheek_to_grip_curve",
+      "material": "olive_recess",
+      "triangles": 88
+    },
+    {
+      "name": "V02_RECEIVER_hardware_00_head",
+      "material": "screws",
+      "triangles": 48
+    },
+    {
+      "name": "V02_RECEIVER_hardware_00_core",
+      "material": "steel",
+      "triangles": 40
+    },
+    {
+      "name": "V02_RECEIVER_hardware_00_slot",
+      "material": "shadow_slots",
+      "triangles": 68
+    },
+    {
+      "name": "V02_RECEIVER_hardware_01_head",
+      "material": "screws",
+      "triangles": 48
+    },
+    {
+      "name": "V02_RECEIVER_hardware_01_core",
+      "material": "steel",
+      "triangles": 40
+    },
+    {
+      "name": "V02_RECEIVER_hardware_01_slot",
+      "material": "shadow_slots",
+      "triangles": 68
+    },
+    {
+      "name": "V02_RECEIVER_hardware_02_head",
+      "material": "screws",
+      "triangles": 48
+    },
+    {
+      "name": "V02_RECEIVER_hardware_02_core",
+      "material": "steel",
+      "triangles": 40
+    },
+    {
+      "name": "V02_RECEIVER_hardware_02_slot",
+      "material": "shadow_slots",
+      "triangles": 68
+    },
+    {
+      "name": "V02_RECEIVER_hardware_03_head",
+      "material": "screws",
+      "triangles": 48
+    },
+    {
+      "name": "V02_RECEIVER_hardware_03_core",
+      "material": "steel",
+      "triangles": 40
+    },
+    {
+      "name": "V02_RECEIVER_hardware_03_slot",
+      "material": "shadow_slots",
+      "triangles": 68
+    },
+    {
+      "name": "V02_RECEIVER_hardware_04_head",
+      "material": "screws",
+      "triangles": 48
+    },
+    {
+      "name": "V02_RECEIVER_hardware_04_core",
+      "material": "steel",
+      "triangles": 40
+    },
+    {
+      "name": "V02_RECEIVER_hardware_04_slot",
+      "material": "shadow_slots",
+      "triangles": 68
+    },
+    {
+      "name": "V02_RECEIVER_hardware_05_head",
+      "material": "screws",
+      "triangles": 48
+    },
+    {
+      "name": "V02_RECEIVER_hardware_05_core",
+      "material": "steel",
+      "triangles": 40
+    },
+    {
+      "name": "V02_RECEIVER_hardware_05_slot",
+      "material": "shadow_slots",
+      "triangles": 68
+    },
+    {
+      "name": "V02_RECEIVER_hardware_06_head",
+      "material": "screws",
+      "triangles": 48
+    },
+    {
+      "name": "V02_RECEIVER_hardware_06_core",
+      "material": "steel",
+      "triangles": 40
+    },
+    {
+      "name": "V02_RECEIVER_hardware_06_slot",
+      "material": "shadow_slots",
+      "triangles": 68
+    },
+    {
+      "name": "V02_SCOPE_retaining_lip_0",
+      "material": "scope_edge",
+      "triangles": 224
+    },
+    {
+      "name": "V02_SCOPE_retaining_lip_1",
+      "material": "scope_edge",
+      "triangles": 224
+    },
+    {
+      "name": "V02_SCOPE_retaining_lip_2",
+      "material": "scope_edge",
+      "triangles": 224
+    },
+    {
+      "name": "V02_SCOPE_retaining_lip_3",
+      "material": "scope_edge",
+      "triangles": 224
+    },
+    {
+      "name": "V02_SCOPE_retaining_lip_4",
+      "material": "scope_edge",
+      "triangles": 224
+    },
+    {
+      "name": "V02_SCOPE_dial_facet_0",
+      "material": "receiver_edge",
+      "triangles": 48
+    },
+    {
+      "name": "V02_SCOPE_dial_facet_1",
+      "material": "receiver_edge",
+      "triangles": 48
+    },
+    {
+      "name": "V02_SCOPE_dial_facet_2",
+      "material": "receiver_edge",
+      "triangles": 48
+    },
+    {
+      "name": "V02_SCOPE_dial_facet_3",
+      "material": "receiver_edge",
+      "triangles": 48
+    },
+    {
+      "name": "V02_SCOPE_dial_facet_4",
+      "material": "receiver_edge",
+      "triangles": 48
+    },
+    {
+      "name": "V02_SCOPE_dial_facet_5",
+      "material": "receiver_edge",
+      "triangles": 48
+    },
+    {
+      "name": "V02_SCOPE_dial_facet_6",
+      "material": "receiver_edge",
+      "triangles": 48
+    },
+    {
+      "name": "V02_SCOPE_dial_facet_7",
+      "material": "receiver_edge",
+      "triangles": 48
+    },
+    {
+      "name": "V02_SCOPE_dial_facet_8",
+      "material": "receiver_edge",
+      "triangles": 48
+    },
+    {
+      "name": "V02_SCOPE_dial_facet_9",
+      "material": "receiver_edge",
+      "triangles": 48
+    },
+    {
+      "name": "V03_BIPOD_upper_collar",
+      "material": "receiver_edge",
+      "triangles": 56
+    },
+    {
+      "name": "V03_BIPOD_large_leg_0",
+      "material": "receiver_black",
+      "triangles": 96
+    },
+    {
+      "name": "V03_BIPOD_inner_leg_0",
+      "material": "steel",
+      "triangles": 80
+    },
+    {
+      "name": "V03_BIPOD_foot_0",
+      "material": "rubber",
+      "triangles": 80
+    },
+    {
+      "name": "V03_BIPOD_joint_0",
+      "material": "steel",
+      "triangles": 80
+    },
+    {
+      "name": "V03_BIPOD_large_leg_1",
+      "material": "receiver_black",
+      "triangles": 96
+    },
+    {
+      "name": "V03_BIPOD_inner_leg_1",
+      "material": "steel",
+      "triangles": 80
+    },
+    {
+      "name": "V03_BIPOD_foot_1",
+      "material": "rubber",
+      "triangles": 80
+    },
+    {
+      "name": "V03_BIPOD_joint_1",
+      "material": "steel",
+      "triangles": 80
+    },
+    {
+      "name": "V02_REAR_buttpad_end_cap",
+      "material": "rubber",
+      "triangles": 44
+    },
+    {
+      "name": "V03_FOREND_outer_face",
+      "material": "olive",
+      "triangles": 64
+    },
+    {
+      "name": "V03_FOREND_side_bevel",
+      "material": "olive_light",
+      "triangles": 44
+    },
+    {
+      "name": "V03_FOREND_lower_bevel",
+      "material": "dark_olive",
+      "triangles": 16
+    },
+    {
+      "name": "V03_FOREND_vent_top_0",
+      "material": "receiver_edge",
+      "triangles": 68
+    },
+    {
+      "name": "V03_FOREND_vent_bottom_0",
+      "material": "olive_recess",
+      "triangles": 68
+    },
+    {
+      "name": "V03_FOREND_vent_top_1",
+      "material": "receiver_edge",
+      "triangles": 68
+    },
+    {
+      "name": "V03_FOREND_vent_bottom_1",
+      "material": "olive_recess",
+      "triangles": 68
+    },
+    {
+      "name": "V03_FOREND_vent_top_2",
+      "material": "receiver_edge",
+      "triangles": 68
+    },
+    {
+      "name": "V03_FOREND_vent_bottom_2",
+      "material": "olive_recess",
+      "triangles": 68
+    },
+    {
+      "name": "V03_RECEIVER_front_beveled_cheek",
+      "material": "receiver_edge",
+      "triangles": 76
+    },
+    {
+      "name": "V03_RECEIVER_large_outer_chassis",
+      "material": "olive_light",
+      "triangles": 72
+    },
+    {
+      "name": "V03_RECEIVER_grip_bridge",
+      "material": "mid_olive",
+      "triangles": 72
+    },
+    {
+      "name": "V03_RECEIVER_milled_side_window",
+      "material": "shadow_slots",
+      "triangles": 64
+    },
+    {
+      "name": "V03_RECEIVER_milled_side_rim",
+      "material": "steel",
+      "triangles": 48
+    },
+    {
+      "name": "V03_RECEIVER_strong_top_line",
+      "material": "dark_olive",
+      "triangles": 84
+    },
+    {
+      "name": "V03_RECEIVER_strong_lower_line",
+      "material": "olive_recess",
+      "triangles": 92
+    },
+    {
+      "name": "V03_RECEIVER_hero_fastener_0_head",
+      "material": "screws",
+      "triangles": 48
+    },
+    {
+      "name": "V03_RECEIVER_hero_fastener_0_core",
+      "material": "steel",
+      "triangles": 40
+    },
+    {
+      "name": "V03_RECEIVER_hero_fastener_0_slot",
+      "material": "shadow_slots",
+      "triangles": 68
+    },
+    {
+      "name": "V03_RECEIVER_hero_fastener_1_head",
+      "material": "screws",
+      "triangles": 48
+    },
+    {
+      "name": "V03_RECEIVER_hero_fastener_1_core",
+      "material": "steel",
+      "triangles": 40
+    },
+    {
+      "name": "V03_RECEIVER_hero_fastener_1_slot",
+      "material": "shadow_slots",
+      "triangles": 68
+    },
+    {
+      "name": "V03_RECEIVER_hero_fastener_2_head",
+      "material": "screws",
+      "triangles": 48
+    },
+    {
+      "name": "V03_RECEIVER_hero_fastener_2_core",
+      "material": "steel",
+      "triangles": 40
+    },
+    {
+      "name": "V03_RECEIVER_hero_fastener_2_slot",
+      "material": "shadow_slots",
+      "triangles": 68
+    },
+    {
+      "name": "V03_RECEIVER_hero_fastener_3_head",
+      "material": "screws",
+      "triangles": 48
+    },
+    {
+      "name": "V03_RECEIVER_hero_fastener_3_core",
+      "material": "steel",
+      "triangles": 40
+    },
+    {
+      "name": "V03_RECEIVER_hero_fastener_3_slot",
+      "material": "shadow_slots",
+      "triangles": 68
+    },
+    {
+      "name": "V03_RECEIVER_hero_fastener_4_head",
+      "material": "screws",
+      "triangles": 48
+    },
+    {
+      "name": "V03_RECEIVER_hero_fastener_4_core",
+      "material": "steel",
+      "triangles": 40
+    },
+    {
+      "name": "V03_RECEIVER_hero_fastener_4_slot",
+      "material": "shadow_slots",
+      "triangles": 68
+    },
+    {
+      "name": "V03_RECEIVER_hero_fastener_5_head",
+      "material": "screws",
+      "triangles": 48
+    },
+    {
+      "name": "V03_RECEIVER_hero_fastener_5_core",
+      "material": "steel",
+      "triangles": 40
+    },
+    {
+      "name": "V03_RECEIVER_hero_fastener_5_slot",
+      "material": "shadow_slots",
+      "triangles": 68
+    },
+    {
+      "name": "V03_STOCK_contour_top",
+      "material": "olive_light",
+      "triangles": 84
+    },
+    {
+      "name": "V03_STOCK_lower_ergonomic_scoop",
+      "material": "dark_olive",
+      "triangles": 84
+    },
+    {
+      "name": "V03_STOCK_rear_faceted_panel",
+      "material": "olive_light",
+      "triangles": 52
+    },
+    {
+      "name": "V03_STOCK_diagonal_front_neck",
+      "material": "mid_olive",
+      "triangles": 60
+    },
+    {
+      "name": "V03_STOCK_thumbhole_highlight",
+      "material": "olive_light",
+      "triangles": 448
+    },
+    {
+      "name": "V03_CHEEK_primary_cushion",
+      "material": "rubber",
+      "triangles": 64
+    },
+    {
+      "name": "V03_CHEEK_support_tower_0",
+      "material": "receiver_black",
+      "triangles": 44
+    },
+    {
+      "name": "V03_CHEEK_screw_0",
+      "material": "steel",
+      "triangles": 80
+    },
+    {
+      "name": "V03_CHEEK_support_tower_1",
+      "material": "receiver_black",
+      "triangles": 44
+    },
+    {
+      "name": "V03_CHEEK_screw_1",
+      "material": "steel",
+      "triangles": 80
+    },
+    {
+      "name": "V03_CHEEK_pad_fine_seam_0",
+      "material": "scope_edge",
+      "triangles": 68
+    },
+    {
+      "name": "V03_CHEEK_pad_fine_seam_1",
+      "material": "scope_edge",
+      "triangles": 68
+    },
+    {
+      "name": "V03_CHEEK_pad_fine_seam_2",
+      "material": "scope_edge",
+      "triangles": 68
+    },
+    {
+      "name": "V03_CHEEK_pad_fine_seam_3",
+      "material": "scope_edge",
+      "triangles": 68
+    },
+    {
+      "name": "V03_CHEEK_pad_fine_seam_4",
+      "material": "scope_edge",
+      "triangles": 68
+    },
+    {
+      "name": "V03_CHEEK_pad_fine_seam_5",
+      "material": "scope_edge",
+      "triangles": 68
+    },
+    {
+      "name": "V03_GRIP_contoured_elbow",
+      "material": "grip_poly",
+      "triangles": 72
+    },
+    {
+      "name": "V03_GRIP_molded_ridge_0",
+      "material": "dark_olive",
+      "triangles": 68
+    },
+    {
+      "name": "V03_GRIP_molded_ridge_1",
+      "material": "dark_olive",
+      "triangles": 68
+    },
+    {
+      "name": "V03_GRIP_molded_ridge_2",
+      "material": "dark_olive",
+      "triangles": 68
+    },
+    {
+      "name": "V03_GRIP_molded_ridge_3",
+      "material": "dark_olive",
+      "triangles": 68
+    },
+    {
+      "name": "V03_GRIP_molded_ridge_4",
+      "material": "dark_olive",
+      "triangles": 68
+    },
+    {
+      "name": "V03_GRIP_molded_ridge_5",
+      "material": "dark_olive",
+      "triangles": 68
+    },
+    {
+      "name": "V03_GRIP_molded_ridge_6",
+      "material": "dark_olive",
+      "triangles": 68
+    },
+    {
+      "name": "V03_GRIP_molded_ridge_7",
+      "material": "dark_olive",
+      "triangles": 68
+    },
+    {
+      "name": "V03_GRIP_molded_ridge_8",
+      "material": "dark_olive",
+      "triangles": 68
+    },
+    {
+      "name": "V03_SCOPE_mount_outer_band_0",
+      "material": "scope_edge",
+      "triangles": 192
+    },
+    {
+      "name": "V03_SCOPE_mount_outer_band_1",
+      "material": "scope_edge",
+      "triangles": 192
+    },
+    {
+      "name": "V03_SCOPE_mount_outer_band_2",
+      "material": "scope_edge",
+      "triangles": 192
+    },
+    {
+      "name": "V03_SCOPE_mount_outer_band_3",
+      "material": "scope_edge",
+      "triangles": 192
+    },
+    {
+      "name": "V03_SCOPE_rubber_eyecup_ring_0",
+      "material": "rubber",
+      "triangles": 176
+    },
+    {
+      "name": "V03_SCOPE_rubber_eyecup_ring_1",
+      "material": "rubber",
+      "triangles": 176
+    },
+    {
+      "name": "V03_SCOPE_rubber_eyecup_ring_2",
+      "material": "rubber",
+      "triangles": 176
+    },
+    {
+      "name": "V03_SCOPE_rubber_eyecup_ring_3",
+      "material": "rubber",
+      "triangles": 176
+    },
+    {
+      "name": "V03_SCOPE_rubber_eyecup_ring_4",
+      "material": "rubber",
+      "triangles": 176
+    },
+    {
+      "name": "V03_SCOPE_rubber_eyecup_ring_5",
+      "material": "rubber",
+      "triangles": 176
+    },
+    {
+      "name": "V03_SCOPE_rubber_eyecup_ring_6",
+      "material": "rubber",
+      "triangles": 176
+    },
+    {
+      "name": "V03_SCOPE_rubber_eyecup_ring_7",
+      "material": "rubber",
+      "triangles": 176
+    },
+    {
+      "name": "V03_SCOPE_rubber_eyecup_ring_8",
+      "material": "rubber",
+      "triangles": 176
+    },
+    {
+      "name": "V03_SCOPE_rubber_eyecup_ring_9",
+      "material": "rubber",
+      "triangles": 176
+    },
+    {
+      "name": "V03_SCOPE_rubber_eyecup_ring_10",
+      "material": "rubber",
+      "triangles": 176
+    },
+    {
+      "name": "V03_SCOPE_rubber_eyecup_ring_11",
+      "material": "rubber",
+      "triangles": 176
+    },
+    {
+      "name": "V03_SCOPE_rubber_eyecup_ring_12",
+      "material": "rubber",
+      "triangles": 176
+    },
+    {
+      "name": "V03_SCOPE_rubber_eyecup_ring_13",
+      "material": "rubber",
+      "triangles": 176
+    },
+    {
+      "name": "V03_SCOPE_rubber_eyecup_ring_14",
+      "material": "rubber",
+      "triangles": 176
+    },
+    {
+      "name": "V03_SCOPE_highlight_rim_0",
+      "material": "steel",
+      "triangles": 192
+    },
+    {
+      "name": "V03_SCOPE_highlight_rim_1",
+      "material": "steel",
+      "triangles": 192
+    },
+    {
+      "name": "V03_SCOPE_highlight_rim_2",
+      "material": "steel",
+      "triangles": 192
+    },
+    {
+      "name": "V03_SCOPE_highlight_rim_3",
+      "material": "steel",
+      "triangles": 192
+    },
+    {
+      "name": "V03_SCOPE_highlight_rim_4",
+      "material": "steel",
+      "triangles": 192
+    },
+    {
+      "name": "V03_SCOPE_highlight_rim_5",
+      "material": "steel",
+      "triangles": 192
+    },
+    {
+      "name": "V03_RECEIVER_visual_control_big",
+      "material": "receiver_edge",
+      "triangles": 96
+    },
+    {
+      "name": "V03_RECEIVER_visual_control_cap",
+      "material": "steel",
+      "triangles": 72
+    },
+    {
+      "name": "V03_STOCK_rear_heel",
+      "material": "rubber",
+      "triangles": 60
+    },
+    {
+      "name": "D02_RECEIVER_branding",
+      "material": "decal",
+      "triangles": 2
+    },
+    {
+      "name": "D03_RECEIVER_lower_brand",
+      "material": "decal",
+      "triangles": 2
+    },
+    {
+      "name": "D04_SCOPE_front_brand",
+      "material": "decal",
+      "triangles": 2
+    },
+    {
+      "name": "D05_SCOPE_rear_brand",
+      "material": "decal",
+      "triangles": 2
+    },
+    {
+      "name": "D06_BUTTPAD_foot_brand",
+      "material": "decal",
+      "triangles": 2
+    },
+    {
+      "name": "D07_SCOPE_center_logo",
+      "material": "receiver_edge",
+      "triangles": 96
+    }
+  ]
+}
