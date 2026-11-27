@@ -157,13 +157,14 @@ async function populate(){
    const option=document.createElement('option');option.value=e.id;option.textContent=e.title;
    sel.append(option);
   }
-  sel.value=entries.some(e=>e.id===previous)?previous:'fox-reference';
+  const desired=new URLSearchParams(location.search).get('asset');
+  sel.value=entries.some(e=>e.id===previous)?previous:(entries.some(e=>e.id===desired)?desired:'fox-reference');
   const p=$('comparisonProfile'+side.id);p.replaceChildren();
   const entry=entries.find(e=>e.id===sel.value);
   for(const v of entry?.profiles||[]){
    const o=document.createElement('option');o.value=v.id;o.textContent=v.label+' · '+size(v.bytes);p.append(o);
   }
-  if(sel.value==='fox-reference')p.value=side.id==='A'?'HERO':'PERFORMANCE';
+  if(sel.value==='fox-reference'||sel.value==='l7-native')p.value=side.id==='A'?'HERO':'PERFORMANCE';
  }
 }
 function resize(){

@@ -10,4 +10,8 @@ Existing native source: art/blender/aether-l7.blend. The script reopens this Ble
 
 Pipeline: .github/workflows/sniper-l7-stage3.yml runs Blender on GitHub Actions and publishes GLBs only after validation. If the workflow fails, fix the pipeline before saying the asset was produced.
 
-Next: add the verified GLBs to static/workshop-library.js with their actual file sizes, inspect Hero versus Performance in the permanent garage, and obtain visual approval before any game integration.
+Export and validation completed successfully in GitHub Actions. 77 Blender mesh objects and 2,584 source triangles were preserved across Hero (2,202,432 bytes) and Performance (863,920 bytes); verified glTF 2.0, materials and normal texture references.
+
+Use /static/workshop.html?asset=l7-native to inspect the Hero and Performance native assets in the permanent garage. Click COMPARE TWO VERSIONS to get the two profiles in synchronized views.
+
+Next: real-browser visual review, optimization measurement, and art refinement. No game integration has been approved yet.

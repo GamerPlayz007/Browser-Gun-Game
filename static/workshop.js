@@ -126,7 +126,9 @@ $('openComparison').addEventListener('click',async()=>{
  catch(e){status('Comparison bay could not open: '+e.message,true);console.error(e)}
 });
 const reportSchema='CROSSFIRE_workshop_asset_library_v2';
-let activeAsset=WORKSHOP_CATALOG[0],libraryUI=null,pendingFetch=null;
+const startQuery=new URLSearchParams(location.search);
+let activeAsset=WORKSHOP_CATALOG.find(a=>a.id===startQuery.get('asset')&&a.profiles.length)||WORKSHOP_CATALOG[0],
+ libraryUI=null,pendingFetch=null;
 const MAX_REPOSITORY_BYTES=65_000_000;
 function setProfileOptions(entry){
  const select=$('quality'),previous=select.value;select.replaceChildren();
@@ -396,6 +398,7 @@ libraryUI=createWorkshopLibraryUI({
  isBusy:()=>running
 });
 setProfileOptions(activeAsset);
+if(activeAsset.profiles.some(p=>p.id===startQuery.get('profile')))$('quality').value=startQuery.get('profile');
 libraryUI.refresh().catch(e=>status('Library could not initialize: '+e.message,true));
 $('importAsset').addEventListener('click',()=>$('file').click());
 $('downloadAsset').addEventListener('click',downloadCurrentAsset);

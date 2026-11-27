@@ -17,6 +17,11 @@ export const WORKSHOP_CATALOG = Object.freeze([
     'Approved shotgun cosmetic GLB used by the live game.',[
       profile('PERFORMANCE','Performance · v0.4','crossfire-s12-v04-performance.glb',2497928)
     ],'Only the performance GLB is present in this repository.'),
+  entry('l7-native','AETHER-L7 Longwatch · Native Blender','development','Workshop review',
+    'Original 77-part Blender game-art source, verified Hero/Performance GLB exports. Visual approval pending.',[
+      profile('PERFORMANCE','Performance · 128px','CROSSFIRE_L7_Performance.glb',863920),
+      profile('HERO','Hero · 384px','CROSSFIRE_L7_Hero.glb',2202432)
+    ],'Source: art/blender/CROSSFIRE_L7_Hero_Source.blend. These cosmetic GLBs are not integrated into live gameplay.'),
   entry('specter-midnight','SPECTER · Midnight','development','Development',
     'Original SPECTER game-art finish with three export quality levels.',[
       profile('PERFORMANCE','Performance','aether9-specter-midnight-performance.glb',6062328),
