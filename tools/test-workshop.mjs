@@ -1,0 +1,18 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+const page=readFileSync(new URL('../static/workshop.html', import.meta.url),'utf8');
+const code=readFileSync(new URL('../static/workshop.js',import.meta.url),'utf8');
+const home=readFileSync(new URL('../static/index.html',import.meta.url),'utf8');
+const field=readFileSync(new URL('../static/map-art-v5.html',import.meta.url),'utf8');
+for(const id of ['stage','workbench','stress','quality','count','clip','pixelRatio','benchmark','measure','toggleWire','toggleRotate','file','fps','draws','tris','chart','results','saveReport','saveCsv'])assert.ok(page.includes('id="'+id+'"'),'Missing workshop control '+id);
+assert.ok(page.includes('value="1" selected')&& !page.includes('value="24" selected'));
+assert.ok(code.includes("buildWorkshopGarage()"),'Garage scene must render');
+assert.ok(code.includes('new GLTFLoader()'),'Artist mesh must come from glTF');
+assert.ok(code.includes("cloneAnimated(source)"),'Stress bay must preserve skinned animation rigs');
+assert.ok(code.includes('mixer.clipAction(clip)'),'Animation must use authored clips');
+assert.ok(page.includes('/static/map-art-v5.html'));
+assert.ok(home.includes('/static/workshop.html'));
+assert.ok(field.includes('/static/workshop.html'));
+assert.ok(!code.includes('WebSocket'),'Workshop must be separate from live game');
+assert.ok(!code.includes('fetch(/api/rooms'),'Workshop must not touch rooms');
+console.log('WORKSHOP GARAGE PASS: import workflow, 3D scene, controls, navigation and multiplayer isolation.');
