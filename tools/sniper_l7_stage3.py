@@ -21,13 +21,16 @@ def objects():
     return art.PARTS
 def profile(label,dimension):
     art.assign_mats("l7","midnight")
-    for img in bpy.data.images:
+    for img in list(bpy.data.images):
+        # The old .blend has stale source-image names with missing files.
+        # Only process NEW deterministic textures generated into OUT.
         if not img.name.startswith("l7-midnight-"):continue
+        if Path(bpy.path.abspath(img.filepath)).resolve().parent != OUT:continue
         width,height=img.size
         if max(width,height)>dimension:
             factor=dimension/max(width,height)
             img.scale(max(1,int(width*factor)),max(1,int(height*factor)))
-        img.pack()
+        img.pack(as_png=True)
     bpy.ops.object.select_all(action="DESELECT")
     for obj in art.PARTS:obj.select_set(True)
     bpy.context.view_layer.objects.active=art.PARTS[0]
