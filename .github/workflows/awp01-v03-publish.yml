@@ -1,0 +1,78 @@
+name: CROSSFire AWP-01 v0.3 Original Asset Publication
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/awp01_v03_builder.py
+      - .github/workflows/awp01-v03-publish.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: crossfire-awp01-v03-source
+  cancel-in-progress: false
+jobs:
+  build-original-awp:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pinned game-art export dependencies
+        run: |
+          python -m pip install --no-input --prefer-binary "numpy==2.3.5" "trimesh==4.11.1" "shapely==2.1.2" "pillow==12.3.0" "scipy==1.17.0"
+      - name: Rebuild original CROSSFire AWP-01 v0.3 cosmetic art
+        run: |
+          python -m py_compile tools/awp01_v03_builder.py
+          mkdir -p build/awp-v03
+          cp tools/awp01_v03_builder.py build/awp-v03/build_awp_v03.py
+          cd build/awp-v03
+          python build_awp_v03.py
+      - name: Verify exact source model fingerprint and GLB integrity
+        run: |
+          python - <<'PY'
+          import hashlib,json,struct
+          from pathlib import Path
+          p=Path("build/awp-v03/CROSSFIRE_AWP_ReferenceInspired_v03.glb")
+          b=p.read_bytes()
+          digest=hashlib.sha256(b).hexdigest()
+          print("AWP01_SOURCE_ART_BYTES",len(b),"SHA256",digest)
+          assert len(b)==4682872, "Unexpected source size"
+          assert digest=="a227f177bc1d5398ec5919aaf537a8a29ab48a2c10b9c9c51b73b74366351b4b", "Output differs from approved GLB"
+          magic,version,length=struct.unpack_from("<III",b)
+          assert (magic,version,length)==(0x46546c67,2,len(b))
+          chunk,typ=struct.unpack_from("<II",b,12)
+          assert typ==0x4e4f534a
+          d=json.loads(b[20:20+chunk])
+          assert len(d["meshes"])==396
+          assert len(d["materials"])==23
+          assert len(d["images"])==59
+          assert len(d["textures"])==59
+          meta=json.loads(Path("build/awp-v03/MODEL_INFO.json").read_text())
+          assert meta["geometry"]["meshes"]==396
+          print("AWP01_ORIGINAL_ASSET_VERIFIED",digest)
+          PY
+      - name: Archive validated original GLB
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: crossfire-awp01-v03-source
+          path: |
+            build/awp-v03/CROSSFIRE_AWP_ReferenceInspired_v03.glb
+            build/awp-v03/MODEL_INFO.json
+          if-no-files-found: warn
+      - name: Publish verified AWP-01 to static assets
+        if: github.ref == 'refs/heads/main'
+        run: |
+          mkdir -p static/assets
+          cp build/awp-v03/CROSSFIRE_AWP_ReferenceInspired_v03.glb static/assets/
+          cp build/awp-v03/MODEL_INFO.json static/assets/CROSSFIRE_AWP_v03_MODEL_INFO.json
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add static/assets/CROSSFIRE_AWP_ReferenceInspired_v03.glb static/assets/CROSSFIRE_AWP_v03_MODEL_INFO.json
+          git diff --cached --quiet && exit 0
+          git commit -m "Publish exact original AWP-01 v0.3 model for Workshop"
+          git pull --rebase origin main
+          git push origin HEAD:main
