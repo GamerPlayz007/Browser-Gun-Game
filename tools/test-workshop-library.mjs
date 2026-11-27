@@ -8,8 +8,11 @@ const get=p=>readFileSync(path.join(root,p),'utf8');
 const html=get('static/workshop.html'),workshop=get('static/workshop.js'),ui=get('static/workshop-library-ui.js');
 assert.equal(WORKSHOP_CATALOG.length,13);
 assert.ok(WORKSHOP_CATALOG.some(x=>x.id==='s12-v04'&&x.status==='In game'));
-assert.ok(WORKSHOP_CATALOG.some(x=>x.id==='l7-native'&&x.status==='Workshop review'&&x.profiles.length===2));
+assert.ok(WORKSHOP_CATALOG.some(x=>x.id==='l7-native'&&x.status==='Archived design'&&x.profiles.length===2));
 assert.ok(WORKSHOP_CATALOG.some(x=>x.id==='awp-local-draft'&&!x.profiles.length));
+assert.ok(WORKSHOP_CATALOG.find(x=>x.id==='awp-local-draft').title.includes('v0.3 ORIGINAL DESIGN'));
+assert.ok(WORKSHOP_CATALOG.find(x=>x.id==='l7-native').description.includes('NOT the CROSSFire AWP-01'));
+
 assert.ok(WORKSHOP_CATALOG.some(x=>x.id==='fox-reference'&&x.profiles.length===2));
 for(const entry of WORKSHOP_CATALOG)for(const p of entry.profiles){
  if(p.url)assert.ok(existsSync(path.join(root,p.url.slice(1))),`Missing repo asset: ${p.url}`);
