@@ -113,6 +113,21 @@ function buildWorkshopGarage(){
  return room;
 }
 buildWorkshopGarage();
+// A dedicated overhead inspection mat, visible only when the WORKBENCH camera is active.
+const topWorkbench=new T.Group();
+topWorkbench.name='WORKSHOP_TOP_VIEW_INSPECTION_SURFACE';
+const topMat=new T.Mesh(new T.PlaneGeometry(4.35,4.35),
+ new T.MeshStandardMaterial({color:0x142f3c,metalness:.26,roughness:.79,side:T.DoubleSide}));
+topMat.rotation.x=-Math.PI/2;topMat.position.y=-.027;topWorkbench.add(topMat);
+const topGrid=new T.GridHelper(4.1,16,0x65afc0,0x365767);
+topGrid.position.y=-.022;topGrid.material.transparent=true;topGrid.material.opacity=.43;
+topWorkbench.add(topGrid);
+for(const edge of [-2.13,2.13]){
+ const border=new T.Mesh(new T.BoxGeometry(4.34,.016,.033),
+   new T.MeshBasicMaterial({color:0x6acdd9}));
+ border.position.set(0,-.016,edge);topWorkbench.add(border);
+}
+topWorkbench.visible=false;scene.add(topWorkbench);
 const loader=new GLTFLoader();
 const VARIANTS={HERO:{b64:HERO_GLB_BASE64,expectedBytes:162928,textureSize:1024},PERFORMANCE:{b64:PERFORMANCE_GLB_BASE64,expectedBytes:150248,textureSize:256}};
 let source=null,sourceClips=[],instances=[],mixers=[],variant='HERO',sourceBytes=0,serial=0;
@@ -242,7 +257,7 @@ function buildInstances(n){if(!source)return;clearInstances();count=n;
  inspector.attach(n===1?instances[0]:null);
  if(viewMode==='parts'&&n===1)inspector.setSpread(Number($('spread').value));
  renderPartList();
- orbit.targetDistance=viewMode==='wall'?24:Math.max(6,Math.min(33,5.4+Math.sqrt(n)*2.85));
+ orbit.targetDistance=viewMode==='top'?6.2:(viewMode==='wall'?24:Math.max(6,Math.min(33,5.4+Math.sqrt(n)*2.85)));
  $('inventory').textContent=`${sharedStats(source).meshes} mesh · ${sourceClips.length} clips × ${n}`;
  $('geometry').textContent=`${sharedStats(source).triangles.toLocaleString()} × ${n} triangles (source)`;
 }
@@ -362,7 +377,7 @@ async function measure(duration=2400){if(document.hidden)throw Error('Benchmark 
  await idle(750);return collectFramesFor(duration);
 }
 function lockUI(locked){running=locked;
- for(const id of ['benchmark','measure','quality','count','clip','pixelRatio','file','workbench','stress','downloadAsset','importAsset','openComparison','modeWall','mode360','modeParts','spread','partSearch','focusPart','partReset','savedImports'])$(id).disabled=locked;
+ for(const id of ['benchmark','measure','quality','count','clip','pixelRatio','file','workbench','stress','downloadAsset','importAsset','openComparison','modeWall','mode360','modeParts','navGarage','navWorkbench','spread','partSearch','focusPart','partReset','savedImports'])$(id).disabled=locked;
  if(!locked)setProfileOptions(activeAsset);
 
 }
@@ -434,6 +449,12 @@ function renderPartList(){
 }
 function setViewMode(mode){
  viewMode=mode;
+ $('navWorkbench').classList.toggle('active',mode==='top');
+ $('navWorkbench').setAttribute('aria-pressed',mode==='top'?'true':'false');
+ $('navGarage').classList.toggle('active',mode!=='top');
+ $('navGarage').setAttribute('aria-pressed',mode==='top'?'false':'true');
+ $('overheadHud').hidden=mode!=='top';
+ topWorkbench.visible=mode==='top';
  for(const [id,value] of [['modeWall','wall'],['mode360','360'],['modeParts','parts']]){
   $(id).classList.toggle('on',mode===value);
   $(id).setAttribute('aria-pressed',mode===value?'true':'false');
@@ -445,6 +466,10 @@ function setViewMode(mode){
  if(mode==='wall'){
   target.set(0,1.55,0);orbit.targetAngle=.16;orbit.targetPitch=.1;orbit.targetDistance=24;
   autoRotate=false;
+ }else if(mode==='top'){
+  // True overhead camera rather than a steep orbit: consistent top silhouette.
+  target.set(0,.75,0);orbit.targetAngle=0;orbit.targetPitch=Math.PI/2;
+  orbit.distance=orbit.targetDistance=6.2;autoRotate=false;
  }else if(mode==='360'){
   target.set(0,.75,0);orbit.targetAngle=.48;orbit.targetPitch=.2;orbit.targetDistance=7.7;
   autoRotate=true;
@@ -472,8 +497,8 @@ async function refreshSavedImports(){
  }
  if(savedRecords.some(r=>r.id===previous))sel.value=previous;
 }
-for(const [id,mode] of [['modeWall','wall'],['mode360','360'],['modeParts','parts']]){
- $(id).addEventListener('click',()=>setViewMode(mode));
+for(const [id,mode] of [['modeWall','wall'],['mode360','360'],['modeParts','parts'],['navGarage','wall'],['navWorkbench','top']]){
+ $(id).addEventListener('click',()=>{if(!running)setViewMode(mode)});
 }
 $('spread').addEventListener('input',e=>{
  inspector.setSpread(Number(e.target.value));
@@ -508,7 +533,19 @@ $('saveReport').addEventListener('click',()=>exportReport('json'));
 $('saveCsv').addEventListener('click',()=>exportReport('csv'));
 $('file').addEventListener('change',e=>loadFile(e.target.files?.[0]));
 canvas.addEventListener('pointerdown',e=>{canvas.setPointerCapture(e.pointerId);interaction={x:e.clientX,y:e.clientY};pointerDownAt={x:e.clientX,y:e.clientY};autoRotate=false;$('toggleRotate').textContent='ROTATION: OFF';$('toggleRotate').classList.remove('on');});
-canvas.addEventListener('pointermove',e=>{if(!interaction)return;orbit.targetAngle-=(e.clientX-interaction.x)*.006;orbit.targetPitch=T.MathUtils.clamp(orbit.targetPitch+(e.clientY-interaction.y)*.004,-.9,1.4);interaction={x:e.clientX,y:e.clientY};});
+canvas.addEventListener('pointermove',e=>{
+ if(!interaction)return;
+ if(viewMode==='top'){
+  // In bird's-eye mode dragging pans the workbench rather than tilting the camera.
+  const step=Math.max(.004,orbit.distance*.0005);
+  target.x=T.MathUtils.clamp(target.x+(e.clientX-interaction.x)*step,-2.0,2.0);
+  target.z=T.MathUtils.clamp(target.z+(e.clientY-interaction.y)*step,-2.0,2.0);
+ }else{
+  orbit.targetAngle-=(e.clientX-interaction.x)*.006;
+  orbit.targetPitch=T.MathUtils.clamp(orbit.targetPitch+(e.clientY-interaction.y)*.004,-.9,1.4);
+ }
+ interaction={x:e.clientX,y:e.clientY};
+});
 for(const event of ['pointerup','pointercancel'])canvas.addEventListener(event,e=>{
  if(event==='pointerup'&&pointerDownAt&&Math.hypot(e.clientX-pointerDownAt.x,e.clientY-pointerDownAt.y)<7&&!running){
   const wall=gallery.pick(camera,canvas,e.clientX,e.clientY);
@@ -533,7 +570,17 @@ function frame(now){requestAnimationFrame(frame);
  if(autoRotate)orbit.targetAngle+=dt*.13;
  const smooth=1-Math.exp(-dt*9);
  orbit.angle+=(orbit.targetAngle-orbit.angle)*smooth;orbit.pitch+=(orbit.targetPitch-orbit.pitch)*smooth;orbit.distance+=(orbit.targetDistance-orbit.distance)*smooth;
- const cp=Math.cos(orbit.pitch);camera.position.set(Math.sin(orbit.angle)*cp*orbit.distance,2.2+Math.sin(orbit.pitch)*orbit.distance,Math.cos(orbit.angle)*cp*orbit.distance);camera.lookAt(target);
+ if(viewMode==='top'){
+  // Avoid a singular lookAt at the north pole by choosing a plan-view up axis.
+  camera.up.set(0,0,-1);
+  camera.position.set(target.x,target.y+orbit.distance,target.z+.0001);
+ }else{
+  camera.up.set(0,1,0);
+  const cp=Math.cos(orbit.pitch);
+  camera.position.set(Math.sin(orbit.angle)*cp*orbit.distance,
+   2.2+Math.sin(orbit.pitch)*orbit.distance,Math.cos(orbit.angle)*cp*orbit.distance);
+ }
+ camera.lookAt(target);
  for(const mixer of mixers)mixer.update(dt);
  renderer.render(scene,camera);
  if(capture){if(!document.hidden&&ms>0&&ms<150)capture.frames.push(ms);if(now-capture.start>=capture.duration)finishCapture();}
