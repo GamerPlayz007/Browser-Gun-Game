@@ -1,30 +1,25 @@
-# Operator 03 — game runtime assets
+# Operator 03 — real multiplayer character assets
 
-This branch contains the tested **runtime integration code**, but GitHub's
-connected text-editing interface cannot transport binary GLBs/PNGs from the
-artifact sandbox. The matching binary assets are supplied in the downloadable
-`Operator03_CROSSFire_Runtime_Assets.zip` package.
+**All runtime assets are now checked into this branch.** The operator body
+is the authored PBR GLB with 18,360 triangles, 10 articulated pivots and
+three embedded texture maps. All eight 1152×1152 camouflage atlases are
+stored next to it in `static/operators/`.
 
-Extract the package into the repository root to create these files:
+The live game loads:
+- `CROSSFire_Operator_03_PBR_Game.glb`
+- `CROSSFire_Operator_03_{skin}_BaseColor_Atlas.png`
 
-- `static/operators/CROSSFire_Operator_03_PBR_Game.glb`
-- `static/operators/CROSSFire_Operator_03_woodland_BaseColor_Atlas.png`
-- `static/operators/CROSSFire_Operator_03_desert_BaseColor_Atlas.png`
-- `static/operators/CROSSFire_Operator_03_urban_BaseColor_Atlas.png`
-- `static/operators/CROSSFire_Operator_03_arctic_BaseColor_Atlas.png`
-- `static/operators/CROSSFire_Operator_03_jungle_BaseColor_Atlas.png`
-- `static/operators/CROSSFire_Operator_03_navy_digital_BaseColor_Atlas.png`
-- `static/operators/CROSSFire_Operator_03_ranger_BaseColor_Atlas.png`
-- `static/operators/CROSSFire_Operator_03_shadow_BaseColor_Atlas.png`
+Available skin IDs: `woodland`, `desert`, `urban`, `arctic`, `jungle`,
+`navy_digital`, `ranger`, `shadow`.
 
-The base GLB contains the full Operator 03 model with rig pivots, PBR normal
-map and metallic/roughness map. Colour atlases are loaded separately. All eight
-skins share its geometry and noncolour maps, reducing downloads and GPU RAM.
+The GLB normal/roughness/metallic maps stay shared; only the base-colour
+atlas changes. The original avatar is a defensive fallback if an asset
+cannot load on a client. Multiplayer skins are synchronized via server
+snapshots and controlled from the lobby.
 
-In modes `teamdeathmatch` and `control`, the **server** forces
-Azure -> Arctic/White and Ember -> Shadow/Black. In all other modes, the
-manual camo selected in the home screen or room lobby applies.
+Team game modes are server-authoritative:
+- Azure = Arctic (white)
+- Ember = Shadow (black)
 
-The client retains the old avatar if the GLB cannot be fetched, so
-adding this code without uploading the binaries does **not** by itself
-activate Operator 03 in the live game.
+Solo modes keep the chosen skin. The Python generator sources and
+GitHub Actions asset build workflow are included for reproducibility.
