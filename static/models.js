@@ -6,7 +6,7 @@ import {sampleReloadPose23} from './reload_motion23.js';
 import {attachAR01V04} from './ar01_v04_model.js';
 import {attachSMG05V02} from './smg05_v02_model.js';
 import {setOperator03Skin,syncOperator03Rig,keepOperator03LegacyHidden,disposeOperator03Rig} from './operator03_model.js';
-export {setOperator03Skin};
+export {setOperator03Skin,syncOperator03Rig};
 const materials=new Map();const material=c=>{if(!materials.has(c))materials.set(c,new T.MeshStandardMaterial({color:c,roughness:.48,metalness:.25}));return materials.get(c);};
 function box(parent,w,h,d,c,x,y,z,r=.018){const m=new T.Mesh(new RoundedBoxGeometry(w,h,d,1,Math.min(r,w/3,h/3,d/3)),material(c));m.position.set(x,y,z);parent.add(m);return m;}
 function cylinder(parent,r1,r2,h,c,x,y,z){const m=new T.Mesh(new T.CylinderGeometry(r1,r2,h,12),material(c));m.position.set(x,y,z);parent.add(m);return m;}
