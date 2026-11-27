@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="CROSSFire v5: actual Daybreak City world and artist-authored GLB asset compatibility showcase. No multiplayer changes.">
+<title>CROSSFire · Map Art Stage v5</title>
+<script type="importmap">{"imports":{"three":"/static/vendor/three.module.js","three/addons/":"/static/vendor/addons/"}}</script>
+<style>
+:root{color-scheme:dark;--bg:#0b1620;--line:#355367;--blue:#87d8ef;--txt:#f0f8fc;--quiet:#9cbbc9}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;font:14px/1.5 system-ui,Segoe UI,sans-serif;color:var(--txt);background:var(--bg);overflow:hidden}
+canvas{display:block;position:fixed;inset:0;width:100%;height:100%;touch-action:none}
+a{color:#96e8fb}header{z-index:2;position:fixed;top:0;left:0;right:0;padding:18px max(18px,3vw);display:flex;justify-content:space-between;align-items:center;background:linear-gradient(#0a1c2ce8,#0a1c2c00);pointer-events:none}header>*{pointer-events:auto}header strong{font-size:13px;letter-spacing:.18em}header strong span{color:var(--blue)}header small{font:11px ui-monospace,monospace;color:#c1dfec}
+.panel{position:fixed;z-index:3;top:80px;right:max(12px,2vw);bottom:24px;width:min(365px,calc(100% - 24px));overflow:auto;border:1px solid var(--line);border-radius:14px;padding:20px;background:#0b1d2bef;box-shadow:0 18px 50px #0009;backdrop-filter:blur(13px)}.panel h1{font-size:23px;letter-spacing:-.02em;line-height:1.14;margin:0 0 8px}.panel p,.panel small{color:var(--quiet)}.panel p{font-size:12px;line-height:1.65;margin:0 0 14px}label{display:block;font:800 10px system-ui;letter-spacing:.15em;text-transform:uppercase;color:#b6d1df;margin:13px 0 6px}select,button{width:100%;padding:10px;background:#122f40;color:var(--txt);border:1px solid #426c80;border-radius:8px;font:600 12px system-ui}button{cursor:pointer}button:hover{background:#1b4257}.buttons{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:13px}button.on{border-color:#a4efff;background:#215066}.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:13px 0}.kpis div{border:1px solid #3a5b6a;border-radius:8px;padding:10px 4px;text-align:center;background:#0d2534}.kpis b{display:block;font:800 20px ui-monospace,monospace}.kpis small{font-size:9px}.section{border-top:1px solid #355467;padding-top:14px;margin-top:16px}.status{margin:14px 0 6px;font:12px/1.5 ui-monospace,monospace;white-space:pre-wrap;color:#b8e0e8}.status.error{color:#ffb2a0}.credit{font:10px/1.55 system-ui;color:#8eacbb;margin-top:20px}.hint{position:fixed;bottom:24px;left:max(15px,3vw);z-index:2;font:11px ui-monospace,monospace;color:#dcecf7;text-shadow:0 1px 10px #000}
+@media(max-width:850px){.panel{top:auto;bottom:9px;max-height:63vh;padding:13px;right:9px}.panel h1{font-size:18px}.panel p{display:none}.hint{display:none}}
+</style></head>
+<body><canvas id="stage" aria-label="Daybreak City artist asset integration view"></canvas>
+<header><strong>CROSS<span>FIRE</span> / MAP ART STAGE</strong><small>V5 · ACTUAL CITY RENDERER · NO MULTIPLAYER CHANGES</small></header>
+<aside class="panel" aria-label="Map art inspection controls">
+ <h1>Real asset.<br>Real city.</h1>
+ <p>Inspect an independently authored 3D model inside the real Daybreak City scene and lighting. Toggle asset quality and map settings without touching multiplayer or map collision.</p>
+ <label for="assetQuality">Imported artist-asset profile</label><select id="assetQuality"><option value="PERFORMANCE">Performance · 256px</option><option value="HERO">Hero · 1024px</option></select>
+ <label for="cityQuality">Real city graphics profile</label><select id="cityQuality"><option value="performance">School laptop · simplified city</option><option value="high">High · full city architecture</option></select>
+ <label for="animation">Original animation clip</label><select id="animation"><option>Survey</option><option>Walk</option><option>Run</option><option>Pause</option></select>
+ <label for="site">Map location</label><select id="site"><option value="0">South Plaza · (-5, 0, 22)</option><option value="1">Market Walk · (-24, 1, 13)</option><option value="2">Atrium Entry · (25, 1, 20)</option></select>
+ <div class="buttons"><button id="rotate" class="on">Orbit: ON</button><button id="wire">Wireframe: OFF</button><button id="hide">Asset: VISIBLE</button><button id="reset">Reset camera</button></div>
+ <div class="section"><div class="kpis"><div><b id="fps">—</b><small>AVG FPS</small></div><div><b id="calls">—</b><small>DRAW CALLS</small></div><div><b id="triangles">—</b><small>RENDER TRIANGLES</small></div></div>
+ <div id="stats" class="status">Loading real Daybreak City scene…</div><button id="report">Download scene report (.JSON)</button></div>
+ <div class="credit">Artist source: Khronos Fox sample. Model: PixelMannen (CC0). Rig/animation: tomkranis (CC BY 4.0); conversion: AsoboStudio and scurest (CC BY 4.0). <a href="https://github.com/KhronosGroup/glTF-Sample-Assets/tree/main/Models/Fox">License and source</a>. This fox is a temporary non-weapon test asset, not a multiplayer character.</div>
+</aside><div class="hint">DRAG TO ORBIT · MOUSEWHEEL TO ZOOM · VIEW PREVIEW ONLY</div>
+<script type="module" src="/static/map-art-v5.js"></script></body></html>
