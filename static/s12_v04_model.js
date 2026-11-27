@@ -103,6 +103,8 @@ function template(){
 export function attachS12V04(rig){
   const data=rig?.userData;
   if(!data||data.id!==2)return;
+  // CI/Node tests run the shared animation rig without a browser renderer.
+  if(typeof window==='undefined'||typeof location==='undefined')return;
   template().then(art=>{
     if(data.s12Disposed)return;
     const body=art.body.clone(true),pump=art.pump.clone(true);
