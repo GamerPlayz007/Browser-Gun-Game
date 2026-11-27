@@ -5,6 +5,8 @@ import {buildAetherGameVisuals,disposeAetherMaterials} from './aether_game_model
 import {sampleReloadPose23} from './reload_motion23.js';
 import {attachAR01V04} from './ar01_v04_model.js';
 import {attachSMG05V02} from './smg05_v02_model.js';
+import {setOperator03Skin,syncOperator03Rig,keepOperator03LegacyHidden,disposeOperator03Rig} from './operator03_model.js';
+export {setOperator03Skin};
 const materials=new Map();const material=c=>{if(!materials.has(c))materials.set(c,new T.MeshStandardMaterial({color:c,roughness:.48,metalness:.25}));return materials.get(c);};
 function box(parent,w,h,d,c,x,y,z,r=.018){const m=new T.Mesh(new RoundedBoxGeometry(w,h,d,1,Math.min(r,w/3,h/3,d/3)),material(c));m.position.set(x,y,z);parent.add(m);return m;}
 function cylinder(parent,r1,r2,h,c,x,y,z){const m=new T.Mesh(new T.CylinderGeometry(r1,r2,h,12),material(c));m.position.set(x,y,z);parent.add(m);return m;}
@@ -28,6 +30,7 @@ export function setModelQuality67(root,mode='high'){
  const tier=MODEL_QUALITY67[mode]??1;
  root.traverse(o=>{if(Number.isInteger(o.userData.detailTier67))
   o.visible=o.userData.detailTier67<=tier;});
+ keepOperator03LegacyHidden(root);
  return tier;
 }
 // CROSSFire v7.2 — inexpensive articulated sci-fi gloves for the local view.
@@ -452,11 +455,14 @@ export function animatePlayer(root,p,time){
  d.tag.position.x=lean*.32;
  root.rotation.y=Number.isFinite(p.yaw)?p.yaw:0;
  root.scale.setScalar(pose.visibilityScale);
+ syncOperator03Rig(root);
  return pose;
 }
 export function disposePlayer(root){
  disposeAetherMaterials(root?.userData?.gun);
+ disposeOperator03Rig(root);
  root.traverse(o=>{
+  if(o.userData.operator03Shared)return;
   o.geometry?.dispose();
   if(o.isSprite){o.material.map?.dispose();o.material.dispose();}
   else if(o.userData.uniqueMaterial)o.material.dispose();
