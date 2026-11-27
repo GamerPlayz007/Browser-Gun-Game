@@ -61,7 +61,7 @@ async function buildTemplate(){
     if(!node.isMesh)return;
     if(Array.isArray(node.material))throw Error('Unexpected multi-material S-12 mesh');
     sourceGeometries.add(node.geometry);
-    const name=node.name||'S12 cosmetic';
+    const name=node.userData?.name||node.name||'S12 cosmetic';
     const moving=PUMP_PART.test(name);
     const id=node.material.uuid+':'+Number(moving);
     const geometry=normalizePartGeometry(node);
