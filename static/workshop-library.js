@@ -17,11 +17,11 @@ export const WORKSHOP_CATALOG = Object.freeze([
     'Approved shotgun cosmetic GLB used by the live game.',[
       profile('PERFORMANCE','Performance · v0.4','crossfire-s12-v04-performance.glb',2497928)
     ],'Only the performance GLB is present in this repository.'),
-  entry('l7-native','AETHER-L7 Longwatch · Native Blender','development','Workshop review',
-    'Original 77-part Blender game-art source, verified Hero/Performance GLB exports. Visual approval pending.',[
+  entry('l7-native','AETHER-L7 · LEGACY (not AWP-01)','development','Archived design',
+    'Older green AETHER-L7 concept. NOT the CROSSFire AWP-01 v0.3 sniper design. Retained for historical comparison only.',[
       profile('PERFORMANCE','Performance · 128px','CROSSFIRE_L7_Performance.glb',863920),
       profile('HERO','Hero · 384px','CROSSFIRE_L7_Hero.glb',2202432)
-    ],'Source: art/blender/CROSSFIRE_L7_Hero_Source.blend. These cosmetic GLBs are not integrated into live gameplay.'),
+    ],'Source: art/blender/CROSSFIRE_L7_Hero_Source.blend. This is the wrong source for the approved AWP-01 v0.3; do not promote it as the active sniper.'),
   entry('specter-midnight','SPECTER · Midnight','development','Development',
     'Original SPECTER game-art finish with three export quality levels.',[
       profile('PERFORMANCE','Performance','aether9-specter-midnight-performance.glb',6062328),
@@ -61,9 +61,9 @@ export const WORKSHOP_CATALOG = Object.freeze([
   entry('operator03-code','Operator 03 · Camouflage','production','Game-only',
     'The player model and camouflages are imported through game runtime code.',[],
     'Source: static/operator03_model.js. No standalone GLB in this repository.'),
-  entry('awp-local-draft','AWP-01 · v0.3 draft','development','Import required',
-    'Previous offline draft; its GLB has not been committed to the CROSSFire repository.',[],
-    'If you still have the Blender-ready GLB, import it below to add it to your personal library.')
+  entry('awp-local-draft','AWP-01 · v0.3 ORIGINAL DESIGN','development','Local GLB import',
+    'The intended green-and-black sniper we designed: long scope, shaped stock and a full horizontal silhouette. Its original GLB is not yet in GitHub.',[],
+    'Original project file: CROSSFIRE_AWP_ReferenceInspired_v03.glb. Download the recovered GLB from the ChatGPT session, then IMPORT & SAVE GLB into your browser library.')
 ]);
 export const PERSONAL_MAX_BYTES=30_000_000;
 const DB_NAME='crossfire-workshop-asset-library-v1',TABLE='assets';
