@@ -17,11 +17,6 @@ export const WORKSHOP_CATALOG = Object.freeze([
     'Approved shotgun cosmetic GLB used by the live game.',[
       profile('PERFORMANCE','Performance · v0.4','crossfire-s12-v04-performance.glb',2497928)
     ],'Only the performance GLB is present in this repository.'),
-  entry('l7-native','AETHER-L7 · LEGACY (not AWP-01)','development','Archived design',
-    'Older green AETHER-L7 concept. NOT the CROSSFire AWP-01 v0.3 sniper design. Retained for historical comparison only.',[
-      profile('PERFORMANCE','Performance · 128px','CROSSFIRE_L7_Performance.glb',863920),
-      profile('HERO','Hero · 384px','CROSSFIRE_L7_Hero.glb',2202432)
-    ],'Source: art/blender/CROSSFIRE_L7_Hero_Source.blend. This is the wrong source for the approved AWP-01 v0.3; do not promote it as the active sniper.'),
   entry('specter-midnight','SPECTER · Midnight','development','Development',
     'Original SPECTER game-art finish with three export quality levels.',[
       profile('PERFORMANCE','Performance','aether9-specter-midnight-performance.glb',6062328),
@@ -61,10 +56,10 @@ export const WORKSHOP_CATALOG = Object.freeze([
   entry('operator03-code','Operator 03 · Camouflage','production','Game-only',
     'The player model and camouflages are imported through game runtime code.',[],
     'Source: static/operator03_model.js. No standalone GLB in this repository.'),
-  entry('awp01-v03','AWP-01 · v0.3 ORIGINAL','development','Workshop ready',
+  entry('awp01-v03','AWP-01 · v0.3 ORIGINAL','production','In game',
     'Our original green-and-black AWP-01 sniper game artwork: extended scope, contoured stock and full horizontal silhouette. Exact original recovered, not the archived AETHER-L7.',[
       profile('ORIGINAL','Original approved artwork · v0.3','CROSSFIRE_AWP_ReferenceInspired_v03.glb',4682872)
-    ],'Permanent repository GLB, 396 artist meshes and 23 materials. Verified exact SHA-256 a227f177bc1d5398ec5919aaf537a8a29ab48a2c10b9c9c51b73b74366351b4b. Preview only; not yet in multiplayer.','CROSSFire / AWP-01 original')
+    ],'Permanent repository GLB, 396 artist meshes and 23 materials. Verified exact SHA-256 a227f177bc1d5398ec5919aaf537a8a29ab48a2c10b9c9c51b73b74366351b4b. Loaded as the approved in-game weapon 3 cosmetic, with no changes to game mechanics.','CROSSFire / AWP-01 original')
 ]);
 export const PERSONAL_MAX_BYTES=30_000_000;
 const DB_NAME='crossfire-workshop-asset-library-v1',TABLE='assets';
