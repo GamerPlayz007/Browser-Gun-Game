@@ -11,7 +11,7 @@ const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);
 assert.equal(new Set(ids).size,ids.length);
 assert.ok([...viewer.matchAll(/\$\('([^']+)'\)/g)].every(m=>ids.includes(m[1])));
 assert.ok(html.includes('/static/gallery-bootstrap.js'));
-assert.ok(home.includes('/static/gallery-lobby.js'));
+assert.ok(!home.includes('/static/aether-armory.html')); // obsolete W12/L7 overlays removed from game
 assert.ok(html.includes('tabindex="0"'));
 const elements=new Map();
 const el=id=>{if(!elements.has(id))elements.set(id,{disabled:false,hidden:false,textContent:'',classList:{add(){}}});return elements.get(id)};

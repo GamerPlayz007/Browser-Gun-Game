@@ -1,6 +1,5 @@
 import * as T from 'three';
 import {buildWorld} from './world.js';
-import {createStaticCosmetic} from './static-cosmetic.js';
 import {buildDustMatch65} from './dust_match65.js';
 import {loadDustSource66} from './dust_source66.js';
 import {makeWeapon,animateWeapon,makePlayer,setPlayerSkin56,setOperator03Skin,setWeaponFinish,disposeWeaponRig,animatePlayer,markPlayerEvent,disposePlayer,setModelQuality67} from './models.js';
@@ -172,7 +171,6 @@ const AETHER_NAMES68=['AR-01 V0.4','SMG-05 V0.2','AETHER-12 WARDRUM','AETHER-L7 
  const displayWeaponName68=id=>AETHER_NAMES68[id]||weapons[id]?.name||'WEAPON';
  const displayWeaponShort68=id=>AETHER_SHORT68[id]||weapons[id]?.short||'W';
  const weapons=map.weapons,weaponModels=weapons.map(w=>makeWeapon(w.id));for(const g of weaponModels){g.visible=false;viewScene.add(g);}
-const armoryCosmetics=weaponModels.map((rig,weaponId)=>createStaticCosmetic(rig,{finish:safeRead56('cf-gallery-finish','midnight'),weaponId}));
 let selected=0,desiredWeapon64=null,weaponMags64=weapons.map(w=>w.mag),ws=null,myId=null,roomCode='',state=null,me=null,local=null,joined=false,keys={},aiming=false,yaw=0,pitch=0,seq=0,shotId=0,pendingShots=[];let pendingMoves=[],movementAccumulator=0,viewError=new T.Vector3(),rosterSignature='',scoreSignature='';
 let groundVelocity=0,landingPulse=0,lastLocalGrounded=true,movementHint='',slideHopUntil53=0,visualLean63=0,lastReconcileAt=0,lastReconciledSeq=-1;
 // Octavus only: lighter authoritative input cadence, unchanged render FPS.
@@ -199,7 +197,6 @@ updateRigQuality67=tier=>{
  rigTier68=tier;
  for(const rig of weaponModels)setModelQuality67(rig,tier);
  for(const rig of opponents.values())setModelQuality67(rig,tier);
- for(const cosmetic of armoryCosmetics)cosmetic.update(false,tier);
 };
 updateRigQuality67(qualityTier61());
 const silhouette=id=>`<svg viewBox="0 0 220 60" aria-hidden="true"><path d="M20 19h${[100,80,130,135][id]}v24H70l-8 16H47l4-17H20z"/><path d="M5 16h22v30H5zM100 26h${[92,65,98,105][id]}v6h-${[92,65,98,105][id]}z"/>${id===3?'<rect x="89" y="5" width="45" height="13" rx="5"/><rect x="100" y="16" width="7" height="7"/>':'<rect x="65" y="12" width="48" height="7"/>'}${id===1?'<rect x="75" y="38" width="10" height="20"/>':''}</svg>`;
@@ -647,7 +644,6 @@ function frame(ms){try{const now=ms/1000,rawMs=ms-clock,dt=Math.min(rawMs/1000,.
    }
   }
   for(let i=0;i<4;i++)weaponModels[i].visible=i===selected&&locked()&&me.hp>0&&state.phase!=='results'&&!(selected===3&&ads>.95);
-  for(let i=0;i<armoryCosmetics.length;i++)armoryCosmetics[i].update(weaponModels[i].visible,rigTier68);
   // Camera-space movement drives the viewmodel's distinct walking, sideways
    // shifting, and slide sway. Mouse-turn lag is visually eased inside rig.
    const rightSpeed71=local.vx*Math.cos(yaw)-local.vz*Math.sin(yaw);
