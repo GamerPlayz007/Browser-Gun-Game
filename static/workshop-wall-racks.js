@@ -1,5 +1,5 @@
 /** CROSSFire Workshop Wall Racks · nonfunctional 3D game-art gallery.
- * Three real repository GLBs; mounts are scenery with pointer hit targets.
+ * Four real repository GLBs; mounts are scenery with pointer hit targets.
  * No gameplay/network/collision imports. */
 import * as T from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
@@ -7,9 +7,10 @@ import {WORKSHOP_CATALOG} from './workshop-library.js';
 import {readAssetBytes} from './gallery-assets.js';
 
 export const WALL_MODELS=Object.freeze([
- {id:'awp01-v03',profile:'ORIGINAL',label:'AWP-01',revision:'ORIGINAL · v0.3',x:-8.2,accent:0x96d1a6},
- {id:'s12-v04',profile:'PERFORMANCE',label:'S-12',revision:'GAME MODEL · v0.4',x:0,accent:0xeab980},
- {id:'specter-midnight',profile:'PERFORMANCE',label:'SPECTER',revision:'MIDNIGHT · STUDIO',x:8.2,accent:0x87c8f0}
+ {id:'awp01-v03',profile:'ORIGINAL',label:'AWP-01',revision:'GAME · v0.3',x:-12.3,accent:0x96d1a6},
+ {id:'awp01-v10',profile:'PERFORMANCE',label:'AWP-01',revision:'ART PASS · 1.0',x:-4.1,accent:0x72dfcc},
+ {id:'s12-v04',profile:'PERFORMANCE',label:'S-12',revision:'GAME MODEL · v0.4',x:4.1,accent:0xeab980},
+ {id:'specter-midnight',profile:'PERFORMANCE',label:'SPECTER',revision:'MIDNIGHT · STUDIO',x:12.3,accent:0x87c8f0}
 ]);
 
 const labelMaterial=(title,subtitle,accent)=>{
