@@ -1,0 +1,47 @@
+name: Workshop AWP-01 Art Pass 1.0 publication checks
+on:
+  pull_request:
+    paths:
+      - 'static/assets/CROSSFire_AWP01_ArtPass_10_*'
+      - 'static/workshop-library.js'
+      - 'static/workshop-wall-racks.js'
+      - 'static/gallery-assets.js'
+      - 'static/workshop.js'
+      - 'tools/test-workshop-library.mjs'
+      - 'tools/test-workshop-wall-racks.mjs'
+      - '.github/workflows/workshop-awp10-review.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'static/assets/CROSSFire_AWP01_ArtPass_10_*'
+      - 'static/workshop-library.js'
+      - 'static/workshop-wall-racks.js'
+      - 'static/gallery-assets.js'
+      - 'static/workshop.js'
+      - 'tools/test-workshop-library.mjs'
+      - 'tools/test-workshop-wall-racks.mjs'
+      - '.github/workflows/workshop-awp10-review.yml'
+permissions:
+  contents: read
+jobs:
+  verify-workshop:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: npm ci --no-audit --no-fund
+      - name: JavaScript modules
+        run: |
+          node --check static/gallery-assets.js
+          node --check static/workshop-library.js
+          node --check static/workshop-wall-racks.js
+          node --check static/workshop.js
+      - name: Source GLB identity, inventory, and wall-rack regression tests
+        run: npm run test:workshop
