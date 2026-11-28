@@ -7,12 +7,29 @@ import {WORKSHOP_CATALOG,matchCatalog,personalToEntry,validateGLBHeader,validate
 const root=path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const get=p=>readFileSync(path.join(root,p),'utf8');
 const html=get('static/workshop.html'),workshop=get('static/workshop.js'),ui=get('static/workshop-library-ui.js');
-assert.equal(WORKSHOP_CATALOG.length,12);
+assert.equal(WORKSHOP_CATALOG.length,13);
 assert.ok(WORKSHOP_CATALOG.some(x=>x.id==='s12-v04'&&x.status==='In game'));
 assert.ok(!WORKSHOP_CATALOG.some(x=>x.id==='l7-native'));
 assert.ok(WORKSHOP_CATALOG.some(x=>x.id==='awp01-v03'&&x.status==='In game'&&x.profiles.length===1));
 assert.ok(WORKSHOP_CATALOG.find(x=>x.id==='awp01-v03').title.includes('v0.3 ORIGINAL'));
 assert.equal(WORKSHOP_CATALOG.find(x=>x.id==='awp01-v03').profiles[0].bytes,4682872);
+const art10=WORKSHOP_CATALOG.find(x=>x.id==='awp01-v10');
+assert.ok(art10&&art10.status==='Workshop preview'&&art10.profiles.length===2);
+const perf10=art10.profiles.find(p=>p.id==='PERFORMANCE');
+const hero10=art10.profiles.find(p=>p.id==='HERO');
+assert.equal(perf10.bytes,1576912);
+assert.equal(hero10.bytes,3674152);
+assert.equal(hero10.type,'split');
+assert.equal(hero10.parts.length,3);
+const perf10Buffer=readFileSync(path.join(root,perf10.url.slice(1)));
+assert.equal(createHash('sha256').update(perf10Buffer).digest('hex'),'86494775b34af5f69a6df685a587f5405eb78027656984804f25eef48d266203');
+const hero10Buffer=Buffer.concat(hero10.parts.map(p=>readFileSync(path.join(root,p.slice(1)))));
+assert.equal(hero10Buffer.length,hero10.bytes);
+assert.equal(createHash('sha256').update(hero10Buffer).digest('hex'),'5557f8625c242e8047979a28e155528a4a016baef8b35a48ae3d9a986a2ba076');
+assert.equal(hero10Buffer.subarray(0,4).toString('ascii'),'glTF');
+assert.equal(hero10Buffer.readUInt32LE(8),hero10Buffer.length);
+assert.equal(workshop.includes('readSplitAssetBytes(profile.parts'),true);
+
 
 
 assert.ok(WORKSHOP_CATALOG.some(x=>x.id==='fox-reference'&&x.profiles.length===2));
@@ -60,4 +77,4 @@ assert.ok(workshop.includes('getPersonalAsset('));
 assert.ok(ui.includes('removePersonalAsset(')); // The older Library module stays available for migration.
 assert.ok(!workshop.includes('new WebSocket('));
 assert.ok(!workshop.includes("fetch('/api/rooms"));
-console.log('PASS workshop asset library: 12 catalog entries, repository file existence, GLB validation, search/filter, UI, personal storage and multiplayer isolation');
+console.log('PASS workshop asset library: 13 catalog entries, repository file existence, GLB validation, search/filter, UI, personal storage and multiplayer isolation');

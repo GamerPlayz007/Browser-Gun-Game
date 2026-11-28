@@ -56,6 +56,17 @@ export const WORKSHOP_CATALOG = Object.freeze([
   entry('operator03-code','Operator 03 · Camouflage','production','Game-only',
     'The player model and camouflages are imported through game runtime code.',[],
     'Source: static/operator03_model.js. No standalone GLB in this repository.'),
+  entry('awp01-v10','AWP-01 · ART PASS 1.0','development','Workshop preview',
+    'New sculpted exterior artwork for side-by-side inspection against v0.3. Original 35,056-triangle geometry with olive, graphite and PBR textures; NOT installed in multiplayer.',[
+      profile('PERFORMANCE','Performance · 512px · 1.6 MB','CROSSFire_AWP01_ArtPass_10_Performance.glb',1576912),
+      {id:'HERO',label:'High detail · 1024px · 3.7 MB',type:'split',
+       filename:'CROSSFire_AWP01_ArtPass_10.glb',
+       parts:[
+        '/static/assets/CROSSFire_AWP01_ArtPass_10_Hero.part01',
+        '/static/assets/CROSSFire_AWP01_ArtPass_10_Hero.part02',
+        '/static/assets/CROSSFire_AWP01_ArtPass_10_Hero.part03'
+       ],bytes:3674152}
+    ],'Full original GLB stored as three byte-perfect pieces to keep GitHub upload requests small. Viewer reconstructs them losslessly; SHA-256 5557f8625c242e8047979a28e155528a4a016baef8b35a48ae3d9a986a2ba076. 1 mesh, 1 material and 3 embedded PBR textures.','CROSSFire / AWP-01 review'),
   entry('awp01-v03','AWP-01 · v0.3 ORIGINAL','production','In game',
     'Our original green-and-black AWP-01 sniper game artwork: extended scope, contoured stock and full horizontal silhouette. Exact original recovered, not the archived AETHER-L7.',[
       profile('ORIGINAL','Original approved artwork · v0.3','CROSSFIRE_AWP_ReferenceInspired_v03.glb',4682872)

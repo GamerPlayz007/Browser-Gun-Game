@@ -30,7 +30,7 @@ assert.ok(workshop.includes("savedImports"),'Personal saved files remain accessi
 assert.ok(racks.includes('loader.parseAsync('),'Wall art must be GLB meshes, not JS placeholders');
 assert.ok(racks.includes('raycaster.intersectObjects('),'3D raycast must select wall art');
 const entries=[...racks.matchAll(/\{id:'([^']+)',profile:'([^']+)',label:/g)].map(m=>({id:m[1],profile:m[2]}));
-assert.deepEqual(entries.map(x=>x.id),['awp01-v03','s12-v04','specter-midnight']);
+assert.deepEqual(entries.map(x=>x.id),['awp01-v03','awp01-v10','s12-v04','specter-midnight']);
 for(const a of entries){const entry=WORKSHOP_CATALOG.find(x=>x.id===a.id);assert.ok(entry,'Missing catalog wall asset '+a.id);assert.ok(entry.profiles.some(p=>p.id===a.profile&&p.url));}
 assert.ok(!racks.includes("ar01-code"));assert.ok(!racks.includes("smg05-code"));assert.ok(!racks.includes("operator03-code"));
 assert.ok(inspector.includes('const direction=center.clone().sub(globalCenter)'));

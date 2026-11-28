@@ -31,3 +31,22 @@ export function chooseGalleryFinish(raw){
 export function chooseGalleryProfile(raw,available){
  return ['performance','balanced','original'].includes(raw)&&available.has(raw)?raw:'original';
 }
+
+/** Reassemble byte-perfect GLB chunks for large original artwork.
+ * Chunks are static public repository files, not network game data.
+ * Sequential fetches keep peak download/network memory bounded.
+ */
+export async function readSplitAssetBytes(parts,{signal,maxBytes=65_000_000,fetchImpl=fetch}={}){
+ if(!Array.isArray(parts)||parts.length<2||parts.length>16)throw Error('Invalid split GLB manifest');
+ const chunks=[];let length=0;
+ for(const url of parts){
+  if(typeof url!=='string'||!url.startsWith('/static/assets/'))throw Error('Untrusted GLB chunk path');
+  const buffer=await readAssetBytes(url,{signal,maxBytes:maxBytes-length,fetchImpl});
+  length+=buffer.byteLength;
+  if(length>maxBytes)throw Error('Combined GLB exceeds download budget');
+  chunks.push(new Uint8Array(buffer));
+ }
+ const result=new Uint8Array(length);let offset=0;
+ for(const piece of chunks){result.set(piece,offset);offset+=piece.byteLength;}
+ return result.buffer;
+}
