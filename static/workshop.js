@@ -7,7 +7,7 @@
 import * as T from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {HERO_GLB_BASE64, PERFORMANCE_GLB_BASE64} from './artist-mesh-v3-data.js';
-import {readAssetBytes} from './gallery-assets.js';
+import {readAssetBytes,readSplitAssetBytes} from './gallery-assets.js';
 import {WORKSHOP_CATALOG,personalToEntry,savePersonalAsset,validatePersonalGLB,getPersonalAsset,listPersonalAssets} from './workshop-library.js';
 import {createWorkshopWallRacks} from './workshop-wall-racks.js';
 import {createWorkshopComponentInspector} from './workshop-component-inspector.js';
@@ -207,7 +207,12 @@ async function downloadCurrentAsset(){
  if(!profile)return;
  try{
   if(profile.url){const a=document.createElement('a');a.href=profile.url;a.download=profile.url.split('/').pop();a.click();return}
-  if(profile.type==='embedded'){downloadBlob(new Blob([decode64(VARIANTS[profile.id].b64)],{type:'model/gltf-binary'}),'CROSSFIRE_Fox_'+profile.id+'.glb');return}
+  if(profile.type==='split'){
+    const data=await readSplitAssetBytes(profile.parts,{maxBytes:MAX_REPOSITORY_BYTES});
+    if(data.byteLength!==profile.bytes)throw Error('High-detail model size mismatch');
+    downloadBlob(new Blob([data],{type:'model/gltf-binary'}),profile.filename||'CROSSFire_ArtPass_10.glb');return;
+   }
+   if(profile.type==='embedded'){downloadBlob(new Blob([decode64(VARIANTS[profile.id].b64)],{type:'model/gltf-binary'}),'CROSSFIRE_Fox_'+profile.id+'.glb');return}
   if(profile.type==='local'){
    const record=await getPersonalAsset(activeAsset.id);if(!record?.blob)throw Error('Saved GLB not found');
    downloadBlob(record.blob,record.name);
@@ -337,7 +342,12 @@ async function loadPreset(mode){
    const bytes=decode64(VARIANTS[mode]?.b64||'');
    if(bytes.byteLength!==profile.bytes)throw Error('Bundled reference asset mismatch');
    payload=bytes.buffer;bytesCount=bytes.byteLength;
-  }else if(profile.type==='url'||profile.type==='gltf'){
+  }else if(profile.type==='split'){
+    const ctl=new AbortController();pendingFetch=ctl;
+    payload=await readSplitAssetBytes(profile.parts,{signal:ctl.signal,maxBytes:MAX_REPOSITORY_BYTES});
+    bytesCount=payload.byteLength;
+    if(bytesCount!==profile.bytes)throw Error('High-detail GLB chunks do not match expected size');
+   }else if(profile.type==='url'||profile.type==='gltf'){
    const ctl=new AbortController();pendingFetch=ctl;
    if(profile.type==='url'){
     payload=await readAssetBytes(profile.url,{signal:ctl.signal,maxBytes:MAX_REPOSITORY_BYTES});
